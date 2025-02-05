@@ -1,5 +1,6 @@
 :root {
     --color_1: rgb(127, 104, 164);
+    --padding_1: 0.6rem;
 }
 
 body, html {
@@ -7,6 +8,10 @@ body, html {
     background-color: rgb(81, 81, 81);
     font-family: monospace;
     font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 button[type="submit"] {
@@ -45,18 +50,52 @@ input[type="file"] {
     justify-content: center;
     margin-top: 2rem;
     margin-bottom: 2rem;
+    width: 500px;
+}
+
+#form {
+    position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+    max-width: 100%;
+	gap: 1.2rem;
+}
+
+a:link, a:visited {
+    color: white;
+    text-decoration: underline;
+}
+
+#image {
+    width: 300px;
+    margin-bottom: 2rem;
+}
+
+#picker {
+    position: relative;
+    background-color: var(--color_1);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding_1);
+    box-sizing: border-box;
 }
 
 #captcha {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
-    width: 540px;
     background-color: var(--color_1);
-    padding: 1rem;
+    padding: var(--padding_1);
     box-sizing: border-box;
+    width: 100%;
 }
 
 #captcha img {
@@ -72,33 +111,17 @@ input[type="file"] {
     font-size: 1rem;
 }
 
-#image {
-    width: 300px;
-    margin-bottom: 2rem;
-}
-
-#picker {
-    background-color: var(--color_1);
-    padding: 1rem;
-    width: 500px;
-    max-width: 500px;
+#bottom {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
     justify-content: center;
-}
-
-#form {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 1.2rem;
-}
-
-a:link, a:visited {
-    color: white;
-    text-decoration: underline;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: var(--padding_1);
+    background-color: var(--color_1);
+    box-sizing: border-box;
 }
 
 #code {
@@ -106,16 +129,4 @@ a:link, a:visited {
     box-sizing: border-box;
     flex-grow: 1;
     flex-shrink: 0;
-}
-
-#bottom {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    padding: 1rem;
-    background-color: var(--color_1);
-    box-sizing: border-box;
 }
