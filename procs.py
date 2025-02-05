@@ -28,7 +28,7 @@ def upload(request: Any) -> str:
         if not app.simple_captcha.verify(c_text, c_hash):
             return error("Failed captcha")
 
-    if code != config.code:
+    if config.code and (code != config.code):
         return error("Invalid code")
 
     if not file:
