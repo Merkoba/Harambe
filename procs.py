@@ -23,6 +23,9 @@ def upload(request: Any) -> str:
     c_text = request.form.get("captcha-text", "")
     code = request.form.get("code", "")
 
+    if config.codes and (code not in config.codes):
+        return error("Invalid code")
+
     if config.captcha_enabled:
         check_catpcha = True
 
@@ -32,9 +35,6 @@ def upload(request: Any) -> str:
         if check_catpcha:
             if not app.simple_captcha.verify(c_text, c_hash):
                 return error("Failed captcha")
-
-    if config.code and (code != config.code):
-        return error("Invalid code")
 
     if not file:
         return error("No file")

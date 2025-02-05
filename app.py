@@ -62,7 +62,8 @@ def index() -> Any:
         captcha = None
 
     max_size = config.max_file_size
-    show_code = bool(config.code)
+    show_code = bool(config.codes)
+
     return render_template(
         "index.html", captcha=captcha, max_size=max_size, show_code=show_code
     )

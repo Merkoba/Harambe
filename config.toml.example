@@ -5,9 +5,9 @@ captcha_key = "change_me"
 # Use this to cheat the captcha by using this code
 captcha_cheat = ""
 
-# A secret code to be able to upload
+# A list of secret codes to be able to upload
 # If empty a code won't be required
-code = "change_me"
+codes = ["change_me"]
 
 # Used for the admin page at site.com/admin/password
 password = "change_me"
