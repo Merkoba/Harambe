@@ -2,6 +2,7 @@ from __future__ import annotations
 
 # Standard
 from typing import Any
+from pathlib import Path
 
 # Modules
 import app
@@ -75,3 +76,10 @@ def upload(request: Any) -> str:
         return error("File is None")
 
     return error("Nothing was uploaded")
+
+
+def get_files() -> list[str]:
+    files = Path("files").glob("*")
+    files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
+    files = [str(f) for f in files if not f.name.startswith(".")]
+    return files[:200]

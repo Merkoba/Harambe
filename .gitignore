@@ -15,15 +15,10 @@ decomp/
 *.idea
 files.db
 .directory
-
-captcha_key.txt
-captcha_cheat.txt
-code.txt
-max_file_size.txt
-
 bundle.js
 bundle.*.js
 node_modules/
 package-lock.json
 export.json
 files/*
+config.toml

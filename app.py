@@ -64,3 +64,13 @@ def index() -> Any:
 @limiter.limit(rate_limit)  # type: ignore
 def get_file(filename: str) -> Any:
     return send_from_directory("files", filename)
+
+
+@app.route("/admin/<password>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit)  # type: ignore
+def admin(password: str) -> Any:
+    if (not config.password) or (password != config.password):
+        return Response(invalid, mimetype=config.text_mtype)
+
+    files = procs.get_files()
+    return render_template("admin.html", files=files)

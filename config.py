@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 # Standard
+import tomllib
 import string
 from pathlib import Path
 
@@ -8,35 +9,17 @@ from pathlib import Path
 rate_limit = 12
 rate_limit_change = 3
 
-captcha_key = "change_me_with_file"
-captcha_key_file = Path("captcha_key.txt")
-captcha_cheat_file = Path("captcha_cheat.txt")
-captcha_cheat = ""
-
 text_mtype = "text/plain"
 file_name_max = 12
-
 max_file_size = 100_000_000
-max_file_size_file = Path("max_file_size.txt")
 
-code = "change_me_with_file"
-code_file = Path("code.txt")
-
-if captcha_key_file.is_file():
-    with captcha_key_file.open("r") as f:
-        captcha_key = f.read().strip()
-
-if captcha_cheat_file.is_file():
-    with captcha_cheat_file.open("r") as f:
-        captcha_cheat = f.read().strip()
-
-if code_file.is_file():
-    with code_file.open("r") as f:
-        code = f.read().strip()
-
-if max_file_size_file.is_file():
-    with max_file_size_file.open("r") as f:
-        max_file_size = int(f.read().strip()) * 1_000_000
+with open(Path("config.toml"), "rb") as f:
+    config = tomllib.load(f)
+    captcha_key = config["captcha_key"]
+    captcha_cheat = config["captcha_cheat"]
+    code = config["code"]
+    password = config["password"]
+    max_file_size = config["max_file_size"]
 
 captcha = {
     "SECRET_CAPTCHA_KEY": captcha_key,

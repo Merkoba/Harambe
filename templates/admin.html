@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Admin</title>
+{% endblock %}
+
+{% block body %}
+    {% for file in files %}
+    <a href="/{{ file }}">{{ file }}</a><br>
+    {% endfor %}
+{% endblock %}
