@@ -2,7 +2,7 @@
 # If empty the captcha will be disabled
 captcha_key = "change_me"
 
-# Use this to cheat the captcha by using this code
+# Use this to cheat the captcha for quick access
 captcha_cheat = ""
 
 # A list of secret codes to be able to upload
