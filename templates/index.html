@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Upload</title>
+
+<script>
+    window.onload = () => {
+        let captcha = document.querySelector("#captcha-text")
+        captcha.placeholder = "Enter the captcha"
+
+        let curl = document.querySelector("#curl")
+        curl.focus()
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <img id="image" src="static/img/cat.jpg">
+
+    <form id="form" action="/" method="post" enctype="multipart/form-data">
+        <div id="picker">
+            <input type="file" name="file">
+        </div>
+
+        <div id="captcha">
+            {{ captcha_html(captcha)|safe }}
+        </div>
+
+        <input id="code" type="text" name="code" placeholder="Enter the code">
+        <button type="submit" name="submit">Upload</button>
+    </form>
+</div>
+{% endblock %}
