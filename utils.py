@@ -18,4 +18,11 @@ def file_name(name: str, max: int) -> str:
     while name and (not name[-1].isalnum()):
         name = name[:-1]
 
+    while name and (not name[0].isalnum()):
+        name = name[1:]
+
     return name or "file"
+
+
+def get_size(n: int) -> float:
+    return round(n / 1_000_000, 2)

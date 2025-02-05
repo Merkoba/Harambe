@@ -83,9 +83,6 @@ def upload(request: Any) -> str:
 
 
 def get_files() -> list[dict[str, Any]]:
-    def size(n: int) -> float:
-        return round(n / 1_000_000, 2)
-
     files = list(Path("files").glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
     files = files[: config.admin_max_files]
@@ -93,7 +90,7 @@ def get_files() -> list[dict[str, Any]]:
     return [
         {
             "name": f.name,
-            "size": size(f.stat().st_size),
+            "size": utils.get_size(f.stat().st_size),
         }
         for f in files
         if not f.name.startswith(".")
@@ -122,7 +119,9 @@ def do_delete_file(name: str) -> None:
 def delete_all() -> tuple[str, int]:
     try:
         do_delete_all()
-        return jsonify({"status": "ok", "message": "All files deleted successfully"}), 200
+        return jsonify(
+            {"status": "ok", "message": "All files deleted successfully"}
+        ), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
