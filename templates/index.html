@@ -14,20 +14,24 @@
     function validate() {
         let captcha = document.querySelector(`#captcha-text`)
 
-        if (!captcha.value.trim()) {
-            return false
+        if (captcha) {
+            if (!captcha.value.trim()) {
+                return false
+            }
         }
 
         let code = document.querySelector(`#code`)
 
-        if (!code.value.trim()) {
-            return false
+        if (code) {
+            if (!code.value.trim()) {
+                return false
+            }
         }
 
-        let fileInput = document.querySelector(`#file`)
+        let file = document.querySelector(`#file`)
 
-        if (fileInput.files.length > 0) {
-            let file = fileInput.files[0]
+        if (file.files.length > 0) {
+            let file = file.files[0]
 
             if (file.size > max_size) {
                 return false
@@ -48,9 +52,11 @@
             <input id="file" type="file" name="file" required>
         </div>
 
-        <div id="captcha">
-            {{ captcha_html(captcha)|safe }}
-        </div>
+        {% if captcha %}
+            <div id="captcha">
+                {{ captcha_html(captcha)|safe }}
+            </div>
+        {% endif %}
 
         <!-- conditional if show_code is true -->
 

@@ -20,14 +20,15 @@ def upload(request: Any) -> str:
     c_text = request.form.get("captcha-text", "")
     code = request.form.get("code", "")
 
-    check_catpcha = True
+    if config.captcha_enabled:
+        check_catpcha = True
 
-    if config.captcha_cheat and (c_text == config.captcha_cheat):
-        check_catpcha = False
+        if config.captcha_cheat and (c_text == config.captcha_cheat):
+            check_catpcha = False
 
-    if check_catpcha:
-        if not app.simple_captcha.verify(c_text, c_hash):
-            return error("Failed captcha")
+        if check_catpcha:
+            if not app.simple_captcha.verify(c_text, c_hash):
+                return error("Failed captcha")
 
     if config.code and (code != config.code):
         return error("Invalid code")
@@ -79,7 +80,7 @@ def upload(request: Any) -> str:
 
 
 def get_files() -> list[str]:
-    files = Path("files").glob("*")
+    files = list(Path("files").glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
-    files = [str(f) for f in files if not f.name.startswith(".")]
-    return files[: config.admin_max_files]
+    names = [str(f) for f in files if not f.name.startswith(".")]
+    return names[: config.admin_max_files]

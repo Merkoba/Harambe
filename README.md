@@ -1,3 +1,11 @@
+![](screenshot.png)
+
+This is a simple file uploader that is configurable and has an admin page.
+
+## Installation
+
+Make a virtual env and install requirements.
+
 Copy `config.toml.example` and make `config.toml`.
 
 Run with gunicorn with this systemd service:
@@ -25,5 +33,3 @@ ProxyPreserveHost On
 ProxyPass / http://localhost:4040/
 ProxyPassReverse / http://localhost:4040/
 ```
-
-![](static/img/cat.jpg)

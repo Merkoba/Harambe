@@ -9,7 +9,7 @@ from flask_cors import CORS  # type: ignore
 from flask_simple_captcha import CAPTCHA  # type: ignore
 from flask_limiter import Limiter  # type: ignore
 from flask_limiter.util import get_remote_address  # type: ignore
-from flask import send_from_directory  # type: ignore
+from flask import send_from_directory  # pyright: ignore
 
 # Modules
 import config
@@ -54,10 +54,16 @@ def index() -> Any:
         except Exception:
             return Response(invalid, mimetype=config.text_mtype)
 
-    captcha = simple_captcha.create()
+    if config.captcha_enabled:
+        captcha = simple_captcha.create()
+    else:
+        captcha = None
+
     max_size = config.max_file_size
     show_code = bool(config.code)
-    return render_template("index.html", captcha=captcha, max_size=max_size, show_code=show_code)
+    return render_template(
+        "index.html", captcha=captcha, max_size=max_size, show_code=show_code
+    )
 
 
 @app.route("/files/<path:filename>", methods=["GET"])  # type: ignore

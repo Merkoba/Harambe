@@ -1,4 +1,5 @@
 # Set this to a long random string
+# If empty the captcha will be disabled
 captcha_key = "change_me"
 
 # Use this to cheat the captcha by using this code

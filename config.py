@@ -13,7 +13,7 @@ text_mtype = "text/plain"
 file_name_max = 12
 admin_max_files = 1000
 
-with open(Path("config.toml"), "rb") as f:
+with Path("config.toml").open("rb") as f:
     config = tomllib.load(f)
     captcha_key = config["captcha_key"]
     captcha_cheat = config["captcha_cheat"]
@@ -21,8 +21,10 @@ with open(Path("config.toml"), "rb") as f:
     password = config["password"]
     max_file_size = int(config["max_file_size"]) * 1_000_000
 
+captcha_enabled = bool(captcha_key)
+
 captcha = {
-    "SECRET_CAPTCHA_KEY": captcha_key,
+    "SECRET_CAPTCHA_KEY": captcha_key or "nothing",
     "CAPTCHA_LENGTH": 10,
     "CAPTCHA_DIGITS": False,
     "EXPIRE_SECONDS": 60,
