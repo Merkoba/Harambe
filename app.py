@@ -79,7 +79,7 @@ def admin(password: str) -> Any:
         return Response(invalid, mimetype=config.text_mtype)
 
     files = procs.get_files()
-    return render_template("admin.html", files=files)
+    return render_template("admin.html", files=files, password=password)
 
 
 @app.route("/delete", methods=["POST"])  # type: ignore
@@ -87,4 +87,21 @@ def admin(password: str) -> Any:
 def delete() -> Any:
     data = request.get_json()
     name = data.get("name", None)
+    password = data.get("password", None)
+
+    if password != config.password:
+        return Response(invalid, mimetype=config.text_mtype)
+
     return procs.delete_file(name)
+
+
+@app.route("/delete_all", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit)  # type: ignore
+def delete_all() -> Any:
+    data = request.get_json()
+    password = data.get("password", None)
+
+    if password != config.password:
+        return Response(invalid, mimetype=config.text_mtype)
+
+    return procs.delete_all()

@@ -117,3 +117,19 @@ def do_delete_file(name: str) -> None:
 
     if file.exists():
         file.unlink()
+
+
+def delete_all() -> tuple[str, int]:
+    try:
+        do_delete_all()
+        return jsonify({"status": "ok", "message": "All files deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+def do_delete_all() -> None:
+    files = Path("files").glob("*")
+
+    for file in files:
+        if not file.name.startswith("."):
+            file.unlink()
