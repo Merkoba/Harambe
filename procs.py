@@ -82,5 +82,5 @@ def upload(request: Any) -> str:
 def get_files() -> list[str]:
     files = list(Path("files").glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
-    names = [str(f) for f in files if not f.name.startswith(".")]
-    return names[: config.admin_max_files]
+    files = files[: config.admin_max_files]
+    return [f.name for f in files if not f.name.startswith(".")]
