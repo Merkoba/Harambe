@@ -9,7 +9,7 @@ window.onload = () => {
         }
     })
 
-    let delete_all = document.getElementById(`delete_all`)
+    let delete_all = document.querySelector(`#delete_all`)
 
     delete_all.addEventListener(`click`, () => {
         if (confirm(`Delete All`)) {
@@ -50,7 +50,7 @@ async function delete_all_files() {
         })
 
         if (response.ok) {
-            document.getElementById(`links`).innerHTML = ``
+            document.querySelector(`#links`).innerHTML = ``
         }
         else {
             console.error(`Error:`, response.status)

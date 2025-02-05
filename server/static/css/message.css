@@ -1,10 +1,10 @@
 :root {
-    --color_1: rgb(222, 211, 239);
+    --color_1: rgb(222 211 239);
 }
 
 body, html {
     color: white;
-    background-color: rgb(81, 81, 81);
+    background-color: rgb(81 81 81);
     font-family: monospace;
     font-size: 20px;
     margin-left: 20px;

@@ -1,5 +1,5 @@
 window.onload = () => {
-  let copy = document.getElementById(`copy`)
+  let copy = document.querySelected(`#copy`)
 
   if (copy) {
     copy.addEventListener(`click`, () => {
@@ -16,7 +16,7 @@ window.onload = () => {
     })
   }
 
-  let new_tab = document.getElementById(`new_tab`)
+  let new_tab = document.querySelected(`#new_tab`)
 
   if (new_tab) {
     new_tab.addEventListener(`click`, () => {

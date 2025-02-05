@@ -1,6 +1,12 @@
 window.onload = () => {
   let captcha = document.querySelector(`#captcha-text`)
   captcha.placeholder = `Enter the captcha`
+
+  let image = document.querySelector(`#image`)
+
+  image.addEventListener(`click`, (event) => {
+    window.scrollTo(0, document.body.scrollHeight)
+  })
 }
 
 function validate() {
