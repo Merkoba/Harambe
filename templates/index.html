@@ -52,8 +52,10 @@
             {{ captcha_html(captcha)|safe }}
         </div>
 
-        <input id="code" type="text" name="code" placeholder="Enter the code" required>
-        <button type="submit" name="submit">Upload</button>
+        <div id="bottom">
+            <input id="code" type="text" name="code" placeholder="Enter the code" required>
+            <button type="submit" name="submit">Upload</button>
+        </div>
     </form>
 </div>
 {% endblock %}
