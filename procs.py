@@ -51,16 +51,17 @@ def upload(request: Any) -> str:
                 if content:
                     file.seek(0)
                     fname = file.filename
-                    split = fname.split(".")
-
-                    if len(split) < 2:
-                        return error("File has no extension")
-
-                    ext = split[-1]
-                    name = split[0]
+                    pfile = Path(fname)
+                    ext = pfile.suffix
+                    name = pfile.stem
                     name = utils.file_name(name, config.file_name_max)
                     name = f"{name}_{int(utils.now())}_{utils.numstring(3)}"
-                    new_name = f"{name}.{ext}"
+
+                    if ext:
+                        new_name = f"{name}{ext}"
+                    else:
+                        new_name = name
+
                     path = f"files/{new_name}"
 
                     try:

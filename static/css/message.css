@@ -7,5 +7,13 @@ body, html {
 
 a:link, a:visited {
     color: white;
+    text-decoration: none;
+}
+
+a:hover {
     text-decoration: underline;
+}
+
+img {
+    height: 14rem;
 }
