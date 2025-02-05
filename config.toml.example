@@ -6,6 +6,10 @@ captcha_key = "change_me"
 # If empty no cheat will be accepted
 captcha_cheat = ""
 
+# The number of characters in the captcha
+# The lower the number the easier it is
+captcha_length = 8
+
 # A list of secret codes to be able to upload
 # If empty a code won't be required
 codes = ["change_me"]

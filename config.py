@@ -16,6 +16,7 @@ with Path("config.toml").open("rb") as f:
     config = tomllib.load(f)
     captcha_key = config["captcha_key"]
     captcha_cheat = config["captcha_cheat"]
+    captcha_length = int(config["captcha_length"])
     codes = config["codes"]
     password = config["password"]
     max_file_size = int(config["max_file_size"]) * 1_000_000
@@ -25,7 +26,7 @@ captcha_enabled = bool(captcha_key)
 
 captcha = {
     "SECRET_CAPTCHA_KEY": captcha_key or "nothing",
-    "CAPTCHA_LENGTH": 8,
+    "CAPTCHA_LENGTH": captcha_length,
     "CAPTCHA_DIGITS": False,
     "EXPIRE_SECONDS": 60,
     "CAPTCHA_IMG_FORMAT": "JPEG",
