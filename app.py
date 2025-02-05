@@ -55,7 +55,8 @@ def index() -> Any:
             return Response(invalid, mimetype=config.text_mtype)
 
     captcha = simple_captcha.create()
-    return render_template("index.html", captcha=captcha)
+    max_size = config.max_file_size
+    return render_template("index.html", captcha=captcha, max_size=max_size)
 
 
 @app.route("/files/<path:filename>", methods=["GET"])  # type: ignore
