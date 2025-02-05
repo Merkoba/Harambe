@@ -4,11 +4,17 @@ body, html {
     color: black;
 }
 
+#delete_all {
+    font-size: 1rem;
+    color: rgb(67, 130, 137);
+    cursor: pointer;
+}
+
 #links {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
 }
 
 .link {
@@ -24,12 +30,6 @@ body, html {
 
 .delete:hover {
     text-decoration: underline;
-}
-
-#delete_all {
-    font-size: 1rem;
-    color: rgb(67, 130, 137);
-    cursor: pointer;
 }
 
 #delete_all:hover {
