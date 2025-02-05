@@ -71,10 +71,14 @@ def get_file(filename: str) -> Any:
     return send_from_directory("files", filename)
 
 
+def check_password(password: str) -> bool:
+    return (config.password) and (password == config.password)
+
+
 @app.route("/admin/<password>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit)  # type: ignore
 def admin(password: str) -> Any:
-    if (not config.password) or (password != config.password):
+    if not check_password(password):
         return Response(invalid, mimetype=config.text_mtype)
 
     files = procs.get_files()
@@ -88,7 +92,7 @@ def delete() -> Any:
     name = data.get("name", None)
     password = data.get("password", None)
 
-    if password != config.password:
+    if not check_password(password):
         return Response(invalid, mimetype=config.text_mtype)
 
     return procs.delete_file(name)
@@ -100,7 +104,7 @@ def delete_all() -> Any:
     data = request.get_json()
     password = data.get("password", None)
 
-    if password != config.password:
+    if not check_password(password):
         return Response(invalid, mimetype=config.text_mtype)
 
     return procs.delete_all()
