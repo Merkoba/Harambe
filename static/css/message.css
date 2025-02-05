@@ -1,0 +1,11 @@
+body, html {
+    color: white;
+    background-color: rgb(81, 81, 81);
+    font-family: monospace;
+    font-size: 20px;
+}
+
+a:link, a:visited {
+    color: white;
+    text-decoration: underline;
+}

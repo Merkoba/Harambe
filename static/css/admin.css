@@ -1,0 +1,43 @@
+body, html {
+    font-size: 20px;
+}
+
+#links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0.8rem;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.delete {
+    color: rgb(67, 130, 137);
+    cursor: pointer;
+}
+
+.delete:hover {
+    text-decoration: underline;
+}
+
+#delete_all {
+    font-size: 1rem;
+    color: rgb(67, 130, 137);
+    cursor: pointer;
+}
+
+#delete_all:hover {
+    text-decoration: underline;
+}
+
+a:link, a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
