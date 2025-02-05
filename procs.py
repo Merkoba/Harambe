@@ -101,6 +101,9 @@ def delete_file(name: str) -> tuple[str, int]:
     if not name:
         return jsonify({"status": "error", "message": "Filename is required"}), 400
 
+    if name.startswith("."):
+        return jsonify({"status": "error", "message": "Invalid filename"}), 400
+
     try:
         do_delete_file(name)
         return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
