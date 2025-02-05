@@ -89,7 +89,7 @@ def get_files() -> list[str]:
     return [f.name for f in files if not f.name.startswith(".")]
 
 
-def delete_file(name: str) -> str:
+def delete_file(name: str) -> tuple[str, int]:
     if not name:
         return jsonify({"status": "error", "message": "Filename is required"}), 400
 
