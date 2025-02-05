@@ -88,8 +88,9 @@
 <div id="links">
     {% for file in files %}
     <div class="link">
-        <a href="/files/{{ file }}">{{ file }}</a><br>
-        <span class="delete" data-name="{{ file }}">Delete</span>
+        <a href="/files/{{ file.name }}">{{ file.name }}</a>
+        <span>({{ file.size }} mb)</span>
+        <span class="delete" data-name="{{ file.name }}">Delete</span>
     </div>
     {% endfor %}
 </div>

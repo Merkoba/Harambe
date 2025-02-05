@@ -82,11 +82,22 @@ def upload(request: Any) -> str:
     return error("Nothing was uploaded")
 
 
-def get_files() -> list[str]:
+def get_files() -> list[dict[str, Any]]:
+    def size(n: int) -> float:
+        return round(n / 1_000_000, 2)
+
     files = list(Path("files").glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
     files = files[: config.admin_max_files]
-    return [f.name for f in files if not f.name.startswith(".")]
+
+    return [
+        {
+            "name": f.name,
+            "size": size(f.stat().st_size),
+        }
+        for f in files
+        if not f.name.startswith(".")
+    ]
 
 
 def delete_file(name: str) -> tuple[str, int]:
