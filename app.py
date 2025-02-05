@@ -43,6 +43,9 @@ limiter = Limiter(
 invalid = "Error: Invalid request"
 
 
+# INDEX / UPLOAD
+
+
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit)  # type: ignore
 def index() -> Any:
@@ -65,14 +68,20 @@ def index() -> Any:
     )
 
 
+# SERVE FILE
+
+
 @app.route("/files/<path:filename>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit)  # type: ignore
 def get_file(filename: str) -> Any:
     return send_from_directory("files", filename)
 
 
+# ADMIN
+
+
 def check_password(password: str) -> bool:
-    return (config.password) and (password == config.password)
+    return bool(config.password) and (password == config.password)
 
 
 @app.route("/admin/<password>", methods=["GET"])  # type: ignore
