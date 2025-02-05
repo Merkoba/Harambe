@@ -12,8 +12,8 @@ from flask_limiter.util import get_remote_address  # type: ignore
 from flask import send_from_directory  # type: ignore
 
 # Modules
-import config as Config
-import procs as Procs
+import config
+import procs
 
 
 # ---
@@ -24,10 +24,10 @@ app = Flask(__name__)
 # Enable all cross origin requests
 CORS(app)
 
-simple_captcha = CAPTCHA(config=Config.captcha)
+simple_captcha = CAPTCHA(config=config.captcha)
 app = simple_captcha.init_app(app)
-rate_limit = f"{Config.rate_limit} per minute"
-rate_limit_change = f"{Config.rate_limit_change} per minute"
+rate_limit = f"{config.rate_limit} per minute"
+rate_limit_change = f"{config.rate_limit_change} per minute"
 
 limiter = Limiter(
     get_remote_address,
@@ -49,11 +49,10 @@ invalid = "Error: Invalid request"
 def index() -> Any:
     if request.method == "POST":
         try:
-            message = Procs.upload(request)
+            message = procs.upload(request)
             return render_template("message.html", message=message)
-        except Exception as e:
-            print(e)
-            return Response(invalid, mimetype=Config.text_mtype)
+        except Exception:
+            return Response(invalid, mimetype=config.text_mtype)
 
     captcha = simple_captcha.create()
     return render_template("index.html", captcha=captcha)
