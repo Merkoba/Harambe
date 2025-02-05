@@ -20,6 +20,7 @@ import procs
 
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = config.max_file_size
 
 # Enable all cross origin requests
 CORS(app)
