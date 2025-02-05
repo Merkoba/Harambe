@@ -11,7 +11,7 @@ rate_limit_change = 3
 
 text_mtype = "text/plain"
 file_name_max = 12
-max_file_size = 100_000_000
+admin_max_files = 1000
 
 with open(Path("config.toml"), "rb") as f:
     config = tomllib.load(f)

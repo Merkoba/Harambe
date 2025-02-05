@@ -82,4 +82,4 @@ def get_files() -> list[str]:
     files = Path("files").glob("*")
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
     files = [str(f) for f in files if not f.name.startswith(".")]
-    return files[:1000]
+    return files[: config.admin_max_files]
