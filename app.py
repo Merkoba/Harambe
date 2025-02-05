@@ -27,7 +27,6 @@ CORS(app)
 simple_captcha = CAPTCHA(config=config.captcha)
 app = simple_captcha.init_app(app)
 rate_limit = f"{config.rate_limit} per minute"
-rate_limit_change = f"{config.rate_limit_change} per minute"
 
 limiter = Limiter(
     get_remote_address,
