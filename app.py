@@ -46,13 +46,19 @@ invalid = "Error: Invalid request"
 # INDEX / UPLOAD
 
 
+def show_message(ans: dict[str, str]) -> Any:
+    return render_template(
+        "message.html", mode=ans["mode"], message=ans["message"], data=ans["data"]
+    )
+
+
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit)  # type: ignore
 def index() -> Any:
     if request.method == "POST":
         try:
             message = procs.upload(request)
-            return render_template("message.html", message=message)
+            return show_message(message)
         except Exception:
             return Response(invalid, mimetype=config.text_mtype)
 

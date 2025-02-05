@@ -1,3 +1,7 @@
+:root {
+    --color_1: rgb(222, 211, 239);
+}
+
 body, html {
     color: white;
     background-color: rgb(81, 81, 81);
@@ -20,4 +24,13 @@ img {
 
 img:hover {
     outline: 2px solid white;
+}
+
+.button {
+    color: var(--color_1);
+    cursor: pointer;
+}
+
+.button:hover {
+    text-decoration: underline;
 }

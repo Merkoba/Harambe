@@ -13,11 +13,11 @@ import utils
 import config
 
 
-def error(s: str) -> str:
-    return f"Error: {s}"
+def error(s: str) -> dict[str, str]:
+    return {"message": f"Error: {s}", "mode": "error", "data": ""}
 
 
-def upload(request: Any) -> str:
+def upload(request: Any) -> dict[str, str]:
     file = request.files.get("file", None)
     c_hash = request.form.get("captcha-hash", "")
     c_text = request.form.get("captcha-text", "")
@@ -70,7 +70,8 @@ def upload(request: Any) -> str:
                         return error("Failed to save file")
 
                     mb = round(length / 1_000_000, 2)
-                    return f'Uploaded: <a href="/{path}">{new_name}</a> ({mb} mb)'
+                    m = f'Uploaded: <a href="/{path}">{new_name}</a> ({mb} mb)'
+                    return {"message": m, "mode": "upload", "data": path}
 
                 return error("File is empty")
             except Exception:

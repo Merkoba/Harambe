@@ -3,11 +3,44 @@
 {% block head %}
 <title>Message</title>
 <link rel="stylesheet" href="/static/css/message.css">
+
+<script>
+    let mode = `{{ mode }}`
+    let data = `{{ data }}`
+
+    window.onload = () => {
+        let copy = document.getElementById(`copy`)
+
+        copy.addEventListener(`click`, () => {
+            if (mode === `upload`) {
+                let loc = window.location
+                let root = `${loc.protocol}//${loc.hostname}`
+
+                if (loc.port) {
+                    root += `:${loc.port}`
+                }
+
+                navigator.clipboard.writeText(`${root}/${data}`)
+            }
+        })
+    }
+</script>
 {% endblock %}
 
 {% block body %}
-{{message|safe}}
-<br><br>
+
+<div id="message">
+    {{message|safe}}
+</div>
+
+<br>
+
+{% if mode == "upload" %}
+    <div id="copy" class="button">Copy to Clipboard</div>
+    <br>
+{% endif %}
+
 <a href="/"><img src="/static/img/return.jpg"></a>
-<br><br>
+
+<br>
 {% endblock %}
