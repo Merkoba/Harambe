@@ -38,7 +38,7 @@ def upload(request: Any) -> str:
                 length = len(content)
 
                 if length > Config.max_file_size:
-                    return "Error: File too big"
+                    return "Error: File is too big"
 
                 if content:
                     file.seek(0)

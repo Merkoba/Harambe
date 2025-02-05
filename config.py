@@ -15,8 +15,10 @@ captcha_cheat_file = Path("captcha_cheat.txt")
 captcha_cheat = ""
 
 text_mtype = "text/plain"
-max_file_size = 100_000_000
 file_name_max = 12
+
+max_file_size = 100_000_000
+max_file_size_file = Path("max_file_size.txt")
 
 code = "change_me_with_file"
 code_file = Path("code.txt")
@@ -32,6 +34,10 @@ if captcha_cheat_file.is_file():
 if code_file.is_file():
     with code_file.open("r") as f:
         code = f.read().strip()
+
+if max_file_size_file.is_file():
+    with max_file_size_file.open("r") as f:
+        max_file_size = int(f.read().strip()) * 1_000_000
 
 captcha = {
     "SECRET_CAPTCHA_KEY": captcha_key,
