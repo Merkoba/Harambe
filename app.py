@@ -33,7 +33,7 @@ limiter = Limiter(
     get_remote_address,
     app=app,
     default_limits=[rate_limit],
-    storage_uri="redis://localhost:6379",
+    storage_uri=f"redis://localhost:{config.redis_port}",
     strategy="fixed-window",
 )
 

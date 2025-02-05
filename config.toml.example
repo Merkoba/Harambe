@@ -15,3 +15,7 @@ password = "change_me"
 # Max file size allowed
 # In megabytes (MB)
 max_file_size = 100
+
+# Port for redis
+# This is used by the limiter
+redis_port = 6379

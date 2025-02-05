@@ -20,6 +20,7 @@ with Path("config.toml").open("rb") as f:
     code = config["code"]
     password = config["password"]
     max_file_size = int(config["max_file_size"]) * 1_000_000
+    redis_port = config["redis_port"]
 
 captcha_enabled = bool(captcha_key)
 
