@@ -19,7 +19,7 @@ with open(Path("config.toml"), "rb") as f:
     captcha_cheat = config["captcha_cheat"]
     code = config["code"]
     password = config["password"]
-    max_file_size = config["max_file_size"]
+    max_file_size = int(config["max_file_size"]) * 1_000_000
 
 captcha = {
     "SECRET_CAPTCHA_KEY": captcha_key,
