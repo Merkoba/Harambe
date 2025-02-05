@@ -3,6 +3,7 @@
 captcha_key = "change_me"
 
 # Use this to cheat the captcha for quick access
+# If empty no cheat will be accepted
 captcha_cheat = ""
 
 # A list of secret codes to be able to upload
