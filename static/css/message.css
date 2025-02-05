@@ -7,19 +7,27 @@ body, html {
     background-color: rgb(81, 81, 81);
     font-family: monospace;
     font-size: 20px;
+    margin-left: 20px;
+    margin-top: 16px;
+    padding: 0;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 a:link, a:visited {
     color: white;
-    text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline;
+.link:hover {
+    font-weight: bold;
 }
 
 img {
-    height: 14rem;
+    height: 15rem;
 }
 
 img:hover {
@@ -29,8 +37,16 @@ img:hover {
 .button {
     color: var(--color_1);
     cursor: pointer;
+    text-decoration: underline;
 }
 
 .button:hover {
     text-decoration: underline;
+    filter: brightness(1.5);
+}
+
+#buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
 }

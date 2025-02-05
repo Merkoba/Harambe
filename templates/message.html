@@ -7,40 +7,26 @@
 <script>
     let mode = `{{ mode }}`
     let data = `{{ data }}`
-
-    window.onload = () => {
-        let copy = document.getElementById(`copy`)
-
-        copy.addEventListener(`click`, () => {
-            if (mode === `upload`) {
-                let loc = window.location
-                let root = `${loc.protocol}//${loc.hostname}`
-
-                if (loc.port) {
-                    root += `:${loc.port}`
-                }
-
-                navigator.clipboard.writeText(`${root}/${data}`)
-            }
-        })
-    }
 </script>
+
+<script src="/static/js/message.js"></script>
 {% endblock %}
 
 {% block body %}
 
-<div id="message">
+<div id="main">
+    <div id="message">
     {{message|safe}}
+    </div>
+
+    {% if mode == "upload" %}
+    <div id="buttons">
+        <div id="copy" class="button">Copy to Clipboard</div>
+        <div id="new_tab" class="button">Open In New Tab</div>
+    </div>
+    {% endif %}
+
+    <a href="/"><img src="/static/img/return.jpg"></a>
 </div>
 
-<br>
-
-{% if mode == "upload" %}
-    <div id="copy" class="button">Copy to Clipboard</div>
-    <br>
-{% endif %}
-
-<a href="/"><img src="/static/img/return.jpg"></a>
-
-<br>
 {% endblock %}

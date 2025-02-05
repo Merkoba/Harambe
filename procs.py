@@ -70,7 +70,7 @@ def upload(request: Any) -> dict[str, str]:
                         return error("Failed to save file")
 
                     mb = round(length / 1_000_000, 2)
-                    m = f'Uploaded: <a href="/{path}">{new_name}</a> ({mb} mb)'
+                    m = f'Uploaded: <a class="link" href="/{path}">{new_name}</a> ({mb} mb)'
                     return {"message": m, "mode": "upload", "data": path}
 
                 return error("File is empty")
