@@ -84,7 +84,7 @@ def upload(request: Any) -> dict[str, str]:
     return error("Nothing was uploaded")
 
 
-def time_ago(date: int) -> str:
+def time_ago(date: float) -> str:
     return utils.time_ago(date, utils.now())
 
 
