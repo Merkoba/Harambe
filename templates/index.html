@@ -7,9 +7,22 @@
     window.onload = () => {
         let captcha = document.querySelector("#captcha-text")
         captcha.placeholder = "Enter the captcha"
+    }
 
-        let curl = document.querySelector("#curl")
-        curl.focus()
+    function validate() {
+        let captcha = document.querySelector("#captcha-text")
+
+        if (!captcha.value.trim()) {
+            return false
+        }
+
+        let code = document.querySelector("#code")
+
+        if (!code.value.trim()) {
+            return false
+        }
+
+        return true
     }
 </script>
 {% endblock %}
@@ -18,7 +31,7 @@
 <div id="main">
     <img id="image" src="static/img/cat.jpg">
 
-    <form id="form" action="/" method="post" enctype="multipart/form-data">
+    <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
         <div id="picker">
             <input type="file" name="file">
         </div>
