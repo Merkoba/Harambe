@@ -20,6 +20,7 @@
     <div class="link">
         <a href="/files/{{ file.name }}">{{ file.name }}</a>
         <span>({{ file.size }} mb)</span>
+        <span>({{ file.ago }})</span>
         <span class="delete" data-name="{{ file.name }}">Delete</span>
     </div>
     {% endfor %}

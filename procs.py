@@ -84,6 +84,10 @@ def upload(request: Any) -> dict[str, str]:
     return error("Nothing was uploaded")
 
 
+def time_ago(date: int) -> str:
+    return utils.time_ago(date, utils.now())
+
+
 def get_files() -> list[dict[str, Any]]:
     files = list(Path("files").glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
@@ -93,6 +97,7 @@ def get_files() -> list[dict[str, Any]]:
         {
             "name": f.name,
             "size": utils.get_size(f.stat().st_size),
+            "ago": time_ago(f.stat().st_mtime),
         }
         for f in files
         if not f.name.startswith(".")
