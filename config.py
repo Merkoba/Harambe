@@ -6,8 +6,7 @@ import string
 from pathlib import Path
 
 
-rate_limit = 6
-rate_limit_change = 3
+rate_limit = 12
 
 text_mtype = "text/plain"
 file_name_max = 12
