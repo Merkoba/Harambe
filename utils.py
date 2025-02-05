@@ -40,19 +40,19 @@ def time_ago(start_time: float, end_time: float) -> str:
     seconds = int(diff)
 
     if seconds < 60:
-        word = singular_or_plural(seconds, "second", "seconds")
+        word = singular_or_plural(seconds, "sec", "secs")
         return f"{seconds} {word} ago"
 
     minutes = seconds // 60
 
     if minutes < 60:
-        word = singular_or_plural(minutes, "minute", "minutes")
+        word = singular_or_plural(minutes, "min", "mins")
         return f"{minutes} {word} ago"
 
     hours = minutes / 60
 
     if hours < 24:
-        word = singular_or_plural(hours, "hour", "hours")
+        word = singular_or_plural(hours, "hr", "hrs")
         return f"{hours:.1f} {word} ago"
 
     days = hours / 24
