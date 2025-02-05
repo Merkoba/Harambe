@@ -3,19 +3,94 @@
 {% block head %}
 <title>Admin</title>
 <style>
+    body, html {
+        font-size: 20px;
+    }
+
     #links {
         display: flex;
         flex-direction: column;
-        font-size: 20px;
         gap: 0.25rem;
+        margin-top: 0.8rem;
+    }
+
+    .link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .delete {
+        color: rgb(67, 130, 137);
+        cursor: pointer;
+    }
+
+    .delete:hover {
+        text-decoration: underline;
+    }
+
+    #delete_all {
+        font-size: 1rem;
+        color: rgb(67, 130, 137);
+        cursor: pointer;
+    }
+
+    #delete_all:hover {
+        text-decoration: underline;
+    }
+
+    a:link, a:visited {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
     }
 </style>
+
+<script>
+    document.addEventListener('mouseup', async (e) => {
+        if (e.target.classList.contains('delete')) {
+            let name = e.target.dataset.name
+
+            if (confirm(`Delete: ${name}`)) {
+                delete_file(name, e.target)
+            }
+        }
+    })
+
+    async function delete_file(name, el) {
+        try {
+            let response = await fetch('/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name})
+            })
+
+            if (response.ok) {
+                el.closest('.link').remove()
+            } else {
+                console.error('Error:', response.status)
+            }
+        }
+        catch (error) {
+            console.error('Error:', error)
+        }
+    }
+</script>
 {% endblock %}
 
 {% block body %}
+<div id="delete_all">Delete All</div>
+
 <div id="links">
     {% for file in files %}
-    <a href="/files/{{ file }}">{{ file }}</a><br>
+    <div class="link">
+        <a href="/files/{{ file }}">{{ file }}</a><br>
+        <span class="delete" data-name="{{ file }}">Delete</span>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

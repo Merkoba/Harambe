@@ -80,3 +80,11 @@ def admin(password: str) -> Any:
 
     files = procs.get_files()
     return render_template("admin.html", files=files)
+
+
+@app.route("/delete", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit)  # type: ignore
+def delete() -> Any:
+    data = request.get_json()
+    name = data.get("name", None)
+    return procs.delete_file(name)

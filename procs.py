@@ -4,6 +4,9 @@ from __future__ import annotations
 from typing import Any
 from pathlib import Path
 
+# Libraries
+from flask import jsonify  # type: ignore
+
 # Modules
 import app
 import utils
@@ -84,3 +87,22 @@ def get_files() -> list[str]:
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
     files = files[: config.admin_max_files]
     return [f.name for f in files if not f.name.startswith(".")]
+
+
+def delete_file(name: str) -> str:
+    if not name:
+        return jsonify({"status": "error", "message": "Filename is required"}), 400
+
+    try:
+        do_delete_file(name)
+        return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+def do_delete_file(name: str) -> None:
+    path = f"files/{name}"
+    file = Path(path)
+
+    if file.exists():
+        file.unlink()
