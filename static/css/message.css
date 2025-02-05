@@ -17,3 +17,7 @@ a:hover {
 img {
     height: 14rem;
 }
+
+img:hover {
+    outline: 2px solid white;
+}
