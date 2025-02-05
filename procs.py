@@ -133,5 +133,7 @@ def do_delete_all() -> None:
     files = Path("files").glob("*")
 
     for file in files:
-        if not file.name.startswith("."):
-            file.unlink()
+        if file.name.startswith("."):
+            continue
+
+        file.unlink()
