@@ -25,7 +25,7 @@ captcha_enabled = bool(captcha_key)
 
 captcha = {
     "SECRET_CAPTCHA_KEY": captcha_key or "nothing",
-    "CAPTCHA_LENGTH": 10,
+    "CAPTCHA_LENGTH": 8,
     "CAPTCHA_DIGITS": False,
     "EXPIRE_SECONDS": 60,
     "CAPTCHA_IMG_FORMAT": "JPEG",
