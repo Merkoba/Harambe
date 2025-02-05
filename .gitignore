@@ -17,6 +17,7 @@ files.db
 .directory
 captcha_key.txt
 captcha_cheat.txt
+code.txt
 bundle.js
 bundle.*.js
 node_modules/
