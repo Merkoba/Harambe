@@ -45,3 +45,21 @@ ProxyPassReverse / http://localhost:4040/
 Basic admin page to view and delete files:
 
 ![](admin.png)
+
+---
+
+## Keys
+
+There is a file you can create in `config` called `keys.toml`.
+
+You can copy `keys.toml.example`.
+
+You can add keys to this array to allow users to upload through a bash script.
+
+You'd give a key to each user and they would modify the script to use it.
+
+The example upload script is [here](upload.sh).
+
+The keys file is read every 60 seconds.
+
+So keys can be added or removed without having to restart the server.

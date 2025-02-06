@@ -82,6 +82,12 @@ def index() -> Any:
     )
 
 
+@app.route("/upload", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit)  # type: ignore
+def upload() -> Any:
+    return procs.upload(request, "user").message
+
+
 @app.route("/message", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit)  # type: ignore
 def message() -> Any:

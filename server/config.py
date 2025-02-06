@@ -3,6 +3,8 @@ from __future__ import annotations
 # Standard
 import tomllib
 import string
+import time
+import threading
 from pathlib import Path
 
 
@@ -23,6 +25,7 @@ with Path("config/config.toml").open("rb") as f:
     password = config.get("password", "fixthis")
     max_file_size = int(config.get("max_file_size", 100))
     redis_port = config.get("redis_port", 6379)
+    key_limit = int(config.get("key_limit", 3))
 
 max_file_size *= 1_000_000
 captcha_enabled = bool(captcha_key)
@@ -36,3 +39,25 @@ captcha = {
     "ONLY_UPPERCASE": False,
     "CHARACTER_POOL": string.ascii_lowercase,
 }
+
+key_check_delay = 60
+keypath = "config/keys.toml"
+keys = []
+
+def read_keys():
+    global keys
+
+    if Path(keypath).exists():
+        with Path(keypath).open("rb") as f:
+            keys = tomllib.load(f).get("keys", [])
+
+def periodic_read_keys():
+    while True:
+        read_keys()
+        time.sleep(key_check_delay)
+
+
+# Read the keys every x seconds
+# This allows you to edit the file without restarting
+thread = threading.Thread(target=periodic_read_keys, daemon=True)
+thread.start()

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 # Standard
+import time
 from typing import Any
 from pathlib import Path
 from dataclasses import dataclass
+from collections import deque
 
 # Libraries
 from flask import jsonify  # type: ignore
@@ -19,77 +21,117 @@ import config
 class Message:
     message: str
     mode: str
-    data: str
+    data: str = ""
+
+
+class KeyData:
+    def __init__(self):
+        self.timestamps = deque()
+        self.limit = config.key_limit
+        self.window = 60  # Rate limit per minute
+
+    def increment(self):
+        now = time.time()
+        self.timestamps.append(now)
+
+        while self.timestamps and (self.timestamps[0] < (now - self.window)):
+            self.timestamps.popleft()
+
+    def blocked(self) -> bool:
+        self.increment()
+        return len(self.timestamps) > self.limit
+
+
+key_data: dict[str, KeyData] = {}
 
 
 def error(s: str) -> Message:
-    return Message(f"Error: {s}", "error", "")
+    return Message(f"Error: {s}", "error")
 
 
-def upload(request: Any) -> Message:
+def upload(request: Any, mode: str = "normal") -> Message:
     file = request.files.get("file", None)
-    c_hash = request.form.get("captcha-hash", "")
-    c_text = request.form.get("captcha-text", "")
-    code = request.form.get("code", "")
-
-    if config.codes and (code not in config.codes):
-        return error("Invalid code")
-
-    if config.captcha_enabled:
-        check_catpcha = True
-
-        if config.captcha_cheat and (c_text == config.captcha_cheat):
-            check_catpcha = False
-
-        if check_catpcha:
-            if not app.simple_captcha.verify(c_text, c_hash):
-                return error("Failed captcha")
 
     if not file:
         return error("No file")
 
-    if file:
-        if hasattr(file, "read"):
-            try:
-                content = file.read()
-                length = len(content)
+    if mode == "normal":
+        c_hash = request.form.get("captcha-hash", "")
+        c_text = request.form.get("captcha-text", "")
+        code = request.form.get("code", "")
 
-                if length > config.max_file_size:
-                    return error("File is too big")
+        if config.codes and (code not in config.codes):
+            return error("Invalid code")
 
-                if content:
-                    file.seek(0)
-                    fname = file.filename
-                    pfile = Path(fname)
-                    ext = pfile.suffix
-                    name = pfile.stem
-                    name = ulid.new().timestamp().str
+        if config.captcha_enabled:
+            check_catpcha = True
 
-                    if ext:
-                        new_name = f"{name}{ext}"
-                    else:
-                        new_name = name
+            if config.captcha_cheat and (c_text == config.captcha_cheat):
+                check_catpcha = False
 
-                    path = utils.files_dir() / new_name
-                    fpath = f"file/{new_name}"
+            if check_catpcha:
+                if not app.simple_captcha.verify(c_text, c_hash):
+                    return error("Failed captcha")
+    elif mode == "user":
+        key = request.form.get("key", "")
 
-                    try:
-                        file.save(path)
-                    except Exception:
-                        return error("Failed to save file")
+        if not key:
+            return error("Key is required")
 
+        if key not in config.keys:
+            return error("Invalid key")
+
+        if key not in key_data:
+            key_data[key] = KeyData()
+
+        d = key_data[key]
+
+        if d.blocked():
+            return error("Rate limit exceeded")
+
+    if hasattr(file, "read"):
+        try:
+            content = file.read()
+            length = len(content)
+
+            if length > config.max_file_size:
+                return error("File is too big")
+
+            if content:
+                file.seek(0)
+                fname = file.filename
+                pfile = Path(fname)
+                ext = pfile.suffix
+                name = pfile.stem
+                name = ulid.new().timestamp().str
+
+                if ext:
+                    new_name = f"{name}{ext}"
+                else:
+                    new_name = name
+
+                path = utils.files_dir() / new_name
+
+                try:
+                    file.save(path)
+                except Exception:
+                    return error("Failed to save file")
+
+                fpath = f"file/{new_name}"
+
+                if mode == "normal":
                     mb = round(length / 1_000_000, 2)
                     m = f'Uploaded: <a class="link" href="/{fpath}">{new_name}</a> ({mb} mb)'
                     return Message(m, "upload", fpath)
+                elif mode == "user":
+                    return Message(fpath, "key_upload")
 
-                return error("File is empty")
-            except Exception as e:
-                utils.error(e)
-                return error("Failed to read file")
-        else:
-            return error("File object has no 'read' attribute")
+            return error("File is empty")
+        except Exception as e:
+            utils.error(e)
+            return error("Failed to read file")
     else:
-        return error("File is None")
+        return error("File object has no 'read' attribute")
 
     return error("Nothing was uploaded")
 
@@ -102,7 +144,6 @@ def get_files() -> list[dict[str, Any]]:
     files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
     files = files[: config.admin_max_files]
-    # get the base name and extension of a file
 
     return [
         {

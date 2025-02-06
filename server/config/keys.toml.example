@@ -1,0 +1,3 @@
+# Keys you can give to users to use with scripts on the 'upload' endpoint
+# This endpoing requires 'file' and 'key'.
+keys = []
