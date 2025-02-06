@@ -91,7 +91,7 @@ def time_ago(date: float) -> str:
 
 
 def get_files() -> list[dict[str, Any]]:
-    files = list(utils.get_files().glob("*"))
+    files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
     files = files[: config.admin_max_files]
 
