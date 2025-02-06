@@ -5,3 +5,4 @@ flask-simple-captcha == 5.5.5
 gunicorn == 23.0.0
 redis == 5.2.1
 ulid-py == 1.1.0
+watchdog == 6.0.0

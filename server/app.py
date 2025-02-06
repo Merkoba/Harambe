@@ -12,10 +12,10 @@ from flask_limiter import Limiter  # type: ignore
 from flask_limiter.util import get_remote_address  # type: ignore
 
 # Modules
-import config
 import procs
 import utils
 from procs import Message
+from config import config
 
 
 # ---
@@ -23,7 +23,7 @@ from procs import Message
 
 app = Flask(__name__)
 app.secret_key = config.app_key
-app.config["MAX_CONTENT_LENGTH"] = config.max_file_size
+app.config["MAX_CONTENT_LENGTH"] = config.get_max_file_size()
 
 # Enable all cross origin requests
 CORS(app)
@@ -77,7 +77,7 @@ def index() -> Any:
     else:
         captcha = None
 
-    max_size = config.max_file_size
+    max_size = config.get_max_file_size()
     require_key = bool(config.require_key)
 
     return render_template(

@@ -1,63 +1,114 @@
 from __future__ import annotations
 
 # Standard
+import copy
 import tomllib
 import string
 import time
 import threading
 from pathlib import Path
+from dataclasses import dataclass, field
+from typing import Any
+
+# Libraries
+from watchdog.observers import Observer  # type: ignore
+from watchdog.events import FileSystemEventHandler  # type: ignore
 
 
-text_mtype = "text/plain"
-file_name_max = 12
-admin_max_files = 1000
+class FileChangeHandler(FileSystemEventHandler):  # type: ignore
+    def __init__(self, path: str) -> None:
+        self.path = path
 
-with Path("config/config.toml").open("rb") as f:
-    config = tomllib.load(f)
-    app_key = config.get("app_key", "fixthis")
-    files_dir = config.get("files_dir", "files")
-    require_captcha = bool(config.get("require_captcha", True))
-    captcha_key = config.get("captcha_key", "")
-    captcha_cheat = config.get("captcha_cheat", "")
-    captcha_length = int(config.get("captcha_length", 8))
-    password = config.get("password", "fixthis")
-    max_file_size = int(config.get("max_file_size", 100))
-    redis_port = config.get("redis_port", 6379)
-    require_key = bool(config.get("require_key", False))
-    key_limit = int(config.get("key_limit", 3))
-
-max_file_size *= 1_000_000
-
-captcha = {
-    "SECRET_CAPTCHA_KEY": captcha_key or "nothing",
-    "CAPTCHA_LENGTH": captcha_length,
-    "CAPTCHA_DIGITS": False,
-    "EXPIRE_SECONDS": 60,
-    "CAPTCHA_IMG_FORMAT": "JPEG",
-    "ONLY_UPPERCASE": False,
-    "CHARACTER_POOL": string.ascii_lowercase,
-}
-
-key_check_delay = 60
-keypath = "config/keys.toml"
-keys = []
+    def on_modified(self, event: Any) -> None:
+        if event.src_path == self.path:
+            read_config()
 
 
-def read_keys() -> None:
-    global keys  # noqa
+@dataclass
+class Config:
+    app_key: str = "fixthis"
+    files_dir: str = "files"
+    require_captcha: bool = True
+    captcha: dict[str, Any] = field(default_factory=dict)
+    captcha_key: str = ""
+    captcha_cheat: str = ""
+    captcha_length: int = 8
+    password: str = "fixthis"
+    max_file_size: int = 100
+    redis_port: int = 6379
+    require_key: bool = False
+    key_limit: int = 3
+    text_mtype: str = "text/plain"
+    admin_max_files: int = 1000
+    keys: list[str] = field(default_factory=list)
 
-    if Path(keypath).exists():
-        with Path(keypath).open("rb") as f:
-            keys = tomllib.load(f).get("keys", [])
+    def get_max_file_size(self) -> int:
+        return self.max_file_size * 1_000_000
 
 
-def periodic_read_keys() -> None:
-    while True:
-        read_keys()
-        time.sleep(key_check_delay)
+# Used for default values
+def_config = Config()
+
+# Fill it later
+config = Config()
+
+# Path to the config file
+configpath = Path("config/config.toml")
 
 
-# Read the keys every x seconds
-# This allows you to edit the file without restarting
-thread = threading.Thread(target=periodic_read_keys, daemon=True)
-thread.start()
+def defvalue(name: str) -> Any:
+    return copy.deepcopy(getattr(def_config, name))
+
+
+def read_config() -> None:
+    def set_value(c: dict[str, Any], name: str) -> None:
+        setattr(config, name, c.get(name, defvalue(name)))
+
+    with configpath.open("rb") as f:
+        c = tomllib.load(f)
+
+        set_value(c, "app_key")
+        set_value(c, "files_dir")
+        set_value(c, "require_captcha")
+        set_value(c, "captcha_key")
+        set_value(c, "captcha_cheat")
+        set_value(c, "captcha_length")
+        set_value(c, "password")
+        set_value(c, "max_file_size")
+        set_value(c, "redis_port")
+        set_value(c, "require_key")
+        set_value(c, "key_limit")
+        set_value(c, "keys")
+
+        config.captcha = {
+            "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",
+            "CAPTCHA_LENGTH": config.captcha_length,
+            "CAPTCHA_DIGITS": False,
+            "EXPIRE_SECONDS": 60,
+            "CAPTCHA_IMG_FORMAT": "JPEG",
+            "ONLY_UPPERCASE": False,
+            "CHARACTER_POOL": string.ascii_lowercase,
+        }
+
+
+def start_observer() -> None:
+    event_handler = FileChangeHandler(str(configpath))
+    observer = Observer()
+    observer.schedule(event_handler, path=str(configpath.parent), recursive=False)
+    observer.start()
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
+
+
+# Fill the config object
+read_config()
+
+# Start the observer to check for config file changes
+# This makes it possible to change things without restarting the server
+observer_thread = threading.Thread(target=start_observer, daemon=True)
+observer_thread.start()

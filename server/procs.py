@@ -14,7 +14,7 @@ import ulid  # type: ignore
 # Modules
 import app
 import utils
-import config
+from config import config
 
 
 @dataclass
@@ -106,7 +106,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
             content = file.read()
             length = len(content)
 
-            if length > config.max_file_size:
+            if length > config.get_max_file_size():
                 return error("File is too big")
 
             if content:

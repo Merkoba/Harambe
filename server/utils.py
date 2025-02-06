@@ -4,7 +4,7 @@ import random
 from pathlib import Path
 
 # Modules
-import config
+from config import config
 
 
 def now() -> float:
