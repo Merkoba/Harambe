@@ -2,6 +2,10 @@
 
 This is a simple file uploader that is configurable and has an admin page.
 
+It's made entirely in python using flask.
+
+---
+
 ## Installation
 
 Make a virtual env and install requirements.
