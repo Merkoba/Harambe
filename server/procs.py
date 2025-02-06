@@ -62,7 +62,8 @@ def upload(request: Any) -> dict[str, str]:
                     else:
                         new_name = name
 
-                    path = f"files/{new_name}"
+                    path = utils.files_dir() / new_name
+                    fpath = str(Path("files") / new_name)
 
                     try:
                         file.save(path)
@@ -70,11 +71,12 @@ def upload(request: Any) -> dict[str, str]:
                         return error("Failed to save file")
 
                     mb = round(length / 1_000_000, 2)
-                    m = f'Uploaded: <a class="link" href="/{path}">{new_name}</a> ({mb} mb)'
-                    return {"message": m, "mode": "upload", "data": path}
+                    m = f'Uploaded: <a class="link" href="/{fpath}">{new_name}</a> ({mb} mb)'
+                    return {"message": m, "mode": "upload", "data": fpath}
 
                 return error("File is empty")
-            except Exception:
+            except Exception as e:
+                utils.error(e)
                 return error("Failed to read file")
         else:
             return error("File object has no 'read' attribute")
@@ -119,7 +121,7 @@ def delete_file(name: str) -> tuple[str, int]:
 
 
 def do_delete_file(name: str) -> None:
-    path = f"files/{name}"
+    path = utils.files_dir() / name
     file = Path(path)
 
     if file.exists():
@@ -137,7 +139,7 @@ def delete_all() -> tuple[str, int]:
 
 
 def do_delete_all() -> None:
-    files = Path("files").glob("*")
+    files = utils.files_dir().glob("*")
 
     for file in files:
         if file.name.startswith("."):

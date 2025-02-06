@@ -17,7 +17,7 @@
 <div id="links">
     {% for file in files %}
     <div class="link">
-        <a href="/files/{{ file.name }}">{{ file.name }}</a>
+        <a href="/{{ files_dir }}/{{ file.name }}">{{ file.name }}</a>
         <span>({{ file.size }} mb)</span>
         <span>({{ file.ago }})</span>
         <span class="delete" data-name="{{ file.name }}">Delete</span>

@@ -1,6 +1,10 @@
 # Standard
 import time
 import random
+from pathlib import Path
+
+# Modules
+import config
 
 
 def now() -> float:
@@ -70,3 +74,11 @@ def time_ago(start_time: float, end_time: float) -> str:
     years = months / 12
     word = singular_or_plural(years, "year", "years")
     return f"{years:.1f} {word} ago"
+
+
+def files_dir() -> Path:
+    return Path(config.files_dir)
+
+
+def error(e: Exception) -> None:
+    print(e)  # noqa

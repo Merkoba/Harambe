@@ -14,6 +14,7 @@ from flask import send_from_directory  # pyright: ignore
 # Modules
 import config
 import procs
+import utils
 
 
 # ---
@@ -49,7 +50,10 @@ invalid = "Error: Invalid request"
 
 def show_message(ans: dict[str, str]) -> Any:
     return render_template(
-        "message.html", mode=ans["mode"], message=ans["message"], data=ans["data"]
+        "message.html",
+        mode=ans["mode"],
+        message=ans["message"],
+        data=ans["data"],
     )
 
 
@@ -60,7 +64,8 @@ def index() -> Any:
         try:
             message = procs.upload(request)
             return show_message(message)
-        except Exception:
+        except Exception as e:
+            utils.error(e)
             return Response(invalid, mimetype=config.text_mtype)
 
     if config.captcha_enabled:
@@ -82,7 +87,8 @@ def index() -> Any:
 @app.route("/files/<path:filename>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit)  # type: ignore
 def get_file(filename: str) -> Any:
-    return send_from_directory("files", filename)
+    fd = utils.files_dir()
+    return send_from_directory(fd, filename)
 
 
 # ADMIN
@@ -99,7 +105,8 @@ def admin(password: str) -> Any:
         return Response(invalid, mimetype=config.text_mtype)
 
     files = procs.get_files()
-    return render_template("admin.html", files=files, password=password)
+    fd = utils.files_dir()
+    return render_template("admin.html", files=files, password=password, files_dir=fd)
 
 
 @app.route("/delete", methods=["POST"])  # type: ignore
