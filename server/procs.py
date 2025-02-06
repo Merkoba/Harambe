@@ -76,7 +76,6 @@ def upload(request: Any, mode: str = "normal") -> Message:
     key = request.form.get("key", "")
 
     if mode == "normal":
-        # Check captcha
         c_hash = request.form.get("captcha-hash", "")
         c_text = request.form.get("captcha-text", "")
 
