@@ -7,4 +7,4 @@ commit_count=$(git rev-list --count HEAD)
 git tag "$commit_count"
 
 # Push the tag to the remote repository
-git push origin "$commit_count"s
+git push origin "$commit_count"

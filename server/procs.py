@@ -3,9 +3,11 @@ from __future__ import annotations
 # Standard
 from typing import Any
 from pathlib import Path
+from dataclasses import dataclass
 
 # Libraries
 from flask import jsonify  # type: ignore
+import ulid  # type: ignore
 
 # Modules
 import app
@@ -13,11 +15,18 @@ import utils
 import config
 
 
-def error(s: str) -> dict[str, str]:
-    return {"message": f"Error: {s}", "mode": "error", "data": ""}
+@dataclass
+class Message:
+    message: str
+    mode: str
+    data: str
 
 
-def upload(request: Any) -> dict[str, str]:
+def error(s: str) -> Message:
+    return Message(f"Error: {s}", "error", "")
+
+
+def upload(request: Any) -> Message:
     file = request.files.get("file", None)
     c_hash = request.form.get("captcha-hash", "")
     c_text = request.form.get("captcha-text", "")
@@ -54,8 +63,7 @@ def upload(request: Any) -> dict[str, str]:
                     pfile = Path(fname)
                     ext = pfile.suffix
                     name = pfile.stem
-                    name = utils.file_name(name, config.file_name_max)
-                    name = f"{name}_{int(utils.now())}_{utils.numstring(3)}"
+                    name = ulid.new().timestamp().str
 
                     if ext:
                         new_name = f"{name}{ext}"
@@ -63,7 +71,7 @@ def upload(request: Any) -> dict[str, str]:
                         new_name = name
 
                     path = utils.files_dir() / new_name
-                    fpath = str(Path("files") / new_name)
+                    fpath = f"file/{new_name}"
 
                     try:
                         file.save(path)
@@ -72,7 +80,7 @@ def upload(request: Any) -> dict[str, str]:
 
                     mb = round(length / 1_000_000, 2)
                     m = f'Uploaded: <a class="link" href="/{fpath}">{new_name}</a> ({mb} mb)'
-                    return {"message": m, "mode": "upload", "data": fpath}
+                    return Message(m, "upload", fpath)
 
                 return error("File is empty")
             except Exception as e:

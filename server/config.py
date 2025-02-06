@@ -14,15 +14,17 @@ admin_max_files = 1000
 
 with Path("config/config.toml").open("rb") as f:
     config = tomllib.load(f)
-    files_dir = config["files_dir"] or "files"
-    captcha_key = config["captcha_key"] or ""
-    captcha_cheat = config["captcha_cheat"] or ""
-    captcha_length = int(config["captcha_length"] or 8)
-    codes = config["codes"] or []
-    password = config["password"] or "fixthis"
-    max_file_size = int(config["max_file_size"] or 100) * 1_000_000
-    redis_port = config["redis_port"] or 6379
+    app_key = config.get("app_key", "fixthis")
+    files_dir = config.get("files_dir", "files")
+    captcha_key = config.get("captcha_key", "")
+    captcha_cheat = config.get("captcha_cheat", "")
+    captcha_length = int(config.get("captcha_length", 8))
+    codes = config.get("codes", [])
+    password = config.get("password", "fixthis")
+    max_file_size = int(config.get("max_file_size", 100))
+    redis_port = config.get("redis_port", 6379)
 
+max_file_size *= 1_000_000
 captcha_enabled = bool(captcha_key)
 
 captcha = {

@@ -1,3 +1,7 @@
+# Secret key used by the app itself
+# Set this to some random long string
+app_key = "change_me"
+
 # The directory where files are saved
 # It can be an external location like /mnt/storage/harambe
 files_dir = "files"

@@ -5,22 +5,24 @@ from typing import Any
 
 # Libraries
 from flask import Flask, render_template, request, Response  # type: ignore
+from flask import send_from_directory, redirect, url_for, session  # pyright: ignore
 from flask_cors import CORS  # type: ignore
 from flask_simple_captcha import CAPTCHA  # type: ignore
 from flask_limiter import Limiter  # type: ignore
 from flask_limiter.util import get_remote_address  # type: ignore
-from flask import send_from_directory  # pyright: ignore
 
 # Modules
 import config
 import procs
 import utils
+from procs import Message
 
 
 # ---
 
 
 app = Flask(__name__)
+app.secret_key = config.app_key
 app.config["MAX_CONTENT_LENGTH"] = config.max_file_size
 
 # Enable all cross origin requests
@@ -41,20 +43,10 @@ limiter = Limiter(
 
 # ---
 
-
 invalid = "Error: Invalid request"
 
 
 # INDEX / UPLOAD
-
-
-def show_message(ans: dict[str, str]) -> Any:
-    return render_template(
-        "message.html",
-        mode=ans["mode"],
-        message=ans["message"],
-        data=ans["data"],
-    )
 
 
 @app.route("/", methods=["POST", "GET"])  # type: ignore
@@ -62,8 +54,17 @@ def show_message(ans: dict[str, str]) -> Any:
 def index() -> Any:
     if request.method == "POST":
         try:
-            message = procs.upload(request)
-            return show_message(message)
+            m = session["data"] = procs.upload(request)
+
+            data = {
+                "mode": m.mode,
+                "message": m.message,
+                "data": m.data,
+            }
+
+            session["data"] = data
+            return redirect(url_for("message"))
+
         except Exception as e:
             utils.error(e)
             return Response(invalid, mimetype=config.text_mtype)
@@ -81,10 +82,31 @@ def index() -> Any:
     )
 
 
+@app.route("/message", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit)  # type: ignore
+def message() -> Any:
+    data = {}
+    ok = True
+
+    if "data" in session:
+        data = session.get("data")
+
+        if not data:
+            ok = False
+    else:
+        ok = False
+
+    if not ok:
+        return redirect(url_for("index"))
+
+    m = Message(data["message"], data["mode"], data["data"])
+    return render_template("message.html", mode=m.mode, message=m.message, data=m.data)
+
+
 # SERVE FILE
 
 
-@app.route("/files/<path:filename>", methods=["GET"])  # type: ignore
+@app.route("/file/<path:filename>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit)  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
