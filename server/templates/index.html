@@ -26,11 +26,9 @@
             </div>
         {% endif %}
 
-        <!-- conditional if show_code is true -->
-
-        {% if show_code %}
+        {% if require_key %}
         <div id="bottom">
-            <input id="code" type="text" name="code" placeholder="Enter the code" required>
+            <input id="key" type="text" name="key" placeholder="Enter the key" required>
             <button type="submit" name="submit">Upload</button>
         </div>
         {% else %}

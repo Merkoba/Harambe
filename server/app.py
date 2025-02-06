@@ -72,23 +72,23 @@ def index() -> Any:
             utils.error(e)
             return Response(invalid, mimetype=config.text_mtype)
 
-    if config.captcha_enabled:
+    if config.require_captcha:
         captcha = simple_captcha.create()
     else:
         captcha = None
 
     max_size = config.max_file_size
-    show_code = bool(config.codes)
+    require_key = bool(config.require_key)
 
     return render_template(
-        "index.html", captcha=captcha, max_size=max_size, show_code=show_code
+        "index.html", captcha=captcha, max_size=max_size, require_key=require_key
     )
 
 
 @app.route("/upload", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.key_limit))  # type: ignore
 def upload() -> Any:
-    return procs.upload(request, "user").message
+    return procs.upload(request, "cli").message
 
 
 @app.route("/message", methods=["GET"])  # type: ignore

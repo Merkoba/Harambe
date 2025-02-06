@@ -25,12 +25,12 @@ class Message:
 
 
 class KeyData:
-    def __init__(self):
-        self.timestamps = deque()
+    def __init__(self) -> None:
+        self.timestamps: deque[float] = deque()
         self.limit = config.key_limit
         self.window = 60  # Rate limit per minute
 
-    def increment(self):
+    def increment(self) -> None:
         now = time.time()
         self.timestamps.append(now)
 
@@ -49,21 +49,44 @@ def error(s: str) -> Message:
     return Message(f"Error: {s}", "error")
 
 
+def check_key(key: str) -> tuple[bool, str]:
+    if not key:
+        return False, "Key is required"
+
+    if key not in config.keys:
+        return False, "Invalid key"
+
+    if key not in key_data:
+        key_data[key] = KeyData()
+
+    d = key_data[key]
+
+    if d.blocked():
+        return False, "Rate limit exceeded"
+
+    return True, "ok"
+
+
 def upload(request: Any, mode: str = "normal") -> Message:
     file = request.files.get("file", None)
 
     if not file:
         return error("No file")
 
+    key = request.form.get("key", "")
+
     if mode == "normal":
+        # Check captcha
         c_hash = request.form.get("captcha-hash", "")
         c_text = request.form.get("captcha-text", "")
-        code = request.form.get("code", "")
 
-        if config.codes and (code not in config.codes):
-            return error("Invalid code")
+        if config.require_key:
+            k_ok, k_msg = check_key(key)
 
-        if config.captcha_enabled:
+            if not k_ok:
+                return error(k_msg)
+
+        if config.require_captcha:
             check_catpcha = True
 
             if config.captcha_cheat and (c_text == config.captcha_cheat):
@@ -72,22 +95,11 @@ def upload(request: Any, mode: str = "normal") -> Message:
             if check_catpcha:
                 if not app.simple_captcha.verify(c_text, c_hash):
                     return error("Failed captcha")
-    elif mode == "user":
-        key = request.form.get("key", "")
+    elif mode == "cli":
+        k_ok, k_msg = check_key(key)
 
-        if not key:
-            return error("Key is required")
-
-        if key not in config.keys:
-            return error("Invalid key")
-
-        if key not in key_data:
-            key_data[key] = KeyData()
-
-        d = key_data[key]
-
-        if d.blocked():
-            return error("Rate limit exceeded")
+        if not k_ok:
+            return error(k_msg)
 
     if hasattr(file, "read"):
         try:
@@ -123,8 +135,8 @@ def upload(request: Any, mode: str = "normal") -> Message:
                     mb = round(length / 1_000_000, 2)
                     m = f'Uploaded: <a class="link" href="/{fpath}">{new_name}</a> ({mb} mb)'
                     return Message(m, "upload", fpath)
-                elif mode == "user":
-                    return Message(fpath, "key_upload")
+
+                return Message(fpath, "key_upload")
 
             return error("File is empty")
         except Exception as e:

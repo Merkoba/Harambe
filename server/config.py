@@ -16,17 +16,17 @@ with Path("config/config.toml").open("rb") as f:
     config = tomllib.load(f)
     app_key = config.get("app_key", "fixthis")
     files_dir = config.get("files_dir", "files")
+    require_captcha = bool(config.get("require_captcha", True))
     captcha_key = config.get("captcha_key", "")
     captcha_cheat = config.get("captcha_cheat", "")
     captcha_length = int(config.get("captcha_length", 8))
-    codes = config.get("codes", [])
     password = config.get("password", "fixthis")
     max_file_size = int(config.get("max_file_size", 100))
     redis_port = config.get("redis_port", 6379)
+    require_key = bool(config.get("require_key", False))
     key_limit = int(config.get("key_limit", 3))
 
 max_file_size *= 1_000_000
-captcha_enabled = bool(captcha_key)
 
 captcha = {
     "SECRET_CAPTCHA_KEY": captcha_key or "nothing",
@@ -42,14 +42,16 @@ key_check_delay = 60
 keypath = "config/keys.toml"
 keys = []
 
-def read_keys():
-    global keys
+
+def read_keys() -> None:
+    global keys  # noqa
 
     if Path(keypath).exists():
         with Path(keypath).open("rb") as f:
             keys = tomllib.load(f).get("keys", [])
 
-def periodic_read_keys():
+
+def periodic_read_keys() -> None:
     while True:
         read_keys()
         time.sleep(key_check_delay)

@@ -6,8 +6,10 @@ app_key = "change_me"
 # It can be an external location like /mnt/storage/harambe
 files_dir = "files"
 
-# Set this to a long random string
-# If empty the captcha will be disabled
+# If true solving a captcha is needed to upload through the web interface
+require_captcha = true
+
+# Set this to a long random string for security
 captcha_key = "change_me"
 
 # Use this to cheat the captcha for quick access
@@ -18,9 +20,8 @@ captcha_cheat = ""
 # The lower the number the easier it is
 captcha_length = 8
 
-# A list of secret codes to be able to upload
-# If empty a code won't be required
-codes = ["change_me"]
+# If true a key is needed to upload through the web interface
+require_key = false
 
 # Used for the admin page at site.com/admin/password
 password = "change_me"

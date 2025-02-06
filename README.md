@@ -63,3 +63,5 @@ The example upload script is [here](upload.sh).
 The keys file is read every 60 seconds.
 
 So keys can be added or removed without having to restart the server.
+
+The key is used for the web interface too if `require_key` is enabled.

@@ -124,7 +124,7 @@ a:link, a:visited {
     box-sizing: border-box;
 }
 
-#code {
+#key {
     font-size: 1rem;
     box-sizing: border-box;
     flex-grow: 1;

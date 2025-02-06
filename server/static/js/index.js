@@ -18,10 +18,10 @@ function validate() {
     }
   }
 
-  let code = document.querySelector(`#code`)
+  let key = document.querySelector(`#key`)
 
-  if (code) {
-    if (!code.value.trim()) {
+  if (key) {
+    if (!key.value.trim()) {
       return false
     }
   }
