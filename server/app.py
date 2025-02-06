@@ -53,7 +53,7 @@ def rate_limit(n: int) -> str:
 
 
 @app.route("/", methods=["POST", "GET"])  # type: ignore
-@limiter.limit(rate_limit(6))  # type: ignore
+@limiter.limit(rate_limit(12))  # type: ignore
 def index() -> Any:
     if request.method == "POST":
         try:
@@ -86,13 +86,13 @@ def index() -> Any:
 
 
 @app.route("/upload", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit(3))  # type: ignore
+@limiter.limit(rate_limit(config.key_limit))  # type: ignore
 def upload() -> Any:
     return procs.upload(request, "user").message
 
 
 @app.route("/message", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(6))  # type: ignore
+@limiter.limit(rate_limit(12))  # type: ignore
 def message() -> Any:
     data = {}
     ok = True
@@ -130,7 +130,7 @@ def check_password(password: str) -> bool:
 
 
 @app.route("/admin/<password>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(3))  # type: ignore
+@limiter.limit(rate_limit(12))  # type: ignore
 def admin(password: str) -> Any:
     if not check_password(password):
         return Response(invalid, mimetype=config.text_mtype)
