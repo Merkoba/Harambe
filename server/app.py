@@ -30,12 +30,11 @@ CORS(app)
 
 simple_captcha = CAPTCHA(config=config.captcha)
 app = simple_captcha.init_app(app)
-rate_limit = f"{config.rate_limit} per minute"
 
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=[rate_limit],
+    default_limits=[12],
     storage_uri=f"redis://localhost:{config.redis_port}",
     strategy="fixed-window",
 )
@@ -46,11 +45,15 @@ limiter = Limiter(
 invalid = "Error: Invalid request"
 
 
+def rate_limit(n: int) -> str:
+    return f"{n} per minute"
+
+
 # INDEX / UPLOAD
 
 
 @app.route("/", methods=["POST", "GET"])  # type: ignore
-@limiter.limit(rate_limit)  # type: ignore
+@limiter.limit(rate_limit(6))  # type: ignore
 def index() -> Any:
     if request.method == "POST":
         try:
@@ -83,13 +86,13 @@ def index() -> Any:
 
 
 @app.route("/upload", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit)  # type: ignore
+@limiter.limit(rate_limit(3))  # type: ignore
 def upload() -> Any:
     return procs.upload(request, "user").message
 
 
 @app.route("/message", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit)  # type: ignore
+@limiter.limit(rate_limit(6))  # type: ignore
 def message() -> Any:
     data = {}
     ok = True
@@ -113,7 +116,7 @@ def message() -> Any:
 
 
 @app.route("/file/<path:filename>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit)  # type: ignore
+@limiter.limit(rate_limit(12))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
     return send_from_directory(fd, filename)
@@ -127,7 +130,7 @@ def check_password(password: str) -> bool:
 
 
 @app.route("/admin/<password>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit)  # type: ignore
+@limiter.limit(rate_limit(3))  # type: ignore
 def admin(password: str) -> Any:
     if not check_password(password):
         return Response(invalid, mimetype=config.text_mtype)
@@ -137,7 +140,7 @@ def admin(password: str) -> Any:
 
 
 @app.route("/delete", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit)  # type: ignore
+@limiter.limit(rate_limit(12))  # type: ignore
 def delete() -> Any:
     data = request.get_json()
     name = data.get("name", None)
@@ -150,7 +153,7 @@ def delete() -> Any:
 
 
 @app.route("/delete_all", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit)  # type: ignore
+@limiter.limit(rate_limit(3))  # type: ignore
 def delete_all() -> Any:
     data = request.get_json()
     password = data.get("password", None)

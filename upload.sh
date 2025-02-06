@@ -3,6 +3,7 @@
 # This script can be used to upload files to a Harambe server
 # Usage: ./upload.sh <file_path>
 # Example: ./upload.sh /path/to/file.jpg
+# It uses xclip to copy the URL to the clipboard
 
 # -------------------------------
 

@@ -8,8 +8,6 @@ import threading
 from pathlib import Path
 
 
-rate_limit = 12
-
 text_mtype = "text/plain"
 file_name_max = 12
 admin_max_files = 1000
