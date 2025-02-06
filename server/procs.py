@@ -94,6 +94,7 @@ def get_files() -> list[dict[str, Any]]:
     files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
     files = files[: config.admin_max_files]
+    # get the base name and extension of a file
 
     return [
         {

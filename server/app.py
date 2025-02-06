@@ -105,8 +105,7 @@ def admin(password: str) -> Any:
         return Response(invalid, mimetype=config.text_mtype)
 
     files = procs.get_files()
-    fd = utils.files_dir()
-    return render_template("admin.html", files=files, password=password, files_dir=fd)
+    return render_template("admin.html", files=files, password=password)
 
 
 @app.route("/delete", methods=["POST"])  # type: ignore
