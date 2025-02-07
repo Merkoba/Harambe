@@ -11,11 +11,13 @@ window.onload = () => {
 
     let delete_all = document.querySelector(`#delete_all`)
 
-    delete_all.addEventListener(`click`, () => {
-        if (confirm(`Delete All`)) {
-            delete_all_files()
-        }
-    })
+    if (delete_all) {
+        delete_all.addEventListener(`click`, () => {
+            if (confirm(`Delete All`)) {
+                delete_all_files()
+            }
+        })
+    }
 }
 
 async function delete_file(name, el) {
