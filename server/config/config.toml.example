@@ -45,7 +45,7 @@ extra_unique_ids = false
 
 # Maximum number of files to keep stored
 # The older ones get removed if reached
-max_files = 1000
+max_files = 10000
 
 # Maximum total storage usage
 # In gigabytes (GB)

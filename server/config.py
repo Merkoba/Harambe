@@ -43,7 +43,7 @@ class Config:
     keys: list[str] = field(default_factory=list)
     uppercase_ids: bool = False
     extra_unique_ids: bool = False
-    max_files: int = 1000
+    max_files: int = 10_000
     max_storage: int = 10
 
     def get_max_file_size(self) -> int:
