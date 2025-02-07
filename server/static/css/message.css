@@ -50,3 +50,7 @@ img:hover {
     flex-direction: row;
     gap: 1rem;
 }
+
+.no_expand {
+    align-self: flex-start;
+}
