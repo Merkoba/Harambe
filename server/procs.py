@@ -114,7 +114,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
                 pfile = Path(fname)
                 ext = pfile.suffix
                 name = pfile.stem
-                name = ulid.new().timestamp().str
+                name = ulid.new().timestamp().str.lower()
 
                 if ext:
                     new_name = f"{name}{ext}"
