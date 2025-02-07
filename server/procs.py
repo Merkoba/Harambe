@@ -192,6 +192,8 @@ def get_files() -> tuple[list[dict[str, Any]], str]:
     else:
         total_str = f"{megas} MB"
 
+    total_str = f"{total_str} | {len(file_list)} Files"
+
     return file_list, total_str
 
 
