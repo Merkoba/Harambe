@@ -57,3 +57,25 @@ You can add keys to the `keys` array in the config.
 These give access to users to upload directly from the command line.
 
 And it might be necesary to supply one in the web interface if `require_key` is enabled.
+
+This is how it looks when a key is needed for the web interface:
+
+![](key.png)
+
+---
+
+This is how it looks when neither captcha or key are required:
+
+![](minimal.png)
+
+---
+
+## Config
+
+The config file is automatically reloaded when the file is modified.
+
+This is done by using the `watchdog` library.
+
+So there's no need to restart the server on config changes.
+
+There are some exceptions like `app_key` which can't be changed at runtime.
