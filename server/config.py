@@ -41,6 +41,8 @@ class Config:
     text_mtype: str = "text/plain"
     admin_max_files: int = 1000
     keys: list[str] = field(default_factory=list)
+    uppercase_ids: bool = False
+    extra_unique_ids: bool = False
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -78,6 +80,8 @@ def read_config() -> None:
         set_value(c, "redis_port")
         set_value(c, "require_key")
         set_value(c, "key_limit")
+        set_value(c, "uppercase_ids")
+        set_value(c, "extra_unique_ids")
         set_value(c, "keys")
 
         config.captcha = {

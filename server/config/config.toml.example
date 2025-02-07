@@ -36,3 +36,9 @@ redis_port = 6379
 
 # The number of requests allowed per minute for each key
 key_limit = 3
+
+# If true the file ids will be upper cased
+uppercase_ids = false
+
+# If true some randomness is added to the ids to make them more unique
+extra_unique_ids = false
