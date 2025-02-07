@@ -13,7 +13,9 @@
 
 {% block body %}
 <div id="main">
+    {% if show_image %}
     <img id="image" src="static/img/cat.jpg">
+    {% endif %}
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
         <div id="picker">
@@ -21,9 +23,9 @@
         </div>
 
         {% if captcha %}
-            <div id="captcha">
-                {{ captcha_html(captcha)|safe }}
-            </div>
+        <div id="captcha">
+            {{ captcha_html(captcha)|safe }}
+        </div>
         {% endif %}
 
         {% if require_key %}

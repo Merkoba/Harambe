@@ -51,3 +51,6 @@ max_files = 10000
 # Old files get deleted until this limit is not exceeded
 # In gigabytes (GB)
 max_storage = 10
+
+# Show the image at the top of the main page
+show_image = true

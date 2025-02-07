@@ -45,6 +45,7 @@ class Config:
     extra_unique_ids: bool = False
     max_files: int = 10_000
     max_storage: int = 10
+    show_image: bool = True
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -90,6 +91,7 @@ def read_config() -> None:
         set_value(c, "keys")
         set_value(c, "max_files")
         set_value(c, "max_storage")
+        set_value(c, "show_image")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",

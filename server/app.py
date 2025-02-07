@@ -78,10 +78,15 @@ def index() -> Any:
         captcha = None
 
     max_size = config.get_max_file_size()
-    require_key = bool(config.require_key)
+    require_key = config.require_key
+    show_image = config.show_image
 
     return render_template(
-        "index.html", captcha=captcha, max_size=max_size, require_key=require_key
+        "index.html",
+        captcha=captcha,
+        max_size=max_size,
+        require_key=require_key,
+        show_image=show_image,
     )
 
 
