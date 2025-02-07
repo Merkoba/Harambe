@@ -10,7 +10,9 @@ It's made entirely in python using flask.
 
 Make a virtual env and install requirements.
 
-Copy `config.toml.example` and make `config.toml`.
+Copy [config.toml.example](server/config/config.toml.example) and make `config.toml`.
+
+Change the configs you need.
 
 Run with gunicorn with this systemd service:
 
