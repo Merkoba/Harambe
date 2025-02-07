@@ -135,8 +135,8 @@ def admin(password: str) -> Any:
     if not check_password(password):
         return Response(invalid, mimetype=config.text_mtype)
 
-    files = procs.get_files()
-    return render_template("admin.html", files=files, password=password)
+    files, total = procs.get_files()
+    return render_template("admin.html", files=files, password=password, total=total)
 
 
 @app.route("/delete", methods=["POST"])  # type: ignore

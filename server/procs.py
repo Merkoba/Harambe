@@ -161,20 +161,38 @@ def time_ago(date: float) -> str:
     return utils.time_ago(date, utils.now())
 
 
-def get_files() -> list[dict[str, Any]]:
+def get_files() -> tuple[list[dict[str, Any]], str]:
     files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
     files = files[: config.admin_max_files]
 
-    return [
-        {
-            "name": f.name,
-            "size": utils.get_size(f.stat().st_size),
-            "ago": time_ago(f.stat().st_mtime),
-        }
-        for f in files
-        if not f.name.startswith(".")
-    ]
+    total_size = 0
+    file_list = []
+
+    for f in files:
+        if f.name.startswith("."):
+            continue
+
+        size = f.stat().st_size
+        total_size += size
+
+        file_list.append(
+            {
+                "name": f.name,
+                "size": utils.get_size(size),
+                "ago": time_ago(f.stat().st_mtime),
+            }
+        )
+
+    gigas = round(total_size / 1_000_000_000, 2)
+    megas = round(total_size / 1_000_000, 2)
+
+    if gigas >= 1:
+        total_str = f"{gigas} GB"
+    else:
+        total_str = f"{megas} MB"
+
+    return file_list, total_str
 
 
 def delete_file(name: str) -> tuple[str, int]:

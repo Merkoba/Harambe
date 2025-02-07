@@ -12,7 +12,10 @@
 {% endblock %}
 
 {% block body %}
-<div id="delete_all">Delete All</div>
+<div id="top">
+    <div id="delete_all">Delete All</div>
+    <div>Total: {{ total }}</div>
+</div>
 
 <div id="links">
     {% for file in files %}
