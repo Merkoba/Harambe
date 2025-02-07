@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 # Standard
+import os
 import time
 from typing import Any
 from pathlib import Path
@@ -136,6 +137,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
                 except Exception:
                     return error("Failed to save file")
 
+                check_storage()
                 fpath = f"file/{new_name}"
 
                 if mode == "normal":
@@ -161,7 +163,7 @@ def time_ago(date: float) -> str:
 
 def get_files() -> list[dict[str, Any]]:
     files = list(utils.files_dir().glob("*"))
-    files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
+    files = sorted(files, key=lambda x: x.name, reverse=True)
     files = files[: config.admin_max_files]
 
     return [
@@ -215,3 +217,33 @@ def do_delete_all() -> None:
             continue
 
         file.unlink()
+
+
+# Remove old files if limits are exceeded
+def check_storage() -> None:
+    directory = utils.files_dir()
+    max_files = config.max_files
+    max_storage = config.get_max_storage()
+
+    total_files = 0
+    total_size = 0
+    files = []
+
+    for root, _, filenames in os.walk(directory):
+        for name in filenames:
+            file_path = Path(root) / Path(name)
+            file_size = file_path.stat().st_size
+            files.append((file_path, file_size))
+            total_files += 1
+            total_size += file_size
+
+    files.sort(key=lambda x: x[0])
+
+    def exceeds() -> bool:
+        return (total_files > max_files) or (total_size > max_storage)
+
+    while exceeds():
+        oldest_file = files.pop(0)
+        oldest_file[0].unlink()
+        total_files -= 1
+        total_size -= oldest_file[1]

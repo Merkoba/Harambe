@@ -43,9 +43,14 @@ class Config:
     keys: list[str] = field(default_factory=list)
     uppercase_ids: bool = False
     extra_unique_ids: bool = False
+    max_files: int = 1000
+    max_storage: int = 10
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
+
+    def get_max_storage(self) -> int:
+        return self.max_storage * 1_000_000_000
 
 
 # Used for default values
@@ -83,6 +88,8 @@ def read_config() -> None:
         set_value(c, "uppercase_ids")
         set_value(c, "extra_unique_ids")
         set_value(c, "keys")
+        set_value(c, "max_files")
+        set_value(c, "max_storage")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",

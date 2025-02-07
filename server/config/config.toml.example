@@ -42,3 +42,11 @@ uppercase_ids = false
 
 # If true some randomness is added to the ids to make them more unique
 extra_unique_ids = false
+
+# Maximum number of files to keep stored
+# The older ones get removed if reached
+max_files = 1000
+
+# Maximum total storage usage
+# In gigabytes (GB)
+max_storage = 10

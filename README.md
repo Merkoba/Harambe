@@ -12,7 +12,7 @@ Make a virtual env and install requirements.
 
 Copy [config.toml.example](server/config/config.toml.example) and make `config.toml`.
 
-Change the configs you need.
+Change the configs you need. You don't need to define them all as there are default values.
 
 Run with gunicorn with this systemd service:
 
