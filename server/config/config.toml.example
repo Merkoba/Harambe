@@ -48,5 +48,6 @@ extra_unique_ids = false
 max_files = 10000
 
 # Maximum total storage usage
+# Old files get deleted until this limit is not exceeded
 # In gigabytes (GB)
 max_storage = 10
