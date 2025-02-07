@@ -46,7 +46,7 @@ key_data: dict[str, KeyData] = {}
 
 
 def error(s: str) -> Message:
-    return Message(f"Error: {s}", "error")
+    return Message(f"🔴 Error: {s}", "error")
 
 
 def check_key(key: str) -> tuple[bool, str]:
@@ -132,7 +132,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
 
                 if mode == "normal":
                     mb = round(length / 1_000_000, 2)
-                    m = f'Uploaded: <a class="link" href="/{fpath}">{new_name}</a> ({mb} mb)'
+                    m = f'🟢 Uploaded: <a class="link" href="/{fpath}">{new_name}</a> ({mb} mb)'
                     return Message(m, "upload", fpath)
 
                 return Message(fpath, "key_upload")
