@@ -32,12 +32,12 @@
 
 <div id="links">
     {% for file in files %}
-    <div class="link" data-name="{{ file.name }}">
-        <input class="select_checkbox" type="checkbox" data-name="{{ file.name }}">
+    <div class="link" data-name="{{ file.name }}" data-size="{{ file.size }}">
+        <input class="select_checkbox" type="checkbox">
         <a href="/file/{{ file.name }}">{{ file.name }}</a>
         <span>({{ file.size }} mb)</span>
         <span>({{ file.ago }})</span>
-        <span class="delete action_button" data-name="{{ file.name }}">Delete</span>
+        <span class="delete action_button">Delete</span>
     </div>
     {% endfor %}
 </div>

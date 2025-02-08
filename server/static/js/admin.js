@@ -3,11 +3,8 @@ let selected_files = []
 window.onload = () => {
     document.addEventListener(`click`, async (e) => {
         if (e.target.classList.contains(`delete`)) {
-            let name = e.target.dataset.name
-
-            if (confirm(`Delete: ${name}`)) {
-                delete_file(name, e.target)
-            }
+            selected_files = [e.closest(`.link`)]
+            delete_files()
         }
     })
 
@@ -20,7 +17,7 @@ window.onload = () => {
 
             for (let checkbox of checkboxes) {
                 if (checkbox.checked) {
-                    files.push(checkbox.dataset.name)
+                    files.push(checkbox.closest(`.link`))
                 }
             }
 
@@ -29,10 +26,7 @@ window.onload = () => {
             }
 
             selected_files = files
-
-            if (confirm(`Delete Selected (${files.length})`)) {
-                delete_selected_files()
-            }
+            delete_files()
         })
     }
 
@@ -44,6 +38,26 @@ window.onload = () => {
                 delete_all_files()
             }
         })
+    }
+}
+
+function delete_files() {
+    let size = 0
+
+    for (let file of selected_files) {
+        size += parseFloat(file.dataset.size)
+    }
+
+    size = Math.round(size * 100) / 100
+
+    if (confirm(`Delete Selected (${selected_files.length} files) (${size} mb)`)) {
+        let files = []
+
+        for (let file of selected_files) {
+            files.push(file.dataset.name)
+        }
+
+        delete_selected_files(files)
     }
 }
 
@@ -70,9 +84,7 @@ async function delete_file(name, el) {
     }
 }
 
-async function delete_selected_files() {
-    let files = selected_files
-
+async function delete_selected_files(files) {
     try {
         let response = await fetch(`/delete_files`, {
             method: `POST`,
