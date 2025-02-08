@@ -46,6 +46,17 @@ Configs are set in `server/config.toml` which you must create.
 
 You can check the default values in [config.py](server/config.py) and redefine what you need.
 
+The `toml` format is very straightforward.
+
+For example:
+
+```toml
+captcha_length = 8
+admin_password = "henkel"
+uppercase_ids = false
+keys = ["cowboy", "cucaracha", "ronaldmac"]
+```
+
 The config file is automatically reloaded when the file is modified.
 
 This is done by using the `watchdog` library.
