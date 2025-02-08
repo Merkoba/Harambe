@@ -96,3 +96,7 @@ input[type="checkbox"] {
     width: 1rem;
     height: 1rem;
 }
+
+select {
+    font-size: 0.8rem;
+}
