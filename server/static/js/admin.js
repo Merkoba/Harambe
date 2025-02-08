@@ -114,7 +114,7 @@ function fill_page_select(page_select) {
     }
 
     add_option(`------`, true)
-    add_option(`All`)
+    add_option(`All`, false, page_size === `all`)
 }
 
 function on_page_select_change() {
