@@ -177,6 +177,10 @@ function delete_below(el) {
 }
 
 function delete_files() {
+    if (selected_files.length === 0) {
+        return
+    }
+
     let size = 0
 
     for (let file of selected_files) {
