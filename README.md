@@ -42,11 +42,11 @@ ProxyPassReverse / http://localhost:4040/
 
 ---
 
-## Admin
+## Dashboard
 
-Basic admin page to view and delete files:
+Basic dashboard to view and delete files:
 
-![](admin.png)
+![](dashboard.png)
 
 ---
 

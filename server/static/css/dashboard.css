@@ -54,3 +54,12 @@ a:link, a:visited {
 a:hover {
     text-decoration: underline;
 }
+
+a.linkbutton:link, a.linkbutton:visited {
+    text-decoration: none;
+    color: var(--color_1);
+}
+
+a.linkbutton:hover {
+    text-decoration: underline;
+}

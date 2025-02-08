@@ -38,7 +38,6 @@ class Config:
     redis_port: int = 6379
     require_key: bool = False
     key_limit: int = 3
-    text_mtype: str = "text/plain"
     admin_max_files: int = 1000
     keys: list[str] = field(default_factory=list)
     uppercase_ids: bool = False
@@ -46,6 +45,7 @@ class Config:
     max_files: int = 10_000
     max_storage: int = 10
     show_image: bool = True
+    admin_page_size: int = 100
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -92,6 +92,7 @@ def read_config() -> None:
         set_value(c, "max_files")
         set_value(c, "max_storage")
         set_value(c, "show_image")
+        set_value(c, "admin_page_size")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",

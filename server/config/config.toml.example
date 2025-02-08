@@ -54,3 +54,6 @@ max_storage = 10
 
 # Show the image at the top of the main page
 show_image = true
+
+# The amount of items per page in the admin
+admin_page_size = 100

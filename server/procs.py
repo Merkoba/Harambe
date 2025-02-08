@@ -161,10 +161,14 @@ def time_ago(date: float) -> str:
     return utils.time_ago(date, utils.now())
 
 
-def get_files() -> tuple[list[dict[str, Any]], str]:
+def get_files(page: int = 1) -> tuple[list[dict[str, Any]], str]:
     files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
-    files = files[: config.admin_max_files]
+
+    page_size = config.admin_page_size
+    start_index = (page - 1) * page_size
+    end_index = start_index + page_size
+    files = files[start_index:end_index]
 
     total_size = 0
     file_list = []

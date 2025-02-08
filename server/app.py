@@ -31,22 +31,21 @@ CORS(app)
 simple_captcha = CAPTCHA(config=config.captcha)
 app = simple_captcha.init_app(app)
 
+
+def rate_limit(n: int) -> str:
+    return f"{n} per minute"
+
+
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=[12],
+    default_limits=[rate_limit(12)],
     storage_uri=f"redis://localhost:{config.redis_port}",
     strategy="fixed-window",
 )
 
-
-# ---
-
 invalid = "Error: Invalid request"
-
-
-def rate_limit(n: int) -> str:
-    return f"{n} per minute"
+text_mtype = "text/plain"
 
 
 # INDEX / UPLOAD
@@ -70,7 +69,7 @@ def index() -> Any:
 
         except Exception as e:
             utils.error(e)
-            return Response(invalid, mimetype=config.text_mtype)
+            return Response(invalid, mimetype=text_mtype)
 
     if config.require_captcha:
         captcha = simple_captcha.create()
@@ -134,14 +133,17 @@ def check_password(password: str) -> bool:
     return bool(config.password) and (password == config.password)
 
 
-@app.route("/admin/<password>", methods=["GET"])  # type: ignore
+@app.route("/dashboard/<string:password>", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/dashboard/<string:password>/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(12))  # type: ignore
-def admin(password: str) -> Any:
+def dashboard(password: str, page: int = 1) -> Any:
     if not check_password(password):
-        return Response(invalid, mimetype=config.text_mtype)
+        return Response(invalid, mimetype=text_mtype)
 
-    files, total = procs.get_files()
-    return render_template("admin.html", files=files, password=password, total=total)
+    files, total = procs.get_files(page)
+    return render_template(
+        "dashboard.html", files=files, password=password, total=total, page=page
+    )
 
 
 @app.route("/delete", methods=["POST"])  # type: ignore
@@ -152,7 +154,7 @@ def delete() -> Any:
     password = data.get("password", None)
 
     if not check_password(password):
-        return Response(invalid, mimetype=config.text_mtype)
+        return Response(invalid, mimetype=text_mtype)
 
     return procs.delete_file(name)
 
@@ -164,6 +166,6 @@ def delete_all() -> Any:
     password = data.get("password", None)
 
     if not check_password(password):
-        return Response(invalid, mimetype=config.text_mtype)
+        return Response(invalid, mimetype=text_mtype)
 
     return procs.delete_all()
