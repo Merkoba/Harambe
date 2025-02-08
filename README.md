@@ -40,6 +40,22 @@ ProxyPassReverse / http://localhost:4040/
 
 ---
 
+## Config <a name="config"></a>
+
+Configs are set in `server/config.toml` which you must create.
+
+You can check the default values in [config.py](server/config.py) and redefine what you need.
+
+The config file is automatically reloaded when the file is modified.
+
+This is done by using the `watchdog` library.
+
+So there's no need to restart the server on config changes.
+
+There are some exceptions like `app_key` which can't be changed at runtime.
+
+---
+
 ## Admin
 
 There is an admin page to view and delete files:
@@ -65,19 +81,3 @@ This is how it looks when a key is needed for the web interface:
 This is how it looks when neither captcha or key are required:
 
 ![](minimal.png)
-
----
-
-## Config <a name="config"></a>
-
-Configs are set in `server/config.toml` which you must create.
-
-You can check the default values in [config.py](server/config.py) and redefine what you need.
-
-The config file is automatically reloaded when the file is modified.
-
-This is done by using the `watchdog` library.
-
-So there's no need to restart the server on config changes.
-
-There are some exceptions like `app_key` which can't be changed at runtime.
