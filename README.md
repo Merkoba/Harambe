@@ -44,7 +44,7 @@ ProxyPassReverse / http://localhost:4040/
 
 ## Admin
 
-Basic admin page to view and delete files:
+There is an admin page to view and delete files:
 
 ![](admin.png)
 
