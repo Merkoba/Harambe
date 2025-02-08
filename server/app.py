@@ -197,7 +197,7 @@ def delete_all() -> Any:
 
 
 @app.route("/login", methods=["GET", "POST"])  # type: ignore
-@limiter.limit(rate_limit(3))
+@limiter.limit(rate_limit(3))  # type: ignore
 def login() -> Any:
     if request.method == "POST":
         username = request.form.get("username", "").strip()
@@ -217,7 +217,7 @@ def login() -> Any:
 
 
 @app.route("/logout")  # type: ignore
-@limiter.limit(rate_limit(3))
+@limiter.limit(rate_limit(3))  # type: ignore
 def logout() -> Any:
     session.pop("username", None)
     return redirect(url_for("login"))
