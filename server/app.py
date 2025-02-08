@@ -136,7 +136,9 @@ def admin(password: str, page: int = 1) -> Any:
     if not procs.check_password(password):
         return Response(invalid, mimetype=text_mtype)
 
-    files, total, next_page = procs.admin(page)
+    page_size = request.args.get("page_size", config.admin_page_size)
+    files, total, next_page = procs.admin(page, page_size)
+    def_page_size = page_size == config.admin_page_size
 
     return render_template(
         "admin.html",
@@ -145,6 +147,8 @@ def admin(password: str, page: int = 1) -> Any:
         total=total,
         page=page,
         next_page=next_page,
+        page_size=page_size,
+        def_page_size=def_page_size,
     )
 
 

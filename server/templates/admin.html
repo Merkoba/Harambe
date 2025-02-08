@@ -6,6 +6,8 @@
 
 <script>
     const password = `{{ password }}`
+    const page_size = `{{ page_size }}`
+    const def_page_size = {{ def_page_size | tojson }}
 </script>
 
 <script src="/static/js/admin.js"></script>
@@ -28,6 +30,7 @@
     <div class="sep">|</div>
     <a class="linkbutton" href="/admin/{{ password }}/{{ page + 1}}">Next</a>
     {% endif %}
+    <select id="page_select" title="Items per page"></select>
 </div>
 
 <div id="links">

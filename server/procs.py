@@ -161,15 +161,28 @@ def time_ago(date: float) -> str:
     return utils.time_ago(date, utils.now())
 
 
-def admin(page: int = 1) -> tuple[list[dict[str, Any]], str, bool]:
+def admin(
+    page: int = 1, page_size: str = "default"
+) -> tuple[list[dict[str, Any]], str, bool]:
+    psize = 0
+
+    if page_size == "default":
+        psize = config.admin_page_size
+    elif page_size == "all":
+        pass  # Don't slice later
+    else:
+        psize = int(page_size)
+
     files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
 
-    page_size = config.admin_page_size
-    start_index = (page - 1) * page_size
-    end_index = start_index + page_size
-    has_next_page = end_index < len(files)
-    files = files[start_index:end_index]
+    if psize > 0:
+        start_index = (page - 1) * psize
+        end_index = start_index + psize
+        has_next_page = end_index < len(files)
+        files = files[start_index:end_index]
+    else:
+        has_next_page = False
 
     total_size = 0
     file_list = []

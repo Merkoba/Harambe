@@ -49,6 +49,63 @@ window.onload = () => {
             }
         })
     }
+
+    let page_select = document.querySelector(`#page_select`)
+
+    if (page_select) {
+        function add_option(n, disabled = false, selected = false) {
+            let option = document.createElement(`option`)
+            option.value = n
+            option.innerText = n
+            option.disabled = disabled
+            option.selected = selected
+            page_select.appendChild(option)
+        }
+
+        add_option(`Default`, false, def_page_size)
+        add_option(`------`, true)
+
+        let n = 100
+
+        for (let i = 0; i < 10; i++) {
+            let selected = false
+
+            if (!def_page_size) {
+                if (page_size === n.toString()) {
+                    selected = true
+                }
+            }
+
+            add_option(n, false, selected)
+            n += 100
+        }
+
+        add_option(`------`, true)
+        add_option(`All`)
+
+        page_select.addEventListener(`change`, () => {
+            let value = page_select.value
+            let psize
+
+            if (value === `-`) {
+                return
+            }
+
+            if (value === `All`) {
+                psize = `all`
+            }
+            else if (value === `Default`) {
+                psize = `default`
+            }
+            else {
+                psize = parseInt(value)
+            }
+
+            let url = new URL(window.location.href)
+            url.searchParams.set(`page_size`, psize)
+            window.location.href = url.href
+        })
+    }
 }
 
 function delete_above(el) {

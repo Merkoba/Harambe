@@ -91,3 +91,8 @@ a.linkbutton:hover {
 .sep {
     color: grey
 }
+
+input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+}
