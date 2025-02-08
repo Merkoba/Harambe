@@ -70,11 +70,11 @@ This is how it looks when neither captcha or key are required:
 
 ## Config <a name="config"></a>
 
-Configs are set in [config.toml](server/config/config.toml).
+Configs are set in [config.toml](server/config.toml).
 
 You only need to add there the ones you need.
 
-You can copy [config.toml.example](server/config/config.toml.example) to use as base.
+You can check the default values in [config.py](server/config.py) and redefine what you need.
 
 The config file is automatically reloaded when the file is modified.
 

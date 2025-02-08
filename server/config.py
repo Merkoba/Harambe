@@ -64,7 +64,7 @@ def_config = Config()
 config = Config()
 
 # Path to the config file
-configpath = Path("config/config.toml")
+configpath = Path("config.toml")
 
 
 def defvalue(name: str) -> Any:
