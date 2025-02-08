@@ -98,9 +98,9 @@ function fill_page_select(page_select) {
     add_option(`Default`, false, def_page_size)
     add_option(`------`, true)
 
-    let n = 100
+    let nums = [10, 20, 50, 100, 200, 500, 1000]
 
-    for (let i = 0; i < 10; i++) {
+    for (let n of nums) {
         let selected = false
 
         if (!def_page_size) {
@@ -110,7 +110,6 @@ function fill_page_select(page_select) {
         }
 
         add_option(n, false, selected)
-        n += 100
     }
 
     add_option(`------`, true)
@@ -214,7 +213,8 @@ async function delete_file(name, el) {
 
         if (response.ok) {
             remove_files(files)
-        } else {
+        }
+        else {
             console.error(`Error:`, response.status)
         }
     }
@@ -235,7 +235,8 @@ async function delete_selected_files(files) {
 
         if (response.ok) {
             remove_files(files)
-        } else {
+        }
+        else {
             console.error(`Error:`, response.status)
         }
     }
