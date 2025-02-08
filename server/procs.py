@@ -197,7 +197,7 @@ def admin(page: int = 1) -> tuple[list[dict[str, Any]], str, bool]:
     else:
         total_str = f"{megas} MB"
 
-    total_str = f"{total_str} | {len(file_list)} Files"
+    total_str = f"{total_str} ({len(file_list)} Files)"
     return file_list, total_str, has_next_page
 
 
