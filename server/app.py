@@ -79,6 +79,7 @@ def index() -> Any:
     max_size = config.get_max_file_size()
     require_key = config.require_key
     show_image = config.show_image
+    image_name = procs.get_image_name()
 
     return render_template(
         "index.html",
@@ -86,6 +87,7 @@ def index() -> Any:
         max_size=max_size,
         require_key=require_key,
         show_image=show_image,
+        image_name=image_name,
     )
 
 

@@ -81,3 +81,11 @@ This is how it looks when a key is needed for the web interface:
 This is how it looks when neither captcha or key are required:
 
 ![](minimal.png)
+
+---
+
+## Banner
+
+The main image at the top can be replaced by creating a file in `server/static/img`.
+
+This file is called `banner` and it can be `jpg`, `png`, or `gif`.

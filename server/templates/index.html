@@ -14,7 +14,7 @@
 {% block body %}
 <div id="main">
     {% if show_image %}
-    <img id="image" src="static/img/cat.jpg">
+    <img id="image" src="static/img/{{ image_name }}">
     {% endif %}
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
