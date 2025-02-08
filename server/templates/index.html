@@ -2,7 +2,12 @@
 
 {% block head %}
 <title>Upload</title>
-<link rel="stylesheet" href="static/css/style.css">
+<style>
+    :root {
+        --background_color: {{ background_color }};
+    }
+</style>
+<link rel="stylesheet" href="static/css/index.css">
 
 <script>
     const max_size = {{ max_size }}

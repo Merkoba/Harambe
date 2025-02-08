@@ -80,6 +80,7 @@ def index() -> Any:
     require_key = config.require_key
     show_image = config.show_image
     image_name = procs.get_image_name()
+    background_color = config.background_color
 
     return render_template(
         "index.html",
@@ -88,6 +89,7 @@ def index() -> Any:
         require_key=require_key,
         show_image=show_image,
         image_name=image_name,
+        background_color=background_color,
     )
 
 

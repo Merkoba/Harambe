@@ -54,3 +54,27 @@ img:hover {
 .no_expand {
     align-self: flex-start;
 }
+
+#message {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+
+}
+
+.icon {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+}
+
+.green {
+    background-color: rgb(102, 210, 102);
+}
+
+.red {
+    background-color: rgb(207, 93, 93);
+}

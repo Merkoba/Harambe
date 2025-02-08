@@ -15,7 +15,12 @@
 {% block body %}
 <div id="main">
     <div id="message">
-    {{message|safe}}
+        {% if mode == "upload" %}
+        <span class="icon green"></span>
+        {% elif mode == "error" %}
+        <span class="icon red"></span>
+        {% endif %}
+        {{message|safe}}
     </div>
 
     {% if mode == "upload" %}

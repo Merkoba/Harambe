@@ -16,11 +16,11 @@ from watchdog.events import FileSystemEventHandler  # type: ignore
 
 
 class FileChangeHandler(FileSystemEventHandler):  # type: ignore
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: Path) -> None:
         self.path = path
 
     def on_modified(self, event: Any) -> None:
-        if event.src_path == self.path:
+        if Path(event.src_path) == self.path:
             read_config()
 
 
@@ -46,6 +46,7 @@ class Config:
     admin_page_size: int = 100
     file_name_length: int = 10
     rate_limit: int = 20
+    background_color: str = "rgb(81 81 81)"
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -97,6 +98,7 @@ def read_config() -> None:
         set_value(c, "admin_page_size")
         set_value(c, "file_name_length")
         set_value(c, "rate_limit")
+        set_value(c, "background_color")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",
@@ -110,7 +112,7 @@ def read_config() -> None:
 
 
 def start_observer() -> None:
-    event_handler = FileChangeHandler(str(configpath))
+    event_handler = FileChangeHandler(configpath)
     observer = Observer()
     observer.schedule(event_handler, path=str(configpath.parent), recursive=False)
     observer.start()
