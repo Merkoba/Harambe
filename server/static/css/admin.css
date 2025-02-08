@@ -14,10 +14,14 @@ body, html {
     gap: 1rem;
 }
 
-#delete_all {
+.action_button {
     font-size: 1rem;
     color: var(--color_1);
     cursor: pointer;
+}
+
+.action_button:hover {
+    text-decoration: underline;
 }
 
 #links {
@@ -32,19 +36,6 @@ body, html {
     align-items: center;
     gap: 0.5rem;
     white-space: nowrap;
-}
-
-.delete {
-    color: var(--color_1);
-    cursor: pointer;
-}
-
-.delete:hover {
-    text-decoration: underline;
-}
-
-#delete_all:hover {
-    text-decoration: underline;
 }
 
 a:link, a:visited {

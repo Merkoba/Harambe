@@ -148,17 +148,17 @@ def admin(password: str, page: int = 1) -> Any:
     )
 
 
-@app.route("/delete", methods=["POST"])  # type: ignore
+@app.route("/delete_files", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(12))  # type: ignore
-def delete() -> Any:
+def delete_files() -> Any:
     data = request.get_json()
-    name = data.get("name", None)
+    files = data.get("files", None)
     password = data.get("password", None)
 
     if not procs.check_password(password):
         return Response(invalid, mimetype=text_mtype)
 
-    return procs.delete_file(name)
+    return procs.delete_files(files)
 
 
 @app.route("/delete_all", methods=["POST"])  # type: ignore

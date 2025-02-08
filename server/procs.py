@@ -201,18 +201,22 @@ def admin(page: int = 1) -> tuple[list[dict[str, Any]], str, bool]:
     return file_list, total_str, has_next_page
 
 
-def delete_file(name: str) -> tuple[str, int]:
-    if not name:
-        return jsonify({"status": "error", "message": "Filename is required"}), 400
+def delete_files(files: list[str]) -> tuple[str, int]:
+    if not files:
+        return jsonify(
+            {"status": "error", "message": "File names were not provided"}
+        ), 400
 
-    if name.startswith("."):
-        return jsonify({"status": "error", "message": "Invalid filename"}), 400
+    for file in files:
+        if file.startswith("."):
+            continue
 
-    try:
-        do_delete_file(name)
-        return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        try:
+            do_delete_file(file)
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 500
+
+    return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
 
 def do_delete_file(name: str) -> None:
@@ -226,6 +230,7 @@ def do_delete_file(name: str) -> None:
 def delete_all() -> tuple[str, int]:
     try:
         do_delete_all()
+
         return jsonify(
             {"status": "ok", "message": "All files deleted successfully"}
         ), 200
