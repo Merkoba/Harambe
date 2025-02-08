@@ -25,9 +25,6 @@ body, html {
 }
 
 #links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
     margin-top: 0.5rem;
 }
 
@@ -53,4 +50,36 @@ a.linkbutton:link, a.linkbutton:visited {
 
 a.linkbutton:hover {
     text-decoration: underline;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.table-row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-header {
+    font-weight: bold;
+    background-color: #f2f2f2;
+}
+
+.table-cell {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+}
+
+.table-cell a {
+    text-decoration: none;
+    color: #000;
+}
+
+.checkbox-cell {
+    flex: 0 0 auto; /* Shrink to fit content */
 }

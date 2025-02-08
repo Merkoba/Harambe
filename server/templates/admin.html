@@ -31,16 +31,35 @@
 </div>
 
 <div id="links">
-    {% for file in files %}
-    <div class="link" data-name="{{ file.name }}" data-size="{{ file.size }}">
-        <input class="select_checkbox" type="checkbox">
-        <a href="/file/{{ file.name }}">{{ file.name }}</a>
-        <span>({{ file.size }} mb)</span>
-        <span>({{ file.ago }})</span>
-        <span class="delete action_button">Delete</span>
-        <span class="delete_above action_button">Above</span>
-        <span class="delete_below action_button">Below</span>
+    <div class="table">
+        <div class="table-row table-header">
+            <div class="table-cell">Name</div>
+            <div class="table-cell">Size</div>
+            <div class="table-cell">Age</div>
+            <div class="table-cell">Actions</div>
+        </div>
+        {% for file in files %}
+        <div class="table-row link" data-name="{{ file.name }}" data-size="{{ file.size }}">
+            <div class="table-cell checkbox-cell">
+                <input class="select_checkbox" type="checkbox">
+            </div>
+
+            <div class="table-cell">
+                <a href="/file/{{ file.name }}">{{ file.name }}</a>
+            </div>
+
+            <div class="table-cell">{{ file.size }} mb</div>
+            <div class="table-cell">{{ file.ago }}</div>
+
+            <div class="table-cell">
+                <span class="delete action_button">Delete</span>
+                <span> | </span>
+                <span class="delete_above action_button">Above</span>
+                <span> | </span>
+                <span class="delete_below action_button">Below</span>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}
