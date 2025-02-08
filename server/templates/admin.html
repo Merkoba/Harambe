@@ -13,7 +13,7 @@
 
 {% block body %}
 <div id="top">
-    <div class="action_button" id="delete_selected">Delete Selected</div>
+    <div class="action_button" id="delete_selected">Delete</div>
     <div>|</div>
     <div class="action_button" id="delete_all">Delete All</div>
     <div>|</div>
@@ -38,6 +38,8 @@
         <span>({{ file.size }} mb)</span>
         <span>({{ file.ago }})</span>
         <span class="delete action_button">Delete</span>
+        <span class="delete_above action_button">Above</span>
+        <span class="delete_below action_button">Below</span>
     </div>
     {% endfor %}
 </div>

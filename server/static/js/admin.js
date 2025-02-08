@@ -3,8 +3,18 @@ let selected_files = []
 window.onload = () => {
     document.addEventListener(`click`, async (e) => {
         if (e.target.classList.contains(`delete`)) {
-            selected_files = [e.closest(`.link`)]
+            selected_files = [e.target.closest(`.link`)]
             delete_files()
+        }
+
+        if (e.target.classList.contains(`delete_above`)) {
+            let el = e.target.closest(`.link`)
+            delete_above(el)
+        }
+
+        if (e.target.classList.contains(`delete_below`)) {
+            let el = e.target.closest(`.link`)
+            delete_below(el)
         }
     })
 
@@ -41,6 +51,42 @@ window.onload = () => {
     }
 }
 
+function delete_above(el) {
+    let links = document.querySelectorAll(`.link`)
+    let files = []
+
+    for (let link of links) {
+        if (link === el) {
+            break
+        }
+
+        files.push(link)
+    }
+
+    selected_files = files
+    delete_files()
+}
+
+function delete_below(el) {
+    let links = document.querySelectorAll(`.link`)
+    let files = []
+    let start = false
+
+    for (let link of links) {
+        if (link === el) {
+            start = true
+            continue
+        }
+
+        if (start) {
+            files.push(link)
+        }
+    }
+
+    selected_files = files
+    delete_files()
+}
+
 function delete_files() {
     let size = 0
 
@@ -50,7 +96,7 @@ function delete_files() {
 
     size = Math.round(size * 100) / 100
 
-    if (confirm(`Delete Selected (${selected_files.length} files) (${size} mb)`)) {
+    if (confirm(`Delete (${selected_files.length} files) (${size} mb)`)) {
         let files = []
 
         for (let file of selected_files) {
