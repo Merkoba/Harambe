@@ -121,6 +121,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
                     name = u.str
                 else:
                     name = u.timestamp().str
+                    name += u.randomness().str[:2]
 
                 if not config.uppercase_ids:
                     name = name.lower()
