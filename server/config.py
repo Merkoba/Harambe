@@ -42,12 +42,12 @@ class Config:
     max_files: int = 10_000
     max_storage: int = 10
     show_image: bool = True
-    admin_password: str = "fixthis"
     admin_page_size: int = 100
     file_name_length: int = 10
     rate_limit: int = 20
     background_color: str = "rgb(81 81 81)"
     font_family: str = "sans-serif"
+    users: list[list[str]] = field(default_factory=list)
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -57,6 +57,13 @@ class Config:
 
     def get_file_name_length(self) -> int:
         return max(min(self.file_name_length, 26), 10)
+
+    def check_user(self, username: str, password: str) -> bool:
+        for user in self.users:
+            if (user[0] == username) and (user[1] == password):
+                return True
+
+        return False
 
 
 # Used for default values
@@ -95,12 +102,12 @@ def read_config() -> None:
         set_value(c, "max_files")
         set_value(c, "max_storage")
         set_value(c, "show_image")
-        set_value(c, "admin_password")
         set_value(c, "admin_page_size")
         set_value(c, "file_name_length")
         set_value(c, "rate_limit")
         set_value(c, "background_color")
         set_value(c, "font_family")
+        set_value(c, "users")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",

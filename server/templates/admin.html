@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="/static/css/admin.css">
 
 <script>
-    const password = `{{password}}`
     const page_size = `{{page_size}}`
     const def_page_size = {{def_page_size | tojson}}
 </script>
@@ -28,13 +27,13 @@
     <div title="This is the current page">Page {{page}}</div>
     <div class="sep">|</div>
     {% if page > 1 %}
-    <a class="linkbutton" href="/admin/{{password}}/{{page - 1}}" title="Go to the previous page">Prev</a>
+    <a class="linkbutton" href="/admin/{{page - 1}}" title="Go to the previous page">Prev</a>
     {% else %}
     <div class="">Prev</div>
     {% endif %}
     <div class="sep">|</div>
     {% if next_page %}
-    <a class="linkbutton" href="/admin/{{password}}/{{page + 1}}" title="Go to the next page">Next</a>
+    <a class="linkbutton" href="/admin/{{page + 1}}" title="Go to the next page">Next</a>
     {% else %}
     <div class="">Next</div>
     {% endif %}

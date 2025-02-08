@@ -208,7 +208,7 @@ async function delete_file(name, el) {
             headers: {
                 "Content-Type": `application/json`
             },
-            body: JSON.stringify({files, password})
+            body: JSON.stringify({files})
         })
 
         if (response.ok) {
@@ -230,7 +230,7 @@ async function delete_selected_files(files) {
             headers: {
                 "Content-Type": `application/json`
             },
-            body: JSON.stringify({files, password})
+            body: JSON.stringify({files})
         })
 
         if (response.ok) {
@@ -262,7 +262,7 @@ async function delete_all_files() {
             headers: {
                 "Content-Type": `application/json`
             },
-            body: JSON.stringify({password})
+            body: JSON.stringify()
         })
 
         if (response.ok) {

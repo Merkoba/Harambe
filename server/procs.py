@@ -290,10 +290,6 @@ def check_storage() -> None:
         total_size -= oldest_file[1]
 
 
-def check_password(password: str) -> bool:
-    return bool(config.admin_password) and (password == config.admin_password)
-
-
 def get_image_name() -> str:
     if Path("static/img/banner.jpg").exists():
         return "banner.jpg"

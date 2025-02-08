@@ -2,10 +2,11 @@ from __future__ import annotations
 
 # Standard
 from typing import Any
+from functools import wraps
 
 # Libraries
 from flask import Flask, render_template, request, Response  # type: ignore
-from flask import send_from_directory, redirect, url_for, session  # pyright: ignore
+from flask import send_from_directory, redirect, url_for, session, flash  # pyright: ignore
 from flask_cors import CORS  # type: ignore
 from flask_simple_captcha import CAPTCHA  # type: ignore
 from flask_limiter import Limiter  # type: ignore
@@ -30,6 +31,17 @@ CORS(app)
 
 simple_captcha = CAPTCHA(config=config.captcha)
 app = simple_captcha.init_app(app)
+
+
+def login_required(f: Any) -> Any:
+    @wraps(f)
+    def decorated_function(*args: Any, **kwargs: Any) -> Any:
+        if not session.get("username"):
+            return redirect(url_for("login", next=request.url))
+
+        return f(*args, **kwargs)
+
+    return decorated_function
 
 
 def rate_limit(n: int) -> str:
@@ -139,19 +151,17 @@ def message() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
-    return send_from_directory(fd, filename)
+    return send_from_directory(fd, filename, cache_timeout=31536000)
 
 
 # ADMIN
 
 
-@app.route("/admin/<string:password>", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/admin/<string:password>/<int:page>", methods=["GET"])  # type: ignore
+@app.route("/admin", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/admin/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-def admin(password: str, page: int = 1) -> Any:
-    if not procs.check_password(password):
-        return Response(invalid, mimetype=text_mtype)
-
+@login_required
+def admin(page: int = 1) -> Any:
     page_size = request.args.get("page_size", config.admin_page_size)
     files, total, next_page = procs.admin(page, page_size)
     def_page_size = page_size == config.admin_page_size
@@ -159,7 +169,6 @@ def admin(password: str, page: int = 1) -> Any:
     return render_template(
         "admin.html",
         files=files,
-        password=password,
         total=total,
         page=page,
         next_page=next_page,
@@ -170,24 +179,43 @@ def admin(password: str, page: int = 1) -> Any:
 
 @app.route("/delete_files", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
 def delete_files() -> Any:
     data = request.get_json()
     files = data.get("files", None)
-    password = data.get("password", None)
-
-    if not procs.check_password(password):
-        return Response(invalid, mimetype=text_mtype)
-
     return procs.delete_files(files)
 
 
 @app.route("/delete_all", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
+@login_required
 def delete_all() -> Any:
-    data = request.get_json()
-    password = data.get("password", None)
-
-    if not procs.check_password(password):
-        return Response(invalid, mimetype=text_mtype)
-
     return procs.delete_all()
+
+
+# AUTH
+
+
+@app.route("/login", methods=["GET", "POST"])  # type: ignore
+def login() -> Any:
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "").strip()
+
+        if (not username) or (not password):
+            flash("Invalid credentials")
+            return redirect(url_for("login"))
+
+        if config.check_user(username, password):
+            session["username"] = username
+            return redirect(url_for("admin"))
+
+        flash("Invalid credentials")
+
+    return render_template("login.html")
+
+
+@app.route("/logout")  # type: ignore
+def logout() -> Any:
+    session.pop("username", None)
+    return redirect(url_for("login"))

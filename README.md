@@ -52,9 +52,17 @@ For example:
 
 ```toml
 captcha_length = 8
-admin_password = "henkel"
+
+files_dir = "/mnt/drive/harambe"
+
 uppercase_ids = false
+
 keys = ["cowboy", "cucaracha", "ronaldmac"]
+
+users = [
+    ["toby", "anviltrack"],
+    ["rhino", "geneses"],
+]
 ```
 
 The config file is automatically reloaded when the file is modified.
