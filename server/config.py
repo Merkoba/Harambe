@@ -47,6 +47,7 @@ class Config:
     file_name_length: int = 10
     rate_limit: int = 20
     background_color: str = "rgb(81 81 81)"
+    font_family: str = "sans-serif"
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -99,6 +100,7 @@ def read_config() -> None:
         set_value(c, "file_name_length")
         set_value(c, "rate_limit")
         set_value(c, "background_color")
+        set_value(c, "font_family")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",

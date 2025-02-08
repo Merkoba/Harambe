@@ -81,6 +81,7 @@ def index() -> Any:
     show_image = config.show_image
     image_name = procs.get_image_name()
     background_color = config.background_color
+    font_family = config.font_family
 
     return render_template(
         "index.html",
@@ -90,6 +91,7 @@ def index() -> Any:
         show_image=show_image,
         image_name=image_name,
         background_color=background_color,
+        font_family=font_family,
     )
 
 
@@ -116,8 +118,18 @@ def message() -> Any:
     if not ok:
         return redirect(url_for("index"))
 
+    background_color = config.background_color
+    font_family = config.font_family
     m = Message(data["message"], data["mode"], data["data"])
-    return render_template("message.html", mode=m.mode, message=m.message, data=m.data)
+
+    return render_template(
+        "message.html",
+        mode=m.mode,
+        message=m.message,
+        data=m.data,
+        background_color=background_color,
+        font_family=font_family,
+    )
 
 
 # SERVE FILE

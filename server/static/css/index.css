@@ -6,7 +6,7 @@
 body, html {
     color: white;
     background-color: var(--background_color);
-    font-family: sans-serif;
+    font-family: var(--font_family);
     font-size: 20px;
     display: flex;
     flex-direction: column;
@@ -16,6 +16,7 @@ body, html {
 
 button[type="submit"] {
     background-color: rgb(88 88 120);
+    font-family: var(--font_family);
     color: white;
     font-size: 1rem;
     padding-left: 0.5rem;
@@ -32,6 +33,7 @@ button[type="submit"]:hover {
 }
 
 input[type="text"] {
+    font-family: var(--font_family);
     text-align: center;
 }
 
@@ -41,6 +43,7 @@ input[type="file"] {
     max-width: 100%;
     white-space: normal;
     word-wrap: break-word;
+    font-family: var(--font_family);
 }
 
 #main {
