@@ -6,6 +6,7 @@ import time
 from typing import Any
 from pathlib import Path
 from dataclasses import dataclass
+from datetime import datetime
 from collections import deque
 
 # Libraries
@@ -23,6 +24,15 @@ class Message:
     message: str
     mode: str
     data: str = ""
+
+
+@dataclass
+class File:
+    name: str
+    date: datetime
+    nice_date: str
+    ago: str
+    size: float
 
 
 class KeyData:
@@ -153,15 +163,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
     return error("Nothing was uploaded")
 
 
-def time_ago(date: float) -> str:
-    return utils.time_ago(
-        date,
-    )
-
-
-def admin(
-    page: int = 1, page_size: str = "default"
-) -> tuple[list[dict[str, Any]], str, bool]:
+def admin(page: int = 1, page_size: str = "default") -> tuple[list[File], str, bool]:
     psize = 0
 
     if page_size == "default":
@@ -181,19 +183,13 @@ def admin(
         if f.name.startswith("."):
             continue
 
-        date = f.stat().st_mtime
-        size = f.stat().st_size
+        date = datetime.fromtimestamp(f.stat().st_mtime)
+        size = int(f.stat().st_size)
         total_size += size
-
-        files.append(
-            {
-                "name": f.name,
-                "date": date,
-                "nice_date": utils.nice_date(date),
-                "ago": utils.time_ago(date, now),
-                "size": utils.get_size(size),
-            }
-        )
+        nice_date = utils.nice_date(date)
+        ago = utils.time_ago(date, now)
+        fsize = utils.get_size(size)
+        files.append(File(f.name, date, nice_date, ago, fsize))
 
     gigas = round(total_size / 1_000_000_000, 2)
     megas = round(total_size / 1_000_000, 2)
@@ -204,6 +200,7 @@ def admin(
         total_str = f"{megas} MB"
 
     total_str = f"{total_str} ({len(files)} Files)"
+    files.sort(key=lambda x: x.date, reverse=True)
 
     if psize > 0:
         start_index = (page - 1) * psize
@@ -213,7 +210,6 @@ def admin(
     else:
         has_next_page = False
 
-    files.sort(key=lambda x: x["date"], reverse=True)
     return files, total_str, has_next_page
 
 

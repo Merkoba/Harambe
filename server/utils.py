@@ -1,14 +1,14 @@
 # Standard
-import time
 import random
+from datetime import datetime
 from pathlib import Path
 
 # Modules
 from config import config
 
 
-def now() -> float:
-    return time.time()
+def now() -> datetime:
+    return datetime.now()
 
 
 def numstring(n: int) -> str:
@@ -39,9 +39,8 @@ def singular_or_plural(num: float, singular: str, plural: str) -> str:
     return plural
 
 
-def time_ago(start_time: float, end_time: float) -> str:
-    diff = end_time - start_time
-    seconds = int(diff)
+def time_ago(start_time: datetime, end_time: datetime) -> str:
+    seconds = int((end_time - start_time).total_seconds())
 
     if seconds < 60:
         word = singular_or_plural(seconds, "sec", "secs")
@@ -84,5 +83,5 @@ def error(e: Exception) -> None:
     print(e)  # noqa
 
 
-def nice_date(date: float) -> str:
-    return time.strftime("%d %B %Y | %I:%M %p", time.localtime(date))
+def nice_date(date: datetime) -> str:
+    return date.strftime("%d %B %Y | %I:%M %p")
