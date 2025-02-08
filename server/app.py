@@ -151,7 +151,7 @@ def message() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
-    return send_from_directory(fd, filename, cache_timeout=31536000)
+    return send_from_directory(fd, filename, max_age=31536000)
 
 
 # ADMIN
@@ -197,6 +197,7 @@ def delete_all() -> Any:
 
 
 @app.route("/login", methods=["GET", "POST"])  # type: ignore
+@limiter.limit(rate_limit(3))
 def login() -> Any:
     if request.method == "POST":
         username = request.form.get("username", "").strip()
@@ -216,6 +217,7 @@ def login() -> Any:
 
 
 @app.route("/logout")  # type: ignore
+@limiter.limit(rate_limit(3))
 def logout() -> Any:
     session.pop("username", None)
     return redirect(url_for("login"))
