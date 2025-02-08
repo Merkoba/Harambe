@@ -95,8 +95,10 @@ This is how it looks when neither captcha or key are required:
 
 ---
 
-## Banner
+## Style
 
 The main image at the top can be replaced by creating a file in `server/static/img`.
 
 This file is called `banner` and it can be `jpg`, `png`, or `gif`.
+
+It's also possible to change the `background_color` and `font_family`.
