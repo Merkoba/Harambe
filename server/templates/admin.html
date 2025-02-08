@@ -15,26 +15,26 @@
 
 {% block body %}
 <div id="top">
-    <div class="action_button" id="select_all">Select</div>
+    <div class="action_button" id="select_all" title="Select all files">Select</div>
     <div class="sep">|</div>
-    <div class="action_button" id="unselect_all">Unselect</div>
+    <div class="action_button" id="unselect_all" title="Unselect all files">Unselect</div>
     <div class="sep">|</div>
-    <div class="action_button" id="delete_selected">Delete</div>
+    <div class="action_button" id="delete_selected" title="Delete selected files">Delete</div>
     <div class="sep">|</div>
-    <div class="action_button" id="delete_all">Delete All</div>
+    <div class="action_button" id="delete_all" title="Delete all files (from all pages)">Delete All</div>
     <div class="sep">|</div>
     <div>Total: {{total}}</div>
     <div class="sep">|</div>
-    <div>Page {{page}}</div>
+    <div title="This is the current page">Page {{page}}</div>
     {% if page > 1 %}
     <div class="sep">|</div>
-    <a class="linkbutton" href="/admin/{{password}}/{{page - 1}}">Prev</a>
+    <a class="linkbutton" href="/admin/{{password}}/{{page - 1}}" title="Go to the previous page">Prev</a>
     {% endif %}
     {% if next_page %}
     <div class="sep">|</div>
-    <a class="linkbutton" href="/admin/{{password}}/{{page + 1}}">Next</a>
+    <a class="linkbutton" href="/admin/{{password}}/{{page + 1}}" title="Go to the next page">Next</a>
     {% endif %}
-    <select id="page_select" title="Items per page"></select>
+    <select id="page_select" title="Show this number of items per page"></select>
 </div>
 
 <div id="links">
@@ -61,9 +61,9 @@
             <div class="table-cell">
                 <span class="delete action_button" title="Delete this file">Delete</span>
                 <span class="sep"> | </span>
-                <span class="delete_above action_button" title="Delete files above this one">Above</span>
+                <span class="delete_above action_button" title="Delete all files above this one">Above</span>
                 <span class="sep"> | </span>
-                <span class="delete_below action_button" title="Delete files below this one">Below</span>
+                <span class="delete_below action_button" title="Delete all files below this one">Below</span>
             </div>
         </div>
         {% endfor %}
