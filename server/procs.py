@@ -161,11 +161,11 @@ def time_ago(date: float) -> str:
     return utils.time_ago(date, utils.now())
 
 
-def dashboard(page: int = 1) -> tuple[list[dict[str, Any]], str, bool]:
+def admin(page: int = 1) -> tuple[list[dict[str, Any]], str, bool]:
     files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
 
-    page_size = config.dashboard_page_size
+    page_size = config.admin_page_size
     start_index = (page - 1) * page_size
     end_index = start_index + page_size
     has_next_page = end_index < len(files)
@@ -274,4 +274,4 @@ def check_storage() -> None:
 
 
 def check_password(password: str) -> bool:
-    return bool(config.dashboard_password) and (password == config.dashboard_password)
+    return bool(config.admin_password) and (password == config.admin_password)

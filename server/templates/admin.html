@@ -2,13 +2,13 @@
 
 {% block head %}
 <title>Admin</title>
-<link rel="stylesheet" href="/static/css/dashboard.css">
+<link rel="stylesheet" href="/static/css/admin.css">
 
 <script>
     const password = `{{ password }}`
 </script>
 
-<script src="/static/js/dashboard.js"></script>
+<script src="/static/js/admin.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -19,11 +19,11 @@
     <div>Page {{ page }}</div>
     {% if page > 1 %}
     <div>|</div>
-    <a class="linkbutton" href="/dashboard/{{ password }}/{{ page - 1}}">Prev</a>
+    <a class="linkbutton" href="/admin/{{ password }}/{{ page - 1}}">Prev</a>
     {% endif %}
     {% if next_page %}
     <div>|</div>
-    <a class="linkbutton" href="/dashboard/{{ password }}/{{ page + 1}}">Next</a>
+    <a class="linkbutton" href="/admin/{{ password }}/{{ page + 1}}">Next</a>
     {% endif %}
 </div>
 

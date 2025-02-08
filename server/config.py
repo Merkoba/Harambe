@@ -43,8 +43,8 @@ class Config:
     max_files: int = 10_000
     max_storage: int = 10
     show_image: bool = True
-    dashboard_password: str = "fixthis"
-    dashboard_page_size: int = 100
+    admin_password: str = "fixthis"
+    admin_page_size: int = 100
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -90,8 +90,8 @@ def read_config() -> None:
         set_value(c, "max_files")
         set_value(c, "max_storage")
         set_value(c, "show_image")
-        set_value(c, "dashboard_password")
-        set_value(c, "dashboard_page_size")
+        set_value(c, "admin_password")
+        set_value(c, "admin_page_size")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",

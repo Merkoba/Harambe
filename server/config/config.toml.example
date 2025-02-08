@@ -1,6 +1,6 @@
 # Secret key used by the app itself
 # Set this to some random long string
-app_key = "change_me"
+app_key = "change_this"
 
 # The directory where files are saved
 # It can be an external location like /mnt/storage/harambe
@@ -10,7 +10,7 @@ files_dir = "files"
 require_captcha = true
 
 # Set this to a long random string for security
-captcha_key = "change_me"
+captcha_key = "change_this"
 
 # Use this to cheat the captcha for quick access
 # If empty no cheat will be accepted
@@ -52,8 +52,8 @@ max_storage = 10
 # Show the image at the top of the main page
 show_image = true
 
-# Used for the dashboard page at site.com/dashboard/password
-password = "change_me"
+# Used for the admin page at site.com/admin/password
+password = "change_this"
 
-# The amount of items per page in the dashboard
-dashboard_page_size = 100
+# The amount of items per page in the admin
+admin_page_size = 100

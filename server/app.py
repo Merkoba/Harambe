@@ -129,16 +129,17 @@ def get_file(filename: str) -> Any:
 # ADMIN
 
 
-@app.route("/dashboard/<string:password>", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/dashboard/<string:password>/<int:page>", methods=["GET"])  # type: ignore
+@app.route("/admin/<string:password>", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/admin/<string:password>/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(12))  # type: ignore
-def dashboard(password: str, page: int = 1) -> Any:
+def admin(password: str, page: int = 1) -> Any:
     if not procs.check_password(password):
         return Response(invalid, mimetype=text_mtype)
 
-    files, total, next_page = procs.dashboard(page)
+    files, total, next_page = procs.admin(page)
+
     return render_template(
-        "dashboard.html",
+        "admin.html",
         files=files,
         password=password,
         total=total,
