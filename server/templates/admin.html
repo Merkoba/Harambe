@@ -23,16 +23,20 @@
     <div class="sep">|</div>
     <div class="action_button" id="delete_all" title="Delete all files (from all pages)">Delete All</div>
     <div class="sep">|</div>
-    <div>Total: {{total}}</div>
+    <div title="Total storage stats of all files (on all pages)">Total: {{total}}</div>
     <div class="sep">|</div>
     <div title="This is the current page">Page {{page}}</div>
+    <div class="sep">|</div>
     {% if page > 1 %}
-    <div class="sep">|</div>
     <a class="linkbutton" href="/admin/{{password}}/{{page - 1}}" title="Go to the previous page">Prev</a>
+    {% else %}
+    <div class="">Prev</div>
     {% endif %}
-    {% if next_page %}
     <div class="sep">|</div>
+    {% if next_page %}
     <a class="linkbutton" href="/admin/{{password}}/{{page + 1}}" title="Go to the next page">Next</a>
+    {% else %}
+    <div class="">Next</div>
     {% endif %}
     <select id="page_select" title="Show this number of items per page"></select>
 </div>
@@ -56,7 +60,7 @@
             </div>
 
             <div class="table-cell">{{file.size}} mb</div>
-            <div class="table-cell" title="{{file.date}}">{{file.ago}}</div>
+            <div class="table-cell" title="{{file.nice_date}}">{{file.ago}}</div>
 
             <div class="table-cell">
                 <span class="delete action_button" title="Delete this file">Delete</span>

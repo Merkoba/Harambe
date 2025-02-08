@@ -154,7 +154,9 @@ def upload(request: Any, mode: str = "normal") -> Message:
 
 
 def time_ago(date: float) -> str:
-    return utils.time_ago(date, )
+    return utils.time_ago(
+        date,
+    )
 
 
 def admin(
@@ -169,22 +171,13 @@ def admin(
     else:
         psize = int(page_size)
 
-    files = list(utils.files_dir().glob("*"))
-    files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
+    all_files = list(utils.files_dir().glob("*"))
 
-    if psize > 0:
-        start_index = (page - 1) * psize
-        end_index = start_index + psize
-        has_next_page = end_index < len(files)
-        files = files[start_index:end_index]
-    else:
-        has_next_page = False
-
+    files = []
     total_size = 0
-    file_list = []
     now = utils.now()
 
-    for f in files:
+    for f in all_files:
         if f.name.startswith("."):
             continue
 
@@ -192,10 +185,11 @@ def admin(
         size = f.stat().st_size
         total_size += size
 
-        file_list.append(
+        files.append(
             {
                 "name": f.name,
-                "date": utils.nice_date(date),
+                "date": date,
+                "nice_date": utils.nice_date(date),
                 "ago": utils.time_ago(date, now),
                 "size": utils.get_size(size),
             }
@@ -209,8 +203,18 @@ def admin(
     else:
         total_str = f"{megas} MB"
 
-    total_str = f"{total_str} ({len(file_list)} Files)"
-    return file_list, total_str, has_next_page
+    total_str = f"{total_str} ({len(files)} Files)"
+
+    if psize > 0:
+        start_index = (page - 1) * psize
+        end_index = start_index + psize
+        has_next_page = end_index < len(files)
+        files = files[start_index:end_index]
+    else:
+        has_next_page = False
+
+    files.sort(key=lambda x: x["date"], reverse=True)
+    return files, total_str, has_next_page
 
 
 def delete_files(files: list[str]) -> tuple[str, int]:
