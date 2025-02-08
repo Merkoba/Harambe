@@ -10,9 +10,7 @@ It's made entirely in python using flask.
 
 Make a virtual env and install requirements.
 
-Copy [config.toml.example](server/config/config.toml.example) and make `config.toml`.
-
-Change the configs you need. You don't need to define them all as there are default values.
+Read [this](#config) to see how to configure it.
 
 Run with gunicorn with this systemd service:
 
@@ -70,7 +68,13 @@ This is how it looks when neither captcha or key are required:
 
 ---
 
-## Config
+## Config <a name="config"></a>
+
+Configs are set in [config.toml](server/config/config.toml).
+
+You only need to add there the ones you need.
+
+You can copy [config.toml.example](server/config/config.toml.example) to use as base.
 
 The config file is automatically reloaded when the file is modified.
 
