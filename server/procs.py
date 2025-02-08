@@ -113,7 +113,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
                 file.seek(0)
                 fname = file.filename
                 pfile = Path(fname)
-                ext = pfile.suffix
+                ext = pfile.suffix.lower()
                 name = pfile.stem
                 u = ulid.new()
 
