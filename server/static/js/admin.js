@@ -1,3 +1,5 @@
+let selected_files = []
+
 window.onload = () => {
     document.addEventListener(`click`, async (e) => {
         if (e.target.classList.contains(`delete`)) {
@@ -13,7 +15,22 @@ window.onload = () => {
 
     if (delete_selected) {
         delete_selected.addEventListener(`click`, () => {
-            if (confirm(`Delete Selected`)) {
+            let files = []
+            let checkboxes = document.querySelectorAll(`.select_checkbox`)
+
+            for (let checkbox of checkboxes) {
+                if (checkbox.checked) {
+                    files.push(checkbox.dataset.name)
+                }
+            }
+
+            if (files.length === 0) {
+                return
+            }
+
+            selected_files = files
+
+            if (confirm(`Delete Selected (${files.length})`)) {
                 delete_selected_files()
             }
         })
@@ -54,18 +71,7 @@ async function delete_file(name, el) {
 }
 
 async function delete_selected_files() {
-    let files = []
-    let checkboxes = document.querySelectorAll(`.select_checkbox`)
-
-    for (let checkbox of checkboxes) {
-        if (checkbox.checked) {
-            files.push(checkbox.dataset.name)
-        }
-    }
-
-    if (files.length === 0) {
-        return
-    }
+    let files = selected_files
 
     try {
         let response = await fetch(`/delete_files`, {
