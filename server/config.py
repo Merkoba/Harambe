@@ -39,7 +39,6 @@ class Config:
     key_limit: int = 3
     keys: list[str] = field(default_factory=list)
     uppercase_ids: bool = False
-    extra_unique_ids: bool = False
     max_files: int = 10_000
     max_storage: int = 10
     show_image: bool = True
@@ -89,7 +88,6 @@ def read_config() -> None:
         set_value(c, "require_key")
         set_value(c, "key_limit")
         set_value(c, "uppercase_ids")
-        set_value(c, "extra_unique_ids")
         set_value(c, "keys")
         set_value(c, "max_files")
         set_value(c, "max_storage")
