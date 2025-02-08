@@ -38,7 +38,6 @@ class Config:
     redis_port: int = 6379
     require_key: bool = False
     key_limit: int = 3
-    admin_max_files: int = 1000
     keys: list[str] = field(default_factory=list)
     uppercase_ids: bool = False
     extra_unique_ids: bool = False

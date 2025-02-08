@@ -21,8 +21,10 @@
     <div>|</div>
     <a class="linkbutton" href="/dashboard/{{ password }}/{{ page - 1}}">Prev</a>
     {% endif %}
+    {% if next_page %}
     <div>|</div>
     <a class="linkbutton" href="/dashboard/{{ password }}/{{ page + 1}}">Next</a>
+    {% endif %}
 </div>
 
 <div id="links">

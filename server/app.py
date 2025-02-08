@@ -140,9 +140,14 @@ def dashboard(password: str, page: int = 1) -> Any:
     if not check_password(password):
         return Response(invalid, mimetype=text_mtype)
 
-    files, total = procs.get_files(page)
+    files, total, next_page = procs.dashboard(page)
     return render_template(
-        "dashboard.html", files=files, password=password, total=total, page=page
+        "dashboard.html",
+        files=files,
+        password=password,
+        total=total,
+        page=page,
+        next_page=next_page,
     )
 
 

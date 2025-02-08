@@ -161,13 +161,14 @@ def time_ago(date: float) -> str:
     return utils.time_ago(date, utils.now())
 
 
-def get_files(page: int = 1) -> tuple[list[dict[str, Any]], str]:
+def dashboard(page: int = 1) -> tuple[list[dict[str, Any]], str, bool]:
     files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
 
     page_size = config.admin_page_size
     start_index = (page - 1) * page_size
     end_index = start_index + page_size
+    has_next_page = end_index < len(files)
     files = files[start_index:end_index]
 
     total_size = 0
@@ -197,8 +198,7 @@ def get_files(page: int = 1) -> tuple[list[dict[str, Any]], str]:
         total_str = f"{megas} MB"
 
     total_str = f"{total_str} | {len(file_list)} Files"
-
-    return file_list, total_str
+    return file_list, total_str, has_next_page
 
 
 def delete_file(name: str) -> tuple[str, int]:
