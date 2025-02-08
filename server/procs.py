@@ -116,12 +116,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
                 ext = pfile.suffix.lower()
                 name = pfile.stem
                 u = ulid.new()
-
-                if config.extra_unique_ids:
-                    name = u.str
-                else:
-                    name = u.timestamp().str
-                    name += u.randomness().str[:2]
+                name = u.str[: config.get_file_name_length()]
 
                 if not config.uppercase_ids:
                     name = name.lower()

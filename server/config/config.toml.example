@@ -57,3 +57,7 @@ password = "change_this"
 
 # The amount of items per page in the admin
 admin_page_size = 100
+
+# The length of the file names
+# Minimum of 10 and maximum of 26
+file_name_length = 10

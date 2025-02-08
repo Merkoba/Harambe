@@ -45,12 +45,16 @@ class Config:
     show_image: bool = True
     admin_password: str = "fixthis"
     admin_page_size: int = 100
+    file_name_length: int = 10
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
 
     def get_max_storage(self) -> int:
         return self.max_storage * 1_000_000_000
+
+    def get_file_name_length(self) -> int:
+        return max(min(self.file_name_length, 26), 10)
 
 
 # Used for default values
@@ -92,6 +96,7 @@ def read_config() -> None:
         set_value(c, "show_image")
         set_value(c, "admin_password")
         set_value(c, "admin_page_size")
+        set_value(c, "file_name_length")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",
