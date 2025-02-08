@@ -37,7 +37,7 @@ def login_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
         if not session.get("username"):
-            return redirect(url_for("login", next=request.url))
+            return redirect(url_for("login"))
 
         return f(*args, **kwargs)
 
@@ -220,4 +220,4 @@ def login() -> Any:
 @limiter.limit(rate_limit(3))  # type: ignore
 def logout() -> Any:
     session.pop("username", None)
-    return redirect(url_for("login"))
+    return redirect(url_for("index"))
