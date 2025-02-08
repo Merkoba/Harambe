@@ -4,13 +4,13 @@
 <title>Upload</title>
 <style>
     :root {
-        --background_color: {{ background_color }};
+        --background_color: {{background_color}};
     }
 </style>
 <link rel="stylesheet" href="static/css/index.css">
 
 <script>
-    const max_size = {{ max_size }}
+    const max_size = {{max_size}}
 </script>
 
 <script src="static/js/index.js"></script>
@@ -19,7 +19,7 @@
 {% block body %}
 <div id="main">
     {% if show_image %}
-    <img id="image" src="static/img/{{ image_name }}">
+    <img id="image" src="static/img/{{image_name}}">
     {% endif %}
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
@@ -29,7 +29,7 @@
 
         {% if captcha %}
         <div id="captcha">
-            {{ captcha_html(captcha)|safe }}
+            {{captcha_html(captcha)|safe}}
         </div>
         {% endif %}
 

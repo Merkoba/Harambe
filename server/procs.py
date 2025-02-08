@@ -154,7 +154,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
 
 
 def time_ago(date: float) -> str:
-    return utils.time_ago(date, utils.now())
+    return utils.time_ago(date, )
 
 
 def admin(
@@ -182,19 +182,22 @@ def admin(
 
     total_size = 0
     file_list = []
+    now = utils.now()
 
     for f in files:
         if f.name.startswith("."):
             continue
 
+        date = f.stat().st_mtime
         size = f.stat().st_size
         total_size += size
 
         file_list.append(
             {
                 "name": f.name,
+                "date": utils.nice_date(date),
+                "ago": utils.time_ago(date, now),
                 "size": utils.get_size(size),
-                "ago": time_ago(f.stat().st_mtime),
             }
         )
 

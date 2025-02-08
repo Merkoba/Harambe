@@ -5,9 +5,9 @@
 <link rel="stylesheet" href="/static/css/admin.css">
 
 <script>
-    const password = `{{ password }}`
-    const page_size = `{{ page_size }}`
-    const def_page_size = {{ def_page_size | tojson }}
+    const password = `{{password}}`
+    const page_size = `{{page_size}}`
+    const def_page_size = {{def_page_size | tojson}}
 </script>
 
 <script src="/static/js/admin.js"></script>
@@ -23,16 +23,16 @@
     <div class="sep">|</div>
     <div class="action_button" id="delete_all">Delete All</div>
     <div class="sep">|</div>
-    <div>Total: {{ total }}</div>
+    <div>Total: {{total}}</div>
     <div class="sep">|</div>
-    <div>Page {{ page }}</div>
+    <div>Page {{page}}</div>
     {% if page > 1 %}
     <div class="sep">|</div>
-    <a class="linkbutton" href="/admin/{{ password }}/{{ page - 1}}">Prev</a>
+    <a class="linkbutton" href="/admin/{{password}}/{{page - 1}}">Prev</a>
     {% endif %}
     {% if next_page %}
     <div class="sep">|</div>
-    <a class="linkbutton" href="/admin/{{ password }}/{{ page + 1}}">Next</a>
+    <a class="linkbutton" href="/admin/{{password}}/{{page + 1}}">Next</a>
     {% endif %}
     <select id="page_select" title="Items per page"></select>
 </div>
@@ -46,24 +46,24 @@
             <div class="table-cell">Actions</div>
         </div>
         {% for file in files %}
-        <div class="table-row link" data-name="{{ file.name }}" data-size="{{ file.size }}">
+        <div class="table-row link" data-name="{{file.name}}" data-size="{{file.size}}">
             <div class="table-cell checkbox-cell">
                 <input class="select_checkbox" type="checkbox">
             </div>
 
             <div class="table-cell">
-                <a href="/file/{{ file.name }}">{{ file.name }}</a>
+                <a href="/file/{{file.name}}">{{file.name}}</a>
             </div>
 
-            <div class="table-cell">{{ file.size }} mb</div>
-            <div class="table-cell">{{ file.ago }}</div>
+            <div class="table-cell">{{file.size}} mb</div>
+            <div class="table-cell" title="{{file.date}}">{{file.ago}}</div>
 
             <div class="table-cell">
-                <span class="delete action_button">Delete</span>
+                <span class="delete action_button" title="Delete this file">Delete</span>
                 <span class="sep"> | </span>
-                <span class="delete_above action_button">Above</span>
+                <span class="delete_above action_button" title="Delete files above this one">Above</span>
                 <span class="sep"> | </span>
-                <span class="delete_below action_button">Below</span>
+                <span class="delete_below action_button" title="Delete files below this one">Below</span>
             </div>
         </div>
         {% endfor %}

@@ -82,3 +82,7 @@ def files_dir() -> Path:
 
 def error(e: Exception) -> None:
     print(e)  # noqa
+
+
+def nice_date(date: float) -> str:
+    return time.strftime("%d %B %Y | %I:%M %p", time.localtime(date))
