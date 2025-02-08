@@ -165,7 +165,7 @@ def dashboard(page: int = 1) -> tuple[list[dict[str, Any]], str, bool]:
     files = list(utils.files_dir().glob("*"))
     files = sorted(files, key=lambda x: x.stat().st_mtime, reverse=True)
 
-    page_size = config.admin_page_size
+    page_size = config.dashboard_page_size
     start_index = (page - 1) * page_size
     end_index = start_index + page_size
     has_next_page = end_index < len(files)
@@ -271,3 +271,7 @@ def check_storage() -> None:
         oldest_file[0].unlink()
         total_files -= 1
         total_size -= oldest_file[1]
+
+
+def check_password(password: str) -> bool:
+    return bool(config.dashboard_password) and (password == config.dashboard_password)

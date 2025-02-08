@@ -33,7 +33,6 @@ class Config:
     captcha_key: str = ""
     captcha_cheat: str = ""
     captcha_length: int = 8
-    password: str = "fixthis"
     max_file_size: int = 100
     redis_port: int = 6379
     require_key: bool = False
@@ -44,7 +43,8 @@ class Config:
     max_files: int = 10_000
     max_storage: int = 10
     show_image: bool = True
-    admin_page_size: int = 100
+    dashboard_password: str = "fixthis"
+    dashboard_page_size: int = 100
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -80,7 +80,6 @@ def read_config() -> None:
         set_value(c, "captcha_key")
         set_value(c, "captcha_cheat")
         set_value(c, "captcha_length")
-        set_value(c, "password")
         set_value(c, "max_file_size")
         set_value(c, "redis_port")
         set_value(c, "require_key")
@@ -91,7 +90,8 @@ def read_config() -> None:
         set_value(c, "max_files")
         set_value(c, "max_storage")
         set_value(c, "show_image")
-        set_value(c, "admin_page_size")
+        set_value(c, "dashboard_password")
+        set_value(c, "dashboard_page_size")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",

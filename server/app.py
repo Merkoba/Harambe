@@ -129,15 +129,11 @@ def get_file(filename: str) -> Any:
 # ADMIN
 
 
-def check_password(password: str) -> bool:
-    return bool(config.password) and (password == config.password)
-
-
 @app.route("/dashboard/<string:password>", defaults={"page": 1}, methods=["GET"])  # type: ignore
 @app.route("/dashboard/<string:password>/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(12))  # type: ignore
 def dashboard(password: str, page: int = 1) -> Any:
-    if not check_password(password):
+    if not procs.check_password(password):
         return Response(invalid, mimetype=text_mtype)
 
     files, total, next_page = procs.dashboard(page)
@@ -158,7 +154,7 @@ def delete() -> Any:
     name = data.get("name", None)
     password = data.get("password", None)
 
-    if not check_password(password):
+    if not procs.check_password(password):
         return Response(invalid, mimetype=text_mtype)
 
     return procs.delete_file(name)
@@ -170,7 +166,7 @@ def delete_all() -> Any:
     data = request.get_json()
     password = data.get("password", None)
 
-    if not check_password(password):
+    if not procs.check_password(password):
         return Response(invalid, mimetype=text_mtype)
 
     return procs.delete_all()
