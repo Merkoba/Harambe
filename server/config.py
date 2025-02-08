@@ -45,6 +45,7 @@ class Config:
     admin_password: str = "fixthis"
     admin_page_size: int = 100
     file_name_length: int = 10
+    rate_limit: int = 20
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -95,6 +96,7 @@ def read_config() -> None:
         set_value(c, "admin_password")
         set_value(c, "admin_page_size")
         set_value(c, "file_name_length")
+        set_value(c, "rate_limit")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",

@@ -39,7 +39,7 @@ def rate_limit(n: int) -> str:
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=[rate_limit(12)],
+    default_limits=[rate_limit(config.rate_limit)],
     storage_uri=f"redis://localhost:{config.redis_port}",
     strategy="fixed-window",
 )
@@ -52,7 +52,7 @@ text_mtype = "text/plain"
 
 
 @app.route("/", methods=["POST", "GET"])  # type: ignore
-@limiter.limit(rate_limit(12))  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def index() -> Any:
     if request.method == "POST":
         try:
@@ -96,7 +96,7 @@ def upload() -> Any:
 
 
 @app.route("/message", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(12))  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def message() -> Any:
     data = {}
     ok = True
@@ -120,7 +120,7 @@ def message() -> Any:
 
 
 @app.route("/file/<path:filename>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(12))  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
     return send_from_directory(fd, filename)
@@ -131,7 +131,7 @@ def get_file(filename: str) -> Any:
 
 @app.route("/admin/<string:password>", defaults={"page": 1}, methods=["GET"])  # type: ignore
 @app.route("/admin/<string:password>/<int:page>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(12))  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def admin(password: str, page: int = 1) -> Any:
     if not procs.check_password(password):
         return Response(invalid, mimetype=text_mtype)
@@ -153,7 +153,7 @@ def admin(password: str, page: int = 1) -> Any:
 
 
 @app.route("/delete_files", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit(12))  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def delete_files() -> Any:
     data = request.get_json()
     files = data.get("files", None)
