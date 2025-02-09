@@ -13,6 +13,12 @@ window.onload = () => {
     image.addEventListener(`click`, (e) => {
       window.scrollTo(0, document.body.scrollHeight)
     })
+
+    image.addEventListener(`auxclick`, (e) => {
+      if (e.button === 1) {
+        window.location = `/admin`
+      }
+    })
   }
 
   document.addEventListener(`dragover`, (e) => {
