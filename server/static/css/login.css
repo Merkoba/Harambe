@@ -6,7 +6,9 @@ body, html {
 }
 
 #main {
-    background-image: url('/static/img/login.jpg');
+    background-image: url("/static/img/login.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
     height: 100%;
     width: 100%;
 }
