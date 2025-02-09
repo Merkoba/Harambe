@@ -40,6 +40,8 @@
     <div class="">Next</div>
     {% endif %}
     <select id="page_select" title="Show this number of items per page"></select>
+    <div class="sep">|</div>
+    <input id="filter" type="text" placeholder="Filter">
 </div>
 
 <div id="links">
@@ -51,7 +53,7 @@
             <div class="table-cell">Actions</div>
         </div>
         {% for file in files %}
-        <div class="table-row link" data-name="{{file.name}}" data-size="{{file.size}}">
+        <div class="table-row link" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.nice_date}}" data-ago="{{file.ago}}" data-size="{{file.size}}">
             <div class="table-cell checkbox-cell">
                 <input class="select_checkbox" type="checkbox">
             </div>

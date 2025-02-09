@@ -83,6 +83,29 @@ window.onload = () => {
             on_page_select_change()
         })
     }
+
+    let filter = document.querySelector(`#filter`)
+
+    if (filter) {
+        filter.addEventListener(`input`, () => {
+            let links = document.querySelectorAll(`.link`)
+            let value = filter.value.toLowerCase()
+
+            for (let link of links) {
+                let name = link.dataset.name.toLowerCase()
+                let ago = link.dataset.ago.toLowerCase()
+                let date = link.dataset.date.toLowerCase()
+                let size = link.dataset.size.toLowerCase()
+
+                if ([name, ago, date, size].some(x => x.includes(value))) {
+                    link.style.display = `flex`
+                }
+                else {
+                    link.style.display = `none`
+                }
+            }
+        })
+    }
 }
 
 function fill_page_select(page_select) {
