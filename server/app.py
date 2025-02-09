@@ -63,7 +63,7 @@ text_mtype = "text/plain"
 # INDEX / UPLOAD
 
 
-@app.route("/", methods=["POST", "GET"])  # type: ignore
+@app.route("/", methods=["POST", "GET"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def index() -> Any:
     if request.method == "POST":
@@ -115,13 +115,13 @@ def index() -> Any:
     )
 
 
-@app.route("/upload", methods=["POST"])  # type: ignore
+@app.route("/upload", methods=["POST"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def upload() -> Any:
     return procs.upload(request, "cli").message
 
 
-@app.route("/message", methods=["GET"])  # type: ignore
+@app.route("/message", methods=["GET"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def message() -> Any:
     data = {}
@@ -163,7 +163,7 @@ def message() -> Any:
 # SERVE FILE
 
 
-@app.route("/file/<path:filename>", methods=["GET"])  # type: ignore
+@app.route("/file/<path:filename>", methods=["GET"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
@@ -173,8 +173,8 @@ def get_file(filename: str) -> Any:
 # ADMIN
 
 
-@app.route("/admin", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/admin/<int:page>", methods=["GET"])  # type: ignore
+@app.route("/admin", defaults={"page": 1}, methods=["GET"], strict_slashes=False)  # type: ignore
+@app.route("/admin/<int:page>", methods=["GET"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
 def admin(page: int = 1) -> Any:
@@ -193,7 +193,7 @@ def admin(page: int = 1) -> Any:
     )
 
 
-@app.route("/delete_files", methods=["POST"])  # type: ignore
+@app.route("/delete_files", methods=["POST"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
 def delete_files() -> Any:
@@ -202,7 +202,7 @@ def delete_files() -> Any:
     return procs.delete_files(files)
 
 
-@app.route("/delete_all", methods=["POST"])  # type: ignore
+@app.route("/delete_all", methods=["POST"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 @login_required
 def delete_all() -> Any:
@@ -212,7 +212,7 @@ def delete_all() -> Any:
 # AUTH
 
 
-@app.route("/login", methods=["GET", "POST"])  # type: ignore
+@app.route("/login", methods=["GET", "POST"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 def login() -> Any:
     if request.method == "POST":
@@ -232,7 +232,7 @@ def login() -> Any:
     return render_template("login.html")
 
 
-@app.route("/logout")  # type: ignore
+@app.route("/logout", strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 def logout() -> Any:
     session.pop("username", None)
