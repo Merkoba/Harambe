@@ -33,7 +33,7 @@ class User:
 
 @dataclass
 class Key:
-    def __init__(self, name: str, limit: int, id_: str = "") -> None:
+    def __init__(self, name: str, limit: int, id_: str) -> None:
         self.name = name
         self.limit = limit
         self.id = id_
@@ -238,7 +238,7 @@ def read_config() -> None:
         keys: list[dict[str, Any]] = c.get("keys", [])
 
         config.keys = [
-            Key(key["name"], key["limit"], key.get("id", "")) for key in keys
+            Key(key["name"], key.get("limit", 12), key.get("id", "")) for key in keys
         ]
 
 
