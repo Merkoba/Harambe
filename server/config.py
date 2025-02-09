@@ -37,9 +37,6 @@ class Config:
     # Require to solve a captcha to upload in the web interface
     require_captcha: bool = True
 
-    # Captcha object. Automatic, don't change
-    captcha: dict[str, Any] = field(default_factory=dict)
-
     # Secret key for security
     # Make it a long random string
     captcha_key: str = ""
@@ -135,6 +132,17 @@ class Config:
 
         return False
 
+    def get_captcha(self) -> dict[str, Any]:
+        return {
+            "SECRET_CAPTCHA_KEY": self.captcha_key or "nothing",
+            "CAPTCHA_LENGTH": self.captcha_length,
+            "CAPTCHA_DIGITS": False,
+            "EXPIRE_SECONDS": 60,
+            "CAPTCHA_IMG_FORMAT": "JPEG",
+            "ONLY_UPPERCASE": False,
+            "CHARACTER_POOL": string.ascii_lowercase,
+        }
+
 
 # Used for default values
 def_config = Config()
@@ -182,16 +190,6 @@ def read_config() -> None:
         set_value(c, "font_family")
         set_value(c, "users")
         set_value(c, "max_age")
-
-        config.captcha = {
-            "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",
-            "CAPTCHA_LENGTH": config.captcha_length,
-            "CAPTCHA_DIGITS": False,
-            "EXPIRE_SECONDS": 60,
-            "CAPTCHA_IMG_FORMAT": "JPEG",
-            "ONLY_UPPERCASE": False,
-            "CHARACTER_POOL": string.ascii_lowercase,
-        }
 
 
 def start_observer() -> None:

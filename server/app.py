@@ -29,7 +29,7 @@ app.config["MAX_CONTENT_LENGTH"] = config.get_max_file_size()
 # Enable all cross origin requests
 CORS(app)
 
-simple_captcha = CAPTCHA(config=config.captcha)
+simple_captcha = CAPTCHA(config=config.get_captcha())
 app = simple_captcha.init_app(app)
 
 
