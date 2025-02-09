@@ -241,6 +241,9 @@ def delete_files(files: list[str]) -> tuple[str, int]:
 
 # Be extra careful with this function
 def do_delete_file(name: str) -> None:
+    if not config.allow_delete:
+        return
+
     if not name:
         return
 

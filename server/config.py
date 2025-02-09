@@ -145,6 +145,9 @@ class Config:
     # This is to make the list semi-private
     list_password: str = ""
 
+    # Allow admins to delete files using the admin page or endpoints
+    allow_delete: bool = True
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -223,6 +226,7 @@ def read_config() -> None:
         set_value(c, "enable_list")
         set_value(c, "list_page_size")
         set_value(c, "list_password")
+        set_value(c, "allow_delete")
 
         # Users
 
