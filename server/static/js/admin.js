@@ -73,7 +73,7 @@ window.onload = () => {
     fill_page_select(page_select)
 
     page_select.addEventListener(`change`, () => {
-      on_page_select_change()
+      on_page_select_change(page_select)
     })
   }
 
@@ -220,7 +220,7 @@ function fill_page_select(page_select) {
   add_option(`All`, false, page_size === `all`)
 }
 
-function on_page_select_change() {
+function on_page_select_change(page_select) {
   let value = page_select.value
   let psize
 
@@ -283,11 +283,11 @@ async function delete_file(name, el) {
       remove_files(files)
     }
     else {
-      console.error(`Error:`, response.status)
+      print_error(response.status)
     }
   }
   catch (error) {
-    console.error(`Error:`, error)
+    print_error(error)
   }
 }
 
@@ -305,11 +305,11 @@ async function delete_selected_files(files) {
       remove_files(files)
     }
     else {
-      console.error(`Error:`, response.status)
+      print_error(response.status)
     }
   }
   catch (error) {
-    console.error(`Error:`, error)
+    print_error(error)
   }
 }
 
@@ -337,11 +337,11 @@ async function delete_all_files() {
       document.querySelector(`#items`).innerHTML = ``
     }
     else {
-      console.error(`Error:`, response.status)
+      print_error(response.status)
     }
   }
   catch (error) {
-    console.error(`Error:`, error)
+    print_error(error)
   }
 }
 
@@ -359,4 +359,9 @@ function unselect_all() {
   for (let checkbox of checkboxes) {
     checkbox.checked = false
   }
+}
+
+function print_error(msg) {
+  // eslint-disable-next-line no-console
+  console.log(`Error: ${msg}`)
 }
