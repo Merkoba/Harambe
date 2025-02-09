@@ -101,7 +101,7 @@ These give access to users to upload directly from the command line.
 
 And it might be necesary to supply one in the web interface if `require_key` is enabled.
 
-Each item is [str, n], the name of the key, and the number of requests it can make per minute.
+Each item is [str, int], the name of the key, and the number of requests it can make per minute.
 
 ---
 
