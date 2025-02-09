@@ -125,6 +125,11 @@ class Config:
     # Default page size for the list page
     list_page_size: int = 100
 
+    # Require a special word in the URL to access the list page
+    # For example: site.com/list?pw=palmtree
+    # This is to make the list semi-private
+    list_password: str = ""
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -204,6 +209,7 @@ def read_config() -> None:
         set_value(c, "show_max_file_size")
         set_value(c, "enable_list")
         set_value(c, "list_page_size")
+        set_value(c, "list_password")
 
 
 def start_observer() -> None:

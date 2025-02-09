@@ -254,9 +254,15 @@ def show_list(page: int = 1) -> Any:
     if not config.enable_list:
         return redirect(url_for("index"))
 
+    pw = request.args.get("pw", "")
+
+    if config.list_password and (pw != config.list_password):
+        return redirect(url_for("index"))
+
     page_size = request.args.get("page_size", config.list_page_size)
     files, total, next_page = procs.get_files(page, page_size)
     def_page_size = page_size == config.list_page_size
+    use_password = bool(pw)
 
     return render_template(
         "list.html",
@@ -266,4 +272,6 @@ def show_list(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
+        password=pw,
+        use_password=use_password,
     )

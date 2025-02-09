@@ -21,13 +21,21 @@
     <div title="This is the current page">Page {{page}}</div>
     <div class="sep">|</div>
     {% if page > 1 %}
+    {% if use_password %}
+    <a class="linkbutton" href="/list/{{page - 1}}?pw={{password}}" title="Go to the previous page">Prev</a>
+    {% else %}
     <a class="linkbutton" href="/list/{{page - 1}}" title="Go to the previous page">Prev</a>
+    {% endif %}
     {% else %}
     <div class="">Prev</div>
     {% endif %}
     <div class="sep">|</div>
     {% if next_page %}
+    {% if use_password %}
+    <a class="linkbutton" href="/list/{{page + 1}}?pw={{password}}" title="Go to the next page">Next</a>
+    {% else %}
     <a class="linkbutton" href="/list/{{page + 1}}" title="Go to the next page">Next</a>
+    {% endif %}
     {% else %}
     <div class="">Next</div>
     {% endif %}
