@@ -97,16 +97,6 @@ These give access to users to upload directly from the command line.
 
 And it might be necesary to supply one in the web interface if `require_key` is enabled.
 
-This is how it looks when a key is needed for the web interface:
-
-![](key.png)
-
----
-
-This is how it looks when neither captcha or key are required:
-
-![](minimal.png)
-
 ---
 
 ## Style
