@@ -10,36 +10,28 @@ window.onload = () => {
 
         if (e.target.classList.contains(`delete_above`)) {
             let el = e.target.closest(`.link`)
-            delete_above(el)
+            select_above(el)
         }
 
         if (e.target.classList.contains(`delete_below`)) {
             let el = e.target.closest(`.link`)
-            delete_below(el)
+            select_below(el)
         }
     })
 
-    let select_all = document.querySelector(`#select_all`)
+    let s_all = document.querySelector(`#select_all`)
 
-    if (select_all) {
-        select_all.addEventListener(`click`, () => {
-            let checkboxes = document.querySelectorAll(`.select_checkbox`)
-
-            for (let checkbox of checkboxes) {
-                checkbox.checked = true
-            }
+    if (s_all) {
+        s_all.addEventListener(`click`, () => {
+            select_all()
         })
     }
 
-    let unselect_all = document.querySelector(`#unselect_all`)
+    let u_all = document.querySelector(`#unselect_all`)
 
-    if (unselect_all) {
-        unselect_all.addEventListener(`click`, () => {
-            let checkboxes = document.querySelectorAll(`.select_checkbox`)
-
-            for (let checkbox of checkboxes) {
-                checkbox.checked = false
-            }
+    if (u_all) {
+        u_all.addEventListener(`click`, () => {
+            unselect_all()
         })
     }
 
@@ -139,6 +131,37 @@ window.onload = () => {
     }
 }
 
+function select_above(el) {
+    unselect_all()
+    let links = document.querySelectorAll(`.link`)
+
+    for (let link of links) {
+        let check = link.querySelector(`.select_checkbox`)
+        check.checked = true
+
+        if (link === el) {
+            break
+        }
+    }
+}
+
+function select_below(el) {
+    unselect_all()
+    let links = document.querySelectorAll(`.link`)
+    let start = false
+
+    for (let link of links) {
+        if (link === el) {
+            start = true
+        }
+
+        if (start) {
+            let check = link.querySelector(`.select_checkbox`)
+            check.checked = true
+        }
+    }
+}
+
 function fill_page_select(page_select) {
     function add_option(n, disabled = false, selected = false) {
         let option = document.createElement(`option`)
@@ -191,42 +214,6 @@ function on_page_select_change() {
     let url = new URL(window.location.href)
     url.searchParams.set(`page_size`, psize)
     window.location.href = url.href
-}
-
-function delete_above(el) {
-    let links = document.querySelectorAll(`.link`)
-    let files = []
-
-    for (let link of links) {
-        if (link === el) {
-            break
-        }
-
-        files.push(link)
-    }
-
-    selected_files = files
-    delete_files()
-}
-
-function delete_below(el) {
-    let links = document.querySelectorAll(`.link`)
-    let files = []
-    let start = false
-
-    for (let link of links) {
-        if (link === el) {
-            start = true
-            continue
-        }
-
-        if (start) {
-            files.push(link)
-        }
-    }
-
-    selected_files = files
-    delete_files()
 }
 
 function delete_files() {
@@ -328,5 +315,21 @@ async function delete_all_files() {
     }
     catch (error) {
         console.error(`Error:`, error)
+    }
+}
+
+function select_all() {
+    let checkboxes = document.querySelectorAll(`.select_checkbox`)
+
+    for (let checkbox of checkboxes) {
+        checkbox.checked = true
+    }
+}
+
+function unselect_all() {
+    let checkboxes = document.querySelectorAll(`.select_checkbox`)
+
+    for (let checkbox of checkboxes) {
+        checkbox.checked = false
     }
 }
