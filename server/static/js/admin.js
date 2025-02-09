@@ -88,7 +88,7 @@ window.onload = () => {
         let name = item.dataset.name.toLowerCase()
         let ago = item.dataset.ago.toLowerCase()
         let date = item.dataset.date.toLowerCase()
-        let size = item.dataset.size.toLowerCase()
+        let size = item.dataset.size_str.toLowerCase()
         let opts = [name, size]
 
         if (date_mode === `ago`) {
