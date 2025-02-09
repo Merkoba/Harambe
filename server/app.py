@@ -33,10 +33,14 @@ simple_captcha = CAPTCHA(config=config.get_captcha())
 app = simple_captcha.init_app(app)
 
 
+def logged_in() -> bool:
+    return bool(session.get("username"))
+
+
 def login_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
-        if not session.get("username"):
+        if not logged_in():
             return redirect(url_for("login"))
 
         return f(*args, **kwargs)
@@ -249,15 +253,15 @@ def logout() -> Any:
 @app.route("/list", defaults={"page": 1}, methods=["GET"], strict_slashes=False)  # type: ignore
 @app.route("/list/<int:page>", methods=["GET"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@login_required
 def show_list(page: int = 1) -> Any:
-    if not config.enable_list:
-        return redirect(url_for("index"))
-
     pw = request.args.get("pw", "")
 
-    if config.list_password and (pw != config.list_password):
-        return redirect(url_for("index"))
+    if not logged_in():
+        if not config.enable_list:
+            return redirect(url_for("index"))
+
+        if config.list_password and (pw != config.list_password):
+            return redirect(url_for("index"))
 
     page_size = request.args.get("page_size", config.list_page_size)
     files, total, next_page = procs.get_files(page, page_size)

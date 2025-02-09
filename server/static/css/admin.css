@@ -94,7 +94,8 @@ a.linkbutton:hover {
 }
 
 .sep {
-    color: grey
+    color: grey;
+    user-select: none;
 }
 
 input[type="checkbox"] {
