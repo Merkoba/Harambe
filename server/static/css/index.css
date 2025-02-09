@@ -77,14 +77,24 @@ a:link, a:visited {
     margin-bottom: 2rem;
 }
 
-#picker {
+#picker_container {
     position: relative;
-    background-color: var(--accent_color);
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+#file_size {
+    align-self: center;
+}
+
+#picker {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: var(--accent_color);
     padding: var(--padding_1);
     box-sizing: border-box;
 }

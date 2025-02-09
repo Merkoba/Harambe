@@ -116,6 +116,9 @@ class Config:
     # Or a low number to force file reload more often
     max_age = 31536000
 
+    # Show the max file size in the web interface
+    show_max_file_size: bool = True
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -192,6 +195,7 @@ def read_config() -> None:
         set_value(c, "font_family")
         set_value(c, "users")
         set_value(c, "max_age")
+        set_value(c, "show_max_file_size")
 
 
 def start_observer() -> None:

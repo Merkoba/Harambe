@@ -30,8 +30,14 @@
     {% endif %}
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
-        <div id="picker">
-            <input id="file" type="file" name="file" required>
+        <div id="picker_container">
+            {% if show_max_file_size %}
+            <div id="file_size">Max file size: {{max_file_size}} mb</div>
+            {% endif %}
+
+            <div id="picker">
+                <input id="file" type="file" name="file" required>
+            </div>
         </div>
 
         {% if captcha %}

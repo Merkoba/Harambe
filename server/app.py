@@ -89,6 +89,8 @@ def index() -> Any:
         captcha = None
 
     max_size = config.get_max_file_size()
+    max_file_size = config.max_file_size
+    show_max_file_size = config.show_max_file_size
     require_key = config.require_key
     show_image = config.show_image
     image_name = procs.get_image_name()
@@ -103,6 +105,8 @@ def index() -> Any:
         "index.html",
         captcha=captcha,
         max_size=max_size,
+        max_file_size=max_file_size,
+        show_max_file_size=show_max_file_size,
         require_key=require_key,
         show_image=show_image,
         image_name=image_name,
