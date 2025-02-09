@@ -232,8 +232,33 @@ def delete_files(files: list[str]) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
 
+# Be extra careful with this function
 def do_delete_file(name: str) -> None:
-    path = utils.files_dir() / name
+    if not name:
+        return
+
+    if not utils.valid_file_name(name):
+        return
+
+    fd = utils.files_dir()
+    fds = str(fd)
+
+    if not fds:
+        return
+
+    if fds == "/":
+        return
+
+    if fds == ".":
+        return
+
+    if (fds == "~") or (fds == "~/"):
+        return
+
+    if fds == "/home":
+        return
+
+    path = fd / name
     file = Path(path)
 
     if file.exists():
@@ -258,7 +283,7 @@ def do_delete_all() -> None:
         if file.name.startswith("."):
             continue
 
-        file.unlink()
+        do_delete_file(file.name)
 
 
 # Remove old files if limits are exceeded

@@ -91,3 +91,27 @@ def error(e: Exception) -> None:
 
 def nice_date(date: datetime) -> str:
     return date.strftime("%d %B %Y | %I:%M %p")
+
+
+def valid_file_name(name: str) -> bool:
+    if not name:
+        return False
+
+    if name.startswith("."):
+        return False
+
+    if "/" in name:
+        return False
+
+    if "\\" in name:
+        return False
+
+    try:
+        p = Path(name)
+
+        if (not p.stem) or (not p.suffix):
+            return False
+    except Exception:
+        return False
+
+    return True

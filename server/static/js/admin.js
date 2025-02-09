@@ -61,7 +61,7 @@ window.onload = () => {
 
   if (delete_all) {
     delete_all.addEventListener(`click`, () => {
-      if (confirm(`Delete All`)) {
+      if (confirm(`Delete ALL files from the server?`)) {
         delete_all_files()
       }
     })

@@ -206,7 +206,7 @@ def delete_files() -> Any:
     return procs.delete_files(files)
 
 
-@app.route("/delete_all", methods=["POST"], strict_slashes=False)  # type: ignore
+@app.route("/delete_all_files", methods=["POST"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 @login_required
 def delete_all() -> Any:
