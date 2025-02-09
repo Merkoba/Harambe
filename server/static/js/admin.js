@@ -132,33 +132,60 @@ window.onload = () => {
 }
 
 function select_above(el) {
-    unselect_all()
     let items = document.querySelectorAll(`.item`)
+    let changed = false
+    let start = true
 
     for (let item of items) {
-        let check = item.querySelector(`.select_checkbox`)
-        check.checked = true
+        let cb = item.querySelector(`.select_checkbox`)
+
+        if (start) {
+            if (!cb.checked) {
+                cb.checked = true
+                changed = true
+            }
+        }
+        else if (cb.checked) {
+            cb.checked = false
+            changed = true
+        }
 
         if (item === el) {
-            break
+            start = false
         }
+    }
+
+    if (!changed) {
+        unselect_all()
     }
 }
 
 function select_below(el) {
-    unselect_all()
     let items = document.querySelectorAll(`.item`)
     let start = false
+    let changed = false
 
     for (let item of items) {
+        let cb = item.querySelector(`.select_checkbox`)
+
         if (item === el) {
             start = true
         }
 
         if (start) {
-            let check = item.querySelector(`.select_checkbox`)
-            check.checked = true
+            if (!cb.checked) {
+                cb.checked = true
+                changed = true
+            }
         }
+        else if (cb.checked) {
+            cb.checked = false
+            changed = true
+        }
+    }
+
+    if (!changed) {
+        unselect_all()
     }
 }
 
