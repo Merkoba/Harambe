@@ -116,6 +116,8 @@ class Config:
     # Or a low number to force file reload more often
     max_age = 31536000
 
+    # --- Methods ---
+
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
 
