@@ -260,7 +260,7 @@ function delete_files() {
 
   size = Math.round(size * 100) / 100
 
-  if (confirm(`Delete (${selected_files.length} files) (${size} mb)`)) {
+  if (confirm(`Delete (${selected_files.length} files) (${size_string(size)})`)) {
     let files = []
 
     for (let file of selected_files) {
@@ -368,4 +368,21 @@ function unselect_all() {
 function print_error(msg) {
   // eslint-disable-next-line no-console
   console.log(`Error: ${msg}`)
+}
+
+function size_string(size) {
+  size /= 1000
+
+  if (size < 1024) {
+    return `${size.toFixed(2)} kb`
+  }
+
+  size /= 1000
+
+  if (size < 1024) {
+    return `${size.toFixed(2)} mb`
+  }
+
+  size /= 1000
+  return `${size.toFixed(2)} gb`
 }

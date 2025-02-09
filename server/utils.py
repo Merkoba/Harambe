@@ -28,8 +28,14 @@ def file_name(name: str, max: int) -> str:
     return name or "file"
 
 
-def get_size(n: int) -> float:
-    return round(n / 1_000_000, 2)
+def get_size(n: int) -> str:
+    if n < 1_000_000:
+        return f"{round(n / 1_000, 2)} kb"
+
+    if n < 1_000_000_000:
+        return f"{round(n / 1_000_000, 2)} mb"
+
+    return f"{round(n / 1_000_000_000, 2)} gb"
 
 
 def singular_or_plural(num: float, singular: str, plural: str) -> str:

@@ -33,6 +33,7 @@ class File:
     nice_date: str
     ago: str
     size: float
+    size_str: str
 
 
 class KeyData:
@@ -195,18 +196,11 @@ def admin(page: int = 1, page_size: str = "default") -> tuple[list[File], str, b
         total_size += size
         nice_date = utils.nice_date(date)
         ago = utils.time_ago(date, now)
-        fsize = utils.get_size(size)
-        files.append(File(f.name, date, nice_date, ago, fsize))
+        size_str = utils.get_size(size)
+        files.append(File(f.name, date, nice_date, ago, size, size_str))
 
-    gigas = round(total_size / 1_000_000_000, 2)
-    megas = round(total_size / 1_000_000, 2)
-
-    if gigas >= 1:
-        total_str = f"{gigas} GB"
-    else:
-        total_str = f"{megas} MB"
-
-    total_str = f"{total_str} ({len(files)} Files)"
+    total_size_str = utils.get_size(total_size)
+    total_str = f"{total_size_str} ({len(files)} Files)"
     files.sort(key=lambda x: x.date, reverse=True)
 
     if psize > 0:

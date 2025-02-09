@@ -53,7 +53,7 @@
             <div class="table-cell">Actions</div>
         </div>
         {% for file in files %}
-        <div class="table-row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.nice_date}}" data-ago="{{file.ago}}" data-size="{{file.size}}">
+        <div class="table-row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.nice_date}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}">
             <div class="table-cell checkbox-cell">
                 <input class="select_checkbox" type="checkbox">
             </div>
@@ -62,7 +62,7 @@
                 <a href="/file/{{file.name}}" target="_blank">{{file.name}}</a>
             </div>
 
-            <div class="table-cell">{{file.size}} mb</div>
+            <div class="table-cell">{{file.size_str}}</div>
             <div class="table-cell date" title="{{file.nice_date}}">{{file.ago}}</div>
 
             <div class="table-cell">
