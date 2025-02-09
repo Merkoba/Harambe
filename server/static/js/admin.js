@@ -190,17 +190,21 @@ function select_below(el) {
 }
 
 function fill_page_select(page_select) {
-  function add_option(n, disabled = false, selected = false) {
+  function add_option(n, selected = false) {
     let option = document.createElement(`option`)
     option.value = n
     option.innerText = n
-    option.disabled = disabled
     option.selected = selected
     page_select.appendChild(option)
   }
 
-  add_option(`Default`, false, def_page_size)
-  add_option(`------`, true)
+  function add_separator() {
+    let sep = document.createElement(`hr`)
+    page_select.appendChild(sep)
+  }
+
+  add_option(`Default`, def_page_size)
+  add_separator()
 
   let nums = [10, 20, 50, 100, 200, 500, 1000]
 
@@ -213,11 +217,11 @@ function fill_page_select(page_select) {
       }
     }
 
-    add_option(n, false, selected)
+    add_option(n, selected)
   }
 
-  add_option(`------`, true)
-  add_option(`All`, false, page_size === `all`)
+  add_separator()
+  add_option(`All`, page_size === `all`)
 }
 
 function on_page_select_change(page_select) {
