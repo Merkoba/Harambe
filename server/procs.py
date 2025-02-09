@@ -16,7 +16,7 @@ import ulid  # type: ignore
 # Modules
 import app
 import utils
-from config import config
+from config import config, Key
 
 
 @dataclass
@@ -61,29 +61,29 @@ def error(s: str) -> Message:
     return Message(f"Error: {s}", "error")
 
 
-def check_key(name: str) -> tuple[bool, str]:
+def check_key(name: str) -> tuple[bool, str, Key | None]:
     if not name:
-        return False, "Key is required"
+        return False, "Key is required", None
 
-    limit = 0
+    key = None
 
-    for key in config.keys:
-        if name == key[0]:
-            limit = key[1]
+    for k in config.keys:
+        if name == k.name:
+            key = k
             break
 
-    if not limit:
-        return False, "Invalid key"
+    if not key:
+        return False, "Invalid key", None
 
     if name not in key_data:
-        key_data[name] = KeyData(limit)
+        key_data[name] = KeyData(key.limit)
 
     d = key_data[name]
 
     if d.blocked():
-        return False, "Rate limit exceeded"
+        return False, "Rate limit exceeded", key
 
-    return True, "ok"
+    return True, "ok", key
 
 
 def upload(request: Any, mode: str = "normal") -> Message:
@@ -93,13 +93,14 @@ def upload(request: Any, mode: str = "normal") -> Message:
         return error("No file")
 
     key = request.form.get("key", "")
+    used_key = None
 
     if mode == "normal":
         c_hash = request.form.get("captcha-hash", "")
         c_text = request.form.get("captcha-text", "")
 
         if config.require_key:
-            k_ok, k_msg = check_key(key)
+            k_ok, k_msg, used_key = check_key(key)
 
             if not k_ok:
                 return error(k_msg)
@@ -114,7 +115,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
                 if not app.simple_captcha.verify(c_text, c_hash):
                     return error("Failed captcha")
     elif mode == "cli":
-        k_ok, k_msg = check_key(key)
+        k_ok, k_msg, used_key = check_key(key)
 
         if not k_ok:
             return error(k_msg)
@@ -135,6 +136,10 @@ def upload(request: Any, mode: str = "normal") -> Message:
                 name = pfile.stem
                 u = ulid.new()
                 name = u.str[: config.get_file_name_length()]
+
+                if used_key and used_key.id:
+                    k_id = used_key.id.strip()
+                    name = f"{name}_{k_id}"
 
                 if not config.uppercase_ids:
                     name = name.lower()

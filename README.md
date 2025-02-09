@@ -46,7 +46,7 @@ Configs are set in `server/config.toml` which you must create.
 
 You can check the default values in [config.py](server/config.py) and redefine what you need.
 
-The `toml` format is very straightforward.
+The `toml` format looks as followed:
 
 For example:
 
@@ -57,18 +57,24 @@ files_dir = "/mnt/drive/harambe"
 
 uppercase_ids = false
 
-# Key name and requests per minute allowed
-keys = [
-    ["cowboy", 3],
-    ["cucaracha", 1],
-    ["ronaldmac", 12],
-]
+# These must go at the bottom or it might not parse correctly:
 
-# Username and password
-users = [
-    ["toby", "anviltrack"],
-    ["rhino", "geneses"],
-]
+[[users]]
+username = "ronald"
+password = "bigmac"
+
+[[users]]
+username = "admiral"
+password = "tokyo1993"
+
+[[keys]]
+name = "seabird"
+limit = 10
+
+[[keys]]
+name = "orbit"
+limit = 6
+id = "orb"
 ```
 
 The config file is automatically reloaded when the file is modified.
@@ -87,9 +93,13 @@ There is an admin page to view and delete files:
 
 ![](admin.png)
 
-To be able to use this, add yourself to the users array.
+To be able to use this you must create one or more users at the bottom:
 
-Each user is [str, str], the username and the password.
+```toml
+[[users]]
+username = "johnnycage"
+password = "goroballs"
+```
 
 ---
 
@@ -101,7 +111,18 @@ These give access to users to upload directly from the command line.
 
 And it might be necesary to supply one in the web interface if `require_key` is enabled.
 
-Each item is [str, int], the name of the key, and the number of requests it can make per minute.
+Add these at the bottom:
+
+```toml
+[[keys]]
+name = "wingwalker"
+limit = 20
+id = "wlkr"
+```
+
+`id` is optional, and if filled the file urls will be signed with it.
+
+For example `01jknx2aj1_wlkr.png` instead of `01jknx2aj1.png`
 
 ---
 

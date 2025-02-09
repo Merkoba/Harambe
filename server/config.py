@@ -25,7 +25,30 @@ class FileChangeHandler(FileSystemEventHandler):  # type: ignore
 
 
 @dataclass
+class User:
+    def __init__(self, username: str, password: str) -> None:
+        self.username = username
+        self.password = password
+
+
+@dataclass
+class Key:
+    def __init__(self, name: str, limit: int, id_: str = "") -> None:
+        self.name = name
+        self.limit = limit
+        self.id = id_
+
+
+@dataclass
 class Config:
+    # Users that can use the admin page
+    # Dict object: username, password
+    users: list[User] = field(default_factory=list)
+
+    # Keys that can be used to upload files
+    # Dict object: name, limit, id (optional)
+    keys: list[Key] = field(default_factory=list)
+
     # Secret key for security
     # Make it a long random string
     app_key: str = "fixthis"
@@ -59,10 +82,6 @@ class Config:
 
     # Require to input a key to upload in the web interface
     require_key: bool = False
-
-    # List of keys that can be used to upload
-    # Each key item is a tuple of (key, max_requests_per_minute)
-    keys: list[tuple[str, int]] = field(default_factory=list)
 
     # Uppercase the file ids
     # The id is used to name the files
@@ -107,10 +126,6 @@ class Config:
     # Font family for the web interface
     font_family: str = "sans-serif"
 
-    # List of users that can access the admin page
-    # Each user item is a tuple of (username, password)
-    users: list[list[str]] = field(default_factory=list)
-
     # Maximum age for the files cache on the user's side
     # Keep this is a huge number to avoid reloading
     # Or a low number to force file reload more often
@@ -143,7 +158,7 @@ class Config:
 
     def check_user(self, username: str, password: str) -> bool:
         for user in self.users:
-            if (user[0] == username) and (user[1] == password):
+            if (user.username == username) and (user.password == password):
                 return True
 
         return False
@@ -191,7 +206,6 @@ def read_config() -> None:
         set_value(c, "redis_port")
         set_value(c, "require_key")
         set_value(c, "uppercase_ids")
-        set_value(c, "keys")
         set_value(c, "max_files")
         set_value(c, "max_storage")
         set_value(c, "show_image")
@@ -204,12 +218,24 @@ def read_config() -> None:
         set_value(c, "text_color")
         set_value(c, "link_color")
         set_value(c, "font_family")
-        set_value(c, "users")
         set_value(c, "max_age")
         set_value(c, "show_max_file_size")
         set_value(c, "enable_list")
         set_value(c, "list_page_size")
         set_value(c, "list_password")
+
+        # Users
+
+        users: list[dict[str, str]] = c.get("users", [])
+        config.users = [User(user["username"], user["password"]) for user in users]
+
+        # Keys
+
+        keys: list[dict[str, Any]] = c.get("keys", [])
+
+        config.keys = [
+            Key(key["name"], key["limit"], key.get("id", "")) for key in keys
+        ]
 
 
 def start_observer() -> None:
