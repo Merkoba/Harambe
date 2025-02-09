@@ -108,3 +108,7 @@ This file is called `banner` and it can be `jpg`, `png`, or `gif`.
 It's also possible to change the `background_color` and `font_family`.
 
 As well as `accent_color`, `font_color`, `text_color`, and `link_color`.
+
+---
+
+Text to trigger update: 1
