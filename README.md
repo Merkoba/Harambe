@@ -124,3 +124,11 @@ A file index page can be enabled with `enable_list`.
 This will allow anybody to view the list of uploaded files.
 
 This is turned off by default.
+
+The list can be slightly protected with a password.
+
+This is a word that is needed to be included in the URL.
+
+For example `site.com/list?pw=bigdrop`
+
+If `list_password` is `bigdrop`.
