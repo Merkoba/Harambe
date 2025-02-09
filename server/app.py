@@ -183,7 +183,7 @@ def get_file(filename: str) -> Any:
 @login_required
 def admin(page: int = 1) -> Any:
     page_size = request.args.get("page_size", config.admin_page_size)
-    files, total, next_page = procs.admin(page, page_size)
+    files, total, next_page = procs.get_files(page, page_size)
     def_page_size = page_size == config.admin_page_size
 
     return render_template(
@@ -236,8 +236,34 @@ def login() -> Any:
     return render_template("login.html")
 
 
-@app.route("/logout", strict_slashes=False)  # type: ignore
+@app.route("/logout", methods=["GET"], strict_slashes=False)  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 def logout() -> Any:
     session.pop("username", None)
     return redirect(url_for("index"))
+
+
+# PUBLIC LIST
+
+
+@app.route("/list", defaults={"page": 1}, methods=["GET"], strict_slashes=False)  # type: ignore
+@app.route("/list/<int:page>", methods=["GET"], strict_slashes=False)  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
+def show_list(page: int = 1) -> Any:
+    if not config.enable_list:
+        return redirect(url_for("index"))
+
+    page_size = request.args.get("page_size", config.list_page_size)
+    files, total, next_page = procs.get_files(page, page_size)
+    def_page_size = page_size == config.list_page_size
+
+    return render_template(
+        "list.html",
+        files=files,
+        total=total,
+        page=page,
+        next_page=next_page,
+        page_size=page_size,
+        def_page_size=def_page_size,
+    )

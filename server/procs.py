@@ -171,7 +171,9 @@ def upload(request: Any, mode: str = "normal") -> Message:
     return error("Nothing was uploaded")
 
 
-def admin(page: int = 1, page_size: str = "default") -> tuple[list[File], str, bool]:
+def get_files(
+    page: int = 1, page_size: str = "default"
+) -> tuple[list[File], str, bool]:
     psize = 0
 
     if page_size == "default":

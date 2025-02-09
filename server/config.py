@@ -119,6 +119,12 @@ class Config:
     # Show the max file size in the web interface
     show_max_file_size: bool = True
 
+    # Enable a public page to list files
+    enable_list: bool = False
+
+    # Default page size for the list page
+    list_page_size: int = 100
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -196,6 +202,8 @@ def read_config() -> None:
         set_value(c, "users")
         set_value(c, "max_age")
         set_value(c, "show_max_file_size")
+        set_value(c, "enable_list")
+        set_value(c, "list_page_size")
 
 
 def start_observer() -> None:
