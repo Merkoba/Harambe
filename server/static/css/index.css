@@ -52,7 +52,7 @@ input[type="file"] {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     margin-bottom: 2rem;
     width: 500px;
 }
@@ -74,7 +74,7 @@ a:link, a:visited {
 
 #image {
     width: 300px;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 #picker_container {
