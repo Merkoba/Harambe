@@ -87,6 +87,10 @@ There is an admin page to view and delete files:
 
 ![](admin.png)
 
+To be able to use this, add yourself to the users array.
+
+Each user is [str, str], the username and the password.
+
 ---
 
 ## Keys
@@ -96,6 +100,8 @@ You can add keys to the `keys` array in the config.
 These give access to users to upload directly from the command line.
 
 And it might be necesary to supply one in the web interface if `require_key` is enabled.
+
+Each item is [str, n], the name of the key, and the number of requests it can make per minute.
 
 ---
 
