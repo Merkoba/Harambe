@@ -57,8 +57,14 @@ files_dir = "/mnt/drive/harambe"
 
 uppercase_ids = false
 
-keys = ["cowboy", "cucaracha", "ronaldmac"]
+# Key name and requests per minute allowed
+keys = [
+    ["cowboy", 3],
+    ["cucaracha", 1],
+    ["ronaldmac", 12],
+]
 
+# Username and password
 users = [
     ["toby", "anviltrack"],
     ["rhino", "geneses"],
@@ -71,7 +77,7 @@ This is done by using the `watchdog` library.
 
 So there's no need to restart the server on config changes.
 
-There are some exceptions like `app_key` which can't be changed at runtime.
+There are some exceptions like `app_key` or the captcha settings which can't be changed at runtime.
 
 ---
 
