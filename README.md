@@ -129,6 +129,8 @@ The list can be slightly protected with a password.
 
 This is a word that is needed to be included in the URL.
 
+This is sent as the `pw` GET parameter.
+
 For example `site.com/list?pw=bigdrop`
 
 If `list_password` is `bigdrop`.
