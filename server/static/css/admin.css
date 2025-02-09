@@ -19,6 +19,7 @@ body, html {
     font-size: 1rem;
     color: var(--color_1);
     cursor: pointer;
+    user-select: none;
 }
 
 .action_button:hover {
@@ -107,6 +108,7 @@ select {
 
 .underline {
     cursor: pointer;
+    user-select: none;
 }
 
 .underline:hover {
