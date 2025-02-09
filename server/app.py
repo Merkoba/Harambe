@@ -167,7 +167,7 @@ def message() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
-    return send_from_directory(fd, filename, max_age=31536000)
+    return send_from_directory(fd, filename, max_age=config.max_age)
 
 
 # ADMIN

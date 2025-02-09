@@ -52,6 +52,7 @@ class Config:
     link_color: str = "rgb(222 211 239)"
     font_family: str = "sans-serif"
     users: list[list[str]] = field(default_factory=list)
+    max_age = 31536000
 
     def get_max_file_size(self) -> int:
         return self.max_file_size * 1_000_000
@@ -116,6 +117,7 @@ def read_config() -> None:
         set_value(c, "link_color")
         set_value(c, "font_family")
         set_value(c, "users")
+        set_value(c, "max_age")
 
         config.captcha = {
             "SECRET_CAPTCHA_KEY": config.captcha_key or "nothing",
