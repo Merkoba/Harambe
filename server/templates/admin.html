@@ -44,7 +44,7 @@
     <input id="filter" type="text" placeholder="Filter">
 </div>
 
-<div id="links">
+<div id="items">
     <div class="table">
         <div class="table-row table-header">
             <div class="table-cell">Name</div>
@@ -53,7 +53,7 @@
             <div class="table-cell">Actions</div>
         </div>
         {% for file in files %}
-        <div class="table-row link" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.nice_date}}" data-ago="{{file.ago}}" data-size="{{file.size}}">
+        <div class="table-row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.nice_date}}" data-ago="{{file.ago}}" data-size="{{file.size}}">
             <div class="table-cell checkbox-cell">
                 <input class="select_checkbox" type="checkbox">
             </div>

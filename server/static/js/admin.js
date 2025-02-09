@@ -4,17 +4,17 @@ let date_mode = `ago`
 window.onload = () => {
     document.addEventListener(`click`, async (e) => {
         if (e.target.classList.contains(`delete`)) {
-            selected_files = [e.target.closest(`.link`)]
+            selected_files = [e.target.closest(`.item`)]
             delete_files()
         }
 
         if (e.target.classList.contains(`delete_above`)) {
-            let el = e.target.closest(`.link`)
+            let el = e.target.closest(`.item`)
             select_above(el)
         }
 
         if (e.target.classList.contains(`delete_below`)) {
-            let el = e.target.closest(`.link`)
+            let el = e.target.closest(`.item`)
             select_below(el)
         }
     })
@@ -44,7 +44,7 @@ window.onload = () => {
 
             for (let checkbox of checkboxes) {
                 if (checkbox.checked) {
-                    files.push(checkbox.closest(`.link`))
+                    files.push(checkbox.closest(`.item`))
                 }
             }
 
@@ -81,14 +81,14 @@ window.onload = () => {
 
     if (filter) {
         filter.addEventListener(`input`, () => {
-            let links = document.querySelectorAll(`.link`)
+            let items = document.querySelectorAll(`.item`)
             let value = filter.value.toLowerCase()
 
-            for (let link of links) {
-                let name = link.dataset.name.toLowerCase()
-                let ago = link.dataset.ago.toLowerCase()
-                let date = link.dataset.date.toLowerCase()
-                let size = link.dataset.size.toLowerCase()
+            for (let item of items) {
+                let name = item.dataset.name.toLowerCase()
+                let ago = item.dataset.ago.toLowerCase()
+                let date = item.dataset.date.toLowerCase()
+                let size = item.dataset.size.toLowerCase()
                 let opts = [name, size]
 
                 if (date_mode === `ago`) {
@@ -99,10 +99,10 @@ window.onload = () => {
                 }
 
                 if (opts.some(x => x.includes(value))) {
-                    link.style.display = `flex`
+                    item.style.display = `flex`
                 }
                 else {
-                    link.style.display = `none`
+                    item.style.display = `none`
                 }
             }
         })
@@ -119,12 +119,12 @@ window.onload = () => {
                 date_mode = `ago`
             }
 
-            for (let link of document.querySelectorAll(`.link`)) {
+            for (let item of document.querySelectorAll(`.item`)) {
                 if (date_mode === `ago`) {
-                    link.querySelector(`.date`).innerText = link.dataset.ago
+                    item.querySelector(`.date`).innerText = item.dataset.ago
                 }
                 else {
-                    link.querySelector(`.date`).innerText = link.dataset.date
+                    item.querySelector(`.date`).innerText = item.dataset.date
                 }
             }
         })
@@ -133,13 +133,13 @@ window.onload = () => {
 
 function select_above(el) {
     unselect_all()
-    let links = document.querySelectorAll(`.link`)
+    let items = document.querySelectorAll(`.item`)
 
-    for (let link of links) {
-        let check = link.querySelector(`.select_checkbox`)
+    for (let item of items) {
+        let check = item.querySelector(`.select_checkbox`)
         check.checked = true
 
-        if (link === el) {
+        if (item === el) {
             break
         }
     }
@@ -147,16 +147,16 @@ function select_above(el) {
 
 function select_below(el) {
     unselect_all()
-    let links = document.querySelectorAll(`.link`)
+    let items = document.querySelectorAll(`.item`)
     let start = false
 
-    for (let link of links) {
-        if (link === el) {
+    for (let item of items) {
+        if (item === el) {
             start = true
         }
 
         if (start) {
-            let check = link.querySelector(`.select_checkbox`)
+            let check = item.querySelector(`.select_checkbox`)
             check.checked = true
         }
     }
@@ -288,7 +288,7 @@ async function delete_selected_files(files) {
 
 function remove_files(files) {
     for (let file of files) {
-        let el = document.querySelector(`.link[data-name="${file}"]`)
+        let el = document.querySelector(`.item[data-name="${file}"]`)
 
         if (el) {
             el.remove()
@@ -307,7 +307,7 @@ async function delete_all_files() {
         })
 
         if (response.ok) {
-            document.querySelector(`#links`).innerHTML = ``
+            document.querySelector(`#items`).innerHTML = ``
         }
         else {
             console.error(`Error:`, response.status)

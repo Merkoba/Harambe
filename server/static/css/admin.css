@@ -26,15 +26,19 @@ body, html {
     text-decoration: underline;
 }
 
-#links {
+#items {
     margin-top: 0.5rem;
 }
 
-.link {
+.item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     white-space: nowrap;
+}
+
+.item:hover {
+    background-color: #f4f4f4;
 }
 
 a:link, a:visited {
@@ -71,11 +75,11 @@ a.linkbutton:hover {
     background-color: #f2f2f2;
 }
 
-.link .table-cell:first-child {
+.item .table-cell:first-child {
     border-left: 1px solid #ddd;
 }
 
-.link .table-cell {
+.item .table-cell {
     border-right: 1px solid #ddd;
 }
 
