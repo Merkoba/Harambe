@@ -1,4 +1,5 @@
 let selected_files = []
+let date_mode = `ago`
 
 window.onload = () => {
     document.addEventListener(`click`, async (e) => {
@@ -96,12 +97,42 @@ window.onload = () => {
                 let ago = link.dataset.ago.toLowerCase()
                 let date = link.dataset.date.toLowerCase()
                 let size = link.dataset.size.toLowerCase()
+                let opts = [name, size]
 
-                if ([name, ago, date, size].some(x => x.includes(value))) {
+                if (date_mode === `ago`) {
+                    opts.push(ago)
+                }
+                else if (date_mode === `date`) {
+                    opts.push(date)
+                }
+
+                if (opts.some(x => x.includes(value))) {
                     link.style.display = `flex`
                 }
                 else {
                     link.style.display = `none`
+                }
+            }
+        })
+    }
+
+    let age = document.querySelector(`#age`)
+
+    if (age) {
+        age.addEventListener(`click`, () => {
+            if (date_mode === `ago`) {
+                date_mode = `date`
+            }
+            else {
+                date_mode = `ago`
+            }
+
+            for (let link of document.querySelectorAll(`.link`)) {
+                if (date_mode === `ago`) {
+                    link.querySelector(`.date`).innerText = link.dataset.ago
+                }
+                else {
+                    link.querySelector(`.date`).innerText = link.dataset.date
                 }
             }
         })

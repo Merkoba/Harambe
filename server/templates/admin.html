@@ -49,7 +49,7 @@
         <div class="table-row table-header">
             <div class="table-cell">Name</div>
             <div class="table-cell">Size</div>
-            <div class="table-cell">Age</div>
+            <div id="age" class="table-cell underline">Age</div>
             <div class="table-cell">Actions</div>
         </div>
         {% for file in files %}
@@ -63,7 +63,7 @@
             </div>
 
             <div class="table-cell">{{file.size}} mb</div>
-            <div class="table-cell" title="{{file.nice_date}}">{{file.ago}}</div>
+            <div class="table-cell date" title="{{file.nice_date}}">{{file.ago}}</div>
 
             <div class="table-cell">
                 <span class="delete action_button" title="Delete this file">Delete</span>

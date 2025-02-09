@@ -104,3 +104,11 @@ select {
 #filter {
     width: 6rem;
 }
+
+.underline {
+    cursor: pointer;
+}
+
+.underline:hover {
+    text-decoration: underline;
+}
