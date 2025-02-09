@@ -6,6 +6,10 @@
 <style>
     :root {
         --background_color: {{background_color}};
+        --accent_color: {{accent_color}};
+        --font_color: {{font_color}};
+        --text_color: {{font_color}};
+        --link_color: {{link_color}};
         --font_family: {{font_family}};
     }
 </style>
@@ -24,9 +28,9 @@
 <div id="main">
     <div id="message">
         {% if mode == "upload" %}
-        <span class="icon green"></span>
+        <span>✅</span>
         {% elif mode == "error" %}
-        <span class="icon red"></span>
+        <span>❌</span>
         {% endif %}
         {{message|safe}}
     </div>

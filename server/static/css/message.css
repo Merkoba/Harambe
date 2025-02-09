@@ -1,9 +1,5 @@
-:root {
-    --color_1: rgb(222 211 239);
-}
-
 body, html {
-    color: white;
+    color: var(--font_color);
     background-color: var(--background_color);
     font-family: var(--font_family);
     font-size: 20px;
@@ -19,11 +15,11 @@ body, html {
 }
 
 a:link, a:visited {
-    color: white;
+    color: var(--link_color);
 }
 
 .link:hover {
-    text-shadow: 0 0 3px white;
+    filter: brightness(1.5);
 }
 
 img {
@@ -31,11 +27,11 @@ img {
 }
 
 img:hover {
-    outline: 2px solid white;
+    outline: 2px solid var(--font_color);
 }
 
 .button {
-    color: var(--color_1);
+    color: var(--link_color);
     cursor: pointer;
     text-decoration: underline;
 }
@@ -61,22 +57,7 @@ img:hover {
     align-items: center;
     justify-content: flex-start;
     gap: 0.5rem;
-
-}
-
-.icon {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 50%;
-}
-
-.green {
-    background-color: rgb(102, 210, 102);
-}
-
-.red {
-    background-color: rgb(238, 85, 85);
+    color: var(--text_color);
 }
 
 .disabled {

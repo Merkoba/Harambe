@@ -93,6 +93,10 @@ def index() -> Any:
     show_image = config.show_image
     image_name = procs.get_image_name()
     background_color = config.background_color
+    accent_color = config.accent_color
+    font_color = config.font_color
+    text_color = config.text_color
+    link_color = config.link_color
     font_family = config.font_family
 
     return render_template(
@@ -103,6 +107,10 @@ def index() -> Any:
         show_image=show_image,
         image_name=image_name,
         background_color=background_color,
+        accent_color=accent_color,
+        font_color=font_color,
+        text_color=text_color,
+        link_color=link_color,
         font_family=font_family,
     )
 
@@ -131,6 +139,10 @@ def message() -> Any:
         return redirect(url_for("index"))
 
     background_color = config.background_color
+    accent_color = config.accent_color
+    font_color = config.font_color
+    text_color = config.text_color
+    link_color = config.link_color
     font_family = config.font_family
     m = Message(data["message"], data["mode"], data["data"])
 
@@ -140,6 +152,10 @@ def message() -> Any:
         message=m.message,
         data=m.data,
         background_color=background_color,
+        accent_color=accent_color,
+        font_color=font_color,
+        text_color=text_color,
+        link_color=link_color,
         font_family=font_family,
     )
 

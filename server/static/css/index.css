@@ -1,10 +1,9 @@
 :root {
-    --color_1: rgb(127 104 164);
     --padding_1: 0.6rem;
 }
 
 body, html {
-    color: white;
+    color: var(--font_color);
     background-color: var(--background_color);
     font-family: var(--font_family);
     font-size: 20px;
@@ -15,9 +14,9 @@ body, html {
 }
 
 button[type="submit"] {
-    background-color: rgb(88 88 120);
+    background-color: var(--accent_color);
     font-family: var(--font_family);
-    color: white;
+    color: var(--font_color);
     font-size: 1rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -25,11 +24,13 @@ button[type="submit"] {
     padding-bottom: 0.1rem;
     flex-grow: 0;
     flex-shrink: 0;
+    filter: brightness(88%);
 }
 
 button[type="submit"]:hover {
-    background-color: var(--color_1);
+    background-color: var(--accent_color);
     cursor: pointer;
+    filter: brightness(100%);
 }
 
 input[type="text"] {
@@ -67,7 +68,7 @@ input[type="file"] {
 }
 
 a:link, a:visited {
-    color: white;
+    color: var(--font_color);
     text-decoration: underline;
 }
 
@@ -78,7 +79,7 @@ a:link, a:visited {
 
 #picker {
     position: relative;
-    background-color: var(--color_1);
+    background-color: var(--accent_color);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -95,7 +96,7 @@ a:link, a:visited {
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
-    background-color: var(--color_1);
+    background-color: var(--accent_color);
     padding: var(--padding_1);
     box-sizing: border-box;
     width: 100%;
@@ -123,7 +124,7 @@ a:link, a:visited {
     gap: 1rem;
     width: 100%;
     padding: var(--padding_1);
-    background-color: var(--color_1);
+    background-color: var(--accent_color);
     box-sizing: border-box;
 }
 
