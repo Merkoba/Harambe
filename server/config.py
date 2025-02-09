@@ -26,32 +26,97 @@ class FileChangeHandler(FileSystemEventHandler):  # type: ignore
 
 @dataclass
 class Config:
+    # Secret key for security
+    # Make it a long random string
     app_key: str = "fixthis"
+
+    # The location to save the files
+    # It can be outside the project folder
     files_dir: str = "files"
+
+    # Require to solve a captcha to upload in the web interface
     require_captcha: bool = True
+
+    # Captcha object. Automatic, don't change
     captcha: dict[str, Any] = field(default_factory=dict)
+
+    # Secret key for security
+    # Make it a long random string
     captcha_key: str = ""
+
+    # Use this to cheat the captcha
+    # Should be kept semi-secret
     captcha_cheat: str = ""
+
+    # Length of the captcha
+    # The higher the number, the harder it is
     captcha_length: int = 8
+
+    # Maximum file size in MB
+    # File beyond this will get ignored
     max_file_size: int = 100
+
+    # Port for the redis server
+    # Redis is used for the limiter
     redis_port: int = 6379
+
+    # Require to input a key to upload in the web interface
     require_key: bool = False
-    key_limit: int = 3
-    keys: list[str] = field(default_factory=list)
+
+    # List of keys that can be used to upload
+    # Each key item is a tuple of (key, max_requests_per_minute)
+    keys: list[tuple[str, int]] = field(default_factory=list)
+
+    # Uppercase the file ids
+    # The id is used to name the files
     uppercase_ids: bool = False
+
+    # Maximum number of files to keep stored
+    # After this the older files will be deleted
     max_files: int = 10_000
+
+    # Maximum storage in GB
+    # After this the older files will be deleted
     max_storage: int = 10
+
+    # Show the image in the web interface
     show_image: bool = True
+
+    # Default page size for the admin page
     admin_page_size: int = 100
+
+    # Length of the file name
+    # Minimum is 10, maximum is 26
     file_name_length: int = 10
+
+    # Requests per minute limit for most endpoints
     rate_limit: int = 20
+
+    # Background color for the web interface
     background_color: str = "rgb(81 81 81)"
+
+    # Accent color for the web interface
     accent_color: str = "rgb(127 104 164)"
+
+    # Font color for the web interface
     font_color: str = "white"
+
+    # Text color for the web interface
     text_color: str = "white"
+
+    # Link color for the web interface
     link_color: str = "rgb(222 211 239)"
+
+    # Font family for the web interface
     font_family: str = "sans-serif"
+
+    # List of users that can access the admin page
+    # Each user item is a tuple of (username, password)
     users: list[list[str]] = field(default_factory=list)
+
+    # Maximum age for the files cache on the user's side
+    # Keep this is a huge number to avoid reloading
+    # Or a low number to force file reload more often
     max_age = 31536000
 
     def get_max_file_size(self) -> int:
@@ -101,7 +166,6 @@ def read_config() -> None:
         set_value(c, "max_file_size")
         set_value(c, "redis_port")
         set_value(c, "require_key")
-        set_value(c, "key_limit")
         set_value(c, "uppercase_ids")
         set_value(c, "keys")
         set_value(c, "max_files")

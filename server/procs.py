@@ -36,9 +36,9 @@ class File:
 
 
 class KeyData:
-    def __init__(self) -> None:
+    def __init__(self, limit: int) -> None:
         self.timestamps: deque[float] = deque()
-        self.limit = config.key_limit
+        self.limit = limit
         self.window = 60  # Rate limit per minute
 
     def increment(self) -> None:
@@ -60,17 +60,24 @@ def error(s: str) -> Message:
     return Message(f"Error: {s}", "error")
 
 
-def check_key(key: str) -> tuple[bool, str]:
-    if not key:
+def check_key(name: str) -> tuple[bool, str]:
+    if not name:
         return False, "Key is required"
 
-    if key not in config.keys:
+    limit = 0
+
+    for key in config.keys:
+        if name == key[0]:
+            limit = key[1]
+            break
+
+    if not limit:
         return False, "Invalid key"
 
-    if key not in key_data:
-        key_data[key] = KeyData()
+    if name not in key_data:
+        key_data[name] = KeyData(limit)
 
-    d = key_data[key]
+    d = key_data[name]
 
     if d.blocked():
         return False, "Rate limit exceeded"
