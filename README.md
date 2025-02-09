@@ -123,7 +123,7 @@ A file index page can be enabled with `enable_list`.
 
 This will allow anybody to view the list of uploaded files.
 
-This is turned off by default, controlled by `enable_list`.
+This is turned off by default.
 
 The list can be slightly protected with a password.
 
