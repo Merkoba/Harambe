@@ -150,7 +150,11 @@ class Config:
     list_enabled: bool = False
 
     # Default page size for the list page
-    list_page_size: int = 100
+    list_page_size: int = 50
+
+    # Maximum of files allowed to be shown in the list page
+    # If 0 it will allow showing all files
+    list_max_files: int = 100
 
     # Require a special word in the URL to access the list page
     # For example: site.com/list?pw=palmtree
@@ -248,6 +252,7 @@ def read_config() -> None:
         set_value(c, "list_enabled")
         set_value(c, "list_page_size")
         set_value(c, "list_password")
+        set_value(c, "list_max_files")
         set_value(c, "allow_delete")
         set_value(c, "main_title")
         set_value(c, "image_tooltip")
