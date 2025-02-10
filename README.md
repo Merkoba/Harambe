@@ -182,5 +182,3 @@ This directoy is not version controlled so you can add anything you want.
 You can use this to host html pages which you can link in the main page.
 
 Just make sure to not delete the `.gitignore` file that is inside.
-
----
