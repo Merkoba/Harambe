@@ -92,34 +92,26 @@ def index() -> Any:
     else:
         captcha = None
 
-    max_size = config.get_max_file_size()
-    max_file_size = config.max_file_size
-    show_max_file_size = config.show_max_file_size
-    require_key = config.require_key
-    show_image = config.show_image
-    image_name = procs.get_image_name()
-    background_color = config.background_color
-    accent_color = config.accent_color
-    font_color = config.font_color
-    text_color = config.text_color
-    link_color = config.link_color
-    font_family = config.font_family
+    logged = logged_in()
+    link_list = config.list_enabled and (config.link_list or logged)
 
     return render_template(
         "index.html",
         captcha=captcha,
-        max_size=max_size,
-        max_file_size=max_file_size,
-        show_max_file_size=show_max_file_size,
-        require_key=require_key,
-        show_image=show_image,
-        image_name=image_name,
-        background_color=background_color,
-        accent_color=accent_color,
-        font_color=font_color,
-        text_color=text_color,
-        link_color=link_color,
-        font_family=font_family,
+        max_size=config.get_max_file_size(),
+        max_file_size=config.max_file_size,
+        show_max_file_size=config.show_max_file_size,
+        require_key=config.require_key,
+        show_image=config.show_image,
+        image_name=procs.get_image_name(),
+        background_color=config.background_color,
+        accent_color=config.accent_color,
+        font_color=config.font_color,
+        text_color=config.text_color,
+        link_color=config.link_color,
+        font_family=config.font_family,
+        link_list=link_list,
+        link_admin=logged,
     )
 
 
@@ -257,7 +249,7 @@ def show_list(page: int = 1) -> Any:
     pw = request.args.get("pw", "")
 
     if not logged_in():
-        if not config.enable_list:
+        if not config.list_enabled:
             return redirect(url_for("index"))
 
         if config.list_password and (pw != config.list_password):

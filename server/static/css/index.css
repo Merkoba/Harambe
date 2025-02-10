@@ -144,3 +144,11 @@ a:link, a:visited {
     flex-grow: 1;
     flex-shrink: 0;
 }
+
+#info {
+    display: flex;
+    flex-direction: row;
+    gap: 0.8rem;
+    align-items: center;
+    justify-content: center;
+}

@@ -135,7 +135,7 @@ class Config:
     show_max_file_size: bool = True
 
     # Enable a public page to list files
-    enable_list: bool = False
+    list_enabled: bool = False
 
     # Default page size for the list page
     list_page_size: int = 100
@@ -144,6 +144,9 @@ class Config:
     # For example: site.com/list?pw=palmtree
     # This is to make the list semi-private
     list_password: str = ""
+
+    # Show a link in the index to go to the list
+    link_list: bool = False
 
     # Allow admins to delete files using the admin page or endpoints
     allow_delete: bool = True
@@ -223,9 +226,10 @@ def read_config() -> None:
         set_value(c, "font_family")
         set_value(c, "max_age")
         set_value(c, "show_max_file_size")
-        set_value(c, "enable_list")
+        set_value(c, "list_enabled")
         set_value(c, "list_page_size")
         set_value(c, "list_password")
+        set_value(c, "link_list")
         set_value(c, "allow_delete")
 
         # Users

@@ -11,12 +11,18 @@ window.onload = () => {
 
   if (image) {
     image.addEventListener(`click`, (e) => {
-      window.scrollTo(0, document.body.scrollHeight)
+      let file = document.querySelector(`#file`)
+      file.click()
     })
 
     image.addEventListener(`auxclick`, (e) => {
       if (e.button === 1) {
-        window.location = `/admin`
+        if (e.ctrlKey) {
+          window.location = `/admin`
+        }
+        else {
+          window.location = `/list`
+        }
       }
     })
   }

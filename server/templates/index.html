@@ -31,9 +31,19 @@
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
         <div id="picker_container">
-            {% if show_max_file_size %}
-            <div id="file_size">Max file size: {{max_file_size}} mb</div>
-            {% endif %}
+            <div id="info">
+                {% if show_max_file_size %}
+                <div id="file_size">Max file size: {{max_file_size}} mb</div>
+                {% endif %}
+
+                {% if link_list %}
+                <a href="/list">List</a>
+                {% endif %}
+
+                {% if link_admin %}
+                <a href="/admin">Admin</a>
+                {% endif %}
+            </div>
 
             <div id="picker">
                 <input id="file" type="file" name="file" required>

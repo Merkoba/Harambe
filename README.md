@@ -140,7 +140,7 @@ As well as `accent_color`, `font_color`, `text_color`, and `link_color`.
 
 ## List
 
-A file index page can be enabled with `enable_list`.
+A file index page can be enabled with `list_enabled`.
 
 This will allow anybody to view the list of uploaded files.
 
