@@ -165,7 +165,9 @@ def message() -> Any:
 # SERVE FILE
 
 
-@app.route("/file/<path:filename>", methods=["GET"], strict_slashes=False)  # type: ignore
+@app.route(
+    f"/{config.file_path}/<path:filename>", methods=["GET"], strict_slashes=False
+)  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
@@ -192,6 +194,7 @@ def admin(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
+        file_path=config.file_path,
     )
 
 
@@ -272,4 +275,5 @@ def show_list(page: int = 1) -> Any:
         def_page_size=def_page_size,
         password=pw,
         use_password=use_password,
+        file_path=config.file_path,
     )

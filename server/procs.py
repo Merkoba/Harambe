@@ -157,7 +157,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
                     return error("Failed to save file")
 
                 check_storage()
-                fpath = f"file/{new_name}"
+                fpath = f"{config.file_path}/{new_name}"
 
                 if mode == "normal":
                     mb = round(length / 1_000_000, 2)

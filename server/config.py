@@ -129,7 +129,7 @@ class Config:
     # Maximum age for the files cache on the user's side
     # Keep this is a huge number to avoid reloading
     # Or a low number to force file reload more often
-    max_age = 31536000
+    max_age: int = 31536000
 
     # Show the max file size in the web interface
     show_max_file_size: bool = True
@@ -152,10 +152,14 @@ class Config:
     allow_delete: bool = True
 
     # The title of the main index page
-    main_title = "Upload"
+    main_title: str = "Upload"
 
     # Tooltip message to show on the main image
-    image_tooltip = "Upload a file"
+    image_tooltip: str = "Upload a file"
+
+    # The first part of image urls
+    # For example 'file' in site.com/file/abc123.jpg
+    file_path: str = "file"
 
     # --- Methods ---
 
@@ -239,6 +243,7 @@ def read_config() -> None:
         set_value(c, "allow_delete")
         set_value(c, "main_title")
         set_value(c, "image_tooltip")
+        set_value(c, "file_path")
 
         # Users
 
