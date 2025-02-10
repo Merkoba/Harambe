@@ -215,6 +215,8 @@ def get_files(
 
     if sort == "date":
         files.sort(key=lambda x: x.date, reverse=True)
+    elif sort == "date_desc":
+        files.sort(key=lambda x: x.date, reverse=False)
     elif sort == "size":
         files.sort(key=lambda x: x.size, reverse=True)
     elif sort == "size_desc":

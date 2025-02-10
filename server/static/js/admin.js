@@ -120,20 +120,11 @@ window.onload = () => {
 
   if (age) {
     age.addEventListener(`click`, () => {
-      if (date_mode === `ago`) {
-        date_mode = `date`
+      if (page_mode === `admin`) {
+        sort_date()
       }
-      else {
-        date_mode = `ago`
-      }
-
-      for (let item of document.querySelectorAll(`.item`)) {
-        if (date_mode === `ago`) {
-          item.querySelector(`.date`).innerText = item.dataset.ago
-        }
-        else {
-          item.querySelector(`.date`).innerText = item.dataset.date
-        }
+      else if (page_mode === `list`) {
+        change_date()
       }
     })
   }
@@ -432,4 +423,36 @@ function sort_size() {
   }
 
   window.location = `/admin?sort=size`
+}
+
+function sort_date() {
+  let url = new URL(window.location.href)
+  let sort = url.searchParams.get(`sort`)
+
+  if (sort) {
+    if (sort === `date_desc`) {
+      window.location = `/admin`
+      return
+    }
+  }
+
+  window.location = `/admin?sort=date_desc`
+}
+
+function change_date() {
+  if (date_mode === `ago`) {
+    date_mode = `date`
+  }
+  else {
+    date_mode = `ago`
+  }
+
+  for (let item of document.querySelectorAll(`.item`)) {
+    if (date_mode === `ago`) {
+      item.querySelector(`.date`).innerText = item.dataset.ago
+    }
+    else {
+      item.querySelector(`.date`).innerText = item.dataset.date
+    }
+  }
 }
