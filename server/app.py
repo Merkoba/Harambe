@@ -274,12 +274,3 @@ def show_list(page: int = 1) -> Any:
         use_password=use_password,
         file_path=config.file_path,
     )
-
-
-# PAGES
-
-
-@app.route(f"/page/<string:name>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-def show_page(name: str) -> Any:
-    return send_from_directory("pages", f"{name}.html")

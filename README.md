@@ -173,12 +173,14 @@ target = "_blank"
 
 ---
 
-## Pages
+## Assets
 
-There is a directory called `pages`. You can create any html file in there.
+There is a directory called `assets` inside `static`.
 
-Files here are accesible through the `/page/name` endpoint.
+This directoy is not version controlled so you can add anything you want.
 
-For example: `site.com/page/about` will show `about.html`.
+You can use this to host html pages which you can link in the main page.
 
-You can use this with `links` to link and host different kinds of pages.
+Just make sure to not delete the `.gitignore` file that is inside.
+
+---
