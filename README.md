@@ -155,3 +155,30 @@ This is sent as the `pw` GET parameter.
 For example `site.com/list?pw=bigdrop`
 
 If `list_password` is `bigdrop`.
+
+---
+
+## Links
+
+Links can be show in the main page if you create them in the config:
+
+```toml
+[[links]]
+name = "About"
+url = "/page/about"
+target = "_blank"
+```
+
+`target` is optional. `_blank` means to open them in a new tab.
+
+---
+
+## Pages
+
+There is a directory called `pages`. You can create any html file in there.
+
+Files here are accesible through the `/page/name` endpoint.
+
+For example: `site.com/page/about` will show `about.html`.
+
+You can use this with `links` to link and host different kinds of pages.
