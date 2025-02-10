@@ -177,7 +177,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
 
 
 def get_files(
-    page: int = 1, page_size: str = "default"
+    page: int = 1, page_size: str = "default", query: str = ""
 ) -> tuple[list[File], str, bool]:
     psize = 0
 
@@ -193,9 +193,13 @@ def get_files(
     files = []
     total_size = 0
     now = utils.now()
+    query = query.lower()
 
     for f in all_files:
         if f.name.startswith("."):
+            continue
+
+        if query and (query not in f.name.lower()):
             continue
 
         date = datetime.fromtimestamp(f.stat().st_mtime)

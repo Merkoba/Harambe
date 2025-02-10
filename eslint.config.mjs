@@ -110,6 +110,7 @@ export default [
         max_size: "readonly",
         mode: "readonly",
         data: "readonly",
+        page_mode: "readonly",
       }
     }
   }

@@ -2,6 +2,14 @@ let selected_files = []
 let date_mode = `ago`
 
 window.onload = () => {
+  document.addEventListener(`keyup`, async (e) => {
+    if (page_mode === `admin`) {
+      if (e.key === `Enter`) {
+        do_search()
+      }
+    }
+  })
+
   document.addEventListener(`click`, async (e) => {
     if (e.target.classList.contains(`delete`)) {
       selected_files = [e.target.closest(`.item`)]
@@ -385,4 +393,15 @@ function size_string(size) {
 
   size /= 1000
   return `${size.toFixed(2)} gb`
+}
+
+function do_search() {
+  let query = document.querySelector(`#filter`).value
+
+  if (query) {
+    window.location = `/admin?query=${query}`
+  }
+  else {
+    window.location = `/admin`
+  }
 }
