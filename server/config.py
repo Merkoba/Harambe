@@ -151,6 +151,9 @@ class Config:
     # Allow admins to delete files using the admin page or endpoints
     allow_delete: bool = True
 
+    # The title of the main index page
+    main_title = "Upload"
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -231,6 +234,7 @@ def read_config() -> None:
         set_value(c, "list_password")
         set_value(c, "link_list")
         set_value(c, "allow_delete")
+        set_value(c, "main_title")
 
         # Users
 
