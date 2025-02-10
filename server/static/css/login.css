@@ -25,6 +25,6 @@ input[type="text"], input[type="password"] {
 input[type="submit"] {
     font-size: 1.1rem;
     background-color: #a0fbff;
-    color: rgb(20, 35, 20);
+    color: rgb(20 35 20);
     font-family: monospace;
 }
