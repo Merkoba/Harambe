@@ -113,6 +113,7 @@ def index() -> Any:
         link_color=config.link_color,
         font_family=config.font_family,
         main_title=config.main_title,
+        image_tooltip=config.image_tooltip,
     )
 
 

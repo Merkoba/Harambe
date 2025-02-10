@@ -154,7 +154,8 @@ class Config:
     # The title of the main index page
     main_title = "Upload"
 
-    #
+    # Tooltip message to show on the main image
+    image_tooltip = "Upload a file"
 
     # --- Methods ---
 
@@ -237,6 +238,7 @@ def read_config() -> None:
         set_value(c, "link_list")
         set_value(c, "allow_delete")
         set_value(c, "main_title")
+        set_value(c, "image_tooltip")
 
         # Users
 
