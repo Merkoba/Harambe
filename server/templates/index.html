@@ -33,16 +33,12 @@
         <div id="picker_container">
             <div id="info">
                 {% if show_max_file_size %}
-                <div id="file_size">Max file size: {{max_file_size}} mb</div>
+                <div id="file_size">Max size: {{max_file_size}} mb</div>
                 {% endif %}
 
-                {% if link_list %}
-                <a href="/list">List</a>
-                {% endif %}
-
-                {% if link_admin %}
-                <a href="/admin">Admin</a>
-                {% endif %}
+                {% for link in links %}
+                <a href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
+                {% endfor %}
             </div>
 
             <div id="picker">

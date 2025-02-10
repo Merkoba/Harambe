@@ -40,6 +40,14 @@ class Key:
 
 
 @dataclass
+class Link:
+    def __init__(self, name: str, url: str, target: str) -> None:
+        self.name = name
+        self.url = url
+        self.target = target
+
+
+@dataclass
 class Config:
     # Users that can use the admin page
     # Dict object: username, password
@@ -48,6 +56,10 @@ class Config:
     # Keys that can be used to upload files
     # Dict object: name, limit, id (optional)
     keys: list[Key] = field(default_factory=list)
+
+    # List of links to show in the index page
+    # Dict object: name, url, target (optional)
+    links: list[Link] = field(default_factory=list)
 
     # Secret key for security
     # Make it a long random string
@@ -145,9 +157,6 @@ class Config:
     # This is to make the list semi-private
     list_password: str = ""
 
-    # Show a link in the index to go to the list
-    link_list: bool = False
-
     # Allow admins to delete files using the admin page or endpoints
     allow_delete: bool = True
 
@@ -239,7 +248,6 @@ def read_config() -> None:
         set_value(c, "list_enabled")
         set_value(c, "list_page_size")
         set_value(c, "list_password")
-        set_value(c, "link_list")
         set_value(c, "allow_delete")
         set_value(c, "main_title")
         set_value(c, "image_tooltip")
@@ -256,6 +264,15 @@ def read_config() -> None:
 
         config.keys = [
             Key(key["name"], key.get("limit", 12), key.get("id", "")) for key in keys
+        ]
+
+        # Links
+
+        links: list[dict[str, str]] = c.get("links", [])
+
+        config.links = [
+            Link(link["name"], link["url"], link.get("target", "_self"))
+            for link in links
         ]
 
 

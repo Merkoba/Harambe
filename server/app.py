@@ -23,6 +23,7 @@ from config import config
 
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 app.secret_key = config.app_key
 app.config["MAX_CONTENT_LENGTH"] = config.get_max_file_size()
 
@@ -67,7 +68,7 @@ text_mtype = "text/plain"
 # INDEX / UPLOAD
 
 
-@app.route("/", methods=["POST", "GET"], strict_slashes=False)  # type: ignore
+@app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def index() -> Any:
     if request.method == "POST":
@@ -92,14 +93,9 @@ def index() -> Any:
     else:
         captcha = None
 
-    logged = logged_in()
-    link_list = config.list_enabled and (config.link_list or logged)
-
     return render_template(
         "index.html",
         captcha=captcha,
-        link_list=link_list,
-        link_admin=logged,
         image_name=procs.get_image_name(),
         max_size=config.get_max_file_size(),
         max_file_size=config.max_file_size,
@@ -114,16 +110,17 @@ def index() -> Any:
         font_family=config.font_family,
         main_title=config.main_title,
         image_tooltip=config.image_tooltip,
+        links=config.links,
     )
 
 
-@app.route("/upload", methods=["POST"], strict_slashes=False)  # type: ignore
+@app.route("/upload", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def upload() -> Any:
     return procs.upload(request, "cli").message
 
 
-@app.route("/message", methods=["GET"], strict_slashes=False)  # type: ignore
+@app.route("/message", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def message() -> Any:
     data = {}
@@ -165,9 +162,7 @@ def message() -> Any:
 # SERVE FILE
 
 
-@app.route(
-    f"/{config.file_path}/<path:filename>", methods=["GET"], strict_slashes=False
-)  # type: ignore
+@app.route(f"/{config.file_path}/<path:filename>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
@@ -177,8 +172,8 @@ def get_file(filename: str) -> Any:
 # ADMIN
 
 
-@app.route("/admin", defaults={"page": 1}, methods=["GET"], strict_slashes=False)  # type: ignore
-@app.route("/admin/<int:page>", methods=["GET"], strict_slashes=False)  # type: ignore
+@app.route("/admin", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/admin/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
 def admin(page: int = 1) -> Any:
@@ -200,7 +195,7 @@ def admin(page: int = 1) -> Any:
     )
 
 
-@app.route("/delete_files", methods=["POST"], strict_slashes=False)  # type: ignore
+@app.route("/delete_files", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
 def delete_files() -> Any:
@@ -209,7 +204,7 @@ def delete_files() -> Any:
     return procs.delete_files(files)
 
 
-@app.route("/delete_all_files", methods=["POST"], strict_slashes=False)  # type: ignore
+@app.route("/delete_all_files", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 @login_required
 def delete_all() -> Any:
@@ -219,7 +214,7 @@ def delete_all() -> Any:
 # AUTH
 
 
-@app.route("/login", methods=["GET", "POST"], strict_slashes=False)  # type: ignore
+@app.route("/login", methods=["GET", "POST"])  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 def login() -> Any:
     if request.method == "POST":
@@ -239,7 +234,7 @@ def login() -> Any:
     return render_template("login.html")
 
 
-@app.route("/logout", methods=["GET"], strict_slashes=False)  # type: ignore
+@app.route("/logout", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 def logout() -> Any:
     session.pop("username", None)
@@ -249,8 +244,8 @@ def logout() -> Any:
 # PUBLIC LIST
 
 
-@app.route("/list", defaults={"page": 1}, methods=["GET"], strict_slashes=False)  # type: ignore
-@app.route("/list/<int:page>", methods=["GET"], strict_slashes=False)  # type: ignore
+@app.route("/list", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/list/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def show_list(page: int = 1) -> Any:
     pw = request.args.get("pw", "")
@@ -279,3 +274,12 @@ def show_list(page: int = 1) -> Any:
         use_password=use_password,
         file_path=config.file_path,
     )
+
+
+# PAGES
+
+
+@app.route(f"/page/<string:name>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+def show_page(name: str) -> Any:
+    return send_from_directory("pages", f"{name}.html")
