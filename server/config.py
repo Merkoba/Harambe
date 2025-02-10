@@ -154,6 +154,8 @@ class Config:
     # The title of the main index page
     main_title = "Upload"
 
+    #
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
