@@ -157,3 +157,7 @@ a:link, a:visited {
     align-items: center;
     justify-content: center;
 }
+
+a:hover {
+    filter: brightness(88%);
+}
