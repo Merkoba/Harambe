@@ -137,6 +137,16 @@ window.onload = () => {
       }
     })
   }
+
+  let size = document.querySelector(`#size`)
+
+  if (size) {
+    if (page_mode === `admin`) {
+      size.addEventListener(`click`, () => {
+        sort_size()
+      })
+    }
+  }
 }
 
 function select_above(el) {
@@ -404,4 +414,22 @@ function do_search() {
   else {
     window.location = `/admin`
   }
+}
+
+function sort_size() {
+  let url = new URL(window.location.href)
+  let sort = url.searchParams.get(`sort`)
+
+  if (sort) {
+    if (sort === `size`) {
+      window.location = `/admin?sort=size_desc`
+      return
+    }
+    else if (sort === `size_desc`) {
+      window.location = `/admin`
+      return
+    }
+  }
+
+  window.location = `/admin?sort=size`
 }

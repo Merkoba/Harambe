@@ -183,8 +183,9 @@ def get_file(filename: str) -> Any:
 @login_required
 def admin(page: int = 1) -> Any:
     query = request.args.get("query", "")
+    sort = request.args.get("sort", "")
     page_size = request.args.get("page_size", config.admin_page_size)
-    files, total, next_page = procs.get_files(page, page_size, query=query)
+    files, total, next_page = procs.get_files(page, page_size, query=query, sort=sort)
     def_page_size = page_size == config.admin_page_size
 
     return render_template(

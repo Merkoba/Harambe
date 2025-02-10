@@ -177,7 +177,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
 
 
 def get_files(
-    page: int = 1, page_size: str = "default", query: str = ""
+    page: int = 1, page_size: str = "default", query: str = "", sort: str = "date"
 ) -> tuple[list[File], str, bool]:
     psize = 0
 
@@ -212,7 +212,13 @@ def get_files(
 
     total_size_str = utils.get_size(total_size)
     total_str = f"{total_size_str} ({len(files)} Files)"
-    files.sort(key=lambda x: x.date, reverse=True)
+
+    if sort == "date":
+        files.sort(key=lambda x: x.date, reverse=True)
+    elif sort == "size":
+        files.sort(key=lambda x: x.size, reverse=True)
+    elif sort == "size_desc":
+        files.sort(key=lambda x: x.size, reverse=False)
 
     if psize > 0:
         start_index = (page - 1) * psize
