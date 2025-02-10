@@ -77,6 +77,11 @@ a:link, a:visited {
     margin-bottom: 1.5rem;
 }
 
+#image:hover {
+    cursor: pointer;
+    outline: 5px solid var(--accent_color);
+}
+
 #picker_container {
     position: relative;
     width: 100%;
