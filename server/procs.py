@@ -363,7 +363,8 @@ def get_file(id_: str) -> File | None:
     log.info(id_)
 
     if not file:
+        log.info("nofile")
         return None
 
-    log.info("file111", file.id)
+    log.info("file111")
     return make_file(file, utils.now())
