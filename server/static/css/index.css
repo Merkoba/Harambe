@@ -68,8 +68,12 @@ input[type="file"] {
 }
 
 a:link, a:visited {
-    color: var(--font_color);
+    color: var(--link_color);
     text-decoration: underline;
+}
+
+a:hover {
+    filter: brightness(1.5);
 }
 
 #image {
@@ -156,8 +160,4 @@ a:link, a:visited {
     gap: 0.777rem;
     align-items: center;
     justify-content: center;
-}
-
-a:hover {
-    filter: brightness(88%);
 }
