@@ -17,6 +17,7 @@ import ulid  # type: ignore
 import app
 import utils
 from config import config, Key
+from database import database
 
 
 @dataclass
@@ -153,7 +154,9 @@ def upload(request: Any, mode: str = "normal") -> Message:
 
                 try:
                     file.save(path)
-                except Exception:
+                    database.add_file(new_name, length)
+                except Exception as e:
+                    utils.error(e)
                     return error("Failed to save file")
 
                 check_storage()

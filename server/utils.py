@@ -11,6 +11,10 @@ def now() -> datetime:
     return datetime.now()
 
 
+def seconds() -> int:
+    return int(datetime.now().timestamp())
+
+
 def numstring(n: int) -> str:
     return "".join([str(random.randint(0, 9)) for _ in range(n)])
 
