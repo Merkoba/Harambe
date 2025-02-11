@@ -125,3 +125,8 @@ def valid_file_name(name: str) -> bool:
         return False
 
     return True
+
+
+def clean_comment(comment: str) -> str:
+    comment = " ".join(comment.split())
+    return comment[: config.max_comment_length].strip()

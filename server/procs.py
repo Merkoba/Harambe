@@ -34,6 +34,7 @@ class File:
     ago: str
     size: int
     size_str: str
+    comment: str
 
 
 class KeyData:
@@ -92,7 +93,11 @@ def upload(request: Any, mode: str = "normal") -> Message:
     if not file:
         return error("No file")
 
-    comment = request.form.get("comment", "")[: config.max_comment_length]
+    comment = request.form.get("comment", "")
+
+    if len(comment) > config.max_comment_length:
+        return error("Comment is too long")
+
     key = request.form.get("key", "")
     used_key = None
 
@@ -154,6 +159,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
 
                 try:
                     file.save(path)
+                    comment = utils.clean_comment(comment)
                     database.add_file(new_name, length, comment)
                 except Exception as e:
                     utils.error(e)
@@ -210,7 +216,8 @@ def get_files(
         nice_date = utils.nice_date(date)
         ago = utils.time_ago(date, now)
         size_str = utils.get_size(size)
-        files.append(File(file.name, date, nice_date, ago, size, size_str))
+        comment = file.comment
+        files.append(File(file.name, date, nice_date, ago, size, size_str, comment))
 
     if sort == "date":
         files.sort(key=lambda x: x.date, reverse=True)
