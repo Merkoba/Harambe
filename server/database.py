@@ -82,6 +82,7 @@ class Database:
         log.info("add file")
         self.files = list(filter(lambda x: x.name != name, self.files))
         file = File(name, utils.now(), size, comment)
+        utils.log(f"Added file: {file.id}")
         self.files.append(file)
         self.save()
         return file
@@ -94,7 +95,7 @@ class Database:
                 return
 
     def get_file(self, id_: str) -> File | None:
-        log.info("getfile")
+        log.info(f"getfile {id_}")
         for file in self.files:
             if file.id == id_:
                 log.info("found")
