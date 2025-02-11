@@ -101,6 +101,7 @@ function validate() {
 }
 
 function reflect_file() {
+  let image = document.querySelector(`#image`)
   let file = document.querySelector(`#file`)
   let src = file.files[0]
 

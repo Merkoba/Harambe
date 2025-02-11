@@ -15,6 +15,7 @@ import ulid  # type: ignore
 # Modules
 import app
 import utils
+import log
 from config import config, Key
 from database import database
 from database import File as DbFile
@@ -359,8 +360,10 @@ def get_image_name() -> str:
 
 def get_file(id_: str) -> File | None:
     file = database.get_file(id_)
+    log.info(id_)
 
     if not file:
         return None
 
+    log.info("file111", file.id)
     return make_file(file, utils.now())

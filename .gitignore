@@ -25,3 +25,4 @@ keys.toml
 banner.*
 .eslintcache
 database.json
+debug.log
