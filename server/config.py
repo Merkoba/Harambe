@@ -258,25 +258,31 @@ class Config:
             # Users
 
             users: list[dict[str, str]] = c.get("users", [])
-            self.users = [User(user["username"], user["password"]) for user in users]
+
+            if users:
+                self.users = [
+                    User(user["username"], user["password"]) for user in users
+                ]
 
             # Keys
 
             keys: list[dict[str, Any]] = c.get("keys", [])
 
-            self.keys = [
-                Key(key["name"], key.get("limit", 12), key.get("id", ""))
-                for key in keys
-            ]
+            if keys:
+                self.keys = [
+                    Key(key["name"], key.get("limit", 12), key.get("id", ""))
+                    for key in keys
+                ]
 
             # Links
 
             links: list[dict[str, str]] = c.get("links", [])
 
-            self.links = [
-                Link(link["name"], link["url"], link.get("target", "_self"))
-                for link in links
-            ]
+            if links:
+                self.links = [
+                    Link(link["name"], link["url"], link.get("target", "_self"))
+                    for link in links
+                ]
 
 
 # Fill it later
