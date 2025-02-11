@@ -196,27 +196,22 @@ def get_files(
     else:
         psize = int(page_size)
 
-    all_files = list(utils.files_dir().glob("*"))
-
     files = []
     total_size = 0
     now = utils.now()
     query = query.lower()
 
-    for f in all_files:
-        if f.name.startswith("."):
+    for file in database.files:
+        if query and (query not in file.name.lower()):
             continue
 
-        if query and (query not in f.name.lower()):
-            continue
-
-        date = datetime.fromtimestamp(f.stat().st_mtime)
-        size = int(f.stat().st_size)
+        date = file.date
+        size = file.size
         total_size += size
         nice_date = utils.nice_date(date)
         ago = utils.time_ago(date, now)
         size_str = utils.get_size(size)
-        files.append(File(f.name, date, nice_date, ago, size, size_str))
+        files.append(File(file.name, date, nice_date, ago, size, size_str))
 
     if sort == "date":
         files.sort(key=lambda x: x.date, reverse=True)

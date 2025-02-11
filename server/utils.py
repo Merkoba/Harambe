@@ -1,4 +1,5 @@
 # Standard
+import time
 import random
 from datetime import datetime
 from pathlib import Path
@@ -8,11 +9,7 @@ from config import config
 
 
 def now() -> datetime:
-    return datetime.now()
-
-
-def seconds() -> int:
-    return int(datetime.now().timestamp())
+    return int(time.time())
 
 
 def numstring(n: int) -> str:
@@ -49,8 +46,8 @@ def singular_or_plural(num: float, singular: str, plural: str) -> str:
     return plural
 
 
-def time_ago(start_time: datetime, end_time: datetime) -> str:
-    seconds = int((end_time - start_time).total_seconds())
+def time_ago(start_time: int, end_time: int) -> str:
+    seconds = end_time - start_time
 
     if seconds < 60:
         word = singular_or_plural(seconds, "sec", "secs")
@@ -97,8 +94,13 @@ def error(e: Exception) -> None:
     print(e)  # noqa
 
 
-def nice_date(date: datetime) -> str:
-    return date.strftime("%d %B %Y | %I:%M %p")
+def get_dtime(date: int) -> datetime:
+    return datetime.fromtimestamp(date)
+
+
+def nice_date(date: int) -> str:
+    dtime = get_dtime(date)
+    return dtime.strftime("%d %B %Y | %I:%M %p")
 
 
 def valid_file_name(name: str) -> bool:

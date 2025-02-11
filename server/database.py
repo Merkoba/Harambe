@@ -78,7 +78,7 @@ class Database:
 
     def add_file(self, name: str, size: float, comment: str) -> None:
         self.files = list(filter(lambda x: x.name != name, self.files))
-        file = File(name, utils.seconds(), size, comment)
+        file = File(name, utils.now(), size, comment)
         self.files.append(file)
         self.save()
 
@@ -87,7 +87,7 @@ class Database:
             if file.name == name:
                 self.files.remove(file)
                 self.save()
-                break
+                return
 
     def get_file(self, name: str) -> File | None:
         for file in self.files:

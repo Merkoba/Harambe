@@ -24,3 +24,4 @@ config.toml
 keys.toml
 banner.*
 .eslintcache
+database.json
