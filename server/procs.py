@@ -179,6 +179,7 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
 
 def set_prop(file: Path, prop: str, value: str) -> None:
     try:
+        import log; log.info(123123)
         os.setxattr(file, f"user.harambe_{prop}", bytes(value, "utf-8"))
     except Exception as e:
         utils.error(e)
