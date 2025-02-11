@@ -161,3 +161,8 @@ a:hover {
     align-items: center;
     justify-content: center;
 }
+
+#comment {
+    font-size: 1rem;
+    width: 100%;
+}

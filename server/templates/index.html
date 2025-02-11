@@ -18,6 +18,7 @@
 
 <script>
     const max_size = {{max_size}}
+    const max_comment_length = {{max_comment_length}}
 </script>
 
 <script src="static/js/index.js"></script>
@@ -45,6 +46,8 @@
                 <input id="file" type="file" name="file" required max-file-size="{{max_file_size}}MB">
             </div>
         </div>
+
+        <input id="comment" type="text" name="comment" placeholder="Enter a comment (Optional)">
 
         {% if captcha %}
         <div id="captcha">

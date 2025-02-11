@@ -93,6 +93,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
     if not file:
         return error("No file")
 
+    comment = request.form.get("comment", "")
     key = request.form.get("key", "")
     used_key = None
 
@@ -154,7 +155,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
 
                 try:
                     file.save(path)
-                    database.add_file(new_name, length)
+                    database.add_file(new_name, length, comment)
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")

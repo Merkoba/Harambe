@@ -180,6 +180,9 @@ class Config:
         # For example 'file' in site.com/file/abc123.jpg
         self.file_path: str = "file"
 
+        # Maximum length allowed for comments
+        self.max_comment_length: int = 500
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:

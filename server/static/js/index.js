@@ -80,6 +80,12 @@ function validate() {
     return false
   }
 
+  let comment = document.querySelector(`#comment`).value
+
+  if (comment.length > max_comment) {
+    return false
+  }
+
   clicked = true
   return true
 }
