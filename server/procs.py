@@ -360,11 +360,8 @@ def get_image_name() -> str:
 
 def get_file(id_: str) -> File | None:
     file = database.get_file(id_)
-    log.info(id_)
 
     if not file:
-        log.info("nofile")
         return None
 
-    log.info("file111")
     return make_file(file, utils.now())

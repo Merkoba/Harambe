@@ -8,6 +8,7 @@ import json
 
 # Modules
 import utils
+import log
 
 
 class File:
@@ -78,6 +79,7 @@ class Database:
         self.files.sort(key=lambda x: x.date, reverse=False)
 
     def add_file(self, name: str, size: int, comment: str) -> File:
+        log.info("add file")
         self.files = list(filter(lambda x: x.name != name, self.files))
         file = File(name, utils.now(), size, comment)
         self.files.append(file)
@@ -92,10 +94,13 @@ class Database:
                 return
 
     def get_file(self, id_: str) -> File | None:
+        log.info("getfile")
         for file in self.files:
             if file.id == id_:
+                log.info("found")
                 return file
 
+        log.info("notfound")
         return None
 
     def save(self) -> None:
