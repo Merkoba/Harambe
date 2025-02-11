@@ -169,7 +169,6 @@ def message() -> Any:
         "message.html",
         mode=data["mode"],
         message=data["message"],
-        data=data["data"],
         background_color=background_color,
         accent_color=accent_color,
         font_color=font_color,
