@@ -93,7 +93,15 @@ def index() -> Any:
                 session["data"] = data
                 return redirect(url_for("message"))
 
-            return redirect(url_for("post", idstr=msg))
+            data = {
+                "mode": "mmmm",
+                "message": msg,
+            }
+
+            session["data"] = data
+            return redirect(url_for("message"))
+
+            # return redirect(url_for("post", idstr=msg))
 
         except Exception as e:
             utils.error(e)
