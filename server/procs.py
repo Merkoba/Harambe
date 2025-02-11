@@ -21,13 +21,6 @@ from database import File as DbFile
 
 
 @dataclass
-class Message:
-    message: str
-    mode: str
-    data: str = ""
-
-
-@dataclass
 class File:
     id: str
     name: str
@@ -60,10 +53,6 @@ class KeyData:
 key_data: dict[str, KeyData] = {}
 
 
-def error(s: str) -> Message:
-    return Message(f"Error: {s}", "error")
-
-
 def check_key(name: str) -> tuple[bool, str, Key | None]:
     if not name:
         return False, "Key is required", None
@@ -89,7 +78,10 @@ def check_key(name: str) -> tuple[bool, str, Key | None]:
     return True, "ok", key
 
 
-def upload(request: Any, mode: str = "normal") -> Message:
+def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
+    def error(s: str) -> tuple[bool, str]:
+        return False, f"Error: {s}"
+
     file = request.files.get("file", None)
 
     if not file:
@@ -162,20 +154,17 @@ def upload(request: Any, mode: str = "normal") -> Message:
                 try:
                     file.save(path)
                     comment = utils.clean_comment(comment)
-                    database.add_file(new_name, length, comment)
+                    db_file = database.add_file(new_name, length, comment)
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")
 
                 check_storage()
-                fpath = f"{config.file_path}/{new_name}"
 
                 if mode == "normal":
-                    mb = round(length / 1_000_000, 2)
-                    m = f'Uploaded: <a class="link" href="/{fpath}">{new_name}</a> ({mb} mb)'
-                    return Message(m, "upload", fpath)
+                    return True, db_file.id
 
-                return Message(fpath, "key_upload")
+                return True, db_file.name
 
             return error("File is empty")
         except Exception as e:
@@ -190,7 +179,6 @@ def upload(request: Any, mode: str = "normal") -> Message:
 def make_file(file: DbFile, now: int) -> File:
     date = file.date
     size = file.size
-    total_size += size
     nice_date = utils.nice_date(date)
     ago = utils.time_ago(date, now)
     size_str = utils.get_size(size)
@@ -224,7 +212,9 @@ def get_files(
         if query and (query not in file.name.lower()):
             continue
 
-        files.append(make_file(file, now))
+        f = make_file(file, now)
+        total_size += f.size
+        files.append(f)
 
     if sort == "date":
         files.sort(key=lambda x: x.date, reverse=True)
@@ -367,7 +357,7 @@ def get_image_name() -> str:
     return "cat.jpg"
 
 
-def get_file(id_: str) -> File | None
+def get_file(id_: str) -> File | None:
     file = database.get_file(id_)
 
     if not file:

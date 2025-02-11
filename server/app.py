@@ -16,7 +16,6 @@ from flask_limiter.util import get_remote_address  # type: ignore
 # Modules
 import procs
 import utils
-from procs import Message
 from config import config
 from database import database
 
@@ -83,16 +82,18 @@ text_mtype = "text/plain"
 def index() -> Any:
     if request.method == "POST":
         try:
-            m = session["data"] = procs.upload(request)
+            ok, msg = procs.upload(request)
 
-            data = {
-                "mode": m.mode,
-                "message": m.message,
-                "data": m.data,
-            }
+            if not ok:
+                data = {
+                    "mode": "error",
+                    "message": msg,
+                }
 
-            session["data"] = data
-            return redirect(url_for("message"))
+                session["data"] = data
+                return redirect(url_for("message"))
+
+            return redirect(url_for("post", idstr=msg))
 
         except Exception as e:
             utils.error(e)
@@ -128,7 +129,8 @@ def index() -> Any:
 @app.route("/upload", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def upload() -> Any:
-    return procs.upload(request, "cli").message
+    _, msg = procs.upload(request, "cli")
+    return msg
 
 
 @app.route("/message", methods=["GET"])  # type: ignore
@@ -154,13 +156,12 @@ def message() -> Any:
     text_color = config.text_color
     link_color = config.link_color
     font_family = config.font_family
-    m = Message(data["message"], data["mode"], data["data"])
 
     return render_template(
         "message.html",
-        mode=m.mode,
-        message=m.message,
-        data=m.data,
+        mode=data["mode"],
+        message=data["message"],
+        data=data["data"],
         background_color=background_color,
         accent_color=accent_color,
         font_color=font_color,
@@ -173,9 +174,9 @@ def message() -> Any:
 # SERVE FILE
 
 
-@app.route(f"/post/<string:idstr>", methods=["GET"])  # type: ignore
+@app.route("/post/<string:idstr>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-def get_post(idstr: str) -> Any:
+def post(idstr: str) -> Any:
     file = procs.get_file(idstr)
 
     if not file:
@@ -184,6 +185,13 @@ def get_post(idstr: str) -> Any:
     return render_template(
         "post.html",
         file=file,
+        file_path=config.file_path,
+        background_color=config.background_color,
+        accent_color=config.accent_color,
+        font_color=config.font_color,
+        text_color=config.text_color,
+        link_color=config.link_color,
+        font_family=config.font_family,
     )
 
 

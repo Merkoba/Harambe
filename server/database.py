@@ -77,11 +77,12 @@ class Database:
     def sort(self) -> None:
         self.files.sort(key=lambda x: x.date, reverse=False)
 
-    def add_file(self, name: str, size: int, comment: str) -> None:
+    def add_file(self, name: str, size: int, comment: str) -> File:
         self.files = list(filter(lambda x: x.name != name, self.files))
         file = File(name, utils.now(), size, comment)
         self.files.append(file)
         self.save()
+        return file
 
     def remove_file(self, name: str) -> None:
         for file in self.files:

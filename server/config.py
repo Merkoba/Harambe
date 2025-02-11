@@ -7,7 +7,7 @@ import string
 import time
 import threading
 from pathlib import Path
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any
 
 # Libraries
@@ -41,7 +41,7 @@ class Key:
 class Link:
     name: str
     url: str
-    target: str
+    target: str = "_self"
 
 
 class Config:
@@ -57,15 +57,15 @@ class Config:
 
         # Users that can use the admin page
         # Dict object: username, password
-        self.users: list[User] = field(default_factory=list)
+        self.users: list[User] = []
 
         # Keys that can be used to upload files
         # Dict object: name, limit, id (optional)
-        self.keys: list[Key] = field(default_factory=list)
+        self.keys: list[Key] = []
 
         # List of links to show in the index page
         # Dict object: name, url, target (optional)
-        self.links: list[Link] = field(default_factory=list)
+        self.links: list[Link] = [Link("about", "/static/assets/about.html")]
 
         # Secret key for security
         # Make it a long random string

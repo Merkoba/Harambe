@@ -49,6 +49,9 @@ def singular_or_plural(num: float, singular: str, plural: str) -> str:
 def time_ago(start_time: int, end_time: int) -> str:
     seconds = end_time - start_time
 
+    if seconds < 5:
+        return "Just now"
+
     if seconds < 60:
         word = singular_or_plural(seconds, "sec", "secs")
         return f"{seconds} {word} ago"

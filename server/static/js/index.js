@@ -25,6 +25,15 @@ window.onload = () => {
         }
       }
     })
+
+    let file = document.querySelector(`#file`)
+
+    if (file) {
+      file.addEventListener(`change`, (e) => {
+        clicked = false
+        reflect_file()
+      })
+    }
   }
 
   document.addEventListener(`dragover`, (e) => {
@@ -40,6 +49,7 @@ window.onload = () => {
       let dataTransfer = new DataTransfer()
       dataTransfer.items.add(files[0])
       file.files = dataTransfer.files
+      reflect_file()
     }
   })
 }
@@ -88,4 +98,26 @@ function validate() {
 
   clicked = true
   return true
+}
+
+function reflect_file() {
+  let file = document.querySelector(`#file`)
+  let src = file.files[0]
+
+  if (!is_image(src)) {
+    image.src = `static/img/${vars.image_name}`
+    return
+  }
+
+  let reader = new FileReader()
+
+  reader.onload = (e) => {
+    image.src = e.target.result
+  }
+
+  reader.readAsDataURL(src)
+}
+
+function is_image(file) {
+  return file.type.match(`image/*`)
 }

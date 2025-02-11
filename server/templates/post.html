@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-<title>Message</title>
+<title>{{file.comment or 'Post'}}</title>
 
 <style>
     :root {
@@ -14,12 +14,10 @@
     }
 </style>
 
-<link rel="stylesheet" href="/static/css/message.css">
+<link rel="stylesheet" href="/static/css/post.css">
 
 <script>
     const vars = {}
-    vars.mode = `{{mode}}`
-    vars.data = `{{data}}`
 </script>
 
 <script src="/static/js/message.js"></script>
@@ -27,13 +25,18 @@
 
 {% block body %}
 <div id="main">
-    <div id="message">
-        {% if mode == "error" %}
-        <span>❌</span>
-        {% endif %}
-        {{message|safe}}
+    {% if file.comment %}
+    <div id="comment">{{file.comment}}</div><hr>
+    {% endif %}
+
+    <div>
+        <b>File:</b> <a class="link" href="/{{file_path}}/{{file.name}}">{{file.name}}</a> | {{file.size_str}}
     </div>
 
-    <a href="/" class="no_expand"><img src="/static/img/return.jpg"></a>
+    <div>
+        <b>Date:</b> {{file.nice_date}} | {{file.ago}}
+    </div>
+
+    <a href="/">Return</a>
 </div>
 {% endblock %}

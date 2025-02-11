@@ -1,0 +1,31 @@
+body, html {
+    color: var(--font_color);
+    background-color: var(--background_color);
+    font-family: var(--font_family);
+    font-size: 20px;
+    margin-left: 20px;
+    margin-top: 16px;
+    padding: 0;
+}
+
+a:link, a:visited {
+    color: var(--link_color);
+}
+
+a:hover {
+    filter: brightness(1.5);
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#comment {
+    font-size: 1.2rem;
+}
+
+hr {
+    width: 100%;
+}
