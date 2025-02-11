@@ -15,15 +15,11 @@ import ulid  # type: ignore
 # Modules
 import app
 import utils
-import log
 from config import config, Key
-from database import database
-from database import File as DbFile
 
 
 @dataclass
 class File:
-    id: str
     name: str
     date: int
     nice_date: str
@@ -146,16 +142,16 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                     name = name.lower()
 
                 if ext:
-                    new_name = f"{name}{ext}"
+                    full_name = f"{name}{ext}"
                 else:
-                    new_name = name
+                    full_name = name
 
-                path = utils.files_dir() / new_name
+                path = utils.files_dir() / full_name
 
                 try:
                     file.save(path)
                     comment = utils.clean_comment(comment)
-                    db_file = database.add_file(new_name, length, comment)
+                    set_prop(path, "comment", comment)
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")
@@ -163,9 +159,9 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                 check_storage()
 
                 if mode == "normal":
-                    return True, db_file.id
+                    return True, name
 
-                return True, db_file.name
+                return True, f"{config.file_path}/{full_name}"
 
             return error("File is empty")
         except Exception as e:
@@ -177,15 +173,29 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
     return error("Nothing was uploaded")
 
 
-def make_file(file: DbFile, now: int) -> File:
-    date = file.date
-    size = file.size
+def set_prop(file: Path, prop: str, value: str) -> None:
+    try:
+        os.setxattr(file, f"user.harambe_{prop}", bytes(value, "utf-8"))
+    except Exception as e:
+        utils.error(e)
+
+
+def get_prop(file: Path, prop: str) -> str:
+    try:
+        return str(os.getxattr(file, f"user.harambe_{prop}"), "utf-8")
+    except Exception:
+        return ""
+
+
+def make_file(file: Path, now: int) -> File:
+    date = int(file.stat().st_mtime)
+    size = int(file.stat().st_size)
     nice_date = utils.nice_date(date)
     ago = utils.time_ago(date, now)
     size_str = utils.get_size(size)
-    comment = file.comment
+    comment = get_prop(file, "comment")
 
-    return File(file.id, file.name, date, nice_date, ago, size, size_str, comment)
+    return File(file.name, date, nice_date, ago, size, size_str, comment)
 
 
 def get_files(
@@ -208,8 +218,9 @@ def get_files(
     total_size = 0
     now = utils.now()
     query = query.lower()
+    all_files = list(utils.files_dir().glob("*"))
 
-    for file in database.files:
+    for file in all_files:
         if query and (query not in file.name.lower()):
             continue
 
@@ -295,7 +306,6 @@ def do_delete_file(name: str) -> None:
 
     if file.exists() and file.is_file():
         file.unlink()
-        database.remove_file(name)
 
 
 def delete_all() -> tuple[str, int]:
@@ -359,9 +369,13 @@ def get_image_name() -> str:
 
 
 def get_file(id_: str) -> File | None:
-    file = database.get_file(id_)
+    all_files = list(utils.files_dir().glob("*"))
 
-    if not file:
-        return None
+    for file in all_files:
+        if file.stem.startswith("."):
+            continue
 
-    return make_file(file, utils.now())
+        if file.stem.startswith(id_):
+            return make_file(file, utils.now())
+
+    return None

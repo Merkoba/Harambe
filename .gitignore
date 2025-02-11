@@ -26,3 +26,4 @@ banner.*
 .eslintcache
 database.json
 debug.log
+database.sqlite3
