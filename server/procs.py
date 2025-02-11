@@ -150,8 +150,12 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
 
                 try:
                     file.save(path)
-                    comment = utils.clean_comment(comment)
-                    set_prop(path, "comment", comment)
+
+                    if config.allow_comments:
+                        comment = utils.clean_comment(comment)
+
+                        if comment:
+                            set_prop(path, "comment", comment)
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")

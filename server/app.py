@@ -109,6 +109,7 @@ def index() -> Any:
         main_title=config.main_title,
         image_tooltip=config.image_tooltip,
         max_comment_length=config.max_comment_length,
+        allow_comments=config.allow_comments,
         links=config.links,
     )
 

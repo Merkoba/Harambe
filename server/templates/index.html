@@ -49,7 +49,9 @@
             </div>
         </div>
 
+        {% if allow_comments %}
         <input id="comment" type="text" name="comment" placeholder="Enter a comment (Optional)">
+        {% endif %}
 
         {% if captcha %}
         <div id="captcha">

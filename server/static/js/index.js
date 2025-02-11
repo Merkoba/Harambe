@@ -90,10 +90,12 @@ function validate() {
     return false
   }
 
-  let comment = document.querySelector(`#comment`).value
+  let comment = document.querySelector(`#comment`)
 
-  if (comment.length > vars.max_comment_length) {
-    return false
+  if (comment) {
+    if (comment.value.length > vars.max_comment_length) {
+      return false
+    }
   }
 
   clicked = true
@@ -101,6 +103,12 @@ function validate() {
 }
 
 function reflect_file() {
+  let comment = document.querySelector(`#comment`)
+
+  if (comment) {
+    comment.focus
+  }
+
   let image = document.querySelector(`#image`)
   let file = document.querySelector(`#file`)
   let src = file.files[0]
