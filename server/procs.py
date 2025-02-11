@@ -293,29 +293,26 @@ def do_delete_file(name: str) -> None:
     path = fd / name
     file = Path(path)
 
-    if file.exists():
+    if file.exists() and file.is_file():
         file.unlink()
+        database.remove_file(name)
 
 
 def delete_all() -> tuple[str, int]:
     try:
-        do_delete_all()
+        files = utils.files_dir().glob("*")
+
+        for file in files:
+            if file.name.startswith("."):
+                continue
+
+            do_delete_file(file.name)
 
         return jsonify(
             {"status": "ok", "message": "All files deleted successfully"}
         ), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-
-
-def do_delete_all() -> None:
-    files = utils.files_dir().glob("*")
-
-    for file in files:
-        if file.name.startswith("."):
-            continue
-
-        do_delete_file(file.name)
 
 
 # Remove old files if limits are exceeded

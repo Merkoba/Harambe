@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 # Standard
+import sys
 from typing import Any
 from functools import wraps
 
@@ -17,9 +18,18 @@ import procs
 import utils
 from procs import Message
 from config import config
+from database import database
 
 
 # ---
+
+# Generate the database file from existing files
+# This is for when you load existing files into the directory
+# And you need to create the database from scratch
+# To use this run with the --generate flag
+if "--generate" in sys.argv:
+    database.generate()
+    sys.exit(0)
 
 
 app = Flask(__name__)
