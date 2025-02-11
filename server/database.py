@@ -82,7 +82,7 @@ class Database:
         log.info("add file")
         self.files = list(filter(lambda x: x.name != name, self.files))
         file = File(name, utils.now(), size, comment)
-        utils.log(f"Added file: {file.id}")
+        log.info(f"Added file: {file.id}")
         self.files.append(file)
         self.save()
         return file
