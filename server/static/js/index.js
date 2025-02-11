@@ -76,13 +76,13 @@ function validate() {
     return false
   }
 
-  if (file.files[0].size > max_size) {
+  if (file.files[0].size > vars.max_size) {
     return false
   }
 
   let comment = document.querySelector(`#comment`).value
 
-  if (comment.length > max_comment) {
+  if (comment.length > vars.max_comment_length) {
     return false
   }
 

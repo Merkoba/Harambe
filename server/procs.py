@@ -6,7 +6,6 @@ import time
 from typing import Any
 from pathlib import Path
 from dataclasses import dataclass
-from datetime import datetime
 from collections import deque
 
 # Libraries
@@ -30,10 +29,10 @@ class Message:
 @dataclass
 class File:
     name: str
-    date: datetime
+    date: int
     nice_date: str
     ago: str
-    size: float
+    size: int
     size_str: str
 
 
@@ -93,7 +92,7 @@ def upload(request: Any, mode: str = "normal") -> Message:
     if not file:
         return error("No file")
 
-    comment = request.form.get("comment", "")
+    comment = request.form.get("comment", "")[: config.max_comment_length]
     key = request.form.get("key", "")
     used_key = None
 

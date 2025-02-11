@@ -105,12 +105,7 @@ export default [
         AColorPicker: "readonly",
         process: "readonly",
         require: "readonly",
-        def_page_size: "readonly",
-        page_size: "readonly",
-        max_size: "readonly",
-        mode: "readonly",
-        data: "readonly",
-        page_mode: "readonly",
+        vars: "readonly",
       }
     }
   }

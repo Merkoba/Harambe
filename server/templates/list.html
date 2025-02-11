@@ -5,9 +5,10 @@
 <link rel="stylesheet" href="/static/css/admin.css">
 
 <script>
-    const page_mode = `list`
-    const page_size = `{{page_size}}`
-    const def_page_size = {{def_page_size | tojson}}
+    const vars = {}
+    vars.mode = `list`
+    vars.page_size = `{{page_size}}`
+    vars.def_page_size = {{def_page_size | tojson}}
 </script>
 
 <script src="/static/js/admin.js"></script>

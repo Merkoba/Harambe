@@ -8,7 +8,7 @@ from pathlib import Path
 from config import config
 
 
-def now() -> datetime:
+def now() -> int:
     return int(time.time())
 
 

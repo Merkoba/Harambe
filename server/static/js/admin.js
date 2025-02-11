@@ -3,7 +3,7 @@ let date_mode = `ago`
 
 window.onload = () => {
   document.addEventListener(`keyup`, async (e) => {
-    if (page_mode === `admin`) {
+    if (vars.mode === `admin`) {
       if (e.key === `Enter`) {
         do_search()
       }
@@ -120,10 +120,10 @@ window.onload = () => {
 
   if (age) {
     age.addEventListener(`click`, () => {
-      if (page_mode === `admin`) {
+      if (vars.mode === `admin`) {
         sort_date()
       }
-      else if (page_mode === `list`) {
+      else if (vars.mode === `list`) {
         change_date()
       }
     })
@@ -132,7 +132,7 @@ window.onload = () => {
   let size = document.querySelector(`#size`)
 
   if (size) {
-    if (page_mode === `admin`) {
+    if (vars.mode === `admin`) {
       size.addEventListener(`click`, () => {
         sort_size()
       })
@@ -212,7 +212,7 @@ function fill_page_select(page_select) {
     page_select.appendChild(sep)
   }
 
-  add_option(`Default`, def_page_size)
+  add_option(`Default`, vars.def_page_size)
   add_separator()
 
   let nums = [10, 20, 50, 100, 200, 500, 1000]
@@ -220,8 +220,8 @@ function fill_page_select(page_select) {
   for (let n of nums) {
     let selected = false
 
-    if (!def_page_size) {
-      if (page_size === n.toString()) {
+    if (!vars.def_page_size) {
+      if (vars.page_size === n.toString()) {
         selected = true
       }
     }
@@ -230,7 +230,7 @@ function fill_page_select(page_select) {
   }
 
   add_separator()
-  add_option(`All`, page_size === `all`)
+  add_option(`All`, vars.page_size === `all`)
 }
 
 function on_page_select_change(page_select) {

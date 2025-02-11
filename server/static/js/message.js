@@ -3,7 +3,7 @@ window.onload = () => {
 
   if (copy) {
     copy.addEventListener(`click`, () => {
-      if (mode === `upload`) {
+      if (vars.mode === `upload`) {
         let loc = window.location
         let root = `${loc.protocol}//${loc.hostname}`
 
@@ -11,7 +11,7 @@ window.onload = () => {
           root += `:${loc.port}`
         }
 
-        navigator.clipboard.writeText(`${root}/${data}`)
+        navigator.clipboard.writeText(`${root}/${vars.data}`)
       }
     })
   }
@@ -20,8 +20,8 @@ window.onload = () => {
 
   if (new_tab) {
     new_tab.addEventListener(`click`, () => {
-      if (mode === `upload`) {
-        window.open(data, `_blank`)
+      if (vars.mode === `upload`) {
+        window.open(vars.data, `_blank`)
       }
     })
   }

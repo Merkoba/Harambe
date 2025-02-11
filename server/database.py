@@ -11,7 +11,7 @@ import utils
 
 
 class File:
-    def __init__(self, name: str, date: int, size: float, comment: str) -> None:
+    def __init__(self, name: str, date: int, size: int, comment: str) -> None:
         self.name = name
         self.date = date
         self.size = size
@@ -76,7 +76,7 @@ class Database:
     def sort(self) -> None:
         self.files.sort(key=lambda x: x.date, reverse=False)
 
-    def add_file(self, name: str, size: float, comment: str) -> None:
+    def add_file(self, name: str, size: int, comment: str) -> None:
         self.files = list(filter(lambda x: x.name != name, self.files))
         file = File(name, utils.now(), size, comment)
         self.files.append(file)
@@ -97,9 +97,7 @@ class Database:
         return None
 
     def save(self) -> None:
-        obj = {
-            "files": [f.to_dict() for f in self.files]
-        }
+        obj = {"files": [f.to_dict() for f in self.files]}
 
         with self.path.open("w") as file:
             file.write(json.dumps(obj, indent=4))
