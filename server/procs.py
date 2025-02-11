@@ -17,6 +17,7 @@ import app
 import utils
 from config import config, Key
 from database import database
+from database import File as DbFile
 
 
 @dataclass
@@ -28,6 +29,7 @@ class Message:
 
 @dataclass
 class File:
+    id: str
     name: str
     date: int
     nice_date: str
@@ -185,6 +187,18 @@ def upload(request: Any, mode: str = "normal") -> Message:
     return error("Nothing was uploaded")
 
 
+def make_file(file: DbFile, now: int) -> File:
+    date = file.date
+    size = file.size
+    total_size += size
+    nice_date = utils.nice_date(date)
+    ago = utils.time_ago(date, now)
+    size_str = utils.get_size(size)
+    comment = file.comment
+
+    return File(file.id, file.name, date, nice_date, ago, size, size_str, comment)
+
+
 def get_files(
     page: int = 1,
     page_size: str = "default",
@@ -210,14 +224,7 @@ def get_files(
         if query and (query not in file.name.lower()):
             continue
 
-        date = file.date
-        size = file.size
-        total_size += size
-        nice_date = utils.nice_date(date)
-        ago = utils.time_ago(date, now)
-        size_str = utils.get_size(size)
-        comment = file.comment
-        files.append(File(file.name, date, nice_date, ago, size, size_str, comment))
+        files.append(make_file(file, now))
 
     if sort == "date":
         files.sort(key=lambda x: x.date, reverse=True)
@@ -358,3 +365,12 @@ def get_image_name() -> str:
         return "banner.gif"
 
     return "cat.jpg"
+
+
+def get_file(id_: str) -> File | None
+    file = database.get_file(id_)
+
+    if not file:
+        return None
+
+    return make_file(file, utils.now())

@@ -12,6 +12,7 @@ import utils
 
 class File:
     def __init__(self, name: str, date: int, size: int, comment: str) -> None:
+        self.id = Path(name).stem
         self.name = name
         self.date = date
         self.size = size
@@ -89,9 +90,9 @@ class Database:
                 self.save()
                 return
 
-    def get_file(self, name: str) -> File | None:
+    def get_file(self, id_: str) -> File | None:
         for file in self.files:
-            if file.name == name:
+            if file.id == id_:
                 return file
 
         return None

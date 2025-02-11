@@ -173,6 +173,20 @@ def message() -> Any:
 # SERVE FILE
 
 
+@app.route(f"/post/<string:idstr>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+def get_post(idstr: str) -> Any:
+    file = procs.get_file(idstr)
+
+    if not file:
+        return Response(invalid, mimetype=text_mtype)
+
+    return render_template(
+        "post.html",
+        file=file,
+    )
+
+
 @app.route(f"/{config.file_path}/<path:filename>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
