@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-<title>{{file.comment or 'Post'}}</title>
+<title>{{file.comment or file.original or 'Post'}}</title>
 
 <style>
     :root {
