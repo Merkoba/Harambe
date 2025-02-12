@@ -15,6 +15,8 @@ import ulid  # type: ignore
 # Modules
 import app
 import utils
+import database
+from database import File as DbFile
 from config import config, Key
 
 
@@ -153,9 +155,11 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
 
                     if config.allow_comments:
                         comment = utils.clean_comment(comment)
+                    else:
+                        comment = ""
 
-                        if comment:
-                            set_prop(path, "comment", comment)
+                    database.add_file(name, ext[1:], comment)
+
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")
@@ -177,27 +181,21 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
     return error("Nothing was uploaded")
 
 
-def set_prop(file: Path, prop: str, value: str) -> None:
-    try:
-        os.setxattr(file, f"user.harambe_{prop}", bytes(value, "utf-8"))
-    except Exception as e:
-        utils.error(e)
+def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
+    if db_file:
+        date = db_file.date
+    else:
+        date = int(file.stat().st_mtime)
 
-
-def get_prop(file: Path, prop: str) -> str:
-    try:
-        return str(os.getxattr(file, f"user.harambe_{prop}"), "utf-8")
-    except Exception:
-        return ""
-
-
-def make_file(file: Path, now: int) -> File:
-    date = int(file.stat().st_mtime)
     size = int(file.stat().st_size)
     nice_date = utils.nice_date(date)
     ago = utils.time_ago(date, now)
     size_str = utils.get_size(size)
-    comment = get_prop(file, "comment")
+
+    if db_file:
+        comment = db_file.comment
+    else:
+        comment = ""
 
     return File(file.name, date, nice_date, ago, size, size_str, comment)
 
@@ -223,12 +221,14 @@ def get_files(
     now = utils.now()
     query = query.lower()
     all_files = list(utils.files_dir().glob("*"))
+    db_files = database.get_files()
 
     for file in all_files:
         if query and (query not in file.name.lower()):
             continue
 
-        f = make_file(file, now)
+        db_file = db_files[file.stem]
+        f = make_file(file, db_file, now)
         total_size += f.size
         files.append(f)
 
@@ -310,6 +310,7 @@ def do_delete_file(name: str) -> None:
 
     if file.exists() and file.is_file():
         file.unlink()
+        database.remove_file(name)
 
 
 def delete_all() -> tuple[str, int]:
@@ -354,9 +355,9 @@ def check_storage() -> None:
 
     while exceeds():
         oldest_file = files.pop(0)
-        oldest_file[0].unlink()
         total_files -= 1
         total_size -= oldest_file[1]
+        do_delete_file(oldest_file[0].name)
 
 
 def get_image_name() -> str:
@@ -372,14 +373,12 @@ def get_image_name() -> str:
     return "cat.jpg"
 
 
-def get_file(id_: str) -> File | None:
+def get_file(name: str) -> File | None:
     all_files = list(utils.files_dir().glob("*"))
 
     for file in all_files:
-        if file.stem.startswith("."):
-            continue
-
-        if file.stem.startswith(id_):
-            return make_file(file, utils.now())
+        if file.stem == name:
+            db_file = database.get_file(name)
+            return make_file(file, db_file, utils.now())
 
     return None
