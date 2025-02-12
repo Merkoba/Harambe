@@ -245,6 +245,16 @@ def delete_all() -> Any:
     return procs.delete_all()
 
 
+@app.route("/edit_title", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
+def edit_title() -> Any:
+    data = request.get_json()
+    name = data.get("name", None)
+    title = data.get("title", None)
+    return procs.edit_title(name, title)
+
+
 # AUTH
 
 

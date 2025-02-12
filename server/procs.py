@@ -487,3 +487,14 @@ def user_can_list(key: str) -> bool:
         return False
 
     return user.list
+
+
+def edit_title(name: str, title: str) -> tuple[str, int]:
+    if (not name) or (not title):
+        return jsonify({"status": "error", "message": "Missing values"}), 500
+
+    if len(title) > config.max_title_length:
+        return jsonify({"status": "error", "message": "Title is too long"}), 500
+
+    database.edit_title(name, title)
+    return jsonify({"status": "ok", "message": "Title updated"}), 200

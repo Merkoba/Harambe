@@ -144,6 +144,16 @@ def increase_views(name: str) -> None:
     conn.close()
 
 
+def edit_title(name: str, title: str) -> None:
+    if not check_db():
+        return
+
+    conn, c = get_conn()
+    c.execute("update files set title = ? where name = ?", (title, name))
+    conn.commit()
+    conn.close()
+
+
 def fill_table() -> None:
     conn, c = get_conn()
     c.execute("pragma table_info(files)")

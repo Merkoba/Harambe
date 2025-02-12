@@ -11,6 +11,11 @@ window.onload = () => {
   })
 
   document.addEventListener(`click`, async (e) => {
+    if (e.target.classList.contains(`edit`)) {
+      let el = e.target.closest(`.item`)
+      edit_title(el)
+    }
+
     if (e.target.classList.contains(`delete`)) {
       selected_files = [e.target.closest(`.item`)]
       delete_files()
@@ -422,7 +427,11 @@ function size_string(size) {
 }
 
 function do_search() {
-  let query = document.querySelector(`#filter`).value
+  let query = document.querySelector(`#filter`).value.trim()
+
+  if (!query) {
+    return
+  }
 
   if (query) {
     window.location = `/admin?query=${query}`
@@ -534,4 +543,31 @@ function sort_name() {
   }
 
   window.location = `/admin?sort=name`
+}
+
+async function edit_title(el) {
+  let t = el.dataset.title
+  let title = prompt(`New title`, t).trim()
+
+  if (!title) {
+    return
+  }
+
+  let name = el.dataset.name
+
+  let response = await fetch(`/edit_title`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({name, title}),
+  })
+
+  if (response.ok) {
+    el.dataset.title = title
+    el.querySelector(`.title`).innerText = title.substring(0, 20)
+  }
+  else {
+    print_error(response.status)
+  }
 }
