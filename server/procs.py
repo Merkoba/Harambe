@@ -81,6 +81,16 @@ def check_key(name: str) -> tuple[bool, str, Key | None]:
     return True, "ok", key
 
 
+def check_key_max(key: Key, size: int) -> bool:
+    megas = int(size / 1000 / 1000)
+
+    if key.max > 0:
+        if megas > key.max:
+            return False
+
+    return True
+
+
 def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
     def error(s: str) -> tuple[bool, str]:
         return False, f"Error: {s}"
@@ -127,6 +137,10 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
         try:
             content = file.read()
             length = len(content)
+
+            if used_key:
+                if not check_key_max(used_key, length):
+                    return error("File is too big")
 
             if length > config.get_max_file_size():
                 return error("File is too big")

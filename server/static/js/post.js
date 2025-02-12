@@ -1,8 +1,8 @@
-MINUTE = 60000
-HOUR = MINUTE * 60
-DAY = HOUR * 24
-MONTH = DAY * 30
-YEAR = DAY * 365
+const MINUTE = 60000
+const HOUR = MINUTE * 60
+const DAY = HOUR * 24
+const MONTH = DAY * 30
+const YEAR = DAY * 365
 
 window.onload = function() {
   let ago = document.querySelector(`#ago`)

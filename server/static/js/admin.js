@@ -412,13 +412,13 @@ function print_error(msg) {
 function size_string(size) {
   size /= 1000
 
-  if (size < 1024) {
+  if (size < 1000) {
     return `${size.toFixed(2)} kb`
   }
 
   size /= 1000
 
-  if (size < 1024) {
+  if (size < 1000) {
     return `${size.toFixed(2)} mb`
   }
 
