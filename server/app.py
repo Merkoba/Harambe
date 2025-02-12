@@ -218,7 +218,6 @@ def admin(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
-        file_path=config.file_path,
     )
 
 
@@ -303,5 +302,4 @@ def show_list(page: int = 1) -> Any:
         def_page_size=def_page_size,
         password=pw,
         use_password=use_password,
-        file_path=config.file_path,
     )

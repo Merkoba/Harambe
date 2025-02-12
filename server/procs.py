@@ -23,6 +23,7 @@ from config import config, Key
 @dataclass
 class File:
     name: str
+    ext: str
     date: int
     nice_date: str
     ago: str
@@ -218,7 +219,8 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         views = 0
 
     return File(
-        file.name,
+        file.stem,
+        file.suffix,
         date,
         nice_date,
         ago,
