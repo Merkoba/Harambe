@@ -20,6 +20,12 @@ class File:
     original: str
     uploader: str
 
+    def full(self) -> str:
+        if self.ext:
+            return f"{self.name}.{self.ext}"
+
+        return self.name
+
 
 db_path = "database.sqlite3"
 

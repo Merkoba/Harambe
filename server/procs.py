@@ -100,7 +100,6 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
     if len(title) > config.max_title_length:
         return error("Title is too long")
 
-    key = request.form.get("key", "")
     user = None
 
     if mode == "normal":
@@ -121,10 +120,14 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                 if not app.simple_captcha.verify(c_text, c_hash):
                     return error("Failed captcha")
     elif mode == "cli":
+        key = request.form.get("key", "")
         k_ok, k_msg, user = check_key(key)
 
         if not k_ok:
             return error(k_msg)
+
+    if (not user) and username:
+        user = config.get_user(username)
 
     file = request.files.get("file", None)
 
@@ -345,13 +348,16 @@ def delete_files(files: list[str]) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
 
-def delete_file(file: str) -> tuple[str, int]:
-    if not file:
-        return jsonify(
-            {"status": "error", "message": "File name was not provided"}
-        ), 400
+def delete_file(name: str, username: str) -> tuple[str, int]:
+    db_file = database.get_file(name)
 
-    do_delete_file(file)
+    if not db_file:
+        return jsonify({"status": "error", "message": "File not found"}), 500
+
+    if db_file.uploader != username:
+        return jsonify({"status": "error", "message": "You are not the uploader"}), 500
+
+    do_delete_file(db_file.full())
     return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
 
@@ -469,15 +475,6 @@ def get_file(name: str) -> File | None:
 
 def increase_view(name: str) -> None:
     database.increase_views(Path(name).stem)
-
-
-def user_can_list(key: str) -> bool:
-    user = config.get_user(key)
-
-    if not user:
-        return False
-
-    return user.list
 
 
 def edit_title(name: str, title: str, username: str) -> tuple[str, int]:

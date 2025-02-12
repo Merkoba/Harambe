@@ -271,8 +271,8 @@ def delete_all() -> Any:
 @login_required
 def delete_file() -> Any:
     data = request.get_json()
-    file = data.get("file", None)
-    return procs.delete_file(file)
+    name = data.get("name", None)
+    return procs.delete_file(name, get_username())
 
 
 @app.route("/edit_title", methods=["POST"])  # type: ignore

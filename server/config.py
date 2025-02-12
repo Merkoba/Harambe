@@ -218,9 +218,9 @@ class Config:
             "CHARACTER_POOL": string.ascii_lowercase,
         }
 
-    def get_user(self, key: str) -> User | None:
+    def get_user(self, username: str) -> User | None:
         for user in self.users:
-            if user.key == key:
+            if user.username == username:
                 return user
 
         return None
