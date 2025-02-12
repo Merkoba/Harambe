@@ -67,7 +67,7 @@ text_mtype = "text/plain"
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def index() -> Any:
-    if not config.web_upload_enabled:
+    if not config.web_uploads_enabled:
         return render_template("fallback.html")
 
     if request.method == "POST":
@@ -119,7 +119,10 @@ def index() -> Any:
 
 @app.route("/upload", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-def upload() -> Any:
+def api_upload() -> Any:
+    if not config.api_uploads_enabled:
+        return "error"
+
     _, msg = procs.upload(request, "cli")
     return msg
 

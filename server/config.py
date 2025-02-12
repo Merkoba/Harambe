@@ -188,8 +188,11 @@ class Config:
         # Allow comments on file uploads
         self.allow_comments: bool = True
 
-        # Enable the web interface
-        self.web_upload_enabled: bool = True
+        # Enable uploads through the web interface
+        self.web_uploads_enabled: bool = True
+
+        # Enable uploads through the API
+        self.api_uploads_enabled: bool = True
 
     # --- Methods ---
 
@@ -263,7 +266,8 @@ class Config:
             set_value(c, "image_tooltip")
             set_value(c, "file_path")
             set_value(c, "allow_comments")
-            set_value(c, "web_upload_enabled")
+            set_value(c, "web_uploads_enabled")
+            set_value(c, "api_uploads_enabled")
 
             # Users
 

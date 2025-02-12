@@ -33,3 +33,7 @@ hr {
 .sep {
     opacity: 0.66;
 }
+
+.button {
+    user-select: none;
+}
