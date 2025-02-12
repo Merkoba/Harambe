@@ -31,15 +31,15 @@
     {% endif %}
 
     <div>
-        <b>File:</b> <a class="link" href="/{{file_path}}/{{file.name}}">{{file.name}}</a> <span class="sep">|</span> {{file.size_str}}
+        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}">{{file.name}}</a><span class="sep">|</span>{{file.size_str}}
     </div>
 
     <div>
-        <b>Date:</b> {{file.nice_date}} <span class="sep">|</span> <span id="ago">{{file.ago}}</span>
+        <span class="title">Date:</span>{{file.nice_date}}<span class="sep">|</span><span id="ago">{{file.ago}}</span>
     </div>
 
     <div>
-        <b>Views:</b> {{file.views}} <span class="sep">|</span> <a href="/" class="button">Return</a>
+        <span class="title">Views:</span>{{file.views}}<span class="sep">|</span><a href="/" class="button">Return</a>
     </div>
 </div>
 {% endblock %}
