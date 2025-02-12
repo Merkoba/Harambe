@@ -189,7 +189,7 @@ class Config:
         self.api_uploads_enabled: bool = True
 
         # Max size to consider image embeds
-        self.embed_image_max: int = 2_000_000
+        self.embed_image_max: int = 5_000_000
 
     # --- Methods ---
 

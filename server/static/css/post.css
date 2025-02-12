@@ -56,11 +56,11 @@ hr {
     cursor: pointer;
 }
 
-.button:hover, a:hover {
+.button:hover, a.link:hover {
     filter: brightness(1.5);
 }
 
 #image {
-    max-width: 300px;
+    max-width: 80%;
     height: auto;
 }
