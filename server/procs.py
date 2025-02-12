@@ -34,6 +34,7 @@ class File:
     size_str: str
     comment: str = ""
     views: int = 0
+    uploader: str = ""
 
 
 class KeyData:
@@ -57,32 +58,32 @@ class KeyData:
 key_data: dict[str, KeyData] = {}
 
 
-def check_key(name: str) -> tuple[bool, str, Key | None]:
-    if not name:
+def check_key(key: str) -> tuple[bool, str, Key | None]:
+    if not key:
         return False, "Key is required", None
 
-    if len(name) > 100:
+    if len(key) > 100:
         return False, "Key is too long", None
 
-    key = None
+    used_key = None
 
     for k in config.keys:
-        if name == k.name:
-            key = k
+        if key == k.key:
+            used_key = k
             break
 
-    if not key:
+    if not used_key:
         return False, "Invalid key", None
 
-    if name not in key_data:
-        key_data[name] = KeyData(key.limit)
+    if key not in key_data:
+        key_data[key] = KeyData(used_key.limit)
 
-    d = key_data[name]
+    d = key_data[key]
 
     if d.blocked():
-        return False, "Rate limit exceeded", key
+        return False, "Rate limit exceeded", used_key
 
-    return True, "ok", key
+    return True, "ok", used_key
 
 
 def check_key_max(key: Key, size: int) -> bool:
@@ -158,10 +159,6 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                 u = ulid.new()
                 name = u.str[: config.get_file_name_length()]
 
-                if used_key and used_key.id:
-                    k_id = used_key.id.strip()
-                    name = f"{name}_{k_id}"
-
                 if not config.uppercase_ids:
                     name = name.lower()
 
@@ -182,7 +179,12 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                     else:
                         comment = ""
 
-                    database.add_file(name, cext, comment, pfile.stem)
+                    if used_key and used_key.name:
+                        uploader = used_key.name
+                    else:
+                        uploader = ""
+
+                    database.add_file(name, cext, comment, pfile.stem, uploader)
 
                 except Exception as e:
                     utils.error(e)
@@ -220,10 +222,12 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         comment = db_file.comment
         views = db_file.views
         original = db_file.original
+        uploader = db_file.uploader
     else:
         comment = ""
         views = 0
         original = ""
+        uploader = ""
 
     if original:
         if file.suffix:
@@ -246,6 +250,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         size_str,
         comment,
         views,
+        uploader,
     )
 
 

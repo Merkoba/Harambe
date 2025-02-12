@@ -38,6 +38,12 @@
         <span class="title">Date:</span>{{file.nice_date}}<span class="sep">|</span><span id="ago">{{file.ago}}</span>
     </div>
 
+    {% if file.uploader %}
+    <div>
+        <span class="title">Uploader:</span>{{file.uploader}}
+    </div>
+    {% endif %}
+
     <div>
         <span class="title">Views:</span>{{file.views}}<span class="sep">|</span><a href="/" class="button">Return</a>
     </div>

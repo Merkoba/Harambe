@@ -115,15 +115,17 @@ Add these at the bottom:
 
 ```toml
 [[keys]]
-name = "wingwalker"
+key = "wingwalker"
+name = "The Upsetter"
 limit = 20
 max = 20
-id = "wlkr"
 ```
 
-`id` is optional, and if filled the file urls will be signed with it.
+`key` is a string which should be kept secret, it's what is used to authenticate.
 
-For example `01jknx2aj1_wlkr.png` instead of `01jknx2aj1.png`
+`name` is the public name to be displayed in posts.
+
+If `name` is empty, no name will be displayed.
 
 `max` is the max file size for that key.
 

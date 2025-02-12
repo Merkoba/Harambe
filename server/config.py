@@ -32,10 +32,10 @@ class User:
 
 @dataclass
 class Key:
+    key: str
     name: str
     limit: int
     max: int
-    id: str
 
 
 @dataclass
@@ -286,10 +286,10 @@ class Config:
             if keys:
                 self.keys = [
                     Key(
-                        key["name"],
+                        key["key"],
+                        key.get("name", ""),
                         key.get("limit", 12),
                         key.get("max", 0),
-                        key.get("id", ""),
                     )
                     for key in keys
                 ]
