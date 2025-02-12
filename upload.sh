@@ -3,10 +3,10 @@
 # This script can be used to upload files to a Harambe server
 # Usage: ./upload.sh <file_path>
 # Example: ./upload.sh /path/to/file.jpg
-# It uses xclip to copy the URL to the clipboard
 
 # -------------------------------
 
+# URL="localhost:4040"
 URL="https://someurl.com"
 
 KEY="somekey"
@@ -45,16 +45,20 @@ if [ -z "$KEY" ]; then
   exit 1
 fi
 
+comment=$(zenity --entry --title="Harambe Upload" --text="Enter a comment:")
+
 # Make the POST request and capture the response
 RESPONSE=$(curl -s -X POST "$URL/upload" \
     -F "file=@${FILE_PATH}" \
+    -F "comment=${comment}" \
     -F "key=${KEY}")
 
 # Check if the response starts with "file/"
-if [[ "$RESPONSE" == file/* ]]; then
+if [[ "$RESPONSE" == post/* ]]; then
     FULL_URL="${URL}/${RESPONSE}"
     echo -n "$FULL_URL" | xclip -selection clipboard
     echo "URL Copied: $FULL_URL"
+    awesome-client 'Utils.msg("Harambe: Upload Complete")'
 else
     echo $RESPONSE
 fi
