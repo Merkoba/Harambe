@@ -138,6 +138,36 @@ window.onload = () => {
       })
     }
   }
+
+  let views = document.querySelector(`#views`)
+
+  if (views) {
+    views.addEventListener(`click`, () => {
+      if (vars.mode === `admin`) {
+        sort_views()
+      }
+    })
+  }
+
+  let comment = document.querySelector(`#comment`)
+
+  if (comment) {
+    comment.addEventListener(`click`, () => {
+      if (vars.mode === `admin`) {
+        sort_comment()
+      }
+    })
+  }
+
+  let name = document.querySelector(`#name`)
+
+  if (name) {
+    name.addEventListener(`click`, () => {
+      if (vars.mode === `admin`) {
+        sort_name()
+      }
+    })
+  }
 }
 
 function select_above(el) {
@@ -455,4 +485,58 @@ function change_date() {
       item.querySelector(`.date`).innerText = item.dataset.date
     }
   }
+}
+
+function sort_views() {
+  let url = new URL(window.location.href)
+  let sort = url.searchParams.get(`sort`)
+
+  if (sort) {
+    if (sort === `views`) {
+      window.location = `/admin?sort=views_desc`
+      return
+    }
+    else if (sort === `views_desc`) {
+      window.location = `/admin`
+      return
+    }
+  }
+
+  window.location = `/admin?sort=views`
+}
+
+function sort_comment() {
+  let url = new URL(window.location.href)
+  let sort = url.searchParams.get(`sort`)
+
+  if (sort) {
+    if (sort === `comment`) {
+      window.location = `/admin?sort=comment_desc`
+      return
+    }
+    else if (sort === `comment_desc`) {
+      window.location = `/admin`
+      return
+    }
+  }
+
+  window.location = `/admin?sort=comment`
+}
+
+function sort_name() {
+  let url = new URL(window.location.href)
+  let sort = url.searchParams.get(`sort`)
+
+  if (sort) {
+    if (sort === `name`) {
+      window.location = `/admin?sort=name_desc`
+      return
+    }
+    else if (sort === `name_desc`) {
+      window.location = `/admin`
+      return
+    }
+  }
+
+  window.location = `/admin?sort=name`
 }

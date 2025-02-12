@@ -65,7 +65,7 @@
             <div class="table_cell">Comment</div>
             <div class="table_cell">Size</div>
             <div id="date" class="table_cell underline">Date</div>
-            <div id="views" class="table_cell views underline">Views</div>
+            <div id="views" class="table_cell views">Views</div>
         </div>
         {% for file in files %}
         <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.nice_date}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}">

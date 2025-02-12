@@ -252,6 +252,18 @@ def get_files(
         files.sort(key=lambda x: x.size, reverse=True)
     elif sort == "size_desc":
         files.sort(key=lambda x: x.size, reverse=False)
+    elif sort == "views":
+        files.sort(key=lambda x: x.views, reverse=True)
+    elif sort == "views_desc":
+        files.sort(key=lambda x: x.views, reverse=False)
+    elif sort == "comment":
+        files.sort(key=lambda x: x.comment, reverse=True)
+    elif sort == "comment_desc":
+        files.sort(key=lambda x: x.comment, reverse=False)
+    elif sort == "name":
+        files.sort(key=lambda x: x.name, reverse=True)
+    elif sort == "name_desc":
+        files.sort(key=lambda x: x.name, reverse=False)
 
     if max_files > 0:
         files = files[:max_files]
