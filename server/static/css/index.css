@@ -174,3 +174,7 @@ a:hover {
     width: 100%;
     box-sizing: border-box;
 }
+
+.link {
+    user-select: none;
+}
