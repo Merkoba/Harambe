@@ -247,9 +247,8 @@ def delete_file() -> Any:
     key = data.get("key", None)
     name = data.get("name", None)
     file = data.get("file", None)
-    logged = logged_in()
 
-    if not procs.can_edit(logged, key, name):
+    if not procs.can_edit(logged_in(), key, name):
         return {}, 400
 
     return procs.delete_file(file)
