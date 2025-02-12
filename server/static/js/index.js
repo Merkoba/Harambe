@@ -106,7 +106,7 @@ function reflect_file() {
   let comment = document.querySelector(`#comment`)
 
   if (comment) {
-    comment.focus
+    comment.focus()
   }
 
   let image = document.querySelector(`#image`)
