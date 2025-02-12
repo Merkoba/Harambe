@@ -80,6 +80,7 @@ a:hover {
     width: 300px;
     margin-bottom: 1.5rem;
     max-height: 300px;
+    object-fit: contain;
 }
 
 #image:hover {
