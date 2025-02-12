@@ -565,7 +565,7 @@ async function edit_title(el) {
 
   if (response.ok) {
     el.dataset.title = title
-    el.querySelector(`.title`).innerText = title.substring(0, 20).trim()
+    el.querySelector(`.title`).innerText = title.substring(0, vars.max_text).trim()
   }
   else {
     print_error(response.status)
