@@ -167,10 +167,10 @@ def message() -> Any:
 # SERVE FILE
 
 
-@app.route("/post/<string:idstr>", methods=["GET"])  # type: ignore
+@app.route("/post/<string:name>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-def post(idstr: str) -> Any:
-    file = procs.get_file(idstr)
+def post(name: str) -> Any:
+    file = procs.get_file(name)
 
     if not file:
         return Response(invalid, mimetype=text_mtype)
@@ -188,13 +188,17 @@ def post(idstr: str) -> Any:
     )
 
 
-@app.route(f"/{config.file_path}/<path:filename>", methods=["GET"])  # type: ignore
-@app.route(f"/{config.file_path}/<path:filename>/<string:name>", methods=["GET"])  # type: ignore
+@app.route(f"/{config.file_path}/<path:name>", methods=["GET"])  # type: ignore
+@app.route(f"/{config.file_path}/<path:name>/<string:original>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-def get_file(filename: str, name: str | None = None) -> Any:
+def get_file(name: str, original: str | None = None) -> Any:
+    file = procs.get_file(name)
+
+    if not file:
+        return Response(invalid, mimetype=text_mtype)
+
     fd = utils.files_dir()
-    procs.increase_view(filename)
-    return send_file(fd / filename, download_name=name, max_age=config.max_age)
+    return send_file(fd / file.full, download_name=original, max_age=config.max_age)
 
 
 # ADMIN

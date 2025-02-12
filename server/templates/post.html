@@ -31,7 +31,7 @@
     {% endif %}
 
     <div>
-        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.full}}/{{file.original}}">{{file.full}}</a><span class="sep">|</span>{{file.size_str}}
+        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original}}">{{file.original or file.full}}</a><span class="sep">|</span>{{file.size_str}}
     </div>
 
     <div>
