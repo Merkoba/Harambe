@@ -24,6 +24,8 @@ from config import config, Key
 class File:
     name: str
     ext: str
+    full: str
+    original: str
     date: int
     nice_date: str
     ago: str
@@ -164,8 +166,10 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
 
                 if ext:
                     full_name = f"{name}{ext}"
+                    cext = ext[1:]
                 else:
                     full_name = name
+                    cext = ""
 
                 path = utils.files_dir() / full_name
 
@@ -177,7 +181,7 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                     else:
                         comment = ""
 
-                    database.add_file(name, ext[1:], comment)
+                    database.add_file(name, cext, comment, fname)
 
                 except Exception as e:
                     utils.error(e)
@@ -214,13 +218,17 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
     if db_file:
         comment = db_file.comment
         views = db_file.views
+        original = db_file.original
     else:
         comment = ""
         views = 0
+        original = ""
 
     return File(
         file.stem,
         file.suffix,
+        file.name,
+        original,
         date,
         nice_date,
         ago,

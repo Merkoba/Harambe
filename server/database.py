@@ -16,7 +16,8 @@ class File:
     ext: str
     date: int
     comment: str
-    views: int = 0
+    views: int
+    original: str
 
 
 db_path = "database.sqlite3"
@@ -28,6 +29,7 @@ schema = {
     "date": "int",
     "comment": "text",
     "views": "int default 0",
+    "original": "text",
 }
 
 
@@ -67,14 +69,14 @@ def create_db() -> None:
     conn.close()
 
 
-def add_file(name: str, ext: str, comment: str) -> None:
+def add_file(name: str, ext: str, comment: str, original: str) -> None:
     check_db()
     conn, c = get_conn()
     date = utils.now()
 
     c.execute(
-        "insert into files (name, ext, date, comment, views) values (?, ?, ?, ?, ?)",
-        (name, ext, date, comment, 0),
+        "insert into files (name, ext, date, comment, views, original) values (?, ?, ?, ?, ?, ?)",
+        (name, ext, date, comment, 0, original),
     )
 
     conn.commit()
@@ -88,6 +90,7 @@ def make_file(row: dict[str, Any]) -> File:
         date=row["date"],
         comment=row.get("comment", ""),
         views=row.get("views", 0),
+        original=row.get("original", ""),
     )
 
 
