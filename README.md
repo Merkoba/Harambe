@@ -117,12 +117,17 @@ Add these at the bottom:
 [[keys]]
 name = "wingwalker"
 limit = 20
+max = 20
 id = "wlkr"
 ```
 
 `id` is optional, and if filled the file urls will be signed with it.
 
 For example `01jknx2aj1_wlkr.png` instead of `01jknx2aj1.png`
+
+`max` is the max file size for that key.
+
+If `max` is set to 0 it will use the default max file size config.
 
 ---
 

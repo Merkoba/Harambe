@@ -138,11 +138,10 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
             content = file.read()
             length = len(content)
 
-            if used_key:
+            if used_key and used_key.max > 0:
                 if not check_key_max(used_key, length):
                     return error("File is too big")
-
-            if length > config.get_max_file_size():
+            elif length > config.get_max_file_size():
                 return error("File is too big")
 
             if content:

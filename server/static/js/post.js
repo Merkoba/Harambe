@@ -12,7 +12,11 @@ window.onload = function() {
     let delay = 30
 
     setInterval(function() {
-      ago.textContent = timeago(vars.date_ms)
+      let [str, level] = timeago(vars.date_ms)
+
+      if (level > 1) {
+        ago.innerHTML = str
+      }
     }, 1000 * delay)
   }
 }
@@ -87,5 +91,5 @@ function timeago(date) {
     level = 6
   }
 
-  return result
+  return [result, level]
 }
