@@ -209,24 +209,21 @@ def get_file(name: str, original: str | None = None) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
 def admin(page: int = 1) -> Any:
-    try:
-        query = request.args.get("query", "")
-        sort = request.args.get("sort", "date")
-        page_size = request.args.get("page_size", config.admin_page_size)
-        files, total, next_page = procs.get_files(page, page_size, query=query, sort=sort)
-        def_page_size = page_size == config.admin_page_size
+    query = request.args.get("query", "")
+    sort = request.args.get("sort", "date")
+    page_size = request.args.get("page_size", config.admin_page_size)
+    files, total, next_page = procs.get_files(page, page_size, query=query, sort=sort)
+    def_page_size = page_size == config.admin_page_size
 
-        return render_template(
-            "admin.html",
-            files=files,
-            total=total,
-            page=page,
-            next_page=next_page,
-            page_size=page_size,
-            def_page_size=def_page_size,
-        )
-    except Exception as e:
-        return render_template("print.html", message=e)
+    return render_template(
+        "admin.html",
+        files=files,
+        total=total,
+        page=page,
+        next_page=next_page,
+        page_size=page_size,
+        def_page_size=def_page_size,
+    )
 
 
 @app.route("/delete_files", methods=["POST"])  # type: ignore
