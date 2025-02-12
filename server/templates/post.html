@@ -26,24 +26,29 @@
 
 {% block body %}
 <div id="main">
+    <!-- Title -->
     {% if file.title or file.original %}
     <div id="title">{{file.title or file.original}}</div><hr>
     {% endif %}
 
+    <!-- File -->
     <div>
-        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original_full}}">{{file.original or file.full}}</a><span class="sep">|</span>{{file.size_str}}
+        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original_full}}">{{file.original_full or file.full}}</a><span class="sep">|</span>{{file.size_str}}
     </div>
 
+    <!-- Date -->
     <div>
         <span class="title">Date:</span>{{file.date_1}}<span class="sep">|</span>{{file.date_2}}<span class="sep">|</span><span id="ago">{{file.ago}}</span>
     </div>
 
+    <!-- Uploader -->
     {% if file.uploader %}
     <div>
         <span class="title">Uploader:</span>{{file.uploader}}
     </div>
     {% endif %}
 
+    <!-- Views -->
     <div>
         <span class="title">Views:</span>{{file.views}}<span class="sep">|</span><a href="/" class="button">Return</a>
     </div>
