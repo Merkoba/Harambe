@@ -29,10 +29,20 @@
 
 {% block body %}
 <div id="main">
-    <!-- Title -->
-    {% if file.title or file.original %}
-    <div id="title">{{file.title or file.original}}</div><hr>
-    {% endif %}
+    <!-- Top -->
+    <div id="top">
+        {% if owned %}
+        <div id="buttons">
+            <div id="edit" class="button">Edit</div><div class="sep">|</div><div id="delete" class="button">Delete</div>
+        </div>
+        {% endif %}
+
+        {% if file.title or file.original %}
+        <div id="title">{{file.title or file.original}}</div>
+        {% endif %}
+    </div>
+
+    <hr>
 
     <!-- File -->
     <div>
@@ -55,12 +65,6 @@
     <div>
         <span class="title">Views:</span>{{file.views}}<span class="sep">|</span><a href="/" class="button">Return</a>
     </div>
-
-    {% if owned %}
-    <div>
-        <span id="edit" class="button">Edit</span><span class="sep">|</span><span id="delete" class="button">Delete</span>
-    </div>
-    {% endif %}
 
     {% if file.embed_image %}
     <img id="image" src="/{{file_path}}/{{file.name}}">
