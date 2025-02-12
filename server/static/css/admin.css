@@ -64,26 +64,26 @@ a.linkbutton:hover {
     width: 100%;
 }
 
-.table-row {
+.table_row {
     display: flex;
     flex-direction: row;
     border-bottom: 1px solid #ddd;
 }
 
-.table-header {
+.table_header {
     font-weight: bold;
     background-color: #f2f2f2;
 }
 
-.item .table-cell:first-child {
+.item .table_cell:first-child {
     border-left: 1px solid #ddd;
 }
 
-.item .table-cell {
+.item .table_cell {
     border-right: 1px solid #ddd;
 }
 
-.table-cell {
+.table_cell {
     flex: 1;
     padding: 8px;
     text-align: center;
@@ -119,4 +119,10 @@ select {
 
 .underline:hover {
     text-decoration: underline;
+}
+
+.table_cell.views {
+    flex-grow: 0;
+    flex-shrink: 1;
+    min-width: 3rem;
 }
