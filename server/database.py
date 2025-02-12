@@ -55,8 +55,7 @@ def row_conn() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
 
 
 def create_db() -> None:
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
+    conn, c = get_conn()
 
     c.execute(
         f"""create table files (
@@ -140,8 +139,7 @@ def increase_views(name: str) -> None:
 
 
 def fill_table() -> None:
-    conn = sqlite3.connect(db_path)
-    c = conn.cursor()
+    conn, c = get_conn()
     c.execute("pragma table_info(files)")
     columns = [info[1] for info in c.fetchall()]
 
