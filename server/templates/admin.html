@@ -77,7 +77,7 @@
             </div>
 
             <!-- Title -->
-            <div class="table_cell" title="{{file.title}}">{{file.title[:20]|trim}}</div>
+            <div class="table_cell" title="{{file.title}}">{{file.title[:20]|trim or file.original[:20]}}</div>
 
             <!-- Size -->
             <div class="table_cell">{{file.size_str}}</div>
