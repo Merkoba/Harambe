@@ -18,7 +18,10 @@
 
 <script>
     const vars = {}
+    vars.date = {{file.date}}
 </script>
+
+<script src="/static/js/post.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -32,7 +35,7 @@
     </div>
 
     <div>
-        <b>Date:</b> {{file.nice_date}} <span class="sep">|</span> {{file.ago}}
+        <b>Date:</b> {{file.nice_date}} <span class="sep">|</span> <span id="ago">{{file.ago}}</span>
     </div>
 
     <div>
