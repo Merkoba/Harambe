@@ -45,6 +45,7 @@ if [ -z "$KEY" ]; then
   exit 1
 fi
 
+# Prompt to get the comment
 comment=$(zenity --entry --title="Harambe Upload" --text="Enter a comment:")
 
 # Make the POST request and capture the response
