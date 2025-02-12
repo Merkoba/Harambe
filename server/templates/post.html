@@ -26,8 +26,8 @@
 
 {% block body %}
 <div id="main">
-    {% if file.comment %}
-    <div id="comment">{{file.comment}}</div><hr>
+    {% if file.comment or file.original %}
+    <div id="comment">{{file.comment or file.original}}</div><hr>
     {% endif %}
 
     <div>
