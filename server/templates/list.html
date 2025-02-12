@@ -25,18 +25,10 @@
     <div class="sep">|</div>
 
     {% if page > 1 %}
-        {% if use_key %}
-            {% if page > 2 %}
-            <a class="linkbutton" href="/list/{{page - 1}}?key={{key}}" title="Go to the previous page">Prev</a>
-            {% else %}
-            <a class="linkbutton" href="/list?key={{key}}" title="Go to the previous page">Prev</a>
-            {% endif %}
+        {% if page > 2 %}
+        <a class="linkbutton" href="/list/{{page - 1}}" title="Go to the previous page">Prev</a>
         {% else %}
-            {% if page > 2 %}
-            <a class="linkbutton" href="/list/{{page - 1}}" title="Go to the previous page">Prev</a>
-            {% else %}
-            <a class="linkbutton" href="/list" title="Go to the previous page">Prev</a>
-            {% endif %}
+        <a class="linkbutton" href="/list" title="Go to the previous page">Prev</a>
         {% endif %}
     {% else %}
     <div class="">Prev</div>
@@ -45,11 +37,7 @@
     <div class="sep">|</div>
 
     {% if next_page %}
-        {% if use_key %}
-        <a class="linkbutton" href="/list/{{page + 1}}?key={{key}}" title="Go to the next page">Next</a>
-        {% else %}
-        <a class="linkbutton" href="/list/{{page + 1}}" title="Go to the next page">Next</a>
-        {% endif %}
+    <a class="linkbutton" href="/list/{{page + 1}}" title="Go to the next page">Next</a>
     {% else %}
     <div class="">Next</div>
     {% endif %}

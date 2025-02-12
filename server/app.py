@@ -324,15 +324,22 @@ def logout() -> Any:
 @app.route("/list/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def show_list(page: int = 1) -> Any:
-    key = request.args.get("key", "")
+    admin = is_admin()
 
-    if not logged_in():
-        if not config.list_enabled:
+    if not config.list_enabled and (not admin):
+        return redirect(url_for("index"))
+
+    if config.list_private and (not admin):
+        if not logged_in():
+            return redirect(url_for("login"))
+
+        user = config.get_user(get_username())
+
+        if not user:
+            return redirect(url_for("login"))
+
+        if not user.list:
             return redirect(url_for("index"))
-
-        if config.list_private:
-            if (not key) or (not procs.user_can_list(key)):
-                return redirect(url_for("index"))
 
     page_size = request.args.get("page_size", config.list_page_size)
 
@@ -341,7 +348,6 @@ def show_list(page: int = 1) -> Any:
     )
 
     def_page_size = page_size == config.list_page_size
-    use_key = bool(key)
 
     return render_template(
         "list.html",
@@ -351,7 +357,5 @@ def show_list(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
-        key=key,
-        use_key=use_key,
         max_text=20,
     )

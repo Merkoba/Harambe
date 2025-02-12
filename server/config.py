@@ -148,7 +148,7 @@ class Config:
         self.show_max_file_size: bool = True
 
         # Enable a public page to list files
-        self.list_enabled: bool = False
+        self.list_enabled: bool = True
 
         # List is private and requires a password or key
         self.list_private: bool = True
