@@ -57,6 +57,9 @@ def check_key(name: str) -> tuple[bool, str, Key | None]:
     if not name:
         return False, "Key is required", None
 
+    if len(name) > 100:
+        return False, "Key is too long", None
+
     key = None
 
     for k in config.keys:
@@ -81,11 +84,6 @@ def check_key(name: str) -> tuple[bool, str, Key | None]:
 def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
     def error(s: str) -> tuple[bool, str]:
         return False, f"Error: {s}"
-
-    file = request.files.get("file", None)
-
-    if not file:
-        return error("No file")
 
     comment = request.form.get("comment", "")
 
@@ -119,6 +117,14 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
 
         if not k_ok:
             return error(k_msg)
+
+        if utils.get_redis_value(f"key_{key}") != "open":
+            return error("Key is not open")
+
+    file = request.files.get("file", None)
+
+    if not file:
+        return error("No file")
 
     if hasattr(file, "read"):
         try:

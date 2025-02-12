@@ -188,6 +188,9 @@ class Config:
         # Allow comments on file uploads
         self.allow_comments: bool = True
 
+        # Enable the web interface
+        self.web_upload_enabled: bool = True
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -260,6 +263,7 @@ class Config:
             set_value(c, "image_tooltip")
             set_value(c, "file_path")
             set_value(c, "allow_comments")
+            set_value(c, "web_upload_enabled")
 
             # Users
 

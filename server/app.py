@@ -67,6 +67,9 @@ text_mtype = "text/plain"
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def index() -> Any:
+    if not config.web_upload_enabled:
+        return render_template("fallback.html")
+
     if request.method == "POST":
         try:
             ok, msg = procs.upload(request)
