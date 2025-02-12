@@ -59,7 +59,7 @@ function validate() {
     return false
   }
 
-  if (!vars.is_admin) {
+  if (!vars.is_user) {
     let captcha = document.querySelector(`#captcha-text`)
 
     if (captcha) {

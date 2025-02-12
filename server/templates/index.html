@@ -21,7 +21,7 @@
     vars.max_size = {{max_size}}
     vars.max_title_length = {{max_title_length}}
     vars.image_name = `{{image_name}}`
-    vars.is_admin = {{is_admin | tojson}}
+    vars.is_user = {{is_user | tojson}}
 </script>
 
 <script src="static/js/index.js"></script>
@@ -60,14 +60,7 @@
         </div>
         {% endif %}
 
-        {% if require_key %}
-        <div id="bottom">
-            <input id="key" type="text" name="key" placeholder="Enter your Key" required>
-            <button type="submit" name="submit">Upload</button>
-        </div>
-        {% else %}
         <button type="submit" name="submit">Upload</button>
-        {% endif %}
     </form>
 </div>
 {% endblock %}

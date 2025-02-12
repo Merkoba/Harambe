@@ -25,15 +25,12 @@ class FileChangeHandler(FileSystemEventHandler):  # type: ignore
 
 
 @dataclass
-class Admin:
+class User:
     username: str
     password: str
-
-
-@dataclass
-class User:
-    key: str
     name: str
+    admin: bool
+    key: str
     limit: int
     max: int
     list: bool
@@ -57,10 +54,6 @@ class Config:
 
         self.path: Path = Path("config.toml")
 
-        # Admins can use manage files
-        # Dict object: username, password
-        self.admins: list[Admin] = []
-
         # Users can upload files
         # Dict object: name, limit, id (optional)
         self.users: list[User] = []
@@ -69,6 +62,7 @@ class Config:
         # Dict object: name, url, target (optional)
         self.links: list[Link] = [
             Link("about", "/static/demo/about.html", "_blank"),
+            Link("login", "/login"),
         ]
 
         # Secret key for security
@@ -92,7 +86,7 @@ class Config:
 
         # Length of the captcha
         # The higher the number, the harder it is
-        self.captcha_length: int = 8
+        self.captcha_length: int = 9
 
         # Maximum file size in MB
         # File beyond this will get ignored
@@ -101,9 +95,6 @@ class Config:
         # Port for the redis server
         # Redis is used for the limiter
         self.redis_port: int = 6379
-
-        # Require to input a key to upload in the web interface
-        self.require_key: bool = False
 
         # Uppercase the file ids
         # The id is used to name the files
@@ -208,12 +199,13 @@ class Config:
     def get_file_name_length(self) -> int:
         return max(min(self.file_name_length, 26), 10)
 
-    def check_admin(self, username: str, password: str) -> bool:
-        for admin in self.admins:
-            if (admin.username == username) and (admin.password == password):
-                return True
+    def check_user(self, username: str, password: str) -> User | None:
+        for user in self.users:
+            if user.username == username:
+                if user.password == password:
+                    return user
 
-        return False
+        return None
 
     def get_captcha(self) -> dict[str, Any]:
         return {
@@ -251,7 +243,6 @@ class Config:
             set_value(c, "captcha_length")
             set_value(c, "max_file_size")
             set_value(c, "redis_port")
-            set_value(c, "require_key")
             set_value(c, "uppercase_ids")
             set_value(c, "max_files")
             set_value(c, "max_storage")
@@ -280,15 +271,6 @@ class Config:
             set_value(c, "web_uploads_enabled")
             set_value(c, "api_uploads_enabled")
 
-            # Admins
-
-            admins: list[dict[str, str]] = c.get("admins", [])
-
-            if admins:
-                self.admins = [
-                    Admin(admin["username"], admin["password"]) for admin in admins
-                ]
-
             # Users
 
             users: list[dict[str, Any]] = c.get("users", [])
@@ -296,8 +278,11 @@ class Config:
             if users:
                 self.users = [
                     User(
-                        user["key"],
+                        user.get("username", ""),
+                        user.get("password", ""),
                         user.get("name", ""),
+                        user.get("admin", False),
+                        user.get("key", ""),
                         user.get("limit", 12),
                         user.get("max", 0),
                         user.get("list", False),

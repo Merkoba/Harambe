@@ -118,16 +118,6 @@ async function edit_title() {
     return
   }
 
-  let key
-
-  if (!vars.is_admin) {
-    key = prompt(`Enter your key`).trim()
-
-    if (!key) {
-      return
-    }
-  }
-
   let name = vars.name
 
   let response = await fetch(`/edit_title`, {
@@ -135,7 +125,7 @@ async function edit_title() {
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({name, title, key}),
+    body: JSON.stringify({name, title}),
   })
 
   if (response.ok) {
@@ -148,22 +138,12 @@ async function edit_title() {
 }
 
 async function delete_file() {
-  let key
-
-  if (!vars.is_admin) {
-    key = prompt(`Enter your key`).trim()
-
-    if (!key) {
-      return
-    }
-  }
-
   let response = await fetch(`/delete_file`, {
     method: `POST`,
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({name: vars.name, file: vars.full, key}),
+    body: JSON.stringify({name: vars.name, file: vars.full}),
   })
 
   if (response.ok) {

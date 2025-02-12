@@ -22,7 +22,6 @@
     vars.full = `{{file.full}}`
     vars.date = {{file.date}}
     vars.title = `{{file.title}}`
-    vars.is_admin = {{is_admin | tojson}}
 </script>
 
 <script src="/static/js/post.js"></script>
@@ -54,11 +53,13 @@
 
     <!-- Views -->
     <div>
-        <span class="title">Views:</span>{{file.views}}
+        <span class="title">Views:</span>{{file.views}}<span class="sep">|</span><a href="/" class="button">Return</a>
     </div>
 
+    {% if owned %}
     <div>
-        <a href="/" class="button">Return</a><span class="sep">|</span><span id="edit" class="button">Edit</span><span class="sep">|</span><span id="delete" class="button">Delete</span>
+        <span id="edit" class="button">Edit</span><span class="sep">|</span><span id="delete" class="button">Delete</span>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

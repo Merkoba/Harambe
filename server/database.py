@@ -19,7 +19,6 @@ class File:
     views: int
     original: str
     uploader: str
-    key: str
 
 
 db_path = "database.sqlite3"
@@ -33,7 +32,6 @@ schema = {
     "views": "int default 0",
     "original": "text",
     "uploader": "text",
-    "key": "text",
 }
 
 
@@ -74,15 +72,15 @@ def create_db() -> None:
 
 
 def add_file(
-    name: str, ext: str, title: str, original: str, uploader: str, key: str
+    name: str, ext: str, title: str, original: str, uploader: str
 ) -> None:
     check_db()
     conn, c = get_conn()
     date = utils.now()
 
     c.execute(
-        "insert into files (name, ext, date, title, views, original, uploader, key) values (?, ?, ?, ?, ?, ?, ?, ?)",
-        (name, ext, date, title, 0, original, uploader, key),
+        "insert into files (name, ext, date, title, views, original, uploader, key) values (?, ?, ?, ?, ?, ?, ?)",
+        (name, ext, date, title, 0, original, uploader),
     )
 
     conn.commit()
@@ -98,7 +96,6 @@ def make_file(row: dict[str, Any]) -> File:
         views=row.get("views") or 0,
         original=row.get("original") or "",
         uploader=row.get("uploader") or "",
-        key=row.get("key") or "",
     )
 
 

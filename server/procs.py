@@ -92,8 +92,7 @@ def check_key_max(user: User, size: int) -> bool:
 
 
 def upload(
-    request: Any, mode: str = "normal", is_admin: bool = False
-) -> tuple[bool, str]:
+    request: Any, mode: str = "normal") -> tuple[bool, str]:
     def error(s: str) -> tuple[bool, str]:
         return False, f"Error: {s}"
 
@@ -106,20 +105,11 @@ def upload(
     user = None
 
     if mode == "normal":
-        if config.require_key:
-            k_ok, k_msg, user = check_key(key)
-
-            if not k_ok:
-                return error(k_msg)
-
         if config.require_captcha:
             c_hash = request.form.get("captcha-hash", "")
             c_text = request.form.get("captcha-text", "")
 
             check_catpcha = True
-
-            if is_admin:
-                check_catpcha = False
 
             if check_catpcha:
                 if config.captcha_cheat and (c_text == config.captcha_cheat):
@@ -187,13 +177,11 @@ def upload(
                         title = ""
 
                     if user and user.name:
-                        k = user.key
-                        uploader = user.name
+                        uploader = user.username
                     else:
-                        k = ""
                         uploader = ""
 
-                    database.add_file(name, cext, title, pfile.stem, uploader, k)
+                    database.add_file(name, cext, title, pfile.stem, uploader)
 
                 except Exception as e:
                     utils.error(e)
@@ -504,24 +492,3 @@ def edit_title(name: str, title: str) -> tuple[str, int]:
 
     database.edit_title(name, title)
     return jsonify({"status": "ok", "message": "Title updated"}), 200
-
-
-def can_edit(is_admin: bool, key: str, name: str) -> bool:
-    if not name:
-        return False
-
-    if is_admin:
-        return True
-
-    if not key:
-        return False
-
-    db_file = database.get_file(name)
-
-    if not db_file:
-        return False
-
-    if not db_file.key:
-        return False
-
-    return db_file.key == key

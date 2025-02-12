@@ -105,36 +105,43 @@ password = "goroballs"
 
 ## Users
 
-Users can upload directly from the command line.
+Users can upload without needing to fill the captcha.
 
-And it might be necesary to supply one in the web interface if `require_key` is enabled.
+Their files are signed using their `name`.
 
-Their files can be signed if they have a `name` property.
+They can edit and delete their own files.
 
-Each user looks likes this:
+Each user looks like this:
 
 ```toml
 [[users]]
-key = "wingwalker"
+username = "wingwalker"
+password = "deluxemic381"
 name = "The Upsetter"
+admin = true
+key = "diploma395aVatraaa2034"
 limit = 20
 max = 20
 list = true
 ```
 
-`key` is a string which should be kept secret, it's what is used to authenticate.
+`username` is the main id of the user, it can't change.
+
+`password` password used to authenticate.
 
 `name` is the public name to be displayed in posts.
 
 If `name` is empty, no name will be displayed.
 
-`max` is the max file size for that key.
+`admin` defines if a user has admin rights or not.
+
+`key` is used in upload scripts. It should be long and secret.
+
+`max` is the max file size permitted to that user.
 
 If `max` is set to 0 it will use the default max file size config.
 
-If `list` is true, the user can access the list if they use their key.
-
-For example: `site.com/list?key=secretUserKey`
+If `list` is true the user can view the file list page.
 
 ---
 
