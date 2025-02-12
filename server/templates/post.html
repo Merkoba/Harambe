@@ -71,5 +71,11 @@
         <a href="/{{file_path}}/{{file.name}}"><img id="image" src="/{{file_path}}/{{file.name}}"></a>
     </div>
     {% endif %}
+
+    {% if file.embed_video or file.embed_audio %}
+    <div>
+        <video id="video" src="/{{file_path}}/{{file.name}}" controls></video>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

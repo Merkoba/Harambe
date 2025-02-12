@@ -191,6 +191,12 @@ class Config:
         # Max size to consider image embeds
         self.embed_image_max: int = 5_000_000
 
+        # Max size to consider video embeds
+        self.embed_video_max: int = 5_000_000
+
+        # Max size to consider audio embeds
+        self.embed_audio_max: int = 5_000_000
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -273,6 +279,9 @@ class Config:
             set_value(c, "allow_titles")
             set_value(c, "web_uploads_enabled")
             set_value(c, "api_uploads_enabled")
+            set_value(c, "embed_image_max")
+            set_value(c, "embed_video_max")
+            set_value(c, "embed_audio_max")
 
             # Users
 

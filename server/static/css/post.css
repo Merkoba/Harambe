@@ -61,6 +61,13 @@ hr {
 }
 
 #image {
-    max-width: 80%;
+    max-width: 60%;
     height: auto;
+}
+
+#video {
+    min-width: 450px;
+    max-width: 60%;
+    height: auto;
+    background-color: var(--link_color);
 }
