@@ -282,10 +282,18 @@ def get_files(
     db_files = database.get_files()
 
     for file in all_files:
-        if query and (query not in file.name.lower()):
+        db_file = db_files.get(file.stem, None)
+
+        ok = (
+            not query
+            or query in file.name.lower()
+            or (db_file and query in db_file.original.lower())
+            or (db_file and query in db_file.title.lower())
+        )
+
+        if not ok:
             continue
 
-        db_file = db_files.get(file.stem, None)
         f = make_file(file, db_file, now)
         total_size += f.size
         files.append(f)

@@ -97,7 +97,9 @@ window.onload = () => {
         let ago = item.dataset.ago.toLowerCase()
         let date = item.dataset.date.toLowerCase()
         let size = item.dataset.size_str.toLowerCase()
-        let opts = [name, size]
+        let title = item.dataset.title.toLowerCase()
+        let original = item.dataset.original.toLowerCase()
+        let opts = [name, size, title, original]
 
         if (date_mode === `ago`) {
           opts.push(ago)
