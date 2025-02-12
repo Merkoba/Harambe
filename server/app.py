@@ -111,8 +111,8 @@ def index() -> Any:
         font_family=config.font_family,
         main_title=config.main_title,
         image_tooltip=config.image_tooltip,
-        max_comment_length=config.max_comment_length,
-        allow_comments=config.allow_comments,
+        max_title_length=config.max_title_length,
+        allow_titles=config.allow_titles,
         links=config.links,
     )
 

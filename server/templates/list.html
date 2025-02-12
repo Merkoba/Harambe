@@ -62,7 +62,7 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell">Name</div>
-            <div class="table_cell">Comment</div>
+            <div class="table_cell">Title</div>
             <div class="table_cell">Size</div>
             <div id="date" class="table_cell underline">Date</div>
             <div id="views" class="table_cell views">Views</div>
@@ -74,8 +74,8 @@
                 <a href="/post/{{file.name}}" target="_blank">{{file.name}}</a>
             </div>
 
-            <!-- Comment -->
-            <div class="table_cell" title="{{file.comment}}">{{file.comment[:20]|trim}}</div>
+            <!-- Title -->
+            <div class="table_cell" title="{{file.title}}">{{file.title[:20]|trim or file.original}}</div>
 
             <!-- Size -->
             <div class="table_cell">{{file.size_str}}</div>

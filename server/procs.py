@@ -32,7 +32,7 @@ class File:
     ago: str
     size: int
     size_str: str
-    comment: str = ""
+    title: str = ""
     views: int = 0
     uploader: str = ""
 
@@ -98,9 +98,9 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
     def error(s: str) -> tuple[bool, str]:
         return False, f"Error: {s}"
 
-    comment = request.form.get("comment", "")
+    title = request.form.get("title", "")
 
-    if len(comment) > config.max_comment_length:
+    if len(title) > config.max_title_length:
         return error("Comment is too long")
 
     key = request.form.get("key", "")
@@ -172,17 +172,17 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                 try:
                     file.save(path)
 
-                    if config.allow_comments:
-                        comment = utils.clean_comment(comment)
+                    if config.allow_titles:
+                        title = utils.clean_title(title)
                     else:
-                        comment = ""
+                        title = ""
 
                     if user and user.name:
                         uploader = user.name
                     else:
                         uploader = ""
 
-                    database.add_file(name, cext, comment, pfile.stem, uploader)
+                    database.add_file(name, cext, title, pfile.stem, uploader)
 
                 except Exception as e:
                     utils.error(e)
@@ -217,12 +217,12 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
     size_str = utils.get_size(size)
 
     if db_file:
-        comment = db_file.comment
+        title = db_file.title
         views = db_file.views
         original = db_file.original
         uploader = db_file.uploader
     else:
-        comment = ""
+        title = ""
         views = 0
         original = ""
         uploader = ""
@@ -246,7 +246,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         ago,
         size,
         size_str,
-        comment,
+        title,
         views,
         uploader,
     )
@@ -296,10 +296,10 @@ def get_files(
         files.sort(key=lambda x: x.views, reverse=True)
     elif sort == "views_desc":
         files.sort(key=lambda x: x.views, reverse=False)
-    elif sort == "comment":
-        files.sort(key=lambda x: x.comment, reverse=True)
-    elif sort == "comment_desc":
-        files.sort(key=lambda x: x.comment, reverse=False)
+    elif sort == "title":
+        files.sort(key=lambda x: x.title, reverse=True)
+    elif sort == "title_desc":
+        files.sort(key=lambda x: x.title, reverse=False)
     elif sort == "name":
         files.sort(key=lambda x: x.name, reverse=True)
     elif sort == "name_desc":

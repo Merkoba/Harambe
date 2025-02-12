@@ -149,12 +149,12 @@ window.onload = () => {
     })
   }
 
-  let comment = document.querySelector(`#comment`)
+  let title = document.querySelector(`#title`)
 
-  if (comment) {
-    comment.addEventListener(`click`, () => {
+  if (title) {
+    title.addEventListener(`click`, () => {
       if (vars.mode === `admin`) {
-        sort_comment()
+        sort_title()
       }
     })
   }
@@ -505,22 +505,22 @@ function sort_views() {
   window.location = `/admin?sort=views`
 }
 
-function sort_comment() {
+function sort_title() {
   let url = new URL(window.location.href)
   let sort = url.searchParams.get(`sort`)
 
   if (sort) {
-    if (sort === `comment`) {
-      window.location = `/admin?sort=comment_desc`
+    if (sort === `title`) {
+      window.location = `/admin?sort=title_desc`
       return
     }
-    else if (sort === `comment_desc`) {
+    else if (sort === `title_desc`) {
       window.location = `/admin`
       return
     }
   }
 
-  window.location = `/admin?sort=comment`
+  window.location = `/admin?sort=title`
 }
 
 function sort_name() {

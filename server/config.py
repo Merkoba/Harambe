@@ -183,11 +183,11 @@ class Config:
         # For example 'file' in site.com/file/abc123.jpg
         self.file_path: str = "file"
 
-        # Maximum length allowed for comments
-        self.max_comment_length: int = 2000
+        # Maximum length allowed for titles
+        self.max_title_length: int = 2000
 
-        # Allow comments on file uploads
-        self.allow_comments: bool = True
+        # Allow titles on file uploads
+        self.allow_titles: bool = True
 
         # Enable uploads through the web interface
         self.web_uploads_enabled: bool = True
@@ -266,7 +266,7 @@ class Config:
             set_value(c, "main_title")
             set_value(c, "image_tooltip")
             set_value(c, "file_path")
-            set_value(c, "allow_comments")
+            set_value(c, "allow_titles")
             set_value(c, "web_uploads_enabled")
             set_value(c, "api_uploads_enabled")
 

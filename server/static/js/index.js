@@ -90,10 +90,10 @@ function validate() {
     return false
   }
 
-  let comment = document.querySelector(`#comment`)
+  let title = document.querySelector(`#title`)
 
-  if (comment) {
-    if (comment.value.length > vars.max_comment_length) {
+  if (title) {
+    if (title.value.length > vars.max_title_length) {
       return false
     }
   }
@@ -103,10 +103,10 @@ function validate() {
 }
 
 function reflect_file() {
-  let comment = document.querySelector(`#comment`)
+  let title = document.querySelector(`#title`)
 
-  if (comment) {
-    comment.focus()
+  if (title) {
+    title.focus()
   }
 
   let image = document.querySelector(`#image`)

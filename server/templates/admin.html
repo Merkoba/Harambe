@@ -58,7 +58,7 @@
     <div class="table">
         <div class="table_row table_header">
             <div id="name" class="table_cell underline">Name</div>
-            <div id="comment" class="table_cell underline">Comment</div>
+            <div id="title" class="table_cell underline">Title</div>
             <div id="size" class="table_cell underline">Size</div>
             <div id="date" class="table_cell underline">Date</div>
             <div id="views" class="table_cell views underline">Views</div>
@@ -73,11 +73,11 @@
 
             <!-- Name -->
             <div class="table_cell">
-                <a href="/post/{{file.name}}" target="_blank">{{file.name}}</a>
+                <a href="/post/{{file.name}}" target="_blank" title="{{file.name}}">{{file.original[:20]|trim}}</a>
             </div>
 
-            <!-- Comment -->
-            <div class="table_cell" title="{{file.comment}}">{{file.comment[:20]|trim}}</div>
+            <!-- Title -->
+            <div class="table_cell" title="{{file.title}}">{{file.title[:20]|trim}}</div>
 
             <!-- Size -->
             <div class="table_cell">{{file.size_str}}</div>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-<title>{{file.comment or file.original or file.name or 'Post'}}</title>
+<title>{{file.title or file.original or file.name or 'Post'}}</title>
 
 <style>
     :root {
@@ -26,8 +26,8 @@
 
 {% block body %}
 <div id="main">
-    {% if file.comment or file.original %}
-    <div id="comment">{{file.comment or file.original}}</div><hr>
+    {% if file.title or file.original %}
+    <div id="title">{{file.title or file.original}}</div><hr>
     {% endif %}
 
     <div>

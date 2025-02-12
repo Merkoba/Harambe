@@ -19,7 +19,7 @@
 <script>
     const vars = {}
     vars.max_size = {{max_size}}
-    vars.max_comment_length = {{max_comment_length}}
+    vars.max_title_length = {{max_title_length}}
     vars.image_name = `{{image_name}}`
 </script>
 
@@ -49,8 +49,8 @@
             </div>
         </div>
 
-        {% if allow_comments %}
-        <input id="comment" type="text" name="comment" placeholder="Enter a comment (Optional)">
+        {% if allow_titles %}
+        <input id="title" type="text" name="title" placeholder="Enter a Title (Optional)">
         {% endif %}
 
         {% if captcha %}
@@ -61,7 +61,7 @@
 
         {% if require_key %}
         <div id="bottom">
-            <input id="key" type="text" name="key" placeholder="Enter the key" required>
+            <input id="key" type="text" name="key" placeholder="Enter your Key" required>
             <button type="submit" name="submit">Upload</button>
         </div>
         {% else %}

@@ -44,13 +44,13 @@ if [ -z "$KEY" ]; then
   exit 1
 fi
 
-# Prompt to get the comment
-comment=$(zenity --entry --title="Harambe Upload" --text="Enter a comment:")
+# Prompt to get the title
+title=$(zenity --entry --title="Harambe Upload" --text="Enter a title:")
 
 # Make the POST request and capture the response
 RESPONSE=$(curl -s -X POST "$URL/upload" \
     -F "file=@${FILE_PATH}" \
-    -F "comment=${comment}" \
+    -F "title=${title}" \
     -F "key=${KEY}")
 
 # Check if the response starts with "file/"

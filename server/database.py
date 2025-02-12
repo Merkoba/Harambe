@@ -15,7 +15,7 @@ class File:
     name: str
     ext: str
     date: int
-    comment: str
+    title: str
     views: int
     original: str
     uploader: str
@@ -28,7 +28,7 @@ schema = {
     "name": "text primary key",
     "ext": "text",
     "date": "int",
-    "comment": "text",
+    "title": "text",
     "views": "int default 0",
     "original": "text",
     "uploader": "text",
@@ -71,14 +71,14 @@ def create_db() -> None:
     conn.close()
 
 
-def add_file(name: str, ext: str, comment: str, original: str, uploader: str) -> None:
+def add_file(name: str, ext: str, title: str, original: str, uploader: str) -> None:
     check_db()
     conn, c = get_conn()
     date = utils.now()
 
     c.execute(
-        "insert into files (name, ext, date, comment, views, original, uploader) values (?, ?, ?, ?, ?, ?, ?)",
-        (name, ext, date, comment, 0, original, uploader),
+        "insert into files (name, ext, date, title, views, original, uploader) values (?, ?, ?, ?, ?, ?, ?)",
+        (name, ext, date, title, 0, original, uploader),
     )
 
     conn.commit()
@@ -90,7 +90,7 @@ def make_file(row: dict[str, Any]) -> File:
         name=row["name"],
         ext=row["ext"],
         date=row["date"],
-        comment=row.get("comment", ""),
+        title=row.get("title", ""),
         views=row.get("views", 0),
         original=row.get("original", ""),
         uploader=row.get("uploader", ""),
