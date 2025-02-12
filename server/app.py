@@ -39,13 +39,23 @@ def logged_in() -> bool:
 
 
 def is_admin() -> bool:
-    return logged_in() and bool(session.get("admin"))
+    user = config.get_user(get_username())
+
+    if not user:
+        return False
+
+    return user.admin
 
 
 def login_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
         if not logged_in():
+            return redirect(url_for("login"))
+
+        user = config.get_user(get_username())
+
+        if not user:
             return redirect(url_for("login"))
 
         return f(*args, **kwargs)
@@ -56,7 +66,12 @@ def login_required(f: Any) -> Any:
 def admin_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
-        if not is_admin():
+        if not logged_in():
+            return redirect(url_for("login"))
+
+        user = config.get_user(get_username())
+
+        if (not user) or (not user.admin):
             return redirect(url_for("login"))
 
         return f(*args, **kwargs)
