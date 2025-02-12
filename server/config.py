@@ -177,7 +177,7 @@ class Config:
         self.main_title: str = "Harambe"
 
         # Tooltip message to show on the main image
-        self.image_tooltip: str = "Upload a file"
+        self.image_tooltip: str = ""
 
         # The first part of image urls
         # For example 'file' in site.com/file/abc123.jpg
