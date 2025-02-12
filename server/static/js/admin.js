@@ -116,10 +116,10 @@ window.onload = () => {
     })
   }
 
-  let age = document.querySelector(`#age`)
+  let date = document.querySelector(`#date`)
 
-  if (age) {
-    age.addEventListener(`click`, () => {
+  if (date) {
+    date.addEventListener(`click`, () => {
       if (vars.mode === `admin`) {
         sort_date()
       }
