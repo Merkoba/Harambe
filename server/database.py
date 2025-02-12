@@ -90,10 +90,10 @@ def make_file(row: dict[str, Any]) -> File:
         name=row["name"],
         ext=row["ext"],
         date=row["date"],
-        title=row.get("title", ""),
-        views=row.get("views", 0),
-        original=row.get("original", ""),
-        uploader=row.get("uploader", ""),
+        title=row.get("title") or "",
+        views=row.get("views") or 0,
+        original=row.get("original") or "",
+        uploader=row.get("uploader") or "",
     )
 
 

@@ -227,9 +227,6 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         original = ""
         uploader = ""
 
-    if not original:
-        print(original)
-
     if original:
         if file.suffix:
             original_full = f"{original}{file.suffix}"
