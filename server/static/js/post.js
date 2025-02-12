@@ -24,6 +24,7 @@ window.onload = function() {
 function timeago(date) {
   let level = 0
   let diff = Date.now() - date
+  let places = 1
   let result
 
   if (diff < MINUTE) {
@@ -31,7 +32,7 @@ function timeago(date) {
     level = 1
   }
   else if (diff < HOUR) {
-    let n = parseInt(diff / MINUTE)
+    let n = parseFloat((diff / MINUTE).toFixed(places))
 
     if (n === 1) {
       result = `${n} min ago`
@@ -43,7 +44,7 @@ function timeago(date) {
     level = 2
   }
   else if ((diff >= HOUR) && (diff < DAY)) {
-    let n = parseInt(diff / HOUR)
+    let n = parseFloat(diff / HOUR).toFixed(places)
 
     if (n === 1) {
       result = `${n} hr ago`
@@ -55,7 +56,7 @@ function timeago(date) {
     level = 3
   }
   else if ((diff >= DAY) && (diff < MONTH)) {
-    let n = parseInt(diff / DAY)
+    let n = parseFloat(diff / DAY).toFixed(places)
 
     if (n === 1) {
       result = `${n} day ago`
@@ -67,7 +68,7 @@ function timeago(date) {
     level = 4
   }
   else if ((diff >= MONTH) && (diff < YEAR)) {
-    let n = parseInt(diff / MONTH)
+    let n = parseFloat(diff / MONTH).toFixed(places)
 
     if (n === 1) {
       result = `${n} month ago`
@@ -79,7 +80,7 @@ function timeago(date) {
     level = 5
   }
   else if (diff >= YEAR) {
-    let n = parseInt(diff / YEAR)
+    let n = parseFloat(diff / YEAR).toFixed(places)
 
     if (n === 1) {
       result = `${n} year ago`

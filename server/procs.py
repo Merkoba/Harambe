@@ -28,7 +28,9 @@ class File:
     original: str
     original_full: str
     date: int
-    nice_date: str
+    date_1: str
+    date_2: str
+    date_3: str
     ago: str
     size: int
     size_str: str
@@ -212,7 +214,9 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         date = int(file.stat().st_mtime)
 
     size = int(file.stat().st_size)
-    nice_date = utils.nice_date(date)
+    date_1 = utils.nice_date(date, "date")
+    date_2 = utils.nice_date(date, "time")
+    date_3 = utils.nice_date(date)
     ago = utils.time_ago(date, now)
     size_str = utils.get_size(size)
 
@@ -242,7 +246,9 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         original,
         original_full,
         date,
-        nice_date,
+        date_1,
+        date_2,
+        date_3,
         ago,
         size,
         size_str,

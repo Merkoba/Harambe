@@ -101,8 +101,15 @@ def get_dtime(date: int) -> datetime:
     return datetime.fromtimestamp(date)
 
 
-def nice_date(date: int) -> str:
+def nice_date(date: int, mode: str = "full") -> str:
     dtime = get_dtime(date)
+
+    if mode == "date":
+        return dtime.strftime("%d %B %Y")
+
+    if mode == "time":
+        return dtime.strftime("%I:%M %p")
+
     return dtime.strftime("%d %B %Y | %I:%M %p")
 
 

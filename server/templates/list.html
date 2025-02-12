@@ -68,7 +68,7 @@
             <div id="views" class="table_cell views">Views</div>
         </div>
         {% for file in files %}
-        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.nice_date}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}">
+        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}">
             <!-- Name -->
             <div class="table_cell">
                 <a href="/post/{{file.name}}" target="_blank" title="{{file.original}}">{{file.name}}</a>
@@ -81,10 +81,10 @@
             <div class="table_cell">{{file.size_str}}</div>
 
             <!-- Date -->
-            <div class="table_cell date" title="{{file.nice_date}}">{{file.ago}}</div>
+            <div class="table_cell date" title="{{file.date_3}}">{{file.ago}}</div>
 
             <!-- Views -->
-            <div class="table_cell views" title="{{file.nice_date}}">{{file.views}}</div>
+            <div class="table_cell views" title="{{file.date_3}}">{{file.views}}</div>
         </div>
         {% endfor %}
     </div>

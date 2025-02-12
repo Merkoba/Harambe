@@ -65,7 +65,7 @@
             <div class="table_cell">Actions</div>
         </div>
         {% for file in files %}
-        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.nice_date}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}">
+        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox-cell">
                 <input class="select_checkbox" type="checkbox">
@@ -83,7 +83,7 @@
             <div class="table_cell">{{file.size_str}}</div>
 
             <!-- Date -->
-            <div class="table_cell date" title="{{file.nice_date}}">{{file.ago}}</div>
+            <div class="table_cell date" title="{{file.date_3}}">{{file.ago}}</div>
 
             <!-- Views -->
             <div class="table_cell views">{{file.views}}</div>
