@@ -22,6 +22,15 @@ class File:
 db_path = "database.sqlite3"
 
 
+schema = {
+    "name": "text primary key",
+    "ext": "text",
+    "date": "int",
+    "comment": "text",
+    "views": "int default 0",
+}
+
+
 def check_db() -> bool:
     path = Path(db_path)
 
@@ -50,13 +59,9 @@ def create_db() -> None:
     c = conn.cursor()
 
     c.execute(
-        """create table files (
-        name text primary key,
-        ext text,
-        date int,
-        comment text,
-        views int default 0
-    )"""
+        f"""create table files (
+            {schema}
+        )"""
     )
 
     conn.commit()
@@ -132,3 +137,21 @@ def increase_views(name: str) -> None:
     c.execute("update files set views = views + 1 where name = ?", (name,))
     conn.commit()
     conn.close()
+
+
+def fill_table() -> None:
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute("pragma table_info(files)")
+    columns = [info[1] for info in c.fetchall()]
+
+    for column, c_type in schema.items():
+        if column not in columns:
+            utils.log(f"Adding column: {column}")
+            c.execute(f"alter table files add column {column} {c_type}")
+
+    conn.commit()
+    conn.close()
+
+
+fill_table()
