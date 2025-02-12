@@ -72,18 +72,18 @@ def index() -> Any:
 
     if request.method == "POST":
         try:
-            ok, msg = procs.upload(request)
+            ok, ans = procs.upload(request)
 
             if not ok:
                 data = {
                     "mode": "error",
-                    "message": msg,
+                    "message": ans,
                 }
 
                 session["data"] = data
                 return redirect(url_for("message"))
 
-            return redirect(url_for("post", idstr=msg))
+            return redirect(url_for("post", name=ans))
 
         except Exception as e:
             utils.error(e)

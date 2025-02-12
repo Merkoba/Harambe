@@ -26,6 +26,7 @@ class File:
     ext: str
     full: str
     original: str
+    original_full: str
     date: int
     nice_date: str
     ago: str
@@ -181,7 +182,7 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                     else:
                         comment = ""
 
-                    database.add_file(name, cext, comment, fname)
+                    database.add_file(name, cext, comment, pfile.stem)
 
                 except Exception as e:
                     utils.error(e)
@@ -224,11 +225,18 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         views = 0
         original = ""
 
+    if original:
+        if file.suffix:
+            original_full = f"{original}{file.suffix}"
+        else:
+            original_full = original
+
     return File(
         file.stem,
         file.suffix,
         file.name,
         original,
+        original_full,
         date,
         nice_date,
         ago,

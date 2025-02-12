@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-<title>{{file.comment or file.original or 'Post'}}</title>
+<title>{{file.comment or file.original or file.name or 'Post'}}</title>
 
 <style>
     :root {
@@ -31,7 +31,7 @@
     {% endif %}
 
     <div>
-        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original}}">{{file.original or file.full}}</a><span class="sep">|</span>{{file.size_str}}
+        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original_full}}">{{file.original or file.full}}</a><span class="sep">|</span>{{file.size_str}}
     </div>
 
     <div>
