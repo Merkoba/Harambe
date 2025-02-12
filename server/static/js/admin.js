@@ -303,7 +303,7 @@ function delete_files() {
     let files = []
 
     for (let file of selected_files) {
-      files.push(file.dataset.name)
+      files.push(file.dataset.full)
     }
 
     delete_selected_files(files)
@@ -358,7 +358,7 @@ async function delete_selected_files(files) {
 
 function remove_files(files) {
   for (let file of files) {
-    let el = document.querySelector(`.item[data-name="${file}"]`)
+    let el = document.querySelector(`.item[data-full="${file}"]`)
 
     if (el) {
       el.remove()
@@ -565,7 +565,7 @@ async function edit_title(el) {
 
   if (response.ok) {
     el.dataset.title = title
-    el.querySelector(`.title`).innerText = title.substring(0, 20)
+    el.querySelector(`.title`).innerText = title.substring(0, 20).trim()
   }
   else {
     print_error(response.status)

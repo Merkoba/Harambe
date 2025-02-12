@@ -353,13 +353,7 @@ def delete_files(files: list[str]) -> tuple[str, int]:
         ), 400
 
     for file in files:
-        if file.startswith("."):
-            continue
-
-        try:
-            do_delete_file(file)
-        except Exception as e:
-            return jsonify({"status": "error", "message": str(e)}), 500
+        do_delete_file(file)
 
     return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
