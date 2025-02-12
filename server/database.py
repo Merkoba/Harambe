@@ -16,6 +16,7 @@ class File:
     ext: str
     date: int
     comment: str
+    views: int = 0
 
 
 db_path = "database.sqlite3"
@@ -53,7 +54,8 @@ def create_db() -> None:
         name text primary key,
         ext text,
         date int,
-        comment text
+        comment text,
+        views int default 0
     )"""
     )
 
@@ -67,8 +69,8 @@ def add_file(name: str, ext: str, comment: str) -> None:
     date = utils.now()
 
     c.execute(
-        "insert into files (name, ext, date, comment) values (?, ?, ?, ?)",
-        (name, ext, date, comment),
+        "insert into files (name, ext, date, comment, views) values (?, ?, ?, ?, ?)",
+        (name, ext, date, comment, 0),
     )
 
     conn.commit()
@@ -80,7 +82,8 @@ def make_file(row: dict[str, Any]) -> File:
         name=row["name"],
         ext=row["ext"],
         date=row["date"],
-        comment=row["comment"],
+        comment=row.get("comment", ""),
+        views=row.get("views", 0),
     )
 
 
@@ -117,5 +120,15 @@ def remove_file(name: str) -> None:
 
     conn, c = get_conn()
     c.execute("delete from files where name = ?", (name,))
+    conn.commit()
+    conn.close()
+
+
+def increase_views(name: str) -> None:
+    if not check_db():
+        return
+
+    conn, c = get_conn()
+    c.execute("update files set views = views + 1 where name = ?", (name,))
     conn.commit()
     conn.close()

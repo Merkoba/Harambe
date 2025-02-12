@@ -28,7 +28,8 @@ class File:
     ago: str
     size: int
     size_str: str
-    comment: str
+    comment: str = ""
+    views: int = 0
 
 
 class KeyData:
@@ -194,10 +195,21 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
 
     if db_file:
         comment = db_file.comment
+        views = db_file.views
     else:
         comment = ""
+        views = 0
 
-    return File(file.name, date, nice_date, ago, size, size_str, comment)
+    return File(
+        file.name,
+        date,
+        nice_date,
+        ago,
+        size,
+        size_str,
+        comment,
+        views,
+    )
 
 
 def get_files(
@@ -379,6 +391,10 @@ def get_file(name: str) -> File | None:
     for file in all_files:
         if file.stem == name:
             db_file = database.get_file(name)
+
+            if db_file:
+                database.increase_views(name)
+
             return make_file(file, db_file, utils.now())
 
     return None
