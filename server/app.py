@@ -271,8 +271,8 @@ def delete_all() -> Any:
 @login_required
 def delete_file() -> Any:
     data = request.get_json()
-    name = data.get("name", None)
-    return procs.delete_file(name, get_username())
+    file = data.get("file", None)
+    return procs.delete_file(file, get_username(), is_admin())
 
 
 @app.route("/edit_title", methods=["POST"])  # type: ignore
@@ -282,7 +282,7 @@ def edit_title() -> Any:
     data = request.get_json()
     name = data.get("name", None)
     title = data.get("title", None)
-    return procs.edit_title(name, title, get_username())
+    return procs.edit_title(name, title, get_username(), is_admin())
 
 
 # AUTH

@@ -149,7 +149,7 @@ async function delete_file() {
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({name: vars.name}),
+    body: JSON.stringify({file: vars.full}),
   })
 
   if (response.ok) {

@@ -18,6 +18,7 @@ class File:
     title: str
     views: int
     original: str
+    username: str
     uploader: str
 
     def full(self) -> str:
@@ -37,6 +38,7 @@ schema = {
     "title": "text",
     "views": "int default 0",
     "original": "text",
+    "username": "text",
     "uploader": "text",
 }
 
@@ -77,14 +79,16 @@ def create_db() -> None:
     conn.close()
 
 
-def add_file(name: str, ext: str, title: str, original: str, uploader: str) -> None:
+def add_file(
+    name: str, ext: str, title: str, original: str, username: str, uploader: str
+) -> None:
     check_db()
     conn, c = get_conn()
     date = utils.now()
 
     c.execute(
-        "insert into files (name, ext, date, title, views, original, uploader) values (?, ?, ?, ?, ?, ?, ?)",
-        (name, ext, date, title, 0, original, uploader),
+        "insert into files (name, ext, date, title, views, original, username, uploader) values (?, ?, ?, ?, ?, ?, ?, ?)",
+        (name, ext, date, title, 0, original, username, uploader),
     )
 
     conn.commit()
@@ -99,6 +103,7 @@ def make_file(row: dict[str, Any]) -> File:
         title=row.get("title") or "",
         views=row.get("views") or 0,
         original=row.get("original") or "",
+        username=row.get("username") or "",
         uploader=row.get("uploader") or "",
     )
 

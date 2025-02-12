@@ -36,6 +36,7 @@ class File:
     size_str: str
     title: str = ""
     views: int = 0
+    username: str = ""
     uploader: str = ""
 
 
@@ -181,8 +182,13 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                     else:
                         title = ""
 
-                    database.add_file(name, cext, title, pfile.stem, username)
+                    if user:
+                        uploader = user.name
+                    else:
+                        uploader = ""
 
+                    database.add_file(name, cext, title, pfile.stem, username, uploader)
+                    # ^ ^ ^ ^ ^ ^ ^ ^ Save to database
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")
@@ -221,11 +227,13 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         title = db_file.title
         views = db_file.views
         original = db_file.original
+        username = db_file.username
         uploader = db_file.uploader
     else:
         title = ""
         views = 0
         original = ""
+        username = ""
         uploader = ""
 
     if original:
@@ -251,6 +259,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         size_str,
         title,
         views,
+        username,
         uploader,
     )
 
@@ -348,16 +357,25 @@ def delete_files(files: list[str]) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
 
-def delete_file(name: str, username: str) -> tuple[str, int]:
-    db_file = database.get_file(name)
+def delete_file(file: str, username: str, is_admin: bool) -> tuple[str, int]:
+    if not file:
+        return jsonify(
+            {"status": "error", "message": "File name was not provided"}
+        ), 400
 
-    if not db_file:
-        return jsonify({"status": "error", "message": "File not found"}), 500
+    if not is_admin:
+        name = Path(file).stem
+        db_file = database.get_file(name)
 
-    if db_file.uploader != username:
-        return jsonify({"status": "error", "message": "You are not the uploader"}), 500
+        if not db_file:
+            return jsonify({"status": "error", "message": "File not found"}), 500
 
-    do_delete_file(db_file.full())
+        if db_file.username != username:
+            return jsonify(
+                {"status": "error", "message": "You are not the uploader"}
+            ), 500
+
+    do_delete_file(file)
     return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
 
@@ -477,20 +495,23 @@ def increase_view(name: str) -> None:
     database.increase_views(Path(name).stem)
 
 
-def edit_title(name: str, title: str, username: str) -> tuple[str, int]:
-    db_file = database.get_file(name)
+def edit_title(name: str, title: str, username: str, is_admin: bool) -> tuple[str, int]:
+    if not is_admin:
+        db_file = database.get_file(name)
 
-    if not db_file:
-        return jsonify({"status": "error", "message": "File not found"}), 500
+        if not db_file:
+            return jsonify({"status": "error", "message": "File not found"}), 500
 
-    if db_file.uploader != username:
-        return jsonify({"status": "error", "message": "You are not the uploader"}), 500
+        if db_file.username != username:
+            return jsonify(
+                {"status": "error", "message": "You are not the uploader"}
+            ), 500
 
-    if (not name) or (not title):
-        return jsonify({"status": "error", "message": "Missing values"}), 500
+        if (not name) or (not title):
+            return jsonify({"status": "error", "message": "Missing values"}), 500
 
-    if len(title) > config.max_title_length:
-        return jsonify({"status": "error", "message": "Title is too long"}), 500
+        if len(title) > config.max_title_length:
+            return jsonify({"status": "error", "message": "Title is too long"}), 500
 
     database.edit_title(name, title)
     return jsonify({"status": "ok", "message": "Title updated"}), 200
