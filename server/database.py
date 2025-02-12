@@ -71,15 +71,13 @@ def create_db() -> None:
     conn.close()
 
 
-def add_file(
-    name: str, ext: str, title: str, original: str, uploader: str
-) -> None:
+def add_file(name: str, ext: str, title: str, original: str, uploader: str) -> None:
     check_db()
     conn, c = get_conn()
     date = utils.now()
 
     c.execute(
-        "insert into files (name, ext, date, title, views, original, uploader, key) values (?, ?, ?, ?, ?, ?, ?)",
+        "insert into files (name, ext, date, title, views, original, uploader) values (?, ?, ?, ?, ?, ?, ?)",
         (name, ext, date, title, 0, original, uploader),
     )
 

@@ -32,7 +32,9 @@ window.onload = function() {
 
   if (del) {
     del.addEventListener(`click`, () => {
-      delete_file()
+      if (confirm(`Delete this file?`)) {
+        delete_file()
+      }
     })
   }
 }
@@ -115,6 +117,10 @@ async function edit_title() {
   let title = prompt(`New Title`, vars.title).trim()
 
   if (!title) {
+    return
+  }
+
+  if (title === vars.title) {
     return
   }
 

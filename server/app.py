@@ -31,7 +31,7 @@ app = simple_captcha.init_app(app)
 
 
 def get_username() -> str:
-    return session.get("username", "")
+    return str(session.get("username", ""))
 
 
 def logged_in() -> bool:
@@ -90,10 +90,11 @@ def index() -> Any:
         return render_template("fallback.html")
 
     is_user = logged_in()
+    username = get_username()
 
     if request.method == "POST":
         try:
-            ok, ans = procs.upload(request)
+            ok, ans = procs.upload(request, username=username)
 
             if not ok:
                 data = {
@@ -281,7 +282,7 @@ def edit_title() -> Any:
     data = request.get_json()
     name = data.get("name", None)
     title = data.get("title", None)
-    return procs.edit_title(name, title)
+    return procs.edit_title(name, title, get_username())
 
 
 # AUTH

@@ -91,8 +91,7 @@ def check_key_max(user: User, size: int) -> bool:
     return True
 
 
-def upload(
-    request: Any, mode: str = "normal") -> tuple[bool, str]:
+def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool, str]:
     def error(s: str) -> tuple[bool, str]:
         return False, f"Error: {s}"
 
@@ -110,6 +109,9 @@ def upload(
             c_text = request.form.get("captcha-text", "")
 
             check_catpcha = True
+
+            if username:
+                check_catpcha = False
 
             if check_catpcha:
                 if config.captcha_cheat and (c_text == config.captcha_cheat):
@@ -176,12 +178,7 @@ def upload(
                     else:
                         title = ""
 
-                    if user and user.name:
-                        uploader = user.username
-                    else:
-                        uploader = ""
-
-                    database.add_file(name, cext, title, pfile.stem, uploader)
+                    database.add_file(name, cext, title, pfile.stem, username)
 
                 except Exception as e:
                     utils.error(e)
@@ -483,7 +480,15 @@ def user_can_list(key: str) -> bool:
     return user.list
 
 
-def edit_title(name: str, title: str) -> tuple[str, int]:
+def edit_title(name: str, title: str, username: str) -> tuple[str, int]:
+    db_file = database.get_file(name)
+
+    if not db_file:
+        return jsonify({"status": "error", "message": "File not found"}), 500
+
+    if db_file.uploader != username:
+        return jsonify({"status": "error", "message": "You are not the uploader"}), 500
+
     if (not name) or (not title):
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
