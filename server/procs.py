@@ -230,6 +230,8 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
             original_full = f"{original}{file.suffix}"
         else:
             original_full = original
+    else:
+        original_full = ""
 
     return File(
         file.stem,
