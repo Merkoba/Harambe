@@ -6,7 +6,7 @@ body, html {
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 64px;
     padding: 0;
 }
 
@@ -44,4 +44,9 @@ hr {
 
 .button:hover, a:hover {
     filter: brightness(1.5);
+}
+
+#image {
+    max-width: 300px;
+    height: auto;
 }

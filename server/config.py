@@ -188,6 +188,9 @@ class Config:
         # Enable uploads through the API
         self.api_uploads_enabled: bool = True
 
+        # Max size to consider image embeds
+        self.embed_image_max: int = 2_000_000
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:

@@ -140,3 +140,7 @@ def valid_file_name(name: str) -> bool:
 def clean_title(title: str) -> str:
     title = " ".join(title.split())
     return title[: config.max_title_length].strip()
+
+
+def is_image(ext: str) -> bool:
+    return ext.lower() in ["jpg", "jpeg", "png", "apng", "gif", "webp"]

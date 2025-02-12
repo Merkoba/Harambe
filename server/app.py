@@ -260,7 +260,7 @@ def delete_files() -> Any:
 
 
 @app.route("/delete_all_files", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit(3))  # type: ignore
+@limiter.limit(rate_limit(2))  # type: ignore
 @admin_required
 def delete_all() -> Any:
     return procs.delete_all()

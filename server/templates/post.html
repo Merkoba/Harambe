@@ -61,5 +61,9 @@
         <span id="edit" class="button">Edit</span><span class="sep">|</span><span id="delete" class="button">Delete</span>
     </div>
     {% endif %}
+
+    {% if file.embed_image %}
+    <img id="image" src="/{{file_path}}/{{file.name}}">
+    {% endif %}
 </div>
 {% endblock %}

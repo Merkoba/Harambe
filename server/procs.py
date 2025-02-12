@@ -34,10 +34,11 @@ class File:
     ago: str
     size: int
     size_str: str
-    title: str = ""
-    views: int = 0
-    username: str = ""
-    uploader: str = ""
+    title: str
+    views: int
+    username: str
+    uploader: str
+    embed_image: bool
 
 
 class UserData:
@@ -188,7 +189,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                         uploader = ""
 
                     database.add_file(name, cext, title, pfile.stem, username, uploader)
-                    # ^ ^ ^ ^ ^ ^ ^ ^ Save to database
+                    # ^ ^ ^ ^ ^ ^ ^ ^ save to database
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")
@@ -229,12 +230,18 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         original = db_file.original
         username = db_file.username
         uploader = db_file.uploader
+        ext = db_file.ext
     else:
         title = ""
         views = 0
         original = ""
         username = ""
         uploader = ""
+
+        if file.suffix:
+            ext = file.suffix[1:]
+        else:
+            ext = ""
 
     if original:
         if file.suffix:
@@ -244,9 +251,11 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
     else:
         original_full = ""
 
+    embed_image = utils.is_image(ext) and (size <= config.embed_image_max)
+
     return File(
         file.stem,
-        file.suffix,
+        ext,
         file.name,
         original,
         original_full,
@@ -261,6 +270,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         views,
         username,
         uploader,
+        embed_image,
     )
 
 
