@@ -299,10 +299,7 @@ def show_list(page: int = 1) -> Any:
             return redirect(url_for("index"))
 
         if config.list_private:
-            if not key:
-                return redirect(url_for("index"))
-
-            if not procs.user_can_list(key):
+            if (not key) or (not procs.user_can_list(key)):
                 return redirect(url_for("index"))
 
     page_size = request.args.get("page_size", config.list_page_size)
