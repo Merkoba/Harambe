@@ -65,7 +65,9 @@ class Config:
 
         # List of links to show in the index page
         # Dict object: name, url, target (optional)
-        self.links: list[Link] = [Link("about", "/static/assets/about.html")]
+        self.links: list[Link] = [
+            Link("about", "/static/assets/about.html", "_blank"),
+        ]
 
         # Secret key for security
         # Make it a long random string
