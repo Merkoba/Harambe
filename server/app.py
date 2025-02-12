@@ -186,6 +186,7 @@ def post(idstr: str) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(filename: str) -> Any:
     fd = utils.files_dir()
+    procs.increase_view(filename)
     return send_from_directory(fd, filename, max_age=config.max_age)
 
 

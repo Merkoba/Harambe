@@ -410,3 +410,7 @@ def get_file(name: str) -> File | None:
             return make_file(file, db_file, utils.now())
 
     return None
+
+
+def increase_view(name: str) -> None:
+    database.increase_views(Path(name).stem)
