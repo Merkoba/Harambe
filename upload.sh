@@ -8,7 +8,6 @@
 
 # URL="localhost:4040"
 URL="https://someurl.com"
-
 KEY="somekey"
 
 # -------------------------------
