@@ -171,7 +171,7 @@ class Config:
         self.allow_delete: bool = True
 
         # The title of the main index page
-        self.main_title: str = "Upload"
+        self.main_title: str = "Harambe"
 
         # Tooltip message to show on the main image
         self.image_tooltip: str = "Upload a file"
