@@ -69,14 +69,6 @@ function validate() {
     }
   }
 
-  let key = document.querySelector(`#key`)
-
-  if (key) {
-    if (!key.value.trim()) {
-      return false
-    }
-  }
-
   let file = document.querySelector(`#file`)
   let file_length = file.files.length
 

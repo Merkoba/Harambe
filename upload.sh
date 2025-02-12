@@ -8,7 +8,8 @@
 
 # URL="localhost:4040"
 URL="https://someurl.com"
-KEY="somekey"
+USERNAME="someusername"
+PASSWORD="somepassword"
 
 # -------------------------------
 
@@ -39,8 +40,13 @@ if [ -z "$FILE_PATH" ]; then
   exit 1
 fi
 
-if [ -z "$KEY" ]; then
-  echo "Error: KEY is not set"
+if [ -z "$USERNAME" ]; then
+  echo "Error: USERNAME is not set"
+  exit 1
+fi
+
+if [ -z "$PASSWORD" ]; then
+  echo "Error: PASSWORD is not set"
   exit 1
 fi
 
@@ -51,7 +57,8 @@ title=$(zenity --entry --title="Harambe Upload" --text="Enter a title:")
 RESPONSE=$(curl -s -X POST "$URL/upload" \
     -F "file=@${FILE_PATH}" \
     -F "title=${title}" \
-    -F "key=${KEY}")
+    -F "username=${USERNAME}" \
+    -F "password=${PASSWORD}")
 
 # Check if the response starts with "file/"
 if [[ "$RESPONSE" == post/* ]]; then

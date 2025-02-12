@@ -64,28 +64,17 @@ class UserData:
 user_data: dict[str, UserData] = {}
 
 
-def check_key(key: str) -> tuple[bool, str, User | None]:
-    if not key:
-        return False, "Key is required", None
+def check_user_limit(user: User) -> tuple[bool, str]:
+    if user.username not in user_data:
+        user_data[user.username] = UserData(user.limit)
 
-    if len(key) > 100:
-        return False, "Key is too long", None
+    if user_data[user.username].blocked():
+        return False, "Rate limit exceeded"
 
-    user = config.get_user(key)
-
-    if not user:
-        return False, "Invalid key", None
-
-    if key not in user_data:
-        user_data[key] = UserData(user.limit)
-
-    if user_data[key].blocked():
-        return False, "Rate limit exceeded", user
-
-    return True, "ok", user
+    return True, "ok"
 
 
-def check_key_max(user: User, size: int) -> bool:
+def check_user_max(user: User, size: int) -> bool:
     megas = int(size / 1000 / 1000)
 
     if user.max > 0:
@@ -124,11 +113,24 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                 if not app.simple_captcha.verify(c_text, c_hash):
                     return error("Failed captcha")
     elif mode == "cli":
-        key = request.form.get("key", "")
-        k_ok, k_msg, user = check_key(key)
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
 
-        if not k_ok:
-            return error(k_msg)
+        if (not username) or (not password):
+            return error("Missing username or password")
+
+        if (len(username) > 255) or (len(password) > 255):
+            return error("Invalid username or password")
+
+        user = config.check_user(username, password)
+
+        if not user:
+            return error("Invalid username or password")
+
+        u_ok, u_msg = check_user_limit(user)
+
+        if not u_ok:
+            return error(u_msg)
 
     if (not user) and username:
         user = config.get_user(username)
@@ -151,7 +153,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
             toobig = "File is too big"
 
             if user and user.max > 0:
-                if not check_key_max(user, length):
+                if not check_user_max(user, length):
                     return error(toobig)
             elif length > config.get_max_file_size():
                 return error(toobig)

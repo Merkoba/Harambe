@@ -30,7 +30,6 @@ class User:
     password: str
     name: str
     admin: bool
-    key: str
     limit: int
     max: int
     list: bool
@@ -150,7 +149,7 @@ class Config:
         # Enable a public page to list files
         self.list_enabled: bool = True
 
-        # List is private and requires a password or key
+        # List is private and requires being logged in
         self.list_private: bool = True
 
         # Default page size for the list page
@@ -159,9 +158,6 @@ class Config:
         # Maximum of files allowed to be shown in the list page
         # If 0 it will allow showing all files
         self.list_max_files: int = 100
-
-        # Allow users to view the list by using their key
-        self.users_can_list: bool = False
 
         # Allow admins to delete files using the admin page or endpoints
         self.allow_delete: bool = True
@@ -271,7 +267,6 @@ class Config:
             set_value(c, "list_private")
             set_value(c, "list_page_size")
             set_value(c, "list_max_files")
-            set_value(c, "users_can_list")
             set_value(c, "allow_delete")
             set_value(c, "main_title")
             set_value(c, "image_tooltip")
@@ -294,7 +289,6 @@ class Config:
                         user.get("password", ""),
                         user.get("name", ""),
                         user.get("admin", False),
-                        user.get("key", ""),
                         user.get("limit", 12),
                         user.get("max", 0),
                         user.get("list", False),

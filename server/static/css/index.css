@@ -154,13 +154,6 @@ a:hover {
     box-sizing: border-box;
 }
 
-#key {
-    font-size: 1rem;
-    box-sizing: border-box;
-    flex-grow: 1;
-    flex-shrink: 0;
-}
-
 #info {
     display: flex;
     flex-direction: row;
