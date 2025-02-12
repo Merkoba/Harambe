@@ -187,11 +187,13 @@ def upload(
                         title = ""
 
                     if user and user.name:
+                        k = user.key
                         uploader = user.name
                     else:
+                        k = ""
                         uploader = ""
 
-                    database.add_file(name, cext, title, pfile.stem, uploader)
+                    database.add_file(name, cext, title, pfile.stem, uploader, k)
 
                 except Exception as e:
                     utils.error(e)
@@ -358,6 +360,16 @@ def delete_files(files: list[str]) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
 
+def delete_file(file: str) -> tuple[str, int]:
+    if not file:
+        return jsonify(
+            {"status": "error", "message": "File name was not provided"}
+        ), 400
+
+    do_delete_file(file)
+    return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
+
+
 # Be extra careful with this function
 def do_delete_file(name: str) -> None:
     if not config.allow_delete:
@@ -492,3 +504,24 @@ def edit_title(name: str, title: str) -> tuple[str, int]:
 
     database.edit_title(name, title)
     return jsonify({"status": "ok", "message": "Title updated"}), 200
+
+
+def can_edit(is_admin: bool, key: str, name: str) -> bool:
+    if not name:
+        return False
+
+    if is_admin:
+        return True
+
+    if not key:
+        return False
+
+    db_file = database.get_file(name)
+
+    if not db_file:
+        return False
+
+    if not db_file.key:
+        return False
+
+    return db_file.key == key

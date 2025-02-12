@@ -188,6 +188,7 @@ def post(name: str) -> Any:
         text_color=config.text_color,
         link_color=config.link_color,
         font_family=config.font_family,
+        is_admin=logged_in(),
     )
 
 
@@ -239,6 +240,21 @@ def delete_files() -> Any:
     return procs.delete_files(files)
 
 
+@app.route("/delete_file", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+def delete_file() -> Any:
+    data = request.get_json()
+    key = data.get("key", None)
+    name = data.get("name", None)
+    file = data.get("file", None)
+    logged = logged_in()
+
+    if not procs.can_edit(logged, key, name):
+        return {}, 400
+
+    return procs.delete_file(file)
+
+
 @app.route("/delete_all_files", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
 @login_required
@@ -248,10 +264,14 @@ def delete_all() -> Any:
 
 @app.route("/edit_title", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@login_required
 def edit_title() -> Any:
     data = request.get_json()
+    key = data.get("key", None)
     name = data.get("name", None)
+
+    if not procs.can_edit(logged_in(), key, name):
+        return {}, 400
+
     title = data.get("title", None)
     return procs.edit_title(name, title)
 

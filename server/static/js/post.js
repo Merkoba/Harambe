@@ -19,6 +19,22 @@ window.onload = function() {
       }
     }, 1000 * delay)
   }
+
+  let edit = document.querySelector(`#edit`)
+
+  if (edit) {
+    edit.addEventListener(`click`, () => {
+      edit_title()
+    })
+  }
+
+  let del = document.querySelector(`#delete`)
+
+  if (del) {
+    del.addEventListener(`click`, () => {
+      delete_file()
+    })
+  }
 }
 
 function timeago(date) {
@@ -93,4 +109,72 @@ function timeago(date) {
   }
 
   return [result, level]
+}
+
+async function edit_title() {
+  let title = prompt(`New Title`, vars.title).trim()
+
+  if (!title) {
+    return
+  }
+
+  let key
+
+  if (!vars.is_admin) {
+    key = prompt(`Enter your key`).trim()
+
+    if (!key) {
+      return
+    }
+  }
+
+  let name = vars.name
+
+  let response = await fetch(`/edit_title`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({name, title, key}),
+  })
+
+  if (response.ok) {
+    vars.title = title
+    document.querySelector(`#title`).textContent = title
+  }
+  else {
+    print_error(response.status)
+  }
+}
+
+async function delete_file() {
+  let key
+
+  if (!vars.is_admin) {
+    key = prompt(`Enter your key`).trim()
+
+    if (!key) {
+      return
+    }
+  }
+
+  let response = await fetch(`/delete_file`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({name: vars.name, file: vars.full, key}),
+  })
+
+  if (response.ok) {
+    document.querySelector(`#title`).textContent = `DELETED 👻`
+  }
+  else {
+    print_error(response.status)
+  }
+}
+
+function print_error(msg) {
+  // eslint-disable-next-line no-console
+  console.log(`Error: ${msg}`)
 }

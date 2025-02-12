@@ -35,14 +35,13 @@ hr {
     padding-right: 0.35rem;
 }
 
-.button {
-    user-select: none;
-}
-
-a:link, a:visited {
+.button, a:link, a:visited {
     color: var(--link_color);
+    user-select: none;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-a:hover {
+.button:hover, a:hover {
     filter: brightness(1.5);
 }
