@@ -227,7 +227,7 @@ def get_files(
         if query and (query not in file.name.lower()):
             continue
 
-        db_file = db_files[file.stem]
+        db_file = db_files.get(file.stem, None)
         f = make_file(file, db_file, now)
         total_size += f.size
         files.append(f)
