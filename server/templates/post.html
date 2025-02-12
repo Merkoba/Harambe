@@ -19,8 +19,6 @@
 <script>
     const vars = {}
 </script>
-
-<script src="/static/js/message.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -30,19 +28,15 @@
     {% endif %}
 
     <div>
-        <b>File:</b> <a class="link" href="/{{file_path}}/{{file.name}}">{{file.name}}</a> | {{file.size_str}}
+        <b>File:</b> <a class="link" href="/{{file_path}}/{{file.name}}">{{file.name}}</a> <span class="sep">|</span> {{file.size_str}}
     </div>
 
     <div>
-        <b>Date:</b> {{file.nice_date}} | {{file.ago}}
+        <b>Date:</b> {{file.nice_date}} <span class="sep">|</span> {{file.ago}}
     </div>
 
     <div>
-        <b>Views:</b> {{file.views}}
-    </div>
-
-    <div>
-        <a href="/">Return</a>
+        <b>Views:</b> {{file.views}} <span class="sep">|</span> <a href="/">Return</a>
     </div>
 </div>
 {% endblock %}

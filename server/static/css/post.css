@@ -29,3 +29,7 @@ a:hover {
 hr {
     width: 100%;
 }
+
+.sep {
+    opacity: 0.66;
+}
