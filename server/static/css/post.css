@@ -4,7 +4,9 @@ body, html {
     font-family: var(--font_family);
     font-size: 20px;
     margin-left: 20px;
+    margin-right: 20px;
     margin-top: 16px;
+    margin-bottom: 16px;
     padding: 0;
 }
 
