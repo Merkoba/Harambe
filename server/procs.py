@@ -103,7 +103,7 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
     title = request.form.get("title", "")
 
     if len(title) > config.max_title_length:
-        return error("Comment is too long")
+        return error("Title is too long")
 
     key = request.form.get("key", "")
     user = None
@@ -137,6 +137,12 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
 
     if not file:
         return error("No file")
+
+    if not file.name:
+        return error("No file name")
+
+    if len(file.name) > 255:
+        return error("File name is too long")
 
     if hasattr(file, "read"):
         try:
