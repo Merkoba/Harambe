@@ -59,11 +59,13 @@ function validate() {
     return false
   }
 
-  let captcha = document.querySelector(`#captcha-text`)
+  if (!vars.is_admin) {
+    let captcha = document.querySelector(`#captcha-text`)
 
-  if (captcha) {
-    if (!captcha.value.trim()) {
-      return false
+    if (captcha) {
+      if (!captcha.value.trim()) {
+        return false
+      }
     }
   }
 

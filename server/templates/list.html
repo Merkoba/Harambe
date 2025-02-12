@@ -24,11 +24,11 @@
     <div class="sep">|</div>
 
     {% if page > 1 %}
-        {% if use_password %}
+        {% if use_key %}
             {% if page > 2 %}
-            <a class="linkbutton" href="/list/{{page - 1}}?pw={{password}}" title="Go to the previous page">Prev</a>
+            <a class="linkbutton" href="/list/{{page - 1}}?key={{key}}" title="Go to the previous page">Prev</a>
             {% else %}
-            <a class="linkbutton" href="/list?pw={{password}}" title="Go to the previous page">Prev</a>
+            <a class="linkbutton" href="/list?key={{key}}" title="Go to the previous page">Prev</a>
             {% endif %}
         {% else %}
             {% if page > 2 %}
@@ -44,8 +44,8 @@
     <div class="sep">|</div>
 
     {% if next_page %}
-        {% if use_password %}
-        <a class="linkbutton" href="/list/{{page + 1}}?pw={{password}}" title="Go to the next page">Next</a>
+        {% if use_key %}
+        <a class="linkbutton" href="/list/{{page + 1}}?key={{key}}" title="Go to the next page">Next</a>
         {% else %}
         <a class="linkbutton" href="/list/{{page + 1}}" title="Go to the next page">Next</a>
         {% endif %}

@@ -67,12 +67,7 @@ def check_key(key: str) -> tuple[bool, str, User | None]:
     if len(key) > 100:
         return False, "Key is too long", None
 
-    user = None
-
-    for u in config.users:
-        if key == u.key:
-            user = u
-            break
+    user = config.get_user(key)
 
     if not user:
         return False, "Invalid key", None
@@ -96,7 +91,9 @@ def check_key_max(user: User, size: int) -> bool:
     return True
 
 
-def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
+def upload(
+    request: Any, mode: str = "normal", is_admin: bool = False
+) -> tuple[bool, str]:
     def error(s: str) -> tuple[bool, str]:
         return False, f"Error: {s}"
 
@@ -109,9 +106,6 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
     user = None
 
     if mode == "normal":
-        c_hash = request.form.get("captcha-hash", "")
-        c_text = request.form.get("captcha-text", "")
-
         if config.require_key:
             k_ok, k_msg, user = check_key(key)
 
@@ -119,10 +113,17 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                 return error(k_msg)
 
         if config.require_captcha:
+            c_hash = request.form.get("captcha-hash", "")
+            c_text = request.form.get("captcha-text", "")
+
             check_catpcha = True
 
-            if config.captcha_cheat and (c_text == config.captcha_cheat):
+            if is_admin:
                 check_catpcha = False
+
+            if check_catpcha:
+                if config.captcha_cheat and (c_text == config.captcha_cheat):
+                    check_catpcha = False
 
             if check_catpcha:
                 if not app.simple_captcha.verify(c_text, c_hash):
@@ -477,3 +478,12 @@ def get_file(name: str) -> File | None:
 
 def increase_view(name: str) -> None:
     database.increase_views(Path(name).stem)
+
+
+def user_can_list(key: str) -> bool:
+    user = config.get_user(key)
+
+    if not user:
+        return False
+
+    return user.list

@@ -36,6 +36,7 @@ class User:
     name: str
     limit: int
     max: int
+    list: bool
 
 
 @dataclass
@@ -158,6 +159,9 @@ class Config:
         # Enable a public page to list files
         self.list_enabled: bool = False
 
+        # List is private and requires a password or key
+        self.list_private: bool = True
+
         # Default page size for the list page
         self.list_page_size: int = 50
 
@@ -165,10 +169,8 @@ class Config:
         # If 0 it will allow showing all files
         self.list_max_files: int = 100
 
-        # Require a special word in the URL to access the list page
-        # For example: site.com/list?pw=palmtree
-        # This is to make the list semi-private
-        self.list_password: str = ""
+        # Allow users to view the list by using their key
+        self.users_can_list: bool = False
 
         # Allow admins to delete files using the admin page or endpoints
         self.allow_delete: bool = True
@@ -224,6 +226,13 @@ class Config:
             "CHARACTER_POOL": string.ascii_lowercase,
         }
 
+    def get_user(self, key: str) -> User | None:
+        for user in self.users:
+            if user.key == key:
+                return user
+
+        return None
+
     def read(self) -> None:
         def defvalue(name: str) -> Any:
             return copy.deepcopy(getattr(self.reference, name))
@@ -259,9 +268,10 @@ class Config:
             set_value(c, "max_age")
             set_value(c, "show_max_file_size")
             set_value(c, "list_enabled")
+            set_value(c, "list_private")
             set_value(c, "list_page_size")
-            set_value(c, "list_password")
             set_value(c, "list_max_files")
+            set_value(c, "users_can_list")
             set_value(c, "allow_delete")
             set_value(c, "main_title")
             set_value(c, "image_tooltip")
@@ -290,6 +300,7 @@ class Config:
                         user.get("name", ""),
                         user.get("limit", 12),
                         user.get("max", 0),
+                        user.get("list", False),
                     )
                     for user in users
                 ]

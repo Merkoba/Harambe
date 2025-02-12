@@ -119,6 +119,7 @@ key = "wingwalker"
 name = "The Upsetter"
 limit = 20
 max = 20
+list = true
 ```
 
 `key` is a string which should be kept secret, it's what is used to authenticate.
@@ -130,6 +131,10 @@ If `name` is empty, no name will be displayed.
 `max` is the max file size for that key.
 
 If `max` is set to 0 it will use the default max file size config.
+
+If `list` is true, the user can access the list if they use their key.
+
+For example: `site.com/list?key=secretUserKey`
 
 ---
 
@@ -153,15 +158,9 @@ This will allow anybody to view the list of uploaded files.
 
 This is turned off by default.
 
-The list can be slightly protected with a password.
+The list can be set to private which requires users to use their key to view.
 
-This is a word that is needed to be included in the URL.
-
-This is sent as the `pw` GET parameter.
-
-For example `site.com/list?pw=bigdrop`
-
-If `list_password` is `bigdrop`.
+For example: `site.com/list?key=secretUserKey`
 
 ---
 

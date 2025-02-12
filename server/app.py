@@ -70,9 +70,11 @@ def index() -> Any:
     if not config.web_uploads_enabled:
         return render_template("fallback.html")
 
+    is_admin = logged_in()
+
     if request.method == "POST":
         try:
-            ok, ans = procs.upload(request)
+            ok, ans = procs.upload(request, is_admin=is_admin)
 
             if not ok:
                 data = {
@@ -114,6 +116,7 @@ def index() -> Any:
         max_title_length=config.max_title_length,
         allow_titles=config.allow_titles,
         links=config.links,
+        is_admin=is_admin,
     )
 
 
@@ -279,14 +282,18 @@ def logout() -> Any:
 @app.route("/list/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def show_list(page: int = 1) -> Any:
-    pw = request.args.get("pw", "")
+    key = request.args.get("key", "")
 
     if not logged_in():
         if not config.list_enabled:
             return redirect(url_for("index"))
 
-        if config.list_password and (pw != config.list_password):
-            return redirect(url_for("index"))
+        if config.list_private:
+            if not key:
+                return redirect(url_for("index"))
+
+            if not procs.user_can_list(key):
+                return redirect(url_for("index"))
 
     page_size = request.args.get("page_size", config.list_page_size)
 
@@ -295,7 +302,7 @@ def show_list(page: int = 1) -> Any:
     )
 
     def_page_size = page_size == config.list_page_size
-    use_password = bool(pw)
+    use_key = bool(key)
 
     return render_template(
         "list.html",
@@ -305,6 +312,6 @@ def show_list(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
-        password=pw,
-        use_password=use_password,
+        key=key,
+        use_key=use_key,
     )
