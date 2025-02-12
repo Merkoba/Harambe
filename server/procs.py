@@ -289,18 +289,21 @@ def get_files(
 
     for file in all_files:
         db_file = db_files.get(file.stem, None)
+        f = make_file(file, db_file, now)
 
         ok = (
             not query
-            or query in file.name.lower()
-            or (db_file and query in db_file.original.lower())
-            or (db_file and query in db_file.title.lower())
+            or query in f.full.lower()
+            or query in f.original.lower()
+            or query in f.title.lower()
+            or query in f.uploader.lower()
+            or query in f.date_3.lower()
+            or query in f.size_str.lower()
         )
 
         if not ok:
             continue
 
-        f = make_file(file, db_file, now)
         total_size += f.size
         files.append(f)
 

@@ -99,14 +99,7 @@ window.onload = () => {
         let size = item.dataset.size_str.toLowerCase()
         let title = item.dataset.title.toLowerCase()
         let original = item.dataset.original.toLowerCase()
-        let opts = [name, size, title, original]
-
-        if (date_mode === `ago`) {
-          opts.push(ago)
-        }
-        else if (date_mode === `date`) {
-          opts.push(date)
-        }
+        let opts = [name, size, title, original, ago, date]
 
         if (opts.some(x => x.includes(value))) {
           item.style.display = `flex`

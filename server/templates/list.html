@@ -71,7 +71,7 @@
         <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}">
             <!-- Name -->
             <div class="table_cell">
-                <a href="/post/{{file.name}}" target="_blank" title="{{file.original}}">{{file.name or file.original[:20]}}</a>
+                <a href="/post/{{file.name}}" target="_blank" title="{{file.uploader or 'Anon'}}">{{file.name or file.original[:20]}}</a>
             </div>
 
             <!-- Title -->
