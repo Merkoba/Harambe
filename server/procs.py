@@ -118,9 +118,6 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
         if not k_ok:
             return error(k_msg)
 
-        if utils.get_redis_value(f"key_{key}") != "open":
-            return error("Key is not open")
-
     file = request.files.get("file", None)
 
     if not file:
