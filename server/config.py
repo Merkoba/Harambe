@@ -25,13 +25,13 @@ class FileChangeHandler(FileSystemEventHandler):  # type: ignore
 
 
 @dataclass
-class User:
+class Admin:
     username: str
     password: str
 
 
 @dataclass
-class Key:
+class User:
     key: str
     name: str
     limit: int
@@ -56,13 +56,13 @@ class Config:
 
         self.path: Path = Path("config.toml")
 
-        # Users that can use the admin page
+        # Admins can use manage files
         # Dict object: username, password
-        self.users: list[User] = []
+        self.admins: list[Admin] = []
 
-        # Keys that can be used to upload files
+        # Users can upload files
         # Dict object: name, limit, id (optional)
-        self.keys: list[Key] = []
+        self.users: list[User] = []
 
         # List of links to show in the index page
         # Dict object: name, url, target (optional)
@@ -206,9 +206,9 @@ class Config:
     def get_file_name_length(self) -> int:
         return max(min(self.file_name_length, 26), 10)
 
-    def check_user(self, username: str, password: str) -> bool:
-        for user in self.users:
-            if (user.username == username) and (user.password == password):
+    def check_admin(self, username: str, password: str) -> bool:
+        for admin in self.admins:
+            if (admin.username == username) and (admin.password == password):
                 return True
 
         return False
@@ -270,28 +270,28 @@ class Config:
             set_value(c, "web_uploads_enabled")
             set_value(c, "api_uploads_enabled")
 
+            # Admins
+
+            admins: list[dict[str, str]] = c.get("admins", [])
+
+            if admins:
+                self.admins = [
+                    Admin(admin["username"], admin["password"]) for admin in admins
+                ]
+
             # Users
 
-            users: list[dict[str, str]] = c.get("users", [])
+            users: list[dict[str, Any]] = c.get("users", [])
 
             if users:
                 self.users = [
-                    User(user["username"], user["password"]) for user in users
-                ]
-
-            # Keys
-
-            keys: list[dict[str, Any]] = c.get("keys", [])
-
-            if keys:
-                self.keys = [
-                    Key(
-                        key["key"],
-                        key.get("name", ""),
-                        key.get("limit", 12),
-                        key.get("max", 0),
+                    User(
+                        user["key"],
+                        user.get("name", ""),
+                        user.get("limit", 12),
+                        user.get("max", 0),
                     )
-                    for key in keys
+                    for user in users
                 ]
 
             # Links

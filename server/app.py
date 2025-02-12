@@ -256,7 +256,7 @@ def login() -> Any:
             flash("Invalid credentials")
             return redirect(url_for("login"))
 
-        if config.check_user(username, password):
+        if config.check_admin(username, password):
             session["username"] = username
             return redirect(url_for("admin"))
 

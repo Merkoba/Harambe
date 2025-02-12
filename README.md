@@ -93,28 +93,28 @@ There is an admin page to view and delete files:
 
 ![](admin.png)
 
-To be able to use this you must create one or more users at the bottom:
+Each admin looks like this:
 
 ```toml
-[[users]]
+[[admins]]
 username = "johnnycage"
 password = "goroballs"
 ```
 
 ---
 
-## Keys
+## Users
 
-You can add keys to the `keys` array in the config.
-
-These give access to users to upload directly from the command line.
+Users can upload directly from the command line.
 
 And it might be necesary to supply one in the web interface if `require_key` is enabled.
 
-Add these at the bottom:
+Their files can be signed if they have a `name` property.
+
+Each user looks likes this:
 
 ```toml
-[[keys]]
+[[users]]
 key = "wingwalker"
 name = "The Upsetter"
 limit = 20

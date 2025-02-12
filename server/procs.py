@@ -17,7 +17,7 @@ import app
 import utils
 import database
 from database import File as DbFile
-from config import config, Key
+from config import config, User
 
 
 @dataclass
@@ -37,7 +37,7 @@ class File:
     uploader: str = ""
 
 
-class KeyData:
+class UserData:
     def __init__(self, limit: int) -> None:
         self.timestamps: deque[float] = deque()
         self.limit = limit
@@ -55,42 +55,40 @@ class KeyData:
         return len(self.timestamps) > self.limit
 
 
-key_data: dict[str, KeyData] = {}
+user_data: dict[str, UserData] = {}
 
 
-def check_key(key: str) -> tuple[bool, str, Key | None]:
+def check_key(key: str) -> tuple[bool, str, User | None]:
     if not key:
         return False, "Key is required", None
 
     if len(key) > 100:
         return False, "Key is too long", None
 
-    used_key = None
+    user = None
 
-    for k in config.keys:
-        if key == k.key:
-            used_key = k
+    for u in config.users:
+        if key == u.key:
+            user = u
             break
 
-    if not used_key:
+    if not user:
         return False, "Invalid key", None
 
-    if key not in key_data:
-        key_data[key] = KeyData(used_key.limit)
+    if key not in user_data:
+        user_data[key] = UserData(user.limit)
 
-    d = key_data[key]
+    if user_data[key].blocked():
+        return False, "Rate limit exceeded", user
 
-    if d.blocked():
-        return False, "Rate limit exceeded", used_key
-
-    return True, "ok", used_key
+    return True, "ok", user
 
 
-def check_key_max(key: Key, size: int) -> bool:
+def check_key_max(user: User, size: int) -> bool:
     megas = int(size / 1000 / 1000)
 
-    if key.max > 0:
-        if megas > key.max:
+    if user.max > 0:
+        if megas > user.max:
             return False
 
     return True
@@ -106,14 +104,14 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
         return error("Comment is too long")
 
     key = request.form.get("key", "")
-    used_key = None
+    user = None
 
     if mode == "normal":
         c_hash = request.form.get("captcha-hash", "")
         c_text = request.form.get("captcha-text", "")
 
         if config.require_key:
-            k_ok, k_msg, used_key = check_key(key)
+            k_ok, k_msg, user = check_key(key)
 
             if not k_ok:
                 return error(k_msg)
@@ -128,7 +126,7 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                 if not app.simple_captcha.verify(c_text, c_hash):
                     return error("Failed captcha")
     elif mode == "cli":
-        k_ok, k_msg, used_key = check_key(key)
+        k_ok, k_msg, user = check_key(key)
 
         if not k_ok:
             return error(k_msg)
@@ -144,8 +142,8 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
             length = len(content)
             toobig = "File is too big"
 
-            if used_key and used_key.max > 0:
-                if not check_key_max(used_key, length):
+            if user and user.max > 0:
+                if not check_key_max(user, length):
                     return error(toobig)
             elif length > config.get_max_file_size():
                 return error(toobig)
@@ -179,8 +177,8 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                     else:
                         comment = ""
 
-                    if used_key and used_key.name:
-                        uploader = used_key.name
+                    if user and user.name:
+                        uploader = user.name
                     else:
                         uploader = ""
 
