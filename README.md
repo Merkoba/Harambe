@@ -192,3 +192,5 @@ There is an `sqlite3` database that holds some data about the files.
 This includes the creation date, the comment, and views.
 
 This is all handled automatically.
+
+This is located in `server/database.sqlite3`.
