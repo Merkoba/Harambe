@@ -170,7 +170,7 @@ def upload(request: Any, mode: str = "normal") -> tuple[bool, str]:
                 if mode == "normal":
                     return True, name
 
-                return True, f"{config.file_path}/{full_name}"
+                return True, f"post/{name}"
 
             return error("File is empty")
         except Exception as e:
