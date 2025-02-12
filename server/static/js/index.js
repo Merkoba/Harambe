@@ -111,9 +111,14 @@ function reflect_file() {
 
   let image = document.querySelector(`#image`)
   let file = document.querySelector(`#file`)
-  let src = file.files[0]
+  let the_file = file.files[0]
 
-  if (!is_image(src)) {
+  if (the_file.size > vars.max_size) {
+    file.value = null
+    alert(`That file is too big.`)
+  }
+
+  if (!is_image(the_file)) {
     image.src = `static/img/${vars.image_name}`
     return
   }
@@ -124,7 +129,7 @@ function reflect_file() {
     image.src = e.target.result
   }
 
-  reader.readAsDataURL(src)
+  reader.readAsDataURL(the_file)
 }
 
 function is_image(file) {
