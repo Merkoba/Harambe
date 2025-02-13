@@ -7,6 +7,10 @@ export default [
   {languageOptions: {globals: globals.browser}},
 
   {
+    ignores: ["**/static/js/marked.js"],
+  },
+
+  {
     rules: {
       "no-unused-vars": "off",
       "indent": ["error", 2],

@@ -40,6 +40,14 @@
                 <div id="file_size">Max size: {{max_file_size}} mb</div>
                 {% endif %}
 
+                {% if show_list %}
+                <a class="link" href="/list">List</a>
+                {% endif %}
+
+                {% if show_admin %}
+                <a class="link" href="/admin">Admin</a>
+                {% endif %}
+
                 {% for link in links %}
                 <a class="link" href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
                 {% endfor %}

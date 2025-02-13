@@ -47,6 +47,15 @@ def is_admin() -> bool:
     return user.admin
 
 
+def can_list() -> bool:
+    user = config.get_user(get_username())
+
+    if not user:
+        return False
+
+    return user.admin or user.list
+
+
 def login_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
@@ -104,6 +113,7 @@ def index() -> Any:
     if not config.web_uploads_enabled:
         return render_template("fallback.html")
 
+    admin = is_admin()
     is_user = logged_in()
     username = get_username()
 
@@ -131,6 +141,11 @@ def index() -> Any:
     else:
         captcha = None
 
+    show_list = False
+
+    if (config.list_enabled and (not config.list_private)) or can_list():
+        show_list = True
+
     return render_template(
         "index.html",
         captcha=captcha,
@@ -151,6 +166,8 @@ def index() -> Any:
         allow_titles=config.allow_titles,
         links=config.links,
         is_user=is_user,
+        show_list=show_list,
+        show_admin=admin,
     )
 
 
