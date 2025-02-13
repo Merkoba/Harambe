@@ -33,6 +33,7 @@ class User:
     limit: int
     max: int
     list: bool
+    mark: str
 
 
 @dataclass
@@ -185,13 +186,13 @@ class Config:
         self.api_uploads_enabled: bool = True
 
         # Max size to consider image embeds
-        self.embed_image_max: int = 5_000_000
+        self.embed_image_max: int = 10_000_000
 
         # Max size to consider video embeds
-        self.embed_video_max: int = 5_000_000
+        self.embed_video_max: int = 10_000_000
 
         # Max size to consider audio embeds
-        self.embed_audio_max: int = 5_000_000
+        self.embed_audio_max: int = 10_000_000
 
     # --- Methods ---
 
@@ -292,6 +293,7 @@ class Config:
                         user.get("limit", 12),
                         user.get("max", 0),
                         user.get("list", False),
+                        user.get("mark", ""),
                     )
                     for user in users
                 ]

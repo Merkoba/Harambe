@@ -167,6 +167,9 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                 u = ulid.new()
                 name = u.str[: config.get_file_name_length()]
 
+                if user and user.mark:
+                    name = f"{name}_{user.mark}".strip()
+
                 if not config.uppercase_ids:
                     name = name.lower()
 
@@ -193,7 +196,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                         uploader = ""
 
                     database.add_file(name, cext, title, pfile.stem, username, uploader)
-                    # ^ ^ ^ ^ ^ ^ ^ ^ save to database
+                    # 💾 save to the database
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")

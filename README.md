@@ -123,6 +123,7 @@ key = "diploma395aVatraaa2034"
 limit = 20
 max = 20
 list = true
+mark = "wlk"
 ```
 
 `username` is the main id of the user, it can't change.
@@ -142,6 +143,14 @@ If `name` is empty, no name will be displayed.
 If `max` is set to 0 it will use the default max file size config.
 
 If `list` is true the user can view the file list page.
+
+`mark` is a string that is appended to urls on uploads from that user.
+
+For example: `site.com/01jkxsxp4k_wlk` instead of `site.com/01jkxsxp4k`.
+
+It could be useful to keep track of who uploaded who based on urls and file names.
+
+If empty, it won't use a mark.
 
 ---
 
