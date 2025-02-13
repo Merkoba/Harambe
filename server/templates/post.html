@@ -67,16 +67,24 @@
     </div>
     {% endif %}
 
-    {% if file.mtype.startswith("image/") %}
-    <div>
-        <a href="/{{file_path}}/{{file.name}}"><img id="image" src="/{{file_path}}/{{file.name}}"></a>
-    </div>
-    {% endif %}
+    {% if file.can_embed %}
+        {% if file.mtype.startswith("image/") and file.size%}
+        <div>
+            <a href="/{{file_path}}/{{file.name}}"><img id="image" src="/{{file_path}}/{{file.name}}"></a>
+        </div>
+        {% endif %}
 
-    {% if file.mtype.startswith("video/") or file.mtype.startswith("audio/") %}
-    <div>
-        <video id="video" src="/{{file_path}}/{{file.name}}" controls></video>
-    </div>
+        {% if file.mtype.startswith("video/") or file.mtype.startswith("audio/") %}
+        <div>
+            <video id="video" src="/{{file_path}}/{{file.name}}" controls></video>
+        </div>
+        {% endif %}
+
+        {% if file.mtype.startswith("text/") %}
+        <div>
+            <div id="textview"></div>
+        </div>
+        {% endif %}
     {% endif %}
 </div>
 {% endblock %}

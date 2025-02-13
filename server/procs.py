@@ -40,6 +40,7 @@ class File:
     username: str
     uploader: str
     mtype: str
+    can_embed: bool
 
 
 class UserData:
@@ -268,6 +269,8 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
     else:
         original_full = ""
 
+    can_embed = size <= config.embed_max_size
+
     return File(
         file.stem,
         ext,
@@ -286,6 +289,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         username,
         uploader,
         mtype,
+        can_embed,
     )
 
 

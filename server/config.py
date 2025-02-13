@@ -188,20 +188,17 @@ class Config:
         # Enable uploads through the API
         self.api_uploads_enabled: bool = True
 
-        # Max size to consider image embeds
-        self.embed_image_max: int = 10_000_000
-
-        # Max size to consider video embeds
-        self.embed_video_max: int = 10_000_000
-
-        # Max size to consider audio embeds
-        self.embed_audio_max: int = 10_000_000
+        # Max size to consider files for media embeds on the post page
+        self.embed_max_size: int = 10_000_000
 
         # Users can edit their own posts
         self.allow_edit: bool = True
 
         # Users can see their own post history
         self.history_enabled: bool = True
+
+        # Allow or block media hotlinking
+        self.allow_hotlinks: bool = True
 
     # --- Methods ---
 
@@ -288,12 +285,11 @@ class Config:
             set_value(c, "allow_titles")
             set_value(c, "web_uploads_enabled")
             set_value(c, "api_uploads_enabled")
-            set_value(c, "embed_image_max")
-            set_value(c, "embed_video_max")
-            set_value(c, "embed_audio_max")
+            set_value(c, "embed_max_size")
             set_value(c, "allow_edit")
             set_value(c, "history_enabled")
             set_value(c, "max_title_length")
+            set_value(c, "allow_hotlinks")
 
             # Users
 

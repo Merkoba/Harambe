@@ -6,7 +6,7 @@ from functools import wraps
 
 # Libraries
 from flask import Flask, render_template, request, Response, send_file  # type: ignore
-from flask import redirect, url_for, session, flash  # pyright: ignore
+from flask import redirect, url_for, session, flash, abort  # pyright: ignore
 from flask_cors import CORS  # type: ignore
 from flask_simple_captcha import CAPTCHA  # type: ignore
 from flask_limiter import Limiter  # type: ignore
@@ -232,6 +232,13 @@ def post(name: str) -> Any:
 @app.route(f"/{config.file_path}/<path:name>/<string:original>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def get_file(name: str, original: str | None = None) -> Any:
+    if not config.allow_hotlinks:
+        referrer = request.referrer
+        host = request.host_url
+
+        if (not referrer) or (not referrer.startswith(host)):
+            abort(403)
+
     file = procs.get_file(name)
 
     if not file:
