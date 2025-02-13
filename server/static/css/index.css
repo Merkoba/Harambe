@@ -167,6 +167,7 @@ a:hover {
     font-size: 1rem;
     width: 100%;
     box-sizing: border-box;
+    padding: 0.2rem;
 }
 
 .link {
