@@ -327,7 +327,6 @@ def get_files(
 
     for file in all_files:
         db_file = db_files.get(file.stem, None)
-        f = make_file(file, db_file, now)
 
         if username:
             if not db_file:
@@ -335,6 +334,8 @@ def get_files(
 
             if db_file.username != username:
                 continue
+
+        f = make_file(file, db_file, now)
 
         ok = (
             not query
