@@ -14,6 +14,9 @@ from typing import Any
 from watchdog.observers import Observer  # type: ignore
 from watchdog.events import FileSystemEventHandler  # type: ignore
 
+# Modules
+import utils
+
 
 class FileChangeHandler(FileSystemEventHandler):  # type: ignore
     def __init__(self, config: Config) -> None:
@@ -239,7 +242,11 @@ class Config:
             setattr(self, name, c.get(name, defvalue(name)))
 
         with self.path.open("rb") as f:
-            c = tomllib.load(f)
+            try:
+                c = tomllib.load(f)
+            except Exception as e:
+                utils.error(e)
+                return
 
             set_value(c, "app_key")
             set_value(c, "files_dir")
@@ -297,6 +304,8 @@ class Config:
                     )
                     for user in users
                 ]
+            else:
+                self.users = []
 
             # Links
 
@@ -307,6 +316,9 @@ class Config:
                     Link(link["name"], link["url"], link.get("target", "_self"))
                     for link in links
                 ]
+
+            else:
+                self.links = []
 
 
 # Fill it later
