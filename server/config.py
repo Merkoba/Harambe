@@ -65,7 +65,6 @@ class Config:
         # Dict object: name, url, target (optional)
         self.links: list[Link] = [
             Link("about", "/static/demo/about.html", "_blank"),
-            Link("login", "/login"),
         ]
 
         # Secret key for security

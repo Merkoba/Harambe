@@ -114,7 +114,7 @@ def index() -> Any:
         return render_template("fallback.html")
 
     admin = is_admin()
-    is_user = logged_in()
+    logged = logged_in()
     username = get_username()
 
     if request.method == "POST":
@@ -136,7 +136,7 @@ def index() -> Any:
             utils.error(e)
             return Response(invalid, mimetype=text_mtype)
 
-    if config.require_captcha and (not is_user):
+    if config.require_captcha and (not logged):
         captcha = simple_captcha.create()
     else:
         captcha = None
@@ -145,6 +145,8 @@ def index() -> Any:
 
     if (config.list_enabled and (not config.list_private)) or can_list():
         show_list = True
+
+    show_history = admin or (config.history_enabled and logged)
 
     return render_template(
         "index.html",
@@ -165,9 +167,11 @@ def index() -> Any:
         max_title_length=config.max_title_length,
         allow_titles=config.allow_titles,
         links=config.links,
-        is_user=is_user,
+        is_user=logged,
+        show_history=show_history,
         show_list=show_list,
         show_admin=admin,
+        show_login=not logged,
     )
 
 

@@ -40,6 +40,10 @@
                 <div id="file_size">Max size: {{max_file_size}} mb</div>
                 {% endif %}
 
+                {% if show_history %}
+                <a class="link" href="/history">History</a>
+                {% endif %}
+
                 {% if show_list %}
                 <a class="link" href="/list">List</a>
                 {% endif %}
@@ -51,6 +55,10 @@
                 {% for link in links %}
                 <a class="link" href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
                 {% endfor %}
+
+                {% if show_login %}
+                <a class="link" href="/login">Login</a>
+                {% endif %}
             </div>
 
             <div id="picker">
