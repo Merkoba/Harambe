@@ -171,7 +171,7 @@ def index() -> Any:
         show_history=show_history,
         show_list=show_list,
         show_admin=admin,
-        show_login=not logged,
+        logged_in=logged,
     )
 
 

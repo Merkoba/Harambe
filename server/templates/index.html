@@ -29,41 +29,43 @@
 
 {% block body %}
 <div id="main">
+    <div id="info">
+        {% if show_max_file_size %}
+        <div id="file_size">Max size: {{max_file_size}} mb</div>
+        {% endif %}
+    </div>
+
     {% if show_image %}
     <img id="image" src="static/img/{{image_name}}" title="{{image_tooltip}}">
     {% endif %}
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
-        <div id="picker_container">
-            <div id="info">
-                {% if show_max_file_size %}
-                <div id="file_size">Max size: {{max_file_size}} mb</div>
-                {% endif %}
+        <div id="links">
+            {% if show_history %}
+            <a class="link" href="/history">History</a>
+            {% endif %}
 
-                {% if show_history %}
-                <a class="link" href="/history">History</a>
-                {% endif %}
+            {% if show_list %}
+            <a class="link" href="/list">List</a>
+            {% endif %}
 
-                {% if show_list %}
-                <a class="link" href="/list">List</a>
-                {% endif %}
+            {% if show_admin %}
+            <a class="link" href="/admin">Admin</a>
+            {% endif %}
 
-                {% if show_admin %}
-                <a class="link" href="/admin">Admin</a>
-                {% endif %}
+            {% for link in links %}
+            <a class="link" href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
+            {% endfor %}
 
-                {% for link in links %}
-                <a class="link" href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
-                {% endfor %}
+            {% if logged_in %}
+            <a class="link" href="/logout">Logout</a>
+            {% else %}
+            <a class="link" href="/login">Login</a>
+            {% endif %}
+        </div>
 
-                {% if show_login %}
-                <a class="link" href="/login">Login</a>
-                {% endif %}
-            </div>
-
-            <div id="picker">
-                <input id="file" type="file" name="file" required max-file-size="{{max_file_size}}MB">
-            </div>
+        <div id="picker">
+            <input id="file" type="file" name="file" required max-file-size="{{max_file_size}}MB">
         </div>
 
         {% if allow_titles %}
