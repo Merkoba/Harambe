@@ -13,13 +13,14 @@ body, html {
 #main {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.5rem;
 }
 
 #top {
     display: flex;
     flex-direction: row;
     align-items: center;
+    font-size: 1.1rem;
     gap: 0;
 }
 
@@ -27,6 +28,10 @@ body, html {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+#file {
+    margin-top: 0.22rem;
 }
 
 .title {
@@ -63,6 +68,7 @@ a.button:hover {
 .button {
     color: var(--link_color);
     cursor: pointer;
+    user-select: none;
 }
 
 .button:hover {
@@ -71,6 +77,10 @@ a.button:hover {
 
 .button:hover, a.link:hover {
     filter: brightness(1.5);
+}
+
+#embed {
+    margin-top: 0.5rem;
 }
 
 #image {
@@ -88,7 +98,6 @@ a.button:hover {
 }
 
 .text_embed {
-    margin-top: 0.5rem;
     border-width: 1px;
     border-style: solid;
     border-color: color-mix(in srgb, var(--font_color), var(--background_color) 50%);
