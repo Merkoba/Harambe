@@ -39,6 +39,9 @@ window.onload = function() {
 
     DOM.el(`#markdown_view`).innerHTML = html
   }
+  else if (vars.mtype === `application/x-shockwave-flash`) {
+    start_flash(vars.name)
+  }
 }
 
 function timeago(date) {
@@ -174,4 +177,14 @@ function update_date() {
   let date_2 = dateFormat(vars.date_ms, `hh:MM TT`)
   DOM.el(`#date_1`).textContent = date_1
   DOM.el(`#date_2`).textContent = date_2
+}
+
+function start_flash(file) {
+  let ruffle = window.RufflePlayer.newest()
+  let player = ruffle.createPlayer()
+  player.style.width = `640px`
+  player.style.height = `480px`
+  let container = DOM.el(`#flash`)
+  container.appendChild(player)
+  player.ruffle().load(`/${vars.file_path}/${file}`)
 }

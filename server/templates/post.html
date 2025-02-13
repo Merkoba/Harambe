@@ -25,10 +25,12 @@
     vars.original = `{{file.original}}`
     vars.mtype = `{{file.mtype}}`
     vars.content = `{{file.content}}`
+    vars.file_path = `{{file_path}}`
 </script>
 
 <script src="/static/js/marked.js"></script>
 <script src="/static/js/dateformat.js"></script>
+<script src="/static/ruffle/ruffle.js"></script>
 <script src="/static/js/post.js"></script>
 {% endblock %}
 
@@ -93,6 +95,12 @@
                 <div id="text_view" class="text_embed">{{file.content}}</div>
             </div>
             {% endif %}
+        {% endif %}
+
+        {% if file.mtype == "application/x-shockwave-flash" %}
+        <div>
+            <div id="flash"></div>
+        </div>
         {% endif %}
     </div>
     {% endif %}

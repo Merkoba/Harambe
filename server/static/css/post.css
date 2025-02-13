@@ -21,6 +21,7 @@ body, html {
     flex-direction: row;
     align-items: center;
     font-size: 1.1rem;
+    flex-wrap: wrap;
     gap: 0;
 }
 
@@ -109,6 +110,11 @@ a.button:hover {
     padding-right: 0.5rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
+}
+
+#flash {
+    width: 60%;
+    height: auto;
 }
 
 #text_view {

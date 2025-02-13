@@ -7,7 +7,7 @@ export default [
   {languageOptions: {globals: globals.browser}},
 
   {
-    ignores: ["**/static/js/marked.js"],
+    ignores: ["**/static/js/marked.js", "**/static/ruffle/**"],
   },
 
   {
