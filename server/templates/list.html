@@ -51,12 +51,13 @@
         <div class="table_row table_header">
             <div class="table_cell">Name</div>
             <div class="table_cell">Title</div>
+            <div class="table_cell">Uploader</div>
             <div class="table_cell">Size</div>
             <div id="date" class="table_cell underline">Date</div>
             <div id="views" class="table_cell views">Views</div>
         </div>
         {% for file in files %}
-        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}">
+        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-uploader="{{file.uploader or 'Anon'}}">
             <!-- Name -->
             <div class="table_cell">
                 <a href="/post/{{file.name}}" target="_blank" title="{{file.uploader or 'Anon'}}">{{file.name or file.original}}</a>
@@ -64,6 +65,9 @@
 
             <!-- Title -->
             <div class="table_cell" title="{{file.title or file.original}}">{{file.title or file.original}}</div>
+
+            <!-- Uploader -->
+            <div class="table_cell">{{file.uploader or 'Anon'}}</div>
 
             <!-- Size -->
             <div class="table_cell">{{file.size_str}}</div>

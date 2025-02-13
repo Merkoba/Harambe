@@ -17,6 +17,7 @@
 {% block body %}
 <div id="top">
     <a class="action_button" href="/">&lt;&lt;</a>
+    <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
     <div class="action_button" id="delete_selected" title="Delete selected files">Delete</div>
     <div class="sep">|</div>
@@ -59,11 +60,11 @@
             <div id="uploader" class="table_cell underline">Uploader</div>
             <div id="size" class="table_cell underline">Size</div>
             <div id="date" class="table_cell underline">Date</div>
-            <div id="views" class="table_cell views underline" title="Views">V</div>
+            <div id="views" class="table_cell views underline" title="Views">Views</div>
             <div class="table_cell actions">Actions</div>
         </div>
         {% for file in files %}
-        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-full="{{file.full}}">
+        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-full="{{file.full}}" data-uploader="{{file.uploader or 'Anon'}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this file">
                 <input class="select_checkbox" type="checkbox">

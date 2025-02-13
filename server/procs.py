@@ -320,6 +320,7 @@ def get_files(
             or query in f.uploader.lower()
             or query in f.date_3.lower()
             or query in f.size_str.lower()
+            or ((query == "anon") and (not f.uploader))
         )
 
         if not ok:

@@ -32,6 +32,14 @@ window.onload = () => {
     }
   })
 
+  let refresh = document.querySelector(`#refresh`)
+
+  if (refresh) {
+    refresh.addEventListener(`click`, () => {
+      window.location = `/admin`
+    })
+  }
+
   let delete_selected = document.querySelector(`#delete_selected`)
 
   if (delete_selected) {
@@ -88,7 +96,8 @@ window.onload = () => {
         let size = item.dataset.size_str.toLowerCase()
         let title = item.dataset.title.toLowerCase()
         let original = item.dataset.original.toLowerCase()
-        let opts = [name, size, title, original, ago, date]
+        let uploader = item.dataset.uploader.toLowerCase()
+        let opts = [name, size, title, original, ago, date, uploader]
 
         if (opts.some(x => x.includes(value))) {
           item.style.display = `flex`
@@ -98,6 +107,8 @@ window.onload = () => {
         }
       }
     })
+
+    filter.focus()
   }
 
   let cb = document.querySelector(`#checkbox`)
