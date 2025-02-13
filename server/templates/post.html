@@ -97,7 +97,7 @@
             {% endif %}
         {% endif %}
 
-        {% if file.mtype == "application/x-shockwave-flash" %}
+        {% if file.mtype.startswith("application/") and ("flash" in file.mtype) %}
         <div>
             <div id="flash"></div>
         </div>

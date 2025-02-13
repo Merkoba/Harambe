@@ -39,7 +39,7 @@ window.onload = function() {
 
     DOM.el(`#markdown_view`).innerHTML = html
   }
-  else if (vars.mtype === `application/x-shockwave-flash`) {
+  else if (vars.mtype.startsWith(`application`) && vars.mtype.includes(`flash`)) {
     start_flash(vars.name)
   }
 }
