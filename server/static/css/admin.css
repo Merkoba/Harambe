@@ -1,5 +1,6 @@
 :root {
-    --color_1: rgb(67 130 137)
+    --color_1: rgb(67 130 137);
+    --border_color: #ddd;
 }
 
 body, html {
@@ -33,7 +34,6 @@ body, html {
 .item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     white-space: nowrap;
 }
 
@@ -67,30 +67,47 @@ a.linkbutton:hover {
 .table_row {
     display: flex;
     flex-direction: row;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border_color);
 }
 
 .table_header {
     font-weight: bold;
     background-color: #f2f2f2;
+    border-top: 1px solid var(--border_color);
 }
 
-.item .table_cell:first-child {
-    border-left: 1px solid #ddd;
-}
-
-.item .table_cell {
-    border-right: 1px solid #ddd;
+.table_cell:first-child {
+    border-left: 1px solid var(--border_color);
 }
 
 .table_cell {
-    flex: 1;
-    padding: 8px;
-    text-align: center;
+    border-right: 1px solid var(--border_color);
 }
 
-.checkbox-cell {
+.table_cell {
+    flex: 1 1 auto;
+    padding: 8px;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+.table_cell.checkbox {
     flex: 0 0 auto;
+    width: 3rem;
+}
+
+.table_cell.views {
+    flex: 0 0 auto;
+    width: 4rem;
+}
+
+.table_cell.actions {
+    flex: 0 0 auto;
+    width: 8rem;
 }
 
 .sep {
@@ -121,8 +138,6 @@ select {
     text-decoration: underline;
 }
 
-.table_cell.views {
-    flex-grow: 0;
-    flex-shrink: 1;
-    min-width: 3rem;
+input[type="checkbox"] {
+    cursor: pointer;
 }

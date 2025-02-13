@@ -9,7 +9,6 @@
     vars.mode = `admin`
     vars.page_size = `{{page_size}}`
     vars.def_page_size = {{def_page_size | tojson}}
-    vars.max_text = {{max_text}}
 </script>
 
 <script src="/static/js/admin.js"></script>
@@ -18,10 +17,6 @@
 {% block body %}
 <div id="top">
     <a class="action_button" href="/">&lt;&lt;</a>
-    <div class="sep">|</div>
-    <div class="action_button" id="select_all" title="Select all files">Select</div>
-    <div class="sep">|</div>
-    <div class="action_button" id="unselect_all" title="Unselect all files">Unselect</div>
     <div class="sep">|</div>
     <div class="action_button" id="delete_selected" title="Delete selected files">Delete</div>
     <div class="sep">|</div>
@@ -58,17 +53,19 @@
 <div id="items">
     <div class="table">
         <div class="table_row table_header">
+            <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
             <div id="name" class="table_cell underline">Name</div>
             <div id="title" class="table_cell underline">Title</div>
+            <div id="uploader" class="table_cell underline">Uploader</div>
             <div id="size" class="table_cell underline">Size</div>
             <div id="date" class="table_cell underline">Date</div>
-            <div id="views" class="table_cell views underline">Views</div>
-            <div class="table_cell">Actions</div>
+            <div id="views" class="table_cell views underline" title="Views">V</div>
+            <div class="table_cell actions">Actions</div>
         </div>
         {% for file in files %}
         <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-full="{{file.full}}">
             <!-- Checkbox -->
-            <div class="table_cell checkbox-cell">
+            <div class="table_cell checkbox" title="Select this file">
                 <input class="select_checkbox" type="checkbox">
             </div>
 
@@ -78,7 +75,10 @@
             </div>
 
             <!-- Title -->
-            <div class="table_cell title" title="{{file.title or file.original}}">{{file.title[:max_text]|trim or file.original[:max_text]|trim}}</div>
+            <div class="table_cell title" title="{{file.title or file.original}}">{{file.title or file.original}}</div>
+
+            <!-- Uploader -->
+            <div class="table_cell uploader">{{file.uploader or 'Anon'}}</div>
 
             <!-- Size -->
             <div class="table_cell">{{file.size_str}}</div>
@@ -90,7 +90,7 @@
             <div class="table_cell views">{{file.views}}</div>
 
             <!-- Actions -->
-            <div class="table_cell">
+            <div class="table_cell actions">
                 <span class="edit action_button" title="Edit this file">E</span>
                 <span class="sep"> | </span>
                 <span class="delete action_button" title="Delete this file">D</span>

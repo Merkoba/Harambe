@@ -261,7 +261,6 @@ def admin(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
-        max_text=20,
     )
 
 
@@ -373,5 +372,4 @@ def show_list(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
-        max_text=20,
     )

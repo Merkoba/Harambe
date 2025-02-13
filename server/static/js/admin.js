@@ -32,22 +32,6 @@ window.onload = () => {
     }
   })
 
-  let s_all = document.querySelector(`#select_all`)
-
-  if (s_all) {
-    s_all.addEventListener(`click`, () => {
-      select_all()
-    })
-  }
-
-  let u_all = document.querySelector(`#unselect_all`)
-
-  if (u_all) {
-    u_all.addEventListener(`click`, () => {
-      unselect_all()
-    })
-  }
-
   let delete_selected = document.querySelector(`#delete_selected`)
 
   if (delete_selected) {
@@ -113,6 +97,14 @@ window.onload = () => {
           item.style.display = `none`
         }
       }
+    })
+  }
+
+  let cb = document.querySelector(`#checkbox`)
+
+  if (cb) {
+    cb.addEventListener(`click`, () => {
+      toggle_select()
     })
   }
 
@@ -394,6 +386,8 @@ function select_all() {
   for (let checkbox of checkboxes) {
     checkbox.checked = true
   }
+
+  document.querySelector(`#checkbox`).checked = true
 }
 
 function unselect_all() {
@@ -402,6 +396,8 @@ function unselect_all() {
   for (let checkbox of checkboxes) {
     checkbox.checked = false
   }
+
+  document.querySelector(`#checkbox`).checked = false
 }
 
 function print_error(msg) {
@@ -565,9 +561,22 @@ async function edit_title(el) {
 
   if (response.ok) {
     el.dataset.title = title
-    el.querySelector(`.title`).innerText = title.substring(0, vars.max_text).trim()
+    el.querySelector(`.title`).innerText = title
   }
   else {
     print_error(response.status)
   }
+}
+
+function toggle_select() {
+  let checkboxes = document.querySelectorAll(`.select_checkbox`)
+
+  for (let checkbox of checkboxes) {
+    if (!checkbox.checked) {
+      select_all()
+      return
+    }
+  }
+
+  unselect_all()
 }
