@@ -63,6 +63,7 @@ hr {
 #image {
     max-width: 60%;
     height: auto;
+    max-height: 600px;
 }
 
 #video {
@@ -70,4 +71,5 @@ hr {
     max-width: 60%;
     height: auto;
     background-color: var(--link_color);
+    max-height: 600px;
 }

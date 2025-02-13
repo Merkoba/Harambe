@@ -39,9 +39,6 @@ class File:
     views: int
     username: str
     uploader: str
-    embed_image: bool
-    embed_video: bool
-    embed_audio: bool
     mtype: str
 
 
@@ -271,10 +268,6 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
     else:
         original_full = ""
 
-    embed_image = utils.is_image(ext) and (size <= config.embed_image_max)
-    embed_video = utils.is_video(ext) and (size <= config.embed_video_max)
-    embed_audio = utils.is_audio(ext) and (size <= config.embed_audio_max)
-
     return File(
         file.stem,
         ext,
@@ -292,9 +285,6 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         views,
         username,
         uploader,
-        embed_image,
-        embed_video,
-        embed_audio,
         mtype,
     )
 

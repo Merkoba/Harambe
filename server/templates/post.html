@@ -67,13 +67,13 @@
     </div>
     {% endif %}
 
-    {% if file.embed_image %}
+    {% if file.mtype.startswith("image/") %}
     <div>
         <a href="/{{file_path}}/{{file.name}}"><img id="image" src="/{{file_path}}/{{file.name}}"></a>
     </div>
     {% endif %}
 
-    {% if file.embed_video or file.embed_audio %}
+    {% if file.mtype.startswith("video/") or file.mtype.startswith("audio/") %}
     <div>
         <video id="video" src="/{{file_path}}/{{file.name}}" controls></video>
     </div>
