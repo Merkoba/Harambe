@@ -2,7 +2,7 @@ let selected_files = []
 let date_mode = `ago`
 
 window.onload = () => {
-  document.addEventListener(`keyup`, async (e) => {
+  DOM.ev(document, `keyup`, async (e) => {
     if (vars.mode === `admin`) {
       if (e.key === `Enter`) {
         do_search()
@@ -10,7 +10,7 @@ window.onload = () => {
     }
   })
 
-  document.addEventListener(`click`, async (e) => {
+  DOM.ev(document, `click`, async (e) => {
     if (e.target.classList.contains(`edit`)) {
       let el = e.target.closest(`.item`)
       edit_title(el)
@@ -32,20 +32,20 @@ window.onload = () => {
     }
   })
 
-  let refresh = document.querySelector(`#refresh`)
+  let refresh = DOM.el(`#refresh`)
 
   if (refresh) {
-    refresh.addEventListener(`click`, () => {
+    DOM.ev(refresh, `click`, () => {
       window.location = `/admin`
     })
   }
 
-  let delete_selected = document.querySelector(`#delete_selected`)
+  let delete_selected = DOM.el(`#delete_selected`)
 
   if (delete_selected) {
-    delete_selected.addEventListener(`click`, () => {
+    DOM.ev(delete_selected`click`, () => {
       let files = []
-      let checkboxes = document.querySelectorAll(`.select_checkbox`)
+      let checkboxes = DOM.els(`.select_checkbox`)
 
       for (let checkbox of checkboxes) {
         if (checkbox.checked) {
@@ -62,31 +62,31 @@ window.onload = () => {
     })
   }
 
-  let delete_all = document.querySelector(`#delete_all`)
+  let delete_all = DOM.el(`#delete_all`)
 
   if (delete_all) {
-    delete_all.addEventListener(`click`, () => {
+    DOM.ev(delete_all, `click`, () => {
       if (confirm(`Delete ALL files from the server?`)) {
         delete_all_files()
       }
     })
   }
 
-  let page_select = document.querySelector(`#page_select`)
+  let page_select = DOM.el(`#page_select`)
 
   if (page_select) {
     fill_page_select(page_select)
 
-    page_select.addEventListener(`change`, () => {
+    DOM.ev(page_select, `change`, () => {
       on_page_select_change(page_select)
     })
   }
 
-  let filter = document.querySelector(`#filter`)
+  let filter = DOM.el(`#filter`)
 
   if (filter) {
-    filter.addEventListener(`input`, () => {
-      let items = document.querySelectorAll(`.item`)
+    DOM.ev(filter, `input`, () => {
+      let items = DOM.els(`.item`)
       let value = filter.value.toLowerCase()
 
       for (let item of items) {
@@ -111,18 +111,18 @@ window.onload = () => {
     filter.focus()
   }
 
-  let cb = document.querySelector(`#checkbox`)
+  let cb = DOM.el(`#checkbox`)
 
   if (cb) {
-    cb.addEventListener(`click`, () => {
+    DOM.ev(cb, `click`, () => {
       toggle_select()
     })
   }
 
-  let date = document.querySelector(`#date`)
+  let date = DOM.el(`#date`)
 
   if (date) {
-    date.addEventListener(`click`, () => {
+    DOM.ev(date, `click`, () => {
       if (vars.mode === `admin`) {
         sort_date()
       }
@@ -132,40 +132,40 @@ window.onload = () => {
     })
   }
 
-  let size = document.querySelector(`#size`)
+  let size = DOM.el(`#size`)
 
   if (size) {
     if (vars.mode === `admin`) {
-      size.addEventListener(`click`, () => {
+      DOM.ev(size, `click`, () => {
         sort_size()
       })
     }
   }
 
-  let views = document.querySelector(`#views`)
+  let views = DOM.el(`#views`)
 
   if (views) {
-    views.addEventListener(`click`, () => {
+    DOM.ev(views, `click`, () => {
       if (vars.mode === `admin`) {
         sort_views()
       }
     })
   }
 
-  let title = document.querySelector(`#title`)
+  let title = DOM.el(`#title`)
 
   if (title) {
-    title.addEventListener(`click`, () => {
+    DOM.ev(title, `click`, () => {
       if (vars.mode === `admin`) {
         sort_title()
       }
     })
   }
 
-  let name = document.querySelector(`#name`)
+  let name = DOM.el(`#name`)
 
   if (name) {
-    name.addEventListener(`click`, () => {
+    DOM.ev(name, `click`, () => {
       if (vars.mode === `admin`) {
         sort_name()
       }
@@ -174,12 +174,12 @@ window.onload = () => {
 }
 
 function select_above(el) {
-  let items = document.querySelectorAll(`.item`)
+  let items = DOM.els(`.item`)
   let changed = false
   let start = true
 
   for (let item of items) {
-    let cb = item.querySelector(`.select_checkbox`)
+    let cb = DOM.el(`.select_checkbox`, item)
 
     if (start) {
       if (!cb.checked) {
@@ -203,12 +203,12 @@ function select_above(el) {
 }
 
 function select_below(el) {
-  let items = document.querySelectorAll(`.item`)
+  let items = DOM.els(`.item`)
   let start = false
   let changed = false
 
   for (let item of items) {
-    let cb = item.querySelector(`.select_checkbox`)
+    let cb = DOM.el(`.select_checkbox`, item)
 
     if (item === el) {
       start = true
@@ -361,7 +361,7 @@ async function delete_selected_files(files) {
 
 function remove_files(files) {
   for (let file of files) {
-    let el = document.querySelector(`.item[data-full="${file}"]`)
+    let el = DOM.el(`.item[data-full="${file}"]`)
 
     if (el) {
       el.remove()
@@ -380,7 +380,7 @@ async function delete_all_files() {
     })
 
     if (response.ok) {
-      document.querySelector(`#items`).innerHTML = ``
+      DOM.el(`#items`).innerHTML = ``
     }
     else {
       print_error(response.status)
@@ -392,23 +392,23 @@ async function delete_all_files() {
 }
 
 function select_all() {
-  let checkboxes = document.querySelectorAll(`.select_checkbox`)
+  let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
     checkbox.checked = true
   }
 
-  document.querySelector(`#checkbox`).checked = true
+  DOM.el(`#checkbox`).checked = true
 }
 
 function unselect_all() {
-  let checkboxes = document.querySelectorAll(`.select_checkbox`)
+  let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
     checkbox.checked = false
   }
 
-  document.querySelector(`#checkbox`).checked = false
+  DOM.el(`#checkbox`).checked = false
 }
 
 function print_error(msg) {
@@ -434,7 +434,7 @@ function size_string(size) {
 }
 
 function do_search() {
-  let query = document.querySelector(`#filter`).value.trim()
+  let query = DOM.el(`#filter`).value.trim()
 
   if (!query) {
     return
@@ -488,12 +488,12 @@ function change_date() {
     date_mode = `ago`
   }
 
-  for (let item of document.querySelectorAll(`.item`)) {
+  for (let item of DOM.els(`.item`)) {
     if (date_mode === `ago`) {
-      item.querySelector(`.date`).innerText = item.dataset.ago
+      DOM.el(`.date`, item).innerText = item.dataset.ago
     }
     else {
-      item.querySelector(`.date`).innerText = item.dataset.date
+      DOM.el(`.date`, item).innerText = item.dataset.date
     }
   }
 }
@@ -568,7 +568,7 @@ async function edit_title(el) {
 
   if (response.ok) {
     el.dataset.title = title
-    el.querySelector(`.title`).innerText = title || o
+    DOM.el(`.title`, el).innerText = title || o
   }
   else {
     print_error(response.status)
@@ -576,7 +576,7 @@ async function edit_title(el) {
 }
 
 function toggle_select() {
-  let checkboxes = document.querySelectorAll(`.select_checkbox`)
+  let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
     if (!checkbox.checked) {

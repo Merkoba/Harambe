@@ -1,21 +1,21 @@
 let clicked = false
 
 window.onload = () => {
-  let captcha = document.querySelector(`#captcha-text`)
+  let captcha = DOM.el(`#captcha-text`)
 
   if (captcha) {
     captcha.placeholder = `Enter the captcha`
   }
 
-  let image = document.querySelector(`#image`)
+  let image = DOM.el(`#image`)
 
   if (image) {
-    image.addEventListener(`click`, (e) => {
-      let file = document.querySelector(`#file`)
+    DOM.ev(image, `click`, (e) => {
+      let file = DOM.el(`#file`)
       file.click()
     })
 
-    image.addEventListener(`auxclick`, (e) => {
+    DOM.ev(image, `auxclick`, (e) => {
       if (e.button === 1) {
         if (e.ctrlKey) {
           window.location = `/admin`
@@ -26,26 +26,26 @@ window.onload = () => {
       }
     })
 
-    let file = document.querySelector(`#file`)
+    let file = DOM.el(`#file`)
 
     if (file) {
-      file.addEventListener(`change`, (e) => {
+      DOM.ev(file, `change`, (e) => {
         clicked = false
         reflect_file()
       })
     }
   }
 
-  document.addEventListener(`dragover`, (e) => {
+  DOM.ev(document, `dragover`, (e) => {
     e.preventDefault()
   })
 
-  document.addEventListener(`drop`, (e) => {
+  DOM.ev(document, `drop`, (e) => {
     e.preventDefault()
     let files = e.dataTransfer.files
 
     if (files && (files.length > 0)) {
-      let file = document.querySelector(`#file`)
+      let file = DOM.el(`#file`)
       let dataTransfer = new DataTransfer()
       dataTransfer.items.add(files[0])
       file.files = dataTransfer.files
@@ -60,7 +60,7 @@ function validate() {
   }
 
   if (!vars.is_user) {
-    let captcha = document.querySelector(`#captcha-text`)
+    let captcha = DOM.el(`#captcha-text`)
 
     if (captcha) {
       if (!captcha.value.trim()) {
@@ -69,7 +69,7 @@ function validate() {
     }
   }
 
-  let file = document.querySelector(`#file`)
+  let file = DOM.el(`#file`)
   let file_length = file.files.length
 
   if (file_length === 0) {
@@ -84,7 +84,7 @@ function validate() {
     return false
   }
 
-  let title = document.querySelector(`#title`)
+  let title = DOM.el(`#title`)
 
   if (title) {
     if (title.value.length > vars.max_title_length) {
@@ -97,14 +97,14 @@ function validate() {
 }
 
 function reflect_file() {
-  let title = document.querySelector(`#title`)
+  let title = DOM.el(`#title`)
 
   if (title) {
     title.focus()
   }
 
-  let image = document.querySelector(`#image`)
-  let file = document.querySelector(`#file`)
+  let image = DOM.el(`#image`)
+  let file = DOM.el(`#file`)
   let the_file = file.files[0]
 
   if (the_file.size > vars.max_size) {

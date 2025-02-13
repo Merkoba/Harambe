@@ -5,33 +5,27 @@ const MONTH = DAY * 30
 const YEAR = DAY * 365
 
 window.onload = function() {
-  let ago = document.querySelector(`#ago`)
   vars.date_ms = vars.date * 1000
+  let delay = 30
 
-  if (ago) {
-    let delay = 30
+  setInterval(function() {
+    update_date()
+  }, 1000 * delay)
 
-    setInterval(function() {
-      let [str, level] = timeago(vars.date_ms)
+  update_date()
 
-      if (level > 1) {
-        ago.innerHTML = str
-      }
-    }, 1000 * delay)
-  }
-
-  let edit = document.querySelector(`#edit`)
+  let edit = DOM.el(`#edit`)
 
   if (edit) {
-    edit.addEventListener(`click`, () => {
+    DOM.ev(edit, `click`, () => {
       edit_title()
     })
   }
 
-  let del = document.querySelector(`#delete`)
+  let del = DOM.el(`#delete`)
 
   if (del) {
-    del.addEventListener(`click`, () => {
+    DOM.ev(del, `click`, () => {
       if (confirm(`Delete this file?`)) {
         delete_file()
       }
@@ -132,7 +126,7 @@ async function edit_title() {
 
   if (response.ok) {
     vars.title = title
-    document.querySelector(`#title`).textContent = title || vars.original
+    DOM.el(`#title`).textContent = title || vars.original
   }
   else {
     print_error(response.status)
@@ -149,7 +143,7 @@ async function delete_file() {
   })
 
   if (response.ok) {
-    document.querySelector(`#title`).textContent = `DELETED 👻`
+    DOM.el(`#title`).textContent = `DELETED 👻`
   }
   else {
     print_error(response.status)
@@ -159,4 +153,17 @@ async function delete_file() {
 function print_error(msg) {
   // eslint-disable-next-line no-console
   console.log(`Error: ${msg}`)
+}
+
+function update_date() {
+  let [str, level] = timeago(vars.date_ms)
+
+  if (level > 1) {
+    DOM.el(`#ago`).textContent = str
+  }
+
+  let date_1 = dateFormat(vars.date_ms, `d mmmm yyyy`)
+  let date_2 = dateFormat(vars.date_ms, `hh:MM TT`)
+  DOM.el(`#date_1`).textContent = date_1
+  DOM.el(`#date_2`).textContent = date_2
 }

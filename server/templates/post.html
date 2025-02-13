@@ -25,6 +25,7 @@
     vars.original = `{{file.original}}`
 </script>
 
+<script src="/static/js/dateformat.js"></script>
 <script src="/static/js/post.js"></script>
 {% endblock %}
 
@@ -52,7 +53,7 @@
 
     <!-- Date -->
     <div>
-        <span class="title">Date:</span>{{file.date_1}}<span class="sep">|</span>{{file.date_2}}<span class="sep">|</span><span id="ago">{{file.ago}}</span>
+        <span class="title">Date:</span><span id="date_1">{{file.date_1}}</span><span class="sep">|</span><span id="date_2">{{file.date_2}}</span><span class="sep">|</span><span id="ago">{{file.ago}}</span>
     </div>
 
     <!-- Uploader -->

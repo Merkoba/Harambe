@@ -521,6 +521,14 @@ def increase_view(name: str) -> None:
 
 
 def edit_title(name: str, title: str, username: str, is_admin: bool) -> tuple[str, int]:
+    title = title or ""
+
+    if not name:
+        return jsonify({"status": "error", "message": "Missing values"}), 500
+
+    if len(title) > config.max_title_length:
+        return jsonify({"status": "error", "message": "Title is too long"}), 500
+
     if not is_admin:
         if not config.allow_edit:
             return jsonify({"status": "error", "message": "Editing is disabled"}), 500
@@ -534,12 +542,6 @@ def edit_title(name: str, title: str, username: str, is_admin: bool) -> tuple[st
             return jsonify(
                 {"status": "error", "message": "You are not the uploader"}
             ), 500
-
-        if (not name) or (not title):
-            return jsonify({"status": "error", "message": "Missing values"}), 500
-
-        if len(title) > config.max_title_length:
-            return jsonify({"status": "error", "message": "Title is too long"}), 500
 
     database.edit_title(name, title)
     return jsonify({"status": "ok", "message": "Title updated"}), 200

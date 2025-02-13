@@ -212,7 +212,7 @@ def post(name: str) -> Any:
     if not file:
         return Response(invalid, mimetype=text_mtype)
 
-    owned = is_admin() or ((file.uploader == get_username()) and config.allow_edit)
+    owned = is_admin() or ((file.username == get_username()) and config.allow_edit)
 
     return render_template(
         "post.html",
