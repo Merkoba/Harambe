@@ -189,7 +189,7 @@ class Config:
         self.api_uploads_enabled: bool = True
 
         # Max size to consider files for media embeds on the post page
-        self.embed_max_size: int = 10_000_000
+        self.embed_max_size: int = 20_000_000
 
         # Users can edit their own posts
         self.allow_edit: bool = True
