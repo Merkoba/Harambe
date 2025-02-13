@@ -106,6 +106,7 @@ export default [
         process: "readonly",
         require: "readonly",
         vars: "readonly",
+        marked: "readonly",
       }
     }
   }

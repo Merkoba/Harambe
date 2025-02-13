@@ -23,8 +23,11 @@
     vars.date = {{file.date}}
     vars.title = `{{file.title}}`
     vars.original = `{{file.original}}`
+    vars.mtype = `{{file.mtype}}`
+    vars.content = `{{file.content}}`
 </script>
 
+<script src="/static/js/marked.js"></script>
 <script src="/static/js/dateformat.js"></script>
 <script src="/static/js/post.js"></script>
 {% endblock %}
@@ -68,6 +71,7 @@
     {% endif %}
 
     {% if file.can_embed %}
+    <div id="embed">
         {% if file.mtype.startswith("image/") and file.size%}
         <div>
             <a href="/{{file_path}}/{{file.name}}"><img id="image" src="/{{file_path}}/{{file.name}}"></a>
@@ -81,10 +85,17 @@
         {% endif %}
 
         {% if file.mtype.startswith("text/") %}
-        <div>
-            <div id="textview"></div>
-        </div>
+            {% if file.mtype == "text/markdown" %}
+            <div>
+                <div id="markdown_view" class="text_embed">{{file.content}}</div>
+            </div>
+            {% else %}
+            <div>
+                <div id="text_view" class="text_embed">{{file.content}}</div>
+            </div>
+            {% endif %}
         {% endif %}
+    </div>
     {% endif %}
 </div>
 {% endblock %}

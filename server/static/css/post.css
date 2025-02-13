@@ -73,3 +73,20 @@ hr {
     background-color: var(--link_color);
     max-height: 600px;
 }
+
+.text_embed {
+    margin-top: 0.5rem;
+    border: 1px solid var(--font_color);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+#markdown_view {
+    /*  */
+}
+
+#text_view {
+    white-space: pre-wrap;
+}

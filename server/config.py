@@ -200,6 +200,9 @@ class Config:
         # Allow or block media hotlinking
         self.allow_hotlinks: bool = True
 
+        # Max file content to read when getting files
+        self.max_file_content: int = 900_000
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -290,6 +293,7 @@ class Config:
             set_value(c, "history_enabled")
             set_value(c, "max_title_length")
             set_value(c, "allow_hotlinks")
+            set_value(c, "max_file_content")
 
             # Users
 

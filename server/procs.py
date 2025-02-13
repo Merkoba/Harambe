@@ -41,6 +41,7 @@ class File:
     uploader: str
     mtype: str
     can_embed: bool
+    content: str
 
 
 class UserData:
@@ -269,6 +270,12 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
     else:
         original_full = ""
 
+    if mtype.startswith("text"):
+        with file.open("r") as f:
+            content = f.read(config.max_file_content)
+    else:
+        content = ""
+
     can_embed = size <= config.embed_max_size
 
     return File(
@@ -290,6 +297,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         uploader,
         mtype,
         can_embed,
+        content,
     )
 
 

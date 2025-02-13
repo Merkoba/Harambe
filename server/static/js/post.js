@@ -31,6 +31,14 @@ window.onload = function() {
       }
     })
   }
+
+  if ((vars.mtype === `text/markdown`) && vars.content) {
+    let html = marked.parse(
+      vars.content.replace(/[\u200B-\u200F\uFEFF]/g, ``),
+    )
+
+    DOM.el(`#markdown_view`).innerHTML = html
+  }
 }
 
 function timeago(date) {
