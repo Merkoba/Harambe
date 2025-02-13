@@ -112,11 +112,6 @@ a.button:hover {
     padding-bottom: 0.25rem;
 }
 
-#flash {
-    width: 60%;
-    height: auto;
-}
-
 #text_view {
     white-space: pre-wrap;
 }

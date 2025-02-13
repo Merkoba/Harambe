@@ -182,8 +182,8 @@ function update_date() {
 function start_flash(file) {
   let ruffle = window.RufflePlayer.newest()
   let player = ruffle.createPlayer()
-  player.style.width = `640px`
-  player.style.height = `480px`
+  player.style.width = `800px`
+  player.style.height = `600px`
   let container = DOM.el(`#flash`)
   container.appendChild(player)
   player.ruffle().load(`/${vars.file_path}/${file}`)
