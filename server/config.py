@@ -200,6 +200,9 @@ class Config:
         # Users can edit their own posts
         self.allow_edit: bool = True
 
+        # Users can see their own post history
+        self.allow_history: bool = True
+
     # --- Methods ---
 
     def get_max_file_size(self) -> int:
@@ -289,6 +292,8 @@ class Config:
             set_value(c, "embed_video_max")
             set_value(c, "embed_audio_max")
             set_value(c, "allow_edit")
+            set_value(c, "allow_history")
+            set_value(c, "max_title_length")
 
             # Users
 
