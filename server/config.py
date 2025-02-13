@@ -64,7 +64,7 @@ class Config:
         # List of links to show in the index page
         # Dict object: name, url, target (optional)
         self.links: list[Link] = [
-            Link("about", "/static/demo/about.html", "_blank"),
+            Link("About", "/static/demo/about.html", "_blank"),
         ]
 
         # Secret key for security
@@ -312,8 +312,6 @@ class Config:
                     )
                     for user in users
                 ]
-            else:
-                self.users = []
 
             # Links
 
@@ -324,9 +322,6 @@ class Config:
                     Link(link["name"], link["url"], link.get("target", "_self"))
                     for link in links
                 ]
-
-            else:
-                self.links = []
 
 
 # Fill it later
