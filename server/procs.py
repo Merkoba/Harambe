@@ -386,6 +386,9 @@ def delete_file(file: str, username: str, is_admin: bool) -> tuple[str, int]:
         ), 400
 
     if not is_admin:
+        if not config.allow_edit:
+            return jsonify({"status": "error", "message": "Editing is disabled"}), 500
+
         name = Path(file).stem
         db_file = database.get_file(name)
 
@@ -519,6 +522,9 @@ def increase_view(name: str) -> None:
 
 def edit_title(name: str, title: str, username: str, is_admin: bool) -> tuple[str, int]:
     if not is_admin:
+        if not config.allow_edit:
+            return jsonify({"status": "error", "message": "Editing is disabled"}), 500
+
         db_file = database.get_file(name)
 
         if not db_file:

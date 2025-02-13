@@ -554,12 +554,8 @@ function sort_name() {
 
 async function edit_title(el) {
   let t = el.dataset.title
-  let title = prompt(`New title`, t).trim()
-
-  if (!title) {
-    return
-  }
-
+  let o = el.dataset.original
+  let title = prompt(`New title`, t || o).trim()
   let name = el.dataset.name
 
   let response = await fetch(`/edit_title`, {
@@ -572,7 +568,7 @@ async function edit_title(el) {
 
   if (response.ok) {
     el.dataset.title = title
-    el.querySelector(`.title`).innerText = title
+    el.querySelector(`.title`).innerText = title || o
   }
   else {
     print_error(response.status)

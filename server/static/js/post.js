@@ -114,11 +114,7 @@ function timeago(date) {
 }
 
 async function edit_title() {
-  let title = prompt(`New Title`, vars.title).trim()
-
-  if (!title) {
-    return
-  }
+  let title = prompt(`New Title`, vars.title || vars.original).trim()
 
   if (title === vars.title) {
     return
@@ -136,7 +132,7 @@ async function edit_title() {
 
   if (response.ok) {
     vars.title = title
-    document.querySelector(`#title`).textContent = title
+    document.querySelector(`#title`).textContent = title || vars.original
   }
   else {
     print_error(response.status)

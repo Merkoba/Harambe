@@ -212,6 +212,8 @@ def post(name: str) -> Any:
     if not file:
         return Response(invalid, mimetype=text_mtype)
 
+    owned = is_admin() or ((file.uploader == get_username()) and config.allow_edit)
+
     return render_template(
         "post.html",
         file=file,
@@ -222,7 +224,7 @@ def post(name: str) -> Any:
         text_color=config.text_color,
         link_color=config.link_color,
         font_family=config.font_family,
-        owned=is_admin() or (file.uploader == get_username()),
+        owned=owned,
     )
 
 
