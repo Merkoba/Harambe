@@ -53,8 +53,12 @@ hr {
 a:link, a:visited {
     color: var(--link_color);
     user-select: none;
-    text-decoration: underline;
+    text-decoration: none;
     cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 a.button:link, a.button:visited {

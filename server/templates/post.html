@@ -65,11 +65,9 @@
     </div>
 
     <!-- Uploader -->
-    {% if file.uploader %}
     <div>
-        <span class="title">Uploader:</span>{{file.uploader}}<span class="sep">|</span><span class="title">Views:</span>{{file.views}}
+        <span class="title">Uploader:</span>{{file.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{file.views}}
     </div>
-    {% endif %}
 
     {% if file.can_embed %}
     <div id="embed">
