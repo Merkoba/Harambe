@@ -42,6 +42,7 @@ class File:
     mtype: str
     can_embed: bool
     content: str
+    show: str
 
 
 class UserData:
@@ -276,6 +277,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
     else:
         content = ""
 
+    show = f"{file.stem} {ext}".strip()
     can_embed = size <= config.embed_max_size
 
     return File(
@@ -298,6 +300,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         mtype,
         can_embed,
         content,
+        show,
     )
 
 
