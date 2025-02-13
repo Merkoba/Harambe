@@ -11,18 +11,19 @@ window.onload = () => {
 
   if (image) {
     DOM.ev(image, `click`, (e) => {
+      if (e.shiftKey || e.ctrlKey || e.altKey) {
+        reset_file()
+        return
+      }
+
       let file = DOM.el(`#file`)
       file.click()
     })
 
     DOM.ev(image, `auxclick`, (e) => {
       if (e.button === 1) {
-        if (e.ctrlKey) {
-          window.location = `/admin`
-        }
-        else {
-          window.location = `/list`
-        }
+        e.preventDefault()
+        reset_file()
       }
     })
 
@@ -32,6 +33,20 @@ window.onload = () => {
       DOM.ev(file, `change`, (e) => {
         clicked = false
         reflect_file()
+      })
+
+      DOM.ev(file, `click`, (e) => {
+        if (e.shiftKey || e.ctrlKey || e.altKey) {
+          e.preventDefault()
+          reset_file()
+        }
+      })
+
+      DOM.ev(file, `auxclick`, (e) => {
+        if (e.button === 1) {
+          e.preventDefault()
+          reset_file()
+        }
       })
     }
   }
@@ -103,17 +118,16 @@ function reflect_file() {
     title.focus()
   }
 
-  let image = DOM.el(`#image`)
   let file = DOM.el(`#file`)
   let the_file = file.files[0]
 
   if (the_file.size > vars.max_size) {
-    file.value = null
+    reset_file()
     alert(`That file is too big.`)
   }
 
   if (!is_image(the_file)) {
-    image.src = `static/img/${vars.image_name}`
+    reset_image()
     return
   }
 
@@ -128,4 +142,15 @@ function reflect_file() {
 
 function is_image(file) {
   return file.type.match(`image/*`)
+}
+
+function reset_file() {
+  let file = DOM.el(`#file`)
+  file.value = null
+  reset_image()
+}
+
+function reset_image() {
+  let image = DOM.el(`#image`)
+  image.src = `static/img/${vars.image_name}`
 }
