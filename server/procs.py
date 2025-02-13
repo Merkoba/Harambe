@@ -3,6 +3,7 @@ from __future__ import annotations
 # Standard
 import os
 import time
+import mimetypes
 from typing import Any
 from pathlib import Path
 from dataclasses import dataclass
@@ -41,6 +42,7 @@ class File:
     embed_image: bool
     embed_video: bool
     embed_audio: bool
+    mtype: str
 
 
 class UserData:
@@ -195,8 +197,17 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                     else:
                         uploader = ""
 
-                    database.add_file(name, cext, title, pfile.stem, username, uploader)
-                    # 💾 save to the database
+                    mtype, _ = mimetypes.guess_type(path)
+
+                    database.add_file(
+                        name,
+                        cext,
+                        title,
+                        pfile.stem,
+                        username,
+                        uploader,
+                        mtype or "",
+                    )
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")
@@ -238,12 +249,14 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         username = db_file.username
         uploader = db_file.uploader
         ext = db_file.ext
+        mtype = db_file.mtype
     else:
         title = ""
         views = 0
         original = ""
         username = ""
         uploader = ""
+        mtype = ""
 
         if file.suffix:
             ext = file.suffix[1:]
@@ -282,6 +295,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         embed_image,
         embed_video,
         embed_audio,
+        mtype,
     )
 
 

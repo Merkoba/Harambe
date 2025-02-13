@@ -20,6 +20,7 @@ class File:
     original: str
     username: str
     uploader: str
+    mtype: str
 
     def full(self) -> str:
         if self.ext:
@@ -40,6 +41,7 @@ schema = {
     "original": "text",
     "username": "text",
     "uploader": "text",
+    "mtype": "text",
 }
 
 
@@ -80,17 +82,21 @@ def create_db() -> None:
 
 
 def add_file(
-    name: str, ext: str, title: str, original: str, username: str, uploader: str
+    name: str,
+    ext: str,
+    title: str,
+    original: str,
+    username: str,
+    uploader: str,
+    mtype: str,
 ) -> None:
     check_db()
     conn, c = get_conn()
     date = utils.now()
-
-    c.execute(
-        "insert into files (name, ext, date, title, views, original, username, uploader) values (?, ?, ?, ?, ?, ?, ?, ?)",
-        (name, ext, date, title, 0, original, username, uploader),
-    )
-
+    values = [name, ext, date, title, 0, original, username, uploader, mtype]
+    placeholders = ", ".join(["?"] * len(values))
+    query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype) values ({placeholders})"
+    c.execute(query, values)
     conn.commit()
     conn.close()
 
@@ -105,6 +111,7 @@ def make_file(row: dict[str, Any]) -> File:
         original=row.get("original") or "",
         username=row.get("username") or "",
         uploader=row.get("uploader") or "",
+        mtype=row.get("mtype") or "",
     )
 
 

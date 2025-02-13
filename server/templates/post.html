@@ -33,11 +33,15 @@
 <div id="main">
     <!-- Top -->
     <div id="top">
-        {% if owned %}
         <div id="buttons">
-            <div id="edit" class="button">Edit</div><div class="sep">|</div><div id="delete" class="button">Delete</div>
-        </div>
+            <a href="/" class="button">Return</a>
+        {% if owned %}
+            <div class="sep">|</div>
+            <div id="edit" class="button">Edit</div>
+            <div class="sep">|</div>
+            <div id="delete" class="button">Delete</div>
         {% endif %}
+        </div>
 
         {% if file.title or file.original %}
         <div id="title">{{file.title or file.original}}</div>
@@ -48,7 +52,7 @@
 
     <!-- File -->
     <div>
-        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original_full}}">{{file.original_full or file.full}}</a><span class="sep">|</span>{{file.size_str}}
+        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original_full}}">{{file.full}}</a><span class="sep">|</span>{{file.size_str}}<span class="sep">|</span>{{file.mtype}}
     </div>
 
     <!-- Date -->
@@ -59,14 +63,9 @@
     <!-- Uploader -->
     {% if file.uploader %}
     <div>
-        <span class="title">Uploader:</span>{{file.uploader}}
+        <span class="title">Uploader:</span>{{file.uploader}}<span class="sep">|</span><span class="title">Views:</span>{{file.views}}
     </div>
     {% endif %}
-
-    <!-- Views -->
-    <div>
-        <span class="title">Views:</span>{{file.views}}<span class="sep">|</span><a href="/" class="button">Return</a>
-    </div>
 
     {% if file.embed_image %}
     <div>

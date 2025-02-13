@@ -392,9 +392,13 @@ def show_history(page: int = 1) -> Any:
         return redirect(url_for("index"))
 
     page_size = request.args.get("page_size", config.list_page_size)
+    username = get_username()
+
+    if not username:
+        return redirect(url_for("index"))
 
     files, total, next_page = procs.get_files(
-        page, page_size, max_files=config.list_max_files, username=get_username()
+        page, page_size, max_files=config.list_max_files, username=username
     )
 
     def_page_size = page_size == config.list_page_size
