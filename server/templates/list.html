@@ -6,7 +6,7 @@
 
 <script>
     const vars = {}
-    vars.mode = `list`
+    vars.mode = `{{mode}}`
     vars.page_size = `{{page_size}}`
     vars.def_page_size = {{def_page_size | tojson}}
 </script>
@@ -25,9 +25,9 @@
 
     {% if page > 1 %}
         {% if page > 2 %}
-        <a class="linkbutton" href="/list/{{page - 1}}" title="Go to the previous page">Prev</a>
+        <a class="linkbutton" href="/{{mode}}/{{page - 1}}" title="Go to the previous page">Prev</a>
         {% else %}
-        <a class="linkbutton" href="/list" title="Go to the previous page">Prev</a>
+        <a class="linkbutton" href="/{{mode}}" title="Go to the previous page">Prev</a>
         {% endif %}
     {% else %}
     <div class="">Prev</div>
@@ -36,7 +36,7 @@
     <div class="sep">|</div>
 
     {% if next_page %}
-    <a class="linkbutton" href="/list/{{page + 1}}" title="Go to the next page">Next</a>
+    <a class="linkbutton" href="/{{mode}}/{{page + 1}}" title="Go to the next page">Next</a>
     {% else %}
     <div class="">Next</div>
     {% endif %}

@@ -368,6 +368,40 @@ def show_list(page: int = 1) -> Any:
 
     return render_template(
         "list.html",
+        mode="list",
+        files=files,
+        total=total,
+        page=page,
+        next_page=next_page,
+        page_size=page_size,
+        def_page_size=def_page_size,
+    )
+
+
+# History
+
+
+@app.route("/history", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/history/<int:page>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
+def show_history(page: int = 1) -> Any:
+    admin = is_admin()
+
+    if not config.history_enabled and (not admin):
+        return redirect(url_for("index"))
+
+    page_size = request.args.get("page_size", config.list_page_size)
+
+    files, total, next_page = procs.get_files(
+        page, page_size, max_files=config.list_max_files, username=get_username()
+    )
+
+    def_page_size = page_size == config.list_page_size
+
+    return render_template(
+        "list.html",
+        mode="history",
         files=files,
         total=total,
         page=page,

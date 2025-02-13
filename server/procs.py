@@ -291,6 +291,7 @@ def get_files(
     query: str = "",
     sort: str = "date",
     max_files: int = 0,
+    username: str = "",
 ) -> tuple[list[File], str, bool]:
     psize = 0
 
@@ -311,6 +312,13 @@ def get_files(
     for file in all_files:
         db_file = db_files.get(file.stem, None)
         f = make_file(file, db_file, now)
+
+        if username:
+            if not db_file:
+                continue
+
+            if db_file.username != username:
+                continue
 
         ok = (
             not query
