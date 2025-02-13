@@ -20,7 +20,7 @@ body, html {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 0.69rem;
+    gap: 0;
 }
 
 #buttons {
@@ -45,11 +45,28 @@ hr {
     padding-right: 0.35rem;
 }
 
-.button, a:link, a:visited {
+a:link, a:visited {
     color: var(--link_color);
     user-select: none;
     text-decoration: underline;
     cursor: pointer;
+}
+
+a.button:link, a.button:visited {
+    text-decoration: none;
+}
+
+a.button:hover {
+    text-decoration: underline;
+}
+
+.button {
+    color: var(--link_color);
+    cursor: pointer;
+}
+
+.button:hover {
+    text-decoration: underline;
 }
 
 .button:hover, a.link:hover {
