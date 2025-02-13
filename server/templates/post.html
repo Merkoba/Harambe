@@ -52,7 +52,7 @@
 
     <!-- File -->
     <div>
-        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original_full}}">{{file.full}}</a><span class="sep">|</span>{{file.size_str}}<span class="sep">|</span>{{file.mtype}}
+        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original_full}}">{{file.full}}</a><span class="sep">|</span>{{file.size_str}}<span class="sep">|</span>{{file.mtype or 'No type detected'}}
     </div>
 
     <!-- Date -->
