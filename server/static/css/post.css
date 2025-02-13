@@ -20,17 +20,13 @@ body, html {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1rem;
+    gap: 0.69rem;
 }
 
 #buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-
-#title {
-    font-size: 1.16rem;
 }
 
 .title {
