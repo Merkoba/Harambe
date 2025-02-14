@@ -213,14 +213,6 @@ class Config:
     def get_file_name_length(self) -> int:
         return max(min(self.file_name_length, 26), 10)
 
-    def check_user(self, username: str, password: str) -> User | None:
-        for user in self.users:
-            if user.username == username:
-                if user.password == password:
-                    return user
-
-        return None
-
     def get_captcha(self) -> dict[str, Any]:
         return {
             "SECRET_CAPTCHA_KEY": self.captcha_key or "nothing",

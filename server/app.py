@@ -50,7 +50,7 @@ def is_admin() -> bool:
 
 
 def can_list() -> bool:
-    user = config.get_user(get_username())
+    user = user_procs.get_user(get_username())
 
     if not user:
         return False
@@ -64,7 +64,7 @@ def login_required(f: Any) -> Any:
         if not logged_in():
             return redirect(url_for("login"))
 
-        user = config.get_user(get_username())
+        user = user_procs.get_user(get_username())
 
         if not user:
             return redirect(url_for("login"))
@@ -80,7 +80,7 @@ def admin_required(f: Any) -> Any:
         if not logged_in():
             return redirect(url_for("login"))
 
-        user = config.get_user(get_username())
+        user = user_procs.get_user(get_username())
 
         if (not user) or (not user.admin):
             return redirect(url_for("login"))
@@ -345,7 +345,7 @@ def login() -> Any:
             flash("Invalid credentials")
             return redirect(url_for("login"))
 
-        user = config.check_user(username, password)
+        user = user_procs.check_auth(username, password)
 
         if user:
             session["username"] = user.username
@@ -380,7 +380,7 @@ def show_list(page: int = 1) -> Any:
         if not logged_in():
             return redirect(url_for("login"))
 
-        user = config.get_user(get_username())
+        user = user_procs.get_user(get_username())
 
         if not user:
             return redirect(url_for("login"))
@@ -456,7 +456,9 @@ def users(page: int = 1) -> Any:
     query = request.args.get("query", "")
     sort = request.args.get("sort", "date")
     page_size = request.args.get("page_size", config.admin_page_size)
-    users, total, next_page = user_procs.get_users(page, page_size, query=query, sort=sort)
+    users, total, next_page = user_procs.get_users(
+        page, page_size, query=query, sort=sort
+    )
     def_page_size = page_size == config.admin_page_size
 
     return render_template(
@@ -480,15 +482,13 @@ def edit_user(username: str = "") -> Any:
 
         if ok:
             return redirect(url_for("users"))
-        else:
-            return redirect(url_for("edit_user", username=username))
-    else:
-        if username:
-            user = user_procs.get_user(username) or {}
-        else:
-            user = {}
 
-        return render_template(
-            "edit_user.html",
-            user=user,
-        )
+        return redirect(url_for("edit_user", username=username))
+
+    if username:
+        user = user_procs.get_user(username)
+
+    return render_template(
+        "edit_user.html",
+        user=user or {},
+    )

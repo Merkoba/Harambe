@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 # Standard
+import sys
 import sqlite3
 from typing import Any
 from pathlib import Path
 from dataclasses import dataclass
-
-# Libraries
-from werkzeug.security import generate_password_hash
 
 # Modules
 import utils
@@ -36,6 +34,7 @@ class File:
 class User:
     username: str
     password: str
+    admin: bool
     name: str
     rpm: int
     max_size: int
@@ -48,9 +47,20 @@ class User:
 db_path = "database.sqlite3"
 
 
-def check_db() -> bool:
+def check_db() -> None:
+    msg = "Database not found or incomplete. Run schema.py"
     path = Path(db_path)
-    return path.exists()
+
+    if not path.exists():
+        sys.exit(msg)
+
+    conn, c = get_conn()
+    c.execute("select name from sqlite_master where type='table'")
+    tables = [table[0] for table in c.fetchall()]
+    conn.close()
+
+    if ("files" not in tables) or ("users" not in tables):
+        sys.exit(msg)
 
 
 def get_conn() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
@@ -75,9 +85,7 @@ def add_file(
     uploader: str,
     mtype: str,
 ) -> None:
-    if not check_db():
-        return
-
+    check_db()
     conn, c = get_conn()
     date = utils.now()
     values = [name, ext, date, title, 0, original, username, uploader, mtype]
@@ -103,9 +111,7 @@ def make_file(row: dict[str, Any]) -> File:
 
 
 def get_file(name: str) -> File | None:
-    if not check_db():
-        return None
-
+    check_db()
     conn, c = row_conn()
     c.execute("select * from files where name = ?", (name,))
     row = c.fetchone()
@@ -118,9 +124,7 @@ def get_file(name: str) -> File | None:
 
 
 def get_files() -> dict[str, File]:
-    if not check_db():
-        return {}
-
+    check_db()
     conn, c = row_conn()
     c.execute("select * from files")
     rows = c.fetchall()
@@ -130,9 +134,7 @@ def get_files() -> dict[str, File]:
 
 
 def remove_file(name: str) -> None:
-    if not check_db():
-        return
-
+    check_db()
     conn, c = get_conn()
     c.execute("delete from files where name = ?", (name,))
     conn.commit()
@@ -140,9 +142,7 @@ def remove_file(name: str) -> None:
 
 
 def increase_views(name: str) -> None:
-    if not check_db():
-        return
-
+    check_db()
     conn, c = get_conn()
     c.execute("update files set views = views + 1 where name = ?", (name,))
     conn.commit()
@@ -150,9 +150,7 @@ def increase_views(name: str) -> None:
 
 
 def edit_title(name: str, title: str) -> None:
-    if not check_db():
-        return
-
+    check_db()
     conn, c = get_conn()
     c.execute("update files set title = ? where name = ?", (title, name))
     conn.commit()
@@ -163,39 +161,39 @@ def add_user(
     mode: str,
     username: str,
     password: str,
-    name: str,
-    rpm: int,
-    max_size: int,
-    can_list: bool,
-    mark: str,
+    admin: bool = False,
+    name: str = "",
+    rpm: int = 0,
+    max_size: int = 0,
+    can_list: bool = False,
+    mark: str = "",
 ) -> bool:
-    if not check_db():
-        return False
+    check_db()
 
     if (not username) or (not password):
         return False
 
     conn, c = get_conn()
-    hashed_password = generate_password_hash(password)
     date = utils.now()
 
     values = [
         username,
-        hashed_password,
+        password,
+        admin or False,
         name or "",
         rpm or 12,
         max_size or 0,
-        can_list or 0,
+        can_list or False,
         mark or "",
     ]
 
     if mode == "add":
         values.extend([date, date])
         placeholders = ", ".join(["?"] * len(values))
-        query = f"insert into users (username, password, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
+        query = f"insert into users (username, password, admin, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
     elif mode == "edit":
         values.append(username)
-        query = f"update users set username = ?, password = ?, name = ?, rpm = ?, max_size = ?, can_list = ?, mark = ? where username = ?"
+        query = "update users set username = ?, password = ?, admin = ?, name = ?, rpm = ?, max_size = ?, can_list = ?, mark = ? where username = ?"
 
     c.execute(query, values)
     conn.commit()
@@ -205,22 +203,21 @@ def add_user(
 
 def make_user(row: dict[str, Any]) -> User:
     return User(
-        username=row.get("username"),
-        password=row.get("password"),
+        username=row.get("username") or "",
+        password=row.get("password") or "",
+        admin=row.get("admin") or False,
         name=row.get("name") or "",
         rpm=row.get("rpm") or 12,
         max_size=row.get("max_size") or 100,
-        can_list=row.get("can_list") or 0,
+        can_list=bool(row.get("can_list")) or False,
         mark=row.get("mark") or "",
         register_date=row.get("register_date") or 0,
         last_date=row.get("last_date") or 0,
     )
 
 
-def get_users() -> dict[str, File]:
-    if not check_db():
-        return {}
-
+def get_users() -> list[User]:
+    check_db()
     conn, c = row_conn()
     c.execute("select * from users")
     rows = c.fetchall()

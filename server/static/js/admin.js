@@ -13,7 +13,13 @@ window.onload = () => {
   DOM.ev(document, `click`, async (e) => {
     if (e.target.classList.contains(`edit`)) {
       let el = e.target.closest(`.item`)
-      edit_title(el)
+
+      if (vars.mode === `users`) {
+        window.location = `/edit_user/${el.dataset.username}`
+      }
+      else {
+        edit_title(el)
+      }
     }
 
     if (e.target.classList.contains(`delete`)) {

@@ -18,7 +18,9 @@ import app
 import utils
 import database
 from database import File as DbFile
-from config import config, User
+import user_procs
+from user_procs import User
+from config import config
 
 
 @dataclass
@@ -124,7 +126,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
         if (len(username) > 255) or (len(password) > 255):
             return error("Invalid username or password")
 
-        user = config.check_user(username, password)
+        user = user_procs.check_auth(username, password)
 
         if not user:
             return error("Invalid username or password")
@@ -135,7 +137,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
             return error(u_msg)
 
     if (not user) and username:
-        user = config.get_user(username)
+        user = user_procs.get_user(username)
 
     file = request.files.get("file", None)
 
