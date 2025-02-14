@@ -406,7 +406,7 @@ def show_list(page: int = 1) -> Any:
     )
 
 
-# History
+# HISTORY
 
 
 @app.route("/history", defaults={"page": 1}, methods=["GET"])  # type: ignore
@@ -435,6 +435,31 @@ def show_history(page: int = 1) -> Any:
         "list.html",
         mode="history",
         files=files,
+        total=total,
+        page=page,
+        next_page=next_page,
+        page_size=page_size,
+        def_page_size=def_page_size,
+    )
+
+
+# USERS
+
+
+@app.route("/users", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/users/<int:page>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
+def users(page: int = 1) -> Any:
+    query = request.args.get("query", "")
+    sort = request.args.get("sort", "date")
+    page_size = request.args.get("page_size", config.admin_page_size)
+    users, total, next_page = procs.get_users(page, page_size, query=query, sort=sort)
+    def_page_size = page_size == config.admin_page_size
+
+    return render_template(
+        "users.html",
+        users=users,
         total=total,
         page=page,
         next_page=next_page,

@@ -29,10 +29,23 @@ class File:
         return self.name
 
 
+@dataclass
+class User:
+    username: str
+    password: str
+    name: str
+    limit: int
+    max: int
+    list: bool
+    mark: str
+    register_date: int
+    last_date: int
+
+
 db_path = "database.sqlite3"
 
 
-schema = {
+schema_files = {
     "name": "text primary key",
     "ext": "text",
     "date": "int",
@@ -42,6 +55,18 @@ schema = {
     "username": "text",
     "uploader": "text",
     "mtype": "text",
+}
+
+schema_users = {
+    "username": "text primary key",
+    "password": "text",
+    "name": "text",
+    "limit": "int",
+    "max": "int",
+    "list": "int",
+    "mark": "text",
+    "register_date": "int",
+    "last_date": "int",
 }
 
 
@@ -73,7 +98,13 @@ def create_db() -> None:
 
     c.execute(
         f"""create table files (
-            {schema}
+            {schema_files}
+        )"""
+    )
+
+    c.execute(
+        f"""create table users (
+            {schema_users}
         )"""
     )
 
@@ -177,10 +208,15 @@ def fill_table() -> None:
     c.execute("pragma table_info(files)")
     columns = [info[1] for info in c.fetchall()]
 
-    for column, c_type in schema.items():
+    for column, c_type in schema_files.items():
         if column not in columns:
             utils.log(f"Adding column: {column}")
             c.execute(f"alter table files add column {column} {c_type}")
+
+    for column, c_type in schema_users.items():
+        if column not in columns:
+            utils.log(f"Adding column: {column}")
+            c.execute(f"alter table users add column {column} {c_type}")
 
     conn.commit()
     conn.close()

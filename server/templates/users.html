@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Users</title>
+<link rel="stylesheet" href="/static/css/users.css">
+
+<script>
+    const vars = {}
+</script>
+
+<script src="/static/js/users.js"></script>
+{% endblock %}
+
+{% block body %}
+<div id="top">
+    <a class="action_button" href="/">Back</a>
+    <div class="sep">|</div>
+    <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
+    <div class="sep">|</div>
+    <div class="action_button" id="delete_selected" title="Delete selected files">Delete</div>
+    <div class="sep">|</div>
+    <div class="action_button" id="delete_all" title="Delete all files (from all pages)">Delete All</div>
+    <div class="sep">|</div>
+    <div title="Total storage stats of all users (on all pages)">Total: {{total}}</div>
+    <div class="sep">|</div>
+    <div title="This is the current page">Page {{page}}</div>
+    <div class="sep">|</div>
+
+    {% if page > 1 %}
+        {% if page > 2 %}
+        <a class="linkbutton" href="/users/{{page - 1}}" title="Go to the previous page">Prev</a>
+        {% else %}
+        <a class="linkbutton" href="/users" title="Go to the previous page">Prev</a>
+        {% endif %}
+    {% else %}
+    <div class="">Prev</div>
+    {% endif %}
+
+    <div class="sep">|</div>
+
+    {% if next_page %}
+    <a class="linkbutton" href="/users/{{page + 1}}" title="Go to the next page">Next</a>
+    {% else %}
+    <div class="">Next</div>
+    {% endif %}
+
+    <select id="page_select" title="Show this number of items per page"></select>
+    <div class="sep">|</div>
+    <input id="filter" type="text" placeholder="Filter" title="Press Enter to search">
+</div>
+
+<div id="items">
+    <div class="table">
+        <div class="table_row table_header">
+            <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
+            <div id="name" class="table_cell underline">Name</div>
+            <div id="title" class="table_cell underline">Title</div>
+            <div id="uploader" class="table_cell underline">Uploader</div>
+            <div id="size" class="table_cell underline">Size</div>
+            <div id="date" class="table_cell underline">Date</div>
+            <div id="views" class="table_cell views underline" title="Views">Views</div>
+            <div class="table_cell actions">Actions</div>
+        </div>
+        {% for file in files %}
+        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-full="{{file.full}}" data-uploader="{{file.uploader or 'Anon'}}">
+            <!-- Checkbox -->
+            <div class="table_cell checkbox" title="Select this file">
+                <input class="select_checkbox" type="checkbox">
+            </div>
+
+            <!-- Name -->
+            <div class="table_cell">
+                <a href="/post/{{file.name}}" target="_blank" title="{{file.show}}">{{file.show}}</a>
+            </div>
+
+            <!-- Title -->
+            <div class="table_cell title" title="{{file.title or file.original}}">{{file.title or file.original}}</div>
+
+            <!-- Uploader -->
+            <div class="table_cell uploader">{{file.uploader or 'Anon'}}</div>
+
+            <!-- Size -->
+            <div class="table_cell">{{file.size_str}}</div>
+
+            <!-- Date -->
+            <div class="table_cell date" title="{{file.date_3}}">{{file.ago}}</div>
+
+            <!-- Views -->
+            <div class="table_cell views">{{file.views}}</div>
+
+            <!-- Actions -->
+            <div class="table_cell actions">
+                <span class="edit action_button" title="Edit this file">E</span>
+                <span class="sep"> | </span>
+                <span class="delete action_button" title="Delete this file">D</span>
+                <span class="sep"> | </span>
+                <span class="delete_above action_button" title="Delete all files above this one">A</span>
+                <span class="sep"> | </span>
+                <span class="delete_below action_button" title="Delete all files below this one">B</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
