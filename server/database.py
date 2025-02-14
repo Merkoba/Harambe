@@ -34,9 +34,9 @@ class User:
     username: str
     password: str
     name: str
-    limit: int
-    max: int
-    list: bool
+    rpm: int
+    max_size: int
+    can_list: bool
     mark: str
     register_date: int
     last_date: int
@@ -45,40 +45,9 @@ class User:
 db_path = "database.sqlite3"
 
 
-schema_files = {
-    "name": "text primary key",
-    "ext": "text",
-    "date": "int",
-    "title": "text",
-    "views": "int default 0",
-    "original": "text",
-    "username": "text",
-    "uploader": "text",
-    "mtype": "text",
-}
-
-schema_users = {
-    "username": "text primary key",
-    "password": "text",
-    "name": "text",
-    "limit": "int",
-    "max": "int",
-    "list": "int",
-    "mark": "text",
-    "register_date": "int",
-    "last_date": "int",
-}
-
-
 def check_db() -> bool:
     path = Path(db_path)
-
-    if not path.exists():
-        create_db()
-        return False
-
-    check_tables()
-    return True
+    return path.exists()
 
 
 def get_conn() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
@@ -94,22 +63,6 @@ def row_conn() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
     return conn, c
 
 
-def create_db() -> None:
-    conn, c = get_conn()
-    c.execute(f"create table files ({schema_files})")
-    c.execute(f"create table users ({schema_users})")
-    conn.commit()
-    conn.close()
-
-
-def check_tables() -> None:
-    conn, c = get_conn()
-    c.execute(f"create table if not exists files ({schema_files})")
-    c.execute(f"create table if not exists users ({schema_users})")
-    conn.commit()
-    conn.close()
-
-
 def add_file(
     name: str,
     ext: str,
@@ -119,7 +72,9 @@ def add_file(
     uploader: str,
     mtype: str,
 ) -> None:
-    check_db()
+    if not check_db():
+        return
+
     conn, c = get_conn()
     date = utils.now()
     values = [name, ext, date, title, 0, original, username, uploader, mtype]
@@ -205,17 +160,20 @@ def add_user(
     username: str,
     password: str,
     name: str,
-    limit: int,
+    rpm: int,
     max_: int,
     list_: bool,
     mark: str,
 ) -> None:
-    check_db()
+    if not check_db():
+        return
+
     conn, c = get_conn()
     date = utils.now()
-    values = [username, password, name, limit, max_, limit, list_, mark]
+    values = [username, password, name, rpm, max_size, can_list, mark]
+    values.extend([date, date])
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into files (username, password, name, limit, max, limit, list_, mark) values ({placeholders})"
+    query = f"insert into files (username, password, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -226,9 +184,9 @@ def make_user(row: dict[str, Any]) -> User:
         username=row.get("username"),
         password=row.get("password"),
         name=row.get("name") or "",
-        limit=row.get("limit") or 12,
-        max=row.get("max") or 100,
-        list=row.get("list") or False,
+        rpm=row.get("rpm") or 12,
+        max_size=row.get("max_size") or 100,
+        can_list=row.get("can_list") or 0,
         mark=row.get("mark") or "",
         register_date=row.get("register_date") or 0,
         last_date=row.get("last_date") or 0,
@@ -245,25 +203,3 @@ def get_users() -> dict[str, File]:
     conn.close()
 
     return {row["name"]: make_user(dict(row)) for row in rows}
-
-
-def fill_table() -> None:
-    conn, c = get_conn()
-    c.execute("pragma table_info(files)")
-    columns = [info[1] for info in c.fetchall()]
-
-    for column, c_type in schema_files.items():
-        if column not in columns:
-            utils.log(f"Adding column: {column}")
-            c.execute(f"alter table files add column {column} {c_type}")
-
-    for column, c_type in schema_users.items():
-        if column not in columns:
-            utils.log(f"Adding column: {column}")
-            c.execute(f"alter table users add column {column} {c_type}")
-
-    conn.commit()
-    conn.close()
-
-check_db()
-fill_table()

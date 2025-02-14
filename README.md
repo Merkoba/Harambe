@@ -213,6 +213,6 @@ There is an `sqlite3` database that holds some data about the files.
 
 This includes the creation date, the title, and views.
 
-This is all handled automatically.
-
 This is located in `server/database.sqlite3`.
+
+To create and update the database run `schema.py`.
