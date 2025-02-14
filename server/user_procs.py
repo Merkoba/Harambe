@@ -131,7 +131,7 @@ def edit_user(request: Request) -> bool:
     mode = "add" if user is None else "edit"
     n_args = {}
 
-    def get_value(what: str) -> bool:
+    def get_value(what: str) -> None:
         value = None
 
         if args[what]:
@@ -144,12 +144,13 @@ def edit_user(request: Request) -> bool:
             if user and getattr(user, what):
                 value = getattr(user, what)
 
-        if value is None:
-            if what in ["username", "password"]:
-                return False
-
         n_args[what] = value
-        return True
+
+    for key in args:
+        get_value(key)
+
+    if (not n_args["username"]) or (not n_args["password"]):
+        return False
 
     if database.add_user(
         mode,
