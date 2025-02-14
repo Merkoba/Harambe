@@ -470,17 +470,20 @@ def users(page: int = 1) -> Any:
     )
 
 
-@app.route("/edit_user", defaults={"username": ""}, methods=["GET"])  # type: ignore
-@app.route("/edit_user/<string:username>", methods=["GET"])  # type: ignore
+@app.route("/edit_user", defaults={"username": ""}, methods=["GET", "POST"])  # type: ignore
+@app.route("/edit_user/<string:username>", methods=["GET", "POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
 def edit_user(username: str = "") -> Any:
-    if username:
-        user = user_procs.get_user(username) or {}
+    if request.method == "POST":
+        return user_procs.edit_user(request)
     else:
-        user = {}
+        if username:
+            user = user_procs.get_user(username) or {}
+        else:
+            user = {}
 
-    return render_template(
-        "edit_user.html",
-        user=user,
-    )
+        return render_template(
+            "edit_user.html",
+            user=user,
+        )

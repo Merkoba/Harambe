@@ -1,6 +1,9 @@
 # Standard
 from dataclasses import dataclass
 
+# Libraries
+from flask import Request
+
 # Modules
 import database
 
@@ -103,3 +106,29 @@ def get_user(username: str) -> User | None:
             return user
 
     return None
+
+def edit_user(request: Request) -> None:
+    username = request.form.get("username")
+    password = request.form.get("password")
+    name = request.form.get("name")
+    rpm = int(request.form.get("rpm"))
+    max_size = int(request.form.get("max_size"))
+    can_list = request.form.get("can_list")
+    mark = request.form.get("mark")
+
+    user = get_user(username)
+    mode = "add" if user is None else "edit"
+    passw = user.password if user is not None else password
+
+    database.add_user(
+        mode,
+        username,
+        password,
+        name,
+        rpm,
+        max_size,
+        can_list,
+        mark,
+    )
+
+    update_userlist()

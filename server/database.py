@@ -6,6 +6,9 @@ from typing import Any
 from pathlib import Path
 from dataclasses import dataclass
 
+# Libraries
+from werkzeug.security import generate_password_hash
+
 # Modules
 import utils
 
@@ -157,6 +160,7 @@ def edit_title(name: str, title: str) -> None:
 
 
 def add_user(
+    mode: str,
     username: str,
     password: str,
     name: str,
@@ -168,12 +172,31 @@ def add_user(
     if not check_db():
         return
 
+    if (not username) or (not password):
+        return
+
     conn, c = get_conn()
+    hashed_password = generate_password_hash(password)
     date = utils.now()
-    values = [username, password, name, rpm, max_size, can_list, mark]
-    values.extend([date, date])
-    placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into files (username, password, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
+
+    values = [
+        username,
+        hashed_password,
+        name or "",
+        rpm or 12,
+        max_size or 0,
+        can_list or 0,
+        mark or "",
+    ]
+
+    if mode == "add":
+        values.extend([date, date])
+        placeholders = ", ".join(["?"] * len(values))
+        query = f"insert into files (username, password, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
+    elif mode == "edit":
+        values.append(username)
+        query = f"update users set username = ?, password = ?, name = ?, rpm = ?, max_size = ?, can_list = ?, mark = ? where username = ?"
+
     c.execute(query, values)
     conn.commit()
     conn.close()
