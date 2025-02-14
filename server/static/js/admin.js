@@ -157,6 +157,14 @@ window.onload = () => {
       }
     })
   }
+
+  let add = DOM.el(`#add`)
+
+  if (add) {
+    DOM.ev(add, `click`, () => {
+      window.location = `/edit_user`
+    })
+  }
 }
 
 function select_above(el) {

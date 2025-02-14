@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Edit User</title>
+<link rel="stylesheet" href="/static/css/edit_user.css">
+<script src="/static/js/edit_user.js"></script>
+{% endblock %}
+
+{% block body %}
+<div>
+    <form>
+        <input type="text" id="username" name="username" placeholder="Username" value="{{user.username}}">
+        <input type="text" id="password" name="password" placeholder="Password" value="{{user.password}}">
+    </form>
+</div>
+{% endblock %}

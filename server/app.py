@@ -14,6 +14,7 @@ from flask_limiter.util import get_remote_address  # type: ignore
 
 # Modules
 import procs
+import user_procs
 import utils
 from config import config
 
@@ -22,6 +23,7 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.secret_key = config.app_key
 app.config["MAX_CONTENT_LENGTH"] = config.get_max_file_size()
+user_procs.update_userlist()
 
 # Enable all cross origin requests
 CORS(app)
@@ -449,7 +451,7 @@ def show_history(page: int = 1) -> Any:
 @app.route("/users", defaults={"page": 1}, methods=["GET"])  # type: ignore
 @app.route("/users/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@login_required
+@admin_required
 def users(page: int = 1) -> Any:
     query = request.args.get("query", "")
     sort = request.args.get("sort", "date")
@@ -465,4 +467,20 @@ def users(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
+    )
+
+
+@app.route("/edit_user", defaults={"username": ""}, methods=["GET"])  # type: ignore
+@app.route("/edit_user/<string:username>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@admin_required
+def edit_user(username: str = "") -> Any:
+    if username:
+        user = user_procs.get_user(username) or {}
+    else:
+        user = {}
+
+    return render_template(
+        "edit_user.html",
+        user=user,
     )

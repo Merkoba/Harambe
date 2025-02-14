@@ -45,18 +45,6 @@ class File:
     show: str
 
 
-@dataclass
-class User:
-    username: str
-    name: str
-    rpm: int
-    max_size: int
-    can_list: bool
-    mark: str
-    register_date: int
-    last_date: int
-
-
 class UserData:
     def __init__(self, rpm: int) -> None:
         self.timestamps: deque[float] = deque()
@@ -589,69 +577,3 @@ def edit_title(name: str, title: str, username: str, is_admin: bool) -> tuple[st
 
     database.edit_title(name, title)
     return jsonify({"status": "ok", "message": "Title updated"}), 200
-
-
-def get_users(
-    page: int = 1,
-    page_size: str = "default",
-    query: str = "",
-    sort: str = "date",
-) -> tuple[list[File], str, bool]:
-    psize = 0
-
-    if page_size == "default":
-        psize = config.admin_page_size
-    elif page_size == "all":
-        pass  # Don't slice later
-    else:
-        psize = int(page_size)
-
-    users = []
-    now = utils.now()
-    query = query.lower()
-    db_users = database.get_users()
-
-    for user in db_users:
-        u = make_user(user)
-
-        ok = (
-            not query
-            or query in u.username()
-        )
-
-        if not ok:
-            continue
-
-        files.append(f)
-
-    if sort == "register_date":
-        users.sort(key=lambda x: x.register_date, reverse=True)
-    elif sort == "register_date_desc":
-        users.sort(key=lambda x: x.register_date, reverse=False)
-
-    elif sort == "last_date":
-        users.sort(key=lambda x: x.last_date, reverse=True)
-    elif sort == "last_date_desc":
-        users.sort(key=lambda x: x.last_date, reverse=False)
-
-    elif sort == "username":
-        users.sort(key=lambda x: x.username, reverse=True)
-    elif sort == "username_desc":
-        users.sort(key=lambda x: x.username, reverse=False)
-
-    elif sort == "name":
-        users.sort(key=lambda x: x.name, reverse=True)
-    elif sort == "name_desc":
-        users.sort(key=lambda x: x.name, reverse=False)
-
-    total_str = f"{len(users)} Users"
-
-    if psize > 0:
-        start_index = (page - 1) * psize
-        end_index = start_index + psize
-        has_next_page = end_index < len(users)
-        users = users[start_index:end_index]
-    else:
-        has_next_page = False
-
-    return users, total_str, has_next_page
