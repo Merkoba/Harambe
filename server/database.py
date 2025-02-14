@@ -77,6 +77,7 @@ def check_db() -> bool:
         create_db()
         return False
 
+    check_tables()
     return True
 
 
@@ -95,19 +96,16 @@ def row_conn() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
 
 def create_db() -> None:
     conn, c = get_conn()
+    c.execute(f"create table files ({schema_files})")
+    c.execute(f"create table users ({schema_users})")
+    conn.commit()
+    conn.close()
 
-    c.execute(
-        f"""create table files (
-            {schema_files}
-        )"""
-    )
 
-    c.execute(
-        f"""create table users (
-            {schema_users}
-        )"""
-    )
-
+def check_tables() -> None:
+    conn, c = get_conn()
+    c.execute(f"create table if not exists files ({schema_files})")
+    c.execute(f"create table if not exists users ({schema_users})")
     conn.commit()
     conn.close()
 
@@ -223,17 +221,17 @@ def add_user(
     conn.close()
 
 
-def make_file(row: dict[str, Any]) -> File:
-    return File(
-        name=row["name"],
-        ext=row["ext"],
-        date=row["date"],
-        title=row.get("title") or "",
-        views=row.get("views") or 0,
-        original=row.get("original") or "",
-        username=row.get("username") or "",
-        uploader=row.get("uploader") or "",
-        mtype=row.get("mtype") or "",
+def make_user(row: dict[str, Any]) -> User:
+    return User(
+        username=row.get("username"),
+        password=row.get("password"),
+        name=row.get("name") or "",
+        limit=row.get("limit") or 12,
+        max=row.get("max") or 100,
+        list=row.get("list") or False,
+        mark=row.get("mark") or "",
+        register_date=row.get("register_date") or 0,
+        last_date=row.get("last_date") or 0,
     )
 
 
@@ -267,5 +265,5 @@ def fill_table() -> None:
     conn.commit()
     conn.close()
 
-
+check_db()
 fill_table()

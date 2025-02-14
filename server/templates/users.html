@@ -53,12 +53,14 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
+            <div id="username" class="table_cell underline">Username</div>
             <div id="name" class="table_cell underline">Name</div>
-            <div id="title" class="table_cell underline">Title</div>
-            <div id="uploader" class="table_cell underline">Uploader</div>
-            <div id="size" class="table_cell underline">Size</div>
-            <div id="date" class="table_cell underline">Date</div>
-            <div id="views" class="table_cell views underline" title="Views">Views</div>
+            <div id="limit" class="table_cell underline">Limit</div>
+            <div id="max" class="table_cell underline">Max</div>
+            <div id="list" class="table_cell underline">List</div>
+            <div id="mark" class="table_cell underline">Mark</div>
+            <div id="reg_date" class="table_cell underline">Reg Date</div>
+            <div id="last_date" class="table_cell underline">Last Date</div>
             <div class="table_cell actions">Actions</div>
         </div>
         {% for file in files %}
@@ -68,25 +70,45 @@
                 <input class="select_checkbox" type="checkbox">
             </div>
 
-            <!-- Name -->
+            <!-- Username -->
             <div class="table_cell">
-                <a href="/post/{{file.name}}" target="_blank" title="{{file.show}}">{{file.show}}</a>
+                <div>{{user.username}}</div>
             </div>
 
-            <!-- Title -->
-            <div class="table_cell title" title="{{file.title or file.original}}">{{file.title or file.original}}</div>
+            <!-- Name -->
+            <div class="table_cell">
+                <div>{{user.name}}</div>
+            </div>
 
-            <!-- Uploader -->
-            <div class="table_cell uploader">{{file.uploader or 'Anon'}}</div>
+            <!-- Limit -->
+            <div class="table_cell">
+                <div>{{user.limit}}</div>
+            </div>
 
-            <!-- Size -->
-            <div class="table_cell">{{file.size_str}}</div>
+            <!-- Max -->
+            <div class="table_cell">
+                <div>{{user.max}}</div>
+            </div>
 
-            <!-- Date -->
-            <div class="table_cell date" title="{{file.date_3}}">{{file.ago}}</div>
+            <!-- List -->
+            <div class="table_cell">
+                <div>{{user.list}}</div>
+            </div>
 
-            <!-- Views -->
-            <div class="table_cell views">{{file.views}}</div>
+            <!-- Mark -->
+            <div class="table_cell">
+                <div>{{user.mark}}</div>
+            </div>
+
+            <!-- Reg Date -->
+            <div class="table_cell">
+                <div>{{user.reg_date}}</div>
+            </div>
+
+            <!-- Last Date -->
+            <div class="table_cell">
+                <div>{{user.last_date}}</div>
+            </div>
 
             <!-- Actions -->
             <div class="table_cell actions">
