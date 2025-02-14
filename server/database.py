@@ -203,6 +203,52 @@ def edit_title(name: str, title: str) -> None:
     conn.close()
 
 
+def add_user(
+    username: str,
+    password: str,
+    name: str,
+    limit: int,
+    max_: int,
+    list_: bool,
+    mark: str,
+) -> None:
+    check_db()
+    conn, c = get_conn()
+    date = utils.now()
+    values = [username, password, name, limit, max_, limit, list_, mark]
+    placeholders = ", ".join(["?"] * len(values))
+    query = f"insert into files (username, password, name, limit, max, limit, list_, mark) values ({placeholders})"
+    c.execute(query, values)
+    conn.commit()
+    conn.close()
+
+
+def make_file(row: dict[str, Any]) -> File:
+    return File(
+        name=row["name"],
+        ext=row["ext"],
+        date=row["date"],
+        title=row.get("title") or "",
+        views=row.get("views") or 0,
+        original=row.get("original") or "",
+        username=row.get("username") or "",
+        uploader=row.get("uploader") or "",
+        mtype=row.get("mtype") or "",
+    )
+
+
+def get_users() -> dict[str, File]:
+    if not check_db():
+        return {}
+
+    conn, c = row_conn()
+    c.execute("select * from users")
+    rows = c.fetchall()
+    conn.close()
+
+    return {row["name"]: make_user(dict(row)) for row in rows}
+
+
 def fill_table() -> None:
     conn, c = get_conn()
     c.execute("pragma table_info(files)")
