@@ -49,19 +49,19 @@ class File:
 class User:
     username: str
     name: str
-    limit: int
-    max: int
-    list: bool
+    rpm: int
+    max_size: int
+    can_list: bool
     mark: str
     register_date: int
     last_date: int
 
 
 class UserData:
-    def __init__(self, limit: int) -> None:
+    def __init__(self, rpm: int) -> None:
         self.timestamps: deque[float] = deque()
-        self.limit = limit
-        self.window = 60  # Rate limit per minute
+        self.rpm = rpm
+        self.window = 60
 
     def increment(self) -> None:
         now = time.time()
@@ -72,7 +72,7 @@ class UserData:
 
     def blocked(self) -> bool:
         self.increment()
-        return len(self.timestamps) > self.limit
+        return len(self.timestamps) > self.rpm
 
 
 user_data: dict[str, UserData] = {}
@@ -80,7 +80,7 @@ user_data: dict[str, UserData] = {}
 
 def check_user_limit(user: User) -> tuple[bool, str]:
     if user.username not in user_data:
-        user_data[user.username] = UserData(user.limit)
+        user_data[user.username] = UserData(user.rpm)
 
     if user_data[user.username].blocked():
         return False, "Rate limit exceeded"
@@ -91,8 +91,8 @@ def check_user_limit(user: User) -> tuple[bool, str]:
 def check_user_max(user: User, size: int) -> bool:
     megas = int(size / 1000 / 1000)
 
-    if user.max > 0:
-        if megas > user.max:
+    if user.max_size > 0:
+        if megas > user.max_size:
             return False
 
     return True
@@ -166,7 +166,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
             length = len(content)
             toobig = "File is too big"
 
-            if user and user.max > 0:
+            if user and user.max_size > 0:
                 if not check_user_max(user, length):
                     return error(toobig)
             elif length > config.get_max_file_size():
@@ -596,7 +596,6 @@ def get_users(
     page_size: str = "default",
     query: str = "",
     sort: str = "date",
-    max_files: int = 0,
 ) -> tuple[list[File], str, bool]:
     psize = 0
 
@@ -644,12 +643,6 @@ def get_users(
         users.sort(key=lambda x: x.name, reverse=True)
     elif sort == "name_desc":
         users.sort(key=lambda x: x.name, reverse=False)
-
-    if max_files > 0:
-        files = files[:max_files]
-
-    if max_users > 0:
-        users = users[:max_users]
 
     total_str = f"{len(users)} Users"
 

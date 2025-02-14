@@ -40,25 +40,11 @@ window.onload = () => {
     })
   }
 
-  let delete_selected = DOM.el(`#delete_selected`)
+  let del_sel = DOM.el(`#delete_selected`)
 
-  if (delete_selected) {
-    DOM.ev(delete_selected`click`, () => {
-      let files = []
-      let checkboxes = DOM.els(`.select_checkbox`)
-
-      for (let checkbox of checkboxes) {
-        if (checkbox.checked) {
-          files.push(checkbox.closest(`.item`))
-        }
-      }
-
-      if (files.length === 0) {
-        return
-      }
-
-      selected_files = files
-      delete_files()
+  if (del_sel) {
+    DOM.ev(del_sel, `click`, () => {
+      delete_selected()
     })
   }
 
@@ -586,4 +572,22 @@ function toggle_select() {
   }
 
   unselect_all()
+}
+
+function delete_selected() {
+  let files = []
+  let checkboxes = DOM.els(`.select_checkbox`)
+
+  for (let checkbox of checkboxes) {
+    if (checkbox.checked) {
+      files.push(checkbox.closest(`.item`))
+    }
+  }
+
+  if (files.length === 0) {
+    return
+  }
+
+  selected_files = files
+  delete_files()
 }

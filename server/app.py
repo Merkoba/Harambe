@@ -53,7 +53,7 @@ def can_list() -> bool:
     if not user:
         return False
 
-    return user.admin or user.list
+    return user.admin or user.can_list
 
 
 def login_required(f: Any) -> Any:
@@ -383,7 +383,7 @@ def show_list(page: int = 1) -> Any:
         if not user:
             return redirect(url_for("login"))
 
-        if not user.list:
+        if not user.can_list:
             return redirect(url_for("index"))
 
     page_size = request.args.get("page_size", config.list_page_size)
