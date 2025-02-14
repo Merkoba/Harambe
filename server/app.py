@@ -42,7 +42,7 @@ def logged_in() -> bool:
 
 
 def is_admin() -> bool:
-    user = config.get_user(get_username())
+    user = user_procs.get_user(get_username())
 
     if not user:
         return False

@@ -60,7 +60,7 @@ def make_database() -> None:
 
         for column, c_type in schema.items():
             if column not in columns:
-                c.execute(f"alter table files add column {column} {c_type}")
+                c.execute(f"alter table {what} add column {column} {c_type}")
 
     add_columns("files")
     add_columns("users")
