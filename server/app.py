@@ -13,10 +13,11 @@ from flask_limiter import Limiter  # type: ignore
 from flask_limiter.util import get_remote_address  # type: ignore
 
 # Modules
+import utils
 import procs
 import user_procs
-import utils
 from config import config
+from user_procs import User
 
 
 app = Flask(__name__)
@@ -484,6 +485,8 @@ def edit_user(username: str = "") -> Any:
             return redirect(url_for("users"))
 
         return redirect(url_for("edit_user", username=username))
+
+    user: User | None = None
 
     if username:
         user = user_procs.get_user(username)

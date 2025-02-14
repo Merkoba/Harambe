@@ -194,6 +194,8 @@ def add_user(
     elif mode == "edit":
         values.append(username)
         query = "update users set username = ?, password = ?, admin = ?, name = ?, rpm = ?, max_size = ?, can_list = ?, mark = ? where username = ?"
+    else:
+        return False
 
     c.execute(query, values)
     conn.commit()

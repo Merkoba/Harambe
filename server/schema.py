@@ -54,6 +54,9 @@ def make_database() -> None:
             schema = schema_files
         elif what == "users":
             schema = schema_users
+        else:
+            print("Invalid table")  # noqa
+            return
 
         for column, c_type in schema.items():
             if column not in columns:
