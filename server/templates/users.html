@@ -20,9 +20,9 @@
     <div class="sep">|</div>
     <div class="action_button" id="add" title="Refresh this page">Add</div>
     <div class="sep">|</div>
-    <div class="action_button" id="delete_selected" title="Delete selected files">Delete</div>
+    <div class="action_button" id="delete_selected" title="Delete selected users">Delete</div>
     <div class="sep">|</div>
-    <div class="action_button" id="delete_all" title="Delete all files (from all pages)">Delete All</div>
+    <div class="action_button" id="delete_all" title="Delete all user (from all pages)">Delete All</div>
     <div class="sep">|</div>
     <div title="Total storage stats of all users (on all pages)">Total: {{total}}</div>
     <div class="sep">|</div>
@@ -66,10 +66,10 @@
             <div id="last_date" class="table_cell underline">Last Date</div>
             <div class="table_cell actions">Actions</div>
         </div>
-        {% for file in files %}
-        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-full="{{file.full}}" data-uploader="{{file.uploader or 'Anon'}}">
+        {% for user in users %}
+        <div class="table_row item" data-username="{{user.username}}" data-name="{{user.name}}" data-rpm="{{user.rpm}}" data-max_size="{{user.max_size}}" data-can_list="{{user.can_list}}" data-mark="{{user.mark}}" data-reg_date="{{user.reg_date}}" data-last_date="{{user.last_date}}">
             <!-- Checkbox -->
-            <div class="table_cell checkbox" title="Select this file">
+            <div class="table_cell checkbox" title="Select this user">
                 <input class="select_checkbox" type="checkbox">
             </div>
 
@@ -83,19 +83,19 @@
                 <div>{{user.name}}</div>
             </div>
 
-            <!-- Limit -->
+            <!-- RPM -->
             <div class="table_cell">
-                <div>{{user.limit}}</div>
+                <div>{{user.rpm}}</div>
             </div>
 
-            <!-- Max -->
+            <!-- Max Size -->
             <div class="table_cell">
-                <div>{{user.max}}</div>
+                <div>{{user.max_size}}</div>
             </div>
 
-            <!-- List -->
+            <!-- Can List -->
             <div class="table_cell">
-                <div>{{user.list}}</div>
+                <div>{{user.can_list}}</div>
             </div>
 
             <!-- Mark -->
@@ -115,13 +115,13 @@
 
             <!-- Actions -->
             <div class="table_cell actions">
-                <span class="edit action_button" title="Edit this file">E</span>
+                <span class="edit action_button" title="Edit this user">E</span>
                 <span class="sep"> | </span>
-                <span class="delete action_button" title="Delete this file">D</span>
+                <span class="delete action_button" title="Delete this user">D</span>
                 <span class="sep"> | </span>
-                <span class="delete_above action_button" title="Delete all files above this one">A</span>
+                <span class="delete_above action_button" title="Delete all users above this one">A</span>
                 <span class="sep"> | </span>
-                <span class="delete_below action_button" title="Delete all files below this one">B</span>
+                <span class="delete_below action_button" title="Delete all users below this one">B</span>
             </div>
         </div>
         {% endfor %}

@@ -165,15 +165,15 @@ def add_user(
     password: str,
     name: str,
     rpm: int,
-    max_: int,
-    list_: bool,
+    max_size: int,
+    can_list: bool,
     mark: str,
-) -> None:
+) -> bool:
     if not check_db():
-        return
+        return False
 
     if (not username) or (not password):
-        return
+        return False
 
     conn, c = get_conn()
     hashed_password = generate_password_hash(password)
@@ -192,7 +192,7 @@ def add_user(
     if mode == "add":
         values.extend([date, date])
         placeholders = ", ".join(["?"] * len(values))
-        query = f"insert into files (username, password, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
+        query = f"insert into users (username, password, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
     elif mode == "edit":
         values.append(username)
         query = f"update users set username = ?, password = ?, name = ?, rpm = ?, max_size = ?, can_list = ?, mark = ? where username = ?"
@@ -200,6 +200,7 @@ def add_user(
     c.execute(query, values)
     conn.commit()
     conn.close()
+    return True
 
 
 def make_user(row: dict[str, Any]) -> User:
@@ -225,4 +226,4 @@ def get_users() -> dict[str, File]:
     rows = c.fetchall()
     conn.close()
 
-    return {row["name"]: make_user(dict(row)) for row in rows}
+    return [make_user(dict(row)) for row in rows]

@@ -456,7 +456,7 @@ def users(page: int = 1) -> Any:
     query = request.args.get("query", "")
     sort = request.args.get("sort", "date")
     page_size = request.args.get("page_size", config.admin_page_size)
-    users, total, next_page = procs.get_users(page, page_size, query=query, sort=sort)
+    users, total, next_page = user_procs.get_users(page, page_size, query=query, sort=sort)
     def_page_size = page_size == config.admin_page_size
 
     return render_template(
@@ -476,7 +476,12 @@ def users(page: int = 1) -> Any:
 @admin_required
 def edit_user(username: str = "") -> Any:
     if request.method == "POST":
-        return user_procs.edit_user(request)
+        ok = user_procs.edit_user(request)
+
+        if ok:
+            return redirect(url_for("users"))
+        else:
+            return redirect(url_for("edit_user", username=username))
     else:
         if username:
             user = user_procs.get_user(username) or {}

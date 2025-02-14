@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from flask import Request
 
 # Modules
+import utils
 import database
 
 
@@ -65,7 +66,7 @@ def get_users(
         if not ok:
             continue
 
-        users.append(f)
+        users.append(user)
 
     if sort == "register_date":
         users.sort(key=lambda x: x.register_date, reverse=True)
@@ -87,7 +88,7 @@ def get_users(
     elif sort == "name_desc":
         users.sort(key=lambda x: x.name, reverse=False)
 
-    total_str = f"{len(users)} Users"
+    total_str = len(users)
 
     if psize > 0:
         start_index = (page - 1) * psize
@@ -111,8 +112,8 @@ def edit_user(request: Request) -> None:
     username = request.form.get("username")
     password = request.form.get("password")
     name = request.form.get("name")
-    rpm = int(request.form.get("rpm"))
-    max_size = int(request.form.get("max_size"))
+    rpm = int(request.form.get("rpm") or 0)
+    max_size = int(request.form.get("max_size") or 0)
     can_list = request.form.get("can_list")
     mark = request.form.get("mark")
 
@@ -120,7 +121,7 @@ def edit_user(request: Request) -> None:
     mode = "add" if user is None else "edit"
     passw = user.password if user is not None else password
 
-    database.add_user(
+    if database.add_user(
         mode,
         username,
         password,
@@ -129,6 +130,8 @@ def edit_user(request: Request) -> None:
         max_size,
         can_list,
         mark,
-    )
+    ):
+        update_userlist()
+        return True
 
-    update_userlist()
+    return False

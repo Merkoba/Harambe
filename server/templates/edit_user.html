@@ -8,9 +8,17 @@
 
 {% block body %}
 <div>
-    <form>
+    <div>Edit or Add a User</div>
+
+    <form id="form" action="/edit_user" method="post">
         <input type="text" id="username" name="username" placeholder="Username" value="{{user.username}}">
         <input type="text" id="password" name="password" placeholder="Password" value="">
+        <input type="text" id="name" name="name" placeholder="Name" value="{{user.name}}">
+        <input type="text" id="rpm" name="rpm" placeholder="Requests Per Minute" value="{{user.rpm}}">
+        <input type="text" id="max_size" name="max_size" placeholder="Max File Size" value="{{user.max_size}}">
+        <input type="text" id="can_list" name="can_list" placeholder="Can Use List" value="{{user.can_list}}">
+        <input type="text" id="mark" name="mark" placeholder="Mark on Files" value="{{user.mark}}">
+        <input type="submit" value="Submit">
     </form>
 </div>
 {% endblock %}
