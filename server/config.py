@@ -193,6 +193,9 @@ class Config:
         # Enable uploads through the API
         self.api_uploads_enabled: bool = True
 
+        # Allow uploads from non-users
+        self.anon_uploads_enabled: bool = False
+
         # Max size to consider files for media embeds on the post page
         self.embed_max_size: int = 20_000_000
 
@@ -287,6 +290,7 @@ class Config:
             set_value(c, "allow_titles")
             set_value(c, "web_uploads_enabled")
             set_value(c, "api_uploads_enabled")
+            set_value(c, "anon_uploads_enabled")
             set_value(c, "embed_max_size")
             set_value(c, "allow_edit")
             set_value(c, "history_enabled")

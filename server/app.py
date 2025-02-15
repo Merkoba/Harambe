@@ -118,6 +118,9 @@ def index() -> Any:
     uname = user.username if user else ""
     is_user = bool(user)
 
+    if (not user) and (not config.anon_uploads_enabled):
+        return redirect(url_for("login"))
+
     if request.method == "POST":
         try:
             ok, ans = procs.upload(request, username=uname)
