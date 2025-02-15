@@ -22,6 +22,7 @@ class File:
     username: str
     uploader: str
     mtype: str
+    view_date: int
 
     def full(self) -> str:
         if self.ext:
@@ -88,9 +89,9 @@ def add_file(
     check_db()
     conn, c = get_conn()
     date = utils.now()
-    values = [name, ext, date, title, 0, original, username, uploader, mtype]
+    values = [name, ext, date, title, 0, original, username, uploader, mtype, date]
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype) values ({placeholders})"
+    query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype, view_date) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -107,6 +108,7 @@ def make_file(row: dict[str, Any]) -> File:
         username=row.get("username") or "",
         uploader=row.get("uploader") or "",
         mtype=row.get("mtype") or "",
+        view_date=row.get("view_date") or 0,
     )
 
 
@@ -144,7 +146,10 @@ def delete_file(name: str) -> None:
 def increase_views(name: str) -> None:
     check_db()
     conn, c = get_conn()
-    c.execute("update files set views = views + 1 where name = ?", (name,))
+    c.execute(
+        "update files set views = views + 1, view_date = ? where name = ?",
+        (utils.now(), name),
+    )
     conn.commit()
     conn.close()
 
@@ -271,8 +276,10 @@ def mod_user(usernames: list[str], what: str, value: Any) -> None:
 def update_user_last_date(username: str) -> None:
     check_db()
     conn, c = get_conn()
+
     c.execute(
         "update users set last_date = ? where username = ?", (utils.now(), username)
     )
+
     conn.commit()
     conn.close()

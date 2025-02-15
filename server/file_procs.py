@@ -309,7 +309,10 @@ def get_file(name: str) -> File | None:
             db_file = database.get_file(name)
 
             if db_file:
-                database.increase_views(name)
+                diff = utils.now() - db_file.view_date
+
+                if diff > config.view_delay:
+                    database.increase_views(name)
 
             return make_file(file, db_file, utils.now())
 

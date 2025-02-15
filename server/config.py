@@ -217,6 +217,9 @@ class Config:
         # Allow non-users to view posts and files
         self.public_posts: bool = True
 
+        # Don't increment view if last view is within this delay in seconds
+        self.view_delay: int = 1
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -302,6 +305,7 @@ class Config:
             set_value(c, "max_file_content")
             set_value(c, "requests_per_minute")
             set_value(c, "public_posts")
+            set_value(c, "view_delay")
 
             # Users
 
