@@ -349,12 +349,9 @@ def check_storage() -> None:
         do_delete_file(oldest_file[0].name)
 
 
-def get_next_file(name: str) -> File | None:
-    files, _, _ = get_files()
+def get_next_file(name: str) -> str | None:
+    if not name:
+        return None
 
-    for i, file in enumerate(files):
-        if file.name == name:
-            if (i + 1) < len(files):
-                return files[i + 1]
-
-    return None
+    file = database.get_next_file(name)
+    return file.name if file else None

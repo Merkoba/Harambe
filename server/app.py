@@ -56,8 +56,6 @@ def can_list(user: User | None = None) -> bool:
 
     return user.admin or user.can_list
 
-    return config.list_enabled and ((not config.list_private) or can_list())
-
 
 def list_visible(user: User | None = None) -> bool:
     return config.list_enabled and ((not config.list_private) or can_list(user))
@@ -89,6 +87,19 @@ def admin_required(f: Any) -> Any:
 
         if (not user) or (not user.admin):
             return redirect(url_for("login"))
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
+def list_required(f: Any) -> Any:
+    @wraps(f)
+    def decorated_function(*args: Any, **kwargs: Any) -> Any:
+        user = user_procs.get_user(get_username())
+
+        if not list_visible(user):
+            return redirect(url_for("index"))
 
         return f(*args, **kwargs)
 
@@ -308,14 +319,14 @@ def get_file(name: str, original: str | None = None) -> Any:
 
 @app.route("/next/<string:current>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@login_required
+@list_required
 def next_post(current: str) -> Any:
-    file = file_procs.get_next_file(current)
+    name = file_procs.get_next_file(current)
 
-    if not file:
+    if not name:
         return redirect(url_for("post", name=current))
 
-    return redirect(url_for("post", name=file.name))
+    return redirect(url_for("post", name=name))
 
 
 # ADMIN

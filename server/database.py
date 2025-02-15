@@ -162,6 +162,28 @@ def edit_title(name: str, title: str) -> None:
     conn.close()
 
 
+def get_next_file(current: str) -> File | None:
+    check_db()
+    conn, c = row_conn()
+
+    c.execute("select * from files where name = ?", (current,))
+    current_row = c.fetchone()
+
+    if not current_row:
+        conn.close()
+        return None
+
+    date = current_row["date"]
+    c.execute("select * from files where date < ? order by date desc limit 1", (date,))
+    next_row = c.fetchone()
+    conn.close()
+
+    if next_row:
+        return make_file(dict(next_row))
+
+    return None
+
+
 def add_user(
     mode: str,
     username: str,
