@@ -242,12 +242,16 @@ def message() -> Any:
 @app.route("/post/<string:name>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def post(name: str) -> Any:
+    user = get_user()
+
+    if not config.public_posts:
+        if not user:
+            return Response(invalid, mimetype=text_mtype)
+
     file = file_procs.get_file(name)
 
     if not file:
         return Response(invalid, mimetype=text_mtype)
-
-    user = get_user()
 
     if user:
         owned = user.admin or ((file.username == user.username) and config.allow_edit)
@@ -278,6 +282,12 @@ def get_file(name: str, original: str | None = None) -> Any:
 
         if (not referrer) or (not referrer.startswith(host)):
             abort(403)
+
+    if not config.public_posts:
+        user = get_user()
+
+        if not user:
+            return Response(invalid, mimetype=text_mtype)
 
     file = file_procs.get_file(name)
 
