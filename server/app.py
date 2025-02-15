@@ -56,6 +56,13 @@ def can_list(user: User | None = None) -> bool:
 
     return user.admin or user.can_list
 
+    return config.list_enabled and ((not config.list_private) or can_list())
+
+
+def list_visible(user: User | None = None) -> bool:
+    return False
+    return config.list_enabled and ((not config.list_private) or can_list(user))
+
 
 def login_required(f: Any) -> Any:
     @wraps(f)
@@ -146,11 +153,7 @@ def index() -> Any:
     else:
         captcha = None
 
-    show_list = False
-
-    if config.list_enabled and ((not config.list_private) or can_list()):
-        show_list = True
-
+    show_list = list_visible(user)
     show_history = admin or (config.history_enabled and is_user)
 
     if user:
@@ -524,8 +527,8 @@ def edit_user(username: str = "") -> Any:
     def show_edit(message: str = "") -> Any:
         user = user_procs.get_user(username)
 
-        if not user:
-            return redirect(url_for("users"))
+        if (not user) and mode == "edit":
+            return redirect(url_for("admin", what="users"))
 
         if mode == "edit":
             title = "Edit User"
@@ -544,7 +547,7 @@ def edit_user(username: str = "") -> Any:
     user = get_user()
 
     if not user:
-        return redirect(url_for("users"))
+        return redirect(url_for("admin", what="users"))
 
     if request.method == "POST":
         if not username:
