@@ -220,6 +220,12 @@ class Config:
         # Don't increment view if last view is within this delay in seconds
         self.view_delay: int = 1
 
+        # Content of the description meta tag in the index
+        self.description_index: str = "Ask Harambe for your file to be uploaded"
+
+        # Content of the description meta tag in posts
+        self.description_post: str = "File kindly uploaded by Harambe"
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

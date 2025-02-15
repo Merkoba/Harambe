@@ -186,6 +186,7 @@ def index() -> Any:
         show_history=show_history,
         show_list=show_list,
         show_admin=admin,
+        description=config.description_index,
     )
 
 
@@ -268,6 +269,7 @@ def post(name: str) -> Any:
         text_color=config.text_color,
         link_color=config.link_color,
         font_family=config.font_family,
+        description=config.description_post,
         owned=owned,
     )
 

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-<meta name="description" content="File kindly uploaded by Harambe">
+<meta name="description" content="{{description}}">
 <title>{{file.title or file.original or file.name or 'Post'}}</title>
 <link rel="stylesheet" href="/static/css/post.css">
 
