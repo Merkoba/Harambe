@@ -161,7 +161,7 @@ window.onload = () => {
 
   if (can_list) {
     DOM.ev(can_list, `click`, () => {
-      can_list_selected()
+      mod_user(`can_list`, 1, `bool`)
     })
   }
 
@@ -169,7 +169,7 @@ window.onload = () => {
 
   if (no_list) {
     DOM.ev(no_list, `click`, () => {
-      no_list_selected()
+      mod_user(`can_list`, 0, `bool`)
     })
   }
 }
@@ -462,6 +462,7 @@ function toggle_select() {
 }
 
 function get_selected() {
+  let items = []
   let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
@@ -469,6 +470,8 @@ function get_selected() {
       items.push(checkbox.closest(`.item`))
     }
   }
+
+  return items
 }
 
 function delete_selected() {
@@ -584,24 +587,38 @@ function do_sort(what) {
   window.location = `/${vars.mode}?sort=${what}`
 }
 
-function list_selected() {
-    try {
-      let response = await fetch(`/list_yes`, {
-        method: `POST`,
-        headers: {
-          "Content-Type": `application/json`,
-        },
-        body: JSON.stringify({files}),
-      })
+function mod_user(what, value, vtype) {
+  if (confirm(`Modify selected users? (${what}: ${value})`)) {
+    do_mod_user(what, value, vtype)
+  }
+}
 
-      if (response.ok) {
-        remove_files(files)
-      }
-      else {
-        print_error(response.status)
-      }
+async function do_mod_user(what, value, vtype) {
+  let items = get_selected()
+
+  if (!items.length) {
+    return
+  }
+
+  let usernames = items.map(x => x.dataset.username)
+
+  try {
+    let response = await fetch(`/mod_user`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({usernames, what, value, vtype}),
+    })
+
+    if (response.ok) {
+      window.location = `/users`
     }
-    catch (error) {
-      print_error(error)
+    else {
+      print_error(response.status)
     }
+  }
+  catch (error) {
+    print_error(error)
+  }
 }

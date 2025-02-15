@@ -256,3 +256,13 @@ def delete_normal_users() -> None:
     c.execute(query)
     conn.commit()
     conn.close()
+
+
+def mod_user(usernames: list[str], what: str, value: Any) -> None:
+    check_db()
+    conn, c = get_conn()
+    placeholders = ", ".join("?" for _ in usernames)
+    query = f"update users set {what} = ? where username in ({placeholders})"
+    c.execute(query, (value, *usernames))
+    conn.commit()
+    conn.close()

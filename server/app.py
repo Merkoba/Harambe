@@ -33,13 +33,13 @@ simple_captcha = CAPTCHA(config=config.get_captcha())
 app = simple_captcha.init_app(app)
 
 
+def get_username() -> str:
+    return str(session.get("username", ""))
+
+
 def get_user() -> User | None:
     username = get_username()
     return user_procs.get_user(username)
-
-
-def get_username() -> str:
-    return str(session.get("username", ""))
 
 
 def logged_in() -> bool:
@@ -412,8 +412,6 @@ def show_list(page: int = 1) -> Any:
         if not logged_in():
             return redirect(url_for("login"))
 
-        user = user_procs.get_user(get_username())
-
         if not user:
             return redirect(url_for("login"))
 
@@ -450,13 +448,17 @@ def show_list(page: int = 1) -> Any:
 @login_required
 def show_history(page: int = 1) -> Any:
     user = get_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
     admin = user and user.admin
 
     if not config.history_enabled and (not admin):
         return redirect(url_for("index"))
 
     page_size = request.args.get("page_size", config.list_page_size)
-    username = get_username()
+    username = user.username
 
     if not username:
         return redirect(url_for("index"))
@@ -513,18 +515,18 @@ def users(page: int = 1) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
 def edit_user(username: str = "") -> Any:
+    user = get_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
     if request.method == "POST":
-        ok = user_procs.edit_user(request, get_username())
+        ok = user_procs.edit_user(request, user.username)
 
         if ok:
             return redirect(url_for("users"))
 
         return redirect(url_for("edit_user", username=username))
-
-    user: User | None = None
-
-    if username:
-        user = user_procs.get_user(username)
 
     return render_template(
         "edit_user.html",
@@ -538,7 +540,16 @@ def edit_user(username: str = "") -> Any:
 def delete_users() -> Any:
     data = request.get_json()
     usernames = data.get("usernames", None)
-    return user_procs.delete_users(usernames, get_username())
+
+    if not usernames:
+        return {}, 400
+
+    user = get_user()
+
+    if not user:
+        return Response(invalid, mimetype=text_mtype)
+
+    return user_procs.delete_users(usernames, user.username)
 
 
 @app.route("/delete_normal_users", methods=["POST"])  # type: ignore
@@ -554,4 +565,34 @@ def delete_normal_users() -> Any:
 def delete_user() -> Any:
     data = request.get_json()
     username = data.get("username", None)
-    return user_procs.delete_user(username, get_username())
+
+    if not username:
+        return {}, 400
+
+    user = get_user()
+
+    if not user:
+        return Response(invalid, mimetype=text_mtype)
+
+    return user_procs.delete_user(username, user.username)
+
+
+@app.route("/mod_user", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@admin_required
+def mod_user() -> Any:
+    data = request.get_json()
+    usernames = data.get("usernames", None)
+    what = data.get("what", None)
+    value = data.get("value", None)
+    vtype = data.get("vtype", None)
+
+    if (not usernames) or (not what) or (value is None) or (not vtype):
+        return {}, 400
+
+    user = get_user()
+
+    if not user:
+        return {}, 400
+
+    return user_procs.mod_user(usernames, what, value, vtype)

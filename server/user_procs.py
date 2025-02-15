@@ -4,6 +4,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass
 from collections import deque
+from typing import Any
 
 # Libraries
 from flask import Request, jsonify  # type: ignore
@@ -316,3 +317,28 @@ def check_user_max(user: User, size: int) -> bool:
         return False
 
     return True
+
+
+def mod_user(
+    usernames: list[str], what: str, value: str, vtype: str
+) -> tuple[dict[str, Any], int]:
+    if not what:
+        return {}, 400
+
+    new_value: Any = None
+
+    if vtype == "int":
+        try:
+            new_value = max(0, int(value))
+        except ValueError:
+            new_value = 0
+    elif vtype == "string":
+        new_value = str(value)
+    elif vtype == "bool":
+        new_value = bool(value)
+
+    if new_value is None:
+        return {}, 400
+
+    database.mod_user(usernames, what, new_value)
+    return {}, 200
