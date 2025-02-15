@@ -156,6 +156,22 @@ window.onload = () => {
       window.location = `/edit_user`
     })
   }
+
+  let can_list = DOM.el(`#can_list`)
+
+  if (can_list) {
+    DOM.ev(can_list, `click`, () => {
+      can_list_selected()
+    })
+  }
+
+  let no_list = DOM.el(`#no_list`)
+
+  if (no_list) {
+    DOM.ev(no_list, `click`, () => {
+      no_list_selected()
+    })
+  }
 }
 
 function select_above(el) {
@@ -445,8 +461,7 @@ function toggle_select() {
   unselect_all()
 }
 
-function delete_selected() {
-  let items = []
+function get_selected() {
   let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
@@ -454,6 +469,10 @@ function delete_selected() {
       items.push(checkbox.closest(`.item`))
     }
   }
+}
+
+function delete_selected() {
+  let items = get_selected()
 
   if (items.length === 0) {
     return
@@ -563,4 +582,26 @@ function do_sort(what) {
   }
 
   window.location = `/${vars.mode}?sort=${what}`
+}
+
+function list_selected() {
+    try {
+      let response = await fetch(`/list_yes`, {
+        method: `POST`,
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        body: JSON.stringify({files}),
+      })
+
+      if (response.ok) {
+        remove_files(files)
+      }
+      else {
+        print_error(response.status)
+      }
+    }
+    catch (error) {
+      print_error(error)
+    }
 }
