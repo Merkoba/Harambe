@@ -73,9 +73,15 @@
 
     {% if file.can_embed %}
     <div id="embed">
-        {% if file.mtype.startswith("image/") and file.size%}
+        {% if file.mtype.startswith("image/") %}
         <div>
-            <a href="/{{file_path}}/{{file.name}}"><img id="image" src="/{{file_path}}/{{file.name}}"></a>
+            <img id="image" src="/{{file_path}}/{{file.name}}">
+
+            <div id="modal">
+                <div id="modal_content">
+                    <img id="modal_image" src="">
+                </div>
+            </div>
         </div>
         {% endif %}
 

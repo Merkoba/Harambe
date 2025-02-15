@@ -42,6 +42,25 @@ window.onload = function() {
   else if (vars.mtype.startsWith(`application`) && vars.mtype.includes(`flash`)) {
     start_flash(vars.name)
   }
+
+  let image = DOM.el(`#image`)
+
+  if (image) {
+    DOM.ev(image, `click`, () => {
+      let modal_image = DOM.el(`#modal_image`)
+      modal_image.src = image.src
+      let modal = DOM.el(`#modal`)
+      modal.style.display = `flex`
+    })
+  }
+
+  let modal = DOM.el(`#modal`)
+
+  if (modal) {
+    DOM.ev(modal, `click`, () => {
+      modal.style.display = `none`
+    })
+  }
 }
 
 function timeago(date) {
