@@ -2,18 +2,6 @@
 
 {% block head %}
 <title>{{file.title or file.original or file.name or 'Post'}}</title>
-
-<style>
-    :root {
-        --background_color: {{background_color}};
-        --accent_color: {{accent_color}};
-        --font_color: {{font_color}};
-        --text_color: {{font_color}};
-        --link_color: {{link_color}};
-        --font_family: {{font_family}};
-    }
-</style>
-
 <link rel="stylesheet" href="/static/css/post.css">
 
 <script>

@@ -6,6 +6,19 @@
         <icon href="/static/img/icon.png" type="image/x-icon">
         <link rel="icon" href="/static/img/icon.png" type="image/x-icon">
         <script src="/static/js/dom.js"></script>
+
+        <style>
+            :root {
+                --font_family: {{font_family}};
+                --background_color: rgb({{background_color}});
+                --accent_color: rgb({{accent_color}});
+                --font_color: rgb({{font_color}});
+                --text_color: rgb({{text_color}});
+                --link_color: rgb({{link_color}});
+                --frame_color: rgba({{text_color}}, 0.5);
+                --modal_background: rgba({{background_color}}, 0.4);
+            }
+        </style>
         {% block head %}{% endblock %}
     </head>
 

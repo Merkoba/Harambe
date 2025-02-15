@@ -130,19 +130,19 @@ class Config:
         self.rate_limit: int = 20
 
         # Background color for the web interface
-        self.background_color: str = "rgb(81 81 81)"
+        self.background_color: str = "81, 81, 81"
 
         # Accent color for the web interface
-        self.accent_color: str = "rgb(127 104 164)"
+        self.accent_color: str = "127, 104, 164"
 
         # Font color for the web interface
-        self.font_color: str = "white"
+        self.font_color: str = "255, 255, 255"
 
         # Text color for the web interface
-        self.text_color: str = "white"
+        self.text_color: str = "255, 255, 255"
 
         # Link color for the web interface
-        self.link_color: str = "rgb(222 211 239)"
+        self.link_color: str = "222, 211, 239"
 
         # Font family for the web interface
         self.font_family: str = "sans-serif"
