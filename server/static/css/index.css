@@ -81,9 +81,6 @@ a:hover {
     margin-bottom: 1.25rem;
     max-height: 300px;
     object-fit: contain;
-}
-
-#image {
     outline: 5px solid transparent;
     transition: outline-color 0.55s;
 }

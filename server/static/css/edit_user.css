@@ -6,8 +6,8 @@ body, html {
     align-items: center;
     margin-top: 0.5rem;
     margin-bottom: 2rem;
-    background-color: rgb(206, 255, 206);
-    color: rgb(53, 108, 86);
+    background-color: rgb(206 255 206);
+    color: rgb(53 108 86);
 }
 
 #form {

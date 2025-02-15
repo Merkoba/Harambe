@@ -81,10 +81,6 @@ a.linkbutton:hover {
 }
 
 .table_cell {
-    border-right: 1px solid var(--border_color);
-}
-
-.table_cell {
     flex: 1 1 auto;
     padding: 8px;
     text-align: center;
@@ -93,6 +89,7 @@ a.linkbutton:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     box-sizing: border-box;
+    border-right: 1px solid var(--border_color);
 }
 
 .table_cell.checkbox {
@@ -118,6 +115,7 @@ a.linkbutton:hover {
 input[type="checkbox"] {
     width: 1rem;
     height: 1rem;
+    cursor: pointer;
 }
 
 select {
@@ -136,8 +134,4 @@ select {
 
 .underline:hover {
     text-decoration: underline;
-}
-
-input[type="checkbox"] {
-    cursor: pointer;
 }
