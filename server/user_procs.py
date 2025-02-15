@@ -50,6 +50,8 @@ class User:
     register_date_str: str
     last_date: int
     last_date_str: str
+    admin_str: str
+    can_list_str: str
 
 
 user_data: dict[str, UserData] = {}
@@ -58,6 +60,8 @@ user_data: dict[str, UserData] = {}
 def make_user(user: DbUser) -> User:
     reg_date_str = utils.nice_date(user.register_date)
     last_date_str = utils.nice_date(user.last_date)
+    admin_str = "A: Yes" if user.admin else "A: No"
+    can_list_str = "L: Yes" if user.can_list else "L: No"
 
     return User(
         user.username,
@@ -72,6 +76,8 @@ def make_user(user: DbUser) -> User:
         reg_date_str,
         user.last_date,
         last_date_str,
+        admin_str,
+        can_list_str,
     )
 
 
@@ -98,7 +104,14 @@ def get_users(
     query = query.lower()
 
     for user in get_userlist():
-        ok = not query or query in user.username
+        ok = (
+            not query
+            or query in user.username.lower()
+            or query in user.name.lower()
+            or query in str(user.max_size).lower()
+            or query in user.register_date_str.lower()
+            or query in user.last_date_str.lower()
+        )
 
         if not ok:
             continue

@@ -72,7 +72,7 @@
             <div class="table_cell actions">Actions</div>
         </div>
         {% for user in users %}
-        <div class="table_row item" data-username="{{user.username}}" data-name="{{user.name}}" data-rpm="{{user.rpm}}" data-max_size="{{user.max_size}}" data-can_list="{{user.can_list}}" data-mark="{{user.mark}}" data-reg_date="{{user.reg_date_str}}" data-last_date="{{user.last_date_str}}" data-admin="{{user.admin}}">
+        <div class="table_row item" data-username="{{user.username}}" data-name="{{user.name}}" data-rpm="{{user.rpm}}" data-max_size="{{user.max_size}}" data-can_list="{{user.can_list_str}}" data-mark="{{user.mark}}" data-reg_date="{{user.reg_date_str}}" data-last_date="{{user.last_date_str}}" data-admin="{{user.admin_str}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this user">
                 <input class="select_checkbox" type="checkbox">
@@ -104,20 +104,12 @@
 
             <!-- Admin -->
             <div class="table_cell">
-                {%if user.admin %}
-                A: Yes
-                {% else %}
-                A: No
-                {% endif %}
+                <div>{{user.admin_str}}</div>
             </div>
 
             <!-- Can List -->
             <div class="table_cell">
-                {%if user.can_list %}
-                L: Yes
-                {% else %}
-                L: No
-                {% endif %}
+                <div>{{user.can_list_str}}</div>
             </div>
 
             <!-- Mark -->

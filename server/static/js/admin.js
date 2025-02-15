@@ -4,10 +4,8 @@ let date_mode = `ago`
 
 window.onload = () => {
   DOM.ev(document, `keyup`, async (e) => {
-    if (vars.mode === `admin`) {
-      if (e.key === `Enter`) {
-        do_search()
-      }
+    if (e.key === `Enter`) {
+      do_search()
     }
   })
 
@@ -114,8 +112,8 @@ window.onload = () => {
           let mark = item.dataset.mark.toLowerCase()
           let reg_date = item.dataset.reg_date.toLowerCase()
           let last_date = item.dataset.last_date.toLowerCase()
-          let admin = item.dataset.admin.toLowerCase()
-          let list = item.dataset.can_list.toLowerCase()
+          let admin = item.dataset.admin.toLowerCase().replace(`:`, ``).trim()
+          let list = item.dataset.can_list.toLowerCase().replace(`:`, ``).trim()
           opts = [username, name, rpm, max_size, mark, reg_date, last_date, admin, list]
         }
         else {
@@ -411,6 +409,10 @@ function size_string(size) {
 }
 
 function do_search() {
+  if (![`admin`, `users`].includes(vars.mode)) {
+    return
+  }
+
   let query = DOM.el(`#filter`).value.trim()
 
   if (!query) {
