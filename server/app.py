@@ -515,18 +515,21 @@ def users(page: int = 1) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
 def edit_user(username: str = "") -> Any:
-    user = get_user()
+    if request.method == "POST":
+        if username:
+            ok = user_procs.edit_user(request, username=username)
+
+            if ok:
+                return redirect(url_for("users"))
+
+            return redirect(url_for("edit_user", username=username))
+
+        return redirect(url_for("edit_user"))
+
+    user = user_procs.get_user(username)
 
     if not user:
-        return redirect(url_for("login"))
-
-    if request.method == "POST":
-        ok = user_procs.edit_user(request, user.username)
-
-        if ok:
-            return redirect(url_for("users"))
-
-        return redirect(url_for("edit_user", username=username))
+        return redirect(url_for("users"))
 
     return render_template(
         "edit_user.html",
