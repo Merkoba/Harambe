@@ -12,6 +12,10 @@ Make a virtual env and install requirements.
 
 Read [this](#config) to see how to configure it.
 
+Run `venv/bin/python schema.py` to prepare the database.
+
+Run `venv/bin/python add_admin.py` to add yourself as the first admin.
+
 Run with gunicorn with this systemd service:
 
 ```
