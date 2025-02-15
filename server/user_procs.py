@@ -12,6 +12,7 @@ from werkzeug.security import check_password_hash as checkpass  # pyright: ignor
 import utils
 from config import config
 import database
+from database import User as DbUser
 
 
 @dataclass
@@ -30,32 +31,28 @@ class User:
     last_date_str: str
 
 
-userlist: list[User] = []
+def make_user(user: DbUser) -> User:
+    reg_date_str = utils.nice_date(user.register_date)
+    last_date_str = utils.nice_date(user.last_date)
+
+    return User(
+        user.username,
+        user.password,
+        user.admin,
+        user.name,
+        user.rpm,
+        user.max_size,
+        user.can_list,
+        user.mark,
+        user.register_date,
+        reg_date_str,
+        user.last_date,
+        last_date_str,
+    )
 
 
-def update_userlist() -> None:
-    userlist.clear()
-
-    for user in database.get_users():
-        reg_date_str = utils.nice_date(user.register_date)
-        last_date_str = utils.nice_date(user.last_date)
-
-        u = User(
-            user.username,
-            user.password,
-            user.admin,
-            user.name,
-            user.rpm,
-            user.max_size,
-            user.can_list,
-            user.mark,
-            user.register_date,
-            reg_date_str,
-            user.last_date,
-            last_date_str,
-        )
-
-        userlist.append(u)
+def get_userlist() -> list[User]:
+    return [make_user(user) for user in database.get_users()]
 
 
 def get_users(
@@ -76,7 +73,7 @@ def get_users(
     users = []
     query = query.lower()
 
-    for user in userlist:
+    for user in get_userlist():
         ok = not query or query in user.username
 
         if not ok:
@@ -118,9 +115,13 @@ def get_users(
 
 
 def get_user(username: str) -> User | None:
-    for user in userlist:
-        if user.username == username:
-            return user
+    user = database.get_user(username)
+
+    if not user:
+        return None
+
+    if user.username == username:
+        return make_user(user)
 
     return None
 
@@ -177,7 +178,7 @@ def edit_user(request: Request, username: str) -> bool:
     if (not n_args["username"]) or (not n_args["password"]):
         return False
 
-    if database.add_user(
+    return database.add_user(
         mode,
         n_args["username"],
         n_args["password"],
@@ -187,20 +188,18 @@ def edit_user(request: Request, username: str) -> bool:
         n_args["max_size"],
         n_args["can_list"],
         n_args["mark"],
-    ):
-        update_userlist()
-        return True
-
-    return False
+    )
 
 
 def check_auth(username: str, password: str) -> User | None:
-    for user in userlist:
-        if user.username == username:
-            if checkpass(user.password, password):
-                return user
+    user = get_user(username)
 
-            break
+    if not user:
+        return None
+
+    if user.username == username:
+        if checkpass(user.password, password):
+            return user
 
     return None
 
@@ -239,10 +238,8 @@ def do_delete_user(username: str) -> None:
         return
 
     database.delete_user(username)
-    update_userlist()
 
 
 def delete_normal_users() -> tuple[str, int]:
     database.delete_normal_users()
-    update_userlist()
     return jsonify({"status": "ok", "message": "Normal users deleted"}), 200

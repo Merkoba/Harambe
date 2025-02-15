@@ -228,6 +228,19 @@ def get_users() -> list[User]:
     return [make_user(dict(row)) for row in rows]
 
 
+def get_user(username: str) -> User | None:
+    check_db()
+    conn, c = row_conn()
+    c.execute("select * from users where username = ?", (username,))
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_user(dict(row))
+
+    return None
+
+
 def delete_user(username: str) -> None:
     check_db()
     conn, c = get_conn()

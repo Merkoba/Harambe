@@ -24,7 +24,6 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.secret_key = config.app_key
 app.config["MAX_CONTENT_LENGTH"] = config.get_max_file_size()
-user_procs.update_userlist()
 
 # Enable all cross origin requests
 CORS(app)
