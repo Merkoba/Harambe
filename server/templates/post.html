@@ -81,7 +81,7 @@
 
         {% if file.mtype.startswith("video/") or file.mtype.startswith("audio/") %}
         <div>
-            <video id="video" src="/{{file_path}}/{{file.name}}" controls></video>
+            <video id="video" src="/{{file_path}}/{{file.name}}" controls preload="none"></video>
         </div>
         {% endif %}
 

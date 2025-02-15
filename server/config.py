@@ -196,8 +196,8 @@ class Config:
         # Allow uploads from non-users
         self.anon_uploads_enabled: bool = False
 
-        # Max size to consider files for media embeds on the post page
-        self.embed_max_size: int = 20_000_000
+        # Max size in megabytes to consider files for media embeds
+        self.embed_max_size: int = 100
 
         # Users can edit their own posts
         self.allow_edit: bool = True

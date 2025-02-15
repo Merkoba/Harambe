@@ -89,7 +89,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         content = ""
 
     show = f"{file.stem} {ext}".strip()
-    can_embed = size <= config.embed_max_size
+    can_embed = size <= (config.embed_max_size * 1_000_000)
 
     return File(
         file.stem,
