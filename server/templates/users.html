@@ -14,6 +14,9 @@
 <script src="/static/js/admin.js"></script>
 {% endblock %}
 
+{% set show_names = users | selectattr("name") | list | length > 0 %}
+{% set show_marks = users | selectattr("mark") | list | length > 0 %}
+
 {% block body %}
 <div id="top">
     <a class="action_button" href="/">Back</a>
@@ -64,12 +67,20 @@
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
             <div id="username" class="table_cell underline" data-sort="username">User</div>
+
+            {% if show_names %}
             <div id="name" class="table_cell underline" data-sort="name">Name</div>
+            {% endif %}
+
             <div id="limit" class="table_cell underline" data-sort="rpm">RPM</div>
             <div id="max" class="table_cell underline" data-sort="max_size">Max Size</div>
             <div id="list" class="table_cell underline" data-sort="admin">Admin</div>
             <div id="list" class="table_cell underline" data-sort="can_list">List</div>
+
+            {% if show_marks %}
             <div id="mark" class="table_cell underline" data-sort="mark">Mark</div>
+            {% endif %}
+
             <div id="reg_date" class="table_cell underline" data-sort="register_date">RegDate</div>
             <div id="last_date" class="table_cell underline" data-sort="last_date">LastDate</div>
             <div class="table_cell actions">Actions</div>
@@ -86,10 +97,12 @@
                 <div>{{user.username}}</div>
             </div>
 
+            {% if show_names %}
             <!-- Name -->
             <div class="table_cell">
                 <div>{{user.name}}</div>
             </div>
+            {% endif %}
 
             <!-- RPM -->
             <div class="table_cell">
@@ -111,10 +124,12 @@
                 <div>{{user.can_list_str}}</div>
             </div>
 
+            {% if show_marks %}
             <!-- Mark -->
             <div class="table_cell">
                 <div>{{user.mark}}</div>
             </div>
+            {% endif %}
 
             <!-- Register Date -->
             <div class="table_cell">
