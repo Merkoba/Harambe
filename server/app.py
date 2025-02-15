@@ -18,6 +18,7 @@ import procs
 import user_procs
 import file_procs
 from config import config
+from file_procs import File
 from user_procs import User
 
 
@@ -303,24 +304,34 @@ def get_file(name: str, original: str | None = None) -> Any:
 # ADMIN
 
 
-@app.route("/admin", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/admin/<int:page>", methods=["GET"])  # type: ignore
+@app.route("/admin/<string:what>", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/admin/<string:what>/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
-def admin(page: int = 1) -> Any:
+def admin(what: str, page: int = 1) -> Any:
+    if what not in ["files", "users"]:
+        return redirect(url_for("index"))
+
     query = request.args.get("query", "")
     sort = request.args.get("sort", "date")
     page_size = request.args.get("page_size", config.admin_page_size)
+    items: list[File] | list[User]
 
-    files, total, next_page = file_procs.get_files(
-        page, page_size, query=query, sort=sort
-    )
+    if what == "files":
+        items, total, next_page = file_procs.get_files(
+            page, page_size, query=query, sort=sort
+        )
+    else:
+        items, total, next_page = user_procs.get_users(
+            page, page_size, query=query, sort=sort
+        )
 
     def_page_size = page_size == config.admin_page_size
+    html_page = "files.html" if what == "files" else "users.html"
 
     return render_template(
-        "admin.html",
-        files=files,
+        html_page,
+        items=items,
         total=total,
         page=page,
         next_page=next_page,
@@ -495,32 +506,6 @@ def show_history(page: int = 1) -> Any:
 
 
 # USERS
-
-
-@app.route("/users", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/users/<int:page>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@admin_required
-def users(page: int = 1) -> Any:
-    query = request.args.get("query", "")
-    sort = request.args.get("sort", "register_date")
-    page_size = request.args.get("page_size", config.admin_page_size)
-
-    users, total, next_page = user_procs.get_users(
-        page, page_size, query=query, sort=sort
-    )
-
-    def_page_size = page_size == config.admin_page_size
-
-    return render_template(
-        "users.html",
-        users=users,
-        total=total,
-        page=page,
-        next_page=next_page,
-        page_size=page_size,
-        def_page_size=def_page_size,
-    )
 
 
 @app.route("/edit_user", defaults={"username": ""}, methods=["GET", "POST"])  # type: ignore

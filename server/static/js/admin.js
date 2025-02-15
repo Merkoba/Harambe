@@ -16,7 +16,7 @@ window.onload = () => {
       if (vars.mode === `users`) {
         window.open(`/edit_user/${item.dataset.username}`, '_blank');
       }
-      else {
+      else if (vars.mode === `files`) {
         edit_title(item)
       }
     }
@@ -26,7 +26,7 @@ window.onload = () => {
         selected_users = [e.target.closest(`.item`)]
         delete_users()
       }
-      else {
+      else if (vars.mode === `files`) {
         selected_files = [e.target.closest(`.item`)]
         delete_files()
       }
@@ -55,7 +55,12 @@ window.onload = () => {
 
   if (refresh) {
     DOM.ev(refresh, `click`, () => {
-      window.location = `/${vars.mode}`
+      if (vars.mode === `list`) {
+        window.location = `/list`
+      }
+      else {
+        window.location = `/admin/${vars.mode}`
+      }
     })
   }
 
@@ -76,7 +81,7 @@ window.onload = () => {
             delete_normal_users()
         }
       }
-      else {
+      else if (vars.mode === `files`) {
         if (confirm(`Delete ALL files ?`)) {
           delete_all_files()
         }
@@ -116,7 +121,7 @@ window.onload = () => {
           let list = item.dataset.can_list.toLowerCase().replace(`:`, ``).trim()
           opts = [username, name, rpm, max_size, mark, reg_date, last_date, admin, list]
         }
-        else {
+        else if (vars.mode === `files`) {
           let name = item.dataset.name.toLowerCase()
           let ago = item.dataset.ago.toLowerCase()
           let date = item.dataset.date.toLowerCase()
@@ -247,7 +252,7 @@ function fill_page_select(page_select) {
   add_option(`Default`, vars.def_page_size)
   add_separator()
 
-  let nums = [10, 20, 50, 100, 200, 500, 1000]
+  let nums = [5, 10, 20, 50, 100, 200, 500, 1000]
 
   for (let n of nums) {
     let selected = false
@@ -417,10 +422,10 @@ function do_search() {
   }
 
   if (query) {
-    window.location = `/${vars.mode}?query=${query}`
+    window.location = `/admin/${vars.mode}?query=${query}`
   }
   else {
-    window.location = `/${vars.mode}`
+    window.location = `/admin/${vars.mode}`
   }
 }
 
@@ -484,7 +489,7 @@ function delete_selected() {
     selected_users = items
     delete_users()
   }
-  else{
+  else if (vars.mode === `files`) {
     selected_files = items
     delete_files()
   }
@@ -575,16 +580,16 @@ function do_sort(what) {
 
   if (sort) {
     if (sort === what) {
-      window.location = `/${vars.mode}?sort=${what}_desc`
+      window.location = `/admin/${vars.mode}?sort=${what}_desc`
       return
     }
     else if (sort === `${what}_desc`) {
-      window.location = `/${vars.mode}`
+      window.location = `/admin/${vars.mode}`
       return
     }
   }
 
-  window.location = `/${vars.mode}?sort=${what}`
+  window.location = `/admin/${vars.mode}?sort=${what}`
 }
 
 function mod_user(what, value, vtype) {

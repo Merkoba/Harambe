@@ -14,8 +14,8 @@
 <script src="/static/js/admin.js"></script>
 {% endblock %}
 
-{% set show_names = users | selectattr("name") | list | length > 0 %}
-{% set show_marks = users | selectattr("mark") | list | length > 0 %}
+{% set show_names = items | selectattr("name") | list | length > 0 %}
+{% set show_marks = items | selectattr("mark") | list | length > 0 %}
 
 {% block body %}
 <div id="top">
@@ -23,26 +23,26 @@
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
-    <div class="action_button" id="add" title="Add a user">Add</div>
+    <div class="action_button" id="add" title="Add an item">Add</div>
     <div class="sep">|</div>
-    <div class="action_button" id="delete_selected" title="Delete selected users">Delete</div>
+    <div class="action_button" id="delete_selected" title="Delete selected items">Delete</div>
     <div class="sep">|</div>
-    <div class="action_button" id="delete_all" title="Delete all user (from all pages)">Delete All</div>
+    <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Delete All</div>
     <div class="sep">|</div>
-    <div class="action_button" id="can_list" title="Delete all user (from all pages)">List</div>
+    <div class="action_button" id="can_list" title="Enable the list on all selected items">List</div>
     <div class="sep">|</div>
-    <div class="action_button" id="no_list" title="Delete all user (from all pages)">No List</div>
+    <div class="action_button" id="no_list" title="Disable the list on all selected items">No List</div>
     <div class="sep">|</div>
-    <div title="Total storage stats of all users (on all pages)">Total: {{total}}</div>
+    <div title="Total storage stats of all items (on all pages)">Total: {{total}}</div>
     <div class="sep">|</div>
     <div title="This is the current page">Page {{page}}</div>
     <div class="sep">|</div>
 
     {% if page > 1 %}
         {% if page > 2 %}
-        <a class="linkbutton" href="/users/{{page - 1}}" title="Go to the previous page">Prev</a>
+        <a class="linkbutton" href="/admin/users/{{page - 1}}?page_size={{page_size}}" title="Go to the previous page">Prev</a>
         {% else %}
-        <a class="linkbutton" href="/users" title="Go to the previous page">Prev</a>
+        <a class="linkbutton" href="/admin/users?page_size={{page_size}}" title="Go to the previous page">Prev</a>
         {% endif %}
     {% else %}
     <div class="">Prev</div>
@@ -51,7 +51,7 @@
     <div class="sep">|</div>
 
     {% if next_page %}
-    <a class="linkbutton" href="/users/{{page + 1}}" title="Go to the next page">Next</a>
+    <a class="linkbutton" href="/admin/users/{{page + 1}}?page_size={{page_size}}" title="Go to the next page">Next</a>
     {% else %}
     <div class="">Next</div>
     {% endif %}
@@ -86,53 +86,53 @@
             <div class="table_cell actions">Actions</div>
         </div>
 
-        {% for user in users %}
-        <div class="table_row item" data-username="{{user.username}}" data-name="{{user.name}}" data-rpm="{{user.rpm_fill}}" data-max_size="{{user.max_size_fill}}" data-can_list="{{user.can_list_str}}" data-mark="{{user.mark}}" data-reg_date="{{user.reg_date_str}}" data-last_date="{{user.last_date_str}}" data-admin="{{user.admin_str}}">
+        {% for item in items %}
+        <div class="table_row item" data-username="{{item.username}}" data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}" data-max_size="{{item.max_size_fill}}" data-can_list="{{item.can_list_str}}" data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}" data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}">
             <!-- Checkbox -->
-            <div class="table_cell checkbox" title="Select this user">
+            <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
             </div>
 
             <!-- Username -->
-            <div class="table_cell" title="{{user.username}}">{{user.username}}</div>
+            <div class="table_cell" title="{{item.username}}">{{item.username}}</div>
 
             <!-- Name -->
             {% if show_names %}
-            <div class="table_cell" title="{{user.name}}">{{user.name}}</div>
+            <div class="table_cell" title="{{item.name}}">{{item.name}}</div>
             {% endif %}
 
             <!-- RPM -->
-            <div class="table_cell">{{user.rpm_fill}}</div>
+            <div class="table_cell">{{item.rpm_fill}}</div>
 
             <!-- Max Size -->
-            <div class="table_cell">{{user.max_size_fill}}</div>
+            <div class="table_cell">{{item.max_size_fill}}</div>
 
             <!-- Admin -->
-            <div class="table_cell">{{user.admin_str}}</div>
+            <div class="table_cell">{{item.admin_str}}</div>
 
             <!-- Can List -->
-            <div class="table_cell">{{user.can_list_str}}</div>
+            <div class="table_cell">{{item.can_list_str}}</div>
 
             <!-- Mark -->
             {% if show_marks %}
-            <div class="table_cell">{{user.mark}}</div>
+            <div class="table_cell">{{item.mark}}</div>
             {% endif %}
 
             <!-- Register Date -->
-            <div class="table_cell" title="{{user.register_date_str}}">{{user.register_date_str}}</div>
+            <div class="table_cell" title="{{item.register_date_str}}">{{item.register_date_str}}</div>
 
             <!-- Last Date -->
-            <div class="table_cell" title="{{user.last_date_str}}">{{user.last_date_str}}</div>
+            <div class="table_cell" title="{{item.last_date_str}}">{{item.last_date_str}}</div>
 
             <!-- Actions -->
             <div class="table_cell actions">
-                <span class="edit action_button" title="Edit this user">E</span>
+                <span class="edit action_button" title="Edit this item">E</span>
                 <span class="sep"> | </span>
-                <span class="delete action_button" title="Delete this user">D</span>
+                <span class="delete action_button" title="Delete this item">D</span>
                 <span class="sep"> | </span>
-                <span class="delete_above action_button" title="Delete all users above this one">A</span>
+                <span class="delete_above action_button" title="Delete all items above this one">A</span>
                 <span class="sep"> | </span>
-                <span class="delete_below action_button" title="Delete all users below this one">B</span>
+                <span class="delete_below action_button" title="Delete all items below this one">B</span>
             </div>
         </div>
         {% endfor %}

@@ -18,6 +18,8 @@
 <div id="top">
     <a class="action_button" href="/">Back</a>
     <div class="sep">|</div>
+    <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
+    <div class="sep">|</div>
     <div title="Total storage stats of all files (on all pages)">Total: {{total}}</div>
     <div class="sep">|</div>
     <div title="This is the current page">Page {{page}}</div>
@@ -25,9 +27,9 @@
 
     {% if page > 1 %}
         {% if page > 2 %}
-        <a class="linkbutton" href="/{{mode}}/{{page - 1}}" title="Go to the previous page">Prev</a>
+        <a class="linkbutton" href="/list/{{page - 1}}?page_size={{page_size}}" title="Go to the previous page">Prev</a>
         {% else %}
-        <a class="linkbutton" href="/{{mode}}" title="Go to the previous page">Prev</a>
+        <a class="linkbutton" href="/list?page_size={{page_size}}" title="Go to the previous page">Prev</a>
         {% endif %}
     {% else %}
     <div class="">Prev</div>
@@ -36,7 +38,7 @@
     <div class="sep">|</div>
 
     {% if next_page %}
-    <a class="linkbutton" href="/{{mode}}/{{page + 1}}" title="Go to the next page">Next</a>
+    <a class="linkbutton" href="/list/{{page + 1}}?page_size={{page_size}}" title="Go to the next page">Next</a>
     {% else %}
     <div class="">Next</div>
     {% endif %}
