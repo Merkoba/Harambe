@@ -165,7 +165,7 @@ def add_user(
     name: str = "",
     rpm: int = 0,
     max_size: int = 0,
-    can_list: bool = False,
+    can_list: bool = True,
     mark: str = "",
 ) -> bool:
     check_db()

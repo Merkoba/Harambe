@@ -16,7 +16,7 @@ window.onload = () => {
 
     if (e.target.classList.contains(`edit`)) {
       if (vars.mode === `users`) {
-        window.location = `/edit_user/${el.dataset.username}`
+        window.location = `/edit_user/${item.dataset.username}`
       }
       else {
         edit_title(item)

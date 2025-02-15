@@ -182,7 +182,11 @@ def edit_user(request: Request, username: str) -> bool:
     args["max_size"] = [request.form.get("max_size"), "int"]
     args["mark"] = [request.form.get("mark"), "string"]
     args["admin"] = [request.form.get("admin") or False, "bool"]
-    args["can_list"] = [request.form.get("can_list") or False, "bool"]
+
+    if request.form.get("can_list") is not None:
+        args["can_list"] = [True, "bool"]
+    else:
+        args["can_list"] = [False, "bool"]
 
     uname = args["username"][0]
 
