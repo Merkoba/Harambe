@@ -65,6 +65,7 @@
             <div id="views" class="table_cell views underline" title="Views" data-sort="views">Views</div>
             <div class="table_cell actions">Actions</div>
         </div>
+
         {% for file in files %}
         <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-full="{{file.full}}" data-uploader="{{file.uploader or 'Anon'}}">
             <!-- Checkbox -->

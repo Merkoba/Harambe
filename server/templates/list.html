@@ -57,6 +57,7 @@
             <div id="date" class="table_cell underline" data-sort="date">Date</div>
             <div id="views" class="table_cell underline views" data-sort="views">Views</div>
         </div>
+
         {% for file in files %}
         <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-uploader="{{file.uploader or 'Anon'}}">
             <!-- Name -->

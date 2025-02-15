@@ -85,6 +85,7 @@
             <div id="last_date" class="table_cell underline" data-sort="last_date">LastDate</div>
             <div class="table_cell actions">Actions</div>
         </div>
+
         {% for user in users %}
         <div class="table_row item" data-username="{{user.username}}" data-name="{{user.name}}" data-rpm="{{user.rpm_fill}}" data-max_size="{{user.max_size_fill}}" data-can_list="{{user.can_list_str}}" data-mark="{{user.mark}}" data-reg_date="{{user.reg_date_str}}" data-last_date="{{user.last_date_str}}" data-admin="{{user.admin_str}}">
             <!-- Checkbox -->
