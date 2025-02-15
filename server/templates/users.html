@@ -93,53 +93,35 @@
             </div>
 
             <!-- Username -->
-            <div class="table_cell">
-                <div>{{user.username}}</div>
-            </div>
+            <div class="table_cell" title="{{user.username}}">{{user.username}}</div>
 
-            {% if show_names %}
             <!-- Name -->
-            <div class="table_cell">
-                <div>{{user.name}}</div>
-            </div>
+            {% if show_names %}
+            <div class="table_cell" title="{{user.name}}">{{user.name}}</div>
             {% endif %}
 
             <!-- RPM -->
-            <div class="table_cell">
-                <div>{{user.rpm_fill}}</div>
-            </div>
+            <div class="table_cell">{{user.rpm_fill}}</div>
 
             <!-- Max Size -->
-            <div class="table_cell">
-                <div>{{user.max_size_fill}}</div>
-            </div>
+            <div class="table_cell">{{user.max_size_fill}}</div>
 
             <!-- Admin -->
-            <div class="table_cell">
-                <div>{{user.admin_str}}</div>
-            </div>
+            <div class="table_cell">{{user.admin_str}}</div>
 
             <!-- Can List -->
-            <div class="table_cell">
-                <div>{{user.can_list_str}}</div>
-            </div>
+            <div class="table_cell">{{user.can_list_str}}</div>
 
-            {% if show_marks %}
             <!-- Mark -->
-            <div class="table_cell">
-                <div>{{user.mark}}</div>
-            </div>
+            {% if show_marks %}
+            <div class="table_cell">{{user.mark}}</div>
             {% endif %}
 
             <!-- Register Date -->
-            <div class="table_cell">
-                <div title="{{user.register_date_str}}">{{user.register_date_str}}</div>
-            </div>
+            <div class="table_cell" title="{{user.register_date_str}}">{{user.register_date_str}}</div>
 
             <!-- Last Date -->
-            <div class="table_cell">
-                <div title="{{user.last_date_str}}">{{user.last_date_str}}</div>
-            </div>
+            <div class="table_cell" title="{{user.last_date_str}}">{{user.last_date_str}}</div>
 
             <!-- Actions -->
             <div class="table_cell actions">
