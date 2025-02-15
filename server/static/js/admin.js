@@ -72,12 +72,12 @@ window.onload = () => {
   if (delete_all) {
     DOM.ev(delete_all, `click`, () => {
       if (vars.mode === `users`) {
-        if (confirm(`Delete all non-admin users?`)) {
+        if (confirm(`Delete all non-admin users ?`)) {
             delete_normal_users()
         }
       }
       else {
-        if (confirm(`Delete ALL files?`)) {
+        if (confirm(`Delete ALL files ?`)) {
           delete_all_files()
         }
       }
@@ -300,8 +300,9 @@ function delete_files() {
   }
 
   size = Math.round(size * 100) / 100
+  let s = singplural(`file`, selected_files.length)
 
-  if (confirm(`Delete (${selected_files.length} files) (${size_string(size)})`)) {
+  if (confirm(`Delete ${selected_files.length} ${s} (${size_string(size)}) ?`)) {
     let files = []
 
     for (let file of selected_files) {
@@ -501,8 +502,9 @@ function delete_users() {
   }
 
   size = Math.round(size * 100) / 100
+  let s = singplural(`user`, selected_users.length)
 
-  if (confirm(`Delete (${selected_users.length} users)`)) {
+  if (confirm(`Delete ${selected_users.length} ${s} ?`)) {
     let users = []
 
     for (let user of selected_users) {
@@ -586,18 +588,20 @@ function do_sort(what) {
 }
 
 function mod_user(what, value, vtype) {
-  if (confirm(`Modify selected users? (${what}: ${value})`)) {
-    do_mod_user(what, value, vtype)
-  }
-}
-
-async function do_mod_user(what, value, vtype) {
   let items = get_selected()
 
   if (!items.length) {
     return
   }
 
+  let s = singplural(`user`, items.length)
+
+  if (confirm(`Modify ${items.length} ${s} (${what}: ${value}) ?`)) {
+    do_mod_user(items, what, value, vtype)
+  }
+}
+
+async function do_mod_user(items, what, value, vtype) {
   let usernames = items.map(x => x.dataset.username)
 
   try {
@@ -619,4 +623,12 @@ async function do_mod_user(what, value, vtype) {
   catch (error) {
     print_error(error)
   }
+}
+
+function singplural(what, length) {
+  if (length === 1) {
+    return what
+  }
+
+  return `${what}s`
 }
