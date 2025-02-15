@@ -120,7 +120,7 @@ class Config:
         self.show_image: bool = True
 
         # Default page size for the admin page
-        self.admin_page_size: int = 50
+        self.admin_page_size: int = 5
 
         # Length of the file name
         # Minimum is 10, maximum is 26
