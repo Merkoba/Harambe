@@ -193,11 +193,11 @@ def get_files(
     elif sort == "name_desc":
         files.sort(key=lambda x: x.name, reverse=False)
 
-    if max_files > 0:
-        files = files[:max_files]
-
     total_size_str = utils.get_size(total_size)
     total_str = f"{total_size_str} ({len(files)} Files)"
+
+    if max_files > 0:
+        files = files[:max_files]
 
     if psize > 0:
         start_index = (page - 1) * psize
