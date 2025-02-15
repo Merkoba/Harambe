@@ -94,6 +94,9 @@ class Config:
         # Files beyond this will get ignored
         self.max_size: int = 100
 
+        # Default max size for users
+        self.max_size_user: int = 100
+
         # Max size for anonymous users
         self.max_size_anon: int = 20
 
@@ -205,6 +208,9 @@ class Config:
         # Max file content to read when getting files
         self.max_file_content: int = 900_000
 
+        # Default requests per minute for uploads
+        self.requests_per_minute = 12
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -252,6 +258,8 @@ class Config:
             set_value(c, "captcha_cheat")
             set_value(c, "captcha_length")
             set_value(c, "max_size")
+            set_value(c, "max_size_user")
+            set_value(c, "max_size_anon")
             set_value(c, "redis_port")
             set_value(c, "uppercase_ids")
             set_value(c, "max_files")
@@ -285,6 +293,7 @@ class Config:
             set_value(c, "max_title_length")
             set_value(c, "allow_hotlinks")
             set_value(c, "max_file_content")
+            set_value(c, "requests_per_minute")
 
             # Users
 

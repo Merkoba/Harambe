@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 # Standard
+import time
 from dataclasses import dataclass
+from collections import deque
 
 # Libraries
 from flask import Request, jsonify  # type: ignore
@@ -13,6 +15,24 @@ import utils
 from config import config
 import database
 from database import User as DbUser
+
+
+class UserData:
+    def __init__(self, rpm: int) -> None:
+        self.timestamps: deque[float] = deque()
+        self.rpm = rpm
+        self.window = 60
+
+    def increment(self) -> None:
+        now = time.time()
+        self.timestamps.append(now)
+
+        while self.timestamps and (self.timestamps[0] < (now - self.window)):
+            self.timestamps.popleft()
+
+    def blocked(self) -> bool:
+        self.increment()
+        return len(self.timestamps) > self.rpm
 
 
 @dataclass
@@ -29,6 +49,9 @@ class User:
     register_date_str: str
     last_date: int
     last_date_str: str
+
+
+user_data: dict[str, UserData] = {}
 
 
 def make_user(user: DbUser) -> User:
@@ -164,7 +187,7 @@ def edit_user(request: Request, username: str) -> bool:
 
         if value:
             if vtype == "int":
-                value = int(value)
+                value = max(0, int(value))
             elif vtype == "string":
                 value = str(value)
             elif vtype == "bool":
@@ -243,3 +266,26 @@ def do_delete_user(username: str) -> None:
 def delete_normal_users() -> tuple[str, int]:
     database.delete_normal_users()
     return jsonify({"status": "ok", "message": "Normal users deleted"}), 200
+
+
+def check_user_limit(user: User) -> tuple[bool, str]:
+    if user.username not in user_data:
+        rpm = user.rpm or config.requests_per_minute
+        user_data[user.username] = UserData(rpm)
+
+    if user_data[user.username].blocked():
+        return False, "Rate limit exceeded"
+
+    return True, "ok"
+
+
+def check_user_max(user: User, size: int) -> bool:
+    megas = int(size / 1000 / 1000)
+
+    if user.max_size > 0:
+        if megas > user.max_size:
+            return False
+    elif megas > config.max_size_user:
+        return False
+
+    return True

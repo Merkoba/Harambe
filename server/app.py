@@ -16,6 +16,7 @@ from flask_limiter.util import get_remote_address  # type: ignore
 import utils
 import procs
 import user_procs
+import file_procs
 from config import config
 from user_procs import User
 
@@ -150,6 +151,9 @@ def index() -> Any:
 
     if user:
         max_size = user.max_size
+
+        if max_size <= 0:
+            max_size = config.max_size_user
     else:
         max_size = config.max_size_anon
 
@@ -235,7 +239,7 @@ def message() -> Any:
 @app.route("/post/<string:name>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def post(name: str) -> Any:
-    file = procs.get_file(name)
+    file = file_procs.get_file(name)
 
     if not file:
         return Response(invalid, mimetype=text_mtype)
@@ -272,7 +276,7 @@ def get_file(name: str, original: str | None = None) -> Any:
         if (not referrer) or (not referrer.startswith(host)):
             abort(403)
 
-    file = procs.get_file(name)
+    file = file_procs.get_file(name)
 
     if not file:
         return Response(invalid, mimetype=text_mtype)
@@ -292,7 +296,9 @@ def admin(page: int = 1) -> Any:
     query = request.args.get("query", "")
     sort = request.args.get("sort", "date")
     page_size = request.args.get("page_size", config.admin_page_size)
-    files, total, next_page = procs.get_files(page, page_size, query=query, sort=sort)
+    files, total, next_page = file_procs.get_files(
+        page, page_size, query=query, sort=sort
+    )
     def_page_size = page_size == config.admin_page_size
 
     return render_template(
@@ -312,14 +318,14 @@ def admin(page: int = 1) -> Any:
 def delete_files() -> Any:
     data = request.get_json()
     files = data.get("files", None)
-    return procs.delete_files(files)
+    return file_procs.delete_files(files)
 
 
 @app.route("/delete_all_files", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(2))  # type: ignore
 @admin_required
 def delete_all_files() -> Any:
-    return procs.delete_all_files()
+    return file_procs.delete_all_files()
 
 
 @app.route("/delete_file", methods=["POST"])  # type: ignore
@@ -333,7 +339,7 @@ def delete_file() -> Any:
     if not user:
         return Response(invalid, mimetype=text_mtype)
 
-    return procs.delete_file(file, user=user)
+    return file_procs.delete_file(file, user=user)
 
 
 @app.route("/edit_title", methods=["POST"])  # type: ignore
@@ -411,7 +417,7 @@ def show_list(page: int = 1) -> Any:
 
     page_size = request.args.get("page_size", config.list_page_size)
 
-    files, total, next_page = procs.get_files(
+    files, total, next_page = file_procs.get_files(
         page, page_size, max_files=config.list_max_files
     )
 
@@ -449,7 +455,7 @@ def show_history(page: int = 1) -> Any:
     if not username:
         return redirect(url_for("index"))
 
-    files, total, next_page = procs.get_files(
+    files, total, next_page = file_procs.get_files(
         page, page_size, max_files=config.list_max_files, username=username
     )
 

@@ -86,7 +86,11 @@
 
             <!-- RPM -->
             <div class="table_cell">
+                {% if user.rpm == 0 %}
+                <div>-</div>
+                {% else %}
                 <div>{{user.rpm}}</div>
+                {% endif %}
             </div>
 
             <!-- Max Size -->
