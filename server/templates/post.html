@@ -12,6 +12,7 @@
     vars.date = {{file.date}}
     vars.title = `{{file.title}}`
     vars.original = `{{file.original}}`
+    vars.original_full = `{{file.original_full}}`
     vars.mtype = `{{file.mtype}}`
     vars.content = `{{file.content}}`
     vars.file_path = `{{file_path}}`
@@ -70,7 +71,7 @@
     <div id="embed">
         {% if file.mtype.startswith("image/") %}
         <div>
-            <img id="image" src="/{{file_path}}/{{file.name}}">
+            <img id="image" src="/{{file_path}}/{{file.name}}/{{file.original_full}}">
 
             <div id="modal">
                 <div id="modal_content">
