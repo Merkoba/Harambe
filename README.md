@@ -60,25 +60,6 @@ captcha_length = 8
 files_dir = "/mnt/drive/harambe"
 
 uppercase_ids = false
-
-# These must go at the bottom or it might not parse correctly:
-
-[[users]]
-username = "ronald"
-password = "bigmac"
-
-[[users]]
-username = "admiral"
-password = "tokyo1993"
-
-[[keys]]
-name = "seabird"
-limit = 10
-
-[[keys]]
-name = "orbit"
-limit = 6
-id = "orb"
 ```
 
 The config file is automatically reloaded when the file is modified.
@@ -97,13 +78,9 @@ There is an admin page to view and delete files:
 
 ![](admin.png)
 
-Each admin looks like this:
+Admins can create more users, but you need to create the first admin.
 
-```toml
-[[admins]]
-username = "johnnycage"
-password = "goroballs"
-```
+You can do it with `venv/bin/python add_admin.py`.
 
 ---
 
@@ -115,20 +92,7 @@ Their files are signed using their `name`.
 
 They can edit and delete their own files.
 
-Each user looks like this:
-
-```toml
-[[users]]
-username = "wingwalker"
-password = "deluxemic381"
-name = "The Upsetter"
-admin = true
-key = "diploma395aVatraaa2034"
-limit = 20
-max = 20
-list = true
-mark = "wlk"
-```
+Users can be added by admins in the admin page.
 
 `username` is the main id of the user, it can't change.
 
@@ -140,13 +104,13 @@ If `name` is empty, no name will be displayed.
 
 `admin` defines if a user has admin rights or not.
 
-`key` is used in upload scripts. It should be long and secret.
+`rpm` the amount of requests per minute it can do.
 
-`max` is the max file size permitted to that user.
+`max_size` is the max file size permitted to that user.
 
-If `max` is set to 0 it will use the default max file size config.
+If `max_size` is set to 0 it will use the default max file size config.
 
-If `list` is true the user can view the file list page.
+If `can_list` is true the user can view the file list page.
 
 `mark` is a string that is appended to urls on uploads from that user.
 
@@ -192,6 +156,10 @@ Links can be show in the main page if you create them in the config:
 [[links]]
 name = "About"
 url = "/page/about"
+
+[[links]]
+name = "Recipes"
+url = "/page/recipes"
 target = "_blank"
 ```
 
