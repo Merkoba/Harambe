@@ -266,3 +266,13 @@ def mod_user(usernames: list[str], what: str, value: Any) -> None:
     c.execute(query, (value, *usernames))
     conn.commit()
     conn.close()
+
+
+def update_user_last_date(username: str) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute(
+        "update users set last_date = ? where username = ?", (utils.now(), username)
+    )
+    conn.commit()
+    conn.close()

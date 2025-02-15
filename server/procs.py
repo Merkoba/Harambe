@@ -141,6 +141,8 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                         uploader,
                         mtype or "",
                     )
+
+                    database.update_user_last_date(username)
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")
