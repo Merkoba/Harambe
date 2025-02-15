@@ -479,7 +479,7 @@ def users(page: int = 1) -> Any:
 @admin_required
 def edit_user(username: str = "") -> Any:
     if request.method == "POST":
-        ok = user_procs.edit_user(request)
+        ok = user_procs.edit_user(request, get_username())
 
         if ok:
             return redirect(url_for("users"))

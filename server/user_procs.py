@@ -124,7 +124,10 @@ def get_user(username: str) -> User | None:
     return None
 
 
-def edit_user(request: Request) -> bool:
+def edit_user(request: Request, username: str) -> bool:
+    if (not request) or (not username):
+        return False
+
     args = {}
 
     args["username"] = request.form.get("username")
@@ -138,6 +141,9 @@ def edit_user(request: Request) -> bool:
 
     if not args["username"]:
         return False
+
+    if args["username"] == username:
+        args["admin"] = True
 
     user = get_user(args["username"])
     mode = "add" if user is None else "edit"
