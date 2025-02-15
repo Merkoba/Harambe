@@ -340,6 +340,9 @@ def admin(what: str, page: int = 1) -> Any:
     )
 
 
+# FILES
+
+
 @app.route("/delete_files", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
