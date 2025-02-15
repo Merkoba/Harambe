@@ -187,7 +187,10 @@ def edit_user(request: Request, username: str) -> bool:
 
         if value:
             if vtype == "int":
-                value = max(0, int(value))
+                try:
+                    value = max(0, int(value))
+                except ValueError:
+                    value = 0
             elif vtype == "string":
                 value = str(value)
             elif vtype == "bool":
