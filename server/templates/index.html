@@ -30,8 +30,8 @@
 {% block body %}
 <div id="main">
     <div id="info">
-        {% if show_max_file_size %}
-        <div id="file_size">Max size: {{max_file_size}} mb</div>
+        {% if show_max_size %}
+        <div id="file_size">Max size: {{max_size_str}} mb</div>
         {% endif %}
     </div>
 
@@ -58,7 +58,7 @@
             <a class="link" href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
             {% endfor %}
 
-            {% if logged_in %}
+            {% if is_user %}
             <a class="link" href="/logout">Logout</a>
             {% else %}
             <a class="link" href="/login">Login</a>
@@ -66,7 +66,7 @@
         </div>
 
         <div id="picker">
-            <input id="file" type="file" name="file" required max-file-size="{{max_file_size}}MB">
+            <input id="file" type="file" name="file" required max-file-size="{{max_size_str}}mb">
         </div>
 
         {% if allow_titles %}

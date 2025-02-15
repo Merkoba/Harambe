@@ -88,11 +88,14 @@ class Config:
 
         # Length of the captcha
         # The higher the number, the harder it is
-        self.captcha_length: int = 9
+        self.captcha_length: int = 10
 
         # Maximum file size in MB
-        # File beyond this will get ignored
-        self.max_file_size: int = 100
+        # Files beyond this will get ignored
+        self.max_size: int = 100
+
+        # Max size for anonymous users
+        self.max_size_anon: int = 20
 
         # Port for the redis server
         # Redis is used for the limiter
@@ -147,7 +150,7 @@ class Config:
         self.max_age: int = 31536000
 
         # Show the max file size in the web interface
-        self.show_max_file_size: bool = True
+        self.show_max_size: bool = True
 
         # Enable a public page to list files
         self.list_enabled: bool = True
@@ -204,9 +207,6 @@ class Config:
 
     # --- Methods ---
 
-    def get_max_file_size(self) -> int:
-        return self.max_file_size * 1_000_000
-
     def get_max_storage(self) -> int:
         return self.max_storage * 1_000_000_000
 
@@ -251,7 +251,7 @@ class Config:
             set_value(c, "captcha_key")
             set_value(c, "captcha_cheat")
             set_value(c, "captcha_length")
-            set_value(c, "max_file_size")
+            set_value(c, "max_size")
             set_value(c, "redis_port")
             set_value(c, "uppercase_ids")
             set_value(c, "max_files")
@@ -267,7 +267,7 @@ class Config:
             set_value(c, "link_color")
             set_value(c, "font_family")
             set_value(c, "max_age")
-            set_value(c, "show_max_file_size")
+            set_value(c, "show_max_size")
             set_value(c, "list_enabled")
             set_value(c, "list_private")
             set_value(c, "list_page_size")

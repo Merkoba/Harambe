@@ -159,7 +159,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
             if user and user.max_size > 0:
                 if not check_user_max(user, length):
                     return error(toobig)
-            elif length > config.get_max_file_size():
+            elif length > config.max_size:
                 return error(toobig)
 
             if content:
@@ -413,13 +413,13 @@ def delete_files(files: list[str]) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
 
 
-def delete_file(file: str, username: str, is_admin: bool) -> tuple[str, int]:
+def delete_file(file: str, user: User) -> tuple[str, int]:
     if not file:
         return jsonify(
             {"status": "error", "message": "File name was not provided"}
         ), 400
 
-    if not is_admin:
+    if not user.admin:
         if not config.allow_edit:
             return jsonify({"status": "error", "message": "Editing is disabled"}), 500
 
@@ -429,7 +429,7 @@ def delete_file(file: str, username: str, is_admin: bool) -> tuple[str, int]:
         if not db_file:
             return jsonify({"status": "error", "message": "File not found"}), 500
 
-        if db_file.username != username:
+        if db_file.username != user.username:
             return jsonify(
                 {"status": "error", "message": "You are not the uploader"}
             ), 500
@@ -554,7 +554,7 @@ def increase_view(name: str) -> None:
     database.increase_views(Path(name).stem)
 
 
-def edit_title(name: str, title: str, username: str, is_admin: bool) -> tuple[str, int]:
+def edit_title(name: str, title: str, user: User) -> tuple[str, int]:
     title = title or ""
 
     if not name:
@@ -563,7 +563,7 @@ def edit_title(name: str, title: str, username: str, is_admin: bool) -> tuple[st
     if len(title) > config.max_title_length:
         return jsonify({"status": "error", "message": "Title is too long"}), 500
 
-    if not is_admin:
+    if not user.admin:
         if not config.allow_edit:
             return jsonify({"status": "error", "message": "Editing is disabled"}), 500
 
@@ -572,7 +572,7 @@ def edit_title(name: str, title: str, username: str, is_admin: bool) -> tuple[st
         if not db_file:
             return jsonify({"status": "error", "message": "File not found"}), 500
 
-        if db_file.username != username:
+        if db_file.username != user.username:
             return jsonify(
                 {"status": "error", "message": "You are not the uploader"}
             ), 500

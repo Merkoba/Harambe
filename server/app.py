@@ -23,13 +23,18 @@ from user_procs import User
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.secret_key = config.app_key
-app.config["MAX_CONTENT_LENGTH"] = config.get_max_file_size()
+app.config["MAX_CONTENT_LENGTH"] = config.max_size * 1_000_000
 
 # Enable all cross origin requests
 CORS(app)
 
 simple_captcha = CAPTCHA(config=config.get_captcha())
 app = simple_captcha.init_app(app)
+
+
+def get_user() -> User | None:
+    username = get_username()
+    return user_procs.get_user(username)
 
 
 def get_username() -> str:
@@ -40,17 +45,9 @@ def logged_in() -> bool:
     return bool(get_username())
 
 
-def is_admin() -> bool:
-    user = user_procs.get_user(get_username())
-
+def can_list(user: User | None = None) -> bool:
     if not user:
-        return False
-
-    return user.admin
-
-
-def can_list() -> bool:
-    user = user_procs.get_user(get_username())
+        user = user_procs.get_user(get_username())
 
     if not user:
         return False
@@ -115,13 +112,14 @@ def index() -> Any:
     if not config.web_uploads_enabled:
         return render_template("fallback.html")
 
-    admin = is_admin()
-    logged = logged_in()
-    username = get_username()
+    user = get_user()
+    admin = user and user.admin
+    uname = user.username if user else ""
+    is_user = bool(user)
 
     if request.method == "POST":
         try:
-            ok, ans = procs.upload(request, username=username)
+            ok, ans = procs.upload(request, username=uname)
 
             if not ok:
                 data = {
@@ -138,7 +136,7 @@ def index() -> Any:
             utils.error(e)
             return Response(invalid, mimetype=text_mtype)
 
-    if config.require_captcha and (not logged):
+    if config.require_captcha and (not is_user):
         captcha = simple_captcha.create()
     else:
         captcha = None
@@ -148,15 +146,23 @@ def index() -> Any:
     if (config.list_enabled and (not config.list_private)) or can_list():
         show_list = True
 
-    show_history = admin or (config.history_enabled and logged)
+    show_history = admin or (config.history_enabled and is_user)
+
+    if user:
+        max_size = user.max_size
+    else:
+        max_size = config.max_size_anon
+
+    max_size_str = max_size
+    max_size *= 1_000_000
 
     return render_template(
         "index.html",
         captcha=captcha,
         image_name=procs.get_image_name(),
-        max_size=config.get_max_file_size(),
-        max_file_size=config.max_file_size,
-        show_max_file_size=config.show_max_file_size,
+        max_size=max_size,
+        max_size_str=max_size_str,
+        show_max_size=config.show_max_size,
         show_image=config.show_image,
         background_color=config.background_color,
         accent_color=config.accent_color,
@@ -169,11 +175,10 @@ def index() -> Any:
         max_title_length=config.max_title_length,
         allow_titles=config.allow_titles,
         links=config.links,
-        is_user=logged,
+        is_user=is_user,
         show_history=show_history,
         show_list=show_list,
         show_admin=admin,
-        logged_in=logged,
     )
 
 
@@ -235,7 +240,12 @@ def post(name: str) -> Any:
     if not file:
         return Response(invalid, mimetype=text_mtype)
 
-    owned = is_admin() or ((file.username == get_username()) and config.allow_edit)
+    user = get_user()
+
+    if user:
+        owned = user.admin or ((file.username == user.username) and config.allow_edit)
+    else:
+        owned = False
 
     return render_template(
         "post.html",
@@ -318,7 +328,12 @@ def delete_all_files() -> Any:
 def delete_file() -> Any:
     data = request.get_json()
     file = data.get("file", None)
-    return procs.delete_file(file, get_username(), is_admin())
+    user = get_user()
+
+    if not user:
+        return Response(invalid, mimetype=text_mtype)
+
+    return procs.delete_file(file, user=user)
 
 
 @app.route("/edit_title", methods=["POST"])  # type: ignore
@@ -328,7 +343,12 @@ def edit_title() -> Any:
     data = request.get_json()
     name = data.get("name", None)
     title = data.get("title", None)
-    return procs.edit_title(name, title, get_username(), is_admin())
+    user = get_user()
+
+    if not user:
+        return Response(invalid, mimetype=text_mtype)
+
+    return procs.edit_title(name, title, user=user)
 
 
 # AUTH
@@ -371,7 +391,8 @@ def logout() -> Any:
 @app.route("/list/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def show_list(page: int = 1) -> Any:
-    admin = is_admin()
+    user = get_user()
+    admin = user and user.admin
 
     if not config.list_enabled and (not admin):
         return redirect(url_for("index"))
@@ -416,7 +437,8 @@ def show_list(page: int = 1) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
 def show_history(page: int = 1) -> Any:
-    admin = is_admin()
+    user = get_user()
+    admin = user and user.admin
 
     if not config.history_enabled and (not admin):
         return redirect(url_for("index"))
