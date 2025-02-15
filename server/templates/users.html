@@ -56,14 +56,15 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
-            <div id="username" class="table_cell underline">Username</div>
+            <div id="username" class="table_cell underline">User</div>
             <div id="name" class="table_cell underline">Name</div>
             <div id="limit" class="table_cell underline">RPM</div>
             <div id="max" class="table_cell underline">Max Size</div>
-            <div id="list" class="table_cell underline">Can List</div>
+            <div id="list" class="table_cell underline">Admin</div>
+            <div id="list" class="table_cell underline">List</div>
             <div id="mark" class="table_cell underline">Mark</div>
-            <div id="reg_date" class="table_cell underline">Reg Date</div>
-            <div id="last_date" class="table_cell underline">Last Date</div>
+            <div id="reg_date" class="table_cell underline">RegDate</div>
+            <div id="last_date" class="table_cell underline">LastDate</div>
             <div class="table_cell actions">Actions</div>
         </div>
         {% for user in users %}
@@ -93,9 +94,22 @@
                 <div>{{user.max_size}}</div>
             </div>
 
+            <!-- Admin -->
+            <div class="table_cell">
+                {%if user.can_list %}
+                <input type="checkbox" checked>
+                {% else %}
+                <input type="checkbox">
+                {% endif %}
+            </div>
+
             <!-- Can List -->
             <div class="table_cell">
-                <div>{{user.can_list}}</div>
+                {%if user.can_list %}
+                <input type="checkbox" checked>
+                {% else %}
+                <input type="checkbox">
+                {% endif %}
             </div>
 
             <!-- Mark -->
@@ -103,14 +117,14 @@
                 <div>{{user.mark}}</div>
             </div>
 
-            <!-- Reg Date -->
+            <!-- Register Date -->
             <div class="table_cell">
-                <div>{{user.reg_date}}</div>
+                <div title="{{user.register_date_str}}">{{user.register_date_str}}</div>
             </div>
 
             <!-- Last Date -->
             <div class="table_cell">
-                <div>{{user.last_date}}</div>
+                <div title="{{user.register_date_str}}">{{user.last_date_str}}</div>
             </div>
 
             <!-- Actions -->

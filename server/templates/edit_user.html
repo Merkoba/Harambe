@@ -16,8 +16,28 @@
         <input type="text" id="name" name="name" placeholder="Name" value="{{user.name}}">
         <input type="text" id="rpm" name="rpm" placeholder="Requests Per Minute" value="{{user.rpm}}">
         <input type="text" id="max_size" name="max_size" placeholder="Max File Size" value="{{user.max_size}}">
-        <input type="text" id="can_list" name="can_list" placeholder="Can Use List" value="{{user.can_list}}">
         <input type="text" id="mark" name="mark" placeholder="Mark on Files" value="{{user.mark}}">
+
+        <div class="row">
+            <div>Is an Admin</div>
+
+            {%if user.admin %}
+            <input id="admin" name="admin" type="checkbox" checked>
+            {% else %}
+            <input id="admin" name="admin" type="checkbox">
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div>Can See The List</div>
+
+            {%if user.can_list %}
+            <input id="can_list" name="can_list" type="checkbox" checked>
+            {% else %}
+            <input id="can_list" name="can_list" type="checkbox">
+            {% endif %}
+        </div>
+
         <input type="submit" value="Submit">
     </form>
 </div>

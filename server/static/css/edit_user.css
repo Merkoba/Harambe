@@ -29,3 +29,14 @@ input[type="submit"]
 input[type="submit"] {
     cursor: pointer;
 }
+
+input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}

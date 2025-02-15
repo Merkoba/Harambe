@@ -8,6 +8,7 @@ from flask import Request  # type: ignore
 from werkzeug.security import generate_password_hash as hashpass  # type: ignore
 
 # Modules
+import utils
 from config import config
 import database
 
@@ -23,7 +24,9 @@ class User:
     can_list: bool
     mark: str
     register_date: int
+    register_date_str: str
     last_date: int
+    last_date_str: str
 
 
 userlist: list[User] = []
@@ -32,28 +35,33 @@ userlist: list[User] = []
 def update_userlist() -> None:
     userlist.clear()
 
-    for db_user in database.get_users():
-        user = User(
-            db_user.username,
-            db_user.password,
-            db_user.admin,
-            db_user.name,
-            db_user.rpm,
-            db_user.max_size,
-            db_user.can_list,
-            db_user.mark,
-            db_user.register_date,
-            db_user.last_date,
+    for user in database.get_users():
+        reg_date_str = utils.nice_date(user.register_date)
+        last_date_str = utils.nice_date(user.last_date)
+
+        u = User(
+            user.username,
+            user.password,
+            user.admin,
+            user.name,
+            user.rpm,
+            user.max_size,
+            user.can_list,
+            user.mark,
+            user.register_date,
+            reg_date_str,
+            user.last_date,
+            last_date_str,
         )
 
-        userlist.append(user)
+        userlist.append(u)
 
 
 def get_users(
     page: int = 1,
     page_size: str = "default",
     query: str = "",
-    sort: str = "date",
+    sort: str = "register_date",
 ) -> tuple[list[User], str, bool]:
     psize = 0
 
@@ -118,31 +126,28 @@ def get_user(username: str) -> User | None:
 
 def edit_user(request: Request) -> bool:
     args = {}
+
     args["username"] = request.form.get("username")
     args["password"] = request.form.get("password")
+    args["name"] = request.form.get("name")
+    args["rpm"] = request.form.get("rpm")
+    args["max_size"] = request.form.get("max_size")
+    args["mark"] = request.form.get("mark")
     args["admin"] = request.form.get("admin") or False
-    args["name"] = request.form.get("name", "")
-    args["rpm"] = int(request.form.get("rpm") or 0)
-    args["max_size"] = int(request.form.get("max_size") or 0)
-    args["can_list"] = request.form.get("can_list", "")
-    args["mark"] = request.form.get("mark", "")
+    args["can_list"] = request.form.get("can_list") or False
+
+    if not args["username"]:
+        return False
 
     user = get_user(args["username"])
     mode = "add" if user is None else "edit"
     n_args = {}
 
     def get_value(what: str) -> None:
-        value = None
+        value = args[what]
 
-        if args[what]:
-            value = args[what]
-
-            if what == "password":
-                value = hashpass(value)
-
-        if not value:
-            if user and getattr(user, what):
-                value = getattr(user, what)
+        if (what == "password") and (not value):
+            value = hashpass(value)
 
         n_args[what] = value
 
@@ -154,14 +159,14 @@ def edit_user(request: Request) -> bool:
 
     if database.add_user(
         mode,
-        n_args["username"],
-        n_args["password"],
-        n_args["admin"],
-        n_args["name"],
-        n_args["rpm"],
-        n_args["max_size"],
-        n_args["can_list"],
-        n_args["mark"],
+        str(n_args["username"]),
+        str(n_args["password"]),
+        bool(n_args["admin"]),
+        str(n_args["name"]),
+        int(n_args["rpm"]),
+        int(n_args["max_size"]),
+        bool(n_args["can_list"]),
+        str(n_args["mark"]),
     ):
         update_userlist()
         return True
