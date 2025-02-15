@@ -347,3 +347,14 @@ def check_storage() -> None:
         total_files -= 1
         total_size -= oldest_file[1]
         do_delete_file(oldest_file[0].name)
+
+
+def get_next_file(name: str) -> File | None:
+    files, _, _ = get_files()
+
+    for i, file in enumerate(files):
+        if file.name == name:
+            if (i + 1) < len(files):
+                return files[i + 1]
+
+    return None

@@ -60,7 +60,6 @@ def can_list(user: User | None = None) -> bool:
 
 
 def list_visible(user: User | None = None) -> bool:
-    return False
     return config.list_enabled and ((not config.list_private) or can_list(user))
 
 
@@ -241,7 +240,7 @@ def message() -> Any:
     )
 
 
-# SERVE FILE
+# POST
 
 
 @app.route("/post/<string:name>", methods=["GET"])  # type: ignore
@@ -263,6 +262,8 @@ def post(name: str) -> Any:
     else:
         owned = False
 
+    show_list = list_visible(user)
+
     return render_template(
         "post.html",
         file=file,
@@ -274,6 +275,7 @@ def post(name: str) -> Any:
         link_color=config.link_color,
         font_family=config.font_family,
         description=config.description_post,
+        show_list=show_list,
         owned=owned,
     )
 
@@ -302,6 +304,18 @@ def get_file(name: str, original: str | None = None) -> Any:
 
     fd = utils.files_dir()
     return send_file(fd / file.full, download_name=original, max_age=config.max_age)
+
+
+@app.route("/next/<string:current>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
+def next_post(current: str) -> Any:
+    file = file_procs.get_next_file(current)
+
+    if not file:
+        return redirect(url_for("post", name=current))
+
+    return redirect(url_for("post", name=file.name))
 
 
 # ADMIN

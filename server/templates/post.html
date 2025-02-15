@@ -29,6 +29,12 @@
     <div id="top">
         <div id="buttons">
             <a href="/" class="button">Return</a>
+            {% if show_list %}
+            <div class="sep">|</div>
+            <a href="/list" class="button">List</a>
+            <div class="sep">|</div>
+            <a href="/next/{{file.name}}" class="button">Next</a>
+            {% endif %}
             <div class="sep">|</div>
         {% if owned %}
             <div id="edit" class="button">Edit</div>
