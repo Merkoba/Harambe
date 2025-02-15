@@ -6,21 +6,17 @@
 
 # -------------------------------
 
-# URL="localhost:4040"
 URL="https://someurl.com"
 USERNAME="someusername"
 PASSWORD="somepassword"
 
 # -------------------------------
 
-# Check if the correct number of arguments is provided
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <file_path>"
-    exit 1
-fi
-
 # Resolve the full path of the file
 FILE_PATH="$1"
+
+# Prompt for comments or not
+MODE="${2:-normal}"
 
 # Remove "file://" prefix if present
 if [[ "$FILE_PATH" == file://* ]]; then
@@ -51,7 +47,11 @@ if [ -z "$PASSWORD" ]; then
 fi
 
 # Prompt to get the title
-title=$(zenity --entry --title="Harambe Upload" --text="Enter a title:")
+if [ "$MODE" == "comment" ]; then
+  title=$(zenity --entry --title="Harambe Upload" --text="Enter a title:")
+else
+  title=""
+fi
 
 # Make the POST request and capture the response
 RESPONSE=$(curl -s -X POST "$URL/upload" \
