@@ -472,10 +472,10 @@ def do_delete_file(name: str) -> None:
 
     if file.exists() and file.is_file():
         file.unlink()
-        database.remove_file(name)
+        database.delete_file(name)
 
 
-def delete_all() -> tuple[str, int]:
+def delete_all_files() -> tuple[str, int]:
     try:
         files = utils.files_dir().glob("*")
 

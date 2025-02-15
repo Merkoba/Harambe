@@ -133,7 +133,7 @@ def get_files() -> dict[str, File]:
     return {row["name"]: make_file(dict(row)) for row in rows}
 
 
-def remove_file(name: str) -> None:
+def delete_file(name: str) -> None:
     check_db()
     conn, c = get_conn()
     c.execute("delete from files where name = ?", (name,))
@@ -179,11 +179,11 @@ def add_user(
     values = [
         username,
         password,
-        admin or False,
-        name or "",
-        rpm or 12,
-        max_size or 0,
-        can_list or False,
+        admin,
+        name,
+        rpm,
+        max_size,
+        can_list,
         mark or "",
     ]
 
@@ -226,3 +226,20 @@ def get_users() -> list[User]:
     conn.close()
 
     return [make_user(dict(row)) for row in rows]
+
+
+def delete_user(username: str) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("delete from users where username = ?", (username,))
+    conn.commit()
+    conn.close()
+
+
+def delete_normal_users() -> None:
+    check_db()
+    conn, c = get_conn()
+    query = "delete from users where admin != 1"
+    c.execute(query)
+    conn.commit()
+    conn.close()

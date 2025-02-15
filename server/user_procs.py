@@ -4,8 +4,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 # Libraries
-from flask import Request  # type: ignore
+from flask import Request, jsonify  # type: ignore
 from werkzeug.security import generate_password_hash as hashpass  # type: ignore
+from werkzeug.security import check_password_hash as checkpass  # pyright: ignore
 
 # Modules
 import utils
@@ -130,30 +131,43 @@ def edit_user(request: Request, username: str) -> bool:
 
     args = {}
 
-    args["username"] = request.form.get("username")
-    args["password"] = request.form.get("password")
-    args["name"] = request.form.get("name")
-    args["rpm"] = request.form.get("rpm")
-    args["max_size"] = request.form.get("max_size")
-    args["mark"] = request.form.get("mark")
-    args["admin"] = request.form.get("admin") or False
-    args["can_list"] = request.form.get("can_list") or False
+    args["username"] = [request.form.get("username"), "string"]
+    args["password"] = [request.form.get("password"), "string"]
+    args["name"] = [request.form.get("name"), "string"]
+    args["rpm"] = [request.form.get("rpm"), "int"]
+    args["max_size"] = [request.form.get("max_size"), "int"]
+    args["mark"] = [request.form.get("mark"), "string"]
+    args["admin"] = [request.form.get("admin") or False, "bool"]
+    args["can_list"] = [request.form.get("can_list") or False, "bool"]
 
-    if not args["username"]:
+    uname = args["username"][0]
+
+    if not uname:
         return False
 
-    if args["username"] == username:
-        args["admin"] = True
+    if uname == username:
+        args["admin"][0] = True
 
-    user = get_user(args["username"])
+    user = get_user(uname)
     mode = "add" if user is None else "edit"
     n_args = {}
 
     def get_value(what: str) -> None:
-        value = args[what]
+        value, vtype = args[what]
 
-        if (what == "password") and (not value):
-            value = hashpass(value)
+        if what == "password":
+            if value:
+                value = hashpass(value)
+            elif user and user.password:
+                value = user.password
+
+        if value:
+            if vtype == "int":
+                value = int(value)
+            elif vtype == "string":
+                value = str(value)
+            elif vtype == "bool":
+                value = bool(value)
 
         n_args[what] = value
 
@@ -165,14 +179,14 @@ def edit_user(request: Request, username: str) -> bool:
 
     if database.add_user(
         mode,
-        str(n_args["username"]),
-        str(n_args["password"]),
-        bool(n_args["admin"]),
-        str(n_args["name"]),
-        int(n_args["rpm"]),
-        int(n_args["max_size"]),
-        bool(n_args["can_list"]),
-        str(n_args["mark"]),
+        n_args["username"],
+        n_args["password"],
+        n_args["admin"],
+        n_args["name"],
+        n_args["rpm"],
+        n_args["max_size"],
+        n_args["can_list"],
+        n_args["mark"],
     ):
         update_userlist()
         return True
@@ -183,7 +197,52 @@ def edit_user(request: Request, username: str) -> bool:
 def check_auth(username: str, password: str) -> User | None:
     for user in userlist:
         if user.username == username:
-            if user.password == password:
+            if checkpass(user.password, password):
                 return user
 
+            break
+
     return None
+
+
+def delete_users(usernames: list[str], admin: str) -> tuple[str, int]:
+    if not usernames:
+        return jsonify(
+            {"status": "error", "message": "Usernames were not provided"}
+        ), 400
+
+    if admin in usernames:
+        return (
+            jsonify({"status": "error", "message": "You can't delete yourself"}),
+            400,
+        )
+
+    for username in usernames:
+        do_delete_user(username)
+
+    return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
+
+
+def delete_user(username: str, admin: str) -> tuple[str, int]:
+    if not username:
+        return jsonify({"status": "error", "message": "Usename was not provided"}), 400
+
+    if username == admin:
+        return jsonify({"status": "error", "message": "You can't delete yourself"}), 400
+
+    do_delete_user(username)
+    return jsonify({"status": "ok", "message": "User deleted successfully"}), 200
+
+
+def do_delete_user(username: str) -> None:
+    if not username:
+        return
+
+    database.delete_user(username)
+    update_userlist()
+
+
+def delete_normal_users() -> tuple[str, int]:
+    database.delete_normal_users()
+    update_userlist()
+    return jsonify({"status": "ok", "message": "Normal users deleted"}), 200

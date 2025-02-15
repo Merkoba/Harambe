@@ -309,8 +309,8 @@ def delete_files() -> Any:
 @app.route("/delete_all_files", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(2))  # type: ignore
 @admin_required
-def delete_all() -> Any:
-    return procs.delete_all()
+def delete_all_files() -> Any:
+    return procs.delete_all_files()
 
 
 @app.route("/delete_file", methods=["POST"])  # type: ignore
@@ -495,3 +495,28 @@ def edit_user(username: str = "") -> Any:
         "edit_user.html",
         user=user or {},
     )
+
+
+@app.route("/delete_users", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@admin_required
+def delete_users() -> Any:
+    data = request.get_json()
+    usernames = data.get("usernames", None)
+    return user_procs.delete_users(usernames, get_username())
+
+
+@app.route("/delete_normal_users", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(2))  # type: ignore
+@admin_required
+def delete_normal_users() -> Any:
+    return user_procs.delete_normal_users()
+
+
+@app.route("/delete_user", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@admin_required
+def delete_user() -> Any:
+    data = request.get_json()
+    username = data.get("username", None)
+    return user_procs.delete_user(username, get_username())

@@ -26,12 +26,12 @@ window.onload = () => {
     if (e.target.classList.contains(`delete`)) {
       if (vars.mode === `users`) {
         selected_users = [e.target.closest(`.item`)]
+        delete_users()
       }
       else {
         selected_files = [e.target.closest(`.item`)]
+        delete_files()
       }
-
-      delete_files()
     }
 
     if (e.target.classList.contains(`delete_above`)) {
@@ -70,11 +70,13 @@ window.onload = () => {
 
   if (delete_all) {
     DOM.ev(delete_all, `click`, () => {
-      if (confirm(`Delete ALL files from the server?`)) {
-        if (vars.mode === `users`) {
-          delete_all_users()
+      if (vars.mode === `users`) {
+        if (confirm(`Delete all non-admin users?`)) {
+            delete_normal_users()
         }
-        else {
+      }
+      else {
+        if (confirm(`Delete ALL files?`)) {
           delete_all_files()
         }
       }
@@ -344,30 +346,6 @@ function delete_files() {
   }
 }
 
-async function delete_file(name, el) {
-  let files = [name]
-
-  try {
-    let response = await fetch(`/delete_files`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({files}),
-    })
-
-    if (response.ok) {
-      remove_files(files)
-    }
-    else {
-      print_error(response.status)
-    }
-  }
-  catch (error) {
-    print_error(error)
-  }
-}
-
 async function delete_selected_files(files) {
   try {
     let response = await fetch(`/delete_files`, {
@@ -411,7 +389,7 @@ async function delete_all_files() {
     })
 
     if (response.ok) {
-      DOM.el(`#items`).innerHTML = ``
+      window.location = `/admin`
     }
     else {
       print_error(response.status)
@@ -656,31 +634,29 @@ function delete_users() {
 
   size = Math.round(size * 100) / 100
 
-  if (confirm(`Delete (${selected_users.length} users) (${size_string(size)})`)) {
+  if (confirm(`Delete (${selected_users.length} users)`)) {
     let users = []
 
     for (let user of selected_users) {
-      users.push(user.dataset.full)
+      users.push(user.dataset.username)
     }
 
     delete_selected_users(users)
   }
 }
 
-async function delete_file(name, el) {
-  let users = [name]
-
+async function delete_selected_users(usernames) {
   try {
     let response = await fetch(`/delete_users`, {
       method: `POST`,
       headers: {
         "Content-Type": `application/json`,
       },
-      body: JSON.stringify({users}),
+      body: JSON.stringify({usernames}),
     })
 
     if (response.ok) {
-      remove_users(users)
+      remove_users(usernames)
     }
     else {
       print_error(response.status)
@@ -691,31 +667,9 @@ async function delete_file(name, el) {
   }
 }
 
-async function delete_selected_users(users) {
-  try {
-    let response = await fetch(`/delete_users`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({users}),
-    })
-
-    if (response.ok) {
-      remove_users(users)
-    }
-    else {
-      print_error(response.status)
-    }
-  }
-  catch (error) {
-    print_error(error)
-  }
-}
-
-function remove_users(users) {
-  for (let user of users) {
-    let el = DOM.el(`.item[data-full="${user}"]`)
+function remove_users(usernames) {
+  for (let username of usernames) {
+    let el = DOM.el(`.item[data-username="${username}"]`)
 
     if (el) {
       el.remove()
@@ -723,9 +677,9 @@ function remove_users(users) {
   }
 }
 
-async function delete_all_users() {
+async function delete_normal_users() {
   try {
-    let response = await fetch(`/delete_all_users`, {
+    let response = await fetch(`/delete_normal_users`, {
       method: `POST`,
       headers: {
         "Content-Type": `application/json`,
@@ -734,7 +688,7 @@ async function delete_all_users() {
     })
 
     if (response.ok) {
-      DOM.el(`#items`).innerHTML = ``
+      window.location = `/users`
     }
     else {
       print_error(response.status)
