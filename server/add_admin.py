@@ -1,6 +1,9 @@
 # Standard
 import sys
 
+# Libraries
+from werkzeug.security import generate_password_hash as hashpass  # type: ignore
+
 # Modules
 import database
 
@@ -8,4 +11,10 @@ import database
 if len(sys.argv) < 3:
     sys.exit(1)
 
-database.add_user("add", sys.argv[1], sys.argv[2], admin=True)
+username = sys.argv[1]
+password = sys.argv[2]
+
+if (not username) or (not password):
+    sys.exit(1)
+
+database.add_user("add", username, hashpass(password), admin=True)
