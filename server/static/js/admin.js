@@ -1,4 +1,5 @@
 let selected_files = []
+let selected_users = []
 let date_mode = `ago`
 
 window.onload = () => {
@@ -23,7 +24,13 @@ window.onload = () => {
     }
 
     if (e.target.classList.contains(`delete`)) {
-      selected_files = [e.target.closest(`.item`)]
+      if (vars.mode === `users`) {
+        selected_users = [e.target.closest(`.item`)]
+      }
+      else {
+        selected_files = [e.target.closest(`.item`)]
+      }
+
       delete_files()
     }
 
@@ -42,7 +49,12 @@ window.onload = () => {
 
   if (refresh) {
     DOM.ev(refresh, `click`, () => {
-      window.location = `/admin`
+      if (vars.mode === `users`) {
+        window.location = `/users`
+      }
+      else {
+        window.location = `/admin`
+      }
     })
   }
 
@@ -589,19 +601,127 @@ function toggle_select() {
 }
 
 function delete_selected() {
-  let files = []
+  let items = []
   let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
     if (checkbox.checked) {
-      files.push(checkbox.closest(`.item`))
+      items.push(checkbox.closest(`.item`))
     }
   }
 
-  if (files.length === 0) {
+  if (items.length === 0) {
     return
   }
 
-  selected_files = files
-  delete_files()
+  if (vars.mode === `users`) {
+    selected_users = items
+    delete_users()
+  }
+  else{
+    selected_files = items
+    delete_files()
+  }
+}
+
+function delete_users() {
+  if (selected_users.length === 0) {
+    return
+  }
+
+  let size = 0
+
+  for (let user of selected_users) {
+    size += parseFloat(user.dataset.size)
+  }
+
+  size = Math.round(size * 100) / 100
+
+  if (confirm(`Delete (${selected_users.length} users) (${size_string(size)})`)) {
+    let users = []
+
+    for (let user of selected_users) {
+      users.push(user.dataset.full)
+    }
+
+    delete_selected_users(users)
+  }
+}
+
+async function delete_file(name, el) {
+  let users = [name]
+
+  try {
+    let response = await fetch(`/delete_users`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({users}),
+    })
+
+    if (response.ok) {
+      remove_users(users)
+    }
+    else {
+      print_error(response.status)
+    }
+  }
+  catch (error) {
+    print_error(error)
+  }
+}
+
+async function delete_selected_users(users) {
+  try {
+    let response = await fetch(`/delete_users`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({users}),
+    })
+
+    if (response.ok) {
+      remove_users(users)
+    }
+    else {
+      print_error(response.status)
+    }
+  }
+  catch (error) {
+    print_error(error)
+  }
+}
+
+function remove_users(users) {
+  for (let user of users) {
+    let el = DOM.el(`.item[data-full="${user}"]`)
+
+    if (el) {
+      el.remove()
+    }
+  }
+}
+
+async function delete_all_users() {
+  try {
+    let response = await fetch(`/delete_all_users`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify(),
+    })
+
+    if (response.ok) {
+      DOM.el(`#items`).innerHTML = ``
+    }
+    else {
+      print_error(response.status)
+    }
+  }
+  catch (error) {
+    print_error(error)
+  }
 }
