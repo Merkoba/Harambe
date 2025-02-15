@@ -56,12 +56,12 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
-            <div id="name" class="table_cell underline">Name</div>
-            <div id="title" class="table_cell underline">Title</div>
-            <div id="uploader" class="table_cell underline">Uploader</div>
-            <div id="size" class="table_cell underline">Size</div>
-            <div id="date" class="table_cell underline">Date</div>
-            <div id="views" class="table_cell views underline" title="Views">Views</div>
+            <div id="name" class="table_cell underline" data-sort="name">Name</div>
+            <div id="title" class="table_cell underline" data-sort="title">Title</div>
+            <div id="uploader" class="table_cell underline" data-sort="uploader">Uploader</div>
+            <div id="size" class="table_cell underline" data-sort="size">Size</div>
+            <div id="date" class="table_cell underline" data-sort="date">Date</div>
+            <div id="views" class="table_cell views underline" title="Views" data-sort="views">Views</div>
             <div class="table_cell actions">Actions</div>
         </div>
         {% for file in files %}

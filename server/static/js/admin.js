@@ -12,14 +12,14 @@ window.onload = () => {
   })
 
   DOM.ev(document, `click`, async (e) => {
-    if (e.target.classList.contains(`edit`)) {
-      let el = e.target.closest(`.item`)
+    let item = e.target.closest(`.item`)
 
+    if (e.target.classList.contains(`edit`)) {
       if (vars.mode === `users`) {
         window.location = `/edit_user/${el.dataset.username}`
       }
       else {
-        edit_title(el)
+        edit_title(item)
       }
     }
 
@@ -35,13 +35,21 @@ window.onload = () => {
     }
 
     if (e.target.classList.contains(`delete_above`)) {
-      let el = e.target.closest(`.item`)
-      select_above(el)
+      select_above(item)
     }
 
     if (e.target.classList.contains(`delete_below`)) {
-      let el = e.target.closest(`.item`)
-      select_below(el)
+      select_below(item)
+    }
+
+    let header = e.target.closest(`.table_header`)
+
+    if (header) {
+      let sort = e.target.dataset.sort
+
+      if (sort) {
+        do_sort(sort)
+      }
     }
   })
 
@@ -49,12 +57,7 @@ window.onload = () => {
 
   if (refresh) {
     DOM.ev(refresh, `click`, () => {
-      if (vars.mode === `users`) {
-        window.location = `/users`
-      }
-      else {
-        window.location = `/admin`
-      }
+      window.location = `/${vars.mode}`
     })
   }
 
@@ -111,7 +114,9 @@ window.onload = () => {
           let mark = item.dataset.mark.toLowerCase()
           let reg_date = item.dataset.reg_date.toLowerCase()
           let last_date = item.dataset.last_date.toLowerCase()
-          opts = [username, name, rpm, max_size, mark, reg_date, last_date]
+          let admin = item.dataset.admin.toLowerCase()
+          let list = item.dataset.can_list.toLowerCase()
+          opts = [username, name, rpm, max_size, mark, reg_date, last_date, admin, list]
         }
         else {
           let name = item.dataset.name.toLowerCase()
@@ -141,59 +146,6 @@ window.onload = () => {
   if (cb) {
     DOM.ev(cb, `click`, () => {
       toggle_select()
-    })
-  }
-
-  let date = DOM.el(`#date`)
-
-  if (date) {
-    DOM.ev(date, `click`, () => {
-      if (vars.mode === `admin`) {
-        sort_date()
-      }
-      else if (vars.mode === `list`) {
-        change_date()
-      }
-    })
-  }
-
-  let size = DOM.el(`#size`)
-
-  if (size) {
-    if (vars.mode === `admin`) {
-      DOM.ev(size, `click`, () => {
-        sort_size()
-      })
-    }
-  }
-
-  let views = DOM.el(`#views`)
-
-  if (views) {
-    DOM.ev(views, `click`, () => {
-      if (vars.mode === `admin`) {
-        sort_views()
-      }
-    })
-  }
-
-  let title = DOM.el(`#title`)
-
-  if (title) {
-    DOM.ev(title, `click`, () => {
-      if (vars.mode === `admin`) {
-        sort_title()
-      }
-    })
-  }
-
-  let name = DOM.el(`#name`)
-
-  if (name) {
-    DOM.ev(name, `click`, () => {
-      if (vars.mode === `admin`) {
-        sort_name()
-      }
     })
   }
 
@@ -450,115 +402,11 @@ function do_search() {
   }
 
   if (query) {
-    window.location = `/admin?query=${query}`
+    window.location = `/${vars.mode}?query=${query}`
   }
   else {
-    window.location = `/admin`
+    window.location = `/${vars.mode}`
   }
-}
-
-function sort_size() {
-  let url = new URL(window.location.href)
-  let sort = url.searchParams.get(`sort`)
-
-  if (sort) {
-    if (sort === `size`) {
-      window.location = `/admin?sort=size_desc`
-      return
-    }
-    else if (sort === `size_desc`) {
-      window.location = `/admin`
-      return
-    }
-  }
-
-  window.location = `/admin?sort=size`
-}
-
-function sort_date() {
-  let url = new URL(window.location.href)
-  let sort = url.searchParams.get(`sort`)
-
-  if (sort) {
-    if (sort === `date_desc`) {
-      window.location = `/admin`
-      return
-    }
-  }
-
-  window.location = `/admin?sort=date_desc`
-}
-
-function change_date() {
-  if (date_mode === `ago`) {
-    date_mode = `date`
-  }
-  else {
-    date_mode = `ago`
-  }
-
-  for (let item of DOM.els(`.item`)) {
-    if (date_mode === `ago`) {
-      DOM.el(`.date`, item).innerText = item.dataset.ago
-    }
-    else {
-      DOM.el(`.date`, item).innerText = item.dataset.date
-    }
-  }
-}
-
-function sort_views() {
-  let url = new URL(window.location.href)
-  let sort = url.searchParams.get(`sort`)
-
-  if (sort) {
-    if (sort === `views`) {
-      window.location = `/admin?sort=views_desc`
-      return
-    }
-    else if (sort === `views_desc`) {
-      window.location = `/admin`
-      return
-    }
-  }
-
-  window.location = `/admin?sort=views`
-}
-
-function sort_title() {
-  let url = new URL(window.location.href)
-  let sort = url.searchParams.get(`sort`)
-
-  if (sort) {
-    if (sort === `title`) {
-      window.location = `/admin?sort=title_desc`
-      return
-    }
-    else if (sort === `title_desc`) {
-      window.location = `/admin`
-      return
-    }
-  }
-
-  window.location = `/admin?sort=title`
-}
-
-function sort_name() {
-  let url = new URL(window.location.href)
-  let sort = url.searchParams.get(`sort`)
-
-  if (sort) {
-    if (sort === `name`) {
-      window.location = `/admin?sort=name_desc`
-      return
-    }
-    else if (sort === `name_desc`) {
-      window.location = `/admin`
-      return
-    }
-  }
-
-  window.location = `/admin?sort=name`
 }
 
 async function edit_title(el) {
@@ -697,4 +545,22 @@ async function delete_normal_users() {
   catch (error) {
     print_error(error)
   }
+}
+
+function do_sort(what) {
+  let url = new URL(window.location.href)
+  let sort = url.searchParams.get(`sort`)
+
+  if (sort) {
+    if (sort === what) {
+      window.location = `/${vars.mode}?sort=${what}_desc`
+      return
+    }
+    else if (sort === `${what}_desc`) {
+      window.location = `/${vars.mode}`
+      return
+    }
+  }
+
+  window.location = `/${vars.mode}?sort=${what}`
 }

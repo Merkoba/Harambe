@@ -296,9 +296,11 @@ def admin(page: int = 1) -> Any:
     query = request.args.get("query", "")
     sort = request.args.get("sort", "date")
     page_size = request.args.get("page_size", config.admin_page_size)
+
     files, total, next_page = file_procs.get_files(
         page, page_size, query=query, sort=sort
     )
+
     def_page_size = page_size == config.admin_page_size
 
     return render_template(
@@ -416,9 +418,10 @@ def show_list(page: int = 1) -> Any:
             return redirect(url_for("index"))
 
     page_size = request.args.get("page_size", config.list_page_size)
+    sort = request.args.get("sort", "date")
 
     files, total, next_page = file_procs.get_files(
-        page, page_size, max_files=config.list_max_files
+        page, page_size, max_files=config.list_max_files, sort=sort
     )
 
     def_page_size = page_size == config.list_page_size
@@ -482,11 +485,13 @@ def show_history(page: int = 1) -> Any:
 @admin_required
 def users(page: int = 1) -> Any:
     query = request.args.get("query", "")
-    sort = request.args.get("sort", "date")
+    sort = request.args.get("sort", "register_date")
     page_size = request.args.get("page_size", config.admin_page_size)
+
     users, total, next_page = user_procs.get_users(
         page, page_size, query=query, sort=sort
     )
+
     def_page_size = page_size == config.admin_page_size
 
     return render_template(

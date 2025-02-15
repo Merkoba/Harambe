@@ -18,7 +18,7 @@
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
-    <div class="action_button" id="add" title="Refresh this page">Add</div>
+    <div class="action_button" id="add" title="Add a user">Add</div>
     <div class="sep">|</div>
     <div class="action_button" id="delete_selected" title="Delete selected users">Delete</div>
     <div class="sep">|</div>
@@ -56,19 +56,19 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
-            <div id="username" class="table_cell underline">User</div>
-            <div id="name" class="table_cell underline">Name</div>
-            <div id="limit" class="table_cell underline">RPM</div>
-            <div id="max" class="table_cell underline">Max Size</div>
-            <div id="list" class="table_cell underline">Admin</div>
-            <div id="list" class="table_cell underline">List</div>
-            <div id="mark" class="table_cell underline">Mark</div>
-            <div id="reg_date" class="table_cell underline">RegDate</div>
-            <div id="last_date" class="table_cell underline">LastDate</div>
+            <div id="username" class="table_cell underline" data-sort="username">User</div>
+            <div id="name" class="table_cell underline" data-sort="name">Name</div>
+            <div id="limit" class="table_cell underline" data-sort="rpm">RPM</div>
+            <div id="max" class="table_cell underline" data-sort="max_size">Max Size</div>
+            <div id="list" class="table_cell underline" data-sort="admin">Admin</div>
+            <div id="list" class="table_cell underline" data-sort="can_list">List</div>
+            <div id="mark" class="table_cell underline" data-sort="mark">Mark</div>
+            <div id="reg_date" class="table_cell underline" data-sort="register_date">RegDate</div>
+            <div id="last_date" class="table_cell underline" data-sort="last_date">LastDate</div>
             <div class="table_cell actions">Actions</div>
         </div>
         {% for user in users %}
-        <div class="table_row item" data-username="{{user.username}}" data-name="{{user.name}}" data-rpm="{{user.rpm}}" data-max_size="{{user.max_size}}" data-can_list="{{user.can_list}}" data-mark="{{user.mark}}" data-reg_date="{{user.reg_date_str}}" data-last_date="{{user.last_date_str}}">
+        <div class="table_row item" data-username="{{user.username}}" data-name="{{user.name}}" data-rpm="{{user.rpm}}" data-max_size="{{user.max_size}}" data-can_list="{{user.can_list}}" data-mark="{{user.mark}}" data-reg_date="{{user.reg_date_str}}" data-last_date="{{user.last_date_str}}" data-admin="{{user.admin}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this user">
                 <input class="select_checkbox" type="checkbox">
@@ -101,18 +101,18 @@
             <!-- Admin -->
             <div class="table_cell">
                 {%if user.admin %}
-                Yes
+                A: Yes
                 {% else %}
-                No
+                A: No
                 {% endif %}
             </div>
 
             <!-- Can List -->
             <div class="table_cell">
                 {%if user.can_list %}
-                Yes
+                L: Yes
                 {% else %}
-                No
+                L: No
                 {% endif %}
             </div>
 

@@ -124,6 +124,26 @@ def get_users(
     elif sort == "name_desc":
         users.sort(key=lambda x: x.name, reverse=False)
 
+    elif sort == "rpm":
+        users.sort(key=lambda x: x.rpm, reverse=True)
+    elif sort == "rpm_desc":
+        users.sort(key=lambda x: x.rpm, reverse=False)
+
+    elif sort == "max_size":
+        users.sort(key=lambda x: x.max_size, reverse=True)
+    elif sort == "max_size_desc":
+        users.sort(key=lambda x: x.max_size, reverse=False)
+
+    elif sort == "admin":
+        users.sort(key=lambda x: x.admin, reverse=True)
+    elif sort == "admin_desc":
+        users.sort(key=lambda x: x.admin, reverse=False)
+
+    elif sort == "can_list":
+        users.sort(key=lambda x: x.can_list, reverse=True)
+    elif sort == "can_list_desc":
+        users.sort(key=lambda x: x.can_list, reverse=False)
+
     total_str = f"{len(users)}"
 
     if psize > 0:
