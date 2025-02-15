@@ -147,7 +147,7 @@ def index() -> Any:
 
     show_list = False
 
-    if (config.list_enabled and (not config.list_private)) or can_list():
+    if (config.list_enabled and ((not config.list_private)) or can_list()):
         show_list = True
 
     show_history = admin or (config.history_enabled and is_user)
