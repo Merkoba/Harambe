@@ -430,9 +430,10 @@ def show_list(page: int = 1) -> Any:
 
     page_size = request.args.get("page_size", config.list_page_size)
     sort = request.args.get("sort", "date")
+    query = request.args.get("query", "")
 
     files, total, next_page = file_procs.get_files(
-        page, page_size, max_files=config.list_max_files, sort=sort
+        page, page_size, max_files=config.list_max_files, sort=sort, query=query
     )
 
     def_page_size = page_size == config.list_page_size
