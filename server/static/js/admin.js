@@ -71,7 +71,12 @@ window.onload = () => {
   if (delete_all) {
     DOM.ev(delete_all, `click`, () => {
       if (confirm(`Delete ALL files from the server?`)) {
-        delete_all_files()
+        if (vars.mode === `users`) {
+          delete_all_users()
+        }
+        else {
+          delete_all_files()
+        }
       }
     })
   }
@@ -94,14 +99,28 @@ window.onload = () => {
       let value = filter.value.toLowerCase()
 
       for (let item of items) {
-        let name = item.dataset.name.toLowerCase()
-        let ago = item.dataset.ago.toLowerCase()
-        let date = item.dataset.date.toLowerCase()
-        let size = item.dataset.size_str.toLowerCase()
-        let title = item.dataset.title.toLowerCase()
-        let original = item.dataset.original.toLowerCase()
-        let uploader = item.dataset.uploader.toLowerCase()
-        let opts = [name, size, title, original, ago, date, uploader]
+        let opts = []
+
+        if (vars.mode === `users`) {
+          let username = item.dataset.username.toLowerCase()
+          let name = item.dataset.name.toLowerCase()
+          let rpm = item.dataset.rpm.toLowerCase()
+          let max_size = item.dataset.max_size.toLowerCase()
+          let mark = item.dataset.mark.toLowerCase()
+          let reg_date = item.dataset.reg_date.toLowerCase()
+          let last_date = item.dataset.last_date.toLowerCase()
+          opts = [username, name, rpm, max_size, mark, reg_date, last_date]
+        }
+        else {
+          let name = item.dataset.name.toLowerCase()
+          let ago = item.dataset.ago.toLowerCase()
+          let date = item.dataset.date.toLowerCase()
+          let size = item.dataset.size_str.toLowerCase()
+          let title = item.dataset.title.toLowerCase()
+          let original = item.dataset.original.toLowerCase()
+          let uploader = item.dataset.uploader.toLowerCase()
+          opts = [name, size, title, original, ago, date, uploader]
+        }
 
         if (opts.some(x => x.includes(value))) {
           item.style.display = `flex`
