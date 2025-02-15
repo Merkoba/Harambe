@@ -61,6 +61,19 @@ window.onload = function() {
       modal.style.display = `none`
     })
   }
+
+  DOM.ev(document, `dragover`, (e) => {
+    e.preventDefault()
+  })
+
+  DOM.ev(document, `drop`, (e) => {
+    e.preventDefault()
+    let files = e.dataTransfer.files
+
+    if (files && (files.length > 0)) {
+      window.location = `/`
+    }
+  })
 }
 
 function timeago(date) {
