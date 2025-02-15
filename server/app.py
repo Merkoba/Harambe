@@ -526,31 +526,48 @@ def users(page: int = 1) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
 def edit_user(username: str = "") -> Any:
+    if username:
+        mode = "edit"
+    else:
+        mode = "add"
+
+    def show_edit(message: str = "") -> Any:
+        user = user_procs.get_user(username)
+
+        if not user:
+            return redirect(url_for("users"))
+
+        if mode == "edit":
+            title = "Edit User"
+        else:
+            title = "Add User"
+
+        if message:
+            title = f"{title} ({message})"
+
+        return render_template(
+            "edit_user.html",
+            user=user or {},
+            title=title,
+        )
+
     user = get_user()
 
     if not user:
         return redirect(url_for("users"))
 
     if request.method == "POST":
-        if username:
-            ok = user_procs.edit_user(request, username, user)
+        if not username:
+            return Response(invalid, mimetype=text_mtype)
 
-            if ok:
-                return redirect(url_for("users"))
+        ok = user_procs.edit_user(mode, request, username, user)
 
-            return redirect(url_for("edit_user", username=username))
+        if ok:
+            return show_edit("Updated")
 
-        return redirect(url_for("edit_user"))
+        return show_edit("Error")
 
-    e_user = user_procs.get_user(username)
-
-    if not e_user:
-        return redirect(url_for("users"))
-
-    return render_template(
-        "edit_user.html",
-        user=e_user or {},
-    )
+    return show_edit()
 
 
 @app.route("/delete_users", methods=["POST"])  # type: ignore

@@ -8,10 +8,14 @@
 
 {% block body %}
 <div>
-    <div>Edit or Add a User</div>
+    <div>{{title}}</div>
 
     <form id="form" action="/edit_user/{{user.username}}" method="post">
-        <input type="text" id="username" name="username" placeholder="Username" value="{{user.username}}">
+        {% if user.username %}
+        <input type="text" id="username" name="username" placeholder="Username" value="{{user.username}}" disabled>
+        {% else %}
+        <input type="text" id="username" name="username" placeholder="Username">
+        {% endif %}
         <input type="text" id="password" name="password" placeholder="Password" value="">
         <input type="text" id="name" name="name" placeholder="Name" value="{{user.name}}">
         <input type="text" id="rpm" name="rpm" placeholder="Requests Per Minute" value="{{user.rpm}}">
@@ -31,7 +35,7 @@
         <div class="row">
             <div>Can See The List</div>
 
-            {%if (not user) or user.can_list %}
+            {% if (not user) or user.can_list %}
             <input id="can_list" name="can_list" type="checkbox" checked>
             {% else %}
             <input id="can_list" name="can_list" type="checkbox">

@@ -44,6 +44,8 @@ class User:
     name: str
     rpm: int
     max_size: int
+    rpm_fill: int
+    max_size_fill: int
     can_list: bool
     mark: str
     register_date: int
@@ -62,6 +64,8 @@ def make_user(user: DbUser) -> User:
     last_date_str = utils.nice_date(user.last_date)
     admin_str = "A: Yes" if user.admin else "A: No"
     can_list_str = "L: Yes" if user.can_list else "L: No"
+    rpm_fill = user.rpm or config.requests_per_minute
+    max_size_fill = user.max_size or config.max_size_user
 
     return User(
         user.username,
@@ -70,6 +74,8 @@ def make_user(user: DbUser) -> User:
         user.name,
         user.rpm,
         user.max_size,
+        rpm_fill,
+        max_size_fill,
         user.can_list,
         user.mark,
         user.register_date,
@@ -183,13 +189,17 @@ def get_user(username: str) -> User | None:
     return None
 
 
-def edit_user(request: Request, username: str, admin: User) -> bool:
+def edit_user(mode: str, request: Request, username: str, admin: User) -> bool:
     if (not request) or (not username):
         return False
 
     args = {}
 
-    args["username"] = [request.form.get("username"), "string"]
+    if mode == "add":
+        args["username"] = [request.form.get("username"), "string"]
+    elif mode == "edit":
+        args["username"] = [username, "string"]
+
     args["password"] = [request.form.get("password"), "string"]
     args["name"] = [request.form.get("name"), "string"]
     args["rpm"] = [request.form.get("rpm"), "int"]
