@@ -15,7 +15,7 @@ PASSWORD="somepassword"
 # Resolve the full path of the file
 FILE_PATH="$1"
 
-# Prompt for comments or not
+# Prompt for title or not
 MODE="${2:-normal}"
 
 # Remove "file://" prefix if present
@@ -47,7 +47,7 @@ if [ -z "$PASSWORD" ]; then
 fi
 
 # Prompt to get the title
-if [ "$MODE" == "comment" ]; then
+if [ "$MODE" == "title" ]; then
   title=$(zenity --entry --title="Harambe Upload" --text="Enter a title:")
 else
   title=""

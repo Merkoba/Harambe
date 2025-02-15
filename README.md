@@ -188,3 +188,13 @@ This includes the creation date, the title, and views.
 This is located in `server/database.sqlite3`.
 
 To create and update the database run `schema.py`.
+
+## Script
+
+There is [this script](upload.sh) which you can use to upload if you are a user.
+
+Just change `URL`, `USERNAME`, and `PASSWORD`.
+
+The arguments are a file path, and an optional mode argument which you can set to `title`.
+
+If you set that second argument to `title` it will use `zenity` to prompt for a title.
