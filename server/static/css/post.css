@@ -208,4 +208,6 @@ a.button:hover {
 #reactions > img {
     padding-right: 0.6rem;
     padding-bottom: 0.6rem;
+    width: 3rem;
+    height: auto;
 }
