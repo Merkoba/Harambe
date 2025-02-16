@@ -53,18 +53,12 @@ else
   title=""
 fi
 
-if [ -n "$title" ]; then
-  title_param="-F \"title=${title}\""
-else
-  title_param=""
-fi
-
 echo "Uploading: $FILE_PATH"
 
 # Make the POST request and capture the response
 RESPONSE=$(curl -s -X POST "$URL/upload" \
-    $title_param \
     -F "file=@\"${FILE_PATH}\"" \
+    -F "title=\"${title}\"" \
     -F "username=\"${USERNAME}\"" \
     -F "password=\"${PASSWORD}\"" \
 )
