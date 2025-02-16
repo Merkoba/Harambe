@@ -13,7 +13,7 @@ schema_files = {
     "uploader": "text",
     "mtype": "text",
     "view_date": "integer",
-    "listed": "integer",
+    "listed": "integer default 1",
 }
 
 schema_users = {
