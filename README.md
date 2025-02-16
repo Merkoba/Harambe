@@ -120,6 +120,8 @@ It could be useful to keep track of who uploaded who based on urls and file name
 
 If empty, it won't use a mark.
 
+![](useredit.png)
+
 ---
 
 ## Style
