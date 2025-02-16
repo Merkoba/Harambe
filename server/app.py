@@ -34,7 +34,7 @@ CORS(app)
 simple_captcha = CAPTCHA(config=config.get_captcha())
 app = simple_captcha.init_app(app)
 
-ICONS = [icon.stem.lower() for icon in Path("static/icons").glob("*.gif")]
+ICONS = [icon.stem for icon in Path("static/icons").glob("*.gif")]
 ICONS.sort()
 
 
