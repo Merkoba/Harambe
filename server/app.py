@@ -726,4 +726,4 @@ def react() -> Any:
     name = data.get("name", None)
     icon = data.get("icon", None)
 
-    return post_procs.react(name, icon, user.username)
+    return post_procs.react(name, icon, user.name)

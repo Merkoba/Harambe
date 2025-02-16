@@ -126,6 +126,14 @@ window.onload = function() {
       }
     })
   }
+
+  DOM.ev(document, `keyup`, (e) => {
+    if (e.key === `r`) {
+      if (!icons_open()) {
+        show_icons()
+      }
+    }
+  })
 }
 
 function timeago(date) {
@@ -283,6 +291,7 @@ function start_flash(file) {
 
 async function show_icons() {
   let modal = DOM.el(`#icons_modal`)
+  let container = DOM.el(`#icons`)
 
   if (!vars.icons_loaded) {
     let response = await fetch(`/get_icons`)
@@ -293,7 +302,6 @@ async function show_icons() {
     }
 
     let json = await response.json()
-    let container = DOM.el(`#icons`)
     container.innerHTML = ``
 
     for (let icon of json.icons) {
@@ -304,12 +312,16 @@ async function show_icons() {
 
     vars.icons_loaded = true
   }
+  else {
+    show_all_icons()
+  }
 
   DOM.show(modal)
   let input = DOM.el(`#icons_input`)
   input.value = ``
   input.focus()
   select_first_icon()
+  container.scrollTop = 0
 }
 
 function filter_icons() {
@@ -434,4 +446,16 @@ function add_reaction(icon) {
   img.src = `/static/icons/${icon}.gif`
   reactions.appendChild(img)
   window.scrollTo(0, document.body.scrollHeight)
+}
+
+function icons_open() {
+  return !DOM.is_hidden(`#icons_modal`)
+}
+
+function show_all_icons() {
+  let icons = DOM.el(`#icons`)
+
+  for (let child of icons.children) {
+    DOM.show(child)
+  }
 }

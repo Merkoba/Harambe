@@ -188,7 +188,7 @@ a.button:hover {
 #icons {
     display: flex;
     flex-direction: column;
-    max-height: 200px;
+    max-height: 320px;
     overflow: auto;
     gap: 0.5rem;
 }
@@ -199,6 +199,10 @@ a.button:hover {
 
 .hidden {
     display: none !important;
+}
+
+#reactions {
+    margin-top: 0.5rem;
 }
 
 #reactions > img {

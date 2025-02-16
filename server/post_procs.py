@@ -41,7 +41,7 @@ class Post:
     listed: bool
     listed_str: str
     post_title: str
-    reactions: list[str]
+    reactions: list[tuple[str, str]]
 
 
 def make_post(post: DbPost, now: int, full: bool = True) -> Post:
@@ -68,8 +68,9 @@ def make_post(post: DbPost, now: int, full: bool = True) -> Post:
 
     if full:
         sample = post.sample
-        reactions = post.reactions.split(",")
-        reactions = [r for r in reactions if r]
+        p_reactions = post.reactions.split(",")
+        p_reactions = [r for r in p_reactions if r]
+        reactions = [tuple(r.split(":")) for r in p_reactions]
     else:
         sample = ""
         reactions = []
@@ -394,9 +395,12 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "Title updated"}), 200
 
 
-def react(name: str, icon: str, username: str) -> tuple[str, int]:
+def react(name: str, icon: str, user_name: str) -> tuple[str, int]:
     icon = icon.strip()
-    username = username.strip()
+    user_name = user_name.strip()
+
+    if not user_name:
+        user_name = "Anon"
 
     if not name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
@@ -404,7 +408,7 @@ def react(name: str, icon: str, username: str) -> tuple[str, int]:
     if not icon:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
-    if not username:
+    if not user_name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
     post = database.get_post(name)
@@ -412,7 +416,7 @@ def react(name: str, icon: str, username: str) -> tuple[str, int]:
     if not post:
         return jsonify({"status": "error", "message": "Post not found"}), 500
 
-    reaction = f"{icon}:{username}"
+    reaction = f"{icon}:{user_name}"
     reactions = post.reactions.split(",")
     reactions.append(reaction)
     reactions = [r for r in reactions if r]

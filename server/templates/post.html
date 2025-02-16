@@ -126,7 +126,7 @@
 
     <div id="reactions">
         {% for reaction in post.reactions %}
-        <img src="/static/icons/{{reaction}}.gif" title="{{reaction}}">
+        <img src="/static/icons/{{reaction[0]}}.gif" title="{{reaction[1]}}">
         {% endfor %}
     </div>
     {% endif %}
