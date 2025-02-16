@@ -408,6 +408,10 @@ function size_string(size) {
 }
 
 function do_search() {
+  if (![`users`, `posts`].includes(vars.mode)) {
+    return
+  }
+
   let query = DOM.el(`#filter`).value.trim()
 
   if (!query) {
