@@ -230,6 +230,12 @@ class Config:
         # Whether anon uploads should be added to the list or not
         self.anon_listers = True
 
+        # Allow reactions in posts
+        self.reactions_enabled = True
+
+        # Allow anons to react in posts
+        self.anon_reacters = False
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -319,6 +325,8 @@ class Config:
             set_value(c, "description_index")
             set_value(c, "description_post")
             set_value(c, "anon_listers")
+            set_value(c, "reactions_enabled")
+            set_value(c, "anon_reacters")
 
             # Users
 

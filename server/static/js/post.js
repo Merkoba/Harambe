@@ -306,6 +306,10 @@ function start_flash(file) {
 }
 
 async function show_icons() {
+  if (!vars.can_react) {
+    return
+  }
+
   let modal = DOM.el(`#icons_modal`)
   let container = DOM.el(`#icons`)
 
@@ -483,6 +487,10 @@ function show_all_icons() {
 }
 
 function react_character() {
+  if (!vars.can_react) {
+    return
+  }
+
   let character = prompt(`Type a character`)
 
   if (!character) {
@@ -500,6 +508,10 @@ function react_character() {
 }
 
 async function send_reaction(text) {
+  if (!vars.can_react) {
+    return
+  }
+
   let name = vars.name
 
   let response = await fetch(`/react`, {

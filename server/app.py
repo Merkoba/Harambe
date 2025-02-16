@@ -278,6 +278,13 @@ def post(name: str) -> Any:
         owned = False
 
     show_list = list_visible(user)
+    can_react = False
+
+    if config.reactions_enabled:
+        if user:
+            can_react = user.reacter
+        elif config.anon_reacters:
+            can_react = True
 
     return render_template(
         "post.html",
@@ -291,6 +298,8 @@ def post(name: str) -> Any:
         link_color=config.link_color,
         font_family=config.font_family,
         description=config.description_post,
+        reactions_enabled=config.reactions_enabled,
+        can_react=can_react,
         show_list=show_list,
         is_user=bool(user),
     )

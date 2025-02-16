@@ -36,6 +36,11 @@
         </div>
 
         <div>
+            <button value="reacter_yes">Reacter: Yes</button>
+            <button value="reacter_no">Reacter: No</button>
+        </div>
+
+        <div>
             <button value="delete">Delete</button>
             <button value="cancel">Cancel</button>
         </div>
@@ -98,6 +103,7 @@
             <div id="list" class="table_cell underline" data-sort="admin" title="This user is an admin and can use the admin pages">Admin</div>
             <div id="list" class="table_cell underline" data-sort="can_list" title="Can view the list of posts from all users">List</div>
             <div id="lister" class="table_cell underline" data-sort="lister" title="The posts of this user will appear in the list">Lister</div>
+            <div id="reacter" class="table_cell underline" data-sort="reacter" title="This user can react in posts">Reacter</div>
             <div id="posts" class="table_cell small underline" data-sort="posts" title="The number of posts this user has done">Posts</div>
 
             {% if show_marks %}
@@ -110,7 +116,7 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-username="{{item.username}}" data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}" data-max_size="{{item.max_size_fill}}" data-can_list="{{item.can_list_str}}" data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}" data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}" data-lister="{{lister_str}}">
+        <div class="table_row item" data-username="{{item.username}}" data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}" data-max_size="{{item.max_size_fill}}" data-can_list="{{item.can_list_str}}" data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}" data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}" data-lister="{{lister_str}}" data-reacter="{{reacter_str}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
@@ -138,6 +144,9 @@
 
             <!-- Lister -->
             <div class="table_cell">{{item.lister_str}}</div>
+
+            <!-- Reacter -->
+            <div class="table_cell">{{item.reacter_str}}</div>
 
             <!-- Posts -->
             <div class="table_cell small">{{item.posts}}</div>

@@ -57,6 +57,8 @@ class User:
     lister: bool
     lister_str: str
     posts: int
+    reacter: bool
+    reacter_str: str
 
 
 user_data: dict[str, UserData] = {}
@@ -66,10 +68,11 @@ def make_user(user: DbUser) -> User:
     reg_date_str = utils.nice_date(user.register_date)
     last_date_str = utils.nice_date(user.last_date)
     admin_str = "A: Yes" if user.admin else "A: No"
-    can_list_str = "L: Yes" if user.can_list else "L: No"
+    can_list_str = "T: Yes" if user.can_list else "T: No"
     rpm_fill = user.rpm or config.requests_per_minute
     max_size_fill = user.max_size or config.max_size_user
-    lister_str = "R: Yes" if user.lister else "R: No"
+    lister_str = "L: Yes" if user.lister else "R: No"
+    reacter_str = "R: Yes" if user.reacter else "R: No"
 
     return User(
         user.username,
@@ -91,6 +94,8 @@ def make_user(user: DbUser) -> User:
         user.lister,
         lister_str,
         user.posts,
+        user.reacter,
+        reacter_str,
     )
 
 

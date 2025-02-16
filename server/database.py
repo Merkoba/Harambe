@@ -55,6 +55,7 @@ class User:
     last_date: int
     lister: bool
     posts: int
+    reacter: bool
 
 
 db_path = "database.sqlite3"
@@ -234,6 +235,7 @@ def add_user(
     can_list: bool = True,
     mark: str = "",
     lister: bool = True,
+    reacter: bool = True,
 ) -> bool:
     check_db()
 
@@ -253,6 +255,7 @@ def add_user(
         can_list,
         mark,
         lister,
+        reacter,
     ]
 
     columns = [
@@ -265,6 +268,7 @@ def add_user(
         "can_list",
         "mark",
         "lister",
+        "reacter",
     ]
 
     if mode == "add":
@@ -305,6 +309,7 @@ def make_user(row: dict[str, Any]) -> User:
         last_date=row.get("last_date") or 0,
         lister=bool(row.get("lister")),
         posts=row.get("posts") or 0,
+        reacter=bool(row.get("reacter")),
     )
 
 

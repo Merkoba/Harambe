@@ -40,6 +40,7 @@ schema_users = {
     "last_date": "integer default 0",
     "lister": "integer default 1",
     "posts": "integer default 0",
+    "reacter": "integer default 1",
 }
 
 

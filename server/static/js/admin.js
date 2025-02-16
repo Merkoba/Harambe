@@ -91,6 +91,12 @@ window.onload = () => {
       else if (value === `lister_no`) {
         mod_user(`lister`, 0, `bool`)
       }
+      else if (value === `reacter_yes`) {
+        mod_user(`reacter`, 1, `bool`)
+      }
+      else if (value === `reacter_no`) {
+        mod_user(`reacter`, 0, `bool`)
+      }
       else if (value === `delete`) {
         delete_all()
       }

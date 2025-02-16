@@ -16,6 +16,7 @@
     vars.mtype = `{{post.mtype}}`
     vars.sample = `{{post.sample}}`
     vars.file_path = `{{file_path}}`
+    vars.can_react = {{can_react | tojson}}
 </script>
 
 <script src="/static/js/marked.js"></script>
@@ -125,7 +126,7 @@
     </div>
     {% endif %}
 
-    {% if is_user %}
+    {% if can_react %}
     <div id="react_buttons">
         <div id="react_icon" class="button" title="You can also press 'r' to open the popup">React with an icon</div>
         <div class="sep">|</div>
@@ -133,6 +134,7 @@
     </div>
     {% endif %}
 
+    {% if reactions_enabled %}
     <div id="reactions">
     {% for reaction in post.reactions %}
         {% if reaction.mode == "icon" %}
@@ -144,5 +146,6 @@
         {% endif %}
     {% endfor %}
     </div>
+    {% endif %}
 </div>
 {% endblock %}
