@@ -214,7 +214,7 @@ def get_post(name: str) -> Post | None:
         diff = now - post.view_date
 
         if diff > config.view_delay:
-            database.increase_views(name)
+            database.increase_post_views(name)
 
         return make_post(post, now, True)
 
@@ -360,3 +360,30 @@ def check_storage() -> None:
 
         if post:
             do_delete_post(post)
+
+
+def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
+    title = title or ""
+
+    if not name:
+        return jsonify({"status": "error", "message": "Missing values"}), 500
+
+    if len(title) > config.max_title_length:
+        return jsonify({"status": "error", "message": "Title is too long"}), 500
+
+    if not user.admin:
+        if not config.allow_edit:
+            return jsonify({"status": "error", "message": "Editing is disabled"}), 500
+
+        db_post = database.get_post(name)
+
+        if not db_post:
+            return jsonify({"status": "error", "message": "File not found"}), 500
+
+        if db_post.username != user.username:
+            return jsonify(
+                {"status": "error", "message": "You are not the uploader"}
+            ), 500
+
+    database.edit_post_title(name, title)
+    return jsonify({"status": "ok", "message": "Title updated"}), 200

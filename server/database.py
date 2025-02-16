@@ -176,7 +176,7 @@ def delete_post(name: str) -> None:
     conn.close()
 
 
-def increase_views(name: str) -> None:
+def increase_post_views(name: str) -> None:
     check_db()
     conn, c = get_conn()
     c.execute(
@@ -187,7 +187,7 @@ def increase_views(name: str) -> None:
     conn.close()
 
 
-def edit_title(name: str, title: str) -> None:
+def edit_post_title(name: str, title: str) -> None:
     check_db()
     conn, c = get_conn()
     c.execute("update posts set title = ? where name = ?", (title, name))

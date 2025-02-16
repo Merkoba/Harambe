@@ -6,7 +6,6 @@ from typing import Any
 from pathlib import Path
 
 # Libraries
-from flask import jsonify  # type: ignore
 import ulid  # type: ignore
 
 # Modules
@@ -16,7 +15,6 @@ import database
 from config import config
 import post_procs
 import user_procs
-from user_procs import User
 
 
 def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool, str]:
@@ -189,34 +187,3 @@ def get_image_name() -> str:
         return "banner.gif"
 
     return "cat.jpg"
-
-
-def increase_view(name: str) -> None:
-    database.increase_views(Path(name).stem)
-
-
-def edit_title(name: str, title: str, user: User) -> tuple[str, int]:
-    title = title or ""
-
-    if not name:
-        return jsonify({"status": "error", "message": "Missing values"}), 500
-
-    if len(title) > config.max_title_length:
-        return jsonify({"status": "error", "message": "Title is too long"}), 500
-
-    if not user.admin:
-        if not config.allow_edit:
-            return jsonify({"status": "error", "message": "Editing is disabled"}), 500
-
-        db_post = database.get_post(name)
-
-        if not db_post:
-            return jsonify({"status": "error", "message": "File not found"}), 500
-
-        if db_post.username != user.username:
-            return jsonify(
-                {"status": "error", "message": "You are not the uploader"}
-            ), 500
-
-    database.edit_title(name, title)
-    return jsonify({"status": "ok", "message": "Title updated"}), 200

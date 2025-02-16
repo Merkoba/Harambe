@@ -450,7 +450,7 @@ def edit_title() -> Any:
     if not user:
         return over()
 
-    return procs.edit_title(name, title, user=user)
+    return post_procs.edit_post_title(name, title, user=user)
 
 
 # AUTH
