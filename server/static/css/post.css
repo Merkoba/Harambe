@@ -212,6 +212,8 @@ a.button:hover {
 .icon_item_img {
     display: flex;
     align-items: center;
+    height: 1.5rem;
+    width: auto;
 }
 
 .icon_item:hover {
@@ -234,6 +236,6 @@ a.button:hover {
 
 #reactions > img {
     padding: 0.5rem;
-    height: 2rem;
+    height: 1.8rem;
     width: auto;
 }
