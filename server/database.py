@@ -311,3 +311,18 @@ def update_user_last_date(username: str) -> None:
 
     conn.commit()
     conn.close()
+
+
+def get_random_file(ignore_names: list[str]) -> File | None:
+    check_db()
+    conn, c = row_conn()
+    query = "select * from files where name not in ({}) order by random() limit 1"
+    placeholders = ", ".join("?" for _ in ignore_names)
+    c.execute(query.format(placeholders), ignore_names)
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_file(dict(row))
+
+    return None

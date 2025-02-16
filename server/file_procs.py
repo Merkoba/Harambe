@@ -355,3 +355,8 @@ def get_next_file(name: str) -> str | None:
 
     file = database.get_next_file(name)
     return file.name if file else None
+
+
+def get_random_file(used_names: list[str]) -> str | None:
+    file = database.get_random_file(used_names)
+    return file.name if file else None

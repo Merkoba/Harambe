@@ -5,7 +5,7 @@ from typing import Any
 from functools import wraps
 
 # Libraries
-from flask import Flask, render_template, request, Response, send_file  # type: ignore
+from flask import Flask, render_template, request, send_file  # type: ignore
 from flask import redirect, url_for, session, flash, abort  # pyright: ignore
 from flask_cors import CORS  # type: ignore
 from flask_simple_captcha import CAPTCHA  # type: ignore
@@ -110,6 +110,10 @@ def rate_limit(n: int) -> str:
     return f"{n} per minute"
 
 
+def over() -> Any:
+    return render_template("over.html")
+
+
 limiter = Limiter(
     get_remote_address,
     app=app,
@@ -156,7 +160,7 @@ def index() -> Any:
 
         except Exception as e:
             utils.error(e)
-            return Response(invalid, mimetype=text_mtype)
+            return over()
 
     if config.require_captcha and (not is_user):
         captcha = simple_captcha.create()
@@ -254,19 +258,19 @@ def message() -> Any:
 # POST
 
 
-@app.route("/post/<string:name>", methods=["GET"])  # type: ignore
+@app.route("/post/<string:name>", methods=["GET", "POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def post(name: str) -> Any:
     user = get_user()
 
     if not config.public_posts:
         if not user:
-            return Response(invalid, mimetype=text_mtype)
+            return over()
 
     file = file_procs.get_file(name)
 
     if not file:
-        return Response(invalid, mimetype=text_mtype)
+        return over()
 
     if user:
         owned = user.admin or ((file.username == user.username) and config.allow_edit)
@@ -275,9 +279,18 @@ def post(name: str) -> Any:
 
     show_list = list_visible(user)
 
+    if request.method == "POST":
+        data = request.get_json()
+        used_names = data.get("used_names", [])
+    else:
+        used_names = []
+
+    used_names.append(file.name)
+
     return render_template(
         "post.html",
         file=file,
+        owned=owned,
         file_path=config.file_path,
         background_color=config.background_color,
         accent_color=config.accent_color,
@@ -287,7 +300,7 @@ def post(name: str) -> Any:
         font_family=config.font_family,
         description=config.description_post,
         show_list=show_list,
-        owned=owned,
+        used_names=used_names,
     )
 
 
@@ -306,12 +319,12 @@ def get_file(name: str, original: str | None = None) -> Any:
         user = get_user()
 
         if not user:
-            return Response(invalid, mimetype=text_mtype)
+            return over()
 
     file = file_procs.get_file(name)
 
     if not file:
-        return Response(invalid, mimetype=text_mtype)
+        return over()
 
     fd = utils.files_dir()
     return send_file(fd / file.full, download_name=original, max_age=config.max_age)
@@ -329,6 +342,21 @@ def next_post(current: str) -> Any:
     return redirect(url_for("post", name=name))
 
 
+@app.route("/random", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@list_required
+def random_post() -> Any:
+    used_names = session["used_names"] if "used_names" in session else []
+    name = file_procs.get_random_file(used_names)
+
+    if name:
+        used_names.append(name)
+        session["used_names"] = used_names
+        return redirect(url_for("post", name=name))
+
+    return over()
+
+
 # ADMIN
 
 
@@ -336,7 +364,7 @@ def next_post(current: str) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
 def admin_fallback() -> Any:
-    return redirect(url_for("admin", what="files"))
+    return render_template("admin.html")
 
 
 @app.route("/admin/<string:what>", defaults={"page": 1}, methods=["GET"])  # type: ignore
@@ -405,7 +433,7 @@ def delete_file() -> Any:
     user = get_user()
 
     if not user:
-        return Response(invalid, mimetype=text_mtype)
+        return over()
 
     return file_procs.delete_file(file, user=user)
 
@@ -420,7 +448,7 @@ def edit_title() -> Any:
     user = get_user()
 
     if not user:
-        return Response(invalid, mimetype=text_mtype)
+        return over()
 
     return procs.edit_title(name, title, user=user)
 
@@ -611,7 +639,7 @@ def delete_users() -> Any:
     user = get_user()
 
     if not user:
-        return Response(invalid, mimetype=text_mtype)
+        return over()
 
     return user_procs.delete_users(usernames, user.username)
 
@@ -636,7 +664,7 @@ def delete_user() -> Any:
     user = get_user()
 
     if not user:
-        return Response(invalid, mimetype=text_mtype)
+        return over()
 
     return user_procs.delete_user(username, user.username)
 
