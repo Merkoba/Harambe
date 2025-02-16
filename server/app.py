@@ -575,12 +575,12 @@ def edit_user(username: str = "") -> Any:
         return redirect(url_for("admin", what="users"))
 
     if request.method == "POST":
-        if not username:
-            return Response(invalid, mimetype=text_mtype)
+        uname = user_procs.edit_user(mode, request, username, user)
 
-        ok = user_procs.edit_user(mode, request, username, user)
+        if uname:
+            if mode == "add":
+                return redirect(url_for("edit_user", username=uname))
 
-        if ok:
             return show_edit("Updated")
 
         return show_edit("Error")

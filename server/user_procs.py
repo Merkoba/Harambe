@@ -189,9 +189,9 @@ def get_user(username: str) -> User | None:
     return None
 
 
-def edit_user(mode: str, request: Request, username: str, admin: User) -> bool:
-    if (not request) or (not username):
-        return False
+def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
+    if not request:
+        return ""
 
     args = {}
 
@@ -219,7 +219,7 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> bool:
     uname = args["username"][0]
 
     if not uname:
-        return False
+        return ""
 
     if uname == admin.username:
         args["admin"][0] = True
@@ -254,9 +254,9 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> bool:
         get_value(key)
 
     if (not n_args["username"]) or (not n_args["password"]):
-        return False
+        return ""
 
-    return database.add_user(
+    database.add_user(
         mode,
         n_args["username"],
         n_args["password"],
@@ -267,6 +267,8 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> bool:
         n_args["can_list"],
         n_args["mark"],
     )
+
+    return str(n_args["username"])
 
 
 def check_auth(username: str, password: str) -> User | None:

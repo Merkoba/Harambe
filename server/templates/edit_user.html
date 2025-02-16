@@ -3,6 +3,12 @@
 {% block head %}
 <title>Edit User</title>
 <link rel="stylesheet" href="/static/css/edit_user.css">
+
+<script>
+    const vars = {}
+    vars.username = `{{user.username}}`
+</script>
+
 <script src="/static/js/edit_user.js"></script>
 {% endblock %}
 
@@ -43,6 +49,15 @@
         </div>
 
         <input type="submit" value="Submit">
+
+        <div id="links">
+            <a href="/admin/users">Users</a>
+            <a href="/edit_user">New User</a>
+
+            {% if user.username %}
+            <div id="delete" class="link" href="/delete_user/{{user.username}}">Delete User</div>
+            {% endif %}
+        </div>
     </form>
 </div>
 {% endblock %}

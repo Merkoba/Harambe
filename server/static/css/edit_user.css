@@ -41,3 +41,28 @@ input[type="checkbox"] {
     flex-direction: row;
     gap: 0.5rem;
 }
+
+#links {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+a:link, a:visited {
+    color: rgb(53 108 86);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.link {
+    color: rgb(53 108 86);
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
