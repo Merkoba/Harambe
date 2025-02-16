@@ -1,0 +1,21 @@
+.hidden {
+    display: none !important;
+}
+
+dialog {
+    width: 400px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    text-align: center;
+}
+
+.dialog_container {
+    padding-top: 0.8rem;
+}
+
+.dialog_container button {
+    font-size: 1rem;
+    min-width: 9rem;
+}

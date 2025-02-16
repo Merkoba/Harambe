@@ -226,10 +226,6 @@ a.button:hover {
     background-color: var(--highlight_color);
 }
 
-.hidden {
-    display: none !important;
-}
-
 #reactions {
     margin-top: 0.5rem;
     max-width: 800px;

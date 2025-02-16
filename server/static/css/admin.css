@@ -157,12 +157,3 @@ select {
     align-items: center;
     justify-content: center;
 }
-
-.dialog_container button {
-    font-size: 1rem;
-    min-width: 9rem;
-}
-
-.hidden {
-    display: none !important;
-}

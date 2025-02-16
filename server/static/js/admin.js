@@ -91,6 +91,9 @@ window.onload = () => {
       else if (value === `lister_no`) {
         mod_user(`lister`, 0, `bool`)
       }
+      else if (value === `delete`) {
+        delete_all()
+      }
     })
 
     DOM.ev(edit, `click`, () => {
