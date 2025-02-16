@@ -43,9 +43,12 @@ input[type="checkbox"] {
 }
 
 #links {
+    margin-top: 1rem;
     display: flex;
     flex-direction: row;
     gap: 1rem;
+    align-items: center;
+    justify-content: center;
 }
 
 a:link, a:visited {
@@ -65,4 +68,25 @@ a:hover {
 .link:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+.checkbox {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox > div {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.checkbox > input[type="checkbox"] {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.checkbox:hover {
+    background-color: rgb(183, 232, 183);
 }
