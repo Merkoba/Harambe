@@ -412,3 +412,11 @@ def edit_post_reactions(name: str, reactions: str) -> None:
     c.execute("update posts set reactions = ? where name = ?", (reactions, name))
     conn.commit()
     conn.close()
+
+
+def change_uploader(username: str, new_name: str) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("update posts set uploader = ? where username = ?", (new_name, username))
+    conn.commit()
+    conn.close()

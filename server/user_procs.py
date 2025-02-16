@@ -302,6 +302,10 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
         n_args["lister"],
     )
 
+    if user:
+        if user.name != n_args["name"]:
+            database.change_uploader(user.username, n_args["name"])
+
     return str(n_args["username"])
 
 

@@ -144,10 +144,10 @@ def is_valid_username(username: str) -> bool:
     if not username:
         return False
 
-    if len(username) < 3:
+    if len(username) < 1:
         return False
 
-    if len(username) > 22:
+    if len(username) > 30:
         return False
 
     if not username.isalnum():
