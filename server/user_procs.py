@@ -216,7 +216,7 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     args = {}
 
     if mode == "add":
-        args["username"] = [request.form.get("username"), "string"]
+        args["username"] = [request.form.get("username").lower(), "string"]
     elif mode == "edit":
         args["username"] = [username, "string"]
 
@@ -244,6 +244,9 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     uname = args["username"][0]
 
     if not uname:
+        return ""
+
+    if not utils.is_valid_username(uname):
         return ""
 
     if uname == admin.username:

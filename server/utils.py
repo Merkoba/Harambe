@@ -140,3 +140,22 @@ def valid_file_name(name: str) -> bool:
 def clean_title(title: str) -> str:
     title = " ".join(title.split())
     return title[: config.max_title_length].strip()
+
+
+def is_valid_username(username: str) -> bool:
+    if not username:
+        return False
+
+    if len(username) < 3:
+        return False
+
+    if len(username) > 22:
+        return False
+
+    if not username.isalnum():
+        return False
+
+    if any(c.isupper() for c in username):
+        return False
+
+    return True

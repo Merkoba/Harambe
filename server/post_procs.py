@@ -394,13 +394,17 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "Title updated"}), 200
 
 
-def react(name: str, reaction: str) -> tuple[str, int]:
-    reaction = reaction.strip()
+def react(name: str, icon: str, username: str) -> tuple[str, int]:
+    icon = icon.strip()
+    username = username.strip()
 
     if not name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
-    if not reaction:
+    if not icon:
+        return jsonify({"status": "error", "message": "Missing values"}), 500
+
+    if not username:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
     post = database.get_post(name)
@@ -408,6 +412,7 @@ def react(name: str, reaction: str) -> tuple[str, int]:
     if not post:
         return jsonify({"status": "error", "message": "Post not found"}), 500
 
+    reaction = f"{icon}:{username}"
     reactions = post.reactions.split(",")
     reactions.append(reaction)
     reactions = [r for r in reactions if r]

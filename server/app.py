@@ -717,7 +717,13 @@ def get_icons() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
 def react() -> Any:
+    user = get_user()
+
+    if not user:
+        return over()
+
     data = request.get_json()
     name = data.get("name", None)
     icon = data.get("icon", None)
-    return post_procs.react(name, icon)
+
+    return post_procs.react(name, icon, user.username)
