@@ -64,6 +64,12 @@ def make_database() -> None:
         for column, c_type in schema.items():
             if column not in columns:
                 c.execute(f"alter table {what} add column {column} {c_type}")
+            else:
+                match = re.search(r"default\s+(\d+)", c_type)
+
+                if match:
+                    defvalue = match.group(1)
+                    c.execute(f"update {what} set {column} = {defvalue} where {column} is null")
 
     add_columns("files")
     add_columns("users")
