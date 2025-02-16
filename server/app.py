@@ -570,7 +570,7 @@ def show_history(page: int = 1) -> Any:
     return render_template(
         "list.html",
         mode="history",
-        posts=posts,
+        items=posts,
         total=total,
         page=page,
         next_page=next_page,
