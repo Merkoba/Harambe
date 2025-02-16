@@ -127,9 +127,7 @@ def valid_file_name(name: str) -> bool:
         return False
 
     try:
-        p = Path(name)
-
-        if (not p.stem) or (not p.suffix):
+        if not Path(name).stem:
             return False
     except Exception:
         return False

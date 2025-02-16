@@ -298,6 +298,7 @@ def do_delete_post(post: DbPost) -> None:
     if not post:
         return
 
+    database.delete_post(post.name)
     file_name = post.full()
 
     if file_name.startswith("."):
@@ -329,8 +330,6 @@ def do_delete_post(post: DbPost) -> None:
 
     if file.exists() and file.is_file():
         file.unlink()
-
-    database.delete_post(post.name)
 
 
 def delete_all_posts() -> tuple[str, int]:
