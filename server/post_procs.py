@@ -71,7 +71,7 @@ def make_post(post: DbPost, now: int, with_sample: bool = False) -> Post:
 
     if original:
         if ext:
-            original_full = f"{original}{ext}"
+            original_full = f"{original}.{ext}"
         else:
             original_full = original
     else:
