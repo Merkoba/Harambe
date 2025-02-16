@@ -33,6 +33,12 @@ class Post:
 
         return self.name
 
+    def original_full(self) -> str:
+        if self.ext:
+            return f"{self.original}.{self.ext}"
+
+        return self.original
+
 
 @dataclass
 class User:

@@ -56,6 +56,7 @@ def make_post(post: DbPost, now: int, with_sample: bool = False) -> Post:
     mtype = post.mtype
     listed = post.listed
     full = post.full()
+    original_full = post.original_full()
     ago = utils.time_ago(date, now)
     date_1 = utils.nice_date(date, "date")
     date_2 = utils.nice_date(date, "time")
@@ -68,14 +69,6 @@ def make_post(post: DbPost, now: int, with_sample: bool = False) -> Post:
         sample = post.sample
     else:
         sample = ""
-
-    if original:
-        if ext:
-            original_full = f"{original}.{ext}"
-        else:
-            original_full = original
-    else:
-        original_full = ""
 
     show = f"{name} {ext}".strip()
     can_embed = size <= (config.embed_max_size * 1_000_000)
