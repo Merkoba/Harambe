@@ -388,3 +388,11 @@ def increase_user_posts(username: str) -> None:
     c.execute("update users set posts = posts + 1 where username = ?", (username,))
     conn.commit()
     conn.close()
+
+
+def update_file_size(name: str, size: int) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("update posts set size = ? where name = ?", (size, name))
+    conn.commit()
+    conn.close()
