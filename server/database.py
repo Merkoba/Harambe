@@ -92,7 +92,19 @@ def add_file(
     check_db()
     conn, c = get_conn()
     date = utils.now()
-    values = [name, ext, date, title, 0, original, username, uploader, mtype, date, listed]
+    values = [
+        name,
+        ext,
+        date,
+        title,
+        0,
+        original,
+        username,
+        uploader,
+        mtype,
+        date,
+        listed,
+    ]
     placeholders = ", ".join(["?"] * len(values))
     query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed) values ({placeholders})"
     c.execute(query, values)
@@ -220,7 +232,17 @@ def add_user(
         lister,
     ]
 
-    columns = ["username", "password", "admin", "name", "rpm", "max_size", "can_list", "mark", "lister"]
+    columns = [
+        "username",
+        "password",
+        "admin",
+        "name",
+        "rpm",
+        "max_size",
+        "can_list",
+        "mark",
+        "lister",
+    ]
 
     if mode == "add":
         c.execute("select * from users where username = ?", (username,))
@@ -232,7 +254,7 @@ def add_user(
         values.extend([date, date])
         columns.extend(["register_date", "last_date"])
         placeholders = ", ".join(["?"] * len(values))
-        query = f"insert into users ({", ".join(columns)}) values ({placeholders})"
+        query = f"insert into users ({', '.join(columns)}) values ({placeholders})"
     elif mode == "edit":
         values.append(username)
         clause = ", ".join([f"{col} = ?" for col in columns])

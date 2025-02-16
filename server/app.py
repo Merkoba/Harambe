@@ -511,7 +511,12 @@ def show_list(page: int = 1) -> Any:
     query = request.args.get("query", "")
 
     files, total, next_page = file_procs.get_files(
-        page, page_size, max_files=config.list_max_files, sort=sort, query=query
+        page,
+        page_size,
+        max_files=config.list_max_files,
+        sort=sort,
+        query=query,
+        only_listed=True,
     )
 
     def_page_size = page_size == config.list_page_size
