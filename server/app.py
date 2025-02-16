@@ -332,6 +332,13 @@ def next_post(current: str) -> Any:
 # ADMIN
 
 
+@app.route("/admin", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@admin_required
+def admin_fallback() -> Any:
+    return redirect(url_for("admin", what="files"))
+
+
 @app.route("/admin/<string:what>", defaults={"page": 1}, methods=["GET"])  # type: ignore
 @app.route("/admin/<string:what>/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
