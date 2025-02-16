@@ -38,41 +38,25 @@ class File:
     can_embed: bool
     content: str
     show: str
+    listed: bool
 
 
 def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
-    if db_file:
-        date = db_file.date
-    else:
-        date = int(file.stat().st_mtime)
-
+    date = db_file.date
     size = int(file.stat().st_size)
     date_1 = utils.nice_date(date, "date")
     date_2 = utils.nice_date(date, "time")
     date_3 = utils.nice_date(date)
     ago = utils.time_ago(date, now)
     size_str = utils.get_size(size)
-
-    if db_file:
-        title = db_file.title
-        views = db_file.views
-        original = db_file.original
-        username = db_file.username
-        uploader = db_file.uploader
-        ext = db_file.ext
-        mtype = db_file.mtype
-    else:
-        title = ""
-        views = 0
-        original = ""
-        username = ""
-        uploader = ""
-        mtype = ""
-
-        if file.suffix:
-            ext = file.suffix[1:]
-        else:
-            ext = ""
+    title = db_file.title
+    views = db_file.views
+    original = db_file.original
+    username = db_file.username
+    uploader = db_file.uploader
+    ext = db_file.ext
+    mtype = db_file.mtype
+    listed = db_file.listed
 
     if original:
         if file.suffix:
@@ -112,6 +96,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         can_embed,
         content,
         show,
+        listed,
     )
 
 
@@ -142,10 +127,10 @@ def get_files(
     for file in all_files:
         db_file = db_files.get(file.stem, None)
 
-        if username:
-            if not db_file:
-                continue
+        if not db_file:
+            continue
 
+        if username:
             if db_file.username != username:
                 continue
 

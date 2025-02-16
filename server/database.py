@@ -112,6 +112,7 @@ def make_file(row: dict[str, Any]) -> File:
         uploader=row.get("uploader") or "",
         mtype=row.get("mtype") or "",
         view_date=row.get("view_date") or 0,
+        listed=row.get("listed") or 1,
     )
 
 

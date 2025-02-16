@@ -15,20 +15,24 @@ window.onload = function() {
   update_date()
 
   let edit = DOM.el(`#edit`)
+  let edit_dialog = DOM.el(`#edit_dialog`)
 
-  if (edit) {
-    DOM.ev(edit, `click`, () => {
-      edit_title()
-    })
-  }
+  if (edit && edit_dialog) {
+    edit_dialog.addEventListener(`close`, () => {
+      let value = edit_dialog.returnValue
 
-  let del = DOM.el(`#delete`)
-
-  if (del) {
-    DOM.ev(del, `click`, () => {
-      if (confirm(`Delete this file?`)) {
-        delete_file()
+      if (value === `delete`) {
+        if (confirm(`Delete this file?`)) {
+          delete_file()
+        }
       }
+      else if (value === `title`) {
+        edit_title()
+      }
+    })
+
+    DOM.ev(edit, `click`, () => {
+      edit_dialog.showModal()
     })
   }
 

@@ -26,6 +26,15 @@
 
 {% block body %}
 <div id="main">
+    <dialog id="edit_dialog">
+        <form method="dialog">
+          <p>Choose an option:</p>
+          <button value="title">Edit Title</button>
+          <button value="delete">Delete File</button>
+          <button value="cancel">Cancel</button>
+        </form>
+    </dialog>
+
     <!-- Top -->
     <div id="top">
         <div id="buttons">
@@ -41,8 +50,6 @@
             <div class="sep">|</div>
         {% if owned %}
             <div id="edit" class="button">Edit</div>
-            <div class="sep">|</div>
-            <div id="delete" class="button">Delete</div>
             <div class="sep">|</div>
         {% endif %}
         </div>
