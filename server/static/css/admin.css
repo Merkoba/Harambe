@@ -13,7 +13,7 @@ body, html {
 #top {
     display: flex;
     flex-direction: row;
-    gap: 0.6rem;
+    gap: 0.5rem;
 }
 
 .action_button {
