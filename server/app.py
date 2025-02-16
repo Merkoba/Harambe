@@ -341,7 +341,8 @@ def admin(what: str, page: int = 1) -> Any:
         return redirect(url_for("index"))
 
     query = request.args.get("query", "")
-    sort = request.args.get("sort", "date")
+    def_date = "date" if what == "files" else "register_date"
+    sort = request.args.get("sort", def_date)
     page_size = request.args.get("page_size", config.admin_page_size)
     items: list[File] | list[User]
 
@@ -365,6 +366,7 @@ def admin(what: str, page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
+        sort=sort,
     )
 
 
@@ -491,6 +493,7 @@ def show_list(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
+        sort=sort,
     )
 
 

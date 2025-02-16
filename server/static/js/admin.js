@@ -575,21 +575,34 @@ async function delete_normal_users() {
 }
 
 function do_sort(what) {
-  let url = new URL(window.location.href)
-  let sort = url.searchParams.get(`sort`)
-
-  if (sort) {
-    if (sort === what) {
-      window.location = `/admin/${vars.mode}?sort=${what}_desc`
+  if (vars.sort) {
+    if (vars.sort === what) {
+      if (vars.mode === `list`) {
+        window.location = `/list?sort=${what}_desc`
+      }
+      else {
+        window.location = `/admin/${vars.mode}?sort=${what}_desc`
+      }
       return
     }
-    else if (sort === `${what}_desc`) {
-      window.location = `/admin/${vars.mode}`
+    else if (vars.sort === `${what}_desc`) {
+      if (vars.mode === `list`) {
+        window.location = `/list`
+      }
+      else {
+        window.location = `/admin/${vars.mode}`
+      }
+
       return
     }
   }
 
-  window.location = `/admin/${vars.mode}?sort=${what}`
+  if (vars.mode === `list`) {
+    window.location = `/list?sort=${what}`
+  }
+  else {
+    window.location = `/admin/${vars.mode}?sort=${what}`
+  }
 }
 
 function mod_user(what, value, vtype) {

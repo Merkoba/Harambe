@@ -215,6 +215,12 @@ def add_user(
     ]
 
     if mode == "add":
+        c.execute("select * from users where username = ?", (username,))
+
+        if c.fetchone():
+            conn.close()
+            return False
+
         values.extend([date, date])
         placeholders = ", ".join(["?"] * len(values))
         query = f"insert into users (username, password, admin, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
