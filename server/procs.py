@@ -133,6 +133,14 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                         listed = config.anon_listers
 
                     mtype, _ = mimetypes.guess_type(path)
+                    mtype = mtype or ""
+
+                    if mtype.startswith("text"):
+                        sample = content[: config.sample_size].decode(
+                            "utf-8", errors="ignore"
+                        )
+                    else:
+                        sample = ""
 
                     database.add_file(
                         name,
@@ -141,8 +149,10 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                         pfile.stem,
                         username,
                         uploader,
-                        mtype or "",
+                        mtype,
                         listed,
+                        length,
+                        sample,
                     )
 
                     database.update_user_last_date(username)

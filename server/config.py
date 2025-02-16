@@ -209,7 +209,7 @@ class Config:
         self.allow_hotlinks: bool = True
 
         # Max file content to read when getting files
-        self.max_file_content: int = 900_000
+        self.sample_size: int = 100_000
 
         # Default requests per minute for uploads
         self.requests_per_minute = 12
@@ -311,7 +311,7 @@ class Config:
             set_value(c, "history_enabled")
             set_value(c, "max_title_length")
             set_value(c, "allow_hotlinks")
-            set_value(c, "max_file_content")
+            set_value(c, "sample_size")
             set_value(c, "requests_per_minute")
             set_value(c, "public_posts")
             set_value(c, "view_delay")

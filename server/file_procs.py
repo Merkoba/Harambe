@@ -36,51 +36,58 @@ class File:
     uploader: str
     mtype: str
     can_embed: bool
-    content: str
+    sample: str
     show: str
     listed: bool
     listed_str: str
+    post_title: str
 
 
-def make_file(file: Path, db_file: DbFile, now: int) -> File:
-    date = db_file.date
-    size = int(file.stat().st_size)
+def make_file(file: DbFile, now: int, with_sample: bool = False) -> File:
+    name = file.name
+    date = file.date
+    size = file.size
+    title = file.title
+    views = file.views
+    original = file.original
+    username = file.username
+    uploader = file.uploader
+    ext = file.ext
+    mtype = file.mtype
+    listed = file.listed
+    ago = utils.time_ago(date, now)
     date_1 = utils.nice_date(date, "date")
     date_2 = utils.nice_date(date, "time")
     date_3 = utils.nice_date(date)
-    ago = utils.time_ago(date, now)
     size_str = utils.get_size(size)
-    title = db_file.title
-    views = db_file.views
-    original = db_file.original
-    username = db_file.username
-    uploader = db_file.uploader
-    ext = db_file.ext
-    mtype = db_file.mtype
-    listed = db_file.listed
     listed_str = "L: Yes" if listed else "L: No"
+    post_title = title or original or name
+
+    if with_sample:
+        sample = file.sample
+    else:
+        sample = ""
 
     if original:
-        if file.suffix:
-            original_full = f"{original}{file.suffix}"
+        if ext:
+            original_full = f"{original}{ext}"
         else:
             original_full = original
     else:
         original_full = ""
 
-    if mtype.startswith("text"):
-        with file.open("r") as f:
-            content = f.read(config.max_file_content)
-    else:
-        content = ""
-
-    show = f"{file.stem} {ext}".strip()
+    show = f"{name} {ext}".strip()
     can_embed = size <= (config.embed_max_size * 1_000_000)
 
+    if ext:
+        full = f"{name}.{ext}"
+    else:
+        full = name
+
     return File(
-        file.stem,
+        name,
         ext,
-        file.name,
+        full,
         original,
         original_full,
         date,
@@ -96,10 +103,11 @@ def make_file(file: Path, db_file: DbFile, now: int) -> File:
         uploader,
         mtype,
         can_embed,
-        content,
+        sample,
         show,
         listed,
         listed_str,
+        post_title,
     )
 
 
@@ -125,24 +133,17 @@ def get_files(
     total_size = 0
     now = utils.now()
     query = query.lower()
-    all_files = list(utils.files_dir().glob("*"))
-    db_files = database.get_files()
 
-    for file in all_files:
-        db_file = db_files.get(file.stem, None)
-
-        if not db_file:
-            continue
-
+    for file in database.get_files():
         if only_listed:
-            if not db_file.listed:
+            if not file.listed:
                 continue
 
         if username:
-            if db_file.username != username:
+            if file.username != username:
                 continue
 
-        f = make_file(file, db_file, now)
+        f = make_file(file, now)
 
         ok = (
             not query
@@ -295,21 +296,11 @@ def delete_all_files() -> tuple[str, int]:
 
 
 def get_file(name: str) -> File | None:
-    all_files = list(utils.files_dir().glob("*"))
+    file = database.get_file(name)
 
-    for file in all_files:
-        if file.stem == name:
-            db_file = database.get_file(name)
-
-            if not db_file:
-                return None
-
-            diff = utils.now() - db_file.view_date
-
-            if diff > config.view_delay:
-                database.increase_views(name)
-
-            return make_file(file, db_file, utils.now())
+    if file:
+        now = utils.now()
+        return make_file(file, now, True)
 
     return None
 

@@ -24,6 +24,8 @@ class File:
     mtype: str
     view_date: int
     listed: bool
+    size: int
+    sample: str
 
     def full(self) -> str:
         if self.ext:
@@ -88,6 +90,8 @@ def add_file(
     uploader: str,
     mtype: str,
     listed: bool,
+    size: int,
+    sample: str,
 ) -> None:
     check_db()
     conn, c = get_conn()
@@ -105,10 +109,12 @@ def add_file(
         mtype,
         date,
         listed,
+        size,
+        sample,
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed) values ({placeholders})"
+    query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed, size, sample) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -127,6 +133,8 @@ def make_file(row: dict[str, Any]) -> File:
         mtype=row.get("mtype") or "",
         view_date=row.get("view_date") or 0,
         listed=bool(row.get("listed")),
+        size=row.get("size") or 0,
+        sample=row.get("sample") or "",
     )
 
 
@@ -143,14 +151,14 @@ def get_file(name: str) -> File | None:
     return None
 
 
-def get_files() -> dict[str, File]:
+def get_files() -> list[File]:
     check_db()
     conn, c = row_conn()
     c.execute("select * from files")
     rows = c.fetchall()
     conn.close()
 
-    return {row["name"]: make_file(dict(row)) for row in rows}
+    return [make_file(dict(row)) for row in rows]
 
 
 def delete_file(name: str) -> None:

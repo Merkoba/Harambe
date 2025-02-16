@@ -36,9 +36,9 @@ window.onload = function() {
     })
   }
 
-  if ((vars.mtype === `text/markdown`) && vars.content) {
+  if ((vars.mtype === `text/markdown`) && vars.sample) {
     let html = marked.parse(
-      vars.content.replace(/[\u200B-\u200F\uFEFF]/g, ``),
+      vars.sample.replace(/[\u200B-\u200F\uFEFF]/g, ``),
     )
 
     DOM.el(`#markdown_view`).innerHTML = html

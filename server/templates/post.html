@@ -14,7 +14,7 @@
     vars.original = `{{file.original}}`
     vars.original_full = `{{file.original_full}}`
     vars.mtype = `{{file.mtype}}`
-    vars.content = `{{file.content}}`
+    vars.sample = `{{file.sample}}`
     vars.file_path = `{{file_path}}`
 </script>
 
@@ -99,11 +99,11 @@
         {% if file.mtype.startswith("text/") %}
             {% if file.mtype == "text/markdown" %}
             <div>
-                <div id="markdown_view" class="text_embed">{{file.content}}</div>
+                <div id="markdown_view" class="text_embed">{{file.sample}}</div>
             </div>
             {% else %}
             <div>
-                <div id="text_view" class="text_embed">{{file.content}}</div>
+                <div id="text_view" class="text_embed">{{file.sample}}</div>
             </div>
             {% endif %}
         {% endif %}
