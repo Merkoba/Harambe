@@ -188,9 +188,9 @@ a.button:hover {
 #icons {
     display: flex;
     flex-direction: column;
-    gap: 0.5;
     max-height: 200px;
     overflow: auto;
+    gap: 0.5rem;
 }
 
 .selected {
@@ -199,4 +199,9 @@ a.button:hover {
 
 .hidden {
     display: none !important;
+}
+
+#reactions > img {
+    padding-right: 0.6rem;
+    padding-bottom: 0.6rem;
 }

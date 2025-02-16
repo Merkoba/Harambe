@@ -359,13 +359,29 @@ function esc_icons() {
   }
 }
 
-function enter_icons() {
+async function enter_icons() {
   if (!vars.selected_icon) {
     return
   }
 
-  console.log(vars.selected_icon)
   hide_icons()
+  let name = vars.name
+  let icon = vars.selected_icon
+
+  let response = await fetch(`/react`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({name, icon}),
+  })
+
+  if (response.ok) {
+    add_reaction(icon)
+  }
+  else {
+    print_error(response.status)
+  }
 }
 
 function hide_icons() {
@@ -410,4 +426,12 @@ function down_icons() {
       break
     }
   }
+}
+
+function add_reaction(icon) {
+  let reactions = DOM.el(`#reactions`)
+  let img = DOM.create(`img`)
+  img.src = `/static/icons/${icon}.gif`
+  reactions.appendChild(img)
+  window.scrollTo(0, document.body.scrollHeight)
 }

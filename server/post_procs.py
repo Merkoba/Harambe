@@ -41,21 +41,22 @@ class Post:
     listed: bool
     listed_str: str
     post_title: str
+    reactions: list[str]
 
 
-def make_post(post: DbPost, now: int, with_sample: bool = False) -> Post:
+def make_post(post: DbPost, now: int, full: bool = True) -> Post:
     name = post.name
+    ext = post.ext
+    full = post.full()
+    title = post.title
     date = post.date
     size = post.size
-    title = post.title
     views = post.views
-    original = post.original
     username = post.username
     uploader = post.uploader
-    ext = post.ext
     mtype = post.mtype
     listed = post.listed
-    full = post.full()
+    original = post.original
     original_full = post.original_full()
     ago = utils.time_ago(date, now)
     date_1 = utils.nice_date(date, "date")
@@ -65,10 +66,13 @@ def make_post(post: DbPost, now: int, with_sample: bool = False) -> Post:
     listed_str = "L: Yes" if listed else "L: No"
     post_title = title or original or name
 
-    if with_sample:
+    if full:
         sample = post.sample
+        reactions = post.reactions.split(",")
+        reactions = [r for r in reactions if r]
     else:
         sample = ""
+        reactions = []
 
     show = f"{name} {ext}".strip()
     can_embed = size <= (config.embed_max_size * 1_000_000)
@@ -97,6 +101,7 @@ def make_post(post: DbPost, now: int, with_sample: bool = False) -> Post:
         listed,
         listed_str,
         post_title,
+        reactions,
     )
 
 
@@ -132,7 +137,7 @@ def get_posts(
             if post.username != username:
                 continue
 
-        f = make_post(post, now)
+        f = make_post(post, now, False)
 
         ok = (
             not query
@@ -216,7 +221,7 @@ def get_post(name: str) -> Post | None:
         if diff > config.view_delay:
             database.increase_post_views(name)
 
-        return make_post(post, now, True)
+        return make_post(post, now)
 
     return None
 
@@ -378,7 +383,7 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
         db_post = database.get_post(name)
 
         if not db_post:
-            return jsonify({"status": "error", "message": "File not found"}), 500
+            return jsonify({"status": "error", "message": "Post not found"}), 500
 
         if db_post.username != user.username:
             return jsonify(
@@ -387,3 +392,26 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
 
     database.edit_post_title(name, title)
     return jsonify({"status": "ok", "message": "Title updated"}), 200
+
+
+def react(name: str, reaction: str) -> tuple[str, int]:
+    reaction = reaction.strip()
+
+    if not name:
+        return jsonify({"status": "error", "message": "Missing values"}), 500
+
+    if not reaction:
+        return jsonify({"status": "error", "message": "Missing values"}), 500
+
+    post = database.get_post(name)
+
+    if not post:
+        return jsonify({"status": "error", "message": "Post not found"}), 500
+
+    reactions = post.reactions.split(",")
+    reactions.append(reaction)
+    reactions = [r for r in reactions if r]
+    p_reactions = ",".join(reactions)
+    database.edit_post_reactions(name, p_reactions)
+
+    return jsonify({"status": "ok", "message": "Reaction added"}), 200

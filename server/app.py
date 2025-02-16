@@ -711,3 +711,13 @@ def mod_user() -> Any:
 @login_required
 def get_icons() -> Any:
     return {"icons": ICONS}
+
+
+@app.route("/react", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
+def react() -> Any:
+    data = request.get_json()
+    name = data.get("name", None)
+    icon = data.get("icon", None)
+    return post_procs.react(name, icon)

@@ -21,6 +21,7 @@ schema_posts = {
     "listed": "integer default 1",
     "size": "integer default 0",
     "sample": "text default ''",
+    "reactions": "text default ''",
 }
 
 

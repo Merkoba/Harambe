@@ -82,7 +82,7 @@
 
     <!-- Uploader -->
     <div>
-        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{post.views}}<span class="sep">|</span><span id="react" class="button">React</span>
+        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{post.views}}{% if is_user %}<span class="sep">|</span><span id="react" class="button">React</span>{% endif %}
     </div>
 
     {% if post.can_embed %}
@@ -122,6 +122,12 @@
             <div id="flash"></div>
         </div>
         {% endif %}
+    </div>
+
+    <div id="reactions">
+        {% for reaction in post.reactions %}
+        <img src="/static/icons/{{reaction}}.gif" title="{{reaction}}">
+        {% endfor %}
     </div>
     {% endif %}
 </div>
