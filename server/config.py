@@ -315,6 +315,8 @@ class Config:
             set_value(c, "requests_per_minute")
             set_value(c, "public_posts")
             set_value(c, "view_delay")
+            set_value(c, "description_index")
+            set_value(c, "description_post")
             set_value(c, "anon_listers")
 
             # Users

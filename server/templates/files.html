@@ -65,6 +65,7 @@
             <div id="size" class="table_cell underline" data-sort="size">Size</div>
             <div id="date" class="table_cell underline" data-sort="date">Date</div>
             <div id="views" class="table_cell views underline" title="Views" data-sort="views">Views</div>
+            <div id="listed" class="table_cell views underline" title="Views" data-sort="views">Listed</div>
             <div class="table_cell actions">Actions</div>
         </div>
 
@@ -94,6 +95,9 @@
 
             <!-- Views -->
             <div class="table_cell views">{{item.views}}</div>
+
+            <!-- Listed -->
+            <div class="table_cell views">{{item.listed_str}}</div>
 
             <!-- Actions -->
             <div class="table_cell actions">

@@ -124,7 +124,7 @@ def make_file(row: dict[str, Any]) -> File:
         uploader=row.get("uploader") or "",
         mtype=row.get("mtype") or "",
         view_date=row.get("view_date") or 0,
-        listed=row.get("listed") or 1,
+        listed=bool(row.get("listed")) or True,
     )
 
 
@@ -190,7 +190,10 @@ def get_next_file(current: str) -> File | None:
         return None
 
     date = current_row["date"]
-    c.execute("select * from files where date < ? order by date desc limit 1", (date,))
+    c.execute(
+        "select * from files where date < ? and listed = 1 order by date desc limit 1",
+        (date,),
+    )
     next_row = c.fetchone()
     conn.close()
 
@@ -349,7 +352,7 @@ def update_user_last_date(username: str) -> None:
 def get_random_file(ignore_names: list[str]) -> File | None:
     check_db()
     conn, c = row_conn()
-    query = "select * from files where name not in ({}) and mtype is not null and mtype != '' order by random() limit 1"
+    query = "select * from files where name not in ({}) and mtype is not null and mtype != '' and listed = 1 order by random() limit 1"
     placeholders = ", ".join("?" for _ in ignore_names)
     c.execute(query.format(placeholders), ignore_names)
     row = c.fetchone()

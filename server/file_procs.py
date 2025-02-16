@@ -39,9 +39,10 @@ class File:
     content: str
     show: str
     listed: bool
+    listed_str: str
 
 
-def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
+def make_file(file: Path, db_file: DbFile, now: int) -> File:
     date = db_file.date
     size = int(file.stat().st_size)
     date_1 = utils.nice_date(date, "date")
@@ -57,6 +58,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
     ext = db_file.ext
     mtype = db_file.mtype
     listed = db_file.listed
+    listed_str = "L: Yes" if listed else "L: No"
 
     if original:
         if file.suffix:
@@ -97,6 +99,7 @@ def make_file(file: Path, db_file: DbFile | None, now: int) -> File:
         content,
         show,
         listed,
+        listed_str,
     )
 
 
@@ -107,6 +110,7 @@ def get_files(
     sort: str = "date",
     max_files: int = 0,
     username: str = "",
+    only_listed: bool = False,
 ) -> tuple[list[File], str, bool]:
     psize = 0
 
@@ -129,6 +133,10 @@ def get_files(
 
         if not db_file:
             continue
+
+        if only_listed:
+            if not db_file.listed:
+                continue
 
         if username:
             if db_file.username != username:
@@ -293,11 +301,13 @@ def get_file(name: str) -> File | None:
         if file.stem == name:
             db_file = database.get_file(name)
 
-            if db_file:
-                diff = utils.now() - db_file.view_date
+            if not db_file:
+                return None
 
-                if diff > config.view_delay:
-                    database.increase_views(name)
+            diff = utils.now() - db_file.view_date
+
+            if diff > config.view_delay:
+                database.increase_views(name)
 
             return make_file(file, db_file, utils.now())
 
