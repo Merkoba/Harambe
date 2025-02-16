@@ -132,6 +132,7 @@ def get_users(
         users.append(user)
 
     total_str = f"{len(users)}"
+    sort_users(users, sort)
 
     if psize > 0:
         start_index = (page - 1) * psize
@@ -141,7 +142,6 @@ def get_users(
     else:
         has_next_page = False
 
-    sort_users(users, sort)
     return users, total_str, has_next_page
 
 

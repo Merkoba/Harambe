@@ -153,6 +153,7 @@ def get_posts(
 
     total_size_str = utils.get_size(total_size)
     total_str = f"{total_size_str} ({len(posts)} Posts)"
+    sort_posts(posts, sort)
 
     if max_posts > 0:
         posts = posts[:max_posts]
@@ -165,7 +166,6 @@ def get_posts(
     else:
         has_next_page = False
 
-    sort_posts(posts, sort)
     return posts, total_str, has_next_page
 
 
