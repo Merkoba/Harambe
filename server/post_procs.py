@@ -203,6 +203,11 @@ def get_post(name: str) -> Post | None:
 
     if post:
         now = utils.now()
+        diff = now - post.view_date
+
+        if diff > config.view_delay:
+            database.increase_views(name)
+
         return make_post(post, now, True)
 
     return None
