@@ -123,12 +123,12 @@
         </div>
         {% endif %}
     </div>
+    {% endif %}
 
     <div id="reactions">
         {% for reaction in post.reactions %}
         <img src="/static/icons/{{reaction.icon}}.gif" title="{{reaction.icon}} : {{reaction.user}}">
         {% endfor %}
     </div>
-    {% endif %}
 </div>
 {% endblock %}
