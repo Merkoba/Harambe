@@ -141,3 +141,11 @@ select {
     flex-direction: row;
     gap: 0.5rem;
 }
+
+#selector a:link, #selector a:visited {
+    color: var(--color_1);
+}
+
+#selector a:hover {
+    text-decoration: underline;
+}

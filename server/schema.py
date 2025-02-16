@@ -70,7 +70,9 @@ def make_database() -> None:
 
                 if match:
                     defvalue = match.group(1)
-                    c.execute(f"update {what} set {column} = {defvalue} where {column} is null")
+                    c.execute(
+                        f"update {what} set {column} = {defvalue} where {column} is null"
+                    )
 
     add_columns("files")
     add_columns("users")
