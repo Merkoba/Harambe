@@ -203,6 +203,7 @@ a.button:hover {
 
 #reactions {
     margin-top: 0.5rem;
+    max-width: 800px;
 }
 
 #reactions > img {

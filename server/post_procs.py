@@ -74,9 +74,13 @@ def make_post(post: DbPost, now: int, all_data: bool = True) -> Post:
 
     if all_data:
         sample = post.sample
-        p_reactions = post.reactions.split(",")
-        p_reactions = [r for r in p_reactions if r]
-        reactions = [Reaction(*r.split(":")) for r in p_reactions]
+
+        try:
+            p_reactions = post.reactions.split(",")
+            p_reactions = [r for r in p_reactions if r]
+            reactions = [Reaction(*r.split(":")) for r in p_reactions]
+        except:
+            reactions = []
     else:
         sample = ""
         reactions = []
