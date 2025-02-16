@@ -21,7 +21,7 @@
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
-    <div title="Total storage stats of all files (on all pages)">Total: {{total}}</div>
+    <div title="Total storage stats of all posts (on all pages)">Total: {{total}}</div>
     <div class="sep">|</div>
     <div title="This is the current page">Page {{page}}</div>
     <div class="sep">|</div>
@@ -61,27 +61,27 @@
             <div id="views" class="table_cell underline views" data-sort="views">Views</div>
         </div>
 
-        {% for file in files %}
-        <div class="table_row item" data-name="{{file.name}}" data-size="{{file.size}}" data-date="{{file.date_3}}" data-ago="{{file.ago}}" data-size="{{file.size}}" data-size_str="{{file.size_str}}" data-title="{{file.title}}" data-original="{{file.original}}" data-uploader="{{file.uploader or 'Anon'}}">
+        {% for item in items %}
+        <div class="table_row item" data-name="{{item.name}}" data-size="{{item.size}}" data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}" data-uploader="{{item.uploader or 'Anon'}}">
             <!-- Name -->
             <div class="table_cell">
-                <a href="/post/{{file.name}}" target="_blank" title="{{file.show}}">{{file.show}}</a>
+                <a href="/post/{{item.name}}" target="_blank" title="{{item.show}}">{{item.show}}</a>
             </div>
 
             <!-- Title -->
-            <div class="table_cell" title="{{file.title or file.original}}">{{file.title or file.original}}</div>
+            <div class="table_cell" title="{{item.title or item.original}}">{{item.title or item.original}}</div>
 
             <!-- Uploader -->
-            <div class="table_cell">{{file.uploader or 'Anon'}}</div>
+            <div class="table_cell">{{item.uploader or 'Anon'}}</div>
 
             <!-- Size -->
-            <div class="table_cell">{{file.size_str}}</div>
+            <div class="table_cell">{{item.size_str}}</div>
 
             <!-- Date -->
-            <div class="table_cell date" title="{{file.date_3}}">{{file.ago}}</div>
+            <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
 
             <!-- Views -->
-            <div class="table_cell views" title="{{file.date_3}}">{{file.views}}</div>
+            <div class="table_cell views" title="{{item.date_3}}">{{item.views}}</div>
         </div>
         {% endfor %}
     </div>

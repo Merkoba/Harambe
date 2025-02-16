@@ -526,7 +526,7 @@ def show_list(page: int = 1) -> Any:
     return render_template(
         "list.html",
         mode="list",
-        posts=posts,
+        items=posts,
         total=total,
         page=page,
         next_page=next_page,

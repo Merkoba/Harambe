@@ -14,9 +14,9 @@ import app
 import utils
 import database
 from config import config
+import post_procs
 import user_procs
 from user_procs import User
-import file_procs
 
 
 def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool, str]:
@@ -161,7 +161,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                     utils.error(e)
                     return error("Failed to save file")
 
-                file_procs.check_storage()
+                post_procs.check_storage()
 
                 if mode == "normal":
                     return True, name
