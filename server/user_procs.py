@@ -322,7 +322,7 @@ def delete_users(usernames: list[str], admin: str) -> tuple[str, int]:
     for username in usernames:
         do_delete_user(username)
 
-    return jsonify({"status": "ok", "message": "File deleted successfully"}), 200
+    return jsonify({"status": "ok", "message": "User deleted successfully"}), 200
 
 
 def delete_user(username: str, admin: str) -> tuple[str, int]:

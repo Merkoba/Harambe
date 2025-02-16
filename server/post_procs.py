@@ -12,7 +12,7 @@ from flask import jsonify  # type: ignore
 import utils
 import database
 from config import config
-from database import File as DbPost
+from database import Post as DbPost
 from user_procs import User
 
 
@@ -119,7 +119,7 @@ def get_posts(
     max_posts: int = 0,
     username: str = "",
     only_listed: bool = False,
-) -> tuple[list[File], str, bool]:
+) -> tuple[list[Post], str, bool]:
     psize = 0
 
     if page_size == "default":
@@ -193,7 +193,7 @@ def get_posts(
         posts.sort(key=lambda x: x.listed, reverse=False)
 
     total_size_str = utils.get_size(total_size)
-    total_str = f"{total_size_str} ({len(posts)} Files)"
+    total_str = f"{total_size_str} ({len(posts)} Posts)"
 
     if max_posts > 0:
         posts = posts[:max_posts]
