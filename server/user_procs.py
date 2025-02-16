@@ -131,6 +131,21 @@ def get_users(
 
         users.append(user)
 
+    total_str = f"{len(users)}"
+
+    if psize > 0:
+        start_index = (page - 1) * psize
+        end_index = start_index + psize
+        has_next_page = end_index < len(users)
+        users = users[start_index:end_index]
+    else:
+        has_next_page = False
+
+    sort_users(users, sort)
+    return users, total_str, has_next_page
+
+
+def sort_users(users: list[User], sort: str) -> None:
     if sort == "register_date":
         users.sort(key=lambda x: x.register_date, reverse=True)
     elif sort == "register_date_desc":
@@ -180,18 +195,6 @@ def get_users(
         users.sort(key=lambda x: x.posts, reverse=True)
     elif sort == "posts_desc":
         users.sort(key=lambda x: x.posts, reverse=False)
-
-    total_str = f"{len(users)}"
-
-    if psize > 0:
-        start_index = (page - 1) * psize
-        end_index = start_index + psize
-        has_next_page = end_index < len(users)
-        users = users[start_index:end_index]
-    else:
-        has_next_page = False
-
-    return users, total_str, has_next_page
 
 
 def get_user(username: str) -> User | None:

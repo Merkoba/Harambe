@@ -151,6 +151,25 @@ def get_posts(
         total_size += f.size
         posts.append(f)
 
+    total_size_str = utils.get_size(total_size)
+    total_str = f"{total_size_str} ({len(posts)} Posts)"
+
+    if max_posts > 0:
+        posts = posts[:max_posts]
+
+    if psize > 0:
+        start_index = (page - 1) * psize
+        end_index = start_index + psize
+        has_next_page = end_index < len(posts)
+        posts = posts[start_index:end_index]
+    else:
+        has_next_page = False
+
+    sort_posts(posts, sort)
+    return posts, total_str, has_next_page
+
+
+def sort_posts(posts: list[Post], sort: str) -> None:
     if sort == "date":
         posts.sort(key=lambda x: x.date, reverse=True)
     elif sort == "date_desc":
@@ -180,22 +199,6 @@ def get_posts(
         posts.sort(key=lambda x: x.listed, reverse=True)
     elif sort == "listed_desc":
         posts.sort(key=lambda x: x.listed, reverse=False)
-
-    total_size_str = utils.get_size(total_size)
-    total_str = f"{total_size_str} ({len(posts)} Posts)"
-
-    if max_posts > 0:
-        posts = posts[:max_posts]
-
-    if psize > 0:
-        start_index = (page - 1) * psize
-        end_index = start_index + psize
-        has_next_page = end_index < len(posts)
-        posts = posts[start_index:end_index]
-    else:
-        has_next_page = False
-
-    return posts, total_str, has_next_page
 
 
 def get_post(name: str) -> Post | None:

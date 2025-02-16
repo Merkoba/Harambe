@@ -25,17 +25,19 @@
 {% endblock %}
 
 {% block body %}
-<div id="main">
-    <dialog id="edit_dialog">
-        <form method="dialog">
-          <p>Choose an option:</p>
+<dialog id="edit_dialog">
+    <form method="dialog">
+      <p>Choose an action:</p>
+
+      <div class="dialog_container">
           <button value="title">Edit Title</button>
           <button value="delete">Delete Post</button>
           <button value="cancel">Cancel</button>
-        </form>
-    </dialog>
+      </div>
+    </form>
+</dialog>
 
-    <!-- Top -->
+<div id="main">
     <div id="top">
         <div id="buttons">
             <a href="/" class="button">Return</a>

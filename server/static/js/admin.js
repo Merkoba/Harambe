@@ -72,20 +72,29 @@ window.onload = () => {
     })
   }
 
-  let delete_all = DOM.el(`#delete_all`)
+  let edit = DOM.el(`#edit`)
+  let edit_dialog = DOM.el(`#edit_dialog`)
 
-  if (delete_all) {
-    DOM.ev(delete_all, `click`, () => {
-      if (vars.mode === `users`) {
-        if (confirm(`Delete all non-admin users ?`)) {
-            delete_normal_users()
-        }
+  if (edit && edit_dialog) {
+    edit_dialog.addEventListener(`close`, () => {
+      let value = edit_dialog.returnValue
+
+      if (value === `can_list_yes`) {
+        mod_user(`can_list`, 1, `bool`)
       }
-      else if (vars.mode === `posts`) {
-        if (confirm(`Delete ALL posts ?`)) {
-          delete_all_posts()
-        }
+      else if (value === `can_list_no`) {
+        mod_user(`can_list`, 0, `bool`)
       }
+      else if (value === `lister_yes`) {
+        mod_user(`lister`, 1, `bool`)
+      }
+      else if (value === `lister_no`) {
+        mod_user(`lister`, 0, `bool`)
+      }
+    })
+
+    DOM.ev(edit, `click`, () => {
+      edit_dialog.showModal()
     })
   }
 
@@ -157,22 +166,6 @@ window.onload = () => {
   if (add) {
     DOM.ev(add, `click`, () => {
       window.location = `/edit_user`
-    })
-  }
-
-  let can_list = DOM.el(`#can_list`)
-
-  if (can_list) {
-    DOM.ev(can_list, `click`, () => {
-      mod_user(`can_list`, 1, `bool`)
-    })
-  }
-
-  let no_list = DOM.el(`#no_list`)
-
-  if (no_list) {
-    DOM.ev(no_list, `click`, () => {
-      mod_user(`can_list`, 0, `bool`)
     })
   }
 }
@@ -361,7 +354,7 @@ async function delete_all_posts() {
     })
 
     if (response.ok) {
-      window.location = `/admin`
+      window.location = `/admin/posts`
     }
     else {
       print_error(response.status)
@@ -563,7 +556,7 @@ async function delete_normal_users() {
     })
 
     if (response.ok) {
-      window.location = `/users`
+      window.location = `/admin/users`
     }
     else {
       print_error(response.status)
@@ -632,7 +625,7 @@ async function do_mod_user(items, what, value, vtype) {
     })
 
     if (response.ok) {
-      window.location = `/users`
+      window.location = `/admin/users`
     }
     else {
       print_error(response.status)
@@ -649,4 +642,17 @@ function singplural(what, length) {
   }
 
   return `${what}s`
+}
+
+function delete_all() {
+  if (vars.mode === `users`) {
+    if (confirm(`Delete all non-admin users ?`)) {
+        delete_normal_users()
+    }
+  }
+  else if (vars.mode === `posts`) {
+    if (confirm(`Delete ALL posts ?`)) {
+      delete_all_posts()
+    }
+  }
 }

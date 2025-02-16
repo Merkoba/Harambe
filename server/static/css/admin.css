@@ -149,3 +149,16 @@ select {
 #selector a:hover {
     text-decoration: underline;
 }
+
+.dialog_container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog_container button {
+    font-size: 1rem;
+    min-width: 9rem;
+}
