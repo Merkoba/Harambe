@@ -200,6 +200,11 @@ def sort_posts(posts: list[Post], sort: str) -> None:
     elif sort == "listed_desc":
         posts.sort(key=lambda x: x.listed, reverse=False)
 
+    elif sort == "uploader":
+        posts.sort(key=lambda x: x.uploader, reverse=True)
+    elif sort == "uploader_desc":
+        posts.sort(key=lambda x: x.uploader, reverse=False)
+
 
 def get_post(name: str) -> Post | None:
     post = database.get_post(name)

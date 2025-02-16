@@ -567,27 +567,9 @@ async function delete_normal_users() {
   }
 }
 
-function do_sort(what) {
-  if (vars.sort) {
-    if (vars.sort === what) {
-      if (vars.mode === `list`) {
-        window.location = `/list?sort=${what}_desc`
-      }
-      else {
-        window.location = `/admin/${vars.mode}?sort=${what}_desc`
-      }
-      return
-    }
-    else if (vars.sort === `${what}_desc`) {
-      if (vars.mode === `list`) {
-        window.location = `/list`
-      }
-      else {
-        window.location = `/admin/${vars.mode}`
-      }
-
-      return
-    }
+function sort_action(what, desc = false) {
+  if (desc) {
+    what = what + `_desc`
   }
 
   if (vars.mode === `list`) {
@@ -595,6 +577,20 @@ function do_sort(what) {
   }
   else {
     window.location = `/admin/${vars.mode}?sort=${what}`
+  }
+}
+
+function do_sort(what) {
+  if (what === vars.sort) {
+    sort_action(what, true)
+  }
+  else {
+    if (vars.sort.includes(`_desc`)) {
+      sort_action(what)
+    }
+    else {
+      sort_action(what, true)
+    }
   }
 }
 
