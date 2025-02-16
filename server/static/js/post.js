@@ -155,7 +155,13 @@ function timeago(date) {
 }
 
 async function edit_title() {
-  let title = prompt(`New Title`, vars.title || vars.original).trim()
+  let title = prompt(`New Title`, vars.title || vars.original)
+
+  if (!title) {
+    return
+  }
+
+  title = title.trim()
 
   if (title === vars.title) {
     return
