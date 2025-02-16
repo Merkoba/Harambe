@@ -55,6 +55,7 @@ def make_post(post: DbPost, now: int, with_sample: bool = False) -> Post:
     ext = post.ext
     mtype = post.mtype
     listed = post.listed
+    full = post.full()
     ago = utils.time_ago(date, now)
     date_1 = utils.nice_date(date, "date")
     date_2 = utils.nice_date(date, "time")
@@ -78,11 +79,6 @@ def make_post(post: DbPost, now: int, with_sample: bool = False) -> Post:
 
     show = f"{name} {ext}".strip()
     can_embed = size <= (config.embed_max_size * 1_000_000)
-
-    if ext:
-        full = f"{name}.{ext}"
-    else:
-        full = name
 
     return Post(
         name,
@@ -238,8 +234,11 @@ def delete_posts(names: list[str]) -> tuple[str, int]:
             {"status": "error", "message": "Post names were not provided"}
         ), 400
 
-    for post in names:
-        do_delete_post(post)
+    for name in names:
+        post = database.get_post(name)
+
+        if post:
+            do_delete_post(post)
 
     return jsonify({"status": "ok", "message": "Post deleted successfully"}), 200
 
@@ -264,22 +263,29 @@ def delete_post(name: str, user: User) -> tuple[str, int]:
                 {"status": "error", "message": "You are not the uploader"}
             ), 500
 
-    do_delete_post(name)
-    return jsonify({"status": "ok", "message": "Post deleted successfully"}), 200
+    post = database.get_post(name)
+
+    if post:
+        do_delete_post(post)
+        return jsonify({"status": "ok", "message": "Post deleted successfully"}), 200
+
+    return jsonify({"status": "error", "message": "Post not found"}), 500
 
 
 # Be extra careful with this function!
-def do_delete_post(name: str) -> None:
+def do_delete_post(post: DbPost) -> None:
     if not config.allow_delete:
         return
 
-    if not name:
+    if not post:
         return
 
-    if name.startswith("."):
+    file_name = post.full()
+
+    if file_name.startswith("."):
         return
 
-    if not utils.valid_file_name(name):
+    if not utils.valid_file_name(file_name):
         return
 
     fd = utils.files_dir()
@@ -300,17 +306,17 @@ def do_delete_post(name: str) -> None:
     if fds == "/home":
         return
 
-    path = fd / name
+    path = fd / file_name
     file = Path(path)
 
     if file.exists() and file.is_file():
         file.unlink()
-        database.delete_post(name)
+        database.delete_post(post.name)
 
 
 def delete_all_posts() -> tuple[str, int]:
     for post in database.get_posts():
-        do_delete_post(post.name)
+        do_delete_post(post)
 
     return jsonify({"status": "ok", "message": "All posts deleted"}), 200
 
@@ -342,4 +348,8 @@ def check_storage() -> None:
         oldest_file = files.pop(0)
         total_files -= 1
         total_size -= oldest_file[1]
-        do_delete_post(oldest_file[0].name)
+        name = oldest_file[0].name
+        post = database.get_post(name)
+
+        if post:
+            do_delete_post(post)

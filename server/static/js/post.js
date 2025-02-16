@@ -181,12 +181,14 @@ async function edit_title() {
 }
 
 async function delete_post() {
+  let name = vars.name
+
   let response = await fetch(`/delete_post`, {
     method: `POST`,
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({name: vars.name}),
+    body: JSON.stringify({name}),
   })
 
   if (response.ok) {
