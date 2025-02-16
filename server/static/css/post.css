@@ -197,6 +197,10 @@ a.button:hover {
     gap: 0.5rem;
 }
 
+.icon_item:hover {
+    text-shadow: 0 0 1px var(--text_color);
+}
+
 .selected {
     background-color: var(--highlight_color);
 }
@@ -212,7 +216,7 @@ a.button:hover {
 }
 
 #reactions > img {
-    padding: 0.6rem;
-    width: 2.6rem;
-    height: auto;
+    padding: 0.5rem;
+    height: 2rem;
+    width: auto;
 }
