@@ -92,6 +92,7 @@ def add_file(
     check_db()
     conn, c = get_conn()
     date = utils.now()
+
     values = [
         name,
         ext,
@@ -105,6 +106,7 @@ def add_file(
         date,
         listed,
     ]
+
     placeholders = ", ".join(["?"] * len(values))
     query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed) values ({placeholders})"
     c.execute(query, values)
@@ -124,7 +126,7 @@ def make_file(row: dict[str, Any]) -> File:
         uploader=row.get("uploader") or "",
         mtype=row.get("mtype") or "",
         view_date=row.get("view_date") or 0,
-        listed=bool(row.get("listed")) or True,
+        listed=bool(row.get("listed")),
     )
 
 
@@ -275,15 +277,15 @@ def make_user(row: dict[str, Any]) -> User:
     return User(
         username=row.get("username") or "",
         password=row.get("password") or "",
-        admin=row.get("admin") or False,
+        admin=bool(row.get("admin")),
         name=row.get("name") or "",
         rpm=row.get("rpm") or 0,
         max_size=row.get("max_size") or 0,
-        can_list=bool(row.get("can_list")) or True,
+        can_list=bool(row.get("can_list")),
         mark=row.get("mark") or "",
         register_date=row.get("register_date") or 0,
         last_date=row.get("last_date") or 0,
-        lister=bool(row.get("lister")) or True,
+        lister=bool(row.get("lister")),
     )
 
 

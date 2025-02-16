@@ -76,6 +76,11 @@
         <span class="title">Uploader:</span>{{file.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{file.views}}
     </div>
 
+    <!-- Listed -->
+    <div>
+        <span class="title">Listed:</span>{{file.listed_str}}
+    </div>
+
     {% if file.can_embed %}
     <div id="embed">
         {% if file.mtype.startswith("image/") %}
