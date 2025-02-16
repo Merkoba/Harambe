@@ -125,6 +125,13 @@ window.onload = function() {
         e.preventDefault()
       }
     })
+
+    DOM.ev(r_modal, `click`, (e) => {
+      if (e.target.classList.contains(`icon_item`)) {
+        vars.selected_icon = e.target.textContent
+        enter_icons()
+      }
+    })
   }
 
   DOM.ev(document, `keyup`, (e) => {
@@ -305,7 +312,7 @@ async function show_icons() {
     container.innerHTML = ``
 
     for (let icon of json.icons) {
-      let div = DOM.create(`div`)
+      let div = DOM.create(`div`, `icon_item`)
       div.textContent = icon
       container.appendChild(div)
     }
@@ -444,6 +451,7 @@ function add_reaction(icon) {
   let reactions = DOM.el(`#reactions`)
   let img = DOM.create(`img`)
   img.src = `/static/icons/${icon}.gif`
+  img.title = `${icon} : You`
   reactions.appendChild(img)
   window.scrollTo(0, document.body.scrollHeight)
 }

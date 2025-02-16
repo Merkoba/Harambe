@@ -181,6 +181,14 @@ a.button:hover {
     gap: 0.5rem;
 }
 
+.icon_item {
+    cursor: pointer;
+}
+
+.icon_item:hover {
+    background-color: var(--highlight_color);
+}
+
 #icons_input {
     font-size: 1rem;
 }
