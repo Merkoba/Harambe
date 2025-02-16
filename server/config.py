@@ -280,7 +280,7 @@ class Config:
             set_value(c, "max_size_user")
             set_value(c, "max_size_anon")
             set_value(c, "redis_port")
-            set_value(c, "uppercase_ids")
+            set_value(c, "uppercase_names")
             set_value(c, "max_posts")
             set_value(c, "max_storage")
             set_value(c, "show_image")
