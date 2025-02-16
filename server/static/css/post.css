@@ -117,7 +117,7 @@ a.button:hover {
     white-space: pre-wrap;
 }
 
-#modal {
+#image_modal {
     display: flex;
     position: fixed;
     z-index: 99;
@@ -128,9 +128,10 @@ a.button:hover {
     justify-content: center;
     align-items: center;
     background-color: var(--modal_background);
+    cursor: pointer;
 }
 
-#modal_content {
+#image_modal_content {
     width: 77%;
     height: 77%;
     padding: 20px;
@@ -141,7 +142,7 @@ a.button:hover {
     border: 2px solid var(--frame_color);
 }
 
-#modal_image {
+#image_modal_img {
     max-width: 100%;
     max-height: 100%;
 }

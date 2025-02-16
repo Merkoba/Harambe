@@ -54,14 +54,14 @@ window.onload = function() {
 
   if (image) {
     DOM.ev(image, `click`, () => {
-      let modal_image = DOM.el(`#modal_image`)
+      let modal_image = DOM.el(`#image_modal_img`)
       modal_image.src = image.src
-      let modal = DOM.el(`#modal`)
+      let modal = DOM.el(`#image_modal`)
       DOM.show(modal)
     })
   }
 
-  let modal = DOM.el(`#modal`)
+  let modal = DOM.el(`#image_modal`)
 
   if (modal) {
     DOM.ev(modal, `click`, () => {
