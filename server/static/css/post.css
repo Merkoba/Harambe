@@ -185,10 +185,6 @@ a.button:hover {
     cursor: pointer;
 }
 
-.icon_item:hover {
-    background-color: var(--highlight_color);
-}
-
 #icons_input {
     font-size: 1rem;
 }
