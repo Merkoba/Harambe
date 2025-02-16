@@ -18,8 +18,9 @@ from user_procs import User
 
 @dataclass
 class Reaction:
-    icon: str
+    value: str
     user: str
+    mode: str
 
 
 @dataclass
@@ -78,7 +79,20 @@ def make_post(post: DbPost, now: int, all_data: bool = True) -> Post:
         try:
             p_reactions = post.reactions.split(",")
             p_reactions = [r for r in p_reactions if r]
-            reactions = [Reaction(*r.split(":")) for r in p_reactions]
+            reactions = []
+
+            for r in p_reactions:
+                text, user = r.split(":")
+
+                if (not text) or (not user):
+                    continue
+
+                if len(text) == 1:
+                    rec = Reaction(text, user, "character")
+                else:
+                    rec = Reaction(text, user, "icon")
+
+                reactions.append(rec)
         except:
             reactions = []
     else:
@@ -404,8 +418,8 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "Title updated"}), 200
 
 
-def react(name: str, icon: str, user_name: str) -> tuple[str, int]:
-    icon = icon.strip()
+def react(name: str, text: str, user_name: str) -> tuple[str, int]:
+    text = text.strip()
     user_name = user_name.strip()
 
     if not user_name:
@@ -414,18 +428,27 @@ def react(name: str, icon: str, user_name: str) -> tuple[str, int]:
     if not name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
-    if not icon:
+    if not text:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
     if not user_name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
+
+    if len(text) > 100:
+        return jsonify({"status": "error", "message": "Reaction is too long"}), 500
+
+    if len(text) == 1:
+        if not text.isalnum():
+            return jsonify({"status": "error", "message": "Invalid reaction"}), 500
+    elif text not in utils.ICONS:
+        return jsonify({"status": "error", "message": "Invalid reaction"}), 500
 
     post = database.get_post(name)
 
     if not post:
         return jsonify({"status": "error", "message": "Post not found"}), 500
 
-    reaction = f"{icon}:{user_name}"
+    reaction = f"{text}:{user_name}"
     reactions = post.reactions.split(",")
     reactions.append(reaction)
     reactions = [r for r in reactions if r]

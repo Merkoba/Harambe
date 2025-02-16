@@ -82,11 +82,19 @@ window.onload = function() {
     }
   })
 
-  let react = DOM.el(`#react`)
+  let r_icon = DOM.el(`#react_icon`)
 
-  if (react) {
-    DOM.ev(react, `click`, () => {
+  if (r_icon) {
+    DOM.ev(r_icon, `click`, () => {
       show_icons()
+    })
+  }
+
+  let r_character = DOM.el(`#react_character`)
+
+  if (r_character) {
+    DOM.ev(r_character, `click`, () => {
+      react_character()
     })
   }
 
@@ -392,23 +400,7 @@ async function enter_icons() {
   }
 
   hide_icons()
-  let name = vars.name
-  let icon = vars.selected_icon
-
-  let response = await fetch(`/react`, {
-    method: `POST`,
-    headers: {
-      "Content-Type": `application/json`,
-    },
-    body: JSON.stringify({name, icon}),
-  })
-
-  if (response.ok) {
-    add_reaction(icon)
-  }
-  else {
-    print_error(response.status)
-  }
+  send_reaction(vars.selected_icon)
 }
 
 function hide_icons() {
@@ -455,12 +447,26 @@ function down_icons() {
   }
 }
 
-function add_reaction(icon) {
+function add_reaction(text) {
+  if (!text) {
+    return
+  }
+
   let reactions = DOM.el(`#reactions`)
-  let img = DOM.create(`img`)
-  img.src = `/static/icons/${icon}.gif`
-  img.title = `${icon} : You`
-  reactions.appendChild(img)
+
+  if (text.length === 1) {
+    let character = DOM.create(`div`, `reaction_item`)
+    character.textContent = text
+    character.title = `${text} : You`
+    reactions.appendChild(character)
+  }
+  else {
+    let img = DOM.create(`img`, `reaction_item`)
+    img.src = `/static/icons/${text}.gif`
+    img.title = `${text} : You`
+    reactions.appendChild(img)
+  }
+
   window.scrollTo(0, document.body.scrollHeight)
 }
 
@@ -473,5 +479,41 @@ function show_all_icons() {
 
   for (let child of icons.children) {
     DOM.show(child)
+  }
+}
+
+function react_character() {
+  let character = prompt(`Type a character`)
+
+  if (!character) {
+    return
+  }
+
+  character = character.slice(0, 1).toUpperCase()
+  let re = /^[A-Z0-9]$/i
+
+  if (!re.test(character)) {
+    return
+  }
+
+  send_reaction(character)
+}
+
+async function send_reaction(text) {
+  let name = vars.name
+
+  let response = await fetch(`/react`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({name, text}),
+  })
+
+  if (response.ok) {
+    add_reaction(text)
+  }
+  else {
+    print_error(response.status)
   }
 }

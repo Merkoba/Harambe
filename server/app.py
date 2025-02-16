@@ -3,7 +3,6 @@ from __future__ import annotations
 # Standard
 from typing import Any
 from functools import wraps
-from pathlib import Path
 
 # Libraries
 from flask import Flask, render_template, request, send_file  # type: ignore
@@ -33,9 +32,6 @@ CORS(app)
 
 simple_captcha = CAPTCHA(config=config.get_captcha())
 app = simple_captcha.init_app(app)
-
-ICONS = [icon.stem for icon in Path("static/icons").glob("*.gif")]
-ICONS.sort()
 
 
 def get_username() -> str:
@@ -707,7 +703,7 @@ def mod_user() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
 def get_icons() -> Any:
-    return {"icons": ICONS}
+    return {"icons": utils.ICONS}
 
 
 @app.route("/react", methods=["POST"])  # type: ignore
@@ -721,6 +717,6 @@ def react() -> Any:
 
     data = request.get_json()
     name = data.get("name", None)
-    icon = data.get("icon", None)
+    text = data.get("text", None)
 
-    return post_procs.react(name, icon, user.name)
+    return post_procs.react(name, text, user.name)

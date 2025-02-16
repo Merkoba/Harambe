@@ -154,3 +154,12 @@ def is_valid_username(username: str) -> bool:
         return False
 
     return not any(c.isupper() for c in username)
+
+
+def load_icons() -> list[str]:
+    icons = [icon.stem for icon in Path("static/icons").glob("*.gif")]
+    icons.sort()
+    return icons
+
+
+ICONS = load_icons()

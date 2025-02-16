@@ -57,10 +57,10 @@
             <a href="/random">Random</a>
             {% endif %}
             <div class="sep">|</div>
-        {% if owned %}
+            {% if owned %}
             <div id="edit" class="button">Edit</div>
             <div class="sep">|</div>
-        {% endif %}
+            {% endif %}
         </div>
 
         {% if post.title or post.original %}
@@ -82,7 +82,7 @@
 
     <!-- Uploader -->
     <div>
-        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{post.views}}{% if is_user %}<span class="sep">|</span><span id="react" class="button" title="You can also press 'r' to open the popup">React</span>{% endif %}
+        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{post.views}}
     </div>
 
     {% if post.can_embed %}
@@ -125,10 +125,24 @@
     </div>
     {% endif %}
 
+    {% if is_user %}
+    <div id="react_buttons">
+        <div id="react_icon" class="button" title="You can also press 'r' to open the popup">React with an icon</div>
+        <div class="sep">|</div>
+        <div id="react_character" class="button" title="You can also press 'r' to open the popup">React with a character</div>
+    </div>
+    {% endif %}
+
     <div id="reactions">
-        {% for reaction in post.reactions %}
-        <img src="/static/icons/{{reaction.icon}}.gif" title="{{reaction.icon}} : {{reaction.user}}">
-        {% endfor %}
+    {% for reaction in post.reactions %}
+        {% if reaction.mode == "icon" %}
+        <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.value}} : {{reaction.user}}" class="reaction_item">
+        {% elif reaction.mode == "character" %}
+        <div class="reaction_item">
+            <div title="{{reaction.value}} : {{reaction.user}}">{{reaction.value}}</div>
+        </div>
+        {% endif %}
+    {% endfor %}
     </div>
 </div>
 {% endblock %}

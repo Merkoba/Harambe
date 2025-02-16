@@ -203,6 +203,7 @@ a.button:hover {
     flex-direction: row;
     gap: 0.5rem;
     align-content: center;
+    user-select: none;
 }
 
 .icon_item_text {
@@ -233,10 +234,21 @@ a.button:hover {
     margin-top: 0.5rem;
     max-width: 800px;
     background-color: var(--contrast_background);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem;
 }
 
-#reactions > img {
-    padding: 0.5rem;
+.reaction_item {
     height: 1.8rem;
     width: auto;
+    padding: 0.5rem;
+}
+
+#react_buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
 }
