@@ -311,7 +311,7 @@ function delete_posts() {
     let posts = []
 
     for (let post of selected_posts) {
-      posts.push(post.dataset.full)
+      posts.push(post.dataset.name)
     }
 
     delete_selected_posts(posts)
@@ -342,7 +342,7 @@ async function delete_selected_posts(names) {
 
 function remove_posts(posts) {
   for (let post of posts) {
-    let el = DOM.el(`.item[data-full="${post}"]`)
+    let el = DOM.el(`.item[data-name="${post}"]`)
 
     if (el) {
       el.remove()
