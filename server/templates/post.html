@@ -138,7 +138,7 @@
     <div id="reactions">
     {% for reaction in post.reactions %}
         {% if reaction.mode == "icon" %}
-        <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.value}} : {{reaction.user}}" class="reaction_item">
+        <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.value}} : {{reaction.user}}" class="reaction_item" loading="lazy">
         {% elif reaction.mode == "character" %}
         <div class="reaction_item">
             <div title="{{reaction.value}} : {{reaction.user}}">{{reaction.value}}</div>

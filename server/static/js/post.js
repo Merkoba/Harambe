@@ -466,6 +466,7 @@ function add_reaction(text) {
   }
   else {
     let img = DOM.create(`img`, `reaction_item`)
+    img.loading = `lazy`
     img.src = `/static/icons/${text}.gif`
     img.title = `${text} : You`
     reactions.appendChild(img)
