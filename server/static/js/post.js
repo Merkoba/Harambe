@@ -7,6 +7,7 @@ const YEAR = DAY * 365
 window.onload = function() {
   vars.date_ms = vars.date * 1000
   vars.icons_loaded = false
+  vars.selected_icon = ``
 
   let delay = 30
 
@@ -105,23 +106,26 @@ window.onload = function() {
         filter_icons()
       })
     }
-  }
 
-  DOM.ev(document, `keydown`, (e) => {
-    if (e.key === `Escape`) {
-      if (!DOM.is_hidden(`#icons_modal`)) {
-        let r_input = DOM.el(`#icons_input`)
-
-        if (r_input.value) {
-          r_input.value = ``
-          filter_icons()
-        }
-        else {
-          DOM.hide(`#icons_modal`)
-        }
+    DOM.ev(r_input, `keydown`, (e) => {
+      if (e.key === `Escape`) {
+        esc_icons()
+        e.preventDefault()
       }
-    }
-  })
+      else if (e.key === `Enter`) {
+        enter_icons()
+        e.preventDefault()
+      }
+      else if (e.key === `ArrowUp`) {
+        up_icons()
+        e.preventDefault()
+      }
+      else if (e.key === `ArrowDown`) {
+        down_icons()
+        e.preventDefault()
+      }
+    })
+  }
 }
 
 function timeago(date) {
@@ -337,7 +341,73 @@ function select_first_icon() {
     }
     else if (!DOM.is_hidden(child)) {
       child.classList.add(`selected`)
+      vars.selected_icon = child.textContent
       selected = true
+    }
+  }
+}
+
+function esc_icons() {
+  let r_input = DOM.el(`#icons_input`)
+
+  if (r_input.value) {
+    r_input.value = ``
+    filter_icons()
+  }
+  else {
+    DOM.hide(`#icons_modal`)
+  }
+}
+
+function enter_icons() {
+  if (!vars.selected_icon) {
+    return
+  }
+
+  console.log(vars.selected_icon)
+  hide_icons()
+}
+
+function hide_icons() {
+  DOM.hide(`#icons_modal`)
+}
+
+function up_icons() {
+  let icons = DOM.el(`#icons`)
+  let children = Array.from(icons.children)
+  let visible = children.filter(c => !DOM.is_hidden(c))
+
+  for (let [i, child] of visible.entries()) {
+    if (child.classList.contains(`selected`)) {
+      if (i > 0) {
+        let prev = visible[i - 1]
+        child.classList.remove(`selected`)
+        prev.classList.add(`selected`)
+        vars.selected_icon = prev.textContent
+        prev.scrollIntoView({block: `center`})
+      }
+
+      break
+    }
+  }
+}
+
+function down_icons() {
+  let icons = DOM.el(`#icons`)
+  let children = Array.from(icons.children)
+  let visible = children.filter(c => !DOM.is_hidden(c))
+
+  for (let [i, child] of visible.entries()) {
+    if (child.classList.contains(`selected`)) {
+      if (i < (visible.length - 1)) {
+        let next = visible[i + 1]
+        child.classList.remove(`selected`)
+        next.classList.add(`selected`)
+        vars.selected_icon = next.textContent
+        next.scrollIntoView({block: `center`})
+      }
+
+      break
     }
   }
 }
