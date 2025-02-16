@@ -1,3 +1,5 @@
+import database
+
 def migrate_files_to_posts() -> None:
     conn, c = database.get_conn()
 
