@@ -258,7 +258,7 @@ def message() -> Any:
 # POST
 
 
-@app.route("/post/<string:name>", methods=["GET", "POST"])  # type: ignore
+@app.route("/post/<string:name>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def post(name: str) -> Any:
     user = get_user()
@@ -279,14 +279,6 @@ def post(name: str) -> Any:
 
     show_list = list_visible(user)
 
-    if request.method == "POST":
-        data = request.get_json()
-        used_names = data.get("used_names", [])
-    else:
-        used_names = []
-
-    used_names.append(file.name)
-
     return render_template(
         "post.html",
         file=file,
@@ -300,7 +292,6 @@ def post(name: str) -> Any:
         font_family=config.font_family,
         description=config.description_post,
         show_list=show_list,
-        used_names=used_names,
     )
 
 
@@ -353,6 +344,12 @@ def random_post() -> Any:
         used_names.append(name)
         session["used_names"] = used_names
         return redirect(url_for("post", name=name))
+
+    if used_names:
+        first = used_names[0]
+        used_names = [first]
+        session["used_names"] = used_names
+        return redirect(url_for("post", name=first))
 
     return over()
 

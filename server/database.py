@@ -316,7 +316,7 @@ def update_user_last_date(username: str) -> None:
 def get_random_file(ignore_names: list[str]) -> File | None:
     check_db()
     conn, c = row_conn()
-    query = "select * from files where name not in ({}) order by random() limit 1"
+    query = "select * from files where name not in ({}) and mtype is not null and mtype != '' order by random() limit 1"
     placeholders = ", ".join("?" for _ in ignore_names)
     c.execute(query.format(placeholders), ignore_names)
     row = c.fetchone()
