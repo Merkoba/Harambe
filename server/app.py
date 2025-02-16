@@ -280,11 +280,12 @@ def post(name: str) -> Any:
     show_list = list_visible(user)
     can_react = False
 
-    if config.reactions_enabled:
-        if user:
-            can_react = user.reacter
-        elif config.anon_reacters:
-            can_react = True
+    if len(post.reactions) < config.max_reactions_length:
+        if config.reactions_enabled:
+            if user:
+                can_react = user.reacter
+            elif config.anon_reacters:
+                can_react = True
 
     return render_template(
         "post.html",

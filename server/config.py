@@ -236,6 +236,9 @@ class Config:
         # Allow anons to react in posts
         self.anon_reacters = False
 
+        # Max length for reactions to be stored
+        self.max_reactions_length = 100_000
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -327,6 +330,7 @@ class Config:
             set_value(c, "anon_listers")
             set_value(c, "reactions_enabled")
             set_value(c, "anon_reacters")
+            set_value(c, "max_reactions_length")
 
             # Users
 

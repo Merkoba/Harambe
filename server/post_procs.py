@@ -434,7 +434,7 @@ def react(name: str, text: str, user_name: str) -> tuple[str, int]:
     if not user_name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
-    if len(text) > 100:
+    if len(text) > 50:
         return jsonify({"status": "error", "message": "Reaction is too long"}), 500
 
     if len(text) == 1:
@@ -447,6 +447,9 @@ def react(name: str, text: str, user_name: str) -> tuple[str, int]:
 
     if not post:
         return jsonify({"status": "error", "message": "Post not found"}), 500
+
+    if len(post.reactions) >= config.max_reactions_length:
+        return jsonify({"status": "error", "message": "Too many reactions"}), 500
 
     reaction = f"{text}:{user_name}"
     reactions = post.reactions.split(",")
