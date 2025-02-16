@@ -23,6 +23,7 @@ class File:
     uploader: str
     mtype: str
     view_date: int
+    listed: bool
 
     def full(self) -> str:
         if self.ext:
@@ -43,6 +44,7 @@ class User:
     mark: str
     register_date: int
     last_date: int
+    lister: bool
 
 
 db_path = "database.sqlite3"
@@ -85,13 +87,14 @@ def add_file(
     username: str,
     uploader: str,
     mtype: str,
+    listed: bool,
 ) -> None:
     check_db()
     conn, c = get_conn()
     date = utils.now()
-    values = [name, ext, date, title, 0, original, username, uploader, mtype, date]
+    values = [name, ext, date, title, 0, original, username, uploader, mtype, date, listed]
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype, view_date) values ({placeholders})"
+    query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -194,6 +197,7 @@ def add_user(
     max_size: int = 0,
     can_list: bool = True,
     mark: str = "",
+    lister: bool = True,
 ) -> bool:
     check_db()
 
@@ -211,8 +215,11 @@ def add_user(
         rpm,
         max_size,
         can_list,
-        mark or "",
+        mark,
+        lister,
     ]
+
+    columns = ["username", "password", "admin", "name", "rpm", "max_size", "can_list", "mark", "lister"]
 
     if mode == "add":
         c.execute("select * from users where username = ?", (username,))
@@ -222,11 +229,13 @@ def add_user(
             return False
 
         values.extend([date, date])
+        columns.extend(["register_date", "last_date"])
         placeholders = ", ".join(["?"] * len(values))
-        query = f"insert into users (username, password, admin, name, rpm, max_size, can_list, mark, register_date, last_date) values ({placeholders})"
+        query = f"insert into users ({", ".join(columns)}) values ({placeholders})"
     elif mode == "edit":
         values.append(username)
-        query = "update users set username = ?, password = ?, admin = ?, name = ?, rpm = ?, max_size = ?, can_list = ?, mark = ? where username = ?"
+        clause = ", ".join([f"{col} = ?" for col in columns])
+        query = f"update users set {clause} where username = ?"
     else:
         return False
 
@@ -244,10 +253,11 @@ def make_user(row: dict[str, Any]) -> User:
         name=row.get("name") or "",
         rpm=row.get("rpm") or 0,
         max_size=row.get("max_size") or 0,
-        can_list=bool(row.get("can_list")) or False,
+        can_list=bool(row.get("can_list")) or True,
         mark=row.get("mark") or "",
         register_date=row.get("register_date") or 0,
         last_date=row.get("last_date") or 0,
+        lister=bool(row.get("lister")) or True,
     )
 
 

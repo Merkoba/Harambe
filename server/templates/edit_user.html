@@ -48,6 +48,16 @@
             {% endif %}
         </div>
 
+        <div class="row">
+            <div>Can Post To The List</div>
+
+            {% if (not user) or user.lister %}
+            <input id="lister" name="lister" type="checkbox" checked>
+            {% else %}
+            <input id="lister" name="lister" type="checkbox">
+            {% endif %}
+        </div>
+
         <input type="submit" value="Submit">
 
         <div id="links">

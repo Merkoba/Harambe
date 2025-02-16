@@ -226,6 +226,9 @@ class Config:
         # Content of the description meta tag in posts
         self.description_post: str = "File kindly uploaded by Harambe"
 
+        # Whether anon uploads should be added to the list or not
+        self.anon_listers = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -312,6 +315,7 @@ class Config:
             set_value(c, "requests_per_minute")
             set_value(c, "public_posts")
             set_value(c, "view_delay")
+            set_value(c, "anon_listers")
 
             # Users
 

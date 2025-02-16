@@ -127,8 +127,10 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
 
                     if user:
                         uploader = user.name
+                        listed = user.lister
                     else:
                         uploader = ""
+                        listed = config.anon_listers
 
                     mtype, _ = mimetypes.guess_type(path)
 
@@ -140,6 +142,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                         username,
                         uploader,
                         mtype or "",
+                        listed,
                     )
 
                     database.update_user_last_date(username)

@@ -54,6 +54,8 @@ class User:
     last_date_str: str
     admin_str: str
     can_list_str: str
+    lister: bool
+    lister_str: str
 
 
 user_data: dict[str, UserData] = {}
@@ -66,6 +68,7 @@ def make_user(user: DbUser) -> User:
     can_list_str = "L: Yes" if user.can_list else "L: No"
     rpm_fill = user.rpm or config.requests_per_minute
     max_size_fill = user.max_size or config.max_size_user
+    lister_str = "R: Yes" if user.lister else "R: No"
 
     return User(
         user.username,
@@ -84,6 +87,8 @@ def make_user(user: DbUser) -> User:
         last_date_str,
         admin_str,
         can_list_str,
+        user.lister,
+        lister_str,
     )
 
 
@@ -216,6 +221,11 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     else:
         args["admin"] = [False, "bool"]
 
+    if request.form.get("lister") is not None:
+        args["lister"] = [True, "bool"]
+    else:
+        args["lister"] = [False, "bool"]
+
     uname = args["username"][0]
 
     if not uname:
@@ -266,6 +276,7 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
         n_args["max_size"],
         n_args["can_list"],
         n_args["mark"],
+        n_args["lister"],
     )
 
     return str(n_args["username"])

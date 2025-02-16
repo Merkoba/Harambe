@@ -7,12 +7,13 @@ schema_files = {
     "ext": "text",
     "date": "integer",
     "title": "text",
-    "views": "integer default 0",
+    "views": "integer",
     "original": "text",
     "username": "text",
     "uploader": "text",
     "mtype": "text",
-    "view_date": "integer default 0",
+    "view_date": "integer",
+    "listed": "integer",
 }
 
 schema_users = {
@@ -26,6 +27,7 @@ schema_users = {
     "mark": "text",
     "register_date": "integer",
     "last_date": "integer",
+    "lister": "integer",
 }
 
 
