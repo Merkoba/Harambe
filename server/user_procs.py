@@ -56,6 +56,7 @@ class User:
     can_list_str: str
     lister: bool
     lister_str: str
+    posts: int
 
 
 user_data: dict[str, UserData] = {}
@@ -89,6 +90,7 @@ def make_user(user: DbUser) -> User:
         can_list_str,
         user.lister,
         lister_str,
+        user.posts,
     )
 
 
@@ -168,6 +170,16 @@ def get_users(
         users.sort(key=lambda x: x.can_list, reverse=True)
     elif sort == "can_list_desc":
         users.sort(key=lambda x: x.can_list, reverse=False)
+
+    elif sort == "lister":
+        users.sort(key=lambda x: x.lister, reverse=True)
+    elif sort == "lister_desc":
+        users.sort(key=lambda x: x.lister, reverse=False)
+
+    elif sort == "posts":
+        users.sort(key=lambda x: x.posts, reverse=True)
+    elif sort == "posts_desc":
+        users.sort(key=lambda x: x.posts, reverse=False)
 
     total_str = f"{len(users)}"
 

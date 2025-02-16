@@ -3,6 +3,8 @@ import re
 import database
 
 
+# Files
+
 schema_files = {
     "name": "text primary key default ''",
     "ext": "text default ''",
@@ -19,6 +21,9 @@ schema_files = {
     "sample": "text default ''",
 }
 
+
+# Users
+
 schema_users = {
     "username": "text primary key default ''",
     "password": "text default ''",
@@ -31,6 +36,7 @@ schema_users = {
     "register_date": "integer default 0",
     "last_date": "integer default 0",
     "lister": "integer default 1",
+    "posts": "integer default 0",
 }
 
 

@@ -64,8 +64,8 @@
             <div id="uploader" class="table_cell underline" data-sort="uploader">Uploader</div>
             <div id="size" class="table_cell underline" data-sort="size">Size</div>
             <div id="date" class="table_cell underline" data-sort="date">Date</div>
-            <div id="views" class="table_cell views underline" title="Views" data-sort="views">Views</div>
-            <div id="listed" class="table_cell views underline" title="Views" data-sort="views">Listed</div>
+            <div id="views" class="table_cell small underline" title="Views" data-sort="views">Views</div>
+            <div id="listed" class="table_cell views underline" title="Views" data-sort="listed">Listed</div>
             <div class="table_cell actions">Actions</div>
         </div>
 
@@ -94,10 +94,10 @@
             <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
 
             <!-- Views -->
-            <div class="table_cell views">{{item.views}}</div>
+            <div class="table_cell small">{{item.views}}</div>
 
             <!-- Listed -->
-            <div class="table_cell views">{{item.listed_str}}</div>
+            <div class="table_cell">{{item.listed_str}}</div>
 
             <!-- Actions -->
             <div class="table_cell actions">

@@ -156,6 +156,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                     )
 
                     database.update_user_last_date(username)
+                    database.increase_user_posts(username)
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")

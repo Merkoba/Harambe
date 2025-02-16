@@ -97,7 +97,7 @@ a.linkbutton:hover {
     width: 3rem;
 }
 
-.table_cell.views {
+.table_cell.small {
     flex: 0 0 auto;
     width: 4rem;
 }

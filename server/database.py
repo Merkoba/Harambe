@@ -47,6 +47,7 @@ class User:
     register_date: int
     last_date: int
     lister: bool
+    posts: int
 
 
 db_path = "database.sqlite3"
@@ -264,8 +265,8 @@ def add_user(
             conn.close()
             return False
 
-        values.extend([date, date])
-        columns.extend(["register_date", "last_date"])
+        values.extend([date, date, 0])
+        columns.extend(["register_date", "last_date", "posts"])
         placeholders = ", ".join(["?"] * len(values))
         query = f"insert into users ({', '.join(columns)}) values ({placeholders})"
     elif mode == "edit":
@@ -294,6 +295,7 @@ def make_user(row: dict[str, Any]) -> User:
         register_date=row.get("register_date") or 0,
         last_date=row.get("last_date") or 0,
         lister=bool(row.get("lister")),
+        posts=row.get("posts") or 0,
     )
 
 
@@ -372,3 +374,11 @@ def get_random_file(ignore_names: list[str]) -> File | None:
         return make_file(dict(row))
 
     return None
+
+
+def increase_user_posts(username: str) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("update users set posts = posts + 1 where username = ?", (username,))
+    conn.commit()
+    conn.close()

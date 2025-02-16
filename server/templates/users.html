@@ -73,11 +73,12 @@
             <div id="name" class="table_cell underline" data-sort="name">Name</div>
             {% endif %}
 
-            <div id="limit" class="table_cell underline" data-sort="rpm">RPM</div>
-            <div id="max" class="table_cell underline" data-sort="max_size">Max Size</div>
+            <div id="limit" class="table_cell small underline" data-sort="rpm">RPM</div>
+            <div id="max" class="table_cell small underline" data-sort="max_size">Max</div>
             <div id="list" class="table_cell underline" data-sort="admin">Admin</div>
             <div id="list" class="table_cell underline" data-sort="can_list">List</div>
-            <div id="lister" class="table_cell underline" data-sort="can_list">Lister</div>
+            <div id="lister" class="table_cell underline" data-sort="lister">Lister</div>
+            <div id="posts" class="table_cell small underline" data-sort="posts">Posts</div>
 
             {% if show_marks %}
             <div id="mark" class="table_cell underline" data-sort="mark">Mark</div>
@@ -104,10 +105,10 @@
             {% endif %}
 
             <!-- RPM -->
-            <div class="table_cell">{{item.rpm_fill}}</div>
+            <div class="table_cell small">{{item.rpm_fill}}</div>
 
             <!-- Max Size -->
-            <div class="table_cell">{{item.max_size_fill}}</div>
+            <div class="table_cell small">{{item.max_size_fill}}</div>
 
             <!-- Admin -->
             <div class="table_cell">{{item.admin_str}}</div>
@@ -117,6 +118,9 @@
 
             <!-- Lister -->
             <div class="table_cell">{{item.lister_str}}</div>
+
+            <!-- Posts -->
+            <div class="table_cell small">{{item.posts}}</div>
 
             <!-- Mark -->
             {% if show_marks %}

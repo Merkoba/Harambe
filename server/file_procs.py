@@ -187,6 +187,11 @@ def get_files(
     elif sort == "name_desc":
         files.sort(key=lambda x: x.name, reverse=False)
 
+    elif sort == "listed":
+        files.sort(key=lambda x: x.listed, reverse=True)
+    elif sort == "listed_desc":
+        files.sort(key=lambda x: x.listed, reverse=False)
+
     total_size_str = utils.get_size(total_size)
     total_str = f"{total_size_str} ({len(files)} Files)"
 
