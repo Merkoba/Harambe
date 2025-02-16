@@ -127,8 +127,9 @@ window.onload = function() {
     })
 
     DOM.ev(r_modal, `click`, (e) => {
-      if (e.target.classList.contains(`icon_item`)) {
-        vars.selected_icon = e.target.textContent
+      if (e.target.closest(`.icon_item`)) {
+        let item = e.target.closest(`.icon_item`)
+        vars.selected_icon = item.dataset.icon
         enter_icons()
       }
     })
@@ -312,9 +313,16 @@ async function show_icons() {
     container.innerHTML = ``
 
     for (let icon of json.icons) {
-      let div = DOM.create(`div`, `icon_item`)
-      div.textContent = icon
-      container.appendChild(div)
+      let item = DOM.create(`div`, `icon_item`)
+      let text = DOM.create(`div`, `icon_item_text`)
+      text.textContent = icon
+      item.appendChild(text)
+      let img = DOM.create(`img`, `icon_item_img`)
+      img.loading = `lazy`
+      img.src = `/static/icons/${icon}.gif`
+      item.appendChild(img)
+      item.dataset.icon = icon
+      container.appendChild(item)
     }
 
     vars.icons_loaded = true

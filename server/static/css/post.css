@@ -197,6 +197,23 @@ a.button:hover {
     gap: 0.5rem;
 }
 
+.icon_item {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-content: center;
+}
+
+.icon_item_text {
+    display: flex;
+    align-items: center;
+}
+
+.icon_item_img {
+    display: flex;
+    align-items: center;
+}
+
 .icon_item:hover {
     text-shadow: 0 0 1px var(--text_color);
 }
