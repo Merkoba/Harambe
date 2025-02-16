@@ -84,8 +84,6 @@ def make_database() -> None:
                         f"update {what} set {column} = {defvalue} where {column} is null"
                     )
 
-
-
     add_columns("posts")
     add_columns("users")
 

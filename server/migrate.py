@@ -1,5 +1,4 @@
 # Modules
-import re
 import database
 
 

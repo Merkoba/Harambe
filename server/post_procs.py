@@ -264,7 +264,7 @@ def delete_post(name: str, user: User) -> tuple[str, int]:
                 {"status": "error", "message": "You are not the uploader"}
             ), 500
 
-    do_delete_post(post)
+    do_delete_post(name)
     return jsonify({"status": "ok", "message": "Post deleted successfully"}), 200
 
 
@@ -312,6 +312,8 @@ def delete_all_posts() -> tuple[str, int]:
     for post in database.get_posts():
         do_delete_post(post.name)
 
+    return jsonify({"status": "ok", "message": "All posts deleted"}), 200
+
 
 # Remove old files if limits are exceeded
 def check_storage() -> None:
@@ -340,4 +342,4 @@ def check_storage() -> None:
         oldest_file = files.pop(0)
         total_files -= 1
         total_size -= oldest_file[1]
-        do_delete_file(oldest_file[0].name)
+        do_delete_post(oldest_file[0].name)

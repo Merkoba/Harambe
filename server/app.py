@@ -15,6 +15,7 @@ from flask_limiter.util import get_remote_address  # type: ignore
 # Modules
 import utils
 import procs
+import post_procs
 import user_procs
 from config import config
 from post_procs import Post
