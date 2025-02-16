@@ -53,12 +53,12 @@
 <div id="items">
     <div class="table">
         <div class="table_row table_header">
-            <div class="table_cell underline" data-sort="name">Name</div>
-            <div class="table_cell underline" data-sort="title">Title</div>
-            <div class="table_cell underline" data-sort="uploader">Uploader</div>
-            <div class="table_cell underline" data-sort="size">Size</div>
-            <div id="date" class="table_cell underline" data-sort="date">Date</div>
-            <div id="views" class="table_cell underline views" data-sort="views">Views</div>
+            <div class="table_cell underline" data-sort="name" title="Name of the post">Name</div>
+            <div class="table_cell underline" data-sort="title" title="Title of the post">Title</div>
+            <div class="table_cell underline" data-sort="uploader" title="The user who uploaded this">Uploader</div>
+            <div class="table_cell underline" data-sort="size" title="The size of the file">Size</div>
+            <div id="date" class="table_cell underline" data-sort="date" title="The date when it was posted">Date</div>
+            <div id="views" class="table_cell underline small" data-sort="views" title="The number of times the post has been viewed">Views</div>
         </div>
 
         {% for item in items %}
@@ -81,7 +81,7 @@
             <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
 
             <!-- Views -->
-            <div class="table_cell views" title="{{item.date_3}}">{{item.views}}</div>
+            <div class="table_cell small" title="{{item.date_3}}">{{item.views}}</div>
         </div>
         {% endfor %}
     </div>
