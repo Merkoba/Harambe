@@ -19,15 +19,15 @@ schema_files = {
 schema_users = {
     "username": "text primary key",
     "password": "text",
-    "admin": "integer",
+    "admin": "integer default 0",
     "name": "text",
     "rpm": "integer",
     "max_size": "integer",
-    "can_list": "integer",
+    "can_list": "integer default 1",
     "mark": "text",
     "register_date": "integer",
     "last_date": "integer",
-    "lister": "integer",
+    "lister": "integer default 1",
 }
 
 
