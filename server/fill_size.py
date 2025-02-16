@@ -16,5 +16,5 @@ all_files = Path(path).glob("*")
 for file in all_files:
     if file.is_file():
         size = file.stat().st_size
-        print(f"{file.stem} - {size}")
+        print(f"{file.stem} - {size}")  # noqa
         database.update_file_size(file.stem, size)
