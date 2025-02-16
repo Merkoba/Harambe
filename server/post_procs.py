@@ -17,6 +17,12 @@ from user_procs import User
 
 
 @dataclass
+class Reaction:
+    icon: str
+    user: str
+
+
+@dataclass
 class Post:
     name: str
     ext: str
@@ -41,10 +47,10 @@ class Post:
     listed: bool
     listed_str: str
     post_title: str
-    reactions: list[tuple[str, str]]
+    reactions: list[Reaction]
 
 
-def make_post(post: DbPost, now: int, full: bool = True) -> Post:
+def make_post(post: DbPost, now: int, all_data: bool = True) -> Post:
     name = post.name
     ext = post.ext
     full = post.full()
@@ -66,11 +72,11 @@ def make_post(post: DbPost, now: int, full: bool = True) -> Post:
     listed_str = "L: Yes" if listed else "L: No"
     post_title = title or original or name
 
-    if full:
+    if all_data:
         sample = post.sample
         p_reactions = post.reactions.split(",")
         p_reactions = [r for r in p_reactions if r]
-        reactions = [tuple(r.split(":")) for r in p_reactions]
+        reactions = [Reaction(*r.split(":")) for r in p_reactions]
     else:
         sample = ""
         reactions = []

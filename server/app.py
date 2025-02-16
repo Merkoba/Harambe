@@ -35,10 +35,7 @@ simple_captcha = CAPTCHA(config=config.get_captcha())
 app = simple_captcha.init_app(app)
 
 # Reaction icons
-ICONS = []
-
-for icon in Path("static/icons").glob("*.gif"):
-    ICONS.append(icon.stem)
+ICONS = [icon.stem for icon in Path("static/icons").glob("*.gif")]
 
 
 def get_username() -> str:

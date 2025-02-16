@@ -26,7 +26,7 @@ class Post:
     listed: bool
     size: int
     sample: str
-    reactions: list[str]
+    reactions: str
 
     def full(self) -> str:
         if self.ext:
@@ -401,7 +401,7 @@ def update_file_size(name: str, size: int) -> None:
     conn.close()
 
 
-def edit_post_reactions(name: str, reactions: list[str]) -> None:
+def edit_post_reactions(name: str, reactions: str) -> None:
     check_db()
     conn, c = get_conn()
     c.execute("update posts set reactions = ? where name = ?", (reactions, name))

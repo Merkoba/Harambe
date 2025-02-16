@@ -155,7 +155,4 @@ def is_valid_username(username: str) -> bool:
     if not username.isalnum():
         return False
 
-    if any(c.isupper() for c in username):
-        return False
-
-    return True
+    return not any(c.isupper() for c in username)
