@@ -141,7 +141,7 @@ def index() -> Any:
     is_user = bool(user)
 
     if (not user) and (not config.anon_uploads_enabled):
-        return render_template("fallback.html")
+        return redirect(url_for("login"))
 
     if request.method == "POST":
         try:
