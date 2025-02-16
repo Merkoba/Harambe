@@ -142,10 +142,10 @@ window.onload = () => {
         }
 
         if (opts.some(x => x.includes(value))) {
-          item.style.display = `flex`
+          DOM.show(item)
         }
         else {
-          item.style.display = `none`
+          DOM.hide(item)
         }
       }
     })

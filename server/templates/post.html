@@ -37,6 +37,13 @@
     </form>
 </dialog>
 
+<div id="icons_modal" class="hidden">
+    <div id="icons_container">
+        <input type="text" id="icons_input" placeholder="Type To Filter">
+        <div id="icons"></div>
+    </div>
+</div>
+
 <div id="main">
     <div id="top">
         <div id="buttons">
@@ -75,7 +82,7 @@
 
     <!-- Uploader -->
     <div>
-        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{post.views}}
+        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{post.views}}<span class="sep">|</span><span id="react" class="button">React</span>
     </div>
 
     {% if post.can_embed %}
@@ -84,7 +91,7 @@
         <div>
             <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}">
 
-            <div id="modal">
+            <div id="modal" class="hidden">
                 <div id="modal_content">
                     <img id="modal_image" src="">
                 </div>

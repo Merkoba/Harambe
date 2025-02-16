@@ -191,6 +191,7 @@ DOM.hidden = (num = 1) => {
 
 // Check if an element is hidden
 DOM.is_hidden = (el, num = 1) => {
+  el = DOM.element(el)
   return el.classList.contains(DOM.hidden(num))
 }
 

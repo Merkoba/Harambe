@@ -162,3 +162,7 @@ select {
     font-size: 1rem;
     min-width: 9rem;
 }
+
+.hidden {
+    display: none !important;
+}

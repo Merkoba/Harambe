@@ -6,6 +6,8 @@ const YEAR = DAY * 365
 
 window.onload = function() {
   vars.date_ms = vars.date * 1000
+  vars.icons_loaded = false
+
   let delay = 30
 
   setInterval(function() {
@@ -54,7 +56,7 @@ window.onload = function() {
       let modal_image = DOM.el(`#modal_image`)
       modal_image.src = image.src
       let modal = DOM.el(`#modal`)
-      modal.style.display = `flex`
+      DOM.show(modal)
     })
   }
 
@@ -62,7 +64,7 @@ window.onload = function() {
 
   if (modal) {
     DOM.ev(modal, `click`, () => {
-      modal.style.display = `none`
+      DOM.hide(modal)
     })
   }
 
@@ -76,6 +78,48 @@ window.onload = function() {
 
     if (files && (files.length > 0)) {
       window.location = `/`
+    }
+  })
+
+  let react = DOM.el(`#react`)
+
+  if (react) {
+    DOM.ev(react, `click`, () => {
+      show_icons()
+    })
+  }
+
+  let r_modal = DOM.el(`#icons_modal`)
+
+  if (r_modal) {
+    DOM.ev(r_modal, `click`, (e) => {
+      if (e.target.id === `icons_modal`) {
+        DOM.hide(r_modal)
+      }
+    })
+
+    let r_input = DOM.el(`#icons_input`)
+
+    if (r_input) {
+      DOM.ev(r_input, `input`, () => {
+        filter_icons()
+      })
+    }
+  }
+
+  DOM.ev(document, `keydown`, (e) => {
+    if (e.key === `Escape`) {
+      if (!DOM.is_hidden(`#icons_modal`)) {
+        let r_input = DOM.el(`#icons_input`)
+
+        if (r_input.value) {
+          r_input.value = ``
+          filter_icons()
+        }
+        else {
+          DOM.hide(`#icons_modal`)
+        }
+      }
     }
   })
 }
@@ -231,4 +275,69 @@ function start_flash(file) {
   let container = DOM.el(`#flash`)
   container.appendChild(player)
   player.ruffle().load(`/${vars.file_path}/${file}`)
+}
+
+async function show_icons() {
+  let modal = DOM.el(`#icons_modal`)
+
+  if (!vars.icons_loaded) {
+    let response = await fetch(`/get_icons`)
+
+    if (!response.ok) {
+      print_error(response.status)
+      return
+    }
+
+    let json = await response.json()
+    let container = DOM.el(`#icons`)
+    container.innerHTML = ``
+
+    for (let icon of json.icons) {
+      let div = DOM.create(`div`)
+      div.textContent = icon
+      container.appendChild(div)
+    }
+
+    vars.icons_loaded = true
+  }
+
+  DOM.show(modal)
+  let input = DOM.el(`#icons_input`)
+  input.value = ``
+  input.focus()
+  select_first_icon()
+}
+
+function filter_icons() {
+  let r_input = DOM.el(`#icons_input`)
+  let value = r_input.value.toLowerCase()
+  let icons = DOM.el(`#icons`)
+  let children = icons.children
+
+  for (let child of children) {
+    if (child.textContent.includes(value)) {
+      DOM.show(child)
+    }
+    else {
+      DOM.hide(child)
+    }
+  }
+
+  select_first_icon()
+}
+
+function select_first_icon() {
+  let icons = DOM.el(`#icons`)
+  let children = icons.children
+  let selected = false
+
+  for (let child of children) {
+    if (selected) {
+      child.classList.remove(`selected`)
+    }
+    else if (!DOM.is_hidden(child)) {
+      child.classList.add(`selected`)
+      selected = true
+    }
+  }
 }
