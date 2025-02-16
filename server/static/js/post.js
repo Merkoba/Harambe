@@ -22,8 +22,8 @@ window.onload = function() {
       let value = edit_dialog.returnValue
 
       if (value === `delete`) {
-        if (confirm(`Delete this file?`)) {
-          delete_file()
+        if (confirm(`Delete this post?`)) {
+          delete_post()
         }
       }
       else if (value === `title`) {
@@ -180,13 +180,13 @@ async function edit_title() {
   }
 }
 
-async function delete_file() {
-  let response = await fetch(`/delete_file`, {
+async function delete_post() {
+  let response = await fetch(`/delete_post`, {
     method: `POST`,
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({file: vars.full}),
+    body: JSON.stringify({name: vars.name}),
   })
 
   if (response.ok) {

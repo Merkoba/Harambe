@@ -57,7 +57,7 @@ class Config:
 
         self.path: Path = Path("config.toml")
 
-        # Users can upload files
+        # Users who can make posts
         # Dict object: name, limit, id (optional)
         self.users: list[User] = []
 
@@ -104,16 +104,17 @@ class Config:
         # Redis is used for the limiter
         self.redis_port: int = 6379
 
-        # Uppercase the file ids
-        # The id is used to name the files
-        self.uppercase_ids: bool = False
+        # Uppercase the post names
+        # This is used to name the files
+        self.uppercase_names: bool = False
 
-        # Maximum number of files to keep stored
-        # After this the older files will be deleted
-        self.max_files: int = 10_000
+        # Maximum number of posts to keep stored
+        # After this the older posts will be deleted
+        # The files are also deleted
+        self.max_posts: int = 10_000
 
         # Maximum storage in GB
-        # After this the older files will be deleted
+        # After this the older posts will be deleted
         self.max_storage: int = 10
 
         # Show the image in the web interface
@@ -122,9 +123,9 @@ class Config:
         # Default page size for the admin page
         self.admin_page_size: int = 50
 
-        # Length of the file name
+        # Length of the post name
         # Minimum is 10, maximum is 26
-        self.file_name_length: int = 10
+        self.post_name_length: int = 10
 
         # Requests per minute limit for most endpoints
         self.rate_limit: int = 20
@@ -155,7 +156,7 @@ class Config:
         # Show the max file size in the web interface
         self.show_max_size: bool = True
 
-        # Enable a public page to list files
+        # Enable a public page to list posts
         self.list_enabled: bool = True
 
         # List is private and requires being logged in
@@ -164,11 +165,11 @@ class Config:
         # Default page size for the list page
         self.list_page_size: int = 50
 
-        # Maximum of files allowed to be shown in the list page
-        # If 0 it will allow showing all files
-        self.list_max_files: int = 100
+        # Maximum posts allowed to be shown in the list page
+        # If 0 it will allow showing all posts
+        self.list_max_posts: int = 100
 
-        # Allow admins to delete files using the admin page or endpoints
+        # Allow admins to delete posts using the admin page or endpoints
         self.allow_delete: bool = True
 
         # The title of the main index page
@@ -184,7 +185,7 @@ class Config:
         # Maximum length allowed for titles
         self.max_title_length: int = 2000
 
-        # Allow titles on file uploads
+        # Allow titles on post uploads
         self.allow_titles: bool = True
 
         # Enable uploads through the web interface
@@ -208,7 +209,7 @@ class Config:
         # Allow or block media hotlinking
         self.allow_hotlinks: bool = True
 
-        # Max file content to read when getting files
+        # Max content to read when text files are uploaded
         self.sample_size: int = 100_000
 
         # Default requests per minute for uploads
@@ -234,8 +235,8 @@ class Config:
     def get_max_storage(self) -> int:
         return self.max_storage * 1_000_000_000
 
-    def get_file_name_length(self) -> int:
-        return max(min(self.file_name_length, 26), 10)
+    def get_post_name_length(self) -> int:
+        return max(min(self.post_name_length, 26), 10)
 
     def get_captcha(self) -> dict[str, Any]:
         return {
@@ -280,11 +281,11 @@ class Config:
             set_value(c, "max_size_anon")
             set_value(c, "redis_port")
             set_value(c, "uppercase_ids")
-            set_value(c, "max_files")
+            set_value(c, "max_posts")
             set_value(c, "max_storage")
             set_value(c, "show_image")
             set_value(c, "admin_page_size")
-            set_value(c, "file_name_length")
+            set_value(c, "post_name_length")
             set_value(c, "rate_limit")
             set_value(c, "background_color")
             set_value(c, "accent_color")
@@ -297,7 +298,7 @@ class Config:
             set_value(c, "list_enabled")
             set_value(c, "list_private")
             set_value(c, "list_page_size")
-            set_value(c, "list_max_files")
+            set_value(c, "list_max_posts")
             set_value(c, "allow_delete")
             set_value(c, "main_title")
             set_value(c, "image_tooltip")

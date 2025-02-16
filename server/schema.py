@@ -1,11 +1,13 @@
-# Modules
+# Standard
 import re
+
+# Modules
 import database
 
 
-# Files
+# Posts
 
-schema_files = {
+schema_posts = {
     "name": "text primary key default ''",
     "ext": "text default ''",
     "date": "integer default 0",
@@ -41,8 +43,8 @@ schema_users = {
 
 
 def get_schema(what: str) -> str:
-    if what == "files":
-        sch = schema_files
+    if what == "posts":
+        sch = schema_posts
     elif what == "users":
         sch = schema_users
     else:
@@ -55,15 +57,15 @@ def get_schema(what: str) -> str:
 def make_database() -> None:
     conn, c = database.get_conn()
 
-    c.execute(f"create table if not exists files ({get_schema('files')})")
+    c.execute(f"create table if not exists posts ({get_schema('posts')})")
     c.execute(f"create table if not exists users ({get_schema('users')})")
 
     def add_columns(what: str) -> None:
         c.execute(f"pragma table_info({what})")
         columns = [info[1] for info in c.fetchall()]
 
-        if what == "files":
-            schema = schema_files
+        if what == "posts":
+            schema = schema_posts
         elif what == "users":
             schema = schema_users
         else:
@@ -82,7 +84,9 @@ def make_database() -> None:
                         f"update {what} set {column} = {defvalue} where {column} is null"
                     )
 
-    add_columns("files")
+
+
+    add_columns("posts")
     add_columns("users")
 
     conn.commit()

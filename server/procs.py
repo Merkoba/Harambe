@@ -100,12 +100,12 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                 ext = pfile.suffix.lower()
                 name = pfile.stem
                 u = ulid.new()
-                name = u.str[: config.get_file_name_length()]
+                name = u.str[: config.get_post_name_length()]
 
                 if user and user.mark:
                     name = f"{name}_{user.mark}".strip()
 
-                if not config.uppercase_ids:
+                if not config.uppercase_names:
                     name = name.lower()
 
                 if ext:
@@ -142,7 +142,7 @@ def upload(request: Any, mode: str = "normal", username: str = "") -> tuple[bool
                     else:
                         sample = ""
 
-                    database.add_file(
+                    database.add_post(
                         name,
                         cext,
                         title,
@@ -208,12 +208,12 @@ def edit_title(name: str, title: str, user: User) -> tuple[str, int]:
         if not config.allow_edit:
             return jsonify({"status": "error", "message": "Editing is disabled"}), 500
 
-        db_file = database.get_file(name)
+        db_post = database.get_post(name)
 
-        if not db_file:
+        if not db_post:
             return jsonify({"status": "error", "message": "File not found"}), 500
 
-        if db_file.username != user.username:
+        if db_post.username != user.username:
             return jsonify(
                 {"status": "error", "message": "You are not the uploader"}
             ), 500

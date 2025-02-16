@@ -16,9 +16,8 @@ from flask_limiter.util import get_remote_address  # type: ignore
 import utils
 import procs
 import user_procs
-import file_procs
 from config import config
-from file_procs import File
+from post_procs import Post
 from user_procs import User
 
 
@@ -267,13 +266,13 @@ def post(name: str) -> Any:
         if not user:
             return over()
 
-    file = file_procs.get_file(name)
+    post = post_procs.get_post(name)
 
-    if not file:
+    if not post:
         return over()
 
     if user:
-        owned = user.admin or ((file.username == user.username) and config.allow_edit)
+        owned = user.admin or ((post.username == user.username) and config.allow_edit)
     else:
         owned = False
 
@@ -281,7 +280,7 @@ def post(name: str) -> Any:
 
     return render_template(
         "post.html",
-        file=file,
+        post=post,
         owned=owned,
         file_path=config.file_path,
         background_color=config.background_color,
@@ -293,6 +292,42 @@ def post(name: str) -> Any:
         description=config.description_post,
         show_list=show_list,
     )
+
+
+@app.route("/next/<string:current>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@list_required
+def next_post(current: str) -> Any:
+    name = post_procs.get_next_post(current)
+
+    if not name:
+        return redirect(url_for("post", name=current))
+
+    return redirect(url_for("post", name=name))
+
+
+@app.route("/random", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@list_required
+def random_post() -> Any:
+    used_names = session["used_names"] if "used_names" in session else []
+    name = post_procs.get_random_post(used_names)
+
+    if name:
+        used_names.append(name)
+        session["used_names"] = used_names
+        return redirect(url_for("post", name=name))
+
+    if used_names:
+        first = used_names[0]
+        used_names = [first]
+        session["used_names"] = used_names
+        return redirect(url_for("post", name=first))
+
+    return over()
+
+
+# FILE
 
 
 @app.route(f"/{config.file_path}/<path:name>", methods=["GET"])  # type: ignore
@@ -312,46 +347,13 @@ def get_file(name: str, original: str | None = None) -> Any:
         if not user:
             return over()
 
-    file = file_procs.get_file(name)
+    post = post_procs.get_post(name)
 
-    if not file:
+    if not post:
         return over()
 
     fd = utils.files_dir()
-    return send_file(fd / file.full, download_name=original, max_age=config.max_age)
-
-
-@app.route("/next/<string:current>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@list_required
-def next_post(current: str) -> Any:
-    name = file_procs.get_next_file(current)
-
-    if not name:
-        return redirect(url_for("post", name=current))
-
-    return redirect(url_for("post", name=name))
-
-
-@app.route("/random", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@list_required
-def random_post() -> Any:
-    used_names = session["used_names"] if "used_names" in session else []
-    name = file_procs.get_random_file(used_names)
-
-    if name:
-        used_names.append(name)
-        session["used_names"] = used_names
-        return redirect(url_for("post", name=name))
-
-    if used_names:
-        first = used_names[0]
-        used_names = [first]
-        session["used_names"] = used_names
-        return redirect(url_for("post", name=first))
-
-    return over()
+    return send_file(fd / post.full, download_name=original, max_age=config.max_age)
 
 
 # ADMIN
@@ -369,17 +371,17 @@ def admin_fallback() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
 def admin(what: str, page: int = 1) -> Any:
-    if what not in ["files", "users"]:
+    if what not in ["posts", "users"]:
         return redirect(url_for("index"))
 
     query = request.args.get("query", "")
-    def_date = "date" if what == "files" else "register_date"
+    def_date = "date" if what == "posts" else "register_date"
     sort = request.args.get("sort", def_date)
     page_size = request.args.get("page_size", config.admin_page_size)
-    items: list[File] | list[User]
+    items: list[Post] | list[User]
 
-    if what == "files":
-        items, total, next_page = file_procs.get_files(
+    if what == "posts":
+        items, total, next_page = post_procs.get_posts(
             page, page_size, query=query, sort=sort
         )
     else:
@@ -388,7 +390,7 @@ def admin(what: str, page: int = 1) -> Any:
         )
 
     def_page_size = page_size == config.admin_page_size
-    html_page = "files.html" if what == "files" else "users.html"
+    html_page = "posts.html" if what == "posts" else "users.html"
 
     return render_template(
         html_page,
@@ -405,34 +407,34 @@ def admin(what: str, page: int = 1) -> Any:
 # FILES
 
 
-@app.route("/delete_files", methods=["POST"])  # type: ignore
+@app.route("/delete_posts", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @admin_required
-def delete_files() -> Any:
+def delete_posts() -> Any:
     data = request.get_json()
-    files = data.get("files", None)
-    return file_procs.delete_files(files)
+    names = data.get("names", None)
+    return post_procs.delete_posts(names)
 
 
-@app.route("/delete_all_files", methods=["POST"])  # type: ignore
+@app.route("/delete_all_posts", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(2))  # type: ignore
 @admin_required
-def delete_all_files() -> Any:
-    return file_procs.delete_all_files()
+def delete_all_posts() -> Any:
+    return post_procs.delete_all_posts()
 
 
-@app.route("/delete_file", methods=["POST"])  # type: ignore
+@app.route("/delete_post", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @login_required
-def delete_file() -> Any:
+def delete_post() -> Any:
     data = request.get_json()
-    file = data.get("file", None)
+    name = data.get("name", None)
     user = get_user()
 
     if not user:
         return over()
 
-    return file_procs.delete_file(file, user=user)
+    return post_procs.delete_post(name, user=user)
 
 
 @app.route("/edit_title", methods=["POST"])  # type: ignore
@@ -510,10 +512,10 @@ def show_list(page: int = 1) -> Any:
     sort = request.args.get("sort", "date")
     query = request.args.get("query", "")
 
-    files, total, next_page = file_procs.get_files(
+    posts, total, next_page = post_procs.get_posts(
         page,
         page_size,
-        max_files=config.list_max_files,
+        max_posts=config.list_max_posts,
         sort=sort,
         query=query,
         only_listed=True,
@@ -524,7 +526,7 @@ def show_list(page: int = 1) -> Any:
     return render_template(
         "list.html",
         mode="list",
-        files=files,
+        posts=posts,
         total=total,
         page=page,
         next_page=next_page,
@@ -558,8 +560,8 @@ def show_history(page: int = 1) -> Any:
     if not username:
         return redirect(url_for("index"))
 
-    files, total, next_page = file_procs.get_files(
-        page, page_size, max_files=config.list_max_files, username=username
+    posts, total, next_page = post_procs.get_posts(
+        page, page_size, max_posts=config.list_max_posts, username=username
     )
 
     def_page_size = page_size == config.list_page_size
@@ -567,7 +569,7 @@ def show_history(page: int = 1) -> Any:
     return render_template(
         "list.html",
         mode="history",
-        files=files,
+        posts=posts,
         total=total,
         page=page,
         next_page=next_page,

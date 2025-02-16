@@ -2,19 +2,19 @@
 
 {% block head %}
 <meta name="description" content="{{description}}">
-<title>{{file.post_title}}</title>
+<title>{{post.post_title}}</title>
 <link rel="stylesheet" href="/static/css/post.css">
 
 <script>
     const vars = {}
-    vars.name = `{{file.name}}`
-    vars.full = `{{file.full}}`
-    vars.date = {{file.date}}
-    vars.title = `{{file.title}}`
-    vars.original = `{{file.original}}`
-    vars.original_full = `{{file.original_full}}`
-    vars.mtype = `{{file.mtype}}`
-    vars.sample = `{{file.sample}}`
+    vars.name = `{{post.name}}`
+    vars.full = `{{post.full}}`
+    vars.date = {{post.date}}
+    vars.title = `{{post.title}}`
+    vars.original = `{{post.original}}`
+    vars.original_full = `{{post.original_full}}`
+    vars.mtype = `{{post.mtype}}`
+    vars.sample = `{{post.sample}}`
     vars.file_path = `{{file_path}}`
 </script>
 
@@ -43,7 +43,7 @@
             <div class="sep">|</div>
             <a href="/list" class="button">List</a>
             <div class="sep">|</div>
-            <a href="/next/{{file.name}}" class="button">Next</a>
+            <a href="/next/{{post.name}}" class="button">Next</a>
             <div class="sep">|</div>
             <a href="/random">Random</a>
             {% endif %}
@@ -54,8 +54,8 @@
         {% endif %}
         </div>
 
-        {% if file.title or file.original %}
-        <div id="title">{{file.title or file.original}}</div>
+        {% if post.title or post.original %}
+        <div id="title">{{post.title or post.original}}</div>
         {% endif %}
     </div>
 
@@ -63,24 +63,24 @@
 
     <!-- File -->
     <div id="file">
-        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{file.name}}/{{file.original_full}}">{{file.full}}</a><span class="sep">|</span>{{file.size_str}}<span class="sep">|</span>{{file.mtype or 'No type detected'}}
+        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}">{{post.full}}</a><span class="sep">|</span>{{post.size_str}}<span class="sep">|</span>{{post.mtype or 'No type detected'}}
     </div>
 
     <!-- Date -->
     <div>
-        <span class="title">Date:</span><span id="date_1">{{file.date_1}}</span><span class="sep">|</span><span id="date_2">{{file.date_2}}</span><span class="sep">|</span><span id="ago">{{file.ago}}</span>
+        <span class="title">Date:</span><span id="date_1">{{post.date_1}}</span><span class="sep">|</span><span id="date_2">{{post.date_2}}</span><span class="sep">|</span><span id="ago">{{post.ago}}</span>
     </div>
 
     <!-- Uploader -->
     <div>
-        <span class="title">Uploader:</span>{{file.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{file.views}}
+        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{post.views}}
     </div>
 
-    {% if file.can_embed %}
+    {% if post.can_embed %}
     <div id="embed">
-        {% if file.mtype.startswith("image/") %}
+        {% if post.mtype.startswith("image/") %}
         <div>
-            <img id="image" src="/{{file_path}}/{{file.name}}/{{file.original_full}}">
+            <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}">
 
             <div id="modal">
                 <div id="modal_content">
@@ -90,25 +90,25 @@
         </div>
         {% endif %}
 
-        {% if file.mtype.startswith("video/") or file.mtype.startswith("audio/") %}
+        {% if post.mtype.startswith("video/") or post.mtype.startswith("audio/") %}
         <div>
-            <video id="video" src="/{{file_path}}/{{file.name}}" controls preload="none"></video>
+            <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none"></video>
         </div>
         {% endif %}
 
-        {% if file.mtype.startswith("text/") %}
-            {% if file.mtype == "text/markdown" %}
+        {% if post.mtype.startswith("text/") %}
+            {% if post.mtype == "text/markdown" %}
             <div>
-                <div id="markdown_view" class="text_embed">{{file.sample}}</div>
+                <div id="markdown_view" class="text_embed">{{post.sample}}</div>
             </div>
             {% else %}
             <div>
-                <div id="text_view" class="text_embed">{{file.sample}}</div>
+                <div id="text_view" class="text_embed">{{post.sample}}</div>
             </div>
             {% endif %}
         {% endif %}
 
-        {% if file.mtype.startswith("application/") and ("flash" in file.mtype) %}
+        {% if post.mtype.startswith("application/") and ("flash" in post.mtype) %}
         <div>
             <div id="flash"></div>
         </div>

@@ -1,4 +1,4 @@
-let selected_files = []
+let selected_posts = []
 let selected_users = []
 let date_mode = `ago`
 
@@ -16,7 +16,7 @@ window.onload = () => {
       if (vars.mode === `users`) {
         window.open(`/edit_user/${item.dataset.username}`, '_blank');
       }
-      else if (vars.mode === `files`) {
+      else if (vars.mode === `posts`) {
         edit_title(item)
       }
     }
@@ -26,9 +26,9 @@ window.onload = () => {
         selected_users = [e.target.closest(`.item`)]
         delete_users()
       }
-      else if (vars.mode === `files`) {
-        selected_files = [e.target.closest(`.item`)]
-        delete_files()
+      else if (vars.mode === `posts`) {
+        selected_posts = [e.target.closest(`.item`)]
+        delete_posts()
       }
     }
 
@@ -81,9 +81,9 @@ window.onload = () => {
             delete_normal_users()
         }
       }
-      else if (vars.mode === `files`) {
-        if (confirm(`Delete ALL files ?`)) {
-          delete_all_files()
+      else if (vars.mode === `posts`) {
+        if (confirm(`Delete ALL posts ?`)) {
+          delete_all_posts()
         }
       }
     })
@@ -121,7 +121,7 @@ window.onload = () => {
           let list = item.dataset.can_list.toLowerCase().replace(`:`, ``).trim()
           opts = [username, name, rpm, max_size, mark, reg_date, last_date, admin, list]
         }
-        else if (vars.mode === `files`) {
+        else if (vars.mode === `posts`) {
           let name = item.dataset.name.toLowerCase()
           let ago = item.dataset.ago.toLowerCase()
           let date = item.dataset.date.toLowerCase()
@@ -293,43 +293,43 @@ function on_page_select_change(page_select) {
   window.location.href = url.href
 }
 
-function delete_files() {
-  if (selected_files.length === 0) {
+function delete_posts() {
+  if (selected_posts.length === 0) {
     return
   }
 
   let size = 0
 
-  for (let file of selected_files) {
-    size += parseFloat(file.dataset.size)
+  for (let post of selected_posts) {
+    size += parseFloat(post.dataset.size)
   }
 
   size = Math.round(size * 100) / 100
-  let s = singplural(`file`, selected_files.length)
+  let s = singplural(`post`, selected_posts.length)
 
-  if (confirm(`Delete ${selected_files.length} ${s} (${size_string(size)}) ?`)) {
-    let files = []
+  if (confirm(`Delete ${selected_posts.length} ${s} (${size_string(size)}) ?`)) {
+    let posts = []
 
-    for (let file of selected_files) {
-      files.push(file.dataset.full)
+    for (let post of selected_posts) {
+      posts.push(post.dataset.full)
     }
 
-    delete_selected_files(files)
+    delete_selected_posts(posts)
   }
 }
 
-async function delete_selected_files(files) {
+async function delete_selected_posts(names) {
   try {
-    let response = await fetch(`/delete_files`, {
+    let response = await fetch(`/delete_posts`, {
       method: `POST`,
       headers: {
         "Content-Type": `application/json`,
       },
-      body: JSON.stringify({files}),
+      body: JSON.stringify({names}),
     })
 
     if (response.ok) {
-      remove_files(files)
+      remove_posts(names)
     }
     else {
       print_error(response.status)
@@ -340,9 +340,9 @@ async function delete_selected_files(files) {
   }
 }
 
-function remove_files(files) {
-  for (let file of files) {
-    let el = DOM.el(`.item[data-full="${file}"]`)
+function remove_posts(posts) {
+  for (let post of posts) {
+    let el = DOM.el(`.item[data-full="${post}"]`)
 
     if (el) {
       el.remove()
@@ -350,9 +350,9 @@ function remove_files(files) {
   }
 }
 
-async function delete_all_files() {
+async function delete_all_posts() {
   try {
-    let response = await fetch(`/delete_all_files`, {
+    let response = await fetch(`/delete_all_posts`, {
       method: `POST`,
       headers: {
         "Content-Type": `application/json`,
@@ -489,9 +489,9 @@ function delete_selected() {
     selected_users = items
     delete_users()
   }
-  else if (vars.mode === `files`) {
-    selected_files = items
-    delete_files()
+  else if (vars.mode === `posts`) {
+    selected_posts = items
+    delete_posts()
   }
 }
 

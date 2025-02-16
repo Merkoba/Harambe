@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 
 {% block head %}
-<title>Files</title>
-<link rel="stylesheet" href="/static/css/admin
-.css">
+<title>Posts</title>
+<link rel="stylesheet" href="/static/css/admin.css">
 
 <script>
     const vars = {}
-    vars.mode = `files`
+    vars.mode = `posts`
     vars.page_size = `{{page_size}}`
     vars.def_page_size = {{def_page_size | tojson}}
     vars.sort = `{{sort}}`
@@ -33,9 +32,9 @@
 
     {% if page > 1 %}
         {% if page > 2 %}
-        <a class="linkbutton" href="/admin/files/{{page - 1}}?page_size={{page_size}}" title="Go to the previous page">Prev</a>
+        <a class="linkbutton" href="/admin/posts/{{page - 1}}?page_size={{page_size}}" title="Go to the previous page">Prev</a>
         {% else %}
-        <a class="linkbutton" href="/admin/files?page_size={{page_size}}" title="Go to the previous page">Prev</a>
+        <a class="linkbutton" href="/admin/posts?page_size={{page_size}}" title="Go to the previous page">Prev</a>
         {% endif %}
     {% else %}
     <div class="">Prev</div>
@@ -44,7 +43,7 @@
     <div class="sep">|</div>
 
     {% if next_page %}
-    <a class="linkbutton" href="/admin/files/{{page + 1}}?page_size={{page_size}}" title="Go to the next page">Next</a>
+    <a class="linkbutton" href="/admin/posts/{{page + 1}}?page_size={{page_size}}" title="Go to the next page">Next</a>
     {% else %}
     <div class="">Next</div>
     {% endif %}
@@ -58,14 +57,14 @@
 <div id="items">
     <div class="table">
         <div class="table_row table_header">
-            <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
-            <div id="name" class="table_cell underline" data-sort="name">Name</div>
-            <div id="title" class="table_cell underline" data-sort="title">Title</div>
-            <div id="uploader" class="table_cell underline" data-sort="uploader">Uploader</div>
-            <div id="size" class="table_cell underline" data-sort="size">Size</div>
-            <div id="date" class="table_cell underline" data-sort="date">Date</div>
-            <div id="views" class="table_cell small underline" title="Views" data-sort="views">Views</div>
-            <div id="listed" class="table_cell views underline" title="Views" data-sort="listed">Listed</div>
+            <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
+            <div id="name" class="table_cell underline" data-sort="name" title="The name or id of the post">Name</div>
+            <div id="title" class="table_cell underline" data-sort="title" title="The title of the post">Title</div>
+            <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">Uploader</div>
+            <div id="size" class="table_cell underline" data-sort="size" title="The size of the file">Size</div>
+            <div id="date" class="table_cell underline" data-sort="date" title="The date when this post was created">Date</div>
+            <div id="views" class="table_cell small underline" title="Views" data-sort="views" title="The number of times the post has been viewed">Views</div>
+            <div id="listed" class="table_cell views underline" title="Views" data-sort="listed" title="The post appears in the list">Listed</div>
             <div class="table_cell actions">Actions</div>
         </div>
 

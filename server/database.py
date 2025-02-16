@@ -12,7 +12,7 @@ import utils
 
 
 @dataclass
-class File:
+class Post:
     name: str
     ext: str
     date: int
@@ -65,7 +65,7 @@ def check_db() -> None:
     tables = [table[0] for table in c.fetchall()]
     conn.close()
 
-    if ("files" not in tables) or ("users" not in tables):
+    if ("posts" not in tables) or ("users" not in tables):
         sys.exit(msg)
 
 
@@ -82,7 +82,7 @@ def row_conn() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
     return conn, c
 
 
-def add_file(
+def add_post(
     name: str,
     ext: str,
     title: str,
@@ -115,14 +115,14 @@ def add_file(
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into files (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed, size, sample) values ({placeholders})"
+    query = f"insert into posts (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed, size, sample) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
 
 
-def make_file(row: dict[str, Any]) -> File:
-    return File(
+def make_post(row: dict[str, Any]) -> Post:
+    return Post(
         name=row["name"],
         ext=row["ext"],
         date=row["date"],
@@ -139,33 +139,33 @@ def make_file(row: dict[str, Any]) -> File:
     )
 
 
-def get_file(name: str) -> File | None:
+def get_post(name: str) -> Post | None:
     check_db()
     conn, c = row_conn()
-    c.execute("select * from files where name = ?", (name,))
+    c.execute("select * from posts where name = ?", (name,))
     row = c.fetchone()
     conn.close()
 
     if row:
-        return make_file(dict(row))
+        return make_post(dict(row))
 
     return None
 
 
-def get_files() -> list[File]:
+def get_posts() -> list[Post]:
     check_db()
     conn, c = row_conn()
-    c.execute("select * from files")
+    c.execute("select * from posts")
     rows = c.fetchall()
     conn.close()
 
-    return [make_file(dict(row)) for row in rows]
+    return [make_post(dict(row)) for row in rows]
 
 
-def delete_file(name: str) -> None:
+def delete_post(name: str) -> None:
     check_db()
     conn, c = get_conn()
-    c.execute("delete from files where name = ?", (name,))
+    c.execute("delete from posts where name = ?", (name,))
     conn.commit()
     conn.close()
 
@@ -174,7 +174,7 @@ def increase_views(name: str) -> None:
     check_db()
     conn, c = get_conn()
     c.execute(
-        "update files set views = views + 1, view_date = ? where name = ?",
+        "update posts set views = views + 1, view_date = ? where name = ?",
         (utils.now(), name),
     )
     conn.commit()
@@ -184,16 +184,16 @@ def increase_views(name: str) -> None:
 def edit_title(name: str, title: str) -> None:
     check_db()
     conn, c = get_conn()
-    c.execute("update files set title = ? where name = ?", (title, name))
+    c.execute("update posts set title = ? where name = ?", (title, name))
     conn.commit()
     conn.close()
 
 
-def get_next_file(current: str) -> File | None:
+def get_next_post(current: str) -> Post | None:
     check_db()
     conn, c = row_conn()
 
-    c.execute("select * from files where name = ?", (current,))
+    c.execute("select * from posts where name = ?", (current,))
     current_row = c.fetchone()
 
     if not current_row:
@@ -202,14 +202,14 @@ def get_next_file(current: str) -> File | None:
 
     date = current_row["date"]
     c.execute(
-        "select * from files where date < ? and listed = 1 order by date desc limit 1",
+        "select * from posts where date < ? and listed = 1 order by date desc limit 1",
         (date,),
     )
     next_row = c.fetchone()
     conn.close()
 
     if next_row:
-        return make_file(dict(next_row))
+        return make_post(dict(next_row))
 
     return None
 
@@ -361,17 +361,17 @@ def update_user_last_date(username: str) -> None:
     conn.close()
 
 
-def get_random_file(ignore_names: list[str]) -> File | None:
+def get_random_post(ignore_names: list[str]) -> Post | None:
     check_db()
     conn, c = row_conn()
-    query = "select * from files where name not in ({}) and mtype is not null and mtype != '' and listed = 1 order by random() limit 1"
+    query = "select * from posts where name not in ({}) and mtype is not null and mtype != '' and listed = 1 order by random() limit 1"
     placeholders = ", ".join("?" for _ in ignore_names)
     c.execute(query.format(placeholders), ignore_names)
     row = c.fetchone()
     conn.close()
 
     if row:
-        return make_file(dict(row))
+        return make_post(dict(row))
 
     return None
 

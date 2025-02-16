@@ -66,26 +66,26 @@
 <div id="items">
     <div class="table">
         <div class="table_row table_header">
-            <div class="table_cell checkbox"><input id="checkbox" type="checkbox"></div>
-            <div id="username" class="table_cell underline" data-sort="username">User</div>
+            <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
+            <div id="username" class="table_cell underline" data-sort="username" title="The username of the user. It acts as the ID and can't be changed">User</div>
 
             {% if show_names %}
-            <div id="name" class="table_cell underline" data-sort="name">Name</div>
+            <div id="name" class="table_cell underline" data-sort="name" title="The public name of this user">Name</div>
             {% endif %}
 
-            <div id="limit" class="table_cell small underline" data-sort="rpm">RPM</div>
-            <div id="max" class="table_cell small underline" data-sort="max_size">Max</div>
-            <div id="list" class="table_cell underline" data-sort="admin">Admin</div>
-            <div id="list" class="table_cell underline" data-sort="can_list">List</div>
-            <div id="lister" class="table_cell underline" data-sort="lister">Lister</div>
-            <div id="posts" class="table_cell small underline" data-sort="posts">Posts</div>
+            <div id="limit" class="table_cell small underline" data-sort="rpm" title="Requests per minute the user can make">RPM</div>
+            <div id="max" class="table_cell small underline" data-sort="max_size" title="The max size in megabytes this user can upload at once">Max</div>
+            <div id="list" class="table_cell underline" data-sort="admin" title="This user is an admin and can use the admin pages">Admin</div>
+            <div id="list" class="table_cell underline" data-sort="can_list" title="Can view the list of posts from all users">List</div>
+            <div id="lister" class="table_cell underline" data-sort="lister" title="The posts of this user will appear in the list">Lister</div>
+            <div id="posts" class="table_cell small underline" data-sort="posts" title="The number of posts this user has done">Posts</div>
 
             {% if show_marks %}
-            <div id="mark" class="table_cell underline" data-sort="mark">Mark</div>
+            <div id="mark" class="table_cell underline" data-sort="mark" title="A mark added to the end of file names to identify a certain kind of upload">Mark</div>
             {% endif %}
 
-            <div id="reg_date" class="table_cell underline" data-sort="register_date">RegDate</div>
-            <div id="last_date" class="table_cell underline" data-sort="last_date">LastDate</div>
+            <div id="reg_date" class="table_cell underline" data-sort="register_date" title="The date when the user was registered">RegDate</div>
+            <div id="last_date" class="table_cell underline" data-sort="last_date" title="The date when the user made their latest post">LastDate</div>
             <div class="table_cell actions">Actions</div>
         </div>
 
