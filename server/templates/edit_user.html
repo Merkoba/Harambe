@@ -24,8 +24,8 @@
         {% endif %}
         <input type="password" id="password" name="password" placeholder="Password" value="">
         <input type="text" id="name" name="name" placeholder="Name" value="{{user.name}}">
-        <input type="text" id="rpm" name="rpm" placeholder="Requests Per Minute" value="{{user.rpm}}">
-        <input type="text" id="max_size" name="max_size" placeholder="Max File Size" value="{{user.max_size}}">
+        <input type="text" id="rpm" name="rpm" placeholder="Requests Per Minute" value="{% if user.rpm > 0 %}{{user.rpm}}{% endif %}">
+        <input type="text" id="max_size" name="max_size" placeholder="Max File Size" value="{% if user.max_size > 0 %}{{user.max_size}}{% endif %}">
         <input type="text" id="mark" name="mark" placeholder="Mark on Files" value="{{user.mark}}">
 
         <div class="checkbox">

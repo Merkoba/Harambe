@@ -246,6 +246,12 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     else:
         args["lister"] = [False, "bool"]
 
+    if request.form.get("rpm") is not None:
+        args["rpm"] = [0, "int"]
+
+    if request.form.get("max_size") is not None:
+        args["max_size"] = [0, "int"]
+
     uname = args["username"][0]
 
     if not uname:
