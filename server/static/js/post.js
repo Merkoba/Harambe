@@ -501,8 +501,8 @@ function react_character() {
   }
 
   let n = vars.character_reaction_length
+  char = char.replace(/[;<> ]/g, ``)
   char = char.slice(0, n).trim()
-  char = char.replace(/[<> ]/g, ``)
   send_reaction(char, `character`)
 }
 

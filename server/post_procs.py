@@ -438,7 +438,7 @@ def react(name: str, text: str, user_name: str, mode: str) -> tuple[str, int]:
         return jsonify({"status": "error", "message": "Reaction is too long"}), 500
 
     if mode == "character":
-        if not text.isalnum() or (len(text) > config.character_reaction_length):
+        if len(text) > config.character_reaction_length:
             return jsonify({"status": "error", "message": "Invalid reaction"}), 500
     elif mode == "icon":
         if text not in utils.ICONS:
