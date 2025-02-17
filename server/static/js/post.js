@@ -494,13 +494,14 @@ function react_character() {
     return
   }
 
-  let char = prompt(`Type something`)
+  let n = vars.character_reaction_length
+  let ns = singplural(`character`, n)
+  let char = prompt(`Max ${n} ${ns} (no spaces)`)
 
   if (!char) {
     return
   }
 
-  let n = vars.character_reaction_length
   char = char.replace(/[;<> ]/g, ``)
   char = char.slice(0, n).trim()
   send_reaction(char, `character`)

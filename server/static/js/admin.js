@@ -645,14 +645,6 @@ async function do_mod_user(items, what, value, vtype) {
   }
 }
 
-function singplural(what, length) {
-  if (length === 1) {
-    return what
-  }
-
-  return `${what}s`
-}
-
 function delete_all() {
   if (vars.mode === `users`) {
     if (confirm(`Delete all non-admin users ?`)) {
