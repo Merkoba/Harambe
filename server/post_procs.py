@@ -448,3 +448,12 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
 
     database.add_reaction(name, user.username, user.name, text, mode)
     return jsonify({"status": "ok", "message": "Reaction added"}), 200
+
+
+def get_latest_post() -> Post | None:
+    post = database.get_latest_post()
+
+    if post:
+        return make_post(post, utils.now(), False)
+
+    return None

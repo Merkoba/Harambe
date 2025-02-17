@@ -470,3 +470,16 @@ def get_reaction_count(post: str, user: str) -> int:
     count = result[0] if result is not None else 0
     conn.close()
     return count
+
+
+def get_latest_post() -> Post | None:
+    check_db()
+    conn, c = row_conn()
+    c.execute("select * from posts order by date desc limit 1")
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_post(dict(row))
+
+    return None

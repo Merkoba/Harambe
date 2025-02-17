@@ -548,6 +548,18 @@ def show_list(page: int = 1) -> Any:
     )
 
 
+@app.route("/fresh", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@list_required
+def latest_post() -> Any:
+    post = post_procs.get_latest_post()
+
+    if not post:
+        return over()
+
+    return redirect(url_for("post", name=post.name))
+
+
 # HISTORY
 
 
