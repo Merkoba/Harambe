@@ -20,6 +20,7 @@ from user_procs import User
 class Reaction:
     value: str
     user: str
+    uname: str
     mode: str
     date: str
 
@@ -82,7 +83,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
             for r in database.get_reactions(name):
                 r_ago = utils.time_ago(r.date, now)
-                reaction = Reaction(r.value, r.user, r.mode, r_ago)
+                reaction = Reaction(r.value, r.user, r.uname, r.mode, r_ago)
                 reactions.append(reaction)
         except:
             reactions = []
@@ -415,20 +416,16 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "Title updated"}), 200
 
 
-def react(name: str, text: str, user_name: str, mode: str) -> tuple[str, int]:
-    text = text.strip()
-    user_name = user_name.strip()
+def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
+    if not user:
+        return jsonify({"status": "error", "message": "You are not logged in"}), 500
 
-    if not user_name:
-        user_name = "Anon"
+    text = text.strip()
 
     if not name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
     if not text:
-        return jsonify({"status": "error", "message": "Missing values"}), 500
-
-    if not user_name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
     if mode not in ["character", "icon"]:
@@ -444,10 +441,10 @@ def react(name: str, text: str, user_name: str, mode: str) -> tuple[str, int]:
         if text not in utils.ICONS:
             return jsonify({"status": "error", "message": "Invalid reaction"}), 500
 
-    if database.get_reaction_count(name, user_name) >= config.max_user_reactions:
+    if database.get_reaction_count(name, user.username) >= config.max_user_reactions:
         return jsonify(
             {"status": "error", "message": "You can't add more reactions"}
         ), 500
 
-    database.add_reaction(name, user_name, text, mode)
+    database.add_reaction(name, user.username, user.name, text, mode)
     return jsonify({"status": "ok", "message": "Reaction added"}), 200

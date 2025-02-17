@@ -61,6 +61,7 @@ class User:
 class Reaction:
     post: str
     user: str
+    uname: str
     value: str
     mode: str
     date: int
@@ -420,13 +421,15 @@ def change_uploader(username: str, new_name: str) -> None:
     conn.close()
 
 
-def add_reaction(post: str, user: str, value: str, mode: str) -> None:
+def add_reaction(post: str, user: str, uname: str, value: str, mode: str) -> None:
     check_db()
     conn, c = get_conn()
+    cols = ["post", "user", "uname", "value", "mode", "date"]
+    placeholders = ", ".join("?" for _ in cols)
 
     c.execute(
-        "insert into reactions (post, user, value, mode, date) values (?, ?, ?, ?, ?)",
-        (post, user, value, mode, utils.now()),
+        f"insert into reactions ({','.join(cols)}) values ({placeholders})",
+        (post, user, uname, value, mode, utils.now()),
     )
 
     conn.commit()
@@ -437,6 +440,7 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
     return Reaction(
         post=row.get("post") or "",
         user=row.get("user") or "",
+        uname=row.get("uname") or "",
         value=row.get("value") or "",
         mode=row.get("mode") or "",
         date=row.get("date") or 0,

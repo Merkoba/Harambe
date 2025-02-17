@@ -730,4 +730,4 @@ def react() -> Any:
     text = data.get("text", None)
     mode = data.get("mode", None)
 
-    return post_procs.react(name, text, user.name, mode)
+    return post_procs.react(name, text, user, mode)

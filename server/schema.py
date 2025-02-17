@@ -40,6 +40,7 @@ schemas = {
         "id": "integer primary key autoincrement",
         "post": "text default ''",
         "user": "text default ''",
+        "uname": "text default ''",
         "value": "text default ''",
         "mode": "text default ''",
         "date": "int default 0",
