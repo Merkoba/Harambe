@@ -233,11 +233,14 @@ class Config:
         # Allow reactions in posts
         self.reactions_enabled = True
 
-        # Allow anons to react in posts
-        self.anon_reacters = False
-
         # Max length for reactions to be stored
         self.max_reactions_length = 100_000
+
+        # Max length for text reactions
+        self.character_reaction_length = 9
+
+        # Max reactions a user can do
+        self.max_user_reactions = 5
 
     # --- Methods ---
 
@@ -329,8 +332,8 @@ class Config:
             set_value(c, "description_post")
             set_value(c, "anon_listers")
             set_value(c, "reactions_enabled")
-            set_value(c, "anon_reacters")
             set_value(c, "max_reactions_length")
+            set_value(c, "character_reaction_length")
 
             # Users
 

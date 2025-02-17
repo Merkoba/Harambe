@@ -406,7 +406,7 @@ async function enter_icons() {
   }
 
   hide_icons()
-  send_reaction(vars.selected_icon)
+  send_reaction(vars.selected_icon, `icon`)
 }
 
 function hide_icons() {
@@ -453,20 +453,20 @@ function down_icons() {
   }
 }
 
-function add_reaction(text) {
+function add_reaction(text, mode) {
   if (!text) {
     return
   }
 
   let reactions = DOM.el(`#reactions`)
 
-  if (text.length === 1) {
+  if (mode === `character`) {
     let character = DOM.create(`div`, `reaction_item`)
     character.textContent = text
     character.title = `${text} : You`
     reactions.appendChild(character)
   }
-  else {
+  else if (mode === `icon`) {
     let img = DOM.create(`img`, `reaction_item`)
     img.loading = `lazy`
     img.src = `/static/icons/${text}.gif`
@@ -494,23 +494,19 @@ function react_character() {
     return
   }
 
-  let character = prompt(`Type a character`)
+  let char = prompt(`Type something`)
 
-  if (!character) {
+  if (!char) {
     return
   }
 
-  character = character.slice(0, 1).toUpperCase()
-  let re = /^[A-Z0-9]$/i
-
-  if (!re.test(character)) {
-    return
-  }
-
-  send_reaction(character)
+  let n = vars.character_reaction_length
+  char = char.slice(0, n).trim()
+  char = char.replace(/[<> ]/g, ``)
+  send_reaction(char, `character`)
 }
 
-async function send_reaction(text) {
+async function send_reaction(text, mode) {
   if (!vars.can_react) {
     return
   }
@@ -522,11 +518,11 @@ async function send_reaction(text) {
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({name, text}),
+    body: JSON.stringify({name, text, mode}),
   })
 
   if (response.ok) {
-    add_reaction(text)
+    add_reaction(text, mode)
   }
   else {
     print_error(response.status)

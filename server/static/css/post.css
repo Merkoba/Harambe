@@ -245,6 +245,9 @@ a.button:hover {
     height: 1.8rem;
     width: auto;
     padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #react_buttons {

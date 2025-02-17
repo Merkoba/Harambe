@@ -415,7 +415,7 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
     return jsonify({"status": "ok", "message": "Title updated"}), 200
 
 
-def react(name: str, text: str, user_name: str) -> tuple[str, int]:
+def react(name: str, text: str, user_name: str, mode: str) -> tuple[str, int]:
     text = text.strip()
     user_name = user_name.strip()
 
@@ -431,15 +431,23 @@ def react(name: str, text: str, user_name: str) -> tuple[str, int]:
     if not user_name:
         return jsonify({"status": "error", "message": "Missing values"}), 500
 
-    if len(text) > 50:
+    if mode not in ["character", "icon"]:
+        return jsonify({"status": "error", "message": "Invalid mode"}), 500
+
+    if len(text) > 100:
         return jsonify({"status": "error", "message": "Reaction is too long"}), 500
 
-    if len(text) == 1:
-        if not text.isalnum():
+    if mode == "character":
+        if not text.isalnum() or (len(text) > config.character_reaction_length):
             return jsonify({"status": "error", "message": "Invalid reaction"}), 500
-    elif text not in utils.ICONS:
-        return jsonify({"status": "error", "message": "Invalid reaction"}), 500
+    elif mode == "icon":
+        if text not in utils.ICONS:
+            return jsonify({"status": "error", "message": "Invalid reaction"}), 500
 
-    mode = "character" if len(text) == 1 else "icon"
+    if database.get_reaction_count(name, user_name) >= config.max_user_reactions:
+        return jsonify(
+            {"status": "error", "message": "You can't add more reactions"}
+        ), 500
+
     database.add_reaction(name, user_name, text, mode)
     return jsonify({"status": "ok", "message": "Reaction added"}), 200

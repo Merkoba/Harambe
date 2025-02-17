@@ -282,10 +282,7 @@ def post(name: str) -> Any:
 
     if len(post.reactions) < config.max_reactions_length:
         if config.reactions_enabled:
-            if user:
-                can_react = user.reacter
-            elif config.anon_reacters:
-                can_react = True
+            can_react = user and user.reacter
 
     return render_template(
         "post.html",
@@ -300,6 +297,7 @@ def post(name: str) -> Any:
         font_family=config.font_family,
         description=config.description_post,
         reactions_enabled=config.reactions_enabled,
+        character_reaction_length=config.character_reaction_length,
         can_react=can_react,
         show_list=show_list,
         is_user=bool(user),
@@ -728,5 +726,6 @@ def react() -> Any:
     data = request.get_json()
     name = data.get("name", None)
     text = data.get("text", None)
+    mode = data.get("mode", None)
 
-    return post_procs.react(name, text, user.name)
+    return post_procs.react(name, text, user.name, mode)

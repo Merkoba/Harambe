@@ -451,3 +451,17 @@ def get_reactions(post: str) -> list[Reaction]:
     conn.close()
 
     return [make_reaction(dict(row)) for row in rows]
+
+
+def get_reaction_count(post: str, user: str) -> int:
+    check_db()
+    conn, c = get_conn()
+
+    c.execute(
+        "select count(*) from reactions where post = ? and user = ?",
+        (post, user),
+    )
+
+    count = c.fetchone()[0]
+    conn.close()
+    return count
