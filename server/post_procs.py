@@ -83,7 +83,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
             for r in database.get_reactions(name):
                 r_ago = utils.time_ago(r.date, now)
-                reaction = Reaction(r.value, r.user, r.uname, r.mode, r_ago)
+                reaction = Reaction(r.value, r.user, r.uname or "Anon", r.mode, r_ago)
                 reactions.append(reaction)
         except:
             reactions = []
