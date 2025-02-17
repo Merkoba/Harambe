@@ -262,6 +262,7 @@ def message() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def post(name: str) -> Any:
     user = get_user()
+    is_user = bool(user)
 
     if not config.public_posts:
         if not user:
@@ -282,7 +283,8 @@ def post(name: str) -> Any:
 
     if len(post.reactions) < config.max_reactions_length:
         if config.reactions_enabled:
-            can_react = user and user.reacter
+            if user:
+                can_react = user.reacter
 
     return render_template(
         "post.html",
@@ -300,7 +302,7 @@ def post(name: str) -> Any:
         character_reaction_length=config.character_reaction_length,
         can_react=can_react,
         show_list=show_list,
-        is_user=bool(user),
+        is_user=is_user,
     )
 
 

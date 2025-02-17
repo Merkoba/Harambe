@@ -462,6 +462,7 @@ def get_reaction_count(post: str, user: str) -> int:
         (post, user),
     )
 
-    count = c.fetchone()[0]
+    result = c.fetchone()
+    count = result[0] if result is not None else 0
     conn.close()
     return count
