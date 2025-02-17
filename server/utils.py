@@ -162,4 +162,8 @@ def load_icons() -> list[str]:
     return icons
 
 
+def single_line(s: str) -> str:
+    return " ".join(s.split()).strip()
+
+
 ICONS = load_icons()
