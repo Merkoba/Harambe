@@ -198,3 +198,11 @@ Just change `URL`, `USERNAME`, and `PASSWORD`.
 The arguments are a file path, and an optional mode argument which you can set to `title`.
 
 If you set that second argument to `title` it will use `zenity` to prompt for a title.
+
+## Reactions
+
+Users can react with icons or with short words:
+
+![](reactions.png)
+
+![](reactions2.png)
