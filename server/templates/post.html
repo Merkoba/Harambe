@@ -136,7 +136,8 @@
     {% endif %}
 
     {% if reactions_enabled %}
-    <div id="reactions">
+    {% if post.reactions | length > 0 %}
+    <div id="reactions">{% else %}<div id="reactions" class="hidden">{% endif %}
     {% for reaction in post.reactions %}
         {% if reaction.mode == "icon" %}
         <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.value}} : {{reaction.user}} : {{reaction.date}}" class="reaction_item" loading="lazy">

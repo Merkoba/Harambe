@@ -459,6 +459,7 @@ function add_reaction(text, mode) {
   }
 
   let reactions = DOM.el(`#reactions`)
+  DOM.show(reactions)
 
   if (mode === `character`) {
     let character = DOM.create(`div`, `reaction_item`)
