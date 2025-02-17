@@ -240,7 +240,7 @@ class Config:
         self.character_reaction_length = 9
 
         # Max reactions a user can do
-        self.max_user_reactions = 5
+        self.max_user_reactions = 9
 
     # --- Methods ---
 
