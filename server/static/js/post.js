@@ -323,8 +323,10 @@ async function show_icons() {
 
     let json = await response.json()
     container.innerHTML = ``
+    let icons = json.icons
+    icons.sort(() => Math.random() - 0.5)
 
-    for (let icon of json.icons) {
+    for (let icon of icons) {
       let item = DOM.create(`div`, `icon_item`)
       let text = DOM.create(`div`, `icon_item_text`)
       text.textContent = icon

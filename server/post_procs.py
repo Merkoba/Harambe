@@ -21,6 +21,7 @@ class Reaction:
     value: str
     user: str
     mode: str
+    date: str
 
 
 @dataclass
@@ -51,7 +52,7 @@ class Post:
     reactions: list[Reaction]
 
 
-def make_post(post: DbPost, now: int, all_data: bool = True) -> Post:
+def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     name = post.name
     ext = post.ext
     full = post.full()
@@ -77,22 +78,12 @@ def make_post(post: DbPost, now: int, all_data: bool = True) -> Post:
         sample = post.sample
 
         try:
-            p_reactions = post.reactions.split(",")
-            p_reactions = [r for r in p_reactions if r]
             reactions = []
 
-            for r in p_reactions:
-                text, user = r.split(":")
-
-                if (not text) or (not user):
-                    continue
-
-                if len(text) == 1:
-                    rec = Reaction(text, user, "character")
-                else:
-                    rec = Reaction(text, user, "icon")
-
-                reactions.append(rec)
+            for r in database.get_reactions(name):
+                r_ago = utils.time_ago(r.date, now)
+                reaction = Reaction(r.value, r.user, r.mode, r_ago)
+                reactions.append(reaction)
         except:
             reactions = []
     else:
@@ -236,19 +227,25 @@ def sort_posts(posts: list[Post], sort: str) -> None:
         posts.sort(key=lambda x: x.uploader, reverse=False)
 
 
-def get_post(name: str) -> Post | None:
+def get_post(name: str, full: bool = False, increase: bool = False) -> Post | None:
     post = database.get_post(name)
 
     if post:
         now = utils.now()
-        diff = now - post.view_date
 
-        if diff > config.view_delay:
-            database.increase_post_views(name)
+        if increase:
+            diff = now - post.view_date
 
-        return make_post(post, now)
+            if diff > config.view_delay:
+                increase_post_views(name)
+
+        return make_post(post, now, full)
 
     return None
+
+
+def increase_post_views(name: str) -> None:
+    database.increase_post_views(name)
 
 
 def get_next_post(name: str) -> str | None:
@@ -443,19 +440,6 @@ def react(name: str, text: str, user_name: str) -> tuple[str, int]:
     elif text not in utils.ICONS:
         return jsonify({"status": "error", "message": "Invalid reaction"}), 500
 
-    post = database.get_post(name)
-
-    if not post:
-        return jsonify({"status": "error", "message": "Post not found"}), 500
-
-    if len(post.reactions) >= config.max_reactions_length:
-        return jsonify({"status": "error", "message": "Too many reactions"}), 500
-
-    reaction = f"{text}:{user_name}"
-    reactions = post.reactions.split(",")
-    reactions.append(reaction)
-    reactions = [r for r in reactions if r]
-    p_reactions = ",".join(reactions)
-    database.edit_post_reactions(name, p_reactions)
-
+    mode = "character" if len(text) == 1 else "icon"
+    database.add_reaction(name, user_name, text, mode)
     return jsonify({"status": "ok", "message": "Reaction added"}), 200

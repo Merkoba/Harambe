@@ -26,7 +26,6 @@ class Post:
     listed: bool
     size: int
     sample: str
-    reactions: str
 
     def full(self) -> str:
         if self.ext:
@@ -56,6 +55,15 @@ class User:
     lister: bool
     posts: int
     reacter: bool
+
+
+@dataclass
+class Reaction:
+    post: str
+    user: str
+    value: str
+    mode: str
+    date: int
 
 
 db_path = "database.sqlite3"
@@ -120,11 +128,10 @@ def add_post(
         listed,
         size,
         sample,
-        "",
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed, size, sample, reactions) values ({placeholders})"
+    query = f"insert into posts (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed, size, sample) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -145,7 +152,6 @@ def make_post(row: dict[str, Any]) -> Post:
         listed=bool(row.get("listed")),
         size=row.get("size") or 0,
         sample=row.get("sample") or "",
-        reactions=row.get("reactions") or "",
     )
 
 
@@ -406,17 +412,42 @@ def update_file_size(name: str, size: int) -> None:
     conn.close()
 
 
-def edit_post_reactions(name: str, reactions: str) -> None:
-    check_db()
-    conn, c = get_conn()
-    c.execute("update posts set reactions = ? where name = ?", (reactions, name))
-    conn.commit()
-    conn.close()
-
-
 def change_uploader(username: str, new_name: str) -> None:
     check_db()
     conn, c = get_conn()
     c.execute("update posts set uploader = ? where username = ?", (new_name, username))
     conn.commit()
     conn.close()
+
+
+def add_reaction(post: str, user: str, value: str, mode: str) -> None:
+    check_db()
+    conn, c = get_conn()
+
+    c.execute(
+        "insert into reactions (post, user, value, mode, date) values (?, ?, ?, ?, ?)",
+        (post, user, value, mode, utils.now()),
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def make_reaction(row: dict[str, Any]) -> Reaction:
+    return Reaction(
+        post=row.get("post") or "",
+        user=row.get("user") or "",
+        value=row.get("value") or "",
+        mode=row.get("mode") or "",
+        date=row.get("date") or 0,
+    )
+
+
+def get_reactions(post: str) -> list[Reaction]:
+    check_db()
+    conn, c = row_conn()
+    c.execute("select * from reactions where post = ?", (post,))
+    rows = c.fetchall()
+    conn.close()
+
+    return [make_reaction(dict(row)) for row in rows]

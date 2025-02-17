@@ -267,7 +267,7 @@ def post(name: str) -> Any:
         if not user:
             return over()
 
-    post = post_procs.get_post(name)
+    post = post_procs.get_post(name, full=True, increase=True)
 
     if not post:
         return over()
@@ -359,7 +359,7 @@ def get_file(name: str, original: str | None = None) -> Any:
         if not user:
             return over()
 
-    post = post_procs.get_post(name)
+    post = post_procs.get_post(name, full=False, increase=True)
 
     if not post:
         return over()
