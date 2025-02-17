@@ -74,9 +74,7 @@ There are some exceptions like `app_key` or the captcha settings which can't be 
 
 ## Admin
 
-There is an admin page to view and delete files:
-
-![](admin.png)
+There are admin pages to view and delete files and users.
 
 Admins can create more users, but you need to create the first admin.
 
