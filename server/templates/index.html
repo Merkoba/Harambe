@@ -30,10 +30,6 @@
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
         <div id="links">
-            {% if show_history %}
-            <a class="link" href="/history">History</a>
-            {% endif %}
-
             {% if show_list %}
             <a class="link" href="/fresh">Fresh</a>
             <a class="link" href="/list">List</a>
@@ -47,6 +43,10 @@
             {% for link in links %}
             <a class="link" href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
             {% endfor %}
+
+            {% if show_history %}
+            <a class="link" href="/history">History</a>
+            {% endif %}
 
             {% if is_user %}
             <a class="link" href="/logout">Logout</a>
