@@ -2,8 +2,9 @@ from __future__ import annotations
 
 # Standard
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from pathlib import Path
+from typing import Any
 
 # Libraries
 from flask import jsonify  # type: ignore
@@ -13,16 +14,22 @@ import utils
 import database
 from config import config
 from database import Post as DbPost
+from database import Reaction as DbReaction
 from user_procs import User
 
 
 @dataclass
 class Reaction:
-    value: str
+    post: str
     user: str
     uname: str
+    value: str
     mode: str
-    date: str
+    date: int
+    ago: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass
@@ -53,6 +60,20 @@ class Post:
     reactions: list[Reaction]
 
 
+def make_reaction(reaction: DbReaction, now: int) -> Reaction:
+    ago = utils.time_ago(reaction.date, now)
+
+    return Reaction(
+        reaction.post,
+        reaction.user,
+        reaction.uname,
+        reaction.value,
+        reaction.mode,
+        reaction.date,
+        ago,
+    )
+
+
 def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     name = post.name
     ext = post.ext
@@ -79,13 +100,9 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         sample = post.sample
 
         try:
-            reactions = []
-
-            for r in database.get_reactions(name):
-                r_ago = utils.time_ago(r.date, now)
-                reaction = Reaction(r.value, r.user, r.uname or "Anon", r.mode, r_ago)
-                reactions.append(reaction)
-        except:
+            reactions = [make_reaction(r, now) for r in database.get_reactions(name)]
+        except Exception as e:
+            utils.error(e)
             reactions = []
     else:
         sample = ""
@@ -446,8 +463,13 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
             {"status": "error", "message": "You can't add more reactions"}
         ), 500
 
-    database.add_reaction(name, user.username, user.name, text, mode)
-    return jsonify({"status": "ok", "message": "Reaction added"}), 200
+    dbr = database.add_reaction(name, user.username, user.name, text, mode)
+
+    if dbr:
+        reaction = make_reaction(dbr, utils.now())
+        return jsonify({"status": "ok", "reaction": reaction}), 200
+
+    return jsonify({"status": "error", "message": "Reaction failed"}), 500
 
 
 def get_latest_post() -> Post | None:
@@ -457,3 +479,18 @@ def get_latest_post() -> Post | None:
         return make_post(post, utils.now(), False)
 
     return None
+
+
+def get_post_update(name: str) -> tuple[bool, dict[str, Any]]:
+    post = get_post(name, full=True, increase=False)
+
+    if post:
+        return True, {
+            "title": post.title,
+            "post_title": post.post_title,
+            "uploader": post.uploader,
+            "reactions": [r.to_dict() for r in post.reactions],
+            "views": post.views,
+        }
+
+    return False, {}

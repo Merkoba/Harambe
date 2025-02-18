@@ -8,6 +8,7 @@ window.onload = function() {
   vars.date_ms = vars.date * 1000
   vars.icons_loaded = false
   vars.selected_icon = ``
+  vars.refresh_count = 0
 
   let delay = 30
 
@@ -150,6 +151,15 @@ window.onload = function() {
       }
     }
   })
+
+  vars.refresh_interval = setInterval(() => {
+    refresh()
+    vars.refresh_count += 1
+
+    if (vars.refresh_count >= vars.post_refresh_times) {
+      clearInterval(vars.refresh_interval)
+    }
+  }, vars.post_refresh_interval * 1000)
 }
 
 function timeago(date) {
@@ -452,29 +462,24 @@ function down_icons() {
   }
 }
 
-function add_reaction(text, mode) {
-  if (!text) {
-    return
-  }
-
+function add_reaction(reaction) {
+  let r = reaction
   let reactions = DOM.el(`#reactions`)
   DOM.show(reactions)
 
-  if (mode === `character`) {
+  if (r.mode === `character`) {
     let character = DOM.create(`div`, `reaction_item`)
-    character.textContent = text
-    character.title = `${text} : You`
+    character.textContent = r.value
+    character.title = `${r.uname} : ${r.ago}`
     reactions.appendChild(character)
   }
-  else if (mode === `icon`) {
+  else if (r.mode === `icon`) {
     let img = DOM.create(`img`, `reaction_item`)
     img.loading = `lazy`
-    img.src = `/static/icons/${text}.gif`
-    img.title = `${text} : You`
+    img.src = `/static/icons/${r.value}.gif`
+    img.title = `${r.value} : ${r.uname} : ${r.ago}`
     reactions.appendChild(img)
   }
-
-  window.scrollTo(0, document.body.scrollHeight)
 }
 
 function icons_open() {
@@ -523,9 +528,47 @@ async function send_reaction(text, mode) {
   })
 
   if (response.ok) {
-    add_reaction(text, mode)
+    let json = await response.json()
+    add_reaction(json.reaction)
+    window.scrollTo(0, document.body.scrollHeight)
   }
   else {
     print_error(response.status)
   }
+}
+
+async function refresh() {
+  let name = vars.name
+
+  let response = await fetch(`/refresh`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({name}),
+  })
+
+  if (response.ok) {
+    let json = await response.json()
+    apply_update(json.update)
+  }
+  else {
+    print_error(response.status)
+  }
+}
+
+function apply_update(update) {
+  if (update.reactions && update.reactions.length) {
+    let c = DOM.el(`#reactions`)
+    c.innerHTML = ``
+
+    for (let reaction of update.reactions) {
+      add_reaction(reaction)
+    }
+  }
+
+  vars.title = update.title
+  document.title = update.post_title
+  DOM.el(`#title`).textContent = update.title || vars.original
+  DOM.el(`#views`).textContent = update.views
 }

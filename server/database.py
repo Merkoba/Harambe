@@ -421,19 +421,30 @@ def change_uploader(username: str, new_name: str) -> None:
     conn.close()
 
 
-def add_reaction(post: str, user: str, uname: str, value: str, mode: str) -> None:
+def add_reaction(
+    post: str, user: str, uname: str, value: str, mode: str
+) -> Reaction | None:
     check_db()
     conn, c = get_conn()
     cols = ["post", "user", "uname", "value", "mode", "date"]
     placeholders = ", ".join("?" for _ in cols)
 
     c.execute(
-        f"insert into reactions ({','.join(cols)}) values ({placeholders})",
+        f"insert into reactions ({','.join(cols)}) values ({placeholders}) returning {', '.join(cols)}",
         (post, user, uname, value, mode, utils.now()),
     )
 
+    row = c.fetchone()
+
+    if row:
+        row_dict = dict(zip(cols, row))
+        reaction = make_reaction(row_dict)
+    else:
+        reaction = None
+
     conn.commit()
     conn.close()
+    return reaction
 
 
 def make_reaction(row: dict[str, Any]) -> Reaction:

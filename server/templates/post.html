@@ -18,6 +18,8 @@
     vars.file_path = `{{file_path}}`
     vars.can_react = {{can_react | tojson}}
     vars.character_reaction_length = {{character_reaction_length}}
+    vars.post_refresh_interval = {{post_refresh_interval}}
+    vars.post_refresh_times = {{post_refresh_times}}
 </script>
 
 <script src="/static/js/marked.js"></script>
@@ -84,7 +86,7 @@
 
     <!-- Uploader -->
     <div>
-        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span>{{post.views}}
+        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span><span id="views">{{post.views}}</views>
     </div>
 
     {% if post.can_embed %}

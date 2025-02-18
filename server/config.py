@@ -183,7 +183,7 @@ class Config:
         self.file_path: str = "file"
 
         # Maximum length allowed for titles
-        self.max_title_length: int = 2000
+        self.max_title_length: int = 280
 
         # Allow titles on post uploads
         self.allow_titles: bool = True
@@ -241,6 +241,12 @@ class Config:
 
         # Max reactions a user can do
         self.max_user_reactions = 10
+
+        # Seconds interval to refresh post pages
+        self.post_refresh_interval = 30
+
+        # The number of times to refresh posts before stopping
+        self.post_refresh_times = 10
 
     # --- Methods ---
 
@@ -334,6 +340,9 @@ class Config:
             set_value(c, "reactions_enabled")
             set_value(c, "max_reactions_length")
             set_value(c, "character_reaction_length")
+            set_value(c, "max_user_reactions")
+            set_value(c, "post_refresh_interval")
+            set_value(c, "post_refresh_times")
 
             # Users
 

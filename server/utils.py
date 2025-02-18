@@ -3,6 +3,10 @@ import time
 import random
 from datetime import datetime
 from pathlib import Path
+from typing import Any
+
+# Libraries
+import q as qlib  # type: ignore
 
 # Modules
 from config import config
@@ -164,6 +168,10 @@ def load_icons() -> list[str]:
 
 def single_line(s: str) -> str:
     return " ".join(s.split()).strip()
+
+
+def q(obj: Any) -> None:
+    qlib.q(obj)
 
 
 ICONS = load_icons()

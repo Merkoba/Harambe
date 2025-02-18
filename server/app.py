@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 # Standard
-from typing import Any
+from typing import Any, Never
 from functools import wraps
 
 # Libraries
@@ -122,6 +122,7 @@ limiter = Limiter(
     strategy="fixed-window",
 )
 
+error_json: tuple[dict[Never, Never], int] = {}, 400
 invalid = "Error: Invalid request"
 text_mtype = "text/plain"
 
@@ -300,10 +301,29 @@ def post(name: str) -> Any:
         description=config.description_post,
         reactions_enabled=config.reactions_enabled,
         character_reaction_length=config.character_reaction_length,
+        post_refresh_interval=config.post_refresh_interval,
+        post_refresh_times=config.post_refresh_times,
         can_react=can_react,
         show_list=show_list,
         is_user=is_user,
     )
+
+
+@app.route("/refresh", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+def refresh() -> Any:
+    data = request.get_json()
+    name = data.get("name", None)
+
+    if not name:
+        return error_json
+
+    ok, update = post_procs.get_post_update(name)
+
+    if not ok:
+        return error_json
+
+    return {"update": update}, 200
 
 
 @app.route("/next/<string:current>", methods=["GET"])  # type: ignore
@@ -662,7 +682,7 @@ def delete_users() -> Any:
     usernames = data.get("usernames", None)
 
     if not usernames:
-        return {}, 400
+        return error_json
 
     user = get_user()
 
@@ -687,7 +707,7 @@ def delete_user() -> Any:
     username = data.get("username", None)
 
     if not username:
-        return {}, 400
+        return error_json
 
     user = get_user()
 
@@ -708,12 +728,12 @@ def mod_user() -> Any:
     vtype = data.get("vtype", None)
 
     if (not usernames) or (not what) or (value is None) or (not vtype):
-        return {}, 400
+        return error_json
 
     user = get_user()
 
     if not user:
-        return {}, 400
+        return error_json
 
     return user_procs.mod_user(usernames, what, value, vtype)
 
