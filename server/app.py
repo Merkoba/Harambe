@@ -61,6 +61,13 @@ def list_visible(user: User | None = None) -> bool:
     return config.list_enabled and ((not config.list_private) or can_list(user))
 
 
+def colon_join(*args: Any) -> str:
+    return " : ".join(map(str, args[0]))
+
+
+app.jinja_env.filters["colon_join"] = colon_join
+
+
 def login_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
