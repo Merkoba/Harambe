@@ -157,3 +157,13 @@ select {
     align-items: center;
     justify-content: center;
 }
+
+.middle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}

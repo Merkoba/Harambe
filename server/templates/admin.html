@@ -3,14 +3,25 @@
 {% block head %}
 <title>Admin</title>
 <link rel="stylesheet" href="/static/css/admin.css">
+
+<style>
+    body, html {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
 {% endblock %}
 
 {% block body %}
-<div id="selector">
-    <a href="/">Return</a>
-    <span class="sep">|</span>
-    <a href="/admin/posts">Posts</a>
-    <span class="sep">|</span>
-    <a href="/admin/users">Users</a>
+<div class="middle">
+    <div id="selector">
+        <a href="/">Return</a>
+        <span class="sep">|</span>
+        <a href="/admin/posts">Posts</a>
+        <span class="sep">|</span>
+        <a href="/admin/users">Users</a>
+    </div>
 </div>
 {% endblock %}
