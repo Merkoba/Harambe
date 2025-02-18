@@ -45,12 +45,6 @@ hr {
     margin: 0;
 }
 
-.sep {
-    opacity: 0.66;
-    padding-left: 0.35rem;
-    padding-right: 0.35rem;
-}
-
 a:link, a:visited {
     color: var(--link_color);
     user-select: none;

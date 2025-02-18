@@ -176,7 +176,6 @@ def index() -> Any:
         captcha = None
 
     show_list = list_visible(user)
-    show_history = admin or (config.history_enabled and is_user)
 
     if user:
         max_size = user.max_size
@@ -209,7 +208,6 @@ def index() -> Any:
         allow_titles=config.allow_titles,
         links=config.links,
         is_user=is_user,
-        show_history=show_history,
         show_list=show_list,
         show_admin=admin,
         description=config.description_index,
@@ -572,6 +570,7 @@ def show_list(page: int = 1) -> Any:
         page_size=page_size,
         def_page_size=def_page_size,
         sort=sort,
+        back="/",
     )
 
 
@@ -585,48 +584,6 @@ def latest_post() -> Any:
         return over()
 
     return redirect(url_for("post", name=post.name))
-
-
-# HISTORY
-
-
-@app.route("/history", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/history/<int:page>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@login_required
-def show_history(page: int = 1) -> Any:
-    user = get_user()
-
-    if not user:
-        return redirect(url_for("login"))
-
-    admin = user and user.admin
-
-    if not config.history_enabled and (not admin):
-        return redirect(url_for("index"))
-
-    page_size = request.args.get("page_size", config.list_page_size)
-    username = user.username
-
-    if not username:
-        return redirect(url_for("index"))
-
-    posts, total, next_page = post_procs.get_posts(
-        page, page_size, max_posts=config.list_max_posts, username=username
-    )
-
-    def_page_size = page_size == config.list_page_size
-
-    return render_template(
-        "list.html",
-        mode="history",
-        items=posts,
-        total=total,
-        page=page,
-        next_page=next_page,
-        page_size=page_size,
-        def_page_size=def_page_size,
-    )
 
 
 # USERS
@@ -770,3 +727,53 @@ def react() -> Any:
     mode = data.get("mode", None)
 
     return post_procs.react(name, text, user, mode)
+
+
+# YOU
+
+
+@app.route("/you", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
+def you() -> Any:
+    user = get_user()
+
+    if not user:
+        return over()
+
+    return render_template("you.html", user=user)
+
+
+@app.route("/history", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/history/<int:page>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
+def show_history(page: int = 1) -> Any:
+    user = get_user()
+
+    if not user:
+        return redirect(url_for("login"))
+
+    page_size = request.args.get("page_size", config.list_page_size)
+    username = user.username
+
+    if not username:
+        return redirect(url_for("index"))
+
+    posts, total, next_page = post_procs.get_posts(
+        page, page_size, max_posts=config.list_max_posts, username=username
+    )
+
+    def_page_size = page_size == config.list_page_size
+
+    return render_template(
+        "list.html",
+        mode="history",
+        items=posts,
+        total=total,
+        page=page,
+        next_page=next_page,
+        page_size=page_size,
+        def_page_size=def_page_size,
+        back="/you",
+    )

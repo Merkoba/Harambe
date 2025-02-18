@@ -203,9 +203,6 @@ class Config:
         # Users can edit their own posts
         self.allow_edit: bool = True
 
-        # Users can see their own post history
-        self.history_enabled: bool = True
-
         # Allow or block media hotlinking
         self.allow_hotlinks: bool = True
 
@@ -327,7 +324,6 @@ class Config:
             set_value(c, "anon_uploads_enabled")
             set_value(c, "embed_max_size")
             set_value(c, "allow_edit")
-            set_value(c, "history_enabled")
             set_value(c, "max_title_length")
             set_value(c, "allow_hotlinks")
             set_value(c, "sample_size")

@@ -44,12 +44,8 @@
             <a class="link" href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
             {% endfor %}
 
-            {% if show_history %}
-            <a class="link" href="/history">History</a>
-            {% endif %}
-
             {% if is_user %}
-            <a class="link" href="/logout">Logout</a>
+            <a class="link" href="/you">You</a>
             {% else %}
             <a class="link" href="/login">Login</a>
             {% endif %}

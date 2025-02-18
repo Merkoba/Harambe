@@ -1,3 +1,13 @@
+:root {
+    --color_1: rgb(67 130 137);
+    --border_color: #ddd;
+}
+
+body, html {
+    font-size: 20px;
+    font-family: sans-serif;
+}
+
 .hidden {
     display: none !important;
 }
@@ -18,4 +28,67 @@ dialog {
 .dialog_container button {
     font-size: 1rem;
     min-width: 9rem;
+}
+
+.middle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.selector {
+    display: flex;
+    flex-direction: row;
+    gap: 0.15rem;
+    color: var(--color_1);
+}
+
+.selector a:link, .selector a:visited {
+    color: var(--color_1);
+}
+
+.selector a:hover {
+    text-decoration: underline;
+}
+
+.action_button {
+    font-size: 1rem;
+    color: var(--color_1);
+    cursor: pointer;
+    user-select: none;
+}
+
+.action_button:hover {
+    text-decoration: underline;
+}
+
+a.linkbutton:link, a.linkbutton:visited {
+    text-decoration: none;
+    color: var(--color_1);
+}
+
+a.linkbutton:hover {
+    text-decoration: underline;
+}
+
+#lab {
+    width: 320px;
+    height: auto;
+}
+
+#you {
+    width: 320px;
+    height: auto;
+}
+
+.sep {
+    opacity: 0.66;
+    padding-left: 0.35rem;
+    padding-right: 0.35rem;
+    user-select: none;
+    color: inherit;
 }
