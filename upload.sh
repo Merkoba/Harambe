@@ -49,6 +49,11 @@ fi
 # Prompt to get the title
 if [ "$MODE" == "title" ]; then
   title=$(zenity --entry --title="Harambe Upload" --text="Enter a title:")
+
+  if [ $? -ne 0 ]; then
+    echo "User cancelled the input."
+    exit 1
+  fi
 else
   title=""
 fi
