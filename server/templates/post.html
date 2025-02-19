@@ -50,22 +50,20 @@
 
 <div id="main">
     <div id="top">
-        <div id="buttons">
-            <a href="/" class="button">Return</a>
-            {% if show_list %}
-            <div class="sep">|</div>
-            <a href="/list" class="button">List</a>
-            <div class="sep">|</div>
-            <a href="/next/{{post.name}}" class="button">Next</a>
-            <div class="sep">|</div>
-            <a href="/random">Random</a>
-            {% endif %}
-            <div class="sep">|</div>
-            {% if owned %}
-            <div id="edit" class="button">Edit</div>
-            <div class="sep">|</div>
-            {% endif %}
-        </div>
+        <a href="/" class="button">Return</a>
+        {% if show_list %}
+        <div class="sep">|</div>
+        <a href="/list" class="button">List</a>
+        <div class="sep">|</div>
+        <a href="/next/{{post.name}}" class="button">Next</a>
+        <div class="sep">|</div>
+        <a href="/random">Random</a>
+        {% endif %}
+        <div class="sep">|</div>
+        {% if owned %}
+        <div id="edit" class="button">Edit</div>
+        <div class="sep">|</div>
+        {% endif %}
 
         {% if post.title or post.original %}
         <div id="title">{{post.title or post.original}}</div>
@@ -75,18 +73,32 @@
     <hr>
 
     <!-- File -->
-    <div id="file">
-        <span class="title">File:</span><a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}">{{post.full}}</a><span class="sep">|</span>{{post.size_str}}<span class="sep">|</span>{{post.mtype or 'No type detected'}}
+    <div id="file" class="rowitem">
+        <div class="title">File:</div>
+        <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}">{{post.full}}</a>
+        <div class="sep">|</div>
+        <div>{{post.size_str}}</div>
+        <div class="sep">|</div>
+        <div>{{post.mtype or 'No type detected'}}</div>
     </div>
 
     <!-- Date -->
-    <div>
-        <span class="title">Date:</span><span id="date_1">{{post.date_1}}</span><span class="sep">|</span><span id="date_2">{{post.date_2}}</span><span class="sep">|</span><span id="ago">{{post.ago}}</span>
+    <div class="rowitem">
+        <div class="title">Date:</div>
+        <div id="date_1">{{post.date_1}}</div>
+        <div class="sep">|</div>
+        <div id="date_2">{{post.date_2}}</div>
+        <div class="sep">|</div>
+        <div id="ago">{{post.ago}}</div>
     </div>
 
     <!-- Uploader -->
-    <div>
-        <span class="title">Uploader:</span>{{post.uploader or 'Anon'}}<span class="sep">|</span><span class="title">Views:</span><span id="views">{{post.views}}</views>
+    <div class="rowitem">
+        <div class="title">Uploader:</div>
+        <div>{{post.uploader or 'Anon'}}</div>
+        <div class="sep">|</div>
+        <div class="title">Views:</div>
+        <div id="views">{{post.views}}</div>
     </div>
 
     {% if post.can_embed %}

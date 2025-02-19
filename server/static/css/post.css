@@ -22,13 +22,7 @@ body, html {
     align-items: center;
     font-size: 1.05rem;
     flex-wrap: wrap;
-    gap: 0;
-}
-
-#buttons {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    gap: 0.5rem;
 }
 
 #file {
@@ -37,7 +31,6 @@ body, html {
 
 .title {
     font-weight: bold;
-    padding-right: 0.5rem;
 }
 
 hr {
@@ -232,7 +225,7 @@ a.button:hover {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 0.1rem;
-    padding: 0.5rem;
+    padding: 0.35rem;
 }
 
 .reaction_item {
@@ -245,6 +238,12 @@ a.button:hover {
 }
 
 #react_buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.rowitem {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
