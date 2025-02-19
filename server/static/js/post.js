@@ -38,6 +38,12 @@ window.onload = function() {
     DOM.ev(edit, `click`, () => {
       edit_dialog.showModal()
     })
+
+    DOM.ev(edit_dialog, `click`, (e) => {
+      if (e.target === edit_dialog) {
+        edit_dialog.close()
+      }
+    })
   }
 
   if ((vars.mtype === `text/markdown`)) {

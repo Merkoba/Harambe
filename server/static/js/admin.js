@@ -105,6 +105,12 @@ window.onload = () => {
     DOM.ev(edit, `click`, () => {
       edit_dialog.showModal()
     })
+
+    DOM.ev(edit_dialog, `click`, (e) => {
+      if (e.target === edit_dialog) {
+        edit_dialog.close()
+      }
+    })
   }
 
   let page_select = DOM.el(`#page_select`)
