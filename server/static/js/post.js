@@ -170,7 +170,7 @@ window.onload = function() {
         reveal_reactions()
       }
       else if (e.key === `m`) {
-        toggle_modal_image()
+        maximize_media()
       }
       else if (e.key === `Escape`) {
         hide_modal_image()
@@ -700,4 +700,19 @@ function get_text_value() {
   }
 
   return el.textContent
+}
+
+function maximize_media() {
+  let image = DOM.el(`#image`)
+
+  if (image) {
+    toggle_modal_image()
+    return
+  }
+
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    video.requestFullscreen()
+  }
 }
