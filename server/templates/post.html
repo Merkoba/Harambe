@@ -153,7 +153,6 @@
     </div>
     {% endif %}
 
-    {% if can_react %}
     <div id="react_buttons">
         <div id="react_icon" class="button" title="You can also press 'r' to open the popup">React with an icon</div>
         <div class="sep">|</div>
@@ -161,7 +160,6 @@
         <div class="sep">|</div>
         <div id="reveal_reactions" class="button" title="Reveal reaction information">Reveal info</div>
     </div>
-    {% endif %}
 
     {% if reactions_enabled %}
         {% if post.reactions | length > 0 %}

@@ -323,8 +323,13 @@ function start_flash(file) {
   player.ruffle().load(`/${vars.file_path}/${file}`)
 }
 
+function react_alert() {
+  alert(`You might have to login to react.`)
+}
+
 async function show_icons() {
   if (!vars.can_react) {
+    react_alert()
     return
   }
 
@@ -513,6 +518,7 @@ function show_all_icons() {
 
 function react_character() {
   if (!vars.can_react) {
+    react_alert()
     return
   }
 

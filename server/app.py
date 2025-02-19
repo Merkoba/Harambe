@@ -303,7 +303,6 @@ def post(name: str) -> Any:
         post_refresh_times=config.post_refresh_times,
         can_react=can_react,
         show_list=show_list,
-        is_user=is_user,
     )
 
 
