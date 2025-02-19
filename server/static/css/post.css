@@ -20,7 +20,7 @@ body, html {
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-size: 1.05rem;
+    font-size: 1.025rem;
     gap: 0.5rem;
 }
 
