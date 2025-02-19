@@ -1,6 +1,7 @@
 # Standard
 import time
 import random
+import unicodedata
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -172,6 +173,27 @@ def single_line(s: str) -> str:
 
 def q(obj: Any) -> None:
     qlib.q(obj)
+
+
+def count_graphemes(s: str) -> int:
+    grapheme_count = 0
+
+    i = 0
+    while i < len(s):
+        char = s[i]
+
+        combining_class = unicodedata.combining(char)
+
+        if combining_class == 0:
+            grapheme_count += 1
+            i += 1
+        else:
+            i += 1
+
+            while i < len(s) and unicodedata.combining(s[i]) > 0:
+                i += 1
+
+    return grapheme_count
 
 
 ICONS = load_icons()

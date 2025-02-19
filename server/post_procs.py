@@ -487,7 +487,7 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     text = re.sub(r"https?://", "", text, flags=re.IGNORECASE)
 
     if mode == "character":
-        if len(text) > config.character_reaction_length:
+        if utils.count_graphemes(text) > config.character_reaction_length:
             return jsonify({"status": "error", "message": "Invalid reaction"}), 500
     elif mode == "icon":
         if text not in utils.ICONS:
