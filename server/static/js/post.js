@@ -576,17 +576,17 @@ function react_character() {
 
   let n = vars.character_reaction_length
   let ns = singplural(`character`, n)
-  let char = prompt(`Max ${n} ${ns} (no spaces)`)
+  let chars = prompt(`Max ${n} ${ns} (no spaces)`)
 
-  if (!char) {
+  if (!chars) {
     return
   }
 
-  char = char.replace(/[;<> ]/g, ``)
-  char = char.replace(/https?:\/\//gi, ``)
-  char = Array.from(char).slice(0, n).join(``)
+  chars = chars.replace(/[;<> ]/g, ``)
+  chars = chars.replace(/https?:\/\//gi, ``)
+  chars = Array.from(chars).slice(0, n).join(``)
 
-  send_reaction(char, `character`)
+  send_reaction(chars, `character`)
 }
 
 async function send_reaction(text, mode) {
