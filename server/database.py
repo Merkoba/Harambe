@@ -146,16 +146,16 @@ def make_post(row: dict[str, Any]) -> Post:
         ext=row["ext"],
         date=row["date"],
         title=row.get("title") or "",
-        views=row.get("views") or 0,
+        views=int(row.get("views") or 0),
         original=row.get("original") or "",
         username=row.get("username") or "",
         uploader=row.get("uploader") or "",
         mtype=row.get("mtype") or "",
-        view_date=row.get("view_date") or 0,
+        view_date=int(row.get("view_date") or 0),
         listed=bool(row.get("listed")),
-        size=row.get("size") or 0,
+        size=int(row.get("size") or 0),
         sample=row.get("sample") or "",
-        reactions=row.get("reactions") or 0,
+        reactions=int(row.get("reactions") or 0),
     )
 
 
@@ -311,14 +311,14 @@ def make_user(row: dict[str, Any]) -> User:
         password=row.get("password") or "",
         admin=bool(row.get("admin")),
         name=row.get("name") or "",
-        rpm=row.get("rpm") or 0,
-        max_size=row.get("max_size") or 0,
+        rpm=int(row.get("rpm") or 0),
+        max_size=int(row.get("max_size") or 0),
         can_list=bool(row.get("can_list")),
         mark=row.get("mark") or "",
-        register_date=row.get("register_date") or 0,
+        register_date=int(row.get("register_date") or 0),
         last_date=row.get("last_date") or 0,
         lister=bool(row.get("lister")),
-        posts=row.get("posts") or 0,
+        posts=int(row.get("posts") or 0),
         reacter=bool(row.get("reacter")),
     )
 
@@ -457,7 +457,7 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
         uname=row.get("uname") or "",
         value=row.get("value") or "",
         mode=row.get("mode") or "",
-        date=row.get("date") or 0,
+        date=int(row.get("date") or 0),
     )
 
 
