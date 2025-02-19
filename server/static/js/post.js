@@ -500,6 +500,8 @@ function add_reaction(reaction) {
   DOM.el(`.uname`, clone).textContent = reaction.uname_str
   DOM.el(`.ago`, clone).textContent = reaction.ago
   item.appendChild(clone)
+  let rc = DOM.el(`#reveal_container`)
+  DOM.show(rc)
 
   reactions.appendChild(item)
 }

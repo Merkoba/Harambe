@@ -157,8 +157,14 @@
         <div id="react_icon" class="button" title="You can also press 'r' to open the popup">React with an icon</div>
         <div class="sep">|</div>
         <div id="react_character" class="button" title="React with letters, numbers, emojis">React with character</div>
-        <div class="sep">|</div>
-        <div id="reveal_reactions" class="button" title="Reveal reaction information">Reveal info</div>
+        {% if post.reactions | length > 0 %}
+        <div id="reveal_container" class="rowitem">
+        {% else %}
+        <div id="reveal_container" class="rowitem hidden">
+        {% endif %}
+            <div class="sep">|</div>
+            <div id="reveal_reactions" class="button" title="Reveal reaction information">Reveal info</div>
+        </div>
     </div>
 
     {% if reactions_enabled %}
