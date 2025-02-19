@@ -61,6 +61,7 @@ class Post:
     reactions: list[Reaction]
     num_reactions: int
     views_str: str
+    show_original: str
 
 
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
@@ -125,6 +126,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         reactions = []
 
     show = f"{name} {ext}".strip()
+    show_original = f"{original} {ext}".strip()
     can_embed = size <= (config.embed_max_size * 1_000_000)
     views_str = f"V: {views} | R: {num_reactions}"
 
@@ -155,6 +157,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         reactions,
         num_reactions,
         views_str,
+        show_original,
     )
 
 
