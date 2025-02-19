@@ -22,15 +22,9 @@ async function copy_to_clipboard(text) {
 function select_all(el) {
   let selection = window.getSelection()
   let range = document.createRange()
-
-  if (selection.containsNode(el, true)) {
-    selection.removeAllRanges()
-  }
-  else {
-    range.selectNode(el)
-    selection.removeAllRanges()
-    selection.addRange(range)
-  }
+  range.selectNodeContents(el)
+  selection.removeAllRanges()
+  selection.addRange(range)
 }
 
 function is_image(file) {
