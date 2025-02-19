@@ -20,6 +20,7 @@ schemas = {
         "listed": "integer default 1",
         "size": "integer default 0",
         "sample": "text default ''",
+        "reactions": "integer default 0",
     },
     "users": {
         "username": "text primary key default ''",

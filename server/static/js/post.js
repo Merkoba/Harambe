@@ -462,10 +462,6 @@ function down_icons() {
   }
 }
 
-function colon_items(items) {
-  return items.join(` : `)
-}
-
 function add_reaction(reaction) {
   let r = reaction
   let reactions = DOM.el(`#reactions`)
@@ -474,14 +470,14 @@ function add_reaction(reaction) {
   if (r.mode === `character`) {
     let character = DOM.create(`div`, `reaction_item`)
     character.textContent = r.value
-    character.title = colon_items([r.uname, r.ago])
+    character.title = r.title
     reactions.appendChild(character)
   }
   else if (r.mode === `icon`) {
     let img = DOM.create(`img`, `reaction_item`)
     img.loading = `lazy`
     img.src = `/static/icons/${r.value}.gif`
-    img.title = colon_items([r.uname, r.ago, r.value])
+    img.title = r.title
     reactions.appendChild(img)
   }
 }

@@ -63,13 +63,13 @@
             <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">Uploader</div>
             <div id="size" class="table_cell underline" data-sort="size" title="The size of the file">Size</div>
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this post was created">Date</div>
-            <div id="views" class="table_cell small underline" title="Views" data-sort="views" title="The number of times the post has been viewed">Views</div>
-            <div id="listed" class="table_cell views underline" title="Views" data-sort="listed" title="The post appears in the list">Listed</div>
+            <div id="views" class="table_cell underline" data-sort="views" title="The number of times the post has been viewed and the number of reactions it has">Views</div>
+            <div id="listed" class="table_cell views underline" data-sort="listed" title="The post appears in the list">Listed</div>
             <div class="table_cell actions">Actions</div>
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-name="{{item.name}}" data-size="{{item.size}}" data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}" data-full="{{item.full}}" data-uploader="{{item.uploader or 'Anon'}}">
+        <div class="table_row item" data-name="{{item.name}}" data-size="{{item.size}}" data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}" data-full="{{item.full}}" data-uploader="{{item.uploader or 'Anon'}}" data-view="{{item.view_str}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
@@ -93,7 +93,7 @@
             <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
 
             <!-- Views -->
-            <div class="table_cell small">{{item.views}}</div>
+            <div class="table_cell">{{item.view_str}}</div>
 
             <!-- Listed -->
             <div class="table_cell">{{item.listed_str}}</div>

@@ -27,6 +27,7 @@ class Reaction:
     mode: str
     date: int
     ago: str
+    title: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -58,10 +59,19 @@ class Post:
     listed_str: str
     post_title: str
     reactions: list[Reaction]
+    num_reactions: int
+    view_str: str
 
 
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     ago = utils.time_ago(reaction.date, now)
+
+    if reaction.mode == "icon":
+        title = f"{reaction.uname} : {ago} : {reaction.value}"
+    elif reaction.mode == "character":
+        title = f"{reaction.uname} : {ago}"
+    else:
+        title = "Nothing"
 
     return Reaction(
         reaction.post,
@@ -71,6 +81,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         reaction.mode,
         reaction.date,
         ago,
+        title,
     )
 
 
@@ -95,6 +106,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     size_str = utils.get_size(size)
     listed_str = "L: Yes" if listed else "L: No"
     post_title = title or original or name
+    num_reactions = post.reactions
 
     if all_data:
         sample = post.sample
@@ -110,6 +122,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
     show = f"{name} {ext}".strip()
     can_embed = size <= (config.embed_max_size * 1_000_000)
+    view_str = f"V: {views} | R: {num_reactions}"
 
     return Post(
         name,
@@ -136,6 +149,8 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         listed_str,
         post_title,
         reactions,
+        num_reactions,
+        view_str,
     )
 
 

@@ -154,10 +154,10 @@
     <div id="reactions">{% else %}<div id="reactions" class="hidden">{% endif %}
     {% for reaction in post.reactions %}
         {% if reaction.mode == "icon" %}
-        <img src="/static/icons/{{reaction.value}}.gif" title="{{[reaction.uname, reaction.date, reaction.value] | colon_join}}" class="reaction_item" loading="lazy">
+        <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.title}}" class="reaction_item" loading="lazy">
         {% elif reaction.mode == "character" %}
         <div class="reaction_item">
-            <div title="{{[reaction.uname, reaction.date] | colon_join}}">{{reaction.value}}</div>
+            <div title="{{reaction.title}}">{{reaction.value}}</div>
         </div>
         {% endif %}
     {% endfor %}

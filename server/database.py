@@ -26,6 +26,7 @@ class Post:
     listed: bool
     size: int
     sample: str
+    reactions: int
 
     def full(self) -> str:
         if self.ext:
@@ -129,10 +130,11 @@ def add_post(
         listed,
         size,
         sample,
+        0,
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed, size, sample) values ({placeholders})"
+    query = f"insert into posts (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed, size, sample, reactions) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -153,6 +155,7 @@ def make_post(row: dict[str, Any]) -> Post:
         listed=bool(row.get("listed")),
         size=row.get("size") or 0,
         sample=row.get("sample") or "",
+        reactions=row.get("reactions") or 0,
     )
 
 
