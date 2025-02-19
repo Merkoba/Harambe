@@ -261,7 +261,6 @@ def message() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def post(name: str) -> Any:
     user = get_user()
-    is_user = bool(user)
 
     if not config.public_posts:
         if not user:
