@@ -531,8 +531,7 @@ function react_character() {
   }
 
   char = char.replace(/[;<> ]/g, ``)
-  char = char.replace(`http://`, ``)
-  char = char.replace(`https://`, ``)
+  char = char.replace(/https?:\/\//gi, ``)
   char = char.slice(0, n).trim()
 
   send_reaction(char, `character`)
