@@ -55,10 +55,7 @@ window.onload = function() {
 
   if (image) {
     DOM.ev(image, `click`, () => {
-      let modal_image = DOM.el(`#image_modal_img`)
-      modal_image.src = image.src
-      let modal = DOM.el(`#image_modal`)
-      DOM.show(modal)
+      show_modal_image()
     })
   }
 
@@ -149,6 +146,15 @@ window.onload = function() {
       if (!icons_open()) {
         show_icons()
       }
+    }
+    else if (e.key === `c`) {
+      react_character()
+    }
+    else if (e.key === `i`) {
+      reveal_reactions()
+    }
+    else if (e.key === `Enter`) {
+      toggle_modal_image()
     }
   })
 
@@ -603,4 +609,28 @@ function apply_update(update) {
 function reveal_reactions() {
   let c = DOM.el(`#reactions`)
   c.classList.toggle(`no_info`)
+}
+
+function show_modal_image() {
+  let modal_image = DOM.el(`#image_modal_img`)
+  modal_image.src = image.src
+  let modal = DOM.el(`#image_modal`)
+  DOM.show(modal)
+}
+
+function toggle_modal_image() {
+  let img = DOM.el(`#image`)
+
+  if (!img) {
+    return
+  }
+
+  let modal = DOM.el(`#image_modal`)
+
+  if (DOM.is_hidden(modal)) {
+    show_modal_image()
+  }
+  else {
+    DOM.hide(modal)
+  }
 }
