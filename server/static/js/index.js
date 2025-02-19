@@ -67,6 +67,15 @@ window.onload = () => {
       reflect_file()
     }
   })
+
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    DOM.ev(video, `loadeddata`, () => {
+      video.muted = true
+      video.play()
+    })
+  }
 }
 
 function validate() {
@@ -147,7 +156,6 @@ function reflect_file() {
     reader.readAsDataURL(the_file)
   }
   else if (is_audio(the_file) || is_video(the_file)) {
-    let video = DOM.el(`#video`)
     video.src = URL.createObjectURL(the_file)
     DOM.hide(image)
     DOM.show(video)

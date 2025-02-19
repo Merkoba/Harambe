@@ -210,6 +210,14 @@ window.onload = function() {
       select_all_text()
     })
   }
+
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    video.muted = true
+    video.play()
+    video.muted = false
+  }
 }
 
 function timeago(date) {
