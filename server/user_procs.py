@@ -231,25 +231,25 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     args["max_size"] = [request.form.get("max_size"), "int"]
     args["mark"] = [request.form.get("mark"), "string"]
 
-    if request.form.get("can_list") is not None:
-        args["can_list"] = [True, "bool"]
-    else:
+    if request.form.get("can_list") is None:
         args["can_list"] = [False, "bool"]
-
-    if request.form.get("admin") is not None:
-        args["admin"] = [True, "bool"]
     else:
+        args["can_list"] = [True, "bool"]
+
+    if request.form.get("admin") is None:
         args["admin"] = [False, "bool"]
-
-    if request.form.get("lister") is not None:
-        args["lister"] = [True, "bool"]
     else:
-        args["lister"] = [False, "bool"]
+        args["admin"] = [True, "bool"]
 
-    if request.form.get("rpm") is not None:
+    if request.form.get("lister") is None:
+        args["lister"] = [False, "bool"]
+    else:
+        args["lister"] = [True, "bool"]
+
+    if request.form.get("rpm") is None:
         args["rpm"] = [0, "int"]
 
-    if request.form.get("max_size") is not None:
+    if request.form.get("max_size") is None:
         args["max_size"] = [0, "int"]
 
     uname = args["username"][0]
