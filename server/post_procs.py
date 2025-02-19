@@ -60,7 +60,7 @@ class Post:
     post_title: str
     reactions: list[Reaction]
     num_reactions: int
-    view_str: str
+    views_str: str
 
 
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
@@ -122,7 +122,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
     show = f"{name} {ext}".strip()
     can_embed = size <= (config.embed_max_size * 1_000_000)
-    view_str = f"V: {views} | R: {num_reactions}"
+    views_str = f"V: {views} | R: {num_reactions}"
 
     return Post(
         name,
@@ -150,7 +150,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         post_title,
         reactions,
         num_reactions,
-        view_str,
+        views_str,
     )
 
 
@@ -482,6 +482,7 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
 
     if dbr:
         reaction = make_reaction(dbr, utils.now())
+        database.increase_post_reactions(name)
         return jsonify({"status": "ok", "reaction": reaction}), 200
 
     return jsonify({"status": "error", "message": "Reaction failed"}), 500

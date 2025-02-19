@@ -497,3 +497,11 @@ def get_latest_post() -> Post | None:
         return make_post(dict(row))
 
     return None
+
+
+def increase_post_reactions(name: str) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("update posts set reactions = reactions + 1 where name = ?", (name,))
+    conn.commit()
+    conn.close()
