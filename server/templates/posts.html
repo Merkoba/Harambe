@@ -19,7 +19,11 @@
 
 {% block body %}
 <div id="top">
+    {% if mode == "posts" %}
     <a class="action_button" href="/admin">Back</a>
+    {% else %}
+    <a class="action_button" href="/">Back</a>
+    {% endif %}
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
