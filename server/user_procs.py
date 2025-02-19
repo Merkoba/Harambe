@@ -284,6 +284,9 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
                 except ValueError:
                     value = 0
             elif vtype == "string":
+                value = "".join(
+                    [c for c in value if c.isalnum() or c in [" ", "_", ".", ",", "-"]]
+                )
                 value = str(value)[:200]
                 value = utils.single_line(value)
             elif vtype == "bool":

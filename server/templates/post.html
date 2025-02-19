@@ -14,7 +14,6 @@
     vars.original = `{{post.original}}`
     vars.original_full = `{{post.original_full}}`
     vars.mtype = `{{post.mtype}}`
-    vars.sample = `{{post.sample}}`
     vars.file_path = `{{file_path}}`
     vars.can_react = {{can_react | tojson}}
     vars.character_reaction_length = {{character_reaction_length}}
@@ -134,13 +133,19 @@
         {% endif %}
 
         {% if post.mtype.startswith("text/") %}
+            <div id="text_buttons" class="rowitem">
+                <div id="copy_all_text" class="button">Copy All</div>
+                <div class="sep">|</div>
+                <div id="select_all_text"class="button">Select All</div>
+            </div>
+
             {% if post.mtype == "text/markdown" %}
-            <div>
-                <div id="markdown_view" class="text_embed">{{post.sample}}</div>
+            <div class="text_container">
+                <div id="markdown_view" class="text_embed">{{post.sample | e}}</div>
             </div>
             {% else %}
-            <div>
-                <div id="text_view" class="text_embed">{{post.sample}}</div>
+            <div class="text_container">
+                <div id="text_view" class="text_embed">{{post.sample | e}}</div>
             </div>
             {% endif %}
         {% endif %}

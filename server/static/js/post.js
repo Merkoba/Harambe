@@ -40,12 +40,21 @@ window.onload = function() {
     })
   }
 
-  if ((vars.mtype === `text/markdown`) && vars.sample) {
-    let html = marked.parse(
-      vars.sample.replace(/[\u200B-\u200F\uFEFF]/g, ``),
-    )
+  if ((vars.mtype === `text/markdown`)) {
+    let view = DOM.el(`#markdown_view`)
+    let sample = view.textContent.trim()
+    vars.original_markdown = sample
 
-    DOM.el(`#markdown_view`).innerHTML = html
+    try {
+      let html = marked.parse(
+        sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
+      )
+
+      DOM.el(`#markdown_view`).innerHTML = html
+    }
+    catch (e) {
+      print_error(e)
+    }
   }
   else if (vars.mtype.startsWith(`application`) && vars.mtype.includes(`flash`)) {
     start_flash(vars.name)
@@ -172,6 +181,22 @@ window.onload = function() {
   if (rev) {
     DOM.ev(rev, `click`, () => {
       reveal_reactions()
+    })
+  }
+
+  let copy_all = DOM.el(`#copy_all_text`)
+
+  if (copy_all) {
+    DOM.ev(copy_all, `click`, () => {
+      copy_all_text()
+    })
+  }
+
+  let select_all = DOM.el(`#select_all_text`)
+
+  if (select_all) {
+    DOM.ev(select_all, `click`, () => {
+      select_all_text()
     })
   }
 }
@@ -632,5 +657,24 @@ function toggle_modal_image() {
   }
   else {
     DOM.hide(modal)
+  }
+}
+
+function copy_all_text() {
+  copy_to_clipboard(get_text_value())
+}
+
+function select_all_text() {
+  select_all(DOM.el(`.text_embed`))
+}
+
+function get_text_value() {
+  let el = DOM.el(`.text_embed`)
+
+  if (el.id === `markdown_view`) {
+    return vars.original_markdown
+  }
+  else {
+    return el.textContent
   }
 }

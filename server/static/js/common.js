@@ -14,3 +14,21 @@ function shuffle_array(array) {
 
   return array
 }
+
+async function copy_to_clipboard(text) {
+  navigator.clipboard.writeText(text)
+}
+
+function select_all(el) {
+  let selection = window.getSelection()
+  let range = document.createRange()
+
+  if (selection.containsNode(el, true)) {
+    selection.removeAllRanges()
+  }
+  else {
+    range.selectNode(el)
+    selection.removeAllRanges()
+    selection.addRange(range)
+  }
+}

@@ -91,13 +91,12 @@ a.button:hover {
 }
 
 .text_embed {
-    border-width: 1px;
-    border-style: solid;
+    max-height: 100%;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
-    border-color: var(--frame_color);
+    background-color: var(--contrast_background);
 }
 
 #text_view {
@@ -263,4 +262,14 @@ a.button:hover {
 
 #reactions.no_info .reaction_item {
     border-width: 0;
+}
+
+.text_container {
+    max-height: 800px;
+    max-width: 1280px;
+    overflow: auto;
+}
+
+#text_buttons {
+    padding-bottom: 0.5rem;
 }
