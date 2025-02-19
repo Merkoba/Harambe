@@ -123,7 +123,12 @@ function reflect_file() {
 
   if (the_file.size > vars.max_size) {
     reset_file()
-    alert(`That file is too big.`)
+
+    setTimeout(() => {
+      alert(`That file is too big.`)
+    }, 100)
+
+    return
   }
 
   reset_image()
@@ -154,9 +159,17 @@ function reset_file() {
   let file = DOM.el(`#file`)
   file.value = null
   reset_image()
+  reset_video()
+  DOM.show(`#image`)
 }
 
 function reset_image() {
   let image = DOM.el(`#image`)
   image.src = `static/img/${vars.image_name}`
+}
+
+function reset_video() {
+  let video = DOM.el(`#video`)
+  video.pause()
+  DOM.hide(video)
 }
