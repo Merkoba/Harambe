@@ -32,3 +32,15 @@ function select_all(el) {
     selection.addRange(range)
   }
 }
+
+function is_image(file) {
+  return file.type.match(`image/*`)
+}
+
+function is_audio(file) {
+  return file.type.match(`audio/*`)
+}
+
+function is_video(file) {
+  return file.type.match(`video/*`)
+}

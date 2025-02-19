@@ -126,22 +126,28 @@ function reflect_file() {
     alert(`That file is too big.`)
   }
 
-  if (!is_image(the_file)) {
-    reset_image()
-    return
+  reset_image()
+  video.pause()
+  DOM.hide(video)
+
+  if (is_image(the_file)) {
+    let reader = new FileReader()
+
+    reader.onload = (e) => {
+      image.src = e.target.result
+    }
+
+    DOM.hide(video)
+    DOM.show(image)
+    reader.readAsDataURL(the_file)
   }
-
-  let reader = new FileReader()
-
-  reader.onload = (e) => {
-    image.src = e.target.result
+  else if (is_audio(the_file) || is_video(the_file)) {
+    let video = DOM.el(`#video`)
+    video.src = URL.createObjectURL(the_file)
+    DOM.hide(image)
+    DOM.show(video)
+    video.load()
   }
-
-  reader.readAsDataURL(the_file)
-}
-
-function is_image(file) {
-  return file.type.match(`image/*`)
 }
 
 function reset_file() {

@@ -90,6 +90,12 @@ a:hover {
     outline-color: var(--accent_color);
 }
 
+#video {
+    width: 360px;
+    max-height: 300px;
+    margin-bottom: 1.25rem;
+}
+
 #file_size {
     align-self: center;
 }
