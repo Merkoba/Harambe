@@ -5,14 +5,16 @@
 body, html {
     font-size: 20px;
     background-color: white;
-    color: black;
     font-family: sans-serif;
+    color: black;
+    background-color: white;
 }
 
 #top {
     display: flex;
     flex-direction: row;
     gap: 0.15rem;
+    color: black;
 }
 
 #items {
