@@ -128,7 +128,7 @@
 
         {% if post.mtype.startswith("video/") or post.mtype.startswith("audio/") %}
         <div>
-            <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none"></video>
+            <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none" poster="/static/img/cover.jpg"></video>
         </div>
         {% endif %}
 

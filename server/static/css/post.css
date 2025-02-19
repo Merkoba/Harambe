@@ -83,10 +83,9 @@ a.button:hover {
 }
 
 #video {
-    min-width: 450px;
-    max-width: 60%;
+    width: 666px;
     height: auto;
-    background-color: var(--link_color);
+    background-color: black;
     max-height: 600px;
 }
 
