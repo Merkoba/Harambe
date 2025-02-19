@@ -6,7 +6,7 @@
 
 <script>
     const vars = {}
-    vars.username = `{{user.username}}`
+    vars.username = JSON.stringify({{user.username | tojson | safe}})
 </script>
 
 <script src="/static/js/edit_user.js"></script>

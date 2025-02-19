@@ -7,14 +7,14 @@
 
 <script>
     const vars = {}
-    vars.name = `{{post.name}}`
-    vars.full = `{{post.full}}`
+    vars.name = JSON.stringify({{post.name | tojson | safe}})
+    vars.full = JSON.stringify({{post.full | tojson | safe}})
     vars.date = {{post.date}}
-    vars.title = `{{post.title}}`
-    vars.original = `{{post.original}}`
-    vars.original_full = `{{post.original_full}}`
-    vars.mtype = `{{post.mtype}}`
-    vars.file_path = `{{file_path}}`
+    vars.title = JSON.stringify({{post.title | tojson | safe}})
+    vars.original = JSON.stringify({{post.original | tojson | safe}})
+    vars.original_full = JSON.stringify({{post.original_full | tojson | safe}})
+    vars.mtype = JSON.stringify({{post.mtype | tojson | safe}})
+    vars.file_path = JSON.stringify({{file_path | tojson | safe}})
     vars.can_react = {{can_react | tojson}}
     vars.character_reaction_length = {{character_reaction_length}}
     vars.post_refresh_interval = {{post_refresh_interval}}

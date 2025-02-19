@@ -7,9 +7,9 @@
 <script>
     const vars = {}
     vars.mode = `list`
-    vars.page_size = `{{page_size}}`
+    vars.page_size = JSON.stringify({{page_size | tojson | safe}})
     vars.def_page_size = {{def_page_size | tojson}}
-    vars.sort = `{{sort}}`
+    vars.sort = JSON.stringify({{sort | tojson | safe}})
     vars.page = {{page}}
 </script>
 
