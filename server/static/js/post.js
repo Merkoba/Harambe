@@ -157,19 +157,24 @@ window.onload = function() {
   }
 
   DOM.ev(document, `keyup`, (e) => {
-    if (e.key === `r`) {
-      if (!icons_open()) {
-        show_icons()
+    if (!icons_open()) {
+      if (e.key === `r`) {
+        if (!icons_open()) {
+          show_icons()
+        }
       }
-    }
-    else if (e.key === `c`) {
-      react_character()
-    }
-    else if (e.key === `i`) {
-      reveal_reactions()
-    }
-    else if (e.key === `Enter`) {
-      toggle_modal_image()
+      else if (e.key === `c`) {
+        react_character()
+      }
+      else if (e.key === `i`) {
+        reveal_reactions()
+      }
+      else if (e.key === `m`) {
+        toggle_modal_image()
+      }
+      else if (e.key === `Escape`) {
+        hide_modal_image()
+      }
     }
   })
 
@@ -649,6 +654,11 @@ function show_modal_image() {
   DOM.show(modal)
 }
 
+function hide_modal_image() {
+  let modal = DOM.el(`#image_modal`)
+  DOM.hide(modal)
+}
+
 function toggle_modal_image() {
   let img = DOM.el(`#image`)
 
@@ -662,7 +672,7 @@ function toggle_modal_image() {
     show_modal_image()
   }
   else {
-    DOM.hide(modal)
+    hide_modal_image()
   }
 }
 
@@ -680,6 +690,6 @@ function get_text_value() {
   if (el.id === `markdown_view`) {
     return vars.original_markdown
   }
-  
+
   return el.textContent
 }
