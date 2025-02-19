@@ -229,14 +229,18 @@ a.button:hover {
 }
 
 .reaction_item {
-    height: 1.8rem;
-    width: auto;
     padding: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 1px solid var(--frame_color);
     gap: 0.5rem;
+}
+
+.reaction_item img {
+    height: 1.8rem;
+    max-height: 100%;
+    width: auto;
 }
 
 #react_buttons {
