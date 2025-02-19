@@ -121,42 +121,7 @@ window.onload = () => {
 
   if (filter) {
     DOM.ev(filter, `input`, () => {
-      let items = DOM.els(`.item`)
-      let value = filter.value.toLowerCase()
-
-      for (let item of items) {
-        let opts = []
-
-        if (vars.mode === `users`) {
-          let username = item.dataset.username.toLowerCase()
-          let name = item.dataset.name.toLowerCase()
-          let rpm = item.dataset.rpm.toLowerCase()
-          let max_size = item.dataset.max_size.toLowerCase()
-          let mark = item.dataset.mark.toLowerCase()
-          let reg_date = item.dataset.reg_date.toLowerCase()
-          let last_date = item.dataset.last_date.toLowerCase()
-          let admin = item.dataset.admin.toLowerCase().replace(`:`, ``).trim()
-          let list = item.dataset.can_list.toLowerCase().replace(`:`, ``).trim()
-          opts = [username, name, rpm, max_size, mark, reg_date, last_date, admin, list]
-        }
-        else if (vars.mode === `posts`) {
-          let name = item.dataset.name.toLowerCase()
-          let ago = item.dataset.ago.toLowerCase()
-          let date = item.dataset.date.toLowerCase()
-          let size = item.dataset.size_str.toLowerCase()
-          let title = item.dataset.title.toLowerCase()
-          let original = item.dataset.original.toLowerCase()
-          let uploader = item.dataset.uploader.toLowerCase()
-          opts = [name, size, title, original, ago, date, uploader]
-        }
-
-        if (opts.some(x => x.includes(value))) {
-          DOM.show(item)
-        }
-        else {
-          DOM.hide(item)
-        }
-      }
+      do_filter()
     })
 
     filter.focus()
@@ -654,6 +619,55 @@ function delete_all() {
   else if (vars.mode === `posts`) {
     if (confirm(`Delete ALL posts ?`)) {
       delete_all_posts()
+    }
+  }
+}
+
+function do_filter() {
+  let filter = DOM.el(`#filter`)
+  let items = DOM.els(`.item`)
+  let value = filter.value.toLowerCase()
+  value = value.replace(/\s/g, ``)
+  value = value.replace(/:/g, ``)
+
+  for (let item of items) {
+    let opts = []
+
+    if (vars.mode === `users`) {
+      let username = item.dataset.username
+      let name = item.dataset.name
+      let rpm = item.dataset.rpm
+      let max_size = item.dataset.max_size
+      let mark = item.dataset.mark
+      let reg_date = item.dataset.reg_date
+      let last_date = item.dataset.last_date
+      let admin = item.dataset.admin
+      let list = item.dataset.can_list
+      opts = [username, name, rpm, max_size, mark, reg_date, last_date, admin, list]
+    }
+    else if (vars.mode === `posts` || vars.mode === `list`) {
+      let name = item.dataset.name
+      let ago = item.dataset.ago
+      let date = item.dataset.date
+      let size = item.dataset.size_str
+      let title = item.dataset.title
+      let original = item.dataset.original
+      let uploader = item.dataset.uploader
+      let views = item.dataset.views
+      let listed = item.dataset.listed
+      opts = [name, size, title, original, ago, date, uploader, views, listed]
+    }
+
+    opts = opts.filter(x => x)
+    opts = opts.map(x => x.toLowerCase().trim())
+    opts = opts.map(x => x.replace(/\s/g, ``))
+    opts = opts.map(x => x.replace(/:/g, ``))
+
+    if (opts.some(x => x.includes(value))) {
+      DOM.show(item)
+    }
+    else {
+      DOM.hide(item)
     }
   }
 }
