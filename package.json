@@ -1,8 +1,8 @@
 {
   "name": "harambe",
   "scripts": {
-		"lint":	"eslint --cache -c --no-warn-ignore eslint.config.mjs",
-		"fix": "eslint --fix -c eslint.config.mjs"
+		"lint":	"eslint --cache -c eslint.config.mjs --no-warn-ignored",
+		"fix": "eslint --fix -c eslint.config.mjs --no-warn-ignored"
 	},
   "dependencies": {
     "eslint": "~9.17.0",

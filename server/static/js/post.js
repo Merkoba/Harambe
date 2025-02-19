@@ -46,7 +46,7 @@ window.onload = function() {
     })
   }
 
-  if ((vars.mtype === `text/markdown`)) {
+  if (vars.mtype === `text/markdown`) {
     let view = DOM.el(`#markdown_view`)
     let sample = view.textContent.trim()
     vars.original_markdown = sample
@@ -680,7 +680,6 @@ function get_text_value() {
   if (el.id === `markdown_view`) {
     return vars.original_markdown
   }
-  else {
-    return el.textContent
-  }
+  
+  return el.textContent
 }

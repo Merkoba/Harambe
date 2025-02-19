@@ -12,6 +12,7 @@ export default [
 
   {
     rules: {
+      "no-undef": "off",
       "no-unused-vars": "off",
       "indent": ["error", 2],
       "linebreak-style": ["error", "unix"],

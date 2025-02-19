@@ -14,7 +14,7 @@ window.onload = () => {
 
     if (e.target.classList.contains(`edit`)) {
       if (vars.mode === `users`) {
-        window.open(`/edit_user/${item.dataset.username}`, '_blank');
+        window.open(`/edit_user/${item.dataset.username}`, `_blank`)
       }
       else if (vars.mode === `posts`) {
         edit_title(item)
@@ -573,13 +573,11 @@ function do_sort(what) {
   if (what === vars.sort) {
     sort_action(what, true)
   }
+  else if (vars.sort.includes(`_desc`)) {
+    sort_action(what)
+  }
   else {
-    if (vars.sort.includes(`_desc`)) {
-      sort_action(what)
-    }
-    else {
-      sort_action(what, true)
-    }
+    sort_action(what, true)
   }
 }
 
@@ -624,7 +622,7 @@ async function do_mod_user(items, what, value, vtype) {
 function delete_all() {
   if (vars.mode === `users`) {
     if (confirm(`Delete all non-admin users ?`)) {
-        delete_normal_users()
+      delete_normal_users()
     }
   }
   else if (vars.mode === `posts`) {
@@ -660,7 +658,7 @@ function do_filter() {
         mark, reg_date, last_date, admin, list,
       ]
     }
-    else if (vars.mode === `posts` || vars.mode === `list`) {
+    else if ((vars.mode === `posts`) || (vars.mode === `list`)) {
       let name = item.dataset.name
       let ago = item.dataset.ago
       let date = item.dataset.date
