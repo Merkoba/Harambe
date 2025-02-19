@@ -287,8 +287,9 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
                 value = "".join(
                     [c for c in value if c.isalnum() or c in [" ", "_", ".", ",", "-"]]
                 )
-                value = str(value)[:200]
+
                 value = utils.single_line(value)
+                value = str(value)[:200]
             elif vtype == "bool":
                 value = bool(value)
 

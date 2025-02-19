@@ -3,6 +3,7 @@ from __future__ import annotations
 # Standard
 from typing import Any, Never
 from functools import wraps
+from typing import Callable
 
 # Libraries
 from flask import Flask, render_template, request, send_file  # type: ignore
@@ -104,6 +105,28 @@ def list_required(f: Any) -> Any:
         return f(*args, **kwargs)
 
     return decorated_function
+
+
+def payload_check(max_post: int = 2048, max_get: int = 2048) -> Callable[[Any], Any]:
+    def decorator(f: Any) -> Any:
+        @wraps(f)
+        def decorated_function(*args: Any, **kwargs: Any) -> Any:
+            if request.method == "POST":
+                post_size = request.content_length or 0
+
+                if post_size > max_post:
+                    return "POST too big", 413
+            elif request.method == "GET":
+                get_size = len(request.url)
+
+                if get_size > max_get:
+                    return "GET too big", 414
+
+            return f(*args, **kwargs)
+
+        return decorated_function
+
+    return decorator
 
 
 def rate_limit(n: int) -> str:
@@ -218,6 +241,7 @@ def api_upload() -> Any:
 
 
 @app.route("/message", methods=["GET"])  # type: ignore
+@payload_check()
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def message() -> Any:
     data = {}
@@ -258,6 +282,7 @@ def message() -> Any:
 
 
 @app.route("/post/<string:name>", methods=["GET"])  # type: ignore
+@payload_check()
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def post(name: str) -> Any:
     user = get_user()
@@ -306,6 +331,7 @@ def post(name: str) -> Any:
 
 
 @app.route("/refresh", methods=["POST"])  # type: ignore
+@payload_check()
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def refresh() -> Any:
     data = request.get_json()
@@ -324,6 +350,7 @@ def refresh() -> Any:
 
 @app.route("/next/<string:current>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @list_required
 def next_post(current: str) -> Any:
     name = post_procs.get_next_post(current)
@@ -336,6 +363,7 @@ def next_post(current: str) -> Any:
 
 @app.route("/random", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @list_required
 def random_post() -> Any:
     used_names = session["used_names"] if "used_names" in session else []
@@ -361,6 +389,7 @@ def random_post() -> Any:
 @app.route(f"/{config.file_path}/<path:name>", methods=["GET"])  # type: ignore
 @app.route(f"/{config.file_path}/<path:name>/<string:original>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 def get_file(name: str, original: str | None = None) -> Any:
     if not config.allow_hotlinks:
         referrer = request.referrer
@@ -389,6 +418,7 @@ def get_file(name: str, original: str | None = None) -> Any:
 
 @app.route("/admin", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @admin_required
 def admin_fallback() -> Any:
     return render_template("admin.html")
@@ -397,6 +427,7 @@ def admin_fallback() -> Any:
 @app.route("/admin/<string:what>", defaults={"page": 1}, methods=["GET"])  # type: ignore
 @app.route("/admin/<string:what>/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @admin_required
 def admin(what: str, page: int = 1) -> Any:
     if what not in ["posts", "users"]:
@@ -437,6 +468,7 @@ def admin(what: str, page: int = 1) -> Any:
 
 @app.route("/delete_posts", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @admin_required
 def delete_posts() -> Any:
     data = request.get_json()
@@ -446,6 +478,7 @@ def delete_posts() -> Any:
 
 @app.route("/delete_all_posts", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(2))  # type: ignore
+@payload_check()
 @admin_required
 def delete_all_posts() -> Any:
     return post_procs.delete_all_posts()
@@ -453,6 +486,7 @@ def delete_all_posts() -> Any:
 
 @app.route("/delete_post", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @login_required
 def delete_post() -> Any:
     data = request.get_json()
@@ -467,6 +501,7 @@ def delete_post() -> Any:
 
 @app.route("/edit_title", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @login_required
 def edit_title() -> Any:
     data = request.get_json()
@@ -485,6 +520,7 @@ def edit_title() -> Any:
 
 @app.route("/login", methods=["GET", "POST"])  # type: ignore
 @limiter.limit(rate_limit(5))  # type: ignore
+@payload_check()
 def login() -> Any:
     if request.method == "POST":
         username = request.form.get("username", "").strip()
@@ -508,6 +544,7 @@ def login() -> Any:
 
 @app.route("/logout", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(3))  # type: ignore
+@payload_check()
 def logout() -> Any:
     session.pop("username", None)
     return redirect(url_for("index"))
@@ -519,6 +556,7 @@ def logout() -> Any:
 @app.route("/list", defaults={"page": 1}, methods=["GET"])  # type: ignore
 @app.route("/list/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 def show_list(page: int = 1) -> Any:
     user = get_user()
     admin = user and user.admin
@@ -567,6 +605,7 @@ def show_list(page: int = 1) -> Any:
 
 @app.route("/fresh", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @list_required
 def latest_post() -> Any:
     post = post_procs.get_latest_post()
@@ -583,6 +622,7 @@ def latest_post() -> Any:
 @app.route("/edit_user", defaults={"username": ""}, methods=["GET", "POST"])  # type: ignore
 @app.route("/edit_user/<string:username>", methods=["GET", "POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @admin_required
 def edit_user(username: str = "") -> Any:
     if username:
@@ -631,6 +671,7 @@ def edit_user(username: str = "") -> Any:
 
 @app.route("/delete_users", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @admin_required
 def delete_users() -> Any:
     data = request.get_json()
@@ -649,6 +690,7 @@ def delete_users() -> Any:
 
 @app.route("/delete_normal_users", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(2))  # type: ignore
+@payload_check()
 @admin_required
 def delete_normal_users() -> Any:
     return user_procs.delete_normal_users()
@@ -656,6 +698,7 @@ def delete_normal_users() -> Any:
 
 @app.route("/delete_user", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @admin_required
 def delete_user() -> Any:
     data = request.get_json()
@@ -674,6 +717,7 @@ def delete_user() -> Any:
 
 @app.route("/mod_user", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @admin_required
 def mod_user() -> Any:
     data = request.get_json()
@@ -698,6 +742,7 @@ def mod_user() -> Any:
 
 @app.route("/get_icons", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @login_required
 def get_icons() -> Any:
     return {"icons": utils.ICONS}
@@ -705,6 +750,7 @@ def get_icons() -> Any:
 
 @app.route("/react", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @login_required
 def react() -> Any:
     user = get_user()
@@ -725,6 +771,7 @@ def react() -> Any:
 
 @app.route("/you", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @login_required
 def you() -> Any:
     user = get_user()
@@ -738,6 +785,7 @@ def you() -> Any:
 @app.route("/history", defaults={"page": 1}, methods=["GET"])  # type: ignore
 @app.route("/history/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
 @login_required
 def show_history(page: int = 1) -> Any:
     user = get_user()
