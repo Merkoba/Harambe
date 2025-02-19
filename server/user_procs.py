@@ -276,8 +276,7 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
                 value = hashpass(value)
             elif user and user.password:
                 value = user.password
-
-        if value:
+        elif value:
             if vtype == "int":
                 try:
                     value = min(max_num, max(0, int(value)))
