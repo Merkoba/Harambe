@@ -7,9 +7,11 @@
 <script>
     const vars = {}
     vars.mode = {{mode | tojson | safe}}
+    vars.page = {{page}}
     vars.page_size = {{page_size | tojson | safe}}
     vars.def_page_size = {{def_page_size | tojson}}
     vars.sort = {{sort | tojson | safe}}
+    vars.next_page = {{next_page | tojson}}
 </script>
 
 <script src="/static/js/admin.js"></script>
@@ -35,21 +37,17 @@
     <div class="sep">|</div>
 
     {% if page > 1 %}
-        {% if page > 2 %}
-        <a class="linkbutton" href="/admin/posts/{{page - 1}}?page_size={{page_size}}" title="Go to the previous page">Prev</a>
-        {% else %}
-        <a class="linkbutton" href="/admin/posts?page_size={{page_size}}" title="Go to the previous page">Prev</a>
-        {% endif %}
+    <div id="prev_page" class="action_button" title="Go to the previous page">Prev</div>
     {% else %}
-    <div class="">Prev</div>
+    <div>Prev</div>
     {% endif %}
 
     <div class="sep">|</div>
 
     {% if next_page %}
-    <a class="linkbutton" href="/admin/posts/{{page + 1}}?page_size={{page_size}}" title="Go to the next page">Next</a>
+    <div id="next_page" class="action_button" title="Go to the next page">Next</div>
     {% else %}
-    <div class="">Next</div>
+    <div>Next</div>
     {% endif %}
 
     <div class="sep">|</div>

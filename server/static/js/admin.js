@@ -54,13 +54,10 @@ window.onload = () => {
   let refresh = DOM.el(`#refresh`)
 
   if (refresh) {
+    let ms = mode_string()
+
     DOM.ev(refresh, `click`, () => {
-      if (vars.mode === `list`) {
-        window.location = `/list`
-      }
-      else {
-        window.location = `/admin/${vars.mode}`
-      }
+      window.location = `/${ms}`
     })
   }
 
@@ -148,6 +145,36 @@ window.onload = () => {
       window.location = `/edit_user`
     })
   }
+
+  let prev_page = DOM.el(`#prev_page`)
+
+  if (prev_page) {
+    DOM.ev(prev_page, `click`, () => {
+      if (vars.page <= 1) {
+        return
+      }
+
+      goto_page(vars.page - 1)
+    })
+  }
+
+  let next_page = DOM.el(`#next_page`)
+
+  if (next_page) {
+    DOM.ev(next_page, `click`, () => {
+      if (!vars.next_page) {
+        return
+      }
+
+      goto_page(vars.page + 1)
+    })
+  }
+}
+
+function goto_page(p) {
+  let ms = mode_string()
+  let ps = vars.page_size
+  window.location = `/${ms}/${p}?page_size=${ps}`
 }
 
 function select_above(el) {
@@ -394,20 +421,13 @@ function do_search() {
     return
   }
 
-  let mode
-
-  if ([`users`, `posts`].includes(vars.mode)) {
-    mode `admin/${vars.mode}`
-  }
-  else if (vars.mode === `list`) {
-    mode = `list`
-  }
+  let ms = mode_string()
 
   if (query) {
-    window.location = `/${mode}?query=${query}`
+    window.location = `/${ms}?query=${query}`
   }
   else {
-    window.location = `/${mode}`
+    window.location = `/${ms}`
   }
 }
 
@@ -561,12 +581,8 @@ function sort_action(what, desc = false) {
     what = what + `_desc`
   }
 
-  if (vars.mode === `list`) {
-    window.location = `/list?sort=${what}`
-  }
-  else {
-    window.location = `/admin/${vars.mode}?sort=${what}`
-  }
+  let ms = mode_string()
+  window.location = `/${ms}?sort=${what}`
 }
 
 function do_sort(what) {
@@ -688,4 +704,12 @@ function do_filter() {
       DOM.hide(item)
     }
   }
+}
+
+function mode_string() {
+  if (vars.mode === `list`) {
+    return `list`
+  }
+
+  return `admin/${vars.mode}`
 }
