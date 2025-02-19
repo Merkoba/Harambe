@@ -106,7 +106,11 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     size_str = utils.get_size(size)
     listed_str = "L: Yes" if listed else "L: No"
     post_title = title or original or name
-    num_reactions = post.reactions
+
+    if isinstance(post.reactions, int):
+        num_reactions = post.reactions
+    else:
+        num_reactions = 0
 
     if all_data:
         sample = post.sample
