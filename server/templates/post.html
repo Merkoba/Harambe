@@ -141,11 +141,11 @@
 
             {% if post.mtype == "text/markdown" %}
             <div class="text_container">
-                <div id="markdown_view" class="text_embed">{{post.sample | e}}</div>
+                <div id="markdown_view" class="text_embed">{{post.sample}}</div>
             </div>
             {% else %}
             <div class="text_container">
-                <div id="text_view" class="text_embed">{{post.sample | e}}</div>
+                <div id="text_view" class="text_embed">{{post.sample}}</div>
             </div>
             {% endif %}
         {% endif %}
