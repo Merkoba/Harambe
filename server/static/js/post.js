@@ -713,6 +713,11 @@ function maximize_media() {
   let video = DOM.el(`#video`)
 
   if (video) {
-    video.requestFullscreen()
+    toggle_max_video()
   }
+}
+
+function toggle_max_video() {
+  let video = DOM.el(`#video`)
+  video.classList.toggle(`maximized`)
 }
