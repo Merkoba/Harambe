@@ -436,6 +436,7 @@ def admin(what: str, page: int = 1) -> Any:
     query = request.args.get("query", "")
     def_date = "date" if what == "posts" else "register_date"
     sort = request.args.get("sort", def_date)
+    username = request.args.get("username", "")
     page_size = request.args.get("page_size", config.admin_page_size)
     items: list[Post] | list[User]
 
@@ -461,6 +462,7 @@ def admin(what: str, page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
+        username=username,
         sort=sort,
     )
 
