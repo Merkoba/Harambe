@@ -171,8 +171,8 @@ def single_line(s: str) -> str:
     return " ".join(s.split()).strip()
 
 
-def q(obj: Any) -> None:
-    qlib.q(obj)
+def q(*args: Any) -> None:
+    qlib.q(args)
 
 
 def count_graphemes(s: str) -> int:

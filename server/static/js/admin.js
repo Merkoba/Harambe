@@ -171,10 +171,17 @@ window.onload = () => {
   }
 }
 
-function goto_page(p) {
-  let ms = mode_string()
-  let ps = vars.page_size
-  window.location = `/${ms}/${p}?page_size=${ps}`
+function goto_page(page) {
+  let psize = vars.page_size
+  let url = new URL(window.location.href)
+  url.searchParams.set(`page`, page)
+  url.searchParams.set(`page_size`, psize)
+
+  if (vars.username) {
+    url.searchParams.set(`username`, vars.username)
+  }
+
+  window.location.href = url.href
 }
 
 function select_above(el) {

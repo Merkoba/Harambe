@@ -562,20 +562,24 @@ def logout() -> Any:
 def show_list(page: int = 1) -> Any:
     user = get_user()
     admin = user and user.admin
+    username = request.args.get("username", "")
+    history = user and user.username == username
 
-    if not config.list_enabled and (not admin):
-        return redirect(url_for("index"))
-
-    if config.list_private and (not admin):
-        if not logged_in():
-            return redirect(url_for("login"))
-
-        if not user:
-            return redirect(url_for("login"))
-
-        if not user.can_list:
+    if not history:
+        if not config.list_enabled and (not admin):
             return redirect(url_for("index"))
 
+        if config.list_private and (not admin):
+            if not logged_in():
+                return redirect(url_for("login"))
+
+            if not user:
+                return redirect(url_for("login"))
+
+            if not user.can_list:
+                return redirect(url_for("index"))
+
+    page = int(request.args.get("page", 1))
     page_size = request.args.get("page_size", config.list_page_size)
     sort = request.args.get("sort", "date")
     query = request.args.get("query", "")
@@ -587,6 +591,7 @@ def show_list(page: int = 1) -> Any:
         sort=sort,
         query=query,
         only_listed=True,
+        username=username,
     )
 
     def_page_size = page_size == config.list_page_size
@@ -600,6 +605,7 @@ def show_list(page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
+        username=username,
         sort=sort,
         back="/",
     )
@@ -782,39 +788,3 @@ def you() -> Any:
         return over()
 
     return render_template("you.html", user=user)
-
-
-@app.route("/history", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/history/<int:page>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-@login_required
-def show_history(page: int = 1) -> Any:
-    user = get_user()
-
-    if not user:
-        return redirect(url_for("login"))
-
-    page_size = request.args.get("page_size", config.list_page_size)
-    username = user.username
-
-    if not username:
-        return redirect(url_for("index"))
-
-    posts, total, next_page = post_procs.get_posts(
-        page, page_size, max_posts=config.list_max_posts, username=username
-    )
-
-    def_page_size = page_size == config.list_page_size
-
-    return render_template(
-        "list.html",
-        mode="history",
-        items=posts,
-        total=total,
-        page=page,
-        next_page=next_page,
-        page_size=page_size,
-        def_page_size=def_page_size,
-        back="/you",
-    )
