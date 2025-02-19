@@ -265,7 +265,7 @@ a.button:hover {
 }
 
 .text_container {
-    max-height: 800px;
+    max-height: 666px;
     max-width: 1280px;
     overflow: auto;
 }
