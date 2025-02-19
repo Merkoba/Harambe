@@ -235,10 +235,28 @@ a.button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid var(--frame_color);
+    gap: 0.5rem;
 }
 
 #react_buttons {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+}
+
+.reaction_info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+#reactions.no_info .reaction_info{
+    display: none;
+}
+
+#reactions.no_info .reaction_item {
+    border-width: 0;
 }

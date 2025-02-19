@@ -160,6 +160,14 @@ window.onload = function() {
       clearInterval(vars.refresh_interval)
     }
   }, vars.post_refresh_interval * 1000)
+
+  let rev = DOM.el(`#reveal_reactions`)
+
+  if (rev) {
+    DOM.ev(rev, `click`, () => {
+      reveal_reactions()
+    })
+  }
 }
 
 function timeago(date) {
@@ -466,20 +474,29 @@ function add_reaction(reaction) {
   let r = reaction
   let reactions = DOM.el(`#reactions`)
   DOM.show(reactions)
+  let item = DOM.create(`div`, `reaction_item`)
 
   if (r.mode === `character`) {
-    let character = DOM.create(`div`, `reaction_item`)
+    let character = DOM.create(`div`)
     character.textContent = r.value
     character.title = r.title
-    reactions.appendChild(character)
+    item.appendChild(character)
   }
   else if (r.mode === `icon`) {
-    let img = DOM.create(`img`, `reaction_item`)
+    let img = DOM.create(`img`)
     img.loading = `lazy`
     img.src = `/static/icons/${r.value}.gif`
     img.title = r.title
-    reactions.appendChild(img)
+    item.appendChild(img)
   }
+
+  let info = DOM.el(`#reaction_info_template`)
+  let clone = info.content.cloneNode(true)
+  DOM.el(`.uname`, clone).textContent = reaction.uname
+  DOM.el(`.ago`, clone).textContent = reaction.ago
+  item.appendChild(clone)
+
+  reactions.appendChild(item)
 }
 
 function icons_open() {
@@ -571,4 +588,9 @@ function apply_update(update) {
   document.title = update.post_title
   DOM.el(`#title`).textContent = update.title || vars.original
   DOM.el(`#views`).textContent = update.views
+}
+
+function reveal_reactions() {
+  let c = DOM.el(`#reactions`)
+  c.classList.toggle(`no_info`)
 }

@@ -48,6 +48,18 @@
     </div>
 </div>
 
+<template id="reaction_info_template">
+    <div class="reaction_info">
+        <div class="sep">|</div>
+
+        <div class="rowitem">
+            <div class="uname"></div>
+            <div class="sep">|</div>
+            <div class="ago"></div>
+        </div>
+    </div>
+</template>
+
 <div id="main">
     <div id="top">
         <a href="/" class="button">Return</a>
@@ -145,23 +157,39 @@
     <div id="react_buttons">
         <div id="react_icon" class="button" title="You can also press 'r' to open the popup">React with an icon</div>
         <div class="sep">|</div>
-        <div id="react_character" class="button" title="You can also press 'r' to open the popup">React with character</div>
+        <div id="react_character" class="button" title="React with letters, numbers, emojis">React with character</div>
+        <div class="sep">|</div>
+        <div id="reveal_reactions" class="button" title="Reveal reaction information">Reveal info</div>
     </div>
     {% endif %}
 
     {% if reactions_enabled %}
-    {% if post.reactions | length > 0 %}
-    <div id="reactions">{% else %}<div id="reactions" class="hidden">{% endif %}
-    {% for reaction in post.reactions %}
-        {% if reaction.mode == "icon" %}
-        <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.title}}" class="reaction_item" loading="lazy">
-        {% elif reaction.mode == "character" %}
-        <div class="reaction_item">
-            <div title="{{reaction.title}}">{{reaction.value}}</div>
-        </div>
+        {% if post.reactions | length > 0 %}
+        <div id="reactions" class="no_info">
+        {% else %}
+        <div id="reactions" class="hidden no_info">
         {% endif %}
-    {% endfor %}
-    </div>
+
+        {% for reaction in post.reactions %}
+            <div class="reaction_item">
+                {% if reaction.mode == "icon" %}
+                <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.title}}" loading="lazy">
+                {% elif reaction.mode == "character" %}
+                <div title="{{reaction.title}}">{{reaction.value}}</div>
+                {% endif %}
+                <div class="reaction_info">
+                    <div class="sep">|</div>
+
+                    <div class="rowitem">
+                        <div>{{reaction.uname}}</div>
+                        <div class="sep">|</div>
+                        <div>{{reaction.ago}}</div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        </div>
     {% endif %}
 </div>
 {% endblock %}
