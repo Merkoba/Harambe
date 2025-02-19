@@ -24,14 +24,19 @@
 
 {% block body %}
 <div class="middle">
-    <div>{{user.username}} | {{user.name}}</div>
+    <div class="rowitem">
+        <div>{{user.username}}</div>
+        <div class="sep">|</div>
+        <div>{{user.name}}</div>
+    </div>
+
     <img src="/static/img/you.jpg" id="you">
 
     <div class="selector">
         <a class="linkbutton" href="/">Return</a>
-        <span class="sep">|</span>
+        <div class="sep">|</div>
         <a class="linkbutton" href="/history">History</a>
-        <span class="sep">|</span>
+        <div class="sep">|</div>
         <div class="action_button" id="logout">Logout</div>
     </div>
 </div>

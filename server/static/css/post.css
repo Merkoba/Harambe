@@ -242,9 +242,3 @@ a.button:hover {
     flex-direction: row;
     gap: 0.5rem;
 }
-
-.rowitem {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-}

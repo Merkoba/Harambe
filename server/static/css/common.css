@@ -90,3 +90,9 @@ a.linkbutton:hover {
     user-select: none;
     color: inherit;
 }
+
+.rowitem {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
