@@ -110,10 +110,15 @@
         <div class="sep">|</div>
         <div class="title">Views:</div>
         <div id="views">{{post.views}}</div>
+        {% if post.video_embed %}
+        <div class="rowitem nowrap">
+            <div class="sep">|</div>
+            <div id="max_video" class="button">Max</div>
+        </div>
+        {% endif %}
     </div>
 
-    {% if post.can_embed %}
-    {% if post.mtype.startswith("image/") %}
+    {% if post.image_embed %}
     <div class="embed">
         <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}">
 
@@ -125,13 +130,13 @@
     </div>
     {% endif %}
 
-    {% if post.mtype.startswith("video/") or post.mtype.startswith("audio/") %}
+    {% if post.video_embed %}
     <div class="embed">
         <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none" poster="/static/img/cover.jpg"></video>
     </div>
     {% endif %}
 
-    {% if post.mtype.startswith("text/") %}
+    {% if post.text_embed %}
     <div class="embed">
         <div id="text_buttons" class="rowitem">
             <div id="copy_all_text" class="button">Copy All</div>
@@ -139,7 +144,7 @@
             <div id="select_all_text"class="button">Select All</div>
         </div>
 
-        {% if post.mtype == "text/markdown" %}
+        {% if post.markdown_embed %}
         <div class="text_container">
             <div id="markdown_view" class="text_embed">{{post.sample}}</div>
         </div>
@@ -151,11 +156,10 @@
     </div>
     {% endif %}
 
-    {% if post.mtype.startswith("application/") and ("flash" in post.mtype) %}
+    {% if post.flash_embed %}
     <div class="embed">
         <div id="flash"></div>
     </div>
-    {% endif %}
     {% endif %}
 
     <div id="react_buttons" class="nowrap">

@@ -218,6 +218,14 @@ window.onload = function() {
     video.play()
     video.muted = false
   }
+
+  let max_video = DOM.el(`#max_video`)
+
+  if (max_video) {
+    DOM.ev(max_video, `click`, () => {
+      toggle_max_video()
+    })
+  }
 }
 
 function timeago(date) {

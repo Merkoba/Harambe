@@ -65,6 +65,11 @@ class Post:
     views_str: str
     uploader_str: str
     mtype_str: str
+    image_embed: bool
+    video_embed: bool
+    flash_embed: bool
+    text_embed: bool
+    markdown_embed: bool
 
 
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
@@ -134,8 +139,13 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         reactions = []
 
     show = f"{name} {ext}".strip()
-    can_embed = size <= (config.embed_max_size * 1_000_000)
     views_str = f"V: {views} | R: {num_reactions}"
+    can_embed = size <= (config.embed_max_size * 1_000_000)
+    image_embed = can_embed and mtype.startswith("image/")
+    video_embed = can_embed and mtype.startswith(("video/", "audio/"))
+    flash_embed = can_embed and mtype.startswith("application/") and ("flash" in mtype)
+    text_embed = can_embed and mtype.startswith("text/")
+    markdown_embed = can_embed and mtype == "text/markdown"
 
     return Post(
         name,
@@ -166,6 +176,11 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         views_str,
         uploader_str,
         mtype_str,
+        image_embed,
+        video_embed,
+        flash_embed,
+        text_embed,
+        markdown_embed,
     )
 
 
