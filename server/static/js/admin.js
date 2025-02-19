@@ -382,21 +382,26 @@ function size_string(size) {
 }
 
 function do_search() {
-  if (![`users`, `posts`].includes(vars.mode)) {
-    return
-  }
-
   let query = DOM.el(`#filter`).value.trim()
 
   if (!query) {
     return
   }
 
+  let mode
+
+  if ([`users`, `posts`].includes(vars.mode)) {
+    mode `admin/${vars.mode}`
+  }
+  else if (vars.mode === `list`) {
+    mode = `list`
+  }
+
   if (query) {
-    window.location = `/admin/${vars.mode}?query=${query}`
+    window.location = `/${mode}?query=${query}`
   }
   else {
-    window.location = `/admin/${vars.mode}`
+    window.location = `/${mode}`
   }
 }
 

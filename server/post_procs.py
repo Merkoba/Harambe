@@ -207,6 +207,7 @@ def get_posts(
             or query in f.uploader.lower()
             or query in f.date_3.lower()
             or query in f.size_str.lower()
+            or query in f.views_str.lower()
             or ((query == "anon") and (not f.uploader))
         )
 
