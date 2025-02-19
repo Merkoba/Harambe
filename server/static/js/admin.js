@@ -14,7 +14,7 @@ window.onload = () => {
 
     if (e.target.classList.contains(`edit`)) {
       if (vars.mode === `users`) {
-        window.open(`/edit_user/${item.dataset.username}`, `_blank`)
+        window.location = `/edit_user/${item.dataset.username}`
       }
       else if (vars.mode === `posts`) {
         edit_title(item)
@@ -47,6 +47,20 @@ window.onload = () => {
 
       if (sort) {
         do_sort(sort)
+      }
+    }
+  })
+
+  DOM.ev(document, `auxclick`, async (e) => {
+    if (e.button !== 1) {
+      return
+    }
+
+    let item = e.target.closest(`.item`)
+
+    if (e.target.classList.contains(`edit`)) {
+      if (vars.mode === `users`) {
+        window.open(`/edit_user/${item.dataset.username}`, `_blank`)
       }
     }
   })

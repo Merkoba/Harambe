@@ -48,7 +48,7 @@
     </form>
 </dialog>
 
-<div id="top">
+<div id="top" class="nowrap">
     <a class="action_button" href="/admin">Back</a>
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
@@ -163,14 +163,14 @@
             <div class="table_cell" title="{{item.last_date_str}}">{{item.last_date_str}}</div>
 
             <!-- Actions -->
-            <div class="table_cell actions">
-                <span class="edit action_button" title="Edit this item">E</span>
-                <span class="sep"> | </span>
-                <span class="delete action_button" title="Delete this item">D</span>
-                <span class="sep"> | </span>
-                <span class="delete_above action_button" title="Delete all items above this one">A</span>
-                <span class="sep"> | </span>
-                <span class="delete_below action_button" title="Delete all items below this one">B</span>
+            <div class="table_cell actions rowitem">
+                <div class="edit action_button" title="Edit this item">E</div>
+                <div class="sep"> | </div>
+                <div class="delete action_button" title="Delete this item">D</div>
+                <div class="sep"> | </div>
+                <div class="delete_above action_button" title="Delete all items above this one">A</div>
+                <div class="sep"> | </div>
+                <div class="delete_below action_button" title="Delete all items below this one">B</div>
             </div>
         </div>
         {% endfor %}
