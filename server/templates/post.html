@@ -60,7 +60,7 @@
 </template>
 
 <div id="main">
-    <div id="top">
+    <div id="top" class="nowrap">
         <a href="/" class="button">Return</a>
         {% if show_list %}
         <div class="sep">|</div>
@@ -84,7 +84,7 @@
     <hr>
 
     <!-- File -->
-    <div id="file" class="rowitem">
+    <div id="file" class="rowitem nowrap">
         <div class="title">File:</div>
         <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
         <div class="sep">|</div>
@@ -94,7 +94,7 @@
     </div>
 
     <!-- Date -->
-    <div class="rowitem">
+    <div class="rowitem nowrap">
         <div class="title">Date:</div>
         <div id="date_1">{{post.date_1}}</div>
         <div class="sep">|</div>
@@ -104,7 +104,7 @@
     </div>
 
     <!-- Uploader -->
-    <div class="rowitem">
+    <div class="rowitem nowrap">
         <div class="title">Uploader:</div>
         <div>{{post.uploader_str}}</div>
         <div class="sep">|</div>
@@ -158,7 +158,7 @@
     {% endif %}
     {% endif %}
 
-    <div id="react_buttons">
+    <div id="react_buttons" class="nowrap">
         <div id="react_icon" class="button" title="React with an icon. You can also use 'r' for this">React with an icon</div>
         <div class="sep">|</div>
         <div id="react_character" class="button" title="React with letters, numbers, emojis. You can also use 'c' for this">React with character</div>

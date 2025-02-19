@@ -21,7 +21,6 @@ body, html {
     flex-direction: row;
     align-items: center;
     font-size: 1.05rem;
-    flex-wrap: wrap;
     gap: 0.5rem;
 }
 
@@ -84,6 +83,7 @@ a.button:hover {
 
 #video {
     width: 720px;
+    max-width: 100%;
     height: auto;
     background-color: black;
     max-height: 600px;

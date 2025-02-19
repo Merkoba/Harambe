@@ -96,3 +96,7 @@ a.linkbutton:hover {
     flex-direction: row;
     gap: 0.5rem;
 }
+
+.nowrap {
+    white-space: nowrap;
+}
