@@ -6,10 +6,10 @@
 
 <script>
     const vars = {}
-    vars.mode = `users`
-    vars.page_size = JSON.stringify({{page_size | tojson | safe}})
+    vars.mode = {{mode | tojson | safe}}
+    vars.page_size = {{page_size | tojson | safe}}
     vars.def_page_size = {{def_page_size | tojson}}
-    vars.sort = JSON.stringify({{sort | tojson | safe}})
+    vars.sort = {{sort | tojson | safe}}
     vars.page = {{page}}
 </script>
 

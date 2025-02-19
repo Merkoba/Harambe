@@ -6,10 +6,10 @@
 
 <script>
     const vars = {}
-    vars.mode = `posts`
-    vars.page_size = JSON.stringify({{page_size | tojson | safe}})
+    vars.mode = {{mode | tojson | safe}}
+    vars.page_size = {{page_size | tojson | safe}}
     vars.def_page_size = {{def_page_size | tojson}}
-    vars.sort = JSON.stringify({{sort | tojson | safe}})
+    vars.sort = {{sort | tojson | safe}}
 </script>
 
 <script src="/static/js/admin.js"></script>
@@ -21,10 +21,14 @@
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
-    <div class="action_button" id="delete_selected" title="Delete selected item">Delete</div>
-    <div class="sep">|</div>
-    <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Delete All</div>
-    <div class="sep">|</div>
+
+    {% if mode == "posts" %}
+        <div class="action_button" id="delete_selected" title="Delete selected item">Delete</div>
+        <div class="sep">|</div>
+        <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Delete All</div>
+        <div class="sep">|</div>
+    {% endif %}
+
     <div title="Total storage stats of all items (on all pages)">Total: {{total}}</div>
     <div class="sep">|</div>
     <div title="This is the current page">Page {{page}}</div>
@@ -57,23 +61,31 @@
 <div id="items">
     <div class="table">
         <div class="table_row table_header">
+            {% if mode == "posts" %}
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
+            {% endif %}
             <div id="name" class="table_cell underline" data-sort="name" title="The name or id of the post">Name</div>
             <div id="title" class="table_cell underline" data-sort="title" title="The title of the post">Title</div>
             <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">Uploader</div>
             <div id="size" class="table_cell underline" data-sort="size" title="The size of the file">Size</div>
+            <div id="mtype" class="table_cell underline" data-sort="size" title="The mime type of the file or the extension">Type</div>
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this post was created">Date</div>
             <div id="views" class="table_cell underline" data-sort="views" title="The number of times the post has been viewed and the number of reactions it has">Views</div>
+
+            {% if mode == "posts" %}
             <div id="listed" class="table_cell views underline" data-sort="listed" title="The post appears in the list">Listed</div>
             <div class="table_cell actions">Actions</div>
+            {% endif %}
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-name="{{item.name}}" data-size="{{item.size}}" data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}" data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views_str}}" data-listed="{{item.listed_str}}">
+        <div class="table_row item" data-name="{{item.name}}" data-size="{{item.size}}" data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}" data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views_str}}" data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}">
+            {% if mode == "posts" %}
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
             </div>
+            {% endif %}
 
             <!-- Name -->
             <div class="table_cell">
@@ -89,15 +101,21 @@
             <!-- Size -->
             <div class="table_cell" title="{{item.size_str}}">{{item.size_str}}</div>
 
+            <!-- Type -->
+            <div class="table_cell" title="{{item.mtype}}">{{item.mtype_str}}</div>
+
             <!-- Date -->
             <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
 
             <!-- Views -->
             <div class="table_cell" title="Views: {{item.views}} | Reactions: {{item.num_reactions}}">{{item.views_str}}</div>
 
+            {% if mode == "posts" %}
             <!-- Listed -->
-            <div class="table_cell" title="{{item.listed_str}}">{{item.listed_str}}</div>
+            <div class="table_cell" itle="{{item.listed_str}}">{{item.listed_str}}</div>
+            {% endif %}
 
+            {% if mode == "posts" %}
             <!-- Actions -->
             <div class="table_cell actions">
                 <span class="edit action_button" title="Edit this item">E</span>
@@ -108,6 +126,7 @@
                 <span class="sep"> | </span>
                 <span class="delete_below action_button" title="Delete all items below this one">B</span>
             </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

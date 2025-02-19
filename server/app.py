@@ -450,9 +450,11 @@ def admin(what: str, page: int = 1) -> Any:
 
     def_page_size = page_size == config.admin_page_size
     html_page = "posts.html" if what == "posts" else "users.html"
+    mode = "posts" if what == "posts" else "users"
 
     return render_template(
         html_page,
+        mode=mode,
         items=items,
         total=total,
         page=page,
@@ -590,7 +592,7 @@ def show_list(page: int = 1) -> Any:
     def_page_size = page_size == config.list_page_size
 
     return render_template(
-        "list.html",
+        "posts.html",
         mode="list",
         items=posts,
         total=total,

@@ -64,6 +64,7 @@ class Post:
     num_reactions: int
     views_str: str
     uploader_str: str
+    mtype_str: str
 
 
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
@@ -113,6 +114,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     listed_str = "L: Yes" if listed else "L: No"
     post_title = title or original or name
     uploader_str = uploader or "Anon"
+    mtype_str = mtype or ext or "?"
 
     if isinstance(post.reactions, int):
         num_reactions = post.reactions
@@ -163,6 +165,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         num_reactions,
         views_str,
         uploader_str,
+        mtype_str,
     )
 
 
@@ -209,6 +212,7 @@ def get_posts(
             or query in f.date_3.lower()
             or query in f.size_str.lower()
             or query in f.views_str.lower()
+            or query in f.mtype.lower()
             or ((query == "anon") and (not f.uploader))
         )
 

@@ -654,7 +654,11 @@ function do_filter() {
       let last_date = item.dataset.last_date
       let admin = item.dataset.admin
       let list = item.dataset.can_list
-      opts = [username, name, rpm, max_size, mark, reg_date, last_date, admin, list]
+
+      opts = [
+        username, name, rpm, max_size,
+        mark, reg_date, last_date, admin, list,
+      ]
     }
     else if (vars.mode === `posts` || vars.mode === `list`) {
       let name = item.dataset.name
@@ -666,7 +670,12 @@ function do_filter() {
       let uploader = item.dataset.uploader
       let views = item.dataset.views
       let listed = item.dataset.listed
-      opts = [name, size, title, original, ago, date, uploader, views, listed]
+      let mtype = item.dataset.mtype
+
+      opts = [
+        name, size, title, original,
+        ago, date, uploader, views, listed, mtype,
+      ]
     }
 
     opts = opts.filter(x => x)
