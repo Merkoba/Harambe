@@ -28,6 +28,7 @@ class Reaction:
     date: int
     ago: str
     title: str
+    uname_str: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -61,6 +62,7 @@ class Post:
     reactions: list[Reaction]
     num_reactions: int
     views_str: str
+    uploader_str: str
 
 
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
@@ -73,6 +75,8 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     else:
         title = "Nothing"
 
+    uname_str = reaction.uname or "Anon"
+
     return Reaction(
         reaction.post,
         reaction.user,
@@ -82,6 +86,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         reaction.date,
         ago,
         title,
+        uname_str,
     )
 
 
@@ -106,6 +111,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     size_str = utils.get_size(size)
     listed_str = "L: Yes" if listed else "L: No"
     post_title = title or original or name
+    uploader_str = uploader or "Anon"
 
     if isinstance(post.reactions, int):
         num_reactions = post.reactions
@@ -155,6 +161,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         reactions,
         num_reactions,
         views_str,
+        uploader_str,
     )
 
 

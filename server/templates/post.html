@@ -107,7 +107,7 @@
     <!-- Uploader -->
     <div class="rowitem">
         <div class="title">Uploader:</div>
-        <div>{{post.uploader or 'Anon'}}</div>
+        <div>{{post.uploader_str}}</div>
         <div class="sep">|</div>
         <div class="title">Views:</div>
         <div id="views">{{post.views}}</div>
@@ -181,7 +181,7 @@
                     <div class="sep">|</div>
 
                     <div class="rowitem">
-                        <div>{{reaction.uname}}</div>
+                        <div>{{reaction.uname_str}}</div>
                         <div class="sep">|</div>
                         <div>{{reaction.ago}}</div>
                     </div>

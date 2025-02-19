@@ -492,7 +492,7 @@ function add_reaction(reaction) {
 
   let info = DOM.el(`#reaction_info_template`)
   let clone = info.content.cloneNode(true)
-  DOM.el(`.uname`, clone).textContent = reaction.uname
+  DOM.el(`.uname`, clone).textContent = reaction.uname_str
   DOM.el(`.ago`, clone).textContent = reaction.ago
   item.appendChild(clone)
 

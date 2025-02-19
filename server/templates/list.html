@@ -63,7 +63,7 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-name="{{item.name}}" data-size="{{item.size}}" data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}" data-uploader="{{item.uploader or 'Anon'}}" data-view="{{item.views_str}}">
+        <div class="table_row item" data-name="{{item.name}}" data-size="{{item.size}}" data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}" data-uploader="{{item.uploader_str}}" data-view="{{item.views_str}}">
             <!-- Name -->
             <div class="table_cell">
                 <a href="/post/{{item.name}}" target="_blank" title="{{item.show}}">{{item.show}}</a>
@@ -73,7 +73,7 @@
             <div class="table_cell" title="{{item.title or item.original}}">{{item.title or item.original}}</div>
 
             <!-- Uploader -->
-            <div class="table_cell" title="{{item.uploader or 'Anon'}}">{{item.uploader or 'Anon'}}</div>
+            <div class="table_cell" title="{{item.uploader_str}}">{{item.uploader_str}}</div>
 
             <!-- Size -->
             <div class="table_cell" title="{{item.size_str}}">{{item.size_str}}</div>
