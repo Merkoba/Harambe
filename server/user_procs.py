@@ -390,12 +390,9 @@ def check_user_max(user: User, size: int) -> bool:
     megas = int(size / 1000 / 1000)
 
     if user.max_size > 0:
-        if megas > user.max_size:
-            return False
-    elif megas > config.max_size_user:
-        return False
+        return megas <= user.max_size
 
-    return True
+    return megas <= config.max_size_user
 
 
 def mod_user(
