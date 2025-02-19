@@ -590,10 +590,7 @@ function react_character() {
     return
   }
 
-  chars = chars.replace(/[;<> ]/g, ``)
-  chars = chars.replace(/https?:\/\//gi, ``)
   chars = Array.from(chars).slice(0, n).join(``)
-
   send_reaction(chars, `character`)
 }
 

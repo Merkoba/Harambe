@@ -2,7 +2,6 @@ from __future__ import annotations
 
 # Standard
 import os
-import re
 from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any
@@ -497,9 +496,6 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
 
     if len(text) > 100:
         return jsonify({"status": "error", "message": "Reaction is too long"}), 500
-
-    text = re.sub(r"[;<> ]", "", text)
-    text = re.sub(r"https?://", "", text, flags=re.IGNORECASE)
 
     if mode == "character":
         if utils.count_graphemes(text) > config.character_reaction_length:
