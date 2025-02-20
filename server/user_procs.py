@@ -370,6 +370,10 @@ def user_edit(user: User, what: str, value: Any) -> tuple[dict[str, Any], int]:
         return {}, 400
 
     database.mod_user([user.username], what, value)
+
+    if (what == "name") and (user.name != value):
+        database.change_uploader(user.username, value)
+
     return {}, 200
 
 
