@@ -274,9 +274,11 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
     return True, value
 
 
-def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
+def edit_user(
+    mode: str, request: Request, username: str, admin: User
+) -> tuple[bool, str]:
     if not request:
-        return ""
+        return False, "No Request"
 
     args = {}
 
@@ -315,28 +317,36 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     uname = args["username"]
 
     if not uname:
-        return ""
+        return False, "Missing Username"
 
     if not utils.is_valid_username(uname):
-        return ""
+        return False, "Invalid Username"
 
     if uname == admin.username:
         args["admin"] = True
 
     user = get_user(uname)
-    mode = "add" if user is None else "edit"
+
+    if user and (mode == "add"):
+        return False, "Already Exists"
+
     n_args = {}
 
     for key in args:
         ok, value = check_value(user, key, args[key])
 
         if not ok:
-            return ""
+            return False, "Invalid Value"
 
         n_args[key] = value
 
     if (not n_args["username"]) or (not n_args["password"]):
-        return ""
+        return False, "Missing Details"
+
+    user = get_user(n_args["username"])
+
+    if user and (mode == "add"):
+        return False, "Already Exists"
 
     database.add_user(
         mode,
@@ -354,7 +364,7 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     if user and (user.name != n_args["name"]):
         database.change_uploader(user.username, n_args["name"])
 
-    return str(n_args["username"])
+    return True, str(n_args["username"])
 
 
 def user_edit(user: User, what: str, value: Any) -> tuple[dict[str, Any], int]:

@@ -651,10 +651,14 @@ def edit_user(username: str = "") -> Any:
         if message:
             title = f"{title} ({message})"
 
+        uname = user.username if user else ""
+
         return render_template(
             "edit_user.html",
             user=user or {},
+            username=uname,
             title=title,
+            **theme_configs(),
         )
 
     user = get_user()
@@ -663,15 +667,15 @@ def edit_user(username: str = "") -> Any:
         return redirect(url_for("admin", what="users"))
 
     if request.method == "POST":
-        uname = user_procs.edit_user(mode, request, username, user)
+        ok, value = user_procs.edit_user(mode, request, username, user)
 
-        if uname:
+        if ok:
             if mode == "add":
-                return redirect(url_for("edit_user", username=uname))
+                return redirect(url_for("edit_user", username=value))
 
             return show_edit("Updated")
 
-        return show_edit("Error")
+        return show_edit(value)
 
     return show_edit()
 
