@@ -1,4 +1,5 @@
 # Standard
+import re
 import time
 import random
 import unicodedata
@@ -194,6 +195,10 @@ def count_graphemes(s: str) -> int:
                 i += 1
 
     return grapheme_count
+
+
+def clean_query(s: Any) -> str:
+    return re.sub(r"[\s:]", "", str(s).lower())
 
 
 ICONS = load_icons()

@@ -119,16 +119,22 @@ def get_users(
         psize = int(page_size)
 
     users = []
-    query = query.lower()
+    query = utils.clean_query(query)
 
     for user in get_userlist():
         ok = (
             not query
-            or query in user.username.lower()
-            or query in user.name.lower()
-            or query in str(user.max_size).lower()
-            or query in user.register_date_str.lower()
-            or query in user.last_date_str.lower()
+            or query in utils.clean_query(user.username)
+            or query in utils.clean_query(user.name)
+            or query in utils.clean_query(user.max_size_fill)
+            or query in utils.clean_query(user.register_date_str)
+            or query in utils.clean_query(user.last_date_str)
+            or query in utils.clean_query(user.admin_str)
+            or query in utils.clean_query(user.reacter_str)
+            or query in utils.clean_query(user.mark)
+            or query in utils.clean_query(user.rpm)
+            or query in utils.clean_query(user.can_list_str)
+            or query in utils.clean_query(user.posts)
         )
 
         if not ok:

@@ -204,7 +204,7 @@ def get_posts(
     posts = []
     total_size = 0
     now = utils.now()
-    query = query.lower()
+    query = utils.clean_query(query)
 
     for post in database.get_posts():
         if only_listed:
@@ -219,15 +219,17 @@ def get_posts(
 
         ok = (
             not query
-            or query in f.full.lower()
-            or query in f.original.lower()
-            or query in f.title.lower()
-            or query in f.uploader.lower()
-            or query in f.date_3.lower()
-            or query in f.size_str.lower()
-            or query in f.views_str.lower()
-            or query in f.mtype.lower()
-            or ((query == "anon") and (not f.uploader))
+            or query in utils.clean_query(f.full)
+            or query in utils.clean_query(f.original)
+            or query in utils.clean_query(f.title)
+            or query in utils.clean_query(f.uploader)
+            or query in utils.clean_query(f.date_3)
+            or query in utils.clean_query(f.size_str)
+            or query in utils.clean_query(f.views_str)
+            or query in utils.clean_query(f.mtype)
+            or query in utils.clean_query(f.uploader_str)
+            or query in utils.clean_query(f.ago)
+            or query in utils.clean_query(f.listed_str)
         )
 
         if not ok:

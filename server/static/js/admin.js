@@ -670,11 +670,14 @@ function delete_all() {
 }
 
 function do_filter() {
+  function clean(s) {
+    s = s.toLowerCase()
+    return value.replace(/[\s:]/g, ``).trim()
+  }
+
   let filter = DOM.el(`#filter`)
   let items = DOM.els(`.item`)
-  let value = filter.value.toLowerCase()
-  value = value.replace(/\s/g, ``)
-  value = value.replace(/:/g, ``)
+  let value = clean(filter.value.toLowerCase())
 
   for (let item of items) {
     let opts = []
@@ -714,9 +717,7 @@ function do_filter() {
     }
 
     opts = opts.filter(x => x)
-    opts = opts.map(x => x.toLowerCase().trim())
-    opts = opts.map(x => x.replace(/\s/g, ``))
-    opts = opts.map(x => x.replace(/:/g, ``))
+    opts = opts.map(x => clean(x))
 
     if (opts.some(x => x.includes(value))) {
       DOM.show(item)
