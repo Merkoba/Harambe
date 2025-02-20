@@ -82,7 +82,15 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-name="{{item.show}}" data-size="{{item.size}}" data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}" data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views_str}}" data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}">
+        <div class="table_row item" data-name="{{item.show}}" data-size="{{item.size}}"
+        data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}"
+        data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}"
+        data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views_str}}"
+        data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}"
+        {% if mode == "posts" %}
+        data-username="{{item.username}}"
+        {% endif %}
+        >
             {% if mode == "posts" %}
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
@@ -99,7 +107,11 @@
             <div class="table_cell title" title="{{item.title or item.original}}">{{item.title or item.original}}</div>
 
             <!-- Uploader -->
+             {% if mode == "posts" %}
+            <div class="table_cell uploader" title="{{item.uploader_str}}">{{item.username}}</div>
+            {% else %}
             <div class="table_cell uploader" title="{{item.uploader_str}}">{{item.uploader_str}}</div>
+            {% endif %}
 
             <!-- Size -->
             <div class="table_cell" title="{{item.size_str}}">{{item.size_str}}</div>

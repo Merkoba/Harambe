@@ -683,6 +683,22 @@ def edit_user(username: str = "") -> Any:
     return show_edit()
 
 
+@app.route("/user_edit", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@login_required
+def edit_user() -> Any:
+    user = get_user()
+
+    if not user:
+        return over()
+
+    data = request.get_json()
+    what = data.get("what", None)
+    value = data.get("value", None)
+    return user_procs.user_edit(user, what, value)
+
+
 @app.route("/delete_users", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()

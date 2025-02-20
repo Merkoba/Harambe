@@ -61,6 +61,23 @@ class User:
     reacter_str: str
 
 
+user_types = {
+    "username": "string",
+    "password": "string",
+    "admin": "bool",
+    "name": "string",
+    "rpm": "int",
+    "max_size": "int",
+    "can_list": "bool",
+    "mark": "string",
+    "register_date": "int",
+    "last_date": "int",
+    "lister": "bool",
+    "posts": "int",
+    "reacter": "bool",
+}
+
+
 user_data: dict[str, UserData] = {}
 
 
@@ -220,6 +237,36 @@ def get_user(username: str) -> User | None:
     return None
 
 
+def check_value(what: str, value: Any) -> tuple[bool, Any]:
+    vtype = user_types.get(what, None)
+
+    if not vtype:
+        return False, None
+
+    if what == "password":
+        if value:
+            value = hashpass(value)
+        elif user and user.password:
+            value = user.password
+    elif value:
+        if vtype == "int":
+            try:
+                value = min(max_num, max(0, int(value)))
+            except ValueError:
+                value = 0
+        elif vtype == "string":
+            value = "".join(
+                [c for c in value if c.isalnum() or c in [" ", "_", ".", ",", "-"]]
+            )
+
+            value = utils.single_line(value)
+            value = str(value)[:200]
+        elif vtype == "bool":
+            value = bool(value)
+
+    return True, value
+
+
 def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     if not request:
         return ""
@@ -227,38 +274,38 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     args = {}
 
     if mode == "add":
-        args["username"] = [request.form.get("username").lower(), "string"]
+        args["username"] = request.form.get("username").lower()
     elif mode == "edit":
-        args["username"] = [username, "string"]
+        args["username"] = username
 
-    args["password"] = [request.form.get("password"), "string"]
-    args["name"] = [request.form.get("name"), "string"]
-    args["rpm"] = [request.form.get("rpm"), "int"]
-    args["max_size"] = [request.form.get("max_size"), "int"]
-    args["mark"] = [request.form.get("mark"), "string"]
+    args["password"] = request.form.get("password")
+    args["name"] = request.form.get("name")
+    args["rpm"] = request.form.get("rpm")
+    args["max_size"] = request.form.get("max_size")
+    args["mark"] = request.form.get("mark")
 
     if request.form.get("can_list") is None:
-        args["can_list"] = [False, "bool"]
+        args["can_list"] = False
     else:
-        args["can_list"] = [True, "bool"]
+        args["can_list"] = True
 
     if request.form.get("admin") is None:
-        args["admin"] = [False, "bool"]
+        args["admin"] = False
     else:
-        args["admin"] = [True, "bool"]
+        args["admin"] = True
 
     if request.form.get("lister") is None:
-        args["lister"] = [False, "bool"]
+        args["lister"] = False
     else:
-        args["lister"] = [True, "bool"]
+        args["lister"] = True
 
     if request.form.get("rpm") is None:
-        args["rpm"] = [0, "int"]
+        args["rpm"] = 0
 
     if request.form.get("max_size") is None:
-        args["max_size"] = [0, "int"]
+        args["max_size"] = 0
 
-    uname = args["username"][0]
+    uname = args["username"]
 
     if not uname:
         return ""
@@ -267,41 +314,20 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
         return ""
 
     if uname == admin.username:
-        args["admin"][0] = True
+        args["admin"] = True
 
     user = get_user(uname)
     mode = "add" if user is None else "edit"
     max_num = 9_000_000
     n_args = {}
 
-    def get_value(what: str) -> None:
-        value, vtype = args[what]
-
-        if what == "password":
-            if value:
-                value = hashpass(value)
-            elif user and user.password:
-                value = user.password
-        elif value:
-            if vtype == "int":
-                try:
-                    value = min(max_num, max(0, int(value)))
-                except ValueError:
-                    value = 0
-            elif vtype == "string":
-                value = "".join(
-                    [c for c in value if c.isalnum() or c in [" ", "_", ".", ",", "-"]]
-                )
-
-                value = utils.single_line(value)
-                value = str(value)[:200]
-            elif vtype == "bool":
-                value = bool(value)
-
-        n_args[what] = value
-
     for key in args:
-        get_value(key)
+        ok, value = check_value(key, args[key])
+
+        if not ok:
+            return ""
+
+        n_args[key] = value
 
     if (not n_args["username"]) or (not n_args["password"]):
         return ""
@@ -319,11 +345,25 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
         n_args["lister"],
     )
 
-    if user:
-        if user.name != n_args["name"]:
-            database.change_uploader(user.username, n_args["name"])
+    if user and (user.name != n_args["name"]):
+        database.change_uploader(user.username, n_args["name"])
 
     return str(n_args["username"])
+
+
+def user_edit(user: User, what: str, value: Any) -> None:
+    if not user:
+        return False
+
+    if not what:
+        return False
+
+    ok, value = check_value(what, value)
+
+    if not ok:
+        return False
+
+    database.mod_user([user.username], what, value)
 
 
 def check_auth(username: str, password: str) -> User | None:

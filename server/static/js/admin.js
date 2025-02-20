@@ -672,7 +672,7 @@ function delete_all() {
 function do_filter() {
   function clean(s) {
     s = s.toLowerCase()
-    return value.replace(/[\s:]/g, ``).trim()
+    return s.replace(/[\s:]/g, ``).trim()
   }
 
   let filter = DOM.el(`#filter`)
@@ -709,10 +709,11 @@ function do_filter() {
       let views = item.dataset.views
       let listed = item.dataset.listed
       let mtype = item.dataset.mtype
+      let uname = item.dataset.username
 
       opts = [
-        name, size, title, original,
-        ago, date, uploader, views, listed, mtype,
+        name, size, title, original, ago, date,
+        uploader, views, listed, mtype, uname,
       ]
     }
 

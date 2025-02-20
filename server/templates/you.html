@@ -12,17 +12,26 @@
 </style>
 
 <script>
-    window.onload = () => {
-        DOM.ev(`#logout`, `click`, () => {
-            if (confirm(`Are you sure you want to logout?`)) {
-                window.location = `/logout`
-            }
-        })
-    }
+    const vars = {}
+    vars.username = {{user.username | tojson | safe}};
 </script>
+
+<script src="/static/js/you.js"></script>
 {% endblock %}
 
 {% block body %}
+<dialog id="edit_dialog">
+    <form method="dialog">
+      <div>Choose An Action</div>
+
+      <div class="dialog_container">
+          <button value="name">Edit Name</button>
+          <button value="password">Edit Password</button>
+          <button value="cancel">Cancel</button>
+      </div>
+    </form>
+</dialog>
+
 <div class="middle">
     <div class="rowitem">
         <div>{{user.username}}</div>
@@ -36,6 +45,8 @@
         <a class="linkbutton" href="/">Return</a>
         <div class="sep">|</div>
         <a class="linkbutton" href="/list?username={{user.username}}">History</a>
+        <div class="sep">|</div>
+        <div id="edit" class="action_button">Edit</div>
         <div class="sep">|</div>
         <div class="action_button" id="logout">Logout</div>
     </div>
