@@ -83,7 +83,7 @@ a.dialog_button:link, a.dialog_button:visited, a.dialog_button:hover {
     color: white;
     cursor: pointer;
     text-decoration: none;
-    min-width: 11rem;
+    min-width: 12rem;
     border: none;
     outline: none;
 }
