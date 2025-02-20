@@ -17,27 +17,26 @@
     vars.name = {{user.name | tojson | safe}}
 </script>
 
+<script src="/static/js/msg.js"></script>
 <script src="/static/js/you.js"></script>
 {% endblock %}
 
 {% block body %}
-<dialog id="edit_dialog">
+<template id="template_edit">
     <form method="dialog">
       <div>Choose An Action</div>
 
       <div class="dialog_container">
         {% if allow_name_edit %}
-        <button value="name">Edit Name</button>
+        <button id="edit_name">Edit Name</button>
         {% endif %}
 
         {% if allow_password_edit %}
-        <button value="password">Edit Password</button>
+        <button id="edit_password">Edit Password</button>
         {% endif %}
-
-        <button value="cancel">Cancel</button>
       </div>
     </form>
-</dialog>
+</template>
 
 <div class="middle">
     <div class="rowitem">

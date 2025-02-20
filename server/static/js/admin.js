@@ -84,43 +84,38 @@ window.onload = () => {
   }
 
   let edit = DOM.el(`#edit`)
-  let edit_dialog = DOM.el(`#edit_dialog`)
 
-  if (edit && edit_dialog) {
-    edit_dialog.addEventListener(`close`, () => {
-      let value = edit_dialog.returnValue
+  if (edit) {
+    vars.msg_edit = Msg.factory()
+    let t = DOM.el(`#template_edit`)
+    vars.msg_edit.set(t.innerHTML)
 
-      if (value === `can_list_yes`) {
-        mod_user(`can_list`, 1, `bool`)
-      }
-      else if (value === `can_list_no`) {
-        mod_user(`can_list`, 0, `bool`)
-      }
-      else if (value === `lister_yes`) {
-        mod_user(`lister`, 1, `bool`)
-      }
-      else if (value === `lister_no`) {
-        mod_user(`lister`, 0, `bool`)
-      }
-      else if (value === `reacter_yes`) {
-        mod_user(`reacter`, 1, `bool`)
-      }
-      else if (value === `reacter_no`) {
-        mod_user(`reacter`, 0, `bool`)
-      }
-      else if (value === `delete`) {
-        delete_all()
-      }
+    DOM.ev(`#edit_can_list_yes`, `click`, () => {
+      mod_user(`can_list`, 1, `bool`)
+    })
+
+    DOM.ev(`#edit_can_list_no`, `click`, () => {
+      mod_user(`can_list`, 0, `bool`)
+    })
+
+    DOM.ev(`#edit_lister_yes`, `click`, () => {
+      mod_user(`lister`, 1, `bool`)
+    })
+
+    DOM.ev(`#edit_lister_no`, `click`, () => {
+      mod_user(`lister`, 0, `bool`)
+    })
+
+    DOM.ev(`#edit_reacter_yes`, `click`, () => {
+      mod_user(`reacter`, 1, `bool`)
+    })
+
+    DOM.ev(`#edit_reacter_no`, `click`, () => {
+      mod_user(`reacter`, 0, `bool`)
     })
 
     DOM.ev(edit, `click`, () => {
-      edit_dialog.showModal()
-    })
-
-    DOM.ev(edit_dialog, `click`, (e) => {
-      if (e.target === edit_dialog) {
-        edit_dialog.close()
-      }
+      vars.msg_edit.show()
     })
   }
 
