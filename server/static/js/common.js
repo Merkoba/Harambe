@@ -38,3 +38,7 @@ function is_audio(file) {
 function is_video(file) {
   return file.type.match(`video/*`)
 }
+
+function set_css_var(name, value) {
+  document.documentElement.style.setProperty(`--${name}`, value)
+}

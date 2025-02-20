@@ -9,6 +9,7 @@ window.onload = function() {
   vars.icons_loaded = false
   vars.selected_icon = ``
   vars.refresh_count = 0
+  vars.video_max = false
 
   let delay = 30
 
@@ -724,5 +725,23 @@ function maximize_media() {
 
 function toggle_max_video() {
   let video = DOM.el(`#video`)
-  video.classList.toggle(`maximized`)
+  let details = DOM.el(`#details`)
+
+  if (vars.video_max) {
+    DOM.show(details)
+    video.classList.remove(`max`)
+  }
+  else {
+    DOM.hide(details)
+    let w_width = window.innerWidth
+    let w_height = window.innerHeight
+    let v_rect = video.getBoundingClientRect()
+    let v_width = w_width - v_rect.left - 20
+    let v_height = w_height - v_rect.top - 20
+    set_css_var(`max_width`, `${v_width}px`)
+    set_css_var(`max_height`, `${v_height}px`)
+    video.classList.add(`max`)
+  }
+
+  vars.video_max = !vars.video_max
 }

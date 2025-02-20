@@ -97,6 +97,12 @@ a.linkbutton:hover {
     gap: 0.5rem;
 }
 
+.colitem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 .nowrap {
     white-space: nowrap;
 }

@@ -10,12 +10,6 @@ body, html {
     padding: 0;
 }
 
-#main {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
 #top {
     display: flex;
     flex-direction: row;
@@ -88,14 +82,11 @@ a.button:hover {
     background-color: black;
 }
 
-#video.maximized {
-    position: fixed;
-    z-index: 99;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black;
+#video.max {
+    width: var(--max_width);
+    height: var(--max_height);
+    max-width: var(--max_width);
+    max-height: var(--max_height);
 }
 
 .text_embed {

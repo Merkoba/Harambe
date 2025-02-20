@@ -59,9 +59,10 @@
     </div>
 </template>
 
-<div id="main">
+<div id="main" class="colitem">
     <div id="top" class="nowrap">
         <a href="/" class="button">Return</a>
+
         {% if show_list %}
         <div class="sep">|</div>
         <a href="/list" class="button">List</a>
@@ -71,9 +72,17 @@
         <a href="/random">Random</a>
         {% endif %}
         <div class="sep">|</div>
+
         {% if owned %}
         <div id="edit" class="button">Edit</div>
         <div class="sep">|</div>
+        {% endif %}
+
+        {% if post.video_embed %}
+        <div class="rowitem nowrap">
+            <div id="max_video" class="button">Max</div>
+            <div class="sep">|</div>
+        </div>
         {% endif %}
 
         {% if post.title or post.original %}
@@ -84,38 +93,34 @@
     <hr>
 
     <!-- File -->
-    <div id="file" class="rowitem nowrap">
-        <div class="title">File:</div>
-        <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
-        <div class="sep">|</div>
-        <div>{{post.size_str}}</div>
-        <div class="sep">|</div>
-        <div>{{post.mtype or 'No type detected'}}</div>
-    </div>
-
-    <!-- Date -->
-    <div class="rowitem nowrap">
-        <div class="title">Date:</div>
-        <div id="date_1">{{post.date_1}}</div>
-        <div class="sep">|</div>
-        <div id="date_2">{{post.date_2}}</div>
-        <div class="sep">|</div>
-        <div id="ago">{{post.ago}}</div>
-    </div>
-
-    <!-- Uploader -->
-    <div class="rowitem nowrap">
-        <div class="title">Uploader:</div>
-        <div>{{post.uploader_str}}</div>
-        <div class="sep">|</div>
-        <div class="title">Views:</div>
-        <div id="views">{{post.views}}</div>
-        {% if post.video_embed %}
-        <div class="rowitem nowrap">
+    <div id="details" class="colitem">
+        <div id="file" class="rowitem nowrap">
+            <div class="title">File:</div>
+            <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
             <div class="sep">|</div>
-            <div id="max_video" class="button">Max</div>
+            <div>{{post.size_str}}</div>
+            <div class="sep">|</div>
+            <div>{{post.mtype or 'No type detected'}}</div>
         </div>
-        {% endif %}
+
+        <!-- Date -->
+        <div class="rowitem nowrap">
+            <div class="title">Date:</div>
+            <div id="date_1">{{post.date_1}}</div>
+            <div class="sep">|</div>
+            <div id="date_2">{{post.date_2}}</div>
+            <div class="sep">|</div>
+            <div id="ago">{{post.ago}}</div>
+        </div>
+
+        <!-- Uploader -->
+        <div class="rowitem nowrap">
+            <div class="title">Uploader:</div>
+            <div>{{post.uploader_str}}</div>
+            <div class="sep">|</div>
+            <div class="title">Views:</div>
+            <div id="views">{{post.views}}</div>
+        </div>
     </div>
 
     {% if post.image_embed %}
