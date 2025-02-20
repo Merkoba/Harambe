@@ -137,7 +137,7 @@ def over() -> Any:
     return render_template("over.html")
 
 
-def theme_configs() -> dict[str, str]:
+def theme_configs() -> dict[str, Any]:
     return {
         "background_color": config.background_color,
         "accent_color": config.accent_color,
@@ -146,6 +146,7 @@ def theme_configs() -> dict[str, str]:
         "link_color": config.link_color,
         "font_family": config.font_family,
         "font_size": config.font_size,
+        "admin_font_size": config.admin_font_size,
     }
 
 
@@ -411,7 +412,7 @@ def get_file(name: str, original: str | None = None) -> Any:
 @payload_check()
 @admin_required
 def admin_fallback() -> Any:
-    return render_template("admin.html")
+    return render_template("admin.html", **theme_configs())
 
 
 @app.route("/admin/<string:what>", defaults={"page": 1}, methods=["GET"])  # type: ignore
@@ -456,6 +457,7 @@ def admin(what: str, page: int = 1) -> Any:
         def_page_size=def_page_size,
         username=username,
         sort=sort,
+        **theme_configs(),
     )
 
 
@@ -604,6 +606,7 @@ def show_list(page: int = 1) -> Any:
         username=username,
         sort=sort,
         back="/",
+        **theme_configs(),
     )
 
 
@@ -818,4 +821,5 @@ def you() -> Any:
         allow_edit=allow_edit,
         allow_name_edit=config.allow_name_edit,
         allow_password_edit=config.allow_password_edit,
+        **theme_configs(),
     )

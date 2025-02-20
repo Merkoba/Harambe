@@ -3,7 +3,7 @@
 }
 
 body, html {
-    font-size: 18px;
+    font-size: var(--admin_font_size);
     background-color: white;
     font-family: sans-serif;
     color: black;

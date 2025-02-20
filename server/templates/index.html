@@ -20,15 +20,13 @@
 {% block body %}
 {% if links | length > 0 %}
 <template id="template_links">
-    <form method="dialog">
-        <div>Links</div>
+    <div>Links</div>
 
-        <div class="dialog_container">
-          {% for link in links %}
-          <a href="{{link.url}}" target="{{link.target}}" class="dialog_button">{{link.name}}</a>
-          {% endfor %}
-        </div>
-      </form>
+    <div class="dialog_container">
+        {% for link in links %}
+        <a href="{{link.url}}" target="{{link.target}}" class="dialog_button">{{link.name}}</a>
+        {% endfor %}
+    </div>
 </template>
 {% endif %}
 

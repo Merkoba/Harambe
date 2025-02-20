@@ -23,19 +23,17 @@
 
 {% block body %}
 <template id="template_edit">
-    <form method="dialog">
-      <div>Choose An Action</div>
+    <div>Choose An Action</div>
 
-      <div class="dialog_container">
-        {% if allow_name_edit %}
-        <button id="edit_name">Edit Name</button>
-        {% endif %}
+    <div class="dialog_container">
+    {% if allow_name_edit %}
+    <button id="edit_name">Edit Name</button>
+    {% endif %}
 
-        {% if allow_password_edit %}
-        <button id="edit_password">Edit Password</button>
-        {% endif %}
-      </div>
-    </form>
+    {% if allow_password_edit %}
+    <button id="edit_password">Edit Password</button>
+    {% endif %}
+    </div>
 </template>
 
 <div class="middle">

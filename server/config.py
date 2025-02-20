@@ -251,8 +251,11 @@ class Config:
         # Allow users to change their password
         self.allow_password_edit = True
 
-        # Base font size for all pages
+        # Font size for all pages
         self.font_size = 20
+
+        # Font size for the admin pages
+        self.admin_font_size = 18
 
     # --- Methods ---
 
