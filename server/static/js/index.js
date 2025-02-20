@@ -76,6 +76,18 @@ window.onload = () => {
       video.play()
     })
   }
+
+  let more_links = DOM.el(`#more_links`)
+
+  if (more_links) {
+    vars.msg_links = Msg.factory()
+    let t = DOM.el(`#template_links`)
+    vars.msg_links.set(t.innerHTML)
+
+    DOM.ev(more_links, `click`, (e) => {
+      vars.msg_links.show()
+    })
+  }
 }
 
 function validate() {
@@ -180,4 +192,9 @@ function reset_video() {
   let video = DOM.el(`#video`)
   video.pause()
   DOM.hide(video)
+}
+
+function show_links() {
+  let links_dialog = DOM.el(`#links_dialog`)
+  links_dialog.showModal()
 }

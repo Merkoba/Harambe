@@ -13,10 +13,25 @@
     vars.is_user = {{is_user | tojson}}
 </script>
 
-<script src="static/js/index.js"></script>
+<script src="/static/js/msg.js"></script>
+<script src="/static/js/index.js"></script>
 {% endblock %}
 
 {% block body %}
+{% if links | length > 0 %}
+<template id="template_links">
+    <form method="dialog">
+        <div>Links</div>
+
+        <div class="dialog_container">
+          {% for link in links %}
+          <a href="{{link.url}}" target="{{link.target}}" class="dialog_button">{{link.name}}</a>
+          {% endfor %}
+        </div>
+      </form>
+</template>
+{% endif %}
+
 <div id="main">
     <div id="info">
         {% if show_max_size %}
@@ -25,7 +40,7 @@
     </div>
 
     {% if show_image %}
-    <img id="image" src="static/img/{{image_name}}" title="{{image_tooltip}}">
+    <img id="image" src="/static/img/{{image_name}}" title="{{image_tooltip}}">
     <video id="video" preload="none" class="hidden" controls poster="/static/img/cover.jpg"></video>
     {% endif %}
 
@@ -41,9 +56,9 @@
             <a class="link" href="/admin">Admin</a>
             {% endif %}
 
-            {% for link in links %}
-            <a class="link" href="{{link.url}}" target="{{link.target}}">{{link.name}}</a>
-            {% endfor %}
+            {% if links | length > 0 %}
+            <div id="more_links" class="button">Links</div>
+            {% endif %}
 
             {% if is_user %}
             <a class="link" href="/you">You</a>

@@ -76,6 +76,33 @@ a:hover {
     filter: brightness(1.5);
 }
 
+a.dialog_button:link, a.dialog_button:visited {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--accent_color);
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    min-width: 10rem;
+    border: none;
+    outline: none;
+}
+
+a.dialog_button:hover {
+    filter: brightness(1.2);
+}
+
+.button {
+    color: var(--link_color);
+    text-decoration: underline;
+    user-select: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    filter: brightness(1.5);
+}
+
 #image {
     width: 300px;
     margin-bottom: 1.25rem;

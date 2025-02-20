@@ -20,30 +20,24 @@ window.onload = function() {
   update_date()
 
   let edit = DOM.el(`#edit`)
-  let edit_dialog = DOM.el(`#edit_dialog`)
 
-  if (edit && edit_dialog) {
-    edit_dialog.addEventListener(`close`, () => {
-      let value = edit_dialog.returnValue
+  if (edit) {
+    vars.msg_edit = Msg.factory()
+    let t = DOM.el(`#template_edit`)
+    vars.msg_edit.set(t.innerHTML)
 
-      if (value === `delete`) {
-        if (confirm(`Delete this post?`)) {
-          delete_post()
-        }
-      }
-      else if (value === `title`) {
-        edit_title()
+    DOM.ev(`#edit_title`, `click`, () => {
+      edit_title()
+    })
+
+    DOM.ev(`#edit_delete`, `click`, () => {
+      if (confirm(`Delete this post?`)) {
+        delete_post()
       }
     })
 
     DOM.ev(edit, `click`, () => {
-      edit_dialog.showModal()
-    })
-
-    DOM.ev(edit_dialog, `click`, (e) => {
-      if (e.target === edit_dialog) {
-        edit_dialog.close()
-      }
+      vars.msg_edit.show()
     })
   }
 

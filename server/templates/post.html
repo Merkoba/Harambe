@@ -21,6 +21,7 @@
     vars.post_refresh_times = {{post_refresh_times}}
 </script>
 
+<script src="/static/js/msg.js"></script>
 <script src="/static/js/marked.js"></script>
 <script src="/static/js/dateformat.js"></script>
 <script src="/static/ruffle/ruffle.js"></script>
@@ -28,17 +29,16 @@
 {% endblock %}
 
 {% block body %}
-<dialog id="edit_dialog">
+<template id="template_edit">
     <form method="dialog">
       <div>Choose An Action</div>
 
       <div class="dialog_container">
-          <button value="title">Edit Title</button>
-          <button value="delete">Delete Post</button>
-          <button value="cancel">Cancel</button>
+          <button id="edit_title">Edit Title</button>
+          <button id="edit_delete">Delete Post</button>
       </div>
     </form>
-</dialog>
+</template>
 
 <div id="icons_modal" class="hidden">
     <div id="icons_container">
