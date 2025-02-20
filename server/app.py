@@ -452,6 +452,7 @@ def admin(what: str, page: int = 1) -> Any:
     def_page_size = page_size == config.admin_page_size
     html_page = "posts.html" if what == "posts" else "users.html"
     mode = "posts" if what == "posts" else "users"
+    title = "Posts" if what == "posts" else "Users"
 
     return render_template(
         html_page,
@@ -459,6 +460,7 @@ def admin(what: str, page: int = 1) -> Any:
         items=items,
         total=total,
         page=page,
+        title=title,
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
@@ -597,6 +599,7 @@ def show_list(page: int = 1) -> Any:
     )
 
     def_page_size = page_size == config.list_page_size
+    title = "List" if not history else "History"
 
     return render_template(
         "posts.html",
@@ -604,6 +607,7 @@ def show_list(page: int = 1) -> Any:
         items=posts,
         total=total,
         page=page,
+        title=title,
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
