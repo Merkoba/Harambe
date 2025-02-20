@@ -245,6 +245,9 @@ def check_value(what: str, value: Any) -> tuple[bool, Any]:
 
     if what == "password":
         if value:
+            if len(value) > 240:
+                return False, None
+
             value = hashpass(value)
         elif user and user.password:
             value = user.password
@@ -256,7 +259,7 @@ def check_value(what: str, value: Any) -> tuple[bool, Any]:
                 value = 0
         elif vtype == "string":
             value = "".join(
-                [c for c in value if c.isalnum() or c in [" ", "_", ".", ",", "-"]]
+                [c for c in value if c.isalnum() or c in [" ", "_", ".", ",", "-", "!", "?"]]
             )
 
             value = utils.single_line(value)
