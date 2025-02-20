@@ -27,10 +27,13 @@ window.onload = function() {
     vars.msg_edit.set(t.innerHTML)
 
     DOM.ev(`#edit_title`, `click`, () => {
+      vars.msg_edit.close()
       edit_title()
     })
 
     DOM.ev(`#edit_delete`, `click`, () => {
+      vars.msg_edit.close()
+
       if (confirm(`Delete this post?`)) {
         delete_post()
       }

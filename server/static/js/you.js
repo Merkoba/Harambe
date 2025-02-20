@@ -13,10 +13,12 @@ window.onload = () => {
     vars.msg_edit.set(t.innerHTML)
 
     DOM.ev(`#edit_name`, `click`, () => {
+      vars.msg_edit.close()
       edit_name()
     })
 
     DOM.ev(`#edit_password`, `click`, () => {
+      vars.msg_edit.close()
       edit_password()
     })
 

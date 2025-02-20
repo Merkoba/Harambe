@@ -609,6 +609,7 @@ function do_sort(what) {
 }
 
 function mod_user(what, value, vtype) {
+  vars.msg_edit.close()
   let items = get_selected()
 
   if (!items.length) {
