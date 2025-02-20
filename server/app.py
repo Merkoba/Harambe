@@ -825,4 +825,6 @@ def you() -> Any:
     return render_template("you.html",
         user=user,
         allow_edit=allow_edit,
+        allow_name_edit=config.allow_name_edit,
+        allow_password_edit=config.allow_password_edit,
     )
