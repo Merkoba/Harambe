@@ -137,6 +137,18 @@ def over() -> Any:
     return render_template("over.html")
 
 
+def theme_configs() -> dict[str, str]:
+    return {
+        "background_color": config.background_color,
+        "accent_color": config.accent_color,
+        "font_color": config.font_color,
+        "text_color": config.text_color,
+        "link_color": config.link_color,
+        "font_family": config.font_family,
+        "font_size": config.font_size,
+    }
+
+
 limiter = Limiter(
     get_remote_address,
     app=app,
@@ -212,12 +224,6 @@ def index() -> Any:
         max_size_str=max_size_str,
         show_max_size=config.show_max_size,
         show_image=config.show_image,
-        background_color=config.background_color,
-        accent_color=config.accent_color,
-        font_color=config.font_color,
-        text_color=config.text_color,
-        link_color=config.link_color,
-        font_family=config.font_family,
         main_title=config.main_title,
         image_tooltip=config.image_tooltip,
         max_title_length=config.max_title_length,
@@ -227,6 +233,7 @@ def index() -> Any:
         show_list=show_list,
         show_admin=admin,
         description=config.description_index,
+        **theme_configs(),
     )
 
 
@@ -258,23 +265,11 @@ def message() -> Any:
     if not ok:
         return redirect(url_for("index"))
 
-    background_color = config.background_color
-    accent_color = config.accent_color
-    font_color = config.font_color
-    text_color = config.text_color
-    link_color = config.link_color
-    font_family = config.font_family
-
     return render_template(
         "message.html",
         mode=data["mode"],
         message=data["message"],
-        background_color=background_color,
-        accent_color=accent_color,
-        font_color=font_color,
-        text_color=text_color,
-        link_color=link_color,
-        font_family=font_family,
+        **theme_configs(),
     )
 
 
@@ -314,12 +309,6 @@ def post(name: str) -> Any:
         post=post,
         owned=owned,
         file_path=config.file_path,
-        background_color=config.background_color,
-        accent_color=config.accent_color,
-        font_color=config.font_color,
-        text_color=config.text_color,
-        link_color=config.link_color,
-        font_family=config.font_family,
         description=config.description_post,
         reactions_enabled=config.reactions_enabled,
         character_reaction_length=config.character_reaction_length,
@@ -327,6 +316,7 @@ def post(name: str) -> Any:
         post_refresh_times=config.post_refresh_times,
         can_react=can_react,
         show_list=show_list,
+        **theme_configs(),
     )
 
 

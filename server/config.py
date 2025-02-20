@@ -251,6 +251,9 @@ class Config:
         # Allow users to change their password
         self.allow_password_edit = True
 
+        # Base font size for all pages
+        self.font_size = 20
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -347,6 +350,7 @@ class Config:
             set_value(c, "post_refresh_times")
             set_value(c, "allow_name_edit")
             set_value(c, "allow_password_edit")
+            set_value(c, "font_size")
 
             # Users
 
