@@ -70,12 +70,12 @@ a.button:hover {
 #image {
     max-width: 60%;
     height: auto;
-    max-height: 600px;
+    max-height: 30rem;
     cursor: pointer;
 }
 
 #video {
-    width: 720px;
+    width: 38rem;
     max-width: 100%;
     height: auto;
     background-color: black;
@@ -206,7 +206,7 @@ a.button:hover {
 
 #reactions {
     margin-top: 0.5rem;
-    max-width: 800px;
+    max-width: 40rem;
     background-color: var(--contrast_background);
     display: flex;
     flex-direction: row;
