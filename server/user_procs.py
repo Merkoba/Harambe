@@ -251,7 +251,7 @@ def check_value(what: str, value: Any) -> tuple[bool, Any]:
     elif value:
         if vtype == "int":
             try:
-                value = min(max_num, max(0, int(value)))
+                value = min(9_000_000, max(0, int(value)))
             except ValueError:
                 value = 0
         elif vtype == "string":
@@ -318,7 +318,6 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
 
     user = get_user(uname)
     mode = "add" if user is None else "edit"
-    max_num = 9_000_000
     n_args = {}
 
     for key in args:
