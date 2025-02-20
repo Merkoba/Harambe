@@ -351,19 +351,20 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     return str(n_args["username"])
 
 
-def user_edit(user: User, what: str, value: Any) -> None:
+def user_edit(user: User, what: str, value: Any) -> tuple[dict[str, Any], int]:
     if not user:
-        return False
+        return {}, 400
 
     if not what:
-        return False
+        return {}, 400
 
     ok, value = check_value(what, value)
 
     if not ok:
-        return False
+        return {}, 400
 
     database.mod_user([user.username], what, value)
+    return {}, 200
 
 
 def check_auth(username: str, password: str) -> User | None:

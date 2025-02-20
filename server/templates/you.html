@@ -45,8 +45,12 @@
         <a class="linkbutton" href="/">Return</a>
         <div class="sep">|</div>
         <a class="linkbutton" href="/list?username={{user.username}}">History</a>
+
+        {% if allow_edit %}
         <div class="sep">|</div>
         <div id="edit" class="action_button">Edit</div>
+        {% endif %}
+
         <div class="sep">|</div>
         <div class="action_button" id="logout">Logout</div>
     </div>

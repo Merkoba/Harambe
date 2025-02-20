@@ -413,11 +413,6 @@ function unselect_all() {
   DOM.el(`#checkbox`).checked = false
 }
 
-function print_error(msg) {
-  // eslint-disable-next-line no-console
-  console.log(`Error: ${msg}`)
-}
-
 function size_string(size) {
   size /= 1000
 

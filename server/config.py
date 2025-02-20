@@ -245,6 +245,12 @@ class Config:
         # The number of times to refresh posts before stopping
         self.post_refresh_times = 10
 
+        # Allow users to edit their name
+        self.allow_name_edit = True
+
+        # Allow users to change their password
+        self.allow_password_edit = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -339,6 +345,8 @@ class Config:
             set_value(c, "max_user_reactions")
             set_value(c, "post_refresh_interval")
             set_value(c, "post_refresh_times")
+            set_value(c, "allow_name_edit")
+            set_value(c, "allow_password_edit")
 
             # Users
 

@@ -32,22 +32,40 @@ window.onload = () => {
   }
 }
 
-async function edit_name() {
+async function do_edit(what, value, title) {
+  let response = await fetch(`/user_edit`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`
+    },
+    body: JSON.stringify({what, value})
+  })
+
+  if (response.ok) {
+    alert(`${title} updated.`)
+    window.location = `/you`
+  }
+  else {
+    print_error(response.status)
+  }
+}
+
+function edit_name() {
   let value = prompt(`Enter your new public name`)
 
   if (!value) {
     return
   }
 
-  let what = `name`
+  do_edit(`name`, value, `Name`)
+}
 
-  if (name) {
-    await fetch(`/user_edit`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`
-      },
-      body: JSON.stringify({what, value})
-    })
+function edit_password() {
+  let value = prompt(`Enter your new password`)
+
+  if (!value) {
+    return
   }
+
+  do_edit(`password`, value, `Password`)
 }

@@ -360,11 +360,6 @@ async function delete_post() {
   }
 }
 
-function print_error(msg) {
-  // eslint-disable-next-line no-console
-  console.log(`Error: ${msg}`)
-}
-
 function update_date() {
   let [str, level] = timeago(vars.date_ms)
 

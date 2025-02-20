@@ -687,7 +687,7 @@ def edit_user(username: str = "") -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 @login_required
-def edit_user() -> Any:
+def user_edit() -> Any:
     user = get_user()
 
     if not user:
@@ -696,6 +696,17 @@ def edit_user() -> Any:
     data = request.get_json()
     what = data.get("what", None)
     value = data.get("value", None)
+
+    if what not in ["name", "password"]:
+        return over()
+
+    if what == "name":
+        if not config.allow_name_edit:
+            return over()
+    elif what == "password":
+        if not config.allow_password_edit:
+            return over()
+
     return user_procs.user_edit(user, what, value)
 
 
@@ -809,4 +820,9 @@ def you() -> Any:
     if not user:
         return over()
 
-    return render_template("you.html", user=user)
+    allow_edit = config.allow_name_edit or config.allow_password_edit
+
+    return render_template("you.html",
+        user=user,
+        allow_edit=allow_edit,
+    )

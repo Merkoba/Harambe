@@ -54,8 +54,3 @@ async function delete_user() {
     print_error(error)
   }
 }
-
-function print_error(msg) {
-  // eslint-disable-next-line no-console
-  console.log(`Error: ${msg}`)
-}
