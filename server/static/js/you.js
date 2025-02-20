@@ -51,7 +51,7 @@ async function do_edit(what, value, title) {
 }
 
 function edit_name() {
-  let value = prompt(`Enter your new public name`)
+  let value = prompt(`Enter your new public name`, vars.name)
 
   if (!value) {
     return
