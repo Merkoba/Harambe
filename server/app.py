@@ -822,7 +822,8 @@ def you() -> Any:
 
     allow_edit = config.allow_name_edit or config.allow_password_edit
 
-    return render_template("you.html",
+    return render_template(
+        "you.html",
         user=user,
         allow_edit=allow_edit,
         allow_name_edit=config.allow_name_edit,

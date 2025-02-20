@@ -1,8 +1,8 @@
 window.onload = () => {
   DOM.ev(`#logout`, `click`, () => {
-      if (confirm(`Are you sure you want to logout?`)) {
-          window.location = `/logout`
-      }
+    if (confirm(`Are you sure you want to logout?`)) {
+      window.location = `/logout`
+    }
   })
 
   let edit = DOM.el(`#edit`)
@@ -36,9 +36,9 @@ async function do_edit(what, value, title) {
   let response = await fetch(`/user_edit`, {
     method: `POST`,
     headers: {
-      "Content-Type": `application/json`
+      "Content-Type": `application/json`,
     },
-    body: JSON.stringify({what, value})
+    body: JSON.stringify({what, value}),
   })
 
   if (response.ok) {

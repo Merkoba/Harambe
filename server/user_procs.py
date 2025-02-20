@@ -237,7 +237,7 @@ def get_user(username: str) -> User | None:
     return None
 
 
-def check_value(what: str, value: Any) -> tuple[bool, Any]:
+def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
     vtype = user_types.get(what, None)
 
     if not vtype:
@@ -259,7 +259,11 @@ def check_value(what: str, value: Any) -> tuple[bool, Any]:
                 value = 0
         elif vtype == "string":
             value = "".join(
-                [c for c in value if c.isalnum() or c in [" ", "_", ".", ",", "-", "!", "?"]]
+                [
+                    c
+                    for c in value
+                    if c.isalnum() or c in [" ", "_", ".", ",", "-", "!", "?"]
+                ]
             )
 
             value = utils.single_line(value)
@@ -324,7 +328,7 @@ def edit_user(mode: str, request: Request, username: str, admin: User) -> str:
     n_args = {}
 
     for key in args:
-        ok, value = check_value(key, args[key])
+        ok, value = check_value(user, key, args[key])
 
         if not ok:
             return ""
@@ -360,7 +364,7 @@ def user_edit(user: User, what: str, value: Any) -> tuple[dict[str, Any], int]:
     if not what:
         return {}, 400
 
-    ok, value = check_value(what, value)
+    ok, value = check_value(user, what, value)
 
     if not ok:
         return {}, 400
