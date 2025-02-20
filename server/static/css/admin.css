@@ -15,7 +15,7 @@ body, html {
     flex-direction: row;
     gap: 0.5rem;
     color: black;
-    padding-left: 0.05rem;
+    padding-left: 0.055rem;
 }
 
 #items {
