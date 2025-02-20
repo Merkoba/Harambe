@@ -75,14 +75,15 @@ a:hover {
     filter: brightness(1.5);
 }
 
-a.dialog_button:link, a.dialog_button:visited {
+a.dialog_button:link, a.dialog_button:visited, a.dialog_button:hover {
     display: inline-block;
-    padding: 8px 16px;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
     background: var(--accent_color);
     color: white;
     cursor: pointer;
     text-decoration: none;
-    min-width: 10rem;
+    min-width: 11rem;
     border: none;
     outline: none;
 }
