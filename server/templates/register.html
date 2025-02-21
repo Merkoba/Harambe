@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Register</title>
+<link rel="stylesheet" href="static/css/login.css">
+<script src="/static/js/login.js"></script>
+{% endblock %}
+
+{% block body %}
+<div id="main">
+    <form id="form" action="/register" method="post">
+        <input type="text" id="username" name="username" placeholder="Username">
+        <input type="password" id="password" name="password" placeholder="Password">
+        <input type="password" id="password_2" name="password_2" placeholder="Password 2">
+        <input type="text" id="name" name="name" placeholder="Name">
+        <input type="submit" id="register" value="Register">
+    </form>
+</div>
+{% endblock %}

@@ -243,14 +243,29 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
     if not vtype:
         return False, None
 
-    if what == "password":
+    if what == "username":
         if value:
-            if len(value) > 240:
+            value = value.strip()
+
+            if not value.isalnum():
+                return False, None
+
+            if len(value) > config.max_user_username_length:
+                return False, None
+    elif what == "password":
+        if value:
+            if len(value) > config.max_user_password_length:
                 return False, None
 
             value = hashpass(value)
         elif user and user.password:
             value = user.password
+    elif what == "name":
+        if value:
+            value = utils.single_line(value)
+
+            if len(value) > config.max_user_name_length:
+                return False, None
     elif value:
         if vtype == "int":
             try:
@@ -481,9 +496,9 @@ def mod_user(
     return utils.ok()
 
 
-def register(request: Request) -> tuple[str, int]:
+def register(request: Request) -> tuple[bool, str, User | None]:
     if not request:
-        return utils.bad("No Request")
+        return "No Request", None
 
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
@@ -491,6 +506,35 @@ def register(request: Request) -> tuple[str, int]:
     name = request.form.get("name", "").strip()
 
     if (not username) or (not password) or (not password_2) or (not name):
-        return utils.bad("Missing Details")
+        return False, "Missing Details", None
 
-    return utils.ok()
+    ok, username = check_value(None, "username", username)
+
+    if not ok:
+        return False, "Invalid Username", None
+
+    ok, password = check_value(None, "password", password)
+
+    if not ok:
+        return False, "Invalid Password", None
+
+    ok, name = check_value(None, "name", name)
+
+    if not ok:
+        return False, "Invalid Name", None
+
+    if (password != password_2):
+        return False, "Passwords do not match", None
+
+    user = get_user(username)
+
+    if user:
+        return False, "User already exists", None
+
+    database.add_user("add", username=username, password=password, name=name)
+    user = get_user(username)
+
+    if not user:
+        return False, "User not found", None
+
+    return True, "User registered successfully", user

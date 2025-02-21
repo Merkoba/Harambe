@@ -258,6 +258,15 @@ class Config:
         # Font size for the admin pages
         self.admin_font_size = 18
 
+        # Max length for user username
+        self.max_user_username_length = 240
+
+        # Max length for user password
+        self.max_user_password_length = 240
+
+        # Max length for user name
+        self.max_user_name_length = 30
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -355,6 +364,9 @@ class Config:
             set_value(c, "allow_name_edit")
             set_value(c, "allow_password_edit")
             set_value(c, "font_size")
+            set_value(c, "max_user_username_length")
+            set_value(c, "max_user_password_length")
+            set_value(c, "max_user_name_length")
 
             # Users
 

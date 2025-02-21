@@ -553,7 +553,15 @@ def logout() -> Any:
 @payload_check()
 def register() -> Any:
     if request.method == "POST":
-        return user_procs.register(request)
+        ok, msg, user = user_procs.register(request)
+
+        if ok and user:
+            session["username"] = user.username
+            session["admin"] = user.admin
+            return redirect(url_for("index"))
+        else:
+            flash(msg)
+            return redirect(url_for("register"))
 
     return render_template("register.html")
 
