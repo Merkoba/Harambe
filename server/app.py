@@ -422,7 +422,11 @@ def admin(what: str, page: int = 1) -> Any:
 
     if what == "posts":
         items, total, next_page = post_procs.get_posts(
-            page, page_size, query=query, sort=sort
+            page,
+            page_size,
+            query=query,
+            sort=sort,
+            username=username,
         )
     else:
         items, total, next_page = user_procs.get_users(
@@ -506,7 +510,7 @@ def edit_title() -> Any:
 
 
 @app.route("/login", methods=["GET", "POST"])  # type: ignore
-@limiter.limit(rate_limit(5))  # type: ignore
+@limiter.limit(rate_limit(6))  # type: ignore
 @payload_check()
 def login() -> Any:
     message = ""
@@ -523,7 +527,7 @@ def login() -> Any:
 
 
 @app.route("/register", methods=["GET", "POST"])  # type: ignore
-@limiter.limit(rate_limit(5))  # type: ignore
+@limiter.limit(rate_limit(6))  # type: ignore
 @payload_check()
 def register() -> Any:
     if not config.register_enabled:

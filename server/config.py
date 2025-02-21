@@ -108,7 +108,7 @@ class Config:
         self.post_name_length: int = 10
 
         # Requests per minute limit for most endpoints
-        self.rate_limit: int = 25
+        self.rate_limit: int = 30
 
         # Background color for the web interface
         self.background_color: str = "81, 81, 81"
