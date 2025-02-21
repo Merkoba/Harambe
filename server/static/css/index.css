@@ -79,7 +79,7 @@ a.dialog_button:link, a.dialog_button:visited, a.dialog_button:hover {
     display: inline-block;
     padding-top: 0.35rem;
     padding-bottom: 0.35rem;
-    background: var(--accent_color);
+    background: rgb(127 104 164);
     color: white;
     cursor: pointer;
     text-decoration: none;
