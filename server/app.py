@@ -697,12 +697,8 @@ def user_edit() -> Any:
     if what not in ["name", "password"]:
         return over()
 
-    if what == "name":
-        if not config.allow_name_edit:
-            return over()
-    elif what == "password":
-        if not config.allow_password_edit:
-            return over()
+    if not getattr(config, f"allow_{what}_edit"):
+        return over()
 
     return user_procs.user_edit(user, what, value)
 
