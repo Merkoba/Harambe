@@ -12,6 +12,7 @@ from werkzeug.security import generate_password_hash as hashpass  # type: ignore
 from werkzeug.security import check_password_hash as checkpass  # pyright: ignore
 
 # Modules
+import app
 import utils
 from config import config
 import database
@@ -496,9 +497,42 @@ def mod_user(
     return utils.ok()
 
 
+def login(request: Request) -> tuple[bool, str, User | None]:
+    if not request:
+        return "No Request", None
+
+    if config.require_captcha_login:
+        c_hash = request.form.get("captcha-hash", "")
+        c_text = request.form.get("captcha-text", "")
+
+        if not app.simple_captcha.verify(c_text, c_hash):
+            return False, "Failed captcha", None
+
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "")
+    name = request.form.get("name", "").strip()
+
+    if (not username) or (not password) or (not name):
+        return False, "Missing details", None
+
+    user = check_auth(username, password)
+
+    if not user:
+        return False, "Invalid username or password", None
+
+    return True, "User logged in successfully", user
+
+
 def register(request: Request) -> tuple[bool, str, User | None]:
     if not request:
         return "No Request", None
+
+    if config.require_captcha_register:
+        c_hash = request.form.get("captcha-hash", "")
+        c_text = request.form.get("captcha-text", "")
+
+        if not app.simple_captcha.verify(c_text, c_hash):
+            return False, "Failed captcha", None
 
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
@@ -506,7 +540,7 @@ def register(request: Request) -> tuple[bool, str, User | None]:
     name = request.form.get("name", "").strip()
 
     if (not username) or (not password) or (not password_2) or (not name):
-        return False, "Missing Details", None
+        return False, "Missing details", None
 
     if (password != password_2):
         return False, "Passwords do not match", None
@@ -514,17 +548,17 @@ def register(request: Request) -> tuple[bool, str, User | None]:
     ok, username = check_value(None, "username", username)
 
     if not ok:
-        return False, "Invalid Username", None
+        return False, "Invalid username", None
 
     ok, password = check_value(None, "password", password)
 
     if not ok:
-        return False, "Invalid Password", None
+        return False, "Invalid password", None
 
     ok, name = check_value(None, "name", name)
 
     if not ok:
-        return False, "Invalid Name", None
+        return False, "Invalid name", None
 
     user = get_user(username)
 

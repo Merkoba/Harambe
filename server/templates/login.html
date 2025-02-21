@@ -8,6 +8,10 @@
 
 {% block body %}
 <div id="main">
+    {% if message %}
+    <div id="message">{{message}}</div>
+    {% endif %}
+
     <form id="form" action="/login" method="post">
         <input type="text" id="username" name="username" placeholder="Username">
         <input type="password" id="password" name="password" placeholder="Password">

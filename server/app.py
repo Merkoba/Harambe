@@ -26,7 +26,6 @@ from user_procs import User
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.secret_key = config.app_key
-app.config["MAX_CONTENT_LENGTH"] = config.max_size * 1_000_000
 
 # Enable all cross origin requests
 CORS(app)
@@ -520,32 +519,22 @@ def edit_title() -> Any:
 @limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()
 def login() -> Any:
+    message = ""
+
     if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "")
+        ok, message, user = user_procs.login(request)
 
-        if (not username) or (not password):
-            flash("Invalid credentials")
-            return redirect(url_for("login"))
-
-        user = user_procs.check_auth(username, password)
-
-        if user:
+        if ok and user:
             session["username"] = user.username
             session["admin"] = user.admin
             return redirect(url_for("index"))
 
-        flash("Invalid credentials")
+    if config.require_captcha_login:
+        captcha = simple_captcha.create()
+    else:
+        captcha = None
 
-    return render_template("login.html")
-
-
-@app.route("/logout", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(3))  # type: ignore
-@payload_check()
-def logout() -> Any:
-    session.pop("username", None)
-    return redirect(url_for("index"))
+    return render_template("login.html", message=message, captcha=captcha,)
 
 
 @app.route("/register", methods=["GET", "POST"])  # type: ignore
@@ -562,7 +551,20 @@ def register() -> Any:
             session["admin"] = user.admin
             return redirect(url_for("index"))
 
-    return render_template("register.html", message=message)
+    if config.require_captcha_register:
+        captcha = simple_captcha.create()
+    else:
+        captcha = None
+
+    return render_template("register.html", message=message, captcha=captcha)
+
+
+@app.route("/logout", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(3))  # type: ignore
+@payload_check()
+def logout() -> Any:
+    session.pop("username", None)
+    return redirect(url_for("index"))
 
 
 # LIST

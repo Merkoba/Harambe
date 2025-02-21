@@ -91,15 +91,13 @@ class Config:
         # The higher the number, the harder it is
         self.captcha_length: int = 10
 
-        # Maximum file size in MB
-        # Files beyond this will get ignored
-        self.max_size: int = 100
-
         # Default max size for users
-        self.max_size_user: int = 100
+        # You can admin them per case later
+        # Low value in case public reigster is on
+        self.max_size_user: int = 20
 
         # Max size for anonymous users
-        self.max_size_anon: int = 20
+        self.max_size_anon: int = 10
 
         # Port for the redis server
         # Redis is used for the limiter
@@ -267,6 +265,15 @@ class Config:
         # Max length for user name
         self.max_user_name_length = 30
 
+        # Register page will be enabled
+        self.register_enabled = True
+
+        # Require captcha to login
+        self.require_captcha_login = True
+
+        # Require captcha to register
+        self.require_captcha_register = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -313,7 +320,6 @@ class Config:
             set_value(c, "captcha_key")
             set_value(c, "captcha_cheat")
             set_value(c, "captcha_length")
-            set_value(c, "max_size")
             set_value(c, "max_size_user")
             set_value(c, "max_size_anon")
             set_value(c, "redis_port")
@@ -367,6 +373,9 @@ class Config:
             set_value(c, "max_user_username_length")
             set_value(c, "max_user_password_length")
             set_value(c, "max_user_name_length")
+            set_value(c, "register_enabled")
+            set_value(c, "require_captcha_login")
+            set_value(c, "require_captcha_register")
 
             # Users
 
