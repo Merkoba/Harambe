@@ -17,9 +17,7 @@
     <div>{{title}}</div>
 
     <form id="form" action="/edit_user/{{user.username}}" method="post">
-        {% if user and user.username %}
-        <input type="text" id="username" name="username" placeholder="Username" value="{{user.username}}" disabled>
-        {% else %}
+        {% if mode != "edit" %}
         <input type="text" id="username" name="username" placeholder="Username">
         {% endif %}
         <input type="password" id="password" name="password" placeholder="Password" value="">

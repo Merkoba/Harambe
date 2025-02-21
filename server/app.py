@@ -647,8 +647,8 @@ def edit_user(username: str = "") -> Any:
         if (not user) and mode == "edit":
             return redirect(url_for("admin", what="users"))
 
-        if mode == "edit":
-            title = "Edit User"
+        if user and (mode == "edit"):
+            title = f"Edit: {user.username}"
         else:
             title = "Add User"
 
@@ -662,6 +662,7 @@ def edit_user(username: str = "") -> Any:
             user=user or {},
             username=uname,
             title=title,
+            mode=mode,
             **theme_configs(),
         )
 
