@@ -72,14 +72,6 @@ window.onload = function() {
     })
   }
 
-  let modal = DOM.el(`#image_modal`)
-
-  if (modal) {
-    DOM.ev(modal, `click`, () => {
-      DOM.hide(modal)
-    })
-  }
-
   DOM.ev(document, `dragover`, (e) => {
     e.preventDefault()
   })
@@ -185,6 +177,27 @@ window.onload = function() {
       resize_video()
     }
   })
+
+  if (vars.image_embed) {
+    vars.msg_image = Msg.factory({
+      disable_content_padding: true,
+      before_show: () => {
+        reset_modal_image()
+      },
+    })
+
+    let t = DOM.el(`#template_image`)
+    vars.msg_image.set(t.innerHTML)
+    let img = DOM.el(`#modal_image`)
+
+    DOM.ev(img, `click`, () => {
+      hide_modal_image()
+    })
+
+    DOM.ev(img, `wheel`, () => {
+      expand_modal_image()
+    })
+  }
 }
 
 function timeago(date) {
@@ -488,7 +501,7 @@ function add_reaction(reaction) {
     item.appendChild(img)
   }
 
-  let info = DOM.el(`#reaction_info_template`)
+  let info = DOM.el(`#template_reaction_info`)
   let clone = info.content.cloneNode(true)
   DOM.el(`.uname`, clone).textContent = reaction.uname_str
   DOM.el(`.ago`, clone).textContent = reaction.ago
@@ -500,7 +513,7 @@ function add_reaction(reaction) {
 }
 
 function icons_open() {
-  return vars.msg_icons.is_open()
+  return vars.msg_icons && vars.msg_icons.is_open()
 }
 
 function show_all_icons() {
@@ -596,32 +609,15 @@ function reveal_reactions() {
 }
 
 function show_modal_image() {
-  let modal_image = DOM.el(`#image_modal_img`)
-  modal_image.src = image.src
-  let modal = DOM.el(`#image_modal`)
-  DOM.show(modal)
+  vars.msg_image.show()
 }
 
 function hide_modal_image() {
-  let modal = DOM.el(`#image_modal`)
-  DOM.hide(modal)
+  vars.msg_image.close()
 }
 
 function toggle_modal_image() {
-  let img = DOM.el(`#image`)
-
-  if (!img) {
-    return
-  }
-
-  let modal = DOM.el(`#image_modal`)
-
-  if (DOM.is_hidden(modal)) {
-    show_modal_image()
-  }
-  else {
-    hide_modal_image()
-  }
+  vars.msg_image.toggle()
 }
 
 function copy_all_text() {
@@ -743,4 +739,14 @@ async function fill_icons() {
     item.dataset.icon = icon
     container.appendChild(item)
   }
+}
+
+function expand_modal_image() {
+  let img = DOM.el(`#modal_image`)
+  img.classList.add(`expanded`)
+}
+
+function reset_modal_image() {
+  let img = DOM.el(`#modal_image`)
+  img.classList.remove(`expanded`)
 }

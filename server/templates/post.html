@@ -19,6 +19,7 @@
     vars.character_reaction_length = {{character_reaction_length}}
     vars.post_refresh_interval = {{post_refresh_interval}}
     vars.post_refresh_times = {{post_refresh_times}}
+    vars.image_embed = {{post.image_embed | tojson}}
 </script>
 
 <script src="/static/js/msg.js"></script>
@@ -45,7 +46,7 @@
     </div>
 </template>
 
-<template id="reaction_info_template">
+<template id="template_reaction_info">
     <div class="reaction_info">
         <div class="sep">|</div>
 
@@ -54,6 +55,12 @@
             <div class="sep">|</div>
             <div class="ago"></div>
         </div>
+    </div>
+</template>
+
+<template id="template_image">
+    <div id="modal_image_container">
+        <img id="modal_image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}">
     </div>
 </template>
 
@@ -124,12 +131,6 @@
     {% if post.image_embed %}
     <div class="embed">
         <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}">
-
-        <div id="image_modal" class="hidden">
-            <div id="image_modal_content">
-                <img id="image_modal_img" src="">
-            </div>
-        </div>
     </div>
     {% endif %}
 

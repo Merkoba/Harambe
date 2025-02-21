@@ -114,3 +114,7 @@ a.linkbutton:hover {
 .Msg-content {
     font-size: var(--font_size) !important;
 }
+
+.Msg-overlay {
+    cursor: pointer !important;
+}
