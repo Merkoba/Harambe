@@ -259,10 +259,11 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
         if value:
             if len(value) > config.max_user_password_length:
                 return False, None
-
             value = hashpass(value)
         elif user and user.password:
             value = user.password
+        else:
+            return False, None
     elif what == "name":
         value = value.strip()
 
@@ -359,7 +360,7 @@ def edit_user(
         ok, value = check_value(user, key, args[key])
 
         if not ok:
-            return False, "Invalid Value"
+            return False, f"Invalid Value '{key}'"
 
         n_args[key] = value
 
