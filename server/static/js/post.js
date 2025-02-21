@@ -742,11 +742,11 @@ async function fill_icons() {
 }
 
 function expand_modal_image() {
-  let img = DOM.el(`#modal_image`)
-  img.classList.add(`expanded`)
+  let c = DOM.el(`#modal_image_container`)
+  c.classList.add(`expanded`)
 }
 
 function reset_modal_image() {
-  let img = DOM.el(`#modal_image`)
-  img.classList.remove(`expanded`)
+  let c = DOM.el(`#modal_image_container`)
+  c.classList.remove(`expanded`)
 }
