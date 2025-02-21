@@ -163,19 +163,18 @@ text_mtype = "text/plain"
 
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@login_required
 def index() -> Any:
     if not config.web_uploads_enabled:
         return render_template("fallback.html")
 
     user = get_user()
-
-    if not user:
-        return over()
-
+    is_user = bool(user)
     admin = user and user.admin
 
     if request.method == "POST":
+        if not user:
+            return over()
+
         try:
             ok, ans = upload_procs.upload(request, user)
 
@@ -195,13 +194,18 @@ def index() -> Any:
             return over()
 
     show_list = list_visible(user)
-    max_size = user.max_size
 
-    if max_size <= 0:
-        max_size = config.max_size_user
+    if not user:
+        max_size = 0
+        max_size_str = 0
+    else:
+        max_size = user.max_size
 
-    max_size_str = max_size
-    max_size *= 1_000_000
+        if max_size <= 0:
+            max_size = config.max_size_user
+
+        max_size_str = max_size
+        max_size *= 1_000_000
 
     return render_template(
         "index.html",
@@ -218,6 +222,7 @@ def index() -> Any:
         show_list=show_list,
         show_admin=admin,
         description=config.description_index,
+        is_user=is_user,
         **theme_configs(),
     )
 
@@ -521,6 +526,9 @@ def login() -> Any:
 @limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()
 def register() -> Any:
+    if not config.register_enabled:
+        return over()
+
     message = ""
 
     if request.method == "POST":

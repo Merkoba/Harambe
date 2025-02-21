@@ -10,7 +10,6 @@
     vars.max_size = {{max_size}}
     vars.max_title_length = {{max_title_length}}
     vars.image_name = {{image_name | tojson | safe}}
-    vars.is_user = {{is_user | tojson}}
 </script>
 
 <script src="/static/js/msg.js"></script>
@@ -32,7 +31,7 @@
 
 <div id="main">
     <div id="info">
-        {% if show_max_size %}
+        {% if is_user and show_max_size %}
         <div id="file_size">Max size: {{max_size_str}} mb</div>
         {% endif %}
     </div>
@@ -44,13 +43,13 @@
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
         <div id="links">
-            {% if show_list %}
+            {% if is_user and show_list %}
             <a class="link" href="/fresh">Fresh</a>
             <a class="link" href="/list">List</a>
             <a class="link" href="/random">Random</a>
             {% endif %}
 
-            {% if show_admin %}
+            {% if is_user and show_admin %}
             <a class="link" href="/admin">Admin</a>
             {% endif %}
 
@@ -62,9 +61,11 @@
             <a class="link" href="/you">You</a>
             {% else %}
             <a class="link" href="/login">Login</a>
+            <a class="link" href="/register">Register</a>
             {% endif %}
         </div>
 
+        {% if is_user %}
         <div id="picker">
             <input id="file" type="file" name="file" required max-file-size="{{max_size_str}}mb">
         </div>
@@ -74,6 +75,7 @@
         {% endif %}
 
         <button type="submit" name="submit">Upload</button>
+        {% endif %}
     </form>
 </div>
 {% endblock %}
