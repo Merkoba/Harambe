@@ -109,51 +109,6 @@ window.onload = function() {
     })
   }
 
-  let r_modal = DOM.el(`#icons_modal`)
-
-  if (r_modal) {
-    DOM.ev(r_modal, `click`, (e) => {
-      if (e.target.id === `icons_modal`) {
-        DOM.hide(r_modal)
-      }
-    })
-
-    let r_input = DOM.el(`#icons_input`)
-
-    if (r_input) {
-      DOM.ev(r_input, `input`, () => {
-        filter_icons()
-      })
-    }
-
-    DOM.ev(r_input, `keydown`, (e) => {
-      if (e.key === `Escape`) {
-        esc_icons()
-        e.preventDefault()
-      }
-      else if (e.key === `Enter`) {
-        enter_icons()
-        e.preventDefault()
-      }
-      else if (e.key === `ArrowUp`) {
-        up_icons()
-        e.preventDefault()
-      }
-      else if (e.key === `ArrowDown`) {
-        down_icons()
-        e.preventDefault()
-      }
-    })
-
-    DOM.ev(r_modal, `click`, (e) => {
-      if (e.target.closest(`.icon_item`)) {
-        let item = e.target.closest(`.icon_item`)
-        vars.selected_icon = item.dataset.icon
-        enter_icons()
-      }
-    })
-  }
-
   DOM.ev(document, `keyup`, (e) => {
     if (!icons_open()) {
       if (e.key === `r`) {
@@ -390,46 +345,27 @@ async function show_icons() {
     return
   }
 
-  let modal = DOM.el(`#icons_modal`)
-  let container = DOM.el(`#icons`)
-
   if (!vars.icons_loaded) {
-    let response = await fetch(`/get_icons`)
+    vars.msg_icons = Msg.factory({
+      disable_content_padding: true,
+    })
 
-    if (!response.ok) {
-      print_error(response.status)
-      return
-    }
-
-    let json = await response.json()
-    container.innerHTML = ``
-    let icons = shuffle_array(json.icons)
-
-    for (let icon of icons) {
-      let item = DOM.create(`div`, `icon_item`)
-      let text = DOM.create(`div`, `icon_item_text`)
-      text.textContent = icon
-      item.appendChild(text)
-      let img = DOM.create(`img`, `icon_item_img`)
-      img.loading = `lazy`
-      img.src = `/static/icons/${icon}.gif`
-      item.appendChild(img)
-      item.dataset.icon = icon
-      container.appendChild(item)
-    }
-
+    let t = DOM.el(`#template_icons`)
+    vars.msg_icons.set(t.innerHTML)
+    await fill_icons()
+    add_icon_events()
     vars.icons_loaded = true
   }
   else {
     show_all_icons()
   }
 
-  DOM.show(modal)
+  vars.msg_icons.show()
   let input = DOM.el(`#icons_input`)
   input.value = ``
   input.focus()
   select_first_icon()
-  container.scrollTop = 0
+  DOM.el(`#icons`).scrollTop = 0
 }
 
 function filter_icons() {
@@ -475,7 +411,7 @@ function esc_icons() {
     filter_icons()
   }
   else {
-    DOM.hide(`#icons_modal`)
+    vars.msg_icons.close()
   }
 }
 
@@ -489,7 +425,7 @@ async function enter_icons() {
 }
 
 function hide_icons() {
-  DOM.hide(`#icons_modal`)
+  vars.msg_icons.close()
 }
 
 function up_icons() {
@@ -564,7 +500,7 @@ function add_reaction(reaction) {
 }
 
 function icons_open() {
-  return !DOM.is_hidden(`#icons_modal`)
+  return vars.msg_icons.is_open()
 }
 
 function show_all_icons() {
@@ -745,4 +681,66 @@ function resize_video() {
   set_css_var(`max_width`, `${v_width}px`)
   set_css_var(`max_height`, `${v_height}px`)
   video.classList.add(`max`)
+}
+
+function add_icon_events() {
+  let input = DOM.el(`#icons_input`)
+  let container = DOM.el(`#icons`)
+
+  DOM.ev(input, `input`, () => {
+    filter_icons()
+  })
+
+  DOM.ev(input, `keydown`, (e) => {
+    if (e.key === `Escape`) {
+      esc_icons()
+      e.preventDefault()
+    }
+    else if (e.key === `Enter`) {
+      enter_icons()
+      e.preventDefault()
+    }
+    else if (e.key === `ArrowUp`) {
+      up_icons()
+      e.preventDefault()
+    }
+    else if (e.key === `ArrowDown`) {
+      down_icons()
+      e.preventDefault()
+    }
+  })
+
+  DOM.ev(container, `click`, (e) => {
+    if (e.target.closest(`.icon_item`)) {
+      let item = e.target.closest(`.icon_item`)
+      vars.selected_icon = item.dataset.icon
+      enter_icons()
+    }
+  })
+}
+
+async function fill_icons() {
+  let container = DOM.el(`#icons`)
+  let response = await fetch(`/get_icons`)
+
+  if (!response.ok) {
+    print_error(response.status)
+    return
+  }
+
+  let json = await response.json()
+  let icons = shuffle_array(json.icons)
+
+  for (let icon of icons) {
+    let item = DOM.create(`div`, `icon_item`)
+    let text = DOM.create(`div`, `icon_item_text`)
+    text.textContent = icon
+    item.appendChild(text)
+    let img = DOM.create(`img`, `icon_item_img`)
+    img.loading = `lazy`
+    img.src = `/static/icons/${icon}.gif`
+    item.appendChild(img)
+    item.dataset.icon = icon
+    container.appendChild(item)
+  }
 }
