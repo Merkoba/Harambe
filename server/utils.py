@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # Standard
 import re
 import time
@@ -9,6 +11,7 @@ from typing import Any
 
 # Libraries
 import q as qlib  # type: ignore
+from flask import jsonify  # type: ignore
 
 # Modules
 from config import config
@@ -199,6 +202,15 @@ def count_graphemes(s: str) -> int:
 
 def clean_query(s: Any) -> str:
     return re.sub(r"[\s:]", "", str(s).lower())
+
+
+def bad(message: str = "") -> tuple[str, int]:
+    return jsonify({"status": "error", "message": message}), 400
+
+
+def ok(message: str = "", data: dict[str, Any] | None = None) -> tuple[str, int]:
+    data = data or {}
+    return jsonify({"status": "ok", "message": message, **data}), 200
 
 
 ICONS = load_icons()

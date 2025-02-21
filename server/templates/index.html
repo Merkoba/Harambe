@@ -22,7 +22,7 @@
 <template id="template_links">
     <div>Links</div>
 
-    <div class="dialog_container">
+    <div id="more_links_container" class="dialog_container">
         {% for link in links %}
         <a href="{{link.url}}" target="{{link.target}}" class="dialog_button">{{link.name}}</a>
         {% endfor %}

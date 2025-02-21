@@ -7,7 +7,7 @@ from collections import deque
 from typing import Any
 
 # Libraries
-from flask import Request, jsonify  # type: ignore
+from flask import Request  # type: ignore
 from werkzeug.security import generate_password_hash as hashpass  # type: ignore
 from werkzeug.security import check_password_hash as checkpass  # pyright: ignore
 
@@ -367,24 +367,24 @@ def edit_user(
     return True, str(n_args["username"])
 
 
-def user_edit(user: User, what: str, value: Any) -> tuple[dict[str, Any], int]:
+def user_edit(user: User, what: str, value: Any) -> tuple[str, int]:
     if not user:
-        return {}, 400
+        return utils.bad("User not found")
 
     if not what:
-        return {}, 400
+        return utils.bad("No field provided")
 
     ok, value = check_value(user, what, value)
 
     if not ok:
-        return {}, 400
+        return utils.bad("Invalid value")
 
     database.mod_user([user.username], what, value)
 
     if (what == "name") and (user.name != value):
         database.change_uploader(user.username, value)
 
-    return {}, 200
+    return utils.ok()
 
 
 def check_auth(username: str, password: str) -> User | None:
@@ -402,31 +402,26 @@ def check_auth(username: str, password: str) -> User | None:
 
 def delete_users(usernames: list[str], admin: str) -> tuple[str, int]:
     if not usernames:
-        return jsonify(
-            {"status": "error", "message": "Usernames were not provided"}
-        ), 400
+        return utils.bad("Usernames were not provided")
 
     if admin in usernames:
-        return (
-            jsonify({"status": "error", "message": "You can't delete yourself"}),
-            400,
-        )
+        return utils.bad("You can't delete yourself")
 
     for username in usernames:
         do_delete_user(username)
 
-    return jsonify({"status": "ok", "message": "User deleted successfully"}), 200
+    return utils.ok("User deleted successfully")
 
 
 def delete_user(username: str, admin: str) -> tuple[str, int]:
     if not username:
-        return jsonify({"status": "error", "message": "Usename was not provided"}), 400
+        return utils.bad("Usename was not provided")
 
     if username == admin:
-        return jsonify({"status": "error", "message": "You can't delete yourself"}), 400
+        return utils.bad("You can't delete yourself")
 
     do_delete_user(username)
-    return jsonify({"status": "ok", "message": "User deleted successfully"}), 200
+    return utils.ok("User deleted successfully")
 
 
 def do_delete_user(username: str) -> None:
@@ -438,7 +433,7 @@ def do_delete_user(username: str) -> None:
 
 def delete_normal_users() -> tuple[str, int]:
     database.delete_normal_users()
-    return jsonify({"status": "ok", "message": "Normal users deleted"}), 200
+    return utils.ok("Normal users deleted")
 
 
 def check_user_limit(user: User) -> tuple[bool, str]:
@@ -463,9 +458,9 @@ def check_user_max(user: User, size: int) -> bool:
 
 def mod_user(
     usernames: list[str], what: str, value: str, vtype: str
-) -> tuple[dict[str, Any], int]:
+) -> tuple[str, int]:
     if not what:
-        return {}, 400
+        return utils.bad("No field provided")
 
     new_value: Any = None
 
@@ -480,7 +475,22 @@ def mod_user(
         new_value = bool(value)
 
     if new_value is None:
-        return {}, 400
+        return utils.bad("Invalid value")
 
     database.mod_user(usernames, what, new_value)
-    return {}, 200
+    return utils.ok()
+
+
+def register(request: Request) -> tuple[str, int]:
+    if not request:
+        return utils.bad("No Request")
+
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "")
+    password_2 = request.form.get("password_2", "")
+    name = request.form.get("name", "").strip()
+
+    if (not username) or (not password) or (not password_2) or (not name):
+        return utils.bad("Missing Details")
+
+    return utils.ok()

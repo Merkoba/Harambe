@@ -6,9 +6,6 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any
 
-# Libraries
-from flask import jsonify  # type: ignore
-
 # Modules
 import utils
 import database
@@ -329,9 +326,7 @@ def get_random_post(used_names: list[str]) -> str | None:
 
 def delete_posts(names: list[str]) -> tuple[str, int]:
     if not names:
-        return jsonify(
-            {"status": "error", "message": "Post names were not provided"}
-        ), 400
+        return utils.bad("Post names were not provided")
 
     for name in names:
         post = database.get_post(name)
@@ -339,36 +334,32 @@ def delete_posts(names: list[str]) -> tuple[str, int]:
         if post:
             do_delete_post(post)
 
-    return jsonify({"status": "ok", "message": "Post deleted successfully"}), 200
+    return utils.ok("Post deleted successfully")
 
 
 def delete_post(name: str, user: User) -> tuple[str, int]:
     if not name:
-        return jsonify(
-            {"status": "error", "message": "Post name was not provided"}
-        ), 400
+        return utils.bad("Post name was not provided")
 
     if not user.admin:
         if not config.allow_edit:
-            return jsonify({"status": "error", "message": "Editing is disabled"}), 500
+            return utils.bad("Editing is disabled")
 
         db_post = database.get_post(name)
 
         if not db_post:
-            return jsonify({"status": "error", "message": "Post not found"}), 500
+            return utils.bad("Post not found")
 
         if db_post.username != user.username:
-            return jsonify(
-                {"status": "error", "message": "You are not the uploader"}
-            ), 500
+            return utils.bad("You are not the uploader")
 
     post = database.get_post(name)
 
     if post:
         do_delete_post(post)
-        return jsonify({"status": "ok", "message": "Post deleted successfully"}), 200
+        return utils.ok("Post deleted successfully")
 
-    return jsonify({"status": "error", "message": "Post not found"}), 500
+    return utils.bad("Post not found")
 
 
 # Be extra careful with this function!
@@ -417,7 +408,7 @@ def delete_all_posts() -> tuple[str, int]:
     for post in database.get_posts():
         do_delete_post(post)
 
-    return jsonify({"status": "ok", "message": "All posts deleted"}), 200
+    return utils.ok("All posts deleted")
 
 
 # Remove old files if limits are exceeded
@@ -458,67 +449,63 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
     title = title or ""
 
     if not name:
-        return jsonify({"status": "error", "message": "Missing values"}), 500
+        return utils.bad("Missing values")
 
     if len(title) > config.max_title_length:
-        return jsonify({"status": "error", "message": "Title is too long"}), 500
+        return utils.bad("Title is too long")
 
     if not user.admin:
         if not config.allow_edit:
-            return jsonify({"status": "error", "message": "Editing is disabled"}), 500
+            return utils.bad("Editing is disabled")
 
         db_post = database.get_post(name)
 
         if not db_post:
-            return jsonify({"status": "error", "message": "Post not found"}), 500
+            return utils.bad("Post not found")
 
         if db_post.username != user.username:
-            return jsonify(
-                {"status": "error", "message": "You are not the uploader"}
-            ), 500
+            return utils.bad("You are not the uploader")
 
     database.edit_post_title(name, title)
-    return jsonify({"status": "ok", "message": "Title updated"}), 200
+    return utils.ok("Title updated")
 
 
 def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if not user:
-        return jsonify({"status": "error", "message": "You are not logged in"}), 500
+        return utils.bad("You are not logged in")
 
     text = text.strip()
 
     if not name:
-        return jsonify({"status": "error", "message": "Missing values"}), 500
+        return utils.bad("Missing values")
 
     if not text:
-        return jsonify({"status": "error", "message": "Missing values"}), 500
+        return utils.bad("Missing values")
 
     if mode not in ["character", "icon"]:
-        return jsonify({"status": "error", "message": "Invalid mode"}), 500
+        return utils.bad("Invalid mode")
 
     if len(text) > 100:
-        return jsonify({"status": "error", "message": "Reaction is too long"}), 500
+        return utils.bad("Reaction is too long")
 
     if mode == "character":
         if utils.count_graphemes(text) > config.character_reaction_length:
-            return jsonify({"status": "error", "message": "Invalid reaction"}), 500
+            return utils.bad("Invalid reaction")
     elif mode == "icon":
         if text not in utils.ICONS:
-            return jsonify({"status": "error", "message": "Invalid reaction"}), 500
+            return utils.bad("Invalid reaction")
 
     if database.get_reaction_count(name, user.username) >= config.max_user_reactions:
-        return jsonify(
-            {"status": "error", "message": "You can't add more reactions"}
-        ), 500
+        return utils.bad("You can't add more reactions")
 
     dbr = database.add_reaction(name, user.username, user.name, text, mode)
 
     if dbr:
         reaction = make_reaction(dbr, utils.now())
         database.increase_post_reactions(name)
-        return jsonify({"status": "ok", "reaction": reaction}), 200
+        return utils.ok(data={"reaction": reaction})
 
-    return jsonify({"status": "error", "message": "Reaction failed"}), 500
+    return utils.bad("Reaction failed")
 
 
 def get_latest_post() -> Post | None:

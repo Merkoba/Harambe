@@ -87,6 +87,10 @@ window.onload = () => {
     DOM.ev(more_links, `click`, (e) => {
       vars.msg_links.show()
     })
+
+    DOM.ev(`#more_links_container`, `click`, (e) => {
+      vars.msg_links.close()
+    })
   }
 }
 

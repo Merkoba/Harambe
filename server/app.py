@@ -522,7 +522,7 @@ def edit_title() -> Any:
 def login() -> Any:
     if request.method == "POST":
         username = request.form.get("username", "").strip()
-        password = request.form.get("password", "").strip()
+        password = request.form.get("password", "")
 
         if (not username) or (not password):
             flash("Invalid credentials")
@@ -546,6 +546,16 @@ def login() -> Any:
 def logout() -> Any:
     session.pop("username", None)
     return redirect(url_for("index"))
+
+
+@app.route("/register", methods=["GET", "POST"])  # type: ignore
+@limiter.limit(rate_limit(5))  # type: ignore
+@payload_check()
+def register() -> Any:
+    if request.method == "POST":
+        return user_procs.register(request)
+
+    return render_template("register.html")
 
 
 # LIST
