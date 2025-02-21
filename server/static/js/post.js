@@ -180,6 +180,7 @@ window.onload = function() {
 
   if (vars.image_embed) {
     vars.msg_image = Msg.factory({
+      class: `modal_image`,
       disable_content_padding: true,
       before_show: () => {
         reset_modal_image()
