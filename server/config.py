@@ -3,7 +3,6 @@ from __future__ import annotations
 # Standard
 import copy
 import tomllib
-import string
 import time
 import threading
 from pathlib import Path
@@ -76,28 +75,10 @@ class Config:
         # It can be outside the project folder
         self.files_dir: str = "files"
 
-        # Require to solve a captcha to upload in the web interface
-        self.require_captcha: bool = True
-
-        # Secret key for security
-        # Make it a long random string
-        self.captcha_key: str = ""
-
-        # Use this to cheat the captcha
-        # Should be kept semi-secret
-        self.captcha_cheat: str = ""
-
-        # Length of the captcha
-        # The higher the number, the harder it is
-        self.captcha_length: int = 10
-
         # Default max size for users
         # You can admin them per case later
         # Low value in case public reigster is on
         self.max_size_user: int = 20
-
-        # Max size for anonymous users
-        self.max_size_anon: int = 10
 
         # Port for the redis server
         # Redis is used for the limiter
@@ -191,10 +172,11 @@ class Config:
         self.web_uploads_enabled: bool = True
 
         # Enable uploads through the API
-        self.api_uploads_enabled: bool = True
+        self.api_upload_enabled: bool = True
 
-        # Allow uploads from non-users
-        self.anon_uploads_enabled: bool = False
+        # The endpoint for api uploads for your scripts
+        # This should be relatively secret
+        self.api_upload_endpoint = "apiupload"
 
         # Max size in megabytes to consider files for media embeds
         self.embed_max_size: int = 100
@@ -222,9 +204,6 @@ class Config:
 
         # Content of the description meta tag in posts
         self.description_post: str = "File kindly uploaded by Harambe"
-
-        # Whether anon uploads should be added to the list or not
-        self.anon_listers = True
 
         # Allow reactions in posts
         self.reactions_enabled = True
@@ -268,12 +247,6 @@ class Config:
         # Register page will be enabled
         self.register_enabled = True
 
-        # Require captcha to login
-        self.require_captcha_login = True
-
-        # Require captcha to register
-        self.require_captcha_register = True
-
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -281,17 +254,6 @@ class Config:
 
     def get_post_name_length(self) -> int:
         return max(min(self.post_name_length, 26), 10)
-
-    def get_captcha(self) -> dict[str, Any]:
-        return {
-            "SECRET_CAPTCHA_KEY": self.captcha_key or "nothing",
-            "CAPTCHA_LENGTH": self.captcha_length,
-            "CAPTCHA_DIGITS": False,
-            "EXPIRE_SECONDS": 60,
-            "CAPTCHA_IMG_FORMAT": "JPEG",
-            "ONLY_UPPERCASE": False,
-            "CHARACTER_POOL": string.ascii_lowercase,
-        }
 
     def get_user(self, username: str) -> User | None:
         for user in self.users:
@@ -316,12 +278,7 @@ class Config:
 
             set_value(c, "app_key")
             set_value(c, "files_dir")
-            set_value(c, "require_captcha")
-            set_value(c, "captcha_key")
-            set_value(c, "captcha_cheat")
-            set_value(c, "captcha_length")
             set_value(c, "max_size_user")
-            set_value(c, "max_size_anon")
             set_value(c, "redis_port")
             set_value(c, "uppercase_names")
             set_value(c, "max_posts")
@@ -348,8 +305,8 @@ class Config:
             set_value(c, "file_path")
             set_value(c, "allow_titles")
             set_value(c, "web_uploads_enabled")
-            set_value(c, "api_uploads_enabled")
-            set_value(c, "anon_uploads_enabled")
+            set_value(c, "api_upload_enabled")
+            set_value(c, "api_upload_endpoint")
             set_value(c, "embed_max_size")
             set_value(c, "allow_edit")
             set_value(c, "max_title_length")
@@ -360,7 +317,6 @@ class Config:
             set_value(c, "view_delay")
             set_value(c, "description_index")
             set_value(c, "description_post")
-            set_value(c, "anon_listers")
             set_value(c, "reactions_enabled")
             set_value(c, "max_reactions_length")
             set_value(c, "character_reaction_length")
@@ -374,8 +330,6 @@ class Config:
             set_value(c, "max_user_password_length")
             set_value(c, "max_user_name_length")
             set_value(c, "register_enabled")
-            set_value(c, "require_captcha_login")
-            set_value(c, "require_captcha_register")
 
             # Users
 

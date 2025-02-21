@@ -73,12 +73,6 @@
         <input id="title" type="text" name="title" placeholder="Enter a Title (Optional)">
         {% endif %}
 
-        {% if captcha %}
-        <div id="captcha">
-            {{captcha_html(captcha)|safe}}
-        </div>
-        {% endif %}
-
         <button type="submit" name="submit">Upload</button>
     </form>
 </div>

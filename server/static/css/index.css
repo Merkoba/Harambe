@@ -134,32 +134,6 @@ a.dialog_button:hover {
     width: 100%;
 }
 
-#captcha {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    background-color: var(--accent_color);
-    padding: var(--padding_1);
-    box-sizing: border-box;
-    width: 100%;
-}
-
-#captcha img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-}
-
-#captcha input {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    font-size: 1rem;
-}
-
 #bottom {
     position: relative;
     display: flex;

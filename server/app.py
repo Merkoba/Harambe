@@ -7,15 +7,14 @@ from typing import Callable
 
 # Libraries
 from flask import Flask, render_template, request, send_file  # type: ignore
-from flask import redirect, url_for, session, flash, abort  # pyright: ignore
+from flask import redirect, url_for, session, abort  # pyright: ignore
 from flask_cors import CORS  # type: ignore
-from flask_simple_captcha import CAPTCHA  # type: ignore
 from flask_limiter import Limiter  # type: ignore
 from flask_limiter.util import get_remote_address  # type: ignore
 
 # Modules
 import utils
-import procs
+import upload_procs
 import post_procs
 import user_procs
 from config import config
@@ -29,9 +28,6 @@ app.secret_key = config.app_key
 
 # Enable all cross origin requests
 CORS(app)
-
-simple_captcha = CAPTCHA(config=config.get_captcha())
-app = simple_captcha.init_app(app)
 
 
 def get_username() -> str:
@@ -167,21 +163,22 @@ text_mtype = "text/plain"
 
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@login_required
 def index() -> Any:
     if not config.web_uploads_enabled:
         return render_template("fallback.html")
 
     user = get_user()
+
+    if not user:
+        return over()
+
     admin = user and user.admin
     uname = user.username if user else ""
-    is_user = bool(user)
-
-    if (not user) and (not config.anon_uploads_enabled):
-        return redirect(url_for("login"))
 
     if request.method == "POST":
         try:
-            ok, ans = procs.upload(request, username=uname)
+            ok, ans = procs.upload(request, user)
 
             if not ok:
                 data = {
@@ -198,27 +195,17 @@ def index() -> Any:
             utils.error(e)
             return over()
 
-    if config.require_captcha and (not is_user):
-        captcha = simple_captcha.create()
-    else:
-        captcha = None
-
     show_list = list_visible(user)
+    max_size = user.max_size
 
-    if user:
-        max_size = user.max_size
-
-        if max_size <= 0:
-            max_size = config.max_size_user
-    else:
-        max_size = config.max_size_anon
+    if max_size <= 0:
+        max_size = config.max_size_user
 
     max_size_str = max_size
     max_size *= 1_000_000
 
     return render_template(
         "index.html",
-        captcha=captcha,
         image_name=procs.get_image_name(),
         max_size=max_size,
         max_size_str=max_size_str,
@@ -229,7 +216,6 @@ def index() -> Any:
         max_title_length=config.max_title_length,
         allow_titles=config.allow_titles,
         links=config.links,
-        is_user=is_user,
         show_list=show_list,
         show_admin=admin,
         description=config.description_index,
@@ -237,13 +223,13 @@ def index() -> Any:
     )
 
 
-@app.route("/upload", methods=["POST"])  # type: ignore
+@app.route(f"/{confing.api_upload_endpoint}", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def api_upload() -> Any:
-    if not config.api_uploads_enabled:
+    if not config.api_upload_enabled:
         return "error"
 
-    _, msg = procs.upload(request, "cli")
+    _, msg = procs.api_upload(request)
     return msg
 
 
@@ -529,12 +515,7 @@ def login() -> Any:
             session["admin"] = user.admin
             return redirect(url_for("index"))
 
-    if config.require_captcha_login:
-        captcha = simple_captcha.create()
-    else:
-        captcha = None
-
-    return render_template("login.html", message=message, captcha=captcha,)
+    return render_template("login.html", message=message)
 
 
 @app.route("/register", methods=["GET", "POST"])  # type: ignore
@@ -551,12 +532,7 @@ def register() -> Any:
             session["admin"] = user.admin
             return redirect(url_for("index"))
 
-    if config.require_captcha_register:
-        captcha = simple_captcha.create()
-    else:
-        captcha = None
-
-    return render_template("register.html", message=message, captcha=captcha)
+    return render_template("register.html", message=message)
 
 
 @app.route("/logout", methods=["GET"])  # type: ignore
@@ -574,11 +550,16 @@ def logout() -> Any:
 @app.route("/list/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
+@list_required
 def show_list(page: int = 1) -> Any:
     user = get_user()
-    admin = user and user.admin
+
+    if not user:
+        return over()
+
+    admin = user.admin
     username = request.args.get("username", "")
-    history = user and user.username == username
+    history = user.username == username
 
     if not history:
         if not config.list_enabled and (not admin):
@@ -586,9 +567,6 @@ def show_list(page: int = 1) -> Any:
 
         if config.list_private and (not admin):
             if not logged_in():
-                return redirect(url_for("login"))
-
-            if not user:
                 return redirect(url_for("login"))
 
             if not user.can_list:

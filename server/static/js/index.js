@@ -1,12 +1,6 @@
 let clicked = false
 
 window.onload = () => {
-  let captcha = DOM.el(`#captcha-text`)
-
-  if (captcha) {
-    captcha.placeholder = `Enter the captcha`
-  }
-
   let image = DOM.el(`#image`)
 
   if (image) {
@@ -97,16 +91,6 @@ window.onload = () => {
 function validate() {
   if (clicked) {
     return false
-  }
-
-  if (!vars.is_user) {
-    let captcha = DOM.el(`#captcha-text`)
-
-    if (captcha) {
-      if (!captcha.value.trim()) {
-        return false
-      }
-    }
   }
 
   let file = DOM.el(`#file`)

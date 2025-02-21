@@ -55,8 +55,6 @@ The `toml` format looks as followed:
 For example:
 
 ```toml
-captcha_length = 8
-
 files_dir = "/mnt/drive/harambe"
 
 uppercase_ids = false
@@ -68,7 +66,7 @@ This is done by using the `watchdog` library.
 
 So there's no need to restart the server on config changes.
 
-There are some exceptions like `app_key` or the captcha settings which can't be changed at runtime.
+There are some exceptions like `app_key` which can't be changed at runtime.
 
 ---
 
@@ -83,12 +81,6 @@ You can do it with `venv/bin/python add_admin.py`.
 ---
 
 ## Users
-
-Users can upload without needing to fill the captcha.
-
-Their files are signed using their `name`.
-
-They can edit and delete their own files.
 
 Users can be added by admins in the admin page.
 

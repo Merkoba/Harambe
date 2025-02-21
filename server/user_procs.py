@@ -12,7 +12,6 @@ from werkzeug.security import generate_password_hash as hashpass  # type: ignore
 from werkzeug.security import check_password_hash as checkpass  # pyright: ignore
 
 # Modules
-import app
 import utils
 from config import config
 import database
@@ -499,20 +498,12 @@ def mod_user(
 
 def login(request: Request) -> tuple[bool, str, User | None]:
     if not request:
-        return "No Request", None
-
-    if config.require_captcha_login:
-        c_hash = request.form.get("captcha-hash", "")
-        c_text = request.form.get("captcha-text", "")
-
-        if not app.simple_captcha.verify(c_text, c_hash):
-            return False, "Failed captcha", None
+        return False, "No Request", None
 
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
-    name = request.form.get("name", "").strip()
 
-    if (not username) or (not password) or (not name):
+    if (not username) or (not password):
         return False, "Missing details", None
 
     user = check_auth(username, password)
@@ -525,14 +516,7 @@ def login(request: Request) -> tuple[bool, str, User | None]:
 
 def register(request: Request) -> tuple[bool, str, User | None]:
     if not request:
-        return "No Request", None
-
-    if config.require_captcha_register:
-        c_hash = request.form.get("captcha-hash", "")
-        c_text = request.form.get("captcha-text", "")
-
-        if not app.simple_captcha.verify(c_text, c_hash):
-            return False, "Failed captcha", None
+        return False, "No Request", None
 
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
@@ -542,7 +526,7 @@ def register(request: Request) -> tuple[bool, str, User | None]:
     if (not username) or (not password) or (not password_2) or (not name):
         return False, "Missing details", None
 
-    if (password != password_2):
+    if password != password_2:
         return False, "Passwords do not match", None
 
     ok, username = check_value(None, "username", username)
