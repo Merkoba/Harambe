@@ -61,7 +61,7 @@ fi
 echo "Uploading: $FILE_PATH"
 
 # Make the POST request and capture the response
-RESPONSE=$(curl -s -X POST "$URL/upload" \
+RESPONSE=$(curl -s -X POST "$URL/apiupload" \
     -F "file=@\"${FILE_PATH}\"" \
     -F "title=\"${title}\"" \
     -F "username=\"${USERNAME}\"" \
