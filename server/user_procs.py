@@ -508,6 +508,9 @@ def register(request: Request) -> tuple[bool, str, User | None]:
     if (not username) or (not password) or (not password_2) or (not name):
         return False, "Missing Details", None
 
+    if (password != password_2):
+        return False, "Passwords do not match", None
+
     ok, username = check_value(None, "username", username)
 
     if not ok:
@@ -522,9 +525,6 @@ def register(request: Request) -> tuple[bool, str, User | None]:
 
     if not ok:
         return False, "Invalid Name", None
-
-    if (password != password_2):
-        return False, "Passwords do not match", None
 
     user = get_user(username)
 

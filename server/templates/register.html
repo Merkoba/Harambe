@@ -8,12 +8,19 @@
 
 {% block body %}
 <div id="main">
+    {% if message %}
+    <div id="message">{{message}}</div>
+    {% endif %}
+
     <form id="form" action="/register" method="post">
         <input type="text" id="username" name="username" placeholder="Username">
-        <input type="password" id="password" name="password" placeholder="Password">
-        <input type="password" id="password_2" name="password_2" placeholder="Password 2">
-        <input type="text" id="name" name="name" placeholder="Name">
-        <input type="submit" id="register" value="Register">
+        <input type="password" id="password" name="password" placeholder="Password (1)">
+        <input type="password" id="password_2" name="password_2" placeholder="Password (2)">
+        <input type="text" id="name" name="name" placeholder="Public Name">
+
+        <div>
+            <input type="submit" id="register" value="Register">
+        </div>
     </form>
 </div>
 {% endblock %}

@@ -14,12 +14,17 @@ body, html {
 }
 
 #form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     padding: 0.8rem;
+    width: 14rem;
 }
 
 input[type="text"], input[type="password"] {
     font-size: 1.1rem;
-    width: 12rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 input[type="submit"] {
@@ -27,4 +32,12 @@ input[type="submit"] {
     background-color: #a0fbff;
     color: rgb(20 35 20);
     font-family: monospace;
+    width: 100%;
+}
+
+#message {
+    background-color: white;
+    color: black;
+    padding: 0.5rem;
+    font-size: 1.1rem;
 }

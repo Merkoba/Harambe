@@ -552,18 +552,17 @@ def logout() -> Any:
 @limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()
 def register() -> Any:
+    message = ""
+
     if request.method == "POST":
-        ok, msg, user = user_procs.register(request)
+        ok, message, user = user_procs.register(request)
 
         if ok and user:
             session["username"] = user.username
             session["admin"] = user.admin
             return redirect(url_for("index"))
-        else:
-            flash(msg)
-            return redirect(url_for("register"))
 
-    return render_template("register.html")
+    return render_template("register.html", message=message)
 
 
 # LIST
