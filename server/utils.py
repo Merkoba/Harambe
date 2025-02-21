@@ -213,4 +213,17 @@ def ok(message: str = "", data: dict[str, Any] | None = None) -> tuple[str, int]
     return jsonify({"status": "ok", "message": message, **data}), 200
 
 
+def get_image_name() -> str:
+    if Path("static/img/banner.jpg").exists():
+        return "banner.jpg"
+
+    if Path("static/img/banner.png").exists():
+        return "banner.png"
+
+    if Path("static/img/banner.gif").exists():
+        return "banner.gif"
+
+    return "cat.jpg"
+
+
 ICONS = load_icons()

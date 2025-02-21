@@ -15,26 +15,14 @@ import database
 from config import config
 import post_procs
 import user_procs
+from user_procs import User
 
 
 def error(s: str) -> tuple[bool, str]:
     return False, f"Error: {s}"
 
 
-def get_image_name() -> str:
-    if Path("static/img/banner.jpg").exists():
-        return "banner.jpg"
-
-    if Path("static/img/banner.png").exists():
-        return "banner.png"
-
-    if Path("static/img/banner.gif").exists():
-        return "banner.gif"
-
-    return "cat.jpg"
-
-
-def upload(request: Any, user: User) -> tuple[bool, str]:
+def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if not user:
         return error("No user")
 
@@ -101,6 +89,7 @@ def upload(request: Any, user: User) -> tuple[bool, str]:
                     else:
                         title = ""
 
+                    username = user.username
                     uploader = user.name
                     listed = user.lister
                     mtype, _ = mimetypes.guess_type(path)
@@ -164,4 +153,4 @@ def api_upload(request: Request) -> tuple[bool, str]:
     if not user:
         return error("Invalid username or password")
 
-    return upload(request, user)
+    return upload(request, user, "cli")

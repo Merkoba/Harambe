@@ -174,11 +174,10 @@ def index() -> Any:
         return over()
 
     admin = user and user.admin
-    uname = user.username if user else ""
 
     if request.method == "POST":
         try:
-            ok, ans = procs.upload(request, user)
+            ok, ans = upload_procs.upload(request, user)
 
             if not ok:
                 data = {
@@ -206,7 +205,7 @@ def index() -> Any:
 
     return render_template(
         "index.html",
-        image_name=procs.get_image_name(),
+        image_name=utils.get_image_name(),
         max_size=max_size,
         max_size_str=max_size_str,
         show_max_size=config.show_max_size,
@@ -223,13 +222,13 @@ def index() -> Any:
     )
 
 
-@app.route(f"/{confing.api_upload_endpoint}", methods=["POST"])  # type: ignore
+@app.route(f"/{config.api_upload_endpoint}", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def api_upload() -> Any:
     if not config.api_upload_enabled:
         return "error"
 
-    _, msg = procs.api_upload(request)
+    _, msg = upload_procs.api_upload(request)
     return msg
 
 
