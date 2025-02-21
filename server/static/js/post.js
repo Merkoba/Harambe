@@ -10,6 +10,7 @@ window.onload = function() {
   vars.selected_icon = ``
   vars.refresh_count = 0
   vars.video_max = false
+  vars.image_expanded = false
 
   let delay = 30
 
@@ -743,11 +744,21 @@ async function fill_icons() {
 }
 
 function expand_modal_image() {
+  if (vars.image_expanded) {
+    return
+  }
+
   let c = DOM.el(`#modal_image_container`)
   c.classList.add(`expanded`)
+  vars.image_expanded = true
 }
 
 function reset_modal_image() {
+  if (!vars.image_expanded) {
+    return
+  }
+
   let c = DOM.el(`#modal_image_container`)
   c.classList.remove(`expanded`)
+  vars.image_expanded = false
 }
