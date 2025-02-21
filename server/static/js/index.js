@@ -5,6 +5,11 @@ window.onload = () => {
 
   if (image) {
     DOM.ev(image, `click`, (e) => {
+      if (!vars.is_user) {
+        alert(`Login or register first.`)
+        return
+      }
+
       if (e.shiftKey || e.ctrlKey || e.altKey) {
         reset_file()
         return
