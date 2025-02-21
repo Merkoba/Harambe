@@ -244,9 +244,12 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
         return False, None
 
     if what == "username":
-        if value:
-            value = value.strip()
+        value = value.strip()
 
+        if not value:
+            return False, None
+
+        if value:
             if not value.isalnum():
                 return False, None
 
@@ -261,6 +264,11 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
         elif user and user.password:
             value = user.password
     elif what == "name":
+        value = value.strip()
+
+        if not value:
+            return False, None
+
         if value:
             value = utils.single_line(value)
 
