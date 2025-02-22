@@ -517,15 +517,16 @@ def increase_post_reactions(name: str) -> None:
 def increase_user_reactions(username: str) -> None:
     check_db()
     conn, c = get_conn()
+
     c.execute(
         "update users set reactions = reactions + 1 where username = ?", (username,)
     )
+
     conn.commit()
     conn.close()
 
 
 def change_reacter(username: str, new_name: str) -> None:
-    utils.q(username, new_name)
     check_db()
     conn, c = get_conn()
     c.execute("update reactions set uname = ? where user = ?", (new_name, username))

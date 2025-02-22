@@ -35,7 +35,6 @@ class Post:
     username: str
     uploader: str
     mtype: str
-    can_embed: bool
     sample: str
     show: str
     listed: bool
@@ -48,6 +47,7 @@ class Post:
     mtype_str: str
     image_embed: bool
     video_embed: bool
+    audio_embed: bool
     flash_embed: bool
     text_embed: bool
     markdown_embed: bool
@@ -98,12 +98,26 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
     show = f"{name} {ext}".strip()
     views_str = f"V: {views} | R: {num_reactions}"
-    can_embed = size <= (config.embed_max_size * 1_000_000)
-    image_embed = can_embed and mtype.startswith("image/")
-    video_embed = can_embed and mtype.startswith(("video/", "audio/"))
-    flash_embed = can_embed and mtype.startswith("application/") and ("flash" in mtype)
-    text_embed = can_embed and mtype.startswith("text/")
-    markdown_embed = can_embed and mtype == "text/markdown"
+
+    def embed_size(mtype: str) -> bool:
+        max_size = int(getattr(config, f"embed_max_size_{mtype}"))
+
+        if max_size <= 0:
+            return True
+
+        return size <= (max_size * 1_000_000)
+
+    image_embed = mtype.startswith("image/") and embed_size("image")
+    video_embed = mtype.startswith("video/") and embed_size("video")
+    audio_embed = mtype.startswith("audio/") and embed_size("audio")
+    utils.q(video_embed)
+
+    flash_embed = (
+        mtype.startswith("application/") and ("flash" in mtype) and embed_size("flash")
+    )
+
+    text_embed = mtype.startswith("text/") and embed_size("text")
+    markdown_embed = (mtype == "text/markdown") and embed_size("markdown")
 
     return Post(
         name,
@@ -123,7 +137,6 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         username,
         uploader,
         mtype,
-        can_embed,
         sample,
         show,
         listed,
@@ -136,6 +149,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         mtype_str,
         image_embed,
         video_embed,
+        audio_embed,
         flash_embed,
         text_embed,
         markdown_embed,

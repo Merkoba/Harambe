@@ -179,7 +179,13 @@ class Config:
         self.api_upload_endpoint = "apiupload"
 
         # Max size in megabytes to consider files for media embeds
-        self.embed_max_size: int = 100
+        # Make it 0 to allow any size
+        self.embed_max_size_image: int = 100
+        self.embed_max_size_video: int = 100
+        self.embed_max_size_audio: int = 100
+        self.embed_max_size_flash: int = 100
+        self.embed_max_size_text: int = 100
+        self.embed_max_size_markdown: int = 100
 
         # Users can edit their own posts
         self.allow_edit: bool = True
@@ -307,7 +313,12 @@ class Config:
             set_value(c, "web_uploads_enabled")
             set_value(c, "api_upload_enabled")
             set_value(c, "api_upload_endpoint")
-            set_value(c, "embed_max_size")
+            set_value(c, "embed_max_size_image")
+            set_value(c, "embed_max_size_video")
+            set_value(c, "embed_max_size_audio")
+            set_value(c, "embed_max_size_flash")
+            set_value(c, "embed_max_size_text")
+            set_value(c, "embed_max_size_markdown")
             set_value(c, "allow_edit")
             set_value(c, "max_title_length")
             set_value(c, "allow_hotlinks")
