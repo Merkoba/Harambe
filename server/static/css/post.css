@@ -259,6 +259,9 @@ a.button:hover {
 .reaction_value {
     flex-grow: 0;
     flex-shrink: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;;
 }
 
 .reaction_text {
