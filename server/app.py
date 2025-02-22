@@ -302,7 +302,7 @@ def post(name: str) -> Any:
         file_path=config.file_path,
         description=config.description_post,
         reactions_enabled=config.reactions_enabled,
-        character_reaction_length=config.character_reaction_length,
+        text_reaction_length=config.text_reaction_length,
         post_refresh_interval=config.post_refresh_interval,
         post_refresh_times=config.post_refresh_times,
         max_post_name_length=config.max_post_name_length,

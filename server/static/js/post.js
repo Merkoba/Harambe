@@ -94,11 +94,11 @@ window.onload = function() {
     })
   }
 
-  let r_character = DOM.el(`#react_character`)
+  let r_text = DOM.el(`#react_text`)
 
-  if (r_character) {
-    DOM.ev(r_character, `click`, () => {
-      react_character()
+  if (r_text) {
+    DOM.ev(r_text, `click`, () => {
+      react_text()
     })
   }
 
@@ -467,7 +467,7 @@ function add_reaction(reaction) {
   DOM.show(reactions)
   let vitem
 
-  if (r.mode === `character`) {
+  if (r.mode === `text`) {
     vitem = DOM.create(`div`)
     vitem.textContent = r.value
     vitem.title = r.title
@@ -507,14 +507,14 @@ function show_all_icons() {
   }
 }
 
-function react_character() {
+function react_text() {
   if (!vars.can_react) {
     react_alert()
     return
   }
 
-  let n = vars.character_reaction_length
-  let ns = singplural(`character`, n)
+  let n = vars.text_reaction_length
+  let ns = singplural(`text`, n)
 
   prompt_text(`Max ${n} ${ns}`, (text) => {
     if (!text) {
@@ -528,7 +528,7 @@ function react_character() {
       return
     }
 
-    send_reaction(text, `character`)
+    send_reaction(text, `text`)
   }, n)
 }
 

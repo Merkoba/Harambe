@@ -215,7 +215,7 @@ class Config:
         self.reactions_enabled = True
 
         # Max length for text reactions
-        self.character_reaction_length = 280
+        self.text_reaction_length = 280
 
         # Max reactions a user can do
         self.max_user_reactions = 20
@@ -335,7 +335,7 @@ class Config:
             set_value(c, "description_index")
             set_value(c, "description_post")
             set_value(c, "reactions_enabled")
-            set_value(c, "character_reaction_length")
+            set_value(c, "text_reaction_length")
             set_value(c, "max_user_reactions")
             set_value(c, "post_reaction_limit")
             set_value(c, "post_refresh_interval")

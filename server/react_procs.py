@@ -55,17 +55,17 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if not text:
         return utils.bad("Missing values")
 
-    if mode not in ["character", "icon"]:
+    if mode not in ["text", "icon"]:
         return utils.bad("Invalid mode")
 
-    if len(text) > max(config.character_reaction_length, 100):
+    if len(text) > max(config.text_reaction_length, 100):
         return utils.bad("Reaction is too long")
 
     if utils.contains_url(text):
         return utils.bad("No URLs allowed")
 
-    if mode == "character":
-        if utils.count_graphemes(text) > config.character_reaction_length:
+    if mode == "text":
+        if utils.count_graphemes(text) > config.text_reaction_length:
             return utils.bad("Invalid reaction")
     elif mode == "icon":
         if text not in utils.ICONS:
