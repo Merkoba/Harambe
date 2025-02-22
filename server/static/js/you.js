@@ -63,5 +63,12 @@ function edit_password() {
     return
   }
 
+  let value_2 = prompt(`Enter the password again`)
+
+  if (value !== value_2) {
+    alert(`Passwords do not match.`)
+    return
+  }
+
   do_edit(`password`, value, `Password`)
 }
