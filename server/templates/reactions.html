@@ -56,16 +56,10 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
-            <div id="username" class="table_cell underline" data-sort="username" title="The username of the user. It acts as the ID and can't be changed">User</div>
-
-            {% if show_names %}
-            <div id="name" class="table_cell underline" data-sort="name" title="The public name of this user">Name</div>
-            {% endif %}
-
-            <div id="username" class="table_cell small underline" data-sort="username" title="The username who did the reaction">Username</div>
-            <div id="name" class="table_cell small underline" data-sort="name" title="The name of the user who did the reaction">Name</div>
-            <div id="value" class="table_cell small underline" data-sort="value" title="The value of the reaction">Value</div>
-            <div id="date" class="table_cell underline" data-sort="register_date" title="The date when this reaction was made">Date</div>
+            <div id="username" class="table_cell underline" data-sort="user" title="The username who did the reaction">User</div>
+            <div id="post" class="table_cell underline" data-sort="post" title="The post where it was posted">Post</div>
+            <div id="value" class="table_cell underline" data-sort="value" title="The value of the reaction">Value</div>
+            <div id="date" class="table_cell underline" data-sort="date" title="The date when this reaction was made">Date</div>
             <div class="table_cell actions">Actions</div>
         </div>
 
@@ -77,19 +71,23 @@
             </div>
 
             <!-- Username -->
-            <a class="table_cell" href="/admin/posts?username={{item.username}}" title="{{item.username}}">{{item.username}}</a>
+            <a class="table_cell" href="/admin/posts?username={{item.user}}" title="{{item.uname}}">{{item.user}}</a>
 
-            <!-- Name -->
-            <div class="table_cell" title="{{item.name}}">{{item.name}}</div>
+            <!-- Post -->
+            <a href="/post/{{item.post}}" class="table_cell" title="{{item.post}}">{{item.post}}</a>
 
             <!-- Value -->
-            <div class="table_cell small">{{item.value}}</div>
+            <div class="table_cell" title="{{item.value_sample}}">{{item.value_sample}}</div>
 
             <!-- Date -->
-            <div class="table_cell small">{{item.date}}</div>
+            <div class="table_cell" title="{{item.date_str}}">{{item.ago}}</div>
 
             <!-- Actions -->
             <div class="table_cell actions rowitem">
+                <div class="edit action_button" title="Edit this item">E</div>
+                <div class="sep"> | </div>
+                <div class="delete action_button" title="Delete this item">D</div>
+                <div class="sep"> | </div>
                 <div class="delete_above action_button" title="Delete all items above this one">A</div>
                 <div class="sep"> | </div>
                 <div class="delete_below action_button" title="Delete all items below this one">B</div>

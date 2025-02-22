@@ -449,6 +449,7 @@ def admin(what: str, page: int = 1) -> Any:
     def_page_size = page_size == config.admin_page_size
     html_page = f"{what}.html"
     title = what.capitalize()
+    items: list[Post] | list[User] | list[Reaction]
 
     if what == "posts":
         items = post_items

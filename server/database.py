@@ -534,7 +534,7 @@ def change_reacter(username: str, new_name: str) -> None:
     conn.close()
 
 
-def get_reactionlist() -> list[User]:
+def get_reactionlist() -> list[Reaction]:
     check_db()
     conn, c = row_conn()
     c.execute("select * from reactions")

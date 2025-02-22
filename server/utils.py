@@ -218,4 +218,8 @@ def remove_multiple_lines(text: str) -> str:
     return re.sub(r"\n\s*\n", "\n\n", text)
 
 
+def space_string(text: str) -> str:
+    return re.sub(r"\s+", " ", text)
+
+
 ICONS = load_icons()

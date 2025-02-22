@@ -22,6 +22,8 @@ class Reaction:
     date: int
     ago: str
     uname_str: str
+    value_sample: str
+    date_str: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -30,6 +32,8 @@ class Reaction:
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     ago = utils.time_ago(reaction.date, now)
     uname_str = reaction.uname or "Anon"
+    value_sample = utils.space_string(reaction.value)[:140]
+    date_str = utils.nice_date(reaction.date)
 
     return Reaction(
         reaction.post,
@@ -40,6 +44,8 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         reaction.date,
         ago,
         uname_str,
+        value_sample,
+        date_str,
     )
 
 
@@ -86,7 +92,7 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     return utils.bad("Reaction failed")
 
 
-def get_reactionlist() -> list[User]:
+def get_reactionlist() -> list[Reaction]:
     now = utils.now()
     return [make_reaction(reaction, now) for reaction in database.get_reactionlist()]
 
@@ -96,7 +102,7 @@ def get_reactions(
     page_size: str = "default",
     query: str = "",
     sort: str = "date",
-) -> tuple[list[User], str, bool]:
+) -> tuple[list[Reaction], str, bool]:
     psize = 0
 
     if page_size == "default":
@@ -112,8 +118,12 @@ def get_reactions(
     for reaction in get_reactionlist():
         ok = (
             not query
-            or query in utils.clean_query(reaction.username)
-            or query in utils.clean_query(reaction.name)
+            or query in utils.clean_query(reaction.user)
+            or query in utils.clean_query(reaction.uname)
+            or query in utils.clean_query(reaction.value)
+            or query in utils.clean_query(reaction.date_str)
+            or query in utils.clean_query(reaction.ago)
+            or query in utils.clean_query(reaction.post)
         )
 
         if not ok:
@@ -136,6 +146,26 @@ def get_reactions(
 
 
 def sort_reactions(reactions: list[Reaction], sort: str) -> None:
+    if sort == "date":
+        reactions.sort(key=lambda x: x.date, reverse=True)
+    elif sort == "date_desc":
+        reactions.sort(key=lambda x: x.date, reverse=False)
+
+    if sort == "user":
+        reactions.sort(key=lambda x: x.user, reverse=True)
+    elif sort == "user_desc":
+        reactions.sort(key=lambda x: x.user, reverse=False)
+
+    if sort == "post":
+        reactions.sort(key=lambda x: x.post, reverse=True)
+    elif sort == "post_desc":
+        reactions.sort(key=lambda x: x.post, reverse=False)
+
+    if sort == "value":
+        reactions.sort(key=lambda x: x.value, reverse=True)
+    elif sort == "value_desc":
+        reactions.sort(key=lambda x: x.value, reverse=False)
+
     if sort == "date":
         reactions.sort(key=lambda x: x.date, reverse=True)
     elif sort == "date_desc":
