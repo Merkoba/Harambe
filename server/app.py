@@ -569,7 +569,6 @@ def logout() -> Any:
 @app.route("/list/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@reader_required
 def show_list(page: int = 1) -> Any:
     user = get_user()
 
