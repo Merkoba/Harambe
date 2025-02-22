@@ -815,7 +815,7 @@ def get_icons() -> Any:
 
 @app.route("/react", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
+@payload_check(max_post=9096)
 @login_required
 def react() -> Any:
     user = get_user()

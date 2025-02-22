@@ -77,14 +77,26 @@ function prompt_text(placeholder, callback, max = 0) {
     msg.close()
   }
 
-  DOM.ev(input, `keydown`, (e) => {
+  function update_btn() {
+    if (max > 0) {
+      btn.textContent = `Submit (${input.value.length}/${max})`
+    }
+    else {
+      btn.textContent = `Submit (${input.value.length})`
+    }
+  }
+
+  DOM.ev(input, `input`, (e) => {
     if (max > 0) {
       if (input.value.length > max) {
         input.value = input.value.substring(0, max).trim()
-        return
       }
     }
 
+    update_btn()
+  })
+
+  DOM.ev(input, `keydown`, (e) => {
     if (e.key === `Enter`) {
       if (e.shiftKey || e.ctrlKey) {
         submit()
@@ -94,7 +106,7 @@ function prompt_text(placeholder, callback, max = 0) {
   })
 
   DOM.ev(btn, `click`, submit)
-
+  update_btn()
   msg.show()
   input.focus()
 }
