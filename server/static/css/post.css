@@ -253,13 +253,15 @@ a.link:hover,
     display: flex;
     flex-grow: 0;
     flex-shrink: 1;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     white-space: pre-wrap;
     align-self: stretch;
     border-right: 1px solid var(--frame_color);
     padding-left: var(--react_padding);
     padding-right: var(--react_padding);
+    max-height: 22rem;
+    overflow: auto;
 }
 
 .reaction_text {
