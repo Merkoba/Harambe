@@ -46,16 +46,12 @@
     </div>
 </template>
 
-<template id="template_reaction_info">
-    <div class="reaction_info">
-        <div class="sep">|</div>
-
-        <div class="rowitem">
-            <div class="uname"></div>
-            <div class="sep">|</div>
-            <div class="ago"></div>
-        </div>
-    </div>
+<template id="template_reaction_item">
+    <div class="reaction_uname"></div>
+    <div class="sep">|</div>
+    <div class="reaction_value"></div>
+    <div class="sep">|</div>
+    <div class="reaction_ago"></div>
 </template>
 
 <template id="template_image">
@@ -170,39 +166,30 @@
         <div id="react_icon" class="button" title="React with an icon. You can also use 'r' for this">React with an icon</div>
         <div class="sep">|</div>
         <div id="react_character" class="button" title="React with letters, numbers, emojis. You can also use 'c' for this">React with character</div>
-        {% if post.reactions | length > 0 %}
-        <div id="reveal_container" class="rowitem">
-        {% else %}
-        <div id="reveal_container" class="rowitem hidden">
-        {% endif %}
-            <div class="sep">|</div>
-            <div id="reveal_reactions" class="button" title="Reveal reaction information. You can also use 'i' for this">Reveal info</div>
-        </div>
     </div>
 
     {% if reactions_enabled %}
         {% if post.reactions | length > 0 %}
         <div id="reactions" class="no_info">
         {% else %}
-        <div id="reactions" class="hidden no_info">
+        <div id="reactions" class="hidden">
         {% endif %}
 
         {% for reaction in post.reactions %}
             <div class="reaction_item">
-                {% if reaction.mode == "icon" %}
-                <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.title}}" loading="lazy">
-                {% elif reaction.mode == "character" %}
-                <div title="{{reaction.title}}">{{reaction.value}}</div>
-                {% endif %}
-                <div class="reaction_info">
-                    <div class="sep">|</div>
+                <div class="reaction_uname">{{reaction.uname_str}}</div>
+                <div class="sep">|</div>
 
-                    <div class="rowitem">
-                        <div>{{reaction.uname_str}}</div>
-                        <div class="sep">|</div>
-                        <div>{{reaction.ago}}</div>
-                    </div>
+                <div class="reaction_value">
+                    {% if reaction.mode == "icon" %}
+                    <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.title}}" loading="lazy">
+                    {% elif reaction.mode == "character" %}
+                    <div title="{{reaction.title}}">{{reaction.value}}</div>
+                    {% endif %}
                 </div>
+
+                <div class="sep">|</div>
+                <div class="reaction_ago">{{reaction.ago}}</div>
             </div>
         {% endfor %}
 

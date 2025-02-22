@@ -210,4 +210,8 @@ def get_image_name() -> str:
     return "cat.jpg"
 
 
+def find_urls(text: str) -> list[str]:
+    return re.findall(r"(https?://|www\.)\S+", text, re.IGNORECASE)
+
+
 ICONS = load_icons()

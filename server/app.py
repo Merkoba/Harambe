@@ -17,6 +17,7 @@ import utils
 import upload_procs
 import post_procs
 import user_procs
+import react_procs
 from config import config
 from post_procs import Post
 from user_procs import User
@@ -813,7 +814,7 @@ def react() -> Any:
     text = data.get("text", None)
     mode = data.get("mode", None)
 
-    return post_procs.react(name, text, user, mode)
+    return react_procs.react(name, text, user, mode)
 
 
 # YOU

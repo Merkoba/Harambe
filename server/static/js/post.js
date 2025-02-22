@@ -112,9 +112,6 @@ window.onload = function() {
       else if (e.key === `c`) {
         react_character()
       }
-      else if (e.key === `i`) {
-        reveal_reactions()
-      }
       else if (e.key === `m`) {
         maximize_media()
       }
@@ -132,14 +129,6 @@ window.onload = function() {
       clearInterval(vars.refresh_interval)
     }
   }, vars.post_refresh_interval * 1000)
-
-  let rev = DOM.el(`#reveal_reactions`)
-
-  if (rev) {
-    DOM.ev(rev, `click`, () => {
-      reveal_reactions()
-    })
-  }
 
   let copy_all = DOM.el(`#copy_all_text`)
 
@@ -487,30 +476,30 @@ function add_reaction(reaction) {
   let r = reaction
   let reactions = DOM.el(`#reactions`)
   DOM.show(reactions)
-  let item = DOM.create(`div`, `reaction_item`)
+  let vitem
 
   if (r.mode === `character`) {
-    let character = DOM.create(`div`)
-    character.textContent = r.value
-    character.title = r.title
-    item.appendChild(character)
+    vitem = DOM.create(`div`)
+    vitem.textContent = r.value
+    vitem.title = r.title
   }
   else if (r.mode === `icon`) {
-    let img = DOM.create(`img`)
-    img.loading = `lazy`
-    img.src = `/static/icons/${r.value}.gif`
-    img.title = r.title
-    item.appendChild(img)
+    vitem = DOM.create(`img`)
+    vitem.loading = `lazy`
+    vitem.src = `/static/icons/${r.value}.gif`
+    vitem.title = r.title
   }
 
-  let info = DOM.el(`#template_reaction_info`)
-  let clone = info.content.cloneNode(true)
-  DOM.el(`.uname`, clone).textContent = reaction.uname_str
-  DOM.el(`.ago`, clone).textContent = reaction.ago
-  item.appendChild(clone)
-  let rc = DOM.el(`#reveal_container`)
-  DOM.show(rc)
+  if (!vitem) {
+    return
+  }
 
+  let t = DOM.el(`#template_reaction_item`)
+  let item = DOM.create(`div`, `reaction_item`)
+  item.innerHTML = t.innerHTML
+  DOM.el(`.reaction_uname`, item).textContent = reaction.uname_str
+  DOM.el(`.reaction_value`, item).appendChild(vitem)
+  DOM.el(`.reaction_ago`, item).textContent = reaction.ago
   reactions.appendChild(item)
 }
 
@@ -534,13 +523,19 @@ function react_character() {
 
   let n = vars.character_reaction_length
   let ns = singplural(`character`, n)
-  let chars = prompt(`Max ${n} ${ns} (no spaces)`)
+  let chars = prompt(`Max ${n} ${ns}`)
 
   if (!chars) {
     return
   }
 
   chars = Array.from(chars).slice(0, n).join(``)
+
+  if (contains_url(chars)) {
+    alert(`URLs are not allowed.`)
+    return
+  }
+
   send_reaction(chars, `character`)
 }
 
@@ -603,11 +598,6 @@ function apply_update(update) {
   document.title = update.post_title
   DOM.el(`#title`).textContent = update.title || vars.original
   DOM.el(`#views`).textContent = update.views
-}
-
-function reveal_reactions() {
-  let c = DOM.el(`#reactions`)
-  c.classList.toggle(`no_info`)
 }
 
 function show_modal_image() {

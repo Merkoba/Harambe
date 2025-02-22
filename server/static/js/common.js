@@ -47,3 +47,7 @@ function print_error(msg) {
   // eslint-disable-next-line no-console
   console.log(`Error: ${msg}`)
 }
+
+function contains_url(text) {
+  return text.match(/(https?:\/\/|www\.)\S+/gi)
+}

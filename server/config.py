@@ -212,7 +212,7 @@ class Config:
         self.max_reactions_length = 100_000
 
         # Max length for text reactions
-        self.character_reaction_length = 10
+        self.character_reaction_length = 280
 
         # Max reactions a user can do
         self.max_user_reactions = 10

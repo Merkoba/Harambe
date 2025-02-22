@@ -2,33 +2,18 @@ from __future__ import annotations
 
 # Standard
 import os
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 # Modules
 import utils
 import database
+import react_procs
 from config import config
 from database import Post as DbPost
-from database import Reaction as DbReaction
 from user_procs import User
-
-
-@dataclass
-class Reaction:
-    post: str
-    user: str
-    uname: str
-    value: str
-    mode: str
-    date: int
-    ago: str
-    title: str
-    uname_str: str
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+from react_procs import Reaction
 
 
 @dataclass
@@ -68,31 +53,6 @@ class Post:
     markdown_embed: bool
 
 
-def make_reaction(reaction: DbReaction, now: int) -> Reaction:
-    ago = utils.time_ago(reaction.date, now)
-
-    if reaction.mode == "icon":
-        title = f"{reaction.uname} : {ago} : {reaction.value}"
-    elif reaction.mode == "character":
-        title = f"{reaction.uname} : {ago}"
-    else:
-        title = "Nothing"
-
-    uname_str = reaction.uname or "Anon"
-
-    return Reaction(
-        reaction.post,
-        reaction.user,
-        reaction.uname,
-        reaction.value,
-        reaction.mode,
-        reaction.date,
-        ago,
-        title,
-        uname_str,
-    )
-
-
 def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     name = post.name
     ext = post.ext
@@ -126,7 +86,9 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         sample = post.sample
 
         try:
-            reactions = [make_reaction(r, now) for r in database.get_reactions(name)]
+            reactions = [
+                react_procs.make_reaction(r, now) for r in database.get_reactions(name)
+            ]
         except Exception as e:
             utils.error(e)
             reactions = []
@@ -468,45 +430,6 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
 
     database.edit_post_title(name, title)
     return utils.ok("Title updated")
-
-
-def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
-    if not user:
-        return utils.bad("You are not logged in")
-
-    text = text.strip()
-
-    if not name:
-        return utils.bad("Missing values")
-
-    if not text:
-        return utils.bad("Missing values")
-
-    if mode not in ["character", "icon"]:
-        return utils.bad("Invalid mode")
-
-    if len(text) > 100:
-        return utils.bad("Reaction is too long")
-
-    if mode == "character":
-        if utils.count_graphemes(text) > config.character_reaction_length:
-            return utils.bad("Invalid reaction")
-    elif mode == "icon":
-        if text not in utils.ICONS:
-            return utils.bad("Invalid reaction")
-
-    if database.get_reaction_count(name, user.username) >= config.max_user_reactions:
-        return utils.bad("You can't add more reactions")
-
-    dbr = database.add_reaction(name, user.username, user.name, text, mode)
-
-    if dbr:
-        reaction = make_reaction(dbr, utils.now())
-        database.increase_post_reactions(name)
-        database.increase_user_reactions(user.username)
-        return utils.ok(data={"reaction": reaction})
-
-    return utils.bad("Reaction failed")
 
 
 def get_latest_post() -> Post | None:
