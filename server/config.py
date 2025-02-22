@@ -179,7 +179,7 @@ class Config:
         self.api_upload_endpoint = "apiupload"
 
         # Max size in megabytes to consider files for media embeds
-        self.embed_max_size: int = 100
+        self.embed_max_size: int = 200
 
         # Users can edit their own posts
         self.allow_edit: bool = True
