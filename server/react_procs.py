@@ -68,7 +68,7 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if mode not in ["character", "icon"]:
         return utils.bad("Invalid mode")
 
-    if len(text) > 100:
+    if len(text) > max(config.character_reaction_length, 100):
         return utils.bad("Reaction is too long")
 
     if mode == "character":
