@@ -470,13 +470,12 @@ function add_reaction(reaction) {
   if (r.mode === `text`) {
     vitem = DOM.create(`div`)
     vitem.textContent = r.value
-    vitem.title = r.title
   }
   else if (r.mode === `icon`) {
     vitem = DOM.create(`img`)
     vitem.loading = `lazy`
     vitem.src = `/static/icons/${r.value}.gif`
-    vitem.title = r.title
+    vitem.title = r.value
   }
 
   if (!vitem) {
