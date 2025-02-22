@@ -508,6 +508,7 @@ function add_reaction(reaction) {
   DOM.el(`.reaction_uname`, item).textContent = reaction.uname_str
   DOM.el(`.reaction_value`, item).appendChild(vitem)
   DOM.el(`.reaction_ago`, item).textContent = reaction.ago
+  DOM.show(`#to_bottom_container`)
   reactions.appendChild(item)
 }
 

@@ -162,23 +162,29 @@
     </div>
     {% endif %}
 
+    {% if reactions_enabled %}
     <div id="react_buttons" class="nowrap">
         <div id="react_icon" class="button" title="React with an icon. You can also use 'r' for this">React with an icon</div>
         <div class="sep">|</div>
         <div id="react_character" class="button" title="React with letters, numbers, emojis. You can also use 'c' for this">React with character</div>
-        <div class="sep">|</div>
-        <div id="to_bottom" class="button">Go To Bottom</div>
+
+        {% if post.reactions | length == 0 %}
+        <div id="to_bottom_container" class="rowitem hidden">
+        {% else %}
+        <div id="to_bottom_container" class="rowitem">
+        {% endif %}
+            <div class="sep">|</div>
+            <div id="to_bottom" class="button">Go To Bottom</div>
+        </div>
     </div>
 
-    {% if reactions_enabled %}
-        {% if post.reactions | length > 0 %}
-        <div id="reactions" class="no_info">
-        {% else %}
-        <div id="reactions" class="hidden">
-        {% endif %}
-
+    {% if post.reactions | length > 0 %}
+    <div id="reactions">
+    {% else %}
+    <div id="reactions" class="hidden">
+    {% endif %}
         {% for reaction in post.reactions %}
-            <div class="reaction_item">
+        <div class="reaction_item">
             <div class="reaction_uname">{{reaction.uname_str}}</div>
             <div class="sep">|</div>
 
@@ -192,10 +198,9 @@
 
             <div class="sep">|</div>
             <div class="reaction_ago">{{reaction.ago}}</div>
-            </div>
-        {% endfor %}
-
         </div>
+        {% endfor %}
+    </div>
     {% endif %}
 </div>
 {% endblock %}
