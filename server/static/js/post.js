@@ -102,7 +102,7 @@ window.onload = function() {
     })
   }
 
-  let r_bottom = DOM.el(`#to_bottom`)
+  let r_bottom = DOM.el(`#lobottomy`)
 
   if (r_bottom) {
     DOM.ev(r_bottom, `click`, () => {
@@ -110,7 +110,7 @@ window.onload = function() {
     })
   }
 
-  let r_top = DOM.el(`#to_top`)
+  let r_top = DOM.el(`#totopy`)
 
   if (r_top) {
     DOM.ev(r_top, `click`, () => {
