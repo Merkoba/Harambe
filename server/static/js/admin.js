@@ -178,6 +178,14 @@ window.onload = () => {
       goto_page(vars.page + 1)
     })
   }
+
+  let del_all = DOM.el(`#delete_all`)
+
+  if (del_all) {
+    DOM.ev(del_all, `click`, () => {
+      delete_all()
+    })
+  }
 }
 
 function goto_page(page) {
@@ -650,12 +658,16 @@ async function do_mod_user(items, what, value, vtype) {
 function delete_all() {
   if (vars.mode === `users`) {
     if (confirm(`Delete all non-admin users ?`)) {
-      delete_normal_users()
+      if (confirm(`Are you really sure ?`)) {
+        delete_normal_users()
+      }
     }
   }
   else if (vars.mode === `posts`) {
     if (confirm(`Delete ALL posts ?`)) {
-      delete_all_posts()
+      if (confirm(`Are you really sure ?`)) {
+        delete_all_posts()
+      }
     }
   }
 }
