@@ -51,3 +51,40 @@ function print_error(msg) {
 function contains_url(text) {
   return text.match(/(https?:\/\/|www\.)\S+/gi)
 }
+
+function prompt_text(placeholder, callback, max = 0) {
+  let msg = Msg.factory({
+    disable_content_padding: true,
+  })
+
+  let c = DOM.create(`div`)
+  c.id = `prompt_container`
+  let input = DOM.create(`input`)
+  input.id = `prompt_input`
+  input.type = `text`
+  input.placeholder = placeholder
+  c.appendChild(input)
+  msg.set(c)
+
+  function submit() {
+    callback(input.value)
+    msg.close()
+  }
+
+  DOM.ev(input, `keydown`, (e) => {
+    if (max > 0) {
+      if (input.value.length > max) {
+        input.value = input.value.substring(0, max).trim()
+        return
+      }
+    }
+
+    if (e.key === `Enter`) {
+      submit()
+      e.preventDefault()
+    }
+  })
+
+  msg.show()
+  input.focus()
+}

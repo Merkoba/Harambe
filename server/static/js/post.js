@@ -255,35 +255,35 @@ function timeago(date) {
 }
 
 async function edit_title() {
-  let title = prompt(`New Title`, vars.title || vars.original)
+  prompt_text(`New Title`, vars.title || vars.original, async (title) => {
+    if (!title) {
+      return
+    }
 
-  if (!title) {
-    return
-  }
+    title = title.trim()
 
-  title = title.trim()
+    if (title === vars.title) {
+      return
+    }
 
-  if (title === vars.title) {
-    return
-  }
+    let name = vars.name
 
-  let name = vars.name
+    let response = await fetch(`/edit_title`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({name, title}),
+    })
 
-  let response = await fetch(`/edit_title`, {
-    method: `POST`,
-    headers: {
-      "Content-Type": `application/json`,
-    },
-    body: JSON.stringify({name, title}),
+    if (response.ok) {
+      vars.title = title
+      DOM.el(`#title`).textContent = title || vars.original
+    }
+    else {
+      print_error(response.status)
+    }
   })
-
-  if (response.ok) {
-    vars.title = title
-    DOM.el(`#title`).textContent = title || vars.original
-  }
-  else {
-    print_error(response.status)
-  }
 }
 
 async function delete_post() {
@@ -515,20 +515,21 @@ function react_character() {
 
   let n = vars.character_reaction_length
   let ns = singplural(`character`, n)
-  let chars = prompt(`Max ${n} ${ns}`)
 
-  if (!chars) {
-    return
-  }
+  prompt_text(`Max ${n} ${ns}`, (text) => {
+    if (!text) {
+      return
+    }
 
-  chars = Array.from(chars).slice(0, n).join(``)
+    text = Array.from(text).slice(0, n).join(``)
 
-  if (contains_url(chars)) {
-    alert(`URLs are not allowed.`)
-    return
-  }
+    if (contains_url(text)) {
+      alert(`URLs are not allowed.`)
+      return
+    }
 
-  send_reaction(chars, `character`)
+    send_reaction(text, `character`)
+  }, n)
 }
 
 async function send_reaction(text, mode) {

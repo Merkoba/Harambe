@@ -118,3 +118,10 @@ a.linkbutton:hover {
 .Msg-overlay {
     cursor: pointer !important;
 }
+
+#prompt_input {
+    font-size: 1rem;
+    padding: 0.5rem;
+    width: 20rem;
+    border: 8px solid #969696;
+}

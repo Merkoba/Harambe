@@ -47,28 +47,28 @@ async function do_edit(what, value, title) {
 }
 
 function edit_name() {
-  let value = prompt(`Enter your new public name`, vars.name)
+  prompt_text(`Enter your new public name`, vars.name, (value) => {
+    if (!value) {
+      return
+    }
 
-  if (!value) {
-    return
-  }
-
-  do_edit(`name`, value, `Name`)
+    do_edit(`name`, value, `Name`)
+  })
 }
 
 function edit_password() {
-  let value = prompt(`Enter your new password`)
+  prompt_text(`Enter your new password`, (value) => {
+    if (!value) {
+      return
+    }
 
-  if (!value) {
-    return
-  }
+    prompt_text(`Enter the password again`, (value_2) => {
+      if (value !== value_2) {
+        alert(`Passwords do not match.`)
+        return
+      }
 
-  let value_2 = prompt(`Enter the password again`)
-
-  if (value !== value_2) {
-    alert(`Passwords do not match.`)
-    return
-  }
-
-  do_edit(`password`, value, `Password`)
+      do_edit(`password`, value, `Password`)
+    })
+  })
 }

@@ -159,7 +159,7 @@ a.button:hover {
 #icons {
     display: flex;
     flex-direction: column;
-    max-height: 280px;
+    max-height: 330px;
     overflow: auto;
     gap: 0.5rem;
 }
