@@ -75,7 +75,10 @@ a.button:hover {
     text-decoration: underline;
 }
 
-.button:hover, a.link:hover {
+.button:hover,
+a.link:hover,
+.react_btn:hover .react_btn_text
+{
     filter: brightness(1.5);
 }
 
