@@ -203,7 +203,7 @@ a.button:hover {
     flex-direction: column;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 0.1rem;
+    gap: 0.5rem;
     padding: 0.35rem;
     align-self: flex-start;
     max-width: 100%;

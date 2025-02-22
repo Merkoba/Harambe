@@ -121,6 +121,14 @@ window.onload = function() {
     }
   })
 
+  let r_bottom = DOM.el(`#to_bottom`)
+
+  if (r_bottom) {
+    DOM.ev(r_bottom, `click`, () => {
+      window.scrollTo(0, document.body.scrollHeight)
+    })
+  }
+
   vars.refresh_interval = setInterval(() => {
     refresh()
     vars.refresh_count += 1
