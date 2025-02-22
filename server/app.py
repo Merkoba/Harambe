@@ -434,14 +434,23 @@ def admin(what: str, page: int = 1) -> Any:
             query=query,
             sort=sort,
             username=username,
+            admin=True,
         )
     elif what == "users":
         user_items, total, next_page = user_procs.get_users(
-            page, page_size, query=query, sort=sort
+            page,
+            page_size,
+            query=query,
+            sort=sort,
+            admin=True,
         )
     elif what == "reactions":
         reaction_items, total, next_page = react_procs.get_reactions(
-            page, page_size, query=query, sort=sort
+            page,
+            page_size,
+            query=query,
+            sort=sort,
+            admin=True,
         )
     else:
         return over()
@@ -615,6 +624,7 @@ def show_list(page: int = 1) -> Any:
         query=query,
         only_listed=True,
         username=username,
+        admin=False,
     )
 
     def_page_size = page_size == config.list_page_size

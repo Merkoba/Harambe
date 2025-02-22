@@ -134,6 +134,7 @@ def get_users(
     page_size: str = "default",
     query: str = "",
     sort: str = "register_date",
+    admin: bool = False,
 ) -> tuple[list[User], str, bool]:
     psize = 0
 

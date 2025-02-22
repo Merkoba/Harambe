@@ -104,6 +104,7 @@ def get_reactions(
     page_size: str = "default",
     query: str = "",
     sort: str = "date",
+    admin: bool = False,
 ) -> tuple[list[Reaction], str, bool]:
     psize = 0
 

@@ -163,6 +163,7 @@ def get_posts(
     max_posts: int = 0,
     username: str = "",
     only_listed: bool = False,
+    admin: bool = False,
 ) -> tuple[list[Post], str, bool]:
     psize = 0
 
@@ -191,6 +192,7 @@ def get_posts(
 
         ok = (
             not query
+            or (admin and (query in utils.clean_query(f.username)))
             or query in utils.clean_query(f.full)
             or query in utils.clean_query(f.original)
             or query in utils.clean_query(f.title)
