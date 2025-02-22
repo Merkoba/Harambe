@@ -499,7 +499,9 @@ function add_reaction(reaction) {
   let name = reaction.uname_str.substring(0, n).trim()
   DOM.el(`.reaction_uname`, item).textContent = name
   DOM.el(`.reaction_value`, item).appendChild(vitem)
-  DOM.el(`.reaction_ago`, item).textContent = reaction.ago
+  let ago = DOM.el(`.reaction_ago`, item)
+  ago.textContent = reaction.ago
+  ago.title = reaction.date_str
   DOM.show(`#to_bottom_container`)
   DOM.show(`#totopia`)
   reactions.appendChild(item)
