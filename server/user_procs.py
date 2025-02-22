@@ -450,6 +450,7 @@ def user_edit(user: User, what: str, value: Any) -> tuple[str, int]:
 
     if (what == "name") and (user.name != value):
         database.change_uploader(user.username, value)
+        database.change_reacter(user.username, value)
 
     return utils.ok()
 

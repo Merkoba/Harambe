@@ -249,6 +249,10 @@ a.button:hover {
     flex-shrink: 1;
 }
 
+.reaction_text {
+    overflow-wrap: anywhere;
+}
+
 .reaction_uname {
     font-weight: bold;
     flex-grow: 0;

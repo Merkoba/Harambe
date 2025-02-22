@@ -185,14 +185,14 @@
     {% endif %}
         {% for reaction in post.reactions %}
         <div class="reaction_item">
-            <div class="reaction_uname">{{reaction.uname_str}}</div>
+            <div class="reaction_uname" title="{{reaction.uname_str}}">{{reaction.uname_str[:12] | trim}}</div>
             <div class="sep">|</div>
 
             <div class="reaction_value">
                 {% if reaction.mode == "icon" %}
                 <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.value}}" loading="lazy">
                 {% elif reaction.mode == "character" %}
-                <div>{{reaction.value}}</div>
+                <div class="reaction_text">{{reaction.value}}</div>
                 {% endif %}
             </div>
 
