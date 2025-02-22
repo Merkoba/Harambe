@@ -514,7 +514,7 @@ function react_text() {
   }
 
   let n = vars.text_reaction_length
-  let ns = singplural(`text`, n)
+  let ns = singplural(`character`, n)
 
   prompt_text(`Max ${n} ${ns}`, (text) => {
     if (!text) {
