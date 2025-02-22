@@ -208,14 +208,14 @@ class Config:
         # Allow reactions in posts
         self.reactions_enabled = True
 
-        # Max length for reactions to be stored
-        self.max_reactions_length = 100_000
-
         # Max length for text reactions
         self.character_reaction_length = 280
 
         # Max reactions a user can do
-        self.max_user_reactions = 10
+        self.max_user_reactions = 20
+
+        # Max reactions allowed on a post
+        self.post_reaction_limit = 200
 
         # Seconds interval to refresh post pages
         self.post_refresh_interval = 30
@@ -318,9 +318,9 @@ class Config:
             set_value(c, "description_index")
             set_value(c, "description_post")
             set_value(c, "reactions_enabled")
-            set_value(c, "max_reactions_length")
             set_value(c, "character_reaction_length")
             set_value(c, "max_user_reactions")
+            set_value(c, "post_reaction_limit")
             set_value(c, "post_refresh_interval")
             set_value(c, "post_refresh_times")
             set_value(c, "allow_name_edit")

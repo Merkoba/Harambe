@@ -290,7 +290,7 @@ def post(name: str) -> Any:
     show_list = list_visible(user)
     can_react = False
 
-    if len(post.reactions) < config.max_reactions_length:
+    if len(post.reactions) < config.post_reaction_limit:
         if config.reactions_enabled:
             if user:
                 can_react = user.reacter
