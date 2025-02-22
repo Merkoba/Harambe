@@ -209,7 +209,7 @@ a.button:hover {
 }
 
 #reactions {
-    margin-top: 0.25rem;
+    margin-top: 0.3rem;
     background-color: var(--contrast_background);
     display: flex;
     flex-direction: column;
