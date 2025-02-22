@@ -50,9 +50,7 @@
 
 <template id="template_reaction_item">
     <div class="reaction_uname"></div>
-    <div class="sep">|</div>
     <div class="reaction_value"></div>
-    <div class="sep">|</div>
     <div class="reaction_ago"></div>
 </template>
 
@@ -205,7 +203,6 @@
         {% for reaction in post.reactions %}
         <div class="reaction_item">
             <div class="reaction_uname" title="{{reaction.uname_str}}">{{reaction.uname_str[: max_reaction_name_length] | trim}}</div>
-            <div class="sep">|</div>
 
             <div class="reaction_value">
                 {% if reaction.mode == "icon" %}
@@ -215,7 +212,6 @@
                 {% endif %}
             </div>
 
-            <div class="sep">|</div>
             <div class="reaction_ago">{{reaction.ago}}</div>
         </div>
         {% endfor %}

@@ -47,10 +47,11 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if not user:
         return utils.bad("You are not logged in")
 
-    text = text.strip()
-
     if not name:
         return utils.bad("Missing values")
+
+    text = text.strip()
+    text = utils.remove_multiple_lines(text)
 
     if not text:
         return utils.bad("Missing values")

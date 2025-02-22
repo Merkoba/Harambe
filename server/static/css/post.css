@@ -1,5 +1,6 @@
 :root {
     --modal_color: rgb(42, 42, 42);
+    --react_padding: 0.8rem;
 }
 
 body, html {
@@ -234,8 +235,44 @@ a.link:hover,
     align-items: center;
     justify-content: flex-start;
     border: 1px solid var(--frame_color);
-    gap: 0.5rem;
     min-width: 28rem;
+    align-items: flex-start;
+}
+
+.reaction_uname {
+    display: flex;
+    font-weight: bold;
+    flex-grow: 0;
+    flex-shrink: 0;
+    border-right: 1px solid var(--frame_color);
+    align-self: stretch;
+    padding-right: var(--react_padding);
+}
+
+.reaction_value {
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 1;
+    align-items: center;
+    justify-content: center;
+    white-space: pre-wrap;
+    align-self: stretch;
+    border-right: 1px solid var(--frame_color);
+    padding-left: var(--react_padding);
+    padding-right: var(--react_padding);
+}
+
+.reaction_text {
+    overflow-wrap: anywhere;
+}
+
+.reaction_ago {
+    display: flex;
+    opacity: 0.7;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-self: stretch;
+    padding-left: var(--react_padding);
 }
 
 .reaction_item img {
@@ -248,43 +285,6 @@ a.link:hover,
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
-}
-
-.reaction_info {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.reaction_info div {
-    flex-shrink: 0;
-    flex-grow: 0;
-}
-
-.reaction_value {
-    flex-grow: 0;
-    flex-shrink: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;;
-}
-
-.reaction_text {
-    overflow-wrap: anywhere;
-}
-
-.reaction_uname {
-    font-weight: bold;
-    flex-grow: 0;
-    flex-shrink: 0;
-}
-
-.reaction_ago {
-    opacity: 0.7;
-    flex-grow: 0;
-    flex-shrink: 0;
 }
 
 .text_container {

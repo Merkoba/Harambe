@@ -118,14 +118,16 @@ window.onload = function() {
     })
   }
 
-  vars.refresh_interval = setInterval(() => {
-    refresh()
-    vars.refresh_count += 1
+  if (vars.post_refresh_times > 0) {
+    vars.refresh_interval = setInterval(() => {
+      refresh()
+      vars.refresh_count += 1
 
-    if (vars.refresh_count >= vars.post_refresh_times) {
-      clearInterval(vars.refresh_interval)
-    }
-  }, vars.post_refresh_interval * 1000)
+      if (vars.refresh_count >= vars.post_refresh_times) {
+        clearInterval(vars.refresh_interval)
+      }
+    }, vars.post_refresh_interval * 1000)
+  }
 
   let copy_all = DOM.el(`#copy_all_text`)
 
@@ -529,6 +531,7 @@ function react_text() {
       return
     }
 
+    text = remove_multiple_empty_lines(text)
     text = Array.from(text).slice(0, n).join(``)
 
     if (contains_url(text)) {

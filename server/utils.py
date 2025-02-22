@@ -214,4 +214,8 @@ def contains_url(text: str) -> list[str]:
     return re.findall(r"(https?://|www\.)\S+", text, re.IGNORECASE)
 
 
+def remove_multiple_lines(text: str) -> str:
+    return re.sub(r"\n\s*\n", "\n\n", text)
+
+
 ICONS = load_icons()

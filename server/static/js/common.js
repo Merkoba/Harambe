@@ -60,11 +60,16 @@ function prompt_text(placeholder, callback, max = 0) {
 
   let c = DOM.create(`div`)
   c.id = `prompt_container`
-  let input = DOM.create(`input`)
+  let input = DOM.create(`textarea`)
+  input.rows = 6
   input.id = `prompt_input`
   input.type = `text`
   input.placeholder = placeholder
+  let btn = DOM.create(`div`)
+  btn.id = `prompt_submit`
+  btn.textContent = `Submit`
   c.appendChild(input)
+  c.appendChild(btn)
   msg.set(c)
 
   function submit() {
@@ -81,10 +86,14 @@ function prompt_text(placeholder, callback, max = 0) {
     }
 
     if (e.key === `Enter`) {
-      submit()
-      e.preventDefault()
+      if (e.shiftKey || e.ctrlKey) {
+        submit()
+        e.preventDefault()
+      }
     }
   })
+
+  DOM.ev(btn, `click`, submit)
 
   msg.show()
   input.focus()
@@ -97,4 +106,8 @@ function popmsg(message, callback) {
   })
 
   msg.show(message)
+}
+
+function remove_multiple_empty_lines(s) {
+  return s.replace(/\n\s*\n/g, `\n\n`)
 }
