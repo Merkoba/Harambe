@@ -565,3 +565,19 @@ def get_reaction(id_: int) -> Reaction | None:
         return make_reaction(dict(row))
 
     return None
+
+
+def delete_all_posts() -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("delete from posts")
+    conn.commit()
+    conn.close()
+
+
+def delete_all_reactions() -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("delete from reactions")
+    conn.commit()
+    conn.close()

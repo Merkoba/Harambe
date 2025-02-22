@@ -67,8 +67,8 @@
             {% if mode == "posts" %}
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
             {% endif %}
-            <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">User</div>
             <div id="name" class="table_cell underline" data-sort="name" title="The name or id of the post">Name</div>
+            <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">User</div>
             <div id="title" class="table_cell underline" data-sort="title" title="The title of the post">Title</div>
             <div id="size" class="table_cell underline" data-sort="size" title="The size of the file">Size</div>
             <div id="mtype" class="table_cell underline" data-sort="size" title="The mime type of the file or the extension">Type</div>
@@ -98,17 +98,17 @@
             </div>
             {% endif %}
 
+            <!-- Name -->
+            <div class="table_cell">
+                <a href="/post/{{item.name}}" title="{{item.show}}">{{item.show}}</a>
+            </div>
+
             <!-- User -->
             {% if mode == "posts" %}
             <a href="/admin/users?username={{item.username}}" class="table_cell uploader" title="{{item.uploader_str}}">{{item.username}}</a>
             {% else %}
             <a class="table_cell uploader" title="{{item.uploader_str}}">{{item.uploader_str}}</a>
             {% endif %}
-
-            <!-- Name -->
-            <div class="table_cell">
-                <a href="/post/{{item.name}}" title="{{item.show}}">{{item.show}}</a>
-            </div>
 
             <!-- Title -->
             <div class="table_cell title" title="{{item.title or item.original}}">{{item.title or item.original}}</div>

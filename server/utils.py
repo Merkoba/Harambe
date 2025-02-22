@@ -222,4 +222,20 @@ def space_string(text: str) -> str:
     return re.sub(r"\s+", " ", text)
 
 
+def check_dir(direc: str) -> bool:
+    if not direc:
+        return False
+
+    if direc == "/":
+        return False
+
+    if direc == ".":
+        return False
+
+    if (direc == "~") or (direc == "~/"):
+        return False
+
+    return direc != "/home"
+
+
 ICONS = load_icons()

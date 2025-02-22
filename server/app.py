@@ -497,7 +497,7 @@ def delete_posts() -> Any:
 
 
 @app.route("/delete_all_posts", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit(2))  # type: ignore
+@limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()
 @admin_required
 def delete_all_posts() -> Any:
@@ -576,7 +576,7 @@ def register() -> Any:
 
 
 @app.route("/logout", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(3))  # type: ignore
+@limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()
 def logout() -> Any:
     session.pop("username", None)
@@ -761,7 +761,7 @@ def delete_users() -> Any:
 
 
 @app.route("/delete_normal_users", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit(2))  # type: ignore
+@limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()
 @admin_required
 def delete_normal_users() -> Any:
@@ -864,6 +864,14 @@ def delete_reaction() -> Any:
     data = request.get_json()
     id_ = data.get("id", None)
     return react_procs.delete_reaction(id_, user)
+
+
+@app.route("/delete_all_reactions", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(5))  # type: ignore
+@payload_check()
+@admin_required
+def delete_all_reactions() -> Any:
+    return react_procs.delete_all_reactions()
 
 
 # YOU

@@ -676,6 +676,13 @@ function delete_all() {
       }
     }
   }
+  else if (vars.mode === `reactions`) {
+    if (confirm(`Delete ALL reactions ?`)) {
+      if (confirm(`Are you really sure ?`)) {
+        delete_all_reactions()
+      }
+    }
+  }
 }
 
 function do_filter() {
@@ -800,5 +807,27 @@ function remove_reactions(reactions) {
     if (el) {
       el.remove()
     }
+  }
+}
+
+async function delete_all_reactions() {
+  try {
+    let response = await fetch(`/delete_all_reactions`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify(),
+    })
+
+    if (response.ok) {
+      window.location = `/admin/reactions`
+    }
+    else {
+      print_error(response.status)
+    }
+  }
+  catch (error) {
+    print_error(error)
   }
 }

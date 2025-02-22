@@ -357,21 +357,8 @@ def do_delete_post(post: DbPost) -> None:
         return
 
     fd = utils.files_dir()
-    fds = str(fd)
 
-    if not fds:
-        return
-
-    if fds == "/":
-        return
-
-    if fds == ".":
-        return
-
-    if (fds == "~") or (fds == "~/"):
-        return
-
-    if fds == "/home":
+    if not utils.check_dir(str(fd)):
         return
 
     path = fd / file_name
@@ -382,10 +369,25 @@ def do_delete_post(post: DbPost) -> None:
 
 
 def delete_all_posts() -> tuple[str, int]:
-    for post in database.get_posts():
-        do_delete_post(post)
-
+    database.delete_all_posts()
+    database.delete_all_reactions()
+    delete_all_files()
     return utils.ok("All posts deleted")
+
+
+def delete_all_files() -> None:
+    fd = utils.files_dir()
+
+    if not utils.check_dir(str(fd)):
+        return
+
+    for root, _, filenames in os.walk(fd):
+        for name in filenames:
+            if name.startswith("."):
+                continue
+
+            file_path = Path(root) / Path(name)
+            file_path.unlink()
 
 
 # Remove old files if limits are exceeded

@@ -210,3 +210,8 @@ def do_delete_reaction(id_: int) -> None:
         return
 
     database.delete_reaction(id_)
+
+
+def delete_all_reactions() -> tuple[str, int]:
+    database.delete_all_reactions()
+    return utils.ok("All reactions deleted")
