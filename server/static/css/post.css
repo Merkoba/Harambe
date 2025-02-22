@@ -30,6 +30,8 @@ body, html {
 }
 
 hr {
+    opacity: 0.3;
+    color: var(--text_color);
     width: 100%;
     margin: 0;
 }
