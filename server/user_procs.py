@@ -46,14 +46,14 @@ class User:
     max_size: int
     rpm_fill: int
     max_size_fill: int
-    can_list: bool
+    reader: bool
     mark: str
     register_date: int
     register_date_str: str
     last_date: int
     last_date_str: str
     admin_str: str
-    can_list_str: str
+    reader_str: str
     lister: bool
     lister_str: str
     posts: int
@@ -71,7 +71,7 @@ user_types = {
     "name": "string",
     "rpm": "int",
     "max_size": "int",
-    "can_list": "bool",
+    "reader": "bool",
     "mark": "string",
     "register_date": "int",
     "last_date": "int",
@@ -90,7 +90,7 @@ def make_user(user: DbUser) -> User:
     reg_date_str = utils.nice_date(user.register_date)
     last_date_str = utils.nice_date(user.last_date)
     admin_str = "A: Yes" if user.admin else "A: No"
-    can_list_str = "T: Yes" if user.can_list else "T: No"
+    reader_str = "D: Yes" if user.reader else "D: No"
     rpm_fill = user.rpm or config.requests_per_minute
     max_size_fill = user.max_size or config.max_size_user
     lister_str = "L: Yes" if user.lister else "R: No"
@@ -106,14 +106,14 @@ def make_user(user: DbUser) -> User:
         user.max_size,
         rpm_fill,
         max_size_fill,
-        user.can_list,
+        user.reader,
         user.mark,
         user.register_date,
         reg_date_str,
         user.last_date,
         last_date_str,
         admin_str,
-        can_list_str,
+        reader_str,
         user.lister,
         lister_str,
         user.posts,
@@ -159,7 +159,7 @@ def get_users(
             or query in utils.clean_query(user.reacter_str)
             or query in utils.clean_query(user.mark)
             or query in utils.clean_query(user.rpm)
-            or query in utils.clean_query(user.can_list_str)
+            or query in utils.clean_query(user.reader_str)
             or query in utils.clean_query(user.posts)
             or query in utils.clean_query(user.reactions)
         )
@@ -219,10 +219,10 @@ def sort_users(users: list[User], sort: str) -> None:
     elif sort == "admin_desc":
         users.sort(key=lambda x: x.admin, reverse=False)
 
-    elif sort == "can_list":
-        users.sort(key=lambda x: x.can_list, reverse=True)
-    elif sort == "can_list_desc":
-        users.sort(key=lambda x: x.can_list, reverse=False)
+    elif sort == "reader":
+        users.sort(key=lambda x: x.reader, reverse=True)
+    elif sort == "reader_desc":
+        users.sort(key=lambda x: x.reader, reverse=False)
 
     elif sort == "lister":
         users.sort(key=lambda x: x.lister, reverse=True)
@@ -342,10 +342,10 @@ def edit_user(
     args["max_size"] = request.form.get("max_size")
     args["mark"] = request.form.get("mark")
 
-    if request.form.get("can_list") is None:
-        args["can_list"] = False
+    if request.form.get("reader") is None:
+        args["reader"] = False
     else:
-        args["can_list"] = True
+        args["reader"] = True
 
     if request.form.get("admin") is None:
         args["admin"] = False
@@ -421,7 +421,7 @@ def edit_user(
         n_args["name"],
         n_args["rpm"],
         n_args["max_size"],
-        n_args["can_list"],
+        n_args["reader"],
         n_args["mark"],
         n_args["lister"],
         n_args["poster"],

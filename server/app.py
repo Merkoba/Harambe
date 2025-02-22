@@ -43,18 +43,18 @@ def logged_in() -> bool:
     return bool(get_username())
 
 
-def can_list(user: User | None = None) -> bool:
+def can_read(user: User | None = None) -> bool:
     if not user:
         user = user_procs.get_user(get_username())
 
     if not user:
         return False
 
-    return user.admin or user.can_list
+    return user.admin or user.reader
 
 
 def list_visible(user: User | None = None) -> bool:
-    return config.list_enabled and ((not config.list_private) or can_list(user))
+    return config.list_enabled and ((not config.list_private) or can_read(user))
 
 
 def login_required(f: Any) -> Any:
@@ -89,7 +89,7 @@ def admin_required(f: Any) -> Any:
     return decorated_function
 
 
-def list_required(f: Any) -> Any:
+def reader_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
         user = user_procs.get_user(get_username())
@@ -331,7 +331,7 @@ def refresh() -> Any:
 @app.route("/next/<string:current>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@list_required
+@reader_required
 def next_post(current: str) -> Any:
     name = post_procs.get_next_post(current)
 
@@ -344,7 +344,7 @@ def next_post(current: str) -> Any:
 @app.route("/random", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@list_required
+@reader_required
 def random_post() -> Any:
     used_names = session["used_names"] if "used_names" in session else []
     name = post_procs.get_random_post(used_names)
@@ -569,7 +569,7 @@ def logout() -> Any:
 @app.route("/list/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@list_required
+@reader_required
 def show_list(page: int = 1) -> Any:
     user = get_user()
 
@@ -588,7 +588,7 @@ def show_list(page: int = 1) -> Any:
             if not logged_in():
                 return redirect(url_for("login"))
 
-            if not user.can_list:
+            if not user.reader:
                 return redirect(url_for("index"))
 
     page = int(request.args.get("page", 1))
@@ -629,7 +629,7 @@ def show_list(page: int = 1) -> Any:
 @app.route("/fresh", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@list_required
+@reader_required
 def latest_post() -> Any:
     post = post_procs.get_latest_post()
 

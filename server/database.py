@@ -49,7 +49,7 @@ class User:
     name: str
     rpm: int
     max_size: int
-    can_list: bool
+    reader: bool
     mark: str
     register_date: int
     last_date: int
@@ -244,7 +244,7 @@ def add_user(
     name: str = "",
     rpm: int = 0,
     max_size: int = 0,
-    can_list: bool = True,
+    reader: bool = True,
     mark: str = "",
     lister: bool = True,
     poster: bool = True,
@@ -265,7 +265,7 @@ def add_user(
         name,
         rpm,
         max_size,
-        can_list,
+        reader,
         mark,
         lister,
         poster,
@@ -279,7 +279,7 @@ def add_user(
         "name",
         "rpm",
         "max_size",
-        "can_list",
+        "reader",
         "mark",
         "lister",
         "poster",
@@ -318,7 +318,7 @@ def make_user(row: dict[str, Any]) -> User:
         name=row.get("name") or "",
         rpm=int(row.get("rpm") or 0),
         max_size=int(row.get("max_size") or 0),
-        can_list=bool(row.get("can_list")),
+        reader=bool(row.get("reader")),
         mark=row.get("mark") or "",
         register_date=int(row.get("register_date") or 0),
         last_date=row.get("last_date") or 0,

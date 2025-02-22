@@ -90,12 +90,12 @@ window.onload = () => {
     let t = DOM.el(`#template_edit`)
     vars.msg_edit.set(t.innerHTML)
 
-    DOM.ev(`#edit_can_list_yes`, `click`, () => {
-      mod_user(`can_list`, 1, `bool`)
+    DOM.ev(`#edit_reader_yes`, `click`, () => {
+      mod_user(`reader`, 1, `bool`)
     })
 
-    DOM.ev(`#edit_can_list_no`, `click`, () => {
-      mod_user(`can_list`, 0, `bool`)
+    DOM.ev(`#edit_reader_no`, `click`, () => {
+      mod_user(`reader`, 0, `bool`)
     })
 
     DOM.ev(`#edit_lister_yes`, `click`, () => {
@@ -682,7 +682,7 @@ function do_filter() {
       let reg_date = item.dataset.reg_date
       let last_date = item.dataset.last_date
       let admin = item.dataset.admin
-      let list = item.dataset.can_list
+      let list = item.dataset.reader
 
       opts = [
         username, name, rpm, max_size,

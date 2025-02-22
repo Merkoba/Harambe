@@ -59,10 +59,10 @@
         <div class="checkbox">
             <div>Can See The List</div>
 
-            {% if (not user) or (user and user.can_list) %}
-            <input id="can_list" name="can_list" type="checkbox" checked>
+            {% if (not user) or (user and user.reader) %}
+            <input id="reader" name="reader" type="checkbox" checked>
             {% else %}
-            <input id="can_list" name="can_list" type="checkbox">
+            <input id="reader" name="reader" type="checkbox">
             {% endif %}
         </div>
 

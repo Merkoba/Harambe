@@ -26,8 +26,8 @@
 
     <div class="dialog_container">
     <div>
-        <button id="edit_can_list_yes">Can List: Yes</button>
-        <button id="edit_can_list_no">Can List: No</button>
+        <button id="edit_reader_yes">Reader: Yes</button>
+        <button id="edit_reader_no">Reader: No</button>
     </div>
 
     <div>
@@ -100,10 +100,10 @@
             <div id="limit" class="table_cell small underline" data-sort="rpm" title="Requests per minute the user can make">RPM</div>
             <div id="max" class="table_cell small underline" data-sort="max_size" title="The max size in megabytes this user can upload at once">Max</div>
             <div id="list" class="table_cell underline" data-sort="admin" title="This user is an admin and can use the admin pages">Admin</div>
-            <div id="list" class="table_cell underline" data-sort="can_list" title="Can view the list of posts from all users">List</div>
-            <div id="lister" class="table_cell underline" data-sort="lister" title="The posts of this user will appear in the list">Lister</div>
+            <div id="list" class="table_cell underline" data-sort="reader" title="Can view the list of posts">Reader</div>
             <div id="poster" class="table_cell underline" data-sort="poster" title="This user can make posts">Poster</div>
             <div id="reacter" class="table_cell underline" data-sort="reacter" title="This user can react in posts">Reacter</div>
+            <div id="lister" class="table_cell underline" data-sort="lister" title="The posts of this user will appear in the list">Lister</div>
             <div id="posts" class="table_cell small underline" data-sort="posts" title="The number of posts this user has done">Posts</div>
             <div id="reactions" class="table_cell small underline" data-sort="reactions" title="The number of reactions this user has done">Reactions</div>
 
@@ -117,7 +117,7 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-username="{{item.username}}" data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}" data-max_size="{{item.max_size_fill}}" data-can_list="{{item.can_list_str}}" data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}" data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}" data-lister="{{lister_str}}" data-reacter="{{reacter_str}}">
+        <div class="table_row item" data-username="{{item.username}}" data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}" data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}" data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}" data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}" data-lister="{{lister_str}}" data-reacter="{{reacter_str}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
@@ -138,17 +138,17 @@
             <!-- Admin -->
             <div class="table_cell">{{item.admin_str}}</div>
 
-            <!-- Can List -->
-            <div class="table_cell">{{item.can_list_str}}</div>
-
-            <!-- Lister -->
-            <div class="table_cell">{{item.lister_str}}</div>
+            <!-- Reader -->
+            <div class="table_cell">{{item.reader_str}}</div>
 
             <!-- Poster -->
             <div class="table_cell">{{item.poster_str}}</div>
 
             <!-- Reacter -->
             <div class="table_cell">{{item.reacter_str}}</div>
+
+            <!-- Lister -->
+            <div class="table_cell">{{item.lister_str}}</div>
 
             <!-- Posts -->
             <div class="table_cell small">{{item.posts}}</div>

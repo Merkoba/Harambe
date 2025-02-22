@@ -29,7 +29,7 @@ schemas = {
         "name": "text default ''",
         "rpm": "integer default 0",
         "max_size": "integer default 0",
-        "can_list": "integer default 1",
+        "reader": "integer default 1",
         "mark": "text default ''",
         "register_date": "integer default 0",
         "last_date": "integer default 0",

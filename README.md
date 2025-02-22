@@ -100,7 +100,7 @@ If `name` is empty, no name will be displayed.
 
 If `max_size` is set to 0 it will use the default max file size config.
 
-If `can_list` is true the user can view the file list page.
+If `reader` is true the user can view the file list page.
 
 `mark` is a string that is appended to urls on uploads from that user.
 
