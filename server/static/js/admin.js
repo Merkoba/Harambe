@@ -339,7 +339,7 @@ function delete_posts() {
       posts.push(post.dataset.name)
     }
 
-    delete_selected_items(posts)
+    delete_selected_posts(posts)
   }
 }
 
@@ -543,7 +543,7 @@ function delete_users() {
       users.push(user.dataset.username)
     }
 
-    delete_selected_items(users)
+    delete_selected_users(users)
   }
 }
 
