@@ -110,7 +110,6 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     image_embed = mtype.startswith("image/") and embed_size("image")
     video_embed = mtype.startswith("video/") and embed_size("video")
     audio_embed = mtype.startswith("audio/") and embed_size("audio")
-    utils.q(video_embed)
 
     flash_embed = (
         mtype.startswith("application/") and ("flash" in mtype) and embed_size("flash")

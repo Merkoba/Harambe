@@ -102,25 +102,6 @@ window.onload = function() {
     })
   }
 
-  DOM.ev(document, `keyup`, (e) => {
-    if (!icons_open()) {
-      if (e.key === `r`) {
-        if (!icons_open()) {
-          show_icons()
-        }
-      }
-      else if (e.key === `c`) {
-        react_character()
-      }
-      else if (e.key === `m`) {
-        maximize_media()
-      }
-      else if (e.key === `Escape`) {
-        hide_modal_image()
-      }
-    }
-  })
-
   let r_bottom = DOM.el(`#to_bottom`)
 
   if (r_bottom) {
@@ -505,7 +486,9 @@ function add_reaction(reaction) {
   let t = DOM.el(`#template_reaction_item`)
   let item = DOM.create(`div`, `reaction_item`)
   item.innerHTML = t.innerHTML
-  DOM.el(`.reaction_uname`, item).textContent = reaction.uname_str
+  let n = vars.max_reaction_name_length
+  let name = reaction.uname_str.substring(0, n).trim()
+  DOM.el(`.reaction_uname`, item).textContent = name
   DOM.el(`.reaction_value`, item).appendChild(vitem)
   DOM.el(`.reaction_ago`, item).textContent = reaction.ago
   DOM.show(`#to_bottom_container`)

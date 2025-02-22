@@ -21,7 +21,6 @@ class Reaction:
     mode: str
     date: int
     ago: str
-    title: str
     uname_str: str
 
     def to_dict(self) -> dict[str, Any]:
@@ -30,14 +29,6 @@ class Reaction:
 
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     ago = utils.time_ago(reaction.date, now)
-
-    if reaction.mode == "icon":
-        title = f"{reaction.uname} : {ago} : {reaction.value}"
-    elif reaction.mode == "character":
-        title = f"{reaction.uname} : {ago}"
-    else:
-        title = "Nothing"
-
     uname_str = reaction.uname or "Anon"
 
     return Reaction(
@@ -48,7 +39,6 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         reaction.mode,
         reaction.date,
         ago,
-        title,
         uname_str,
     )
 

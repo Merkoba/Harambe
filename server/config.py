@@ -253,6 +253,12 @@ class Config:
         # Register page will be enabled
         self.register_enabled = True
 
+        # The max displayed length of names in posts
+        self.max_post_name_length = 18
+
+        # The max displayed length of names in reactions
+        self.max_reaction_name_length = 18
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -341,6 +347,8 @@ class Config:
             set_value(c, "max_user_password_length")
             set_value(c, "max_user_name_length")
             set_value(c, "register_enabled")
+            set_value(c, "max_post_name_length")
+            set_value(c, "max_reaction_name_length")
 
             # Users
 

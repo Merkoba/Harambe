@@ -305,6 +305,8 @@ def post(name: str) -> Any:
         character_reaction_length=config.character_reaction_length,
         post_refresh_interval=config.post_refresh_interval,
         post_refresh_times=config.post_refresh_times,
+        max_post_name_length=config.max_post_name_length,
+        max_reaction_name_length=config.max_reaction_name_length,
         can_react=can_react,
         show_list=show_list,
         **theme_configs(),
