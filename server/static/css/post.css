@@ -65,7 +65,7 @@ a.button:hover {
     text-decoration: underline;
 }
 
-.react_btn {
+.icon_btn {
     color: var(--link_color);
     cursor: pointer;
     user-select: none;
@@ -74,13 +74,13 @@ a.button:hover {
     gap: 0.35rem;
 }
 
-.react_btn:hover .react_btn_text {
+.icon_btn:hover .icon_btn_text {
     text-decoration: underline;
 }
 
 .button:hover,
 a.link:hover,
-.react_btn:hover .react_btn_text
+.icon_btn:hover .icon_btn_text
 {
     filter: brightness(1.5);
 }
