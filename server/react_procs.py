@@ -71,6 +71,9 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if len(text) > max(config.character_reaction_length, 100):
         return utils.bad("Reaction is too long")
 
+    if utils.contains_url(text):
+        return utils.bad("No URLs allowed")
+
     if mode == "character":
         if utils.count_graphemes(text) > config.character_reaction_length:
             return utils.bad("Invalid reaction")
