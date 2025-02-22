@@ -1,8 +1,6 @@
-let selected_posts = []
-let selected_users = []
-let date_mode = `ago`
-
 window.onload = () => {
+  vars.selected_items = []
+
   DOM.ev(document, `keyup`, async (e) => {
     if (e.key === `Enter`) {
       do_search()
@@ -22,13 +20,16 @@ window.onload = () => {
     }
 
     if (e.target.classList.contains(`delete`)) {
+      vars.selected_items = [e.target.closest(`.item`)]
+
       if (vars.mode === `users`) {
-        selected_users = [e.target.closest(`.item`)]
         delete_users()
       }
       else if (vars.mode === `posts`) {
-        selected_posts = [e.target.closest(`.item`)]
         delete_posts()
+      }
+      else if (vars.mode === `reactions`) {
+        delete_reactions()
       }
     }
 
@@ -318,27 +319,27 @@ function on_page_select_change(page_select) {
 }
 
 function delete_posts() {
-  if (selected_posts.length === 0) {
+  if (vars.selected_items.length === 0) {
     return
   }
 
   let size = 0
 
-  for (let post of selected_posts) {
+  for (let post of vars.selected_items) {
     size += parseFloat(post.dataset.size)
   }
 
   size = Math.round(size * 100) / 100
-  let s = singplural(`post`, selected_posts.length)
+  let s = singplural(`post`, vars.selected_items.length)
 
-  if (confirm(`Delete ${selected_posts.length} ${s} (${size_string(size)}) ?`)) {
+  if (confirm(`Delete ${vars.selected_items.length} ${s} (${size_string(size)}) ?`)) {
     let posts = []
 
-    for (let post of selected_posts) {
+    for (let post of vars.selected_items) {
       posts.push(post.dataset.name)
     }
 
-    delete_selected_posts(posts)
+    delete_selected_items(posts)
   }
 }
 
@@ -508,38 +509,41 @@ function delete_selected() {
     return
   }
 
+  vars.selected_items = items
+
   if (vars.mode === `users`) {
-    selected_users = items
     delete_users()
   }
   else if (vars.mode === `posts`) {
-    selected_posts = items
     delete_posts()
+  }
+  else if (vars.mode === `reactions`) {
+    delete_reactions()
   }
 }
 
 function delete_users() {
-  if (selected_users.length === 0) {
+  if (vars.selected_items.length === 0) {
     return
   }
 
   let size = 0
 
-  for (let user of selected_users) {
+  for (let user of vars.selected_items) {
     size += parseFloat(user.dataset.size)
   }
 
   size = Math.round(size * 100) / 100
-  let s = singplural(`user`, selected_users.length)
+  let s = singplural(`user`, vars.selected_items.length)
 
-  if (confirm(`Delete ${selected_users.length} ${s} ?`)) {
+  if (confirm(`Delete ${vars.selected_items.length} ${s} ?`)) {
     let users = []
 
-    for (let user of selected_users) {
+    for (let user of vars.selected_items) {
       users.push(user.dataset.username)
     }
 
-    delete_selected_users(users)
+    delete_selected_items(users)
   }
 }
 
@@ -741,4 +745,60 @@ function mode_string() {
   }
 
   return `admin/${vars.mode}`
+}
+
+function delete_reactions() {
+  if (vars.selected_items.length === 0) {
+    return
+  }
+
+  let size = 0
+
+  for (let reaction of vars.selected_items) {
+    size += parseFloat(reaction.dataset.size)
+  }
+
+  let s = singplural(`reaction`, vars.selected_items.length)
+
+  if (confirm(`Delete ${vars.selected_items.length} ${s} ?`)) {
+    let reactions = []
+
+    for (let reaction of vars.selected_items) {
+      reactions.push(parseInt(reaction.dataset.id))
+    }
+
+    delete_selected_reactions(reactions)
+  }
+}
+
+async function delete_selected_reactions(ids) {
+  try {
+    let response = await fetch(`/delete_reactions`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({ids}),
+    })
+
+    if (response.ok) {
+      remove_reactions(ids)
+    }
+    else {
+      print_error(response.status)
+    }
+  }
+  catch (error) {
+    print_error(error)
+  }
+}
+
+function remove_reactions(reactions) {
+  for (let id of reactions) {
+    let el = DOM.el(`.item[data-id="${id}"]`)
+
+    if (el) {
+      el.remove()
+    }
+  }
 }

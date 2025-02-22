@@ -23,6 +23,10 @@
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
+    <div class="action_button" id="delete_selected" title="Delete selected items">Delete</div>
+    <div class="sep">|</div>
+    <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del All</div>
+    <div class="sep">|</div>
     <div title="Total storage stats of all items (on all pages)">Total: {{total}}</div>
     <div class="sep">|</div>
     <div title="This is the current page">Page {{page}}</div>
@@ -64,7 +68,7 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-username="{{item.username}}" data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}" data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}" data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}" data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}" data-lister="{{lister_str}}" data-reacter="{{reacter_str}}">
+        <div class="table_row item" data-id="{{item.id}}" data-user="{{item.user}}" data-name="{{item.name}}" data-post="{{item.post}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">

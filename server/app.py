@@ -505,7 +505,7 @@ def delete_post() -> Any:
     user = get_user()
 
     if not user:
-        return over()
+        return error_json
 
     return post_procs.delete_post(name, user=user)
 
@@ -521,7 +521,7 @@ def edit_title() -> Any:
     user = get_user()
 
     if not user:
-        return over()
+        return error_json
 
     return post_procs.edit_post_title(name, title, user=user)
 
@@ -716,17 +716,17 @@ def user_edit() -> Any:
     user = get_user()
 
     if not user:
-        return over()
+        return error_json
 
     data = request.get_json()
     what = data.get("what", None)
     value = data.get("value", None)
 
     if what not in ["name", "password"]:
-        return over()
+        return error_json
 
     if not getattr(config, f"allow_{what}_edit"):
-        return over()
+        return error_json
 
     return user_procs.user_edit(user, what, value)
 
@@ -745,7 +745,7 @@ def delete_users() -> Any:
     user = get_user()
 
     if not user:
-        return over()
+        return error_json
 
     return user_procs.delete_users(usernames, user.username)
 
@@ -772,7 +772,7 @@ def delete_user() -> Any:
     user = get_user()
 
     if not user:
-        return over()
+        return error_json
 
     return user_procs.delete_user(username, user.username)
 
@@ -810,6 +810,9 @@ def get_icons() -> Any:
     return {"icons": utils.ICONS}
 
 
+# REACTIONS
+
+
 @app.route("/react", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
@@ -818,7 +821,7 @@ def react() -> Any:
     user = get_user()
 
     if not user:
-        return over()
+        return error_json
 
     data = request.get_json()
     name = data.get("name", None)
@@ -826,6 +829,31 @@ def react() -> Any:
     mode = data.get("mode", None)
 
     return react_procs.react(name, text, user, mode)
+
+
+@app.route("/delete_reactions", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@admin_required
+def delete_reactions() -> Any:
+    data = request.get_json()
+    ids = data.get("ids", None)
+    return react_procs.delete_reactions(ids)
+
+
+@app.route("/delete_reaction", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@login_required
+def delete_reaction() -> Any:
+    user = get_user()
+
+    if not user:
+        return error_json
+
+    data = request.get_json()
+    id_ = data.get("id", None)
+    return react_procs.delete_reaction(id_, user)
 
 
 # YOU

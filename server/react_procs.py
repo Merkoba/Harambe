@@ -14,6 +14,7 @@ from user_procs import User
 
 @dataclass
 class Reaction:
+    id: int
     post: str
     user: str
     uname: str
@@ -36,6 +37,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     date_str = utils.nice_date(reaction.date)
 
     return Reaction(
+        reaction.id,
         reaction.post,
         reaction.user,
         reaction.uname,
@@ -170,3 +172,40 @@ def sort_reactions(reactions: list[Reaction], sort: str) -> None:
         reactions.sort(key=lambda x: x.date, reverse=True)
     elif sort == "date_desc":
         reactions.sort(key=lambda x: x.date, reverse=False)
+
+
+def delete_reactions(ids: list[int]) -> tuple[str, int]:
+    if not ids:
+        return utils.bad("Ids were not provided")
+
+    for id_ in ids:
+        do_delete_reaction(id_)
+
+    return utils.ok("Reaction deleted successfully")
+
+
+def delete_reaction(id_: int, user: User) -> tuple[str, int]:
+    if not id_:
+        return utils.bad("Id was not provided")
+
+    if not user:
+        return utils.bad("You are not logged in")
+
+    reaction = database.get_reaction(id_)
+
+    if not reaction:
+        return utils.bad("Reaction not found")
+
+    if reaction.user != user.username:
+        if not user.admin:
+            return utils.bad("You can't delete this reaction")
+
+    do_delete_reaction(id_)
+    return utils.ok("Reaction deleted successfully")
+
+
+def do_delete_reaction(id_: int) -> None:
+    if not id_:
+        return
+
+    database.delete_reaction(id_)

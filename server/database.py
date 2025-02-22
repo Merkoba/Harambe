@@ -62,6 +62,7 @@ class User:
 
 @dataclass
 class Reaction:
+    id: int
     post: str
     user: str
     uname: str
@@ -459,6 +460,7 @@ def add_reaction(
 
 def make_reaction(row: dict[str, Any]) -> Reaction:
     return Reaction(
+        id=int(row.get("id") or 0),
         post=row.get("post") or "",
         user=row.get("user") or "",
         uname=row.get("uname") or "",
@@ -542,3 +544,24 @@ def get_reactionlist() -> list[Reaction]:
     conn.close()
 
     return [make_reaction(dict(row)) for row in rows]
+
+
+def delete_reaction(id_: int) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("delete from reactions where id = ?", (id_,))
+    conn.commit()
+    conn.close()
+
+
+def get_reaction(id_: int) -> Reaction | None:
+    check_db()
+    conn, c = row_conn()
+    c.execute("select * from reactions where id = ?", (id_,))
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_reaction(dict(row))
+
+    return None
