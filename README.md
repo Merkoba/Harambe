@@ -27,7 +27,7 @@ After=network.target
 User=someuser
 Group=www-data
 WorkingDirectory=/home/someuser/harambe/server
-ExecStart=/home/someuser/harambe/server/venv/bin/python -m gunicorn -w 4 "app:app" --bind 0.0.0.0:4040
+ExecStart=/home/someuser/harambe/server/venv/bin/python -m gunicorn -w 4 "app:app" --bind 0.0.0.0:4040 --timeout 600 --keep-alive 5 --error-logfile /home/me/error_harambe.log
 TimeoutStopSec=3
 
 [Install]
@@ -38,8 +38,9 @@ In apache conf:
 
 ```
 ProxyPreserveHost On
-ProxyPass / http://localhost:4040/
+ProxyPass / http://localhost:4040/ timeout=600 Keepalive=On retry=1 acquire=3000
 ProxyPassReverse / http://localhost:4040/
+LimitRequestBody 522144000
 ```
 
 ---

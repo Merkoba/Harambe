@@ -9,6 +9,7 @@
 URL="https://someurl.com"
 USERNAME="someusername"
 PASSWORD="somepassword"
+ENDPOINT="apiupload"
 
 # -------------------------------
 
@@ -61,7 +62,7 @@ fi
 echo "Uploading: $FILE_PATH"
 
 # Make the POST request and capture the response
-RESPONSE=$(curl -s -X POST "$URL/apiupload" \
+RESPONSE=$(curl -s -X POST "$URL/$ENDPOINT" \
     -F "file=@\"${FILE_PATH}\"" \
     -F "title=\"${title}\"" \
     -F "username=\"${USERNAME}\"" \
