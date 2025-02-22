@@ -205,25 +205,24 @@ a.button:hover {
     align-items: flex-start;
     gap: 0.1rem;
     padding: 0.35rem;
+    align-self: flex-start;
+    max-width: 100%;
 }
 
 .reaction_item {
     padding: 0.5rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     border: 1px solid var(--frame_color);
     gap: 0.5rem;
+    min-width: 28rem;
 }
 
 .reaction_item img {
     height: 1.8rem;
     max-height: 100%;
     width: auto;
-}
-
-.reaction_item .uname {
-    font-weight: bold;
 }
 
 #react_buttons {
@@ -243,6 +242,14 @@ a.button:hover {
 .reaction_info div {
     flex-shrink: 0;
     flex-grow: 0;
+}
+
+.reaction_uname {
+    font-weight: bold;
+}
+
+.reaction_ago {
+    opacity: 0.7;
 }
 
 .text_container {

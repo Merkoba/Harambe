@@ -177,19 +177,19 @@
 
         {% for reaction in post.reactions %}
             <div class="reaction_item">
-                <div class="reaction_uname">{{reaction.uname_str}}</div>
-                <div class="sep">|</div>
+            <div class="reaction_uname">{{reaction.uname_str}}</div>
+            <div class="sep">|</div>
 
-                <div class="reaction_value">
-                    {% if reaction.mode == "icon" %}
-                    <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.title}}" loading="lazy">
-                    {% elif reaction.mode == "character" %}
-                    <div title="{{reaction.title}}">{{reaction.value}}</div>
-                    {% endif %}
-                </div>
+            <div class="reaction_value">
+                {% if reaction.mode == "icon" %}
+                <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.value}}" loading="lazy">
+                {% elif reaction.mode == "character" %}
+                <div>{{reaction.value}}</div>
+                {% endif %}
+            </div>
 
-                <div class="sep">|</div>
-                <div class="reaction_ago">{{reaction.ago}}</div>
+            <div class="sep">|</div>
+            <div class="reaction_ago">{{reaction.ago}}</div>
             </div>
         {% endfor %}
 
