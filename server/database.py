@@ -330,7 +330,7 @@ def make_user(row: dict[str, Any]) -> User:
     )
 
 
-def get_users() -> list[User]:
+def get_userlist() -> list[User]:
     check_db()
     conn, c = row_conn()
     c.execute("select * from users")
@@ -532,3 +532,13 @@ def change_reacter(username: str, new_name: str) -> None:
     c.execute("update reactions set uname = ? where user = ?", (new_name, username))
     conn.commit()
     conn.close()
+
+
+def get_reactionlist() -> list[User]:
+    check_db()
+    conn, c = row_conn()
+    c.execute("select * from reactions")
+    rows = c.fetchall()
+    conn.close()
+
+    return [make_reaction(dict(row)) for row in rows]

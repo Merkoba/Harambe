@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>{{title}}</title>
+<link rel="stylesheet" href="/static/css/admin.css">
+
+<script>
+    const vars = {}
+    vars.mode = {{mode | tojson | safe}}
+    vars.page_size = {{page_size | tojson | safe}}
+    vars.def_page_size = {{def_page_size | tojson}}
+    vars.sort = {{sort | tojson | safe}}
+    vars.page = {{page}}
+</script>
+
+<script src="/static/js/msg.js"></script>
+<script src="/static/js/admin.js"></script>
+{% endblock %}
+
+{% block body %}
+<div id="top" class="nowrap">
+    <a class="action_button" href="/admin">Back</a>
+    <div class="sep">|</div>
+    <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
+    <div class="sep">|</div>
+    <div title="Total storage stats of all items (on all pages)">Total: {{total}}</div>
+    <div class="sep">|</div>
+    <div title="This is the current page">Page {{page}}</div>
+    <div class="sep">|</div>
+
+    {% if page > 1 %}
+        {% if page > 2 %}
+        <a class="linkbutton" href="/admin/reactions/{{page - 1}}?page_size={{page_size}}" title="Go to the previous page">Prev</a>
+        {% else %}
+        <a class="linkbutton" href="/admin/reactions?page_size={{page_size}}" title="Go to the previous page">Prev</a>
+        {% endif %}
+    {% else %}
+    <div class="">Prev</div>
+    {% endif %}
+
+    <div class="sep">|</div>
+
+    {% if next_page %}
+    <a class="linkbutton" href="/admin/reactions/{{page + 1}}?page_size={{page_size}}" title="Go to the next page">Next</a>
+    {% else %}
+    <div class="">Next</div>
+    {% endif %}
+
+    <div class="sep">|</div>
+    <select id="page_select" title="Show this number of items per page"></select>
+    <div class="sep">|</div>
+    <input id="filter" type="text" placeholder="Filter" title="Press Enter to search">
+</div>
+
+<div id="items">
+    <div class="table">
+        <div class="table_row table_header">
+            <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
+            <div id="username" class="table_cell underline" data-sort="username" title="The username of the user. It acts as the ID and can't be changed">User</div>
+
+            {% if show_names %}
+            <div id="name" class="table_cell underline" data-sort="name" title="The public name of this user">Name</div>
+            {% endif %}
+
+            <div id="username" class="table_cell small underline" data-sort="username" title="The username who did the reaction">Username</div>
+            <div id="name" class="table_cell small underline" data-sort="name" title="The name of the user who did the reaction">Name</div>
+            <div id="value" class="table_cell small underline" data-sort="value" title="The value of the reaction">Value</div>
+            <div id="date" class="table_cell underline" data-sort="register_date" title="The date when this reaction was made">Date</div>
+            <div class="table_cell actions">Actions</div>
+        </div>
+
+        {% for item in items %}
+        <div class="table_row item" data-username="{{item.username}}" data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}" data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}" data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}" data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}" data-lister="{{lister_str}}" data-reacter="{{reacter_str}}">
+            <!-- Checkbox -->
+            <div class="table_cell checkbox" title="Select this item">
+                <input class="select_checkbox" type="checkbox">
+            </div>
+
+            <!-- Username -->
+            <a class="table_cell" href="/admin/posts?username={{item.username}}" title="{{item.username}}">{{item.username}}</a>
+
+            <!-- Name -->
+            <div class="table_cell" title="{{item.name}}">{{item.name}}</div>
+
+            <!-- Value -->
+            <div class="table_cell small">{{item.value}}</div>
+
+            <!-- Date -->
+            <div class="table_cell small">{{item.date}}</div>
+
+            <!-- Actions -->
+            <div class="table_cell actions rowitem">
+                <div class="delete_above action_button" title="Delete all items above this one">A</div>
+                <div class="sep"> | </div>
+                <div class="delete_below action_button" title="Delete all items below this one">B</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

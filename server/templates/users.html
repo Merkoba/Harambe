@@ -17,14 +17,13 @@
 <script src="/static/js/admin.js"></script>
 {% endblock %}
 
-{% set show_names = items | selectattr("name") | list | length > 0 %}
 {% set show_marks = items | selectattr("mark") | list | length > 0 %}
 
 {% block body %}
 <template id="template_edit">
     <div>Choose An Action</div>
-
     <div class="dialog_container">
+
     <div>
         <button id="edit_reader_yes">Reader: Yes</button>
         <button id="edit_reader_no">Reader: No</button>
@@ -94,11 +93,7 @@
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
             <div id="username" class="table_cell underline" data-sort="username" title="The username of the user. It acts as the ID and can't be changed">User</div>
-
-            {% if show_names %}
             <div id="name" class="table_cell underline" data-sort="name" title="The public name of this user">Name</div>
-            {% endif %}
-
             <div id="limit" class="table_cell small underline" data-sort="rpm" title="Requests per minute the user can make">RPM</div>
             <div id="max" class="table_cell small underline" data-sort="max_size" title="The max size in megabytes this user can upload at once">Max</div>
             <div id="list" class="table_cell underline" data-sort="admin" title="This user is an admin and can use the admin pages">Admin</div>
@@ -159,7 +154,7 @@
             <div class="table_cell small">{{item.reactions}}</div>
 
             <!-- Mark -->
-            {% if has_marks %}
+            {% if show_marks %}
             <div class="table_cell">{{item.mark}}</div>
             {% endif %}
 

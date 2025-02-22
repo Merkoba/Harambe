@@ -84,3 +84,59 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
         return utils.ok(data={"reaction": reaction})
 
     return utils.bad("Reaction failed")
+
+
+def get_reactionlist() -> list[User]:
+    now = utils.now()
+    return [make_reaction(reaction, now) for reaction in database.get_reactionlist()]
+
+
+def get_reactions(
+    page: int = 1,
+    page_size: str = "default",
+    query: str = "",
+    sort: str = "date",
+) -> tuple[list[User], str, bool]:
+    psize = 0
+
+    if page_size == "default":
+        psize = config.admin_page_size
+    elif page_size == "all":
+        pass  # Don't slice later
+    else:
+        psize = int(page_size)
+
+    reactions = []
+    query = utils.clean_query(query)
+
+    for reaction in get_reactionlist():
+        ok = (
+            not query
+            or query in utils.clean_query(reaction.username)
+            or query in utils.clean_query(reaction.name)
+        )
+
+        if not ok:
+            continue
+
+        reactions.append(reaction)
+
+    total_str = f"{len(reactions)}"
+    sort_reactions(reactions, sort)
+
+    if psize > 0:
+        start_index = (page - 1) * psize
+        end_index = start_index + psize
+        has_next_page = end_index < len(reactions)
+        reactions = reactions[start_index:end_index]
+    else:
+        has_next_page = False
+
+    return reactions, total_str, has_next_page
+
+
+def sort_reactions(reactions: list[Reaction], sort: str) -> None:
+    if sort == "date":
+        reactions.sort(key=lambda x: x.date, reverse=True)
+    elif sort == "date_desc":
+        reactions.sort(key=lambda x: x.date, reverse=False)

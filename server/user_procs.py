@@ -126,7 +126,7 @@ def make_user(user: DbUser) -> User:
 
 
 def get_userlist() -> list[User]:
-    return [make_user(user) for user in database.get_users()]
+    return [make_user(user) for user in database.get_userlist()]
 
 
 def get_users(

@@ -21,6 +21,7 @@ import react_procs
 from config import config
 from post_procs import Post
 from user_procs import User
+from react_procs import Reaction
 
 
 app = Flask(__name__)
@@ -414,16 +415,17 @@ def admin_fallback() -> Any:
 @payload_check()
 @admin_required
 def admin(what: str, page: int = 1) -> Any:
-    if what not in ["posts", "users"]:
+    if what not in ["posts", "users", "reactions"]:
         return redirect(url_for("index"))
 
     query = request.args.get("query", "")
-    def_date = "date" if what == "posts" else "register_date"
+    def_date = "register_date" if what == "users" else "date"
     sort = request.args.get("sort", def_date)
     username = request.args.get("username", "")
     page_size = request.args.get("page_size", config.admin_page_size)
     post_items: list[Post] = []
     user_items: list[User] = []
+    reaction_items: list[Reaction] = []
 
     if what == "posts":
         post_items, total, next_page = post_procs.get_posts(
@@ -433,25 +435,31 @@ def admin(what: str, page: int = 1) -> Any:
             sort=sort,
             username=username,
         )
-    else:
+    elif what == "users":
         user_items, total, next_page = user_procs.get_users(
             page, page_size, query=query, sort=sort
         )
+    elif what == "reactions":
+        reaction_items, total, next_page = react_procs.get_reactions(
+            page, page_size, query=query, sort=sort
+        )
+    else:
+        return over()
 
     def_page_size = page_size == config.admin_page_size
-    html_page = "posts.html" if what == "posts" else "users.html"
-    mode = "posts" if what == "posts" else "users"
-    title = "Posts" if what == "posts" else "Users"
-    items = post_items if what == "posts" else user_items
+    html_page = f"{what}.html"
+    title = what.capitalize()
 
-    if mode == "users":
-        has_marks = any(item.mark for item in user_items)
-    else:
-        has_marks = False
+    if what == "posts":
+        items = post_items
+    elif what == "users":
+        items = user_items
+    elif what == "reactions":
+        items = reaction_items
 
     return render_template(
         html_page,
-        mode=mode,
+        mode=what,
         items=items,
         total=total,
         page=page,
@@ -461,7 +469,6 @@ def admin(what: str, page: int = 1) -> Any:
         def_page_size=def_page_size,
         username=username,
         sort=sort,
-        has_marks=has_marks,
         **theme_configs(),
     )
 
