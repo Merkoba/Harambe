@@ -110,7 +110,7 @@ window.onload = function() {
     })
   }
 
-  let r_top = DOM.el(`#totopy`)
+  let r_top = DOM.el(`#totopia`)
 
   if (r_top) {
     DOM.ev(r_top, `click`, () => {
@@ -499,7 +499,7 @@ function add_reaction(reaction) {
   DOM.el(`.reaction_value`, item).appendChild(vitem)
   DOM.el(`.reaction_ago`, item).textContent = reaction.ago
   DOM.show(`#to_bottom_container`)
-  DOM.show(`#to_top`)
+  DOM.show(`#totopia`)
   reactions.appendChild(item)
 }
 
