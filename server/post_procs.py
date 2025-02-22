@@ -503,6 +503,7 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if dbr:
         reaction = make_reaction(dbr, utils.now())
         database.increase_post_reactions(name)
+        database.increase_user_reactions(user.username)
         return utils.ok(data={"reaction": reaction})
 
     return utils.bad("Reaction failed")

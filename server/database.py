@@ -512,3 +512,13 @@ def increase_post_reactions(name: str) -> None:
     c.execute("update posts set reactions = reactions + 1 where name = ?", (name,))
     conn.commit()
     conn.close()
+
+
+def increase_user_reactions(username: str) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute(
+        "update users set reactions = reactions + 1 where username = ?", (username,)
+    )
+    conn.commit()
+    conn.close()
