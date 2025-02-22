@@ -713,10 +713,11 @@ function do_filter() {
       let listed = item.dataset.listed
       let mtype = item.dataset.mtype
       let uname = item.dataset.username
+      let ext = item.dataset.ext
 
       opts = [
         name, size, title, original, ago, date,
-        uploader, views, listed, mtype, uname,
+        uploader, views, listed, mtype, uname, ext,
       ]
     }
 
