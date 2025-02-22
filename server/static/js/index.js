@@ -6,7 +6,7 @@ window.onload = () => {
   if (image) {
     DOM.ev(image, `click`, (e) => {
       if (!vars.is_user) {
-        alert(`Login or register first.`)
+        popmsg(`Login or register first.`)
         return
       }
 
@@ -137,11 +137,7 @@ function reflect_file() {
 
   if (the_file.size > vars.max_size) {
     reset_file()
-
-    setTimeout(() => {
-      alert(`That file is too big.`)
-    }, 100)
-
+    popmsg(`That file is too big.`)
     return
   }
 

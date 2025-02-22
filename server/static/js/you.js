@@ -38,8 +38,9 @@ async function do_edit(what, value, title) {
   })
 
   if (response.ok) {
-    alert(`${title} updated.`)
-    window.location = `/you`
+    popmsg(`${title} updated.`, () => {
+      window.location = `/you`
+    })
   }
   else {
     print_error(response.status)
@@ -64,7 +65,7 @@ function edit_password() {
 
     prompt_text(`Enter the password again`, (value_2) => {
       if (value !== value_2) {
-        alert(`Passwords do not match.`)
+        popmsg(`Passwords do not match.`)
         return
       }
 

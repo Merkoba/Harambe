@@ -329,7 +329,7 @@ function start_flash(file) {
 }
 
 function react_alert() {
-  alert(`You might have to login to react.`)
+  popmsg(`You might have to login to react.`)
 }
 
 async function show_icons() {
@@ -524,7 +524,7 @@ function react_character() {
     text = Array.from(text).slice(0, n).join(``)
 
     if (contains_url(text)) {
-      alert(`URLs are not allowed.`)
+      popmsg(`URLs are not allowed.`)
       return
     }
 

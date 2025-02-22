@@ -54,6 +54,7 @@ function contains_url(text) {
 
 function prompt_text(placeholder, callback, max = 0) {
   let msg = Msg.factory({
+    persistent: false,
     disable_content_padding: true,
   })
 
@@ -87,4 +88,13 @@ function prompt_text(placeholder, callback, max = 0) {
 
   msg.show()
   input.focus()
+}
+
+function popmsg(message, callback) {
+  let msg = Msg.factory({
+    persistent: false,
+    after_close: callback,
+  })
+
+  msg.show(message)
 }
