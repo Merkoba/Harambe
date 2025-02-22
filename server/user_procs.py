@@ -94,8 +94,8 @@ def make_user(user: DbUser) -> User:
     rpm_fill = user.rpm or config.requests_per_minute
     max_size_fill = user.max_size or config.max_size_user
     lister_str = "L: Yes" if user.lister else "R: No"
+    poster_str = "P: Yes" if user.poster else "P: No"
     reacter_str = "R: Yes" if user.reacter else "R: No"
-    poster_str = "P: Yes" if user.reacter else "P: No"
 
     return User(
         user.username,

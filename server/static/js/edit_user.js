@@ -17,6 +17,10 @@ window.onload = () => {
 
   DOM.ev(document, `click`, (e) => {
     if (e.target.closest(`.checkbox`)) {
+      if (e.target.tagName === `INPUT`) {
+        return
+      }
+
       let c = e.target.closest(`.checkbox`)
       let cb = DOM.el(`input[type="checkbox"]`, c)
 

@@ -100,10 +100,10 @@
             <div id="limit" class="table_cell small underline" data-sort="rpm" title="Requests per minute the user can make">RPM</div>
             <div id="max" class="table_cell small underline" data-sort="max_size" title="The max size in megabytes this user can upload at once">Max</div>
             <div id="list" class="table_cell underline" data-sort="admin" title="This user is an admin and can use the admin pages">Admin</div>
-            <div id="list" class="table_cell underline" data-sort="reader" title="Can view the list of posts">Reader</div>
             <div id="poster" class="table_cell underline" data-sort="poster" title="This user can make posts">Poster</div>
             <div id="reacter" class="table_cell underline" data-sort="reacter" title="This user can react in posts">Reacter</div>
             <div id="lister" class="table_cell underline" data-sort="lister" title="The posts of this user will appear in the list">Lister</div>
+            <div id="list" class="table_cell underline" data-sort="reader" title="Can view the list of posts">Reader</div>
             <div id="posts" class="table_cell small underline" data-sort="posts" title="The number of posts this user has done">Posts</div>
             <div id="reactions" class="table_cell small underline" data-sort="reactions" title="The number of reactions this user has done">Reactions</div>
 
@@ -138,9 +138,6 @@
             <!-- Admin -->
             <div class="table_cell">{{item.admin_str}}</div>
 
-            <!-- Reader -->
-            <div class="table_cell">{{item.reader_str}}</div>
-
             <!-- Poster -->
             <div class="table_cell">{{item.poster_str}}</div>
 
@@ -149,6 +146,9 @@
 
             <!-- Lister -->
             <div class="table_cell">{{item.lister_str}}</div>
+
+            <!-- Reader -->
+            <div class="table_cell">{{item.reader_str}}</div>
 
             <!-- Posts -->
             <div class="table_cell small">{{item.posts}}</div>
