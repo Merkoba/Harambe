@@ -183,16 +183,16 @@
         {% endif %}
 
         {% if post.reactions | length == 0 %}
-        <div id="to_bottom" class="rowitem hidden">
+        <div id="to_bottom_container" class="rowitem hidden">
         {% else %}
-        <div id="to_bottom" class="rowitem">
+        <div id="to_bottom_container" class="rowitem">
         {% endif %}
             {% if is_user %}
             <div class="sep">|</div>
             {% endif %}
-            <div class="react_btn">
-                <span class="btn_icon">⬇️</span>
-                <span class="react_btn_text">Go To Bottom</span>
+            <div id="to_bottom" class="react_btn">
+                <div class="btn_icon">⬇️</div>
+                <div class="react_btn_text">Go To Bottom</div>
             </div>
         </div>
     </div>
