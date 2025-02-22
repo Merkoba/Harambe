@@ -57,7 +57,10 @@ class User:
     lister: bool
     lister_str: str
     posts: int
+    reactions: int
+    poster: bool
     reacter: bool
+    poster_str: str
     reacter_str: str
 
 
@@ -74,6 +77,8 @@ user_types = {
     "last_date": "int",
     "lister": "bool",
     "posts": "int",
+    "reactions": "int",
+    "poster": "bool",
     "reacter": "bool",
 }
 
@@ -90,6 +95,7 @@ def make_user(user: DbUser) -> User:
     max_size_fill = user.max_size or config.max_size_user
     lister_str = "L: Yes" if user.lister else "R: No"
     reacter_str = "R: Yes" if user.reacter else "R: No"
+    poster_str = "P: Yes" if user.reacter else "P: No"
 
     return User(
         user.username,
@@ -111,7 +117,10 @@ def make_user(user: DbUser) -> User:
         user.lister,
         lister_str,
         user.posts,
+        user.reactions,
+        user.poster,
         user.reacter,
+        poster_str,
         reacter_str,
     )
 
@@ -152,6 +161,7 @@ def get_users(
             or query in utils.clean_query(user.rpm)
             or query in utils.clean_query(user.can_list_str)
             or query in utils.clean_query(user.posts)
+            or query in utils.clean_query(user.reactions)
         )
 
         if not ok:
@@ -219,10 +229,25 @@ def sort_users(users: list[User], sort: str) -> None:
     elif sort == "lister_desc":
         users.sort(key=lambda x: x.lister, reverse=False)
 
+    elif sort == "poster":
+        users.sort(key=lambda x: x.poster, reverse=True)
+    elif sort == "poster_desc":
+        users.sort(key=lambda x: x.poster, reverse=False)
+
+    elif sort == "reacter":
+        users.sort(key=lambda x: x.reacter, reverse=True)
+    elif sort == "reacter_desc":
+        users.sort(key=lambda x: x.reacter, reverse=False)
+
     elif sort == "posts":
         users.sort(key=lambda x: x.posts, reverse=True)
     elif sort == "posts_desc":
         users.sort(key=lambda x: x.posts, reverse=False)
+
+    elif sort == "reactions":
+        users.sort(key=lambda x: x.reactions, reverse=True)
+    elif sort == "reactions_desc":
+        users.sort(key=lambda x: x.reactions, reverse=False)
 
 
 def get_user(username: str) -> User | None:
@@ -332,31 +357,36 @@ def edit_user(
     else:
         args["lister"] = True
 
+    if request.form.get("poster") is None:
+        args["poster"] = False
+    else:
+        args["poster"] = True
+
+    if request.form.get("reacter") is None:
+        args["reacter"] = False
+    else:
+        args["reacter"] = True
+
     if request.form.get("rpm") is None:
         args["rpm"] = 0
 
     if request.form.get("max_size") is None:
         args["max_size"] = 0
 
-    uname = args["username"]
-
-    if not uname:
-        return False, "Missing Username"
-
-    if not utils.is_valid_username(uname):
-        return False, "Invalid Username"
-
-    if uname == admin.username:
-        args["admin"] = True
-
-    user = get_user(uname)
-
-    if user and (mode == "add"):
-        return False, "Already Exists"
-
     n_args = {}
+    user = None
+
+    if mode == "edit":
+        user = get_user(username)
+
+        if not user:
+            return False, "User not found"
 
     for key in args:
+        if mode == "edit":
+            if key in ["username"]:
+                continue
+
         ok, value = check_value(user, key, args[key])
 
         if not ok:
@@ -364,17 +394,28 @@ def edit_user(
 
         n_args[key] = value
 
-    if (not n_args["username"]) or (not n_args["password"]):
-        return False, "Missing Details"
+    uname = username or n_args["username"]
 
-    user = get_user(n_args["username"])
+    if not uname:
+        return False, "Missing Username"
 
-    if user and (mode == "add"):
-        return False, "Already Exists"
+    if mode == "add":
+        user = get_user(uname)
+
+        if user:
+            return False, "Already Exists"
+
+    if uname == admin.username:
+        args["admin"] = True
+
+    required = ["password"]
+
+    if not all(n_args.get(key) for key in required):
+        return False, "Missing Required"
 
     database.add_user(
         mode,
-        n_args["username"],
+        uname,
         n_args["password"],
         n_args["admin"],
         n_args["name"],
@@ -383,12 +424,14 @@ def edit_user(
         n_args["can_list"],
         n_args["mark"],
         n_args["lister"],
+        n_args["poster"],
+        n_args["reacter"],
     )
 
     if user and (user.name != n_args["name"]):
         database.change_uploader(user.username, n_args["name"])
 
-    return True, str(n_args["username"])
+    return True, uname
 
 
 def user_edit(user: User, what: str, value: Any) -> tuple[str, int]:

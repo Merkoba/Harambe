@@ -55,6 +55,8 @@ class User:
     last_date: int
     lister: bool
     posts: int
+    reactions: int
+    poster: bool
     reacter: bool
 
 
@@ -245,6 +247,7 @@ def add_user(
     can_list: bool = True,
     mark: str = "",
     lister: bool = True,
+    poster: bool = True,
     reacter: bool = True,
 ) -> bool:
     check_db()
@@ -265,6 +268,7 @@ def add_user(
         can_list,
         mark,
         lister,
+        poster,
         reacter,
     ]
 
@@ -278,6 +282,7 @@ def add_user(
         "can_list",
         "mark",
         "lister",
+        "poster",
         "reacter",
     ]
 
@@ -288,8 +293,8 @@ def add_user(
             conn.close()
             return False
 
-        values.extend([date, date, 0])
-        columns.extend(["register_date", "last_date", "posts"])
+        values.extend([date, date, 0, 0])
+        columns.extend(["register_date", "last_date", "posts", "reactions"])
         placeholders = ", ".join(["?"] * len(values))
         query = f"insert into users ({', '.join(columns)}) values ({placeholders})"
     elif mode == "edit":
@@ -319,6 +324,8 @@ def make_user(row: dict[str, Any]) -> User:
         last_date=row.get("last_date") or 0,
         lister=bool(row.get("lister")),
         posts=int(row.get("posts") or 0),
+        reactions=int(row.get("reactions") or 0),
+        poster=bool(row.get("poster")),
         reacter=bool(row.get("reacter")),
     )
 

@@ -37,6 +37,26 @@
         </div>
 
         <div class="checkbox">
+            <div>Can Make Posts</div>
+
+            {% if (not user) or (user and user.poster) %}
+            <input id="poster" name="poster" type="checkbox" checked>
+            {% else %}
+            <input id="poster" name="poster" type="checkbox">
+            {% endif %}
+        </div>
+
+        <div class="checkbox">
+            <div>Can React To Posts</div>
+
+            {% if (not user) or (user and user.reacter) %}
+            <input id="reacter" name="reacter" type="checkbox" checked>
+            {% else %}
+            <input id="reacter" name="reacter" type="checkbox">
+            {% endif %}
+        </div>
+
+        <div class="checkbox">
             <div>Can See The List</div>
 
             {% if (not user) or (user and user.can_list) %}
@@ -47,7 +67,7 @@
         </div>
 
         <div class="checkbox">
-            <div>Can Post To The List</div>
+            <div>Posts Appear In The List</div>
 
             {% if (not user) or (user and user.lister) %}
             <input id="lister" name="lister" type="checkbox" checked>

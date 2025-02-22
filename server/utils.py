@@ -149,22 +149,6 @@ def clean_title(title: str) -> str:
     return title[: config.max_title_length].strip()
 
 
-def is_valid_username(username: str) -> bool:
-    if not username:
-        return False
-
-    if len(username) < 1:
-        return False
-
-    if len(username) > 30:
-        return False
-
-    if not username.isalnum():
-        return False
-
-    return not any(c.isupper() for c in username)
-
-
 def load_icons() -> list[str]:
     icons = [icon.stem for icon in Path("static/icons").glob("*.gif")]
     icons.sort()

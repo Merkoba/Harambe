@@ -418,10 +418,11 @@ def admin(what: str, page: int = 1) -> Any:
     sort = request.args.get("sort", def_date)
     username = request.args.get("username", "")
     page_size = request.args.get("page_size", config.admin_page_size)
-    items: list[Post] | list[User]
+    post_items: list[Post] = []
+    user_items: list[User] = []
 
     if what == "posts":
-        items, total, next_page = post_procs.get_posts(
+        post_items, total, next_page = post_procs.get_posts(
             page,
             page_size,
             query=query,
@@ -429,7 +430,7 @@ def admin(what: str, page: int = 1) -> Any:
             username=username,
         )
     else:
-        items, total, next_page = user_procs.get_users(
+        user_items, total, next_page = user_procs.get_users(
             page, page_size, query=query, sort=sort
         )
 
@@ -437,6 +438,12 @@ def admin(what: str, page: int = 1) -> Any:
     html_page = "posts.html" if what == "posts" else "users.html"
     mode = "posts" if what == "posts" else "users"
     title = "Posts" if what == "posts" else "Users"
+    items = post_items if what == "posts" else user_items
+
+    if mode == "users":
+        has_marks = any(item.mark for item in user_items)
+    else:
+        has_marks = False
 
     return render_template(
         html_page,
@@ -450,6 +457,7 @@ def admin(what: str, page: int = 1) -> Any:
         def_page_size=def_page_size,
         username=username,
         sort=sort,
+        has_marks=has_marks,
         **theme_configs(),
     )
 

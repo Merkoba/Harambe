@@ -36,6 +36,11 @@
     </div>
 
     <div>
+        <button id="edit_reacter_yes">Poster: Yes</button>
+        <button id="edit_reacter_no">Poster: No</button>
+    </div>
+
+    <div>
         <button id="edit_reacter_yes">Reacter: Yes</button>
         <button id="edit_reacter_no">Reacter: No</button>
     </div>
@@ -97,8 +102,10 @@
             <div id="list" class="table_cell underline" data-sort="admin" title="This user is an admin and can use the admin pages">Admin</div>
             <div id="list" class="table_cell underline" data-sort="can_list" title="Can view the list of posts from all users">List</div>
             <div id="lister" class="table_cell underline" data-sort="lister" title="The posts of this user will appear in the list">Lister</div>
+            <div id="poster" class="table_cell underline" data-sort="poster" title="This user can make posts">Poster</div>
             <div id="reacter" class="table_cell underline" data-sort="reacter" title="This user can react in posts">Reacter</div>
             <div id="posts" class="table_cell small underline" data-sort="posts" title="The number of posts this user has done">Posts</div>
+            <div id="reactions" class="table_cell small underline" data-sort="reactions" title="The number of reactions this user has done">Reactions</div>
 
             {% if show_marks %}
             <div id="mark" class="table_cell underline" data-sort="mark" title="A mark added to the end of file names to identify a certain kind of upload">Mark</div>
@@ -120,9 +127,7 @@
             <a class="table_cell" href="/admin/posts?username={{item.username}}" title="{{item.username}}">{{item.username}}</a>
 
             <!-- Name -->
-            {% if show_names %}
             <div class="table_cell" title="{{item.name}}">{{item.name}}</div>
-            {% endif %}
 
             <!-- RPM -->
             <div class="table_cell small">{{item.rpm_fill}}</div>
@@ -139,14 +144,20 @@
             <!-- Lister -->
             <div class="table_cell">{{item.lister_str}}</div>
 
+            <!-- Poster -->
+            <div class="table_cell">{{item.poster_str}}</div>
+
             <!-- Reacter -->
             <div class="table_cell">{{item.reacter_str}}</div>
 
             <!-- Posts -->
             <div class="table_cell small">{{item.posts}}</div>
 
+            <!-- Reactions -->
+            <div class="table_cell small">{{item.reactions}}</div>
+
             <!-- Mark -->
-            {% if show_marks %}
+            {% if has_marks %}
             <div class="table_cell">{{item.mark}}</div>
             {% endif %}
 

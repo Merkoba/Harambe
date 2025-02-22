@@ -35,6 +35,8 @@ schemas = {
         "last_date": "integer default 0",
         "lister": "integer default 1",
         "posts": "integer default 0",
+        "reactions": "integer default 0",
+        "poster": "integer default 1",
         "reacter": "integer default 1",
     },
     "reactions": {
