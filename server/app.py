@@ -840,5 +840,7 @@ def you() -> Any:
         allow_edit=allow_edit,
         allow_name_edit=config.allow_name_edit,
         allow_password_edit=config.allow_password_edit,
+        max_name_length=config.max_user_name_length,
+        max_password_length=config.max_user_password_length,
         **theme_configs(),
     )

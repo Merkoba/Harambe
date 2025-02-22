@@ -15,6 +15,8 @@
     const vars = {}
     vars.username = {{user.username | tojson | safe}}
     vars.name = {{user.name | tojson | safe}}
+    vars.max_name_length = {{max_name_length}}
+    vars.max_password_length = {{max_password_length}}
 </script>
 
 <script src="/static/js/msg.js"></script>

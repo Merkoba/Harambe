@@ -47,13 +47,13 @@ async function do_edit(what, value, title) {
 }
 
 function edit_name() {
-  prompt_text(`Enter your new public name`, vars.name, (value) => {
+  prompt_text(`Enter your new public name`, (value) => {
     if (!value) {
       return
     }
 
     do_edit(`name`, value, `Name`)
-  })
+  }, vars.max_name_length)
 }
 
 function edit_password() {
@@ -69,6 +69,6 @@ function edit_password() {
       }
 
       do_edit(`password`, value, `Password`)
-    })
-  })
+    }, vars.max_password_length)
+  }, vars.max_password_length)
 }
