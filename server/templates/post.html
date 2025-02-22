@@ -168,17 +168,21 @@
     <hr>
 
     <div id="react_buttons" class="nowrap">
-        <div id="react_text" class="button">📝 React with Text</div>
+        {% if is_user %}
+        <div id="react_text" class="react_btn"><span class="btn_icon">📝</span><span class="react_btn_text">React with Text</span></div>
         <div class="sep">|</div>
-        <div id="react_icon" class="button">🫠 React with an Icon</div>
+        <div id="react_icon" class="react_btn"><span class="btn_icon">🫠</span><span class="react_btn_text">React with an Icon</span></div>
+        {% endif %}
 
         {% if post.reactions | length == 0 %}
         <div id="to_bottom_container" class="rowitem hidden">
         {% else %}
         <div id="to_bottom_container" class="rowitem">
         {% endif %}
+            {% if is_user %}
             <div class="sep">|</div>
-            <div id="to_bottom" class="button">⬇️ Go To Bottom</div>
+            {% endif %}
+            <div id="to_bottom" class="react_btn"><span class="btn_icon">⬇️</span><span class="react_btn_text">Go To Bottom</span></div>
         </div>
     </div>
 

@@ -65,6 +65,16 @@ a.button:hover {
     text-decoration: underline;
 }
 
+.react_btn {
+    color: var(--link_color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.react_btn:hover .react_btn_text {
+    text-decoration: underline;
+}
+
 .button:hover, a.link:hover {
     filter: brightness(1.5);
 }
@@ -199,7 +209,7 @@ a.button:hover {
 }
 
 #reactions {
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
     background-color: var(--contrast_background);
     display: flex;
     flex-direction: column;
@@ -279,4 +289,8 @@ a.button:hover {
 
 .Msg-content-container-modal_image {
     background-color: var(--modal_color) !important;
+}
+
+.btn_icon {
+    margin-right: 0.35rem;
 }

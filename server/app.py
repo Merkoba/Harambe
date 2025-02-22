@@ -309,6 +309,7 @@ def post(name: str) -> Any:
         max_reaction_name_length=config.max_reaction_name_length,
         can_react=can_react,
         show_list=show_list,
+        is_user=bool(user),
         **theme_configs(),
     )
 
