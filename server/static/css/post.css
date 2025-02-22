@@ -69,6 +69,9 @@ a.button:hover {
     color: var(--link_color);
     cursor: pointer;
     user-select: none;
+    display: flex;
+    flex-direction: row;
+    gap: 0.35rem;
 }
 
 .react_btn:hover .react_btn_text {
@@ -213,6 +216,7 @@ a.link:hover,
 
 #reactions {
     margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
     background-color: var(--contrast_background);
     display: flex;
     flex-direction: column;
@@ -295,8 +299,4 @@ a.link:hover,
 
 .Msg-content-container-modal_image {
     background-color: var(--modal_color) !important;
-}
-
-.btn_icon {
-    margin-right: 0.35rem;
 }

@@ -110,6 +110,14 @@ window.onload = function() {
     })
   }
 
+  let r_top = DOM.el(`#to_top`)
+
+  if (r_top) {
+    DOM.ev(r_top, `click`, () => {
+      window.scrollTo(0, 0)
+    })
+  }
+
   vars.refresh_interval = setInterval(() => {
     refresh()
     vars.refresh_count += 1
@@ -490,7 +498,8 @@ function add_reaction(reaction) {
   DOM.el(`.reaction_uname`, item).textContent = name
   DOM.el(`.reaction_value`, item).appendChild(vitem)
   DOM.el(`.reaction_ago`, item).textContent = reaction.ago
-  DOM.show(`#to_bottom_container`)
+  DOM.show(`#to_bottom`)
+  DOM.show(`#to_top`)
   reactions.appendChild(item)
 }
 

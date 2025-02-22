@@ -169,20 +169,31 @@
 
     <div id="react_buttons" class="nowrap">
         {% if is_user %}
-        <div id="react_text" class="react_btn"><span class="btn_icon">📝</span><span class="react_btn_text">React with Text</span></div>
+        <div id="react_text" class="react_btn">
+            <div class="btn_icon">📝</div>
+            <div class="react_btn_text">React with Text</div>
+        </div>
+
         <div class="sep">|</div>
-        <div id="react_icon" class="react_btn"><span class="btn_icon">🫠</span><span class="react_btn_text">React with an Icon</span></div>
+
+        <div id="react_icon" class="react_btn">
+            <div class="btn_icon">🫠</div>
+            <div class="react_btn_text">React with an Icon</div>
+        </div>
         {% endif %}
 
         {% if post.reactions | length == 0 %}
-        <div id="to_bottom_container" class="rowitem hidden">
+        <div id="to_bottom" class="rowitem hidden">
         {% else %}
-        <div id="to_bottom_container" class="rowitem">
+        <div id="to_bottom" class="rowitem">
         {% endif %}
             {% if is_user %}
             <div class="sep">|</div>
             {% endif %}
-            <div id="to_bottom" class="react_btn"><span class="btn_icon">⬇️</span><span class="react_btn_text">Go To Bottom</span></div>
+            <div class="react_btn">
+                <span class="btn_icon">⬇️</span>
+                <span class="react_btn_text">Go To Bottom</span>
+            </div>
         </div>
     </div>
 
@@ -210,5 +221,14 @@
         {% endfor %}
     </div>
     {% endif %}
+
+    {% if post.reactions | length == 0 %}
+    <div id="to_top" class="react_btn hidden">
+    {% else %}
+    <div id="to_top" class="react_btn">
+    {% endif %}
+        <div class="btn_icon">⬆️</div>
+        <div class="react_btn_text">Go To Top</div>
+    </div>
 </div>
 {% endblock %}
