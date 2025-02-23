@@ -102,21 +102,13 @@ window.onload = () => {
     })
   }
 
-  let admin_opts = DOM.el(`#template_admin_opts`)
+  let admin_btn = DOM.el(`#admin_btn`)
 
-  if (admin_opts) {
+  if (admin_btn) {
     setup_admin_opts()
 
     DOM.ev(`#admin_btn`, `click`, (e) => {
       vars.msg_admin_opts.show()
-    })
-  }
-
-  let explore_btn = DOM.el(`#explore_btn`)
-
-  if (explore_btn) {
-    DOM.ev(explore_btn, `click`, (e) => {
-      show_explore()
     })
   }
 
@@ -128,13 +120,29 @@ window.onload = () => {
     })
   }
 
-  let explore_opts = DOM.el(`#template_explore_opts`)
+  let explore_btn = DOM.el(`#explore_btn`)
 
-  if (explore_opts) {
+  if (explore_btn) {
     setup_explore_opts()
 
     DOM.ev(`#explore_btn`, `click`, (e) => {
       vars.msg_explore_opts.show()
+    })
+  }
+
+  let login_btn = DOM.el(`#login_btn`)
+
+  if (login_btn) {
+    DOM.ev(login_btn, `click`, (e) => {
+      window.location = `/login`
+    })
+  }
+
+  let register_btn = DOM.el(`#register_btn`)
+
+  if (register_btn) {
+    DOM.ev(register_btn, `click`, (e) => {
+      window.location = `/register`
     })
   }
 }
