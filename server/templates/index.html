@@ -11,6 +11,7 @@
     vars.max_title_length = {{max_title_length}}
     vars.image_name = {{image_name | tojson | safe}}
     vars.is_user = {{is_user | tojson}}
+    vars.links = {{links | tojson}}
 </script>
 
 <script src="/static/js/msg.js"></script>
@@ -20,13 +21,7 @@
 {% block body %}
 {% if links | length > 0 %}
 <template id="template_links">
-    <div>Links</div>
-
-    <div id="more_links_container" class="dialog_container">
-        {% for link in links %}
-        <a href="{{link.url}}" target="{{link.target}}" class="dialog_button">{{link.name}}</a>
-        {% endfor %}
-    </div>
+    <div id="more_links_container" class="dialog_container"></div>
 </template>
 {% endif %}
 

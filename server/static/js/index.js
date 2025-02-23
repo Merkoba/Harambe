@@ -82,6 +82,19 @@ window.onload = () => {
     vars.msg_links = Msg.factory()
     let t = DOM.el(`#template_links`)
     vars.msg_links.set(t.innerHTML)
+    let c = DOM.el(`#more_links_container`)
+
+    for (let link of vars.links) {
+      let item = DOM.create(`div`, `aero_button`)
+      item.textContent = link.name
+      item.title = link.url
+
+      DOM.ev(item, `click`, (e) => {
+        window.open(link.url, item.target)
+      })
+
+      c.appendChild(item)
+    }
 
     DOM.ev(more_links, `click`, (e) => {
       vars.msg_links.show()

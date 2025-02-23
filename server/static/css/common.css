@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "custom";
+    src: url("/static/fonts/BubblegumSans-Regular.ttf") format("truetype");
+}
+
 :root {
     --color_1: rgb(67 130 137);
     --border_color: #ddd;
@@ -10,15 +15,6 @@ body, html {
 
 .hidden {
     display: none !important;
-}
-
-.dialog_container {
-    padding-top: 0.8rem;
-}
-
-.dialog_container button {
-    font-size: 1rem;
-    min-width: 9rem;
 }
 
 .middle {
@@ -107,11 +103,6 @@ a.linkbutton:hover {
     justify-content: center;
 }
 
-.dialog_container button {
-    font-size: var(--font_size);
-    min-width: 15rem;
-}
-
 .Msg-content {
     font-size: var(--font_size) !important;
 }
@@ -152,4 +143,38 @@ a.linkbutton:hover {
 
 #prompt_submit:hover {
     background-color: rgb(133, 116, 161);
+}
+
+.Msg-content {
+    font-size: 1rem !important;
+    font-family: custom, sans-serif !important;
+}
+
+.aero_button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #777;
+    border-radius: 5px;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #459cc6, #5d6850);
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3);
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease-in-out;
+    min-width: 12rem;
+}
+
+.aero_button:hover {
+    background: linear-gradient(to bottom, #459cc6, #81936c);
+    border-color: #555;
+    box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.aero_button:active {
+    background: linear-gradient(to bottom, #6495ed, #4682b4);
+    box-shadow: inset 0px 1px 8px rgba(0, 0, 0, 0.7);
 }

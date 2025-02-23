@@ -105,9 +105,9 @@
 
             <!-- User -->
             {% if mode == "posts" %}
-            <a href="/admin/users?username={{item.username}}" class="table_cell uploader" title="{{item.uploader_str}}">{{item.username}}</a>
+            <a href="/admin/posts?username={{item.username}}" class="table_cell uploader" title="{{item.uploader_str}}">{{item.username}}</a>
             {% else %}
-            <a class="table_cell uploader" title="{{item.uploader_str}}">{{item.uploader_str}}</a>
+            <div class="table_cell uploader" title="{{item.uploader_str}}">{{item.uploader_str}}</div>
             {% endif %}
 
             <!-- Title -->

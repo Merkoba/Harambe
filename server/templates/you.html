@@ -25,16 +25,14 @@
 
 {% block body %}
 <template id="template_edit">
-    <div>Choose An Action</div>
-
     <div class="dialog_container">
-    {% if allow_name_edit %}
-    <button id="edit_name">Edit Name</button>
-    {% endif %}
+        {% if allow_name_edit %}
+        <div id="edit_name" class="aero_button">Edit Name</div>
+        {% endif %}
 
-    {% if allow_password_edit %}
-    <button id="edit_password">Edit Password</button>
-    {% endif %}
+        {% if allow_password_edit %}
+        <div id="edit_password" class="aero_button">Edit Password</div>
+        {% endif %}
     </div>
 </template>
 
