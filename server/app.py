@@ -395,14 +395,6 @@ def get_file(name: str, original: str | None = None) -> Any:
 # ADMIN
 
 
-@app.route("/admin", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-@admin_required
-def admin_fallback() -> Any:
-    return render_template("admin.html", **theme_configs())
-
-
 @app.route("/admin/<string:what>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
@@ -929,30 +921,3 @@ def delete_reaction() -> Any:
 @admin_required
 def delete_all_reactions() -> Any:
     return react_procs.delete_all_reactions()
-
-
-# YOU
-
-
-@app.route("/you", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-@login_required
-def you() -> Any:
-    user = get_user()
-
-    if not user:
-        return over()
-
-    allow_edit = config.allow_name_edit or config.allow_password_edit
-
-    return render_template(
-        "you.html",
-        user=user,
-        allow_edit=allow_edit,
-        allow_name_edit=config.allow_name_edit,
-        allow_password_edit=config.allow_password_edit,
-        max_name_length=config.max_user_name_length,
-        max_password_length=config.max_user_password_length,
-        **theme_configs(),
-    )
