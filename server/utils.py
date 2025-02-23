@@ -229,4 +229,5 @@ def get_banner() -> str:
     banners = list(Path("static/img/banners").glob("*"))
     return random.choice(banners).name
 
+
 ICONS = load_icons()

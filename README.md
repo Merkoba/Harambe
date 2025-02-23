@@ -115,18 +115,6 @@ If empty, it won't use a mark.
 
 ---
 
-## Style
-
-The main image at the top can be replaced by creating a file in `server/static/img`.
-
-This file is called `banner` and it can be `jpg`, `png`, or `gif`.
-
-It's also possible to change the `background_color` and `font_family`.
-
-As well as `accent_color`, `font_color`, `text_color`, and `link_color`.
-
----
-
 ## List
 
 A file index page can be enabled with `list_enabled`.
