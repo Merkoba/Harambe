@@ -230,7 +230,7 @@ function reset_file() {
 
 function reset_image() {
   let image = DOM.el(`#image`)
-  image.src = `static/img/${vars.image_name}`
+  image.src = `/static/img/banners/${vars.banner}`
 }
 
 function reset_video() {

@@ -9,7 +9,7 @@
     const vars = {}
     vars.max_size = {{max_size}}
     vars.max_title_length = {{max_title_length}}
-    vars.image_name = {{image_name | tojson | safe}}
+    vars.banner = {{banner | tojson | safe}}
     vars.is_user = {{is_user | tojson}}
     vars.links = {{links | tojson}}
     vars.username = {{username | tojson | safe}}
@@ -63,7 +63,7 @@
     </div>
 
     {% if show_image %}
-    <img id="image" src="/static/img/{{image_name}}" title="{{image_tooltip}}">
+    <img id="image" src="/static/img/banners/{{banner}}" title="{{image_tooltip}}">
     <video id="video" preload="none" class="hidden" controls poster="/static/img/cover.jpg"></video>
     {% endif %}
 

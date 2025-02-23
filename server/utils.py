@@ -197,19 +197,6 @@ def ok(message: str = "", data: dict[str, Any] | None = None) -> tuple[str, int]
     return jsonify({"status": "ok", "message": message, **data}), 200
 
 
-def get_image_name() -> str:
-    if Path("static/img/banner.jpg").exists():
-        return "banner.jpg"
-
-    if Path("static/img/banner.png").exists():
-        return "banner.png"
-
-    if Path("static/img/banner.gif").exists():
-        return "banner.gif"
-
-    return "cat.jpg"
-
-
 def contains_url(text: str) -> list[str]:
     return re.findall(r"(https?://|www\.)\S+", text, re.IGNORECASE)
 
@@ -237,5 +224,9 @@ def check_dir(direc: str) -> bool:
 
     return direc != "/home"
 
+
+def get_banner() -> str:
+    banners = list(Path("static/img/banners").glob("*"))
+    return random.choice(banners).name
 
 ICONS = load_icons()

@@ -206,9 +206,10 @@ def index() -> Any:
         max_size_str = max_size
         max_size *= 1_000_000
 
+    banner = utils.get_banner()
+
     return render_template(
         "index.html",
-        image_name=utils.get_image_name(),
         max_size=max_size,
         max_size_str=max_size_str,
         show_max_size=config.show_max_size,
@@ -225,6 +226,7 @@ def index() -> Any:
         username=user.username if user else "",
         user_name=user.name if user else "",
         upload_enabled=config.web_uploads_enabled,
+        banner=banner,
         **theme_configs(),
     )
 
