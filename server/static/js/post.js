@@ -542,7 +542,7 @@ function react_text() {
     }
 
     send_reaction(text, `text`)
-  }, n)
+  }, n, true)
 }
 
 async function send_reaction(text, mode) {

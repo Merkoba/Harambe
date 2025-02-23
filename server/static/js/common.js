@@ -52,7 +52,7 @@ function contains_url(text) {
   return text.match(/(https?:\/\/|www\.)\S+/gi)
 }
 
-function prompt_text(placeholder, callback, max = 0) {
+function prompt_text(placeholder, callback, max = 0, multi = false) {
   let msg = Msg.factory({
     persistent: false,
     disable_content_padding: true,
@@ -60,7 +60,15 @@ function prompt_text(placeholder, callback, max = 0) {
 
   let c = DOM.create(`div`)
   c.id = `prompt_container`
-  let input = DOM.create(`textarea`)
+  let input
+
+  if (multi) {
+    input = DOM.create(`textarea`)
+  }
+  else {
+    input = DOM.create(`input`)
+  }
+
   input.rows = 6
   input.id = `prompt_input`
   input.type = `text`
@@ -98,7 +106,13 @@ function prompt_text(placeholder, callback, max = 0) {
 
   DOM.ev(input, `keydown`, (e) => {
     if (e.key === `Enter`) {
-      if (e.shiftKey || e.ctrlKey) {
+      if (multi) {
+        if (e.shiftKey || e.ctrlKey) {
+          submit()
+          e.preventDefault()
+        }
+      }
+      else {
         submit()
         e.preventDefault()
       }
