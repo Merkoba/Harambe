@@ -125,7 +125,15 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-username="{{item.username}}" data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}" data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}" data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}" data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}" data-lister="{{lister_str}}" data-reacter="{{reacter_str}}">
+        <div class="table_row item"
+        {% if mode == "users" %}
+        data-username="{{item.username}}"
+        {% endif %}
+        data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}"
+        data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}"
+        data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}"
+        data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}"
+        data-lister="{{lister_str}}" data-reacter="{{reacter_str}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
