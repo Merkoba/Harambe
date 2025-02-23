@@ -105,6 +105,8 @@ def get_reactions(
     query: str = "",
     sort: str = "date",
     admin: bool = False,
+    username: str = "",
+    max_reactions: int = 0,
 ) -> tuple[list[Reaction], str, bool]:
     psize = 0
 
@@ -119,6 +121,10 @@ def get_reactions(
     query = utils.clean_query(query)
 
     for reaction in get_reactionlist():
+        if username:
+            if reaction.user != username:
+                continue
+
         ok = (
             not query
             or query in utils.clean_query(reaction.user)
@@ -136,6 +142,9 @@ def get_reactions(
 
     total_str = f"{len(reactions)}"
     sort_reactions(reactions, sort)
+
+    if max_reactions > 0:
+        reactions = reactions[:max_reactions]
 
     if psize > 0:
         start_index = (page - 1) * psize

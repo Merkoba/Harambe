@@ -610,6 +610,7 @@ def show_list(page: int = 1) -> Any:
     page_size = request.args.get("page_size", config.list_page_size)
     sort = request.args.get("sort", "date")
     query = request.args.get("query", "")
+    only_listed = not history
 
     posts, total, next_page = post_procs.get_posts(
         page,
@@ -617,7 +618,7 @@ def show_list(page: int = 1) -> Any:
         max_posts=config.list_max_posts,
         sort=sort,
         query=query,
-        only_listed=True,
+        only_listed=only_listed,
         username=username,
         admin=False,
     )
@@ -653,6 +654,66 @@ def latest_post() -> Any:
         return over()
 
     return redirect(url_for("post", name=post.name))
+
+
+@app.route("/reacts", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/reacts/<int:page>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def show_reacts(page: int = 1) -> Any:
+    user = get_user()
+
+    if not user:
+        return over()
+
+    admin = user.admin
+    username = request.args.get("username", "")
+    history = user.username == username
+
+    if not history:
+        if not config.list_enabled and (not admin):
+            return redirect(url_for("index"))
+
+        if config.list_private and (not admin):
+            if not logged_in():
+                return redirect(url_for("login"))
+
+            if not user.reader:
+                return redirect(url_for("index"))
+
+    page = int(request.args.get("page", 1))
+    page_size = request.args.get("page_size", config.list_page_size)
+    sort = request.args.get("sort", "date")
+    query = request.args.get("query", "")
+
+    posts, total, next_page = react_procs.get_reactions(
+        page,
+        page_size,
+        max_reactions=config.list_max_reactions,
+        sort=sort,
+        query=query,
+        username=username,
+        admin=False,
+    )
+
+    def_page_size = page_size == config.list_page_size
+    title = "List" if not history else "History"
+
+    return render_template(
+        "admin_reactions.html",
+        mode="list",
+        items=posts,
+        total=total,
+        page=page,
+        title=title,
+        next_page=next_page,
+        page_size=page_size,
+        def_page_size=def_page_size,
+        username=username,
+        sort=sort,
+        back="/",
+        **theme_configs(),
+    )
 
 
 # USERS

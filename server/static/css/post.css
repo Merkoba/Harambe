@@ -100,6 +100,7 @@ a.link:hover,
     width: 38rem;
     max-width: 100%;
     height: auto;
+    max-height: 24rem;
     background-color: black;
 }
 

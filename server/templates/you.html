@@ -48,7 +48,9 @@
     <div class="selector">
         <a class="linkbutton" href="/">Return</a>
         <div class="sep">|</div>
-        <a class="linkbutton" href="/list?username={{user.username}}">History</a>
+        <a class="linkbutton" href="/list?username={{user.username}}">Posts</a>
+        <div class="sep">|</div>
+        <a class="linkbutton" href="/reacts?username={{user.username}}">Reactions</a>
 
         {% if allow_edit %}
         <div class="sep">|</div>
