@@ -243,8 +243,10 @@ function setup_you_opts(username) {
   })
 
   DOM.ev(`#you_opts_logout`, `click`, (e) => {
-    vars.msg_you_opts.close()
-    window.location = `/logout`
+    if (confirm(`Are you sure you want to logout ?`)) {
+      vars.msg_you_opts.close()
+      window.location = `/logout`
+    }
   })
 
   let ret = DOM.el(`#you_opts_return`)

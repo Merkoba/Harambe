@@ -35,7 +35,7 @@ window.onload = function() {
     DOM.ev(`#edit_delete`, `click`, () => {
       vars.msg_edit.close()
 
-      if (confirm(`Delete this post?`)) {
+      if (confirm(`Delete this post ?`)) {
         delete_post()
       }
     })
