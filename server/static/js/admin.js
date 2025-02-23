@@ -197,9 +197,13 @@ window.onload = () => {
   if (admin_opts) {
     setup_admin_opts(true)
 
-    DOM.ev(`#back_btn`, `click`, (e) => {
-      vars.msg_admin_opts.show()
-    })
+    let back_btn = DOM.el(`#back_btn`)
+
+    if (back_btn) {
+      DOM.ev(back_btn, `click`, (e) => {
+        vars.msg_admin_opts.show()
+      })
+    }
   }
 }
 
