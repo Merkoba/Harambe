@@ -46,9 +46,9 @@
 
     {% if page > 1 %}
         {% if page > 2 %}
-        <a class="linkbutton" href="/admin/reactions/{{page - 1}}?page_size={{page_size}}" title="Go to the previous page">Prev</a>
+        <div title="Go to the previous page" class="action_button">Prev</div>
         {% else %}
-        <a class="linkbutton" href="/admin/reactions?page_size={{page_size}}" title="Go to the previous page">Prev</a>
+        <div>Prev</div>
         {% endif %}
     {% else %}
     <div class="">Prev</div>
@@ -57,7 +57,7 @@
     <div class="sep">|</div>
 
     {% if next_page %}
-    <a class="linkbutton" href="/admin/reactions/{{page + 1}}?page_size={{page_size}}" title="Go to the next page">Next</a>
+    <div class="action_button" title="Go to the next page">Next</div>
     {% else %}
     <div class="">Next</div>
     {% endif %}
