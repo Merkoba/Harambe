@@ -147,6 +147,17 @@ window.onload = () => {
       vars.msg_you_opts.show()
     })
   }
+
+  let submit_btn = DOM.el(`#submit_btn`)
+
+  if (submit_btn) {
+    DOM.ev(submit_btn, `click`, (e) => {
+      if (validate()) {
+        let form = DOM.el(`#form`)
+        form.submit()
+      }
+    })
+  }
 }
 
 function validate() {
@@ -158,6 +169,7 @@ function validate() {
   let file_length = file.files.length
 
   if (file_length === 0) {
+    file.click()
     return false
   }
 
