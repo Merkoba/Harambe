@@ -541,7 +541,11 @@ def login() -> Any:
             session["admin"] = user.admin
             return redirect(url_for("index"))
 
-    return render_template("login.html", message=message)
+    return render_template(
+        "login.html",
+        message=message,
+        **theme_configs(),
+    )
 
 
 @app.route("/register", methods=["GET", "POST"])  # type: ignore
@@ -561,7 +565,11 @@ def register() -> Any:
             session["admin"] = user.admin
             return redirect(url_for("index"))
 
-    return render_template("register.html", message=message)
+    return render_template(
+        "register.html",
+        message=message,
+        **theme_configs(),
+    )
 
 
 @app.route("/logout", methods=["GET"])  # type: ignore
