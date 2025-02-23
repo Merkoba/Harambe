@@ -226,6 +226,8 @@ def index() -> Any:
         username=user.username if user else "",
         user_name=user.name if user else "",
         upload_enabled=config.web_uploads_enabled,
+        max_name_length=config.max_user_name_length,
+        max_password_length=config.max_user_password_length,
         banner=banner,
         **theme_configs(),
     )
