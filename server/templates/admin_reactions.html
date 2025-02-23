@@ -11,6 +11,7 @@
     vars.def_page_size = {{def_page_size | tojson}}
     vars.sort = {{sort | tojson | safe}}
     vars.page = {{page}}
+    vars.next_page = {{next_page | tojson}}
 </script>
 
 <script src="/static/js/msg.js"></script>
@@ -45,19 +46,15 @@
     <div class="sep">|</div>
 
     {% if page > 1 %}
-        {% if page > 2 %}
-        <div title="Go to the previous page" class="action_button">Prev</div>
-        {% else %}
-        <div>Prev</div>
-        {% endif %}
+    <div id="prev_page" title="Go to the previous page" class="action_button">Prev</div>
     {% else %}
-    <div class="">Prev</div>
+    <div>Prev</div>
     {% endif %}
 
     <div class="sep">|</div>
 
     {% if next_page %}
-    <div class="action_button" title="Go to the next page">Next</div>
+    <div id="next_page" class="action_button" title="Go to the next page">Next</div>
     {% else %}
     <div class="">Next</div>
     {% endif %}

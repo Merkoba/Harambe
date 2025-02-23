@@ -403,12 +403,11 @@ def admin_fallback() -> Any:
     return render_template("admin.html", **theme_configs())
 
 
-@app.route("/admin/<string:what>", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/admin/<string:what>/<int:page>", methods=["GET"])  # type: ignore
+@app.route("/admin/<string:what>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 @admin_required
-def admin(what: str, page: int = 1) -> Any:
+def admin(what: str) -> Any:
     if what not in ["posts", "users", "reactions"]:
         return redirect(url_for("index"))
 
@@ -416,6 +415,7 @@ def admin(what: str, page: int = 1) -> Any:
     def_date = "register_date" if what == "users" else "date"
     sort = request.args.get("sort", def_date)
     username = request.args.get("username", "")
+    page = int(request.args.get("page", 1))
     page_size = request.args.get("page_size", config.admin_page_size)
     post_items: list[Post] = []
     user_items: list[User] = []
