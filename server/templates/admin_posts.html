@@ -30,6 +30,13 @@
     </div>
 </template>
 
+<template id="template_user_opts">
+    <div class="dialog_container">
+        <div id="user_opts_posts" class="aero_button">Posts</div>
+        <div id="user_opts_reactions" class="aero_button">Reactions</div>
+    </div>
+</template>
+
 <div id="top" class="nowrap">
     {% if mode == "posts" %}
     <div id="back_btn" class="action_button">Back</div>
@@ -116,7 +123,7 @@
 
             <!-- User -->
             {% if mode == "posts" %}
-            <a href="/admin/posts?username={{item.username}}" class="table_cell uploader" title="{{item.uploader_str}}">{{item.username}}</a>
+            <div class="table_cell uploader admin_username action_button" title="{{item.uploader_str}}">{{item.username}}</div>
             {% else %}
             <div class="table_cell uploader" title="{{item.uploader_str}}">{{item.uploader_str}}</div>
             {% endif %}

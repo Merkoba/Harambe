@@ -55,6 +55,13 @@
     </div>
 </template>
 
+<template id="template_user_opts">
+    <div class="dialog_container">
+        <div id="user_opts_posts" class="aero_button">Posts</div>
+        <div id="user_opts_reactions" class="aero_button">Reactions</div>
+    </div>
+</template>
+
 <div id="top" class="nowrap">
     <div id="back_btn" class="action_button">Back</div>
     <div class="sep">|</div>
@@ -125,7 +132,7 @@
             </div>
 
             <!-- Username -->
-            <a class="table_cell" href="/admin/posts?username={{item.username}}" title="{{item.name}}">{{item.username}}</a>
+            <div class="table_cell admin_username action_button" title="{{item.name}}">{{item.username}}</div>
 
             <!-- RPM -->
             <div class="table_cell small">{{item.rpm_fill}}</div>

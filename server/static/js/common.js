@@ -263,6 +263,33 @@ function setup_you_opts(username) {
   }
 }
 
+function setup_user_opts() {
+  vars.msg_user_opts = Msg.factory()
+  let user_opts = DOM.el(`#template_user_opts`)
+  vars.msg_user_opts.set(user_opts.innerHTML)
+
+  DOM.ev(`#user_opts_posts`, `click`, (e) => {
+    vars.msg_user_opts.close()
+    let username = vars.active_item.dataset.username
+    window.location = `/admin/posts?username=${username}`
+  })
+
+  DOM.ev(`#user_opts_reactions`, `click`, (e) => {
+    vars.msg_user_opts.close()
+    let username = vars.active_item.dataset.username
+    window.location = `/admin/reactions?username=${username}`
+  })
+
+  let ret = DOM.el(`#you_opts_return`)
+
+  if (ret) {
+    DOM.ev(ret, `click`, (e) => {
+      vars.msg_admin_opts.close()
+      window.location = `/`
+    })
+  }
+}
+
 function fill_def_args(def, args) {
   for (let key in def) {
     if ((args[key] === undefined) && (def[key] !== undefined)) {

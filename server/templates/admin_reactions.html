@@ -28,6 +28,13 @@
     </div>
 </template>
 
+<template id="template_user_opts">
+    <div class="dialog_container">
+        <div id="user_opts_posts" class="aero_button">Posts</div>
+        <div id="user_opts_reactions" class="aero_button">Reactions</div>
+    </div>
+</template>
+
 <div id="top" class="nowrap">
     {% if mode == "reactions" %}
     <div id="back_btn" class="action_button">Back</div>
@@ -84,7 +91,7 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-id="{{item.id}}" data-user="{{item.user}}" data-name="{{item.name}}" data-post="{{item.post}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}">
+        <div class="table_row item" data-id="{{item.id}}" data-username="{{item.user}}" data-name="{{item.name}}" data-post="{{item.post}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}" data-value="{{item.value}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
@@ -98,7 +105,7 @@
 
             {% if mode == "reactions" %}
             <!-- Username -->
-            <a class="table_cell" href="/admin/posts?username={{item.user}}" title="{{item.uname}}">{{item.user}}</a>
+            <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.user}}</div>
             {% else %}
             <div class="table_cell" title="{{item.uname}}">{{item.uname}}</div>
             {% endif %}

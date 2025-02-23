@@ -9,6 +9,7 @@ window.onload = () => {
 
   DOM.ev(document, `click`, async (e) => {
     let item = e.target.closest(`.item`)
+    vars.active_item = item
 
     if (e.target.classList.contains(`edit`)) {
       if (vars.mode === `users`) {
@@ -18,8 +19,7 @@ window.onload = () => {
         edit_title(item)
       }
     }
-
-    if (e.target.classList.contains(`delete`)) {
+    else if (e.target.classList.contains(`delete`)) {
       vars.selected_items = [e.target.closest(`.item`)]
 
       if (vars.mode === `users`) {
@@ -32,22 +32,24 @@ window.onload = () => {
         delete_reactions()
       }
     }
-
-    if (e.target.classList.contains(`delete_above`)) {
+    else if (e.target.classList.contains(`delete_above`)) {
       select_above(item)
     }
-
-    if (e.target.classList.contains(`delete_below`)) {
+    else if (e.target.classList.contains(`delete_below`)) {
       select_below(item)
     }
+    else if (e.target.classList.contains(`admin_username`)) {
+      vars.msg_user_opts.show()
+    }
+    else {
+      let header = e.target.closest(`.table_header`)
 
-    let header = e.target.closest(`.table_header`)
+      if (header) {
+        let sort = e.target.dataset.sort
 
-    if (header) {
-      let sort = e.target.dataset.sort
-
-      if (sort) {
-        do_sort(sort)
+        if (sort) {
+          do_sort(sort)
+        }
       }
     }
   })
@@ -204,6 +206,12 @@ window.onload = () => {
         vars.msg_admin_opts.show()
       })
     }
+  }
+
+  let user_opts = DOM.el(`#template_user_opts`)
+
+  if (user_opts) {
+    setup_user_opts(true)
   }
 }
 
@@ -748,43 +756,33 @@ function do_filter() {
   let value = clean(filter.value.toLowerCase())
 
   for (let item of items) {
-    let opts = []
+    let name = item.dataset.name
+    let ago = item.dataset.ago
+    let date = item.dataset.date
+    let size = item.dataset.size_str
+    let title = item.dataset.title
+    let original = item.dataset.original
+    let uploader = item.dataset.uploader
+    let views = item.dataset.views
+    let listed = item.dataset.listed
+    let mtype = item.dataset.mtype
+    let uname = item.dataset.username
+    let ext = item.dataset.ext
+    let username = item.dataset.username
+    let rpm = item.dataset.rpm
+    let max_size = item.dataset.max_size
+    let mark = item.dataset.mark
+    let reg_date = item.dataset.reg_date
+    let last_date = item.dataset.last_date
+    let admin = item.dataset.admin
+    let list = item.dataset.reader
+    let value_ = item.dataset.value
 
-    if (vars.mode === `users`) {
-      let username = item.dataset.username
-      let name = item.dataset.name
-      let rpm = item.dataset.rpm
-      let max_size = item.dataset.max_size
-      let mark = item.dataset.mark
-      let reg_date = item.dataset.reg_date
-      let last_date = item.dataset.last_date
-      let admin = item.dataset.admin
-      let list = item.dataset.reader
-
-      opts = [
-        username, name, rpm, max_size,
-        mark, reg_date, last_date, admin, list,
-      ]
-    }
-    else if ((vars.mode === `posts`) || (vars.mode === `post_history`)) {
-      let name = item.dataset.name
-      let ago = item.dataset.ago
-      let date = item.dataset.date
-      let size = item.dataset.size_str
-      let title = item.dataset.title
-      let original = item.dataset.original
-      let uploader = item.dataset.uploader
-      let views = item.dataset.views
-      let listed = item.dataset.listed
-      let mtype = item.dataset.mtype
-      let uname = item.dataset.username
-      let ext = item.dataset.ext
-
-      opts = [
-        name, size, title, original, ago, date,
-        uploader, views, listed, mtype, uname, ext,
-      ]
-    }
+    let opts = [
+      name, ago, date, size, title, original, uploader, views,
+      listed, mtype, uname, ext, username, rpm, max_size, mark,
+      reg_date, last_date, admin, list, value_,
+    ]
 
     opts = opts.filter(x => x)
     opts = opts.map(x => clean(x))
