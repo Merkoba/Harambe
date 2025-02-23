@@ -274,7 +274,9 @@ function edit_name() {
         return
       }
 
-      do_edit(`name`, value, `Name`)
+      do_edit(`name`, value, `Name`, () => {
+        vars.user_name = value
+      })
     },
   }
 
@@ -310,7 +312,7 @@ function edit_password() {
   prompt_text(prompt_args)
 }
 
-async function do_edit(what, value, title) {
+async function do_edit(what, value, title, callback) {
   let response = await fetch(`/user_edit`, {
     method: `POST`,
     headers: {
@@ -321,7 +323,9 @@ async function do_edit(what, value, title) {
 
   if (response.ok) {
     popmsg(`${title} updated.`, () => {
-      window.location.reload()
+      if (callback) {
+        callback()
+      }
     })
   }
   else {

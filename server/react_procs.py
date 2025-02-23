@@ -127,7 +127,7 @@ def get_reactions(
 
         ok = (
             not query
-            or query in utils.clean_query(reaction.user)
+            or (admin and (query in utils.clean_query(reaction.user)))
             or query in utils.clean_query(reaction.uname)
             or query in utils.clean_query(reaction.value)
             or query in utils.clean_query(reaction.date_str)
