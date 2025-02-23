@@ -90,6 +90,7 @@ window.onload = () => {
       item.title = link.url
 
       DOM.ev(item, `click`, (e) => {
+        vars.msg_links.close()
         window.open(link.url, item.target)
       })
 
