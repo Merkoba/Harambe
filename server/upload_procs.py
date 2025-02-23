@@ -50,12 +50,14 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     if hasattr(file, "read"):
         try:
-            content = file.read()
-            length = len(content)
-            toobig = "File is too big"
+            file.seek(0, 2)
+            size = file.tell()
+            file.seek(0)
 
-            if not user_procs.check_user_max(user, length):
-                return error(toobig)
+            if not user_procs.check_user_max(user, size):
+                return error("File is too big")
+
+            content = file.read()
 
             if content:
                 file.seek(0)
@@ -111,7 +113,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                         uploader,
                         mtype,
                         listed,
-                        length,
+                        size,
                         sample,
                     )
 
