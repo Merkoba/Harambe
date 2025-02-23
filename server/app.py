@@ -450,7 +450,7 @@ def admin(what: str, page: int = 1) -> Any:
         return over()
 
     def_page_size = page_size == config.admin_page_size
-    html_page = f"{what}.html"
+    html_page = f"admin_{what}.html"
     title = what.capitalize()
     items: list[Post] | list[User] | list[Reaction]
 
@@ -626,7 +626,7 @@ def show_list(page: int = 1) -> Any:
     title = "List" if not history else "History"
 
     return render_template(
-        "posts.html",
+        "admin_posts.html",
         mode="list",
         items=posts,
         total=total,
