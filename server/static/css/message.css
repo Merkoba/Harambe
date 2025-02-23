@@ -1,7 +1,6 @@
 body, html {
     color: var(--font_color);
     background-color: var(--background_color);
-    font-family: var(--font_family);
     margin-left: 20px;
     margin-top: 16px;
     padding: 0;

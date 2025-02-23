@@ -5,7 +5,6 @@
 body, html {
     color: var(--font_color);
     background-color: var(--background_color);
-    font-family: var(--font_family);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,7 +13,7 @@ body, html {
 
 button[type="submit"] {
     background-color: var(--accent_color);
-    font-family: var(--font_family);
+    font-family: inherit;
     color: var(--font_color);
     font-size: 1rem;
     padding-left: 0.5rem;
@@ -33,7 +32,7 @@ button[type="submit"]:hover {
 }
 
 input[type="text"] {
-    font-family: var(--font_family);
+    font-family: inherit;
     text-align: center;
 }
 
@@ -43,7 +42,7 @@ input[type="file"] {
     max-width: 100%;
     white-space: normal;
     word-wrap: break-word;
-    font-family: var(--font_family);
+    font-family: inherit;
 }
 
 #main {

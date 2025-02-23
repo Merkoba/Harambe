@@ -6,7 +6,6 @@
 body, html {
     color: var(--font_color);
     background-color: var(--background_color);
-    font-family: var(--font_family);
     margin-left: 10px;
     margin-right: 10px;
     margin-top: 5px;
