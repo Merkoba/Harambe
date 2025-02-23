@@ -12,6 +12,8 @@
     vars.image_name = {{image_name | tojson | safe}}
     vars.is_user = {{is_user | tojson}}
     vars.links = {{links | tojson}}
+    vars.username = {{username | tojson | safe}}
+    vars.user_name = {{user_name | tojson | safe}}
 </script>
 
 <script src="/static/js/msg.js"></script>
@@ -44,7 +46,8 @@
     <div class="dialog_container">
         <div id="you_opts_posts" class="aero_button">Posts</div>
         <div id="you_opts_reactions" class="aero_button">Reactions</div>
-        <div id="you_opts_edit" class="aero_button">Edit</div>
+        <div id="you_opts_edit_name" class="aero_button">Change Name</div>
+        <div id="you_opts_edit_password" class="aero_button">Change Password</div>
         <div id="you_opts_logout" class="aero_button">Logout</div>
     </div>
 </template>
@@ -63,16 +66,18 @@
     {% endif %}
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
+        {% if is_user and upload_enabled %}
         <div id="picker">
             <input id="file" type="file" name="file" required max-file-size="{{max_size_str}}mb">
         </div>
+        {% endif %}
 
-        {% if allow_titles %}
+        {% if allow_titles and is_user and upload_enabled %}
         <input id="title" type="text" name="title" placeholder="Enter a Title (Optional)">
         {% endif %}
 
         <div id="buttons">
-            {% if is_user %}
+            {% if is_user and upload_enabled %}
             <button type="submit" name="submit">Upload</button>
             {% endif %}
             {% if is_user and show_list %}

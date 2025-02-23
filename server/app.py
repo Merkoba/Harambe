@@ -166,9 +166,6 @@ text_mtype = "text/plain"
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def index() -> Any:
-    if not config.web_uploads_enabled:
-        return render_template("fallback.html")
-
     user = get_user()
     is_user = bool(user)
     admin = user and user.admin
@@ -225,6 +222,9 @@ def index() -> Any:
         show_admin=admin,
         description=config.description_index,
         is_user=is_user,
+        username=user.username if user else "",
+        user_name=user.name if user else "",
+        upload_enabled=config.web_uploads_enabled,
         **theme_configs(),
     )
 

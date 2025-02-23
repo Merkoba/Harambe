@@ -212,6 +212,46 @@ function setup_explore_opts() {
   }
 }
 
+function setup_you_opts() {
+  vars.msg_you_opts = Msg.factory()
+  let you_opts = DOM.el(`#template_you_opts`)
+  vars.msg_you_opts.set(you_opts.innerHTML)
+
+  DOM.ev(`#you_opts_posts`, `click`, (e) => {
+    vars.msg_you_opts.close()
+    window.location = `/posts`
+  })
+
+  DOM.ev(`#you_opts_reactions`, `click`, (e) => {
+    vars.msg_you_opts.close()
+    window.location = `/reactions`
+  })
+
+  DOM.ev(`#you_opts_edit_name`, `click`, (e) => {
+    vars.msg_you_opts.close()
+    edit_name()
+  })
+
+  DOM.ev(`#you_opts_edit_password`, `click`, (e) => {
+    vars.msg_you_opts.close()
+    edit_password()
+  })
+
+  DOM.ev(`#you_opts_logout`, `click`, (e) => {
+    vars.msg_you_opts.close()
+    window.location = `/logout`
+  })
+
+  let ret = DOM.el(`#you_opts_return`)
+
+  if (ret) {
+    DOM.ev(ret, `click`, (e) => {
+      vars.msg_admin_opts.close()
+      window.location = `/`
+    })
+  }
+}
+
 function fill_def_args(def, args) {
   for (let key in def) {
     if ((args[key] === undefined) && (def[key] !== undefined)) {

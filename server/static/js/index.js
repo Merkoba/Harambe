@@ -107,16 +107,8 @@ window.onload = () => {
   if (admin_btn) {
     setup_admin_opts()
 
-    DOM.ev(`#admin_btn`, `click`, (e) => {
+    DOM.ev(admin_btn, `click`, (e) => {
       vars.msg_admin_opts.show()
-    })
-  }
-
-  let you_btn = DOM.el(`#you_btn`)
-
-  if (you_btn) {
-    DOM.ev(you_btn, `click`, (e) => {
-      show_you()
     })
   }
 
@@ -125,7 +117,7 @@ window.onload = () => {
   if (explore_btn) {
     setup_explore_opts()
 
-    DOM.ev(`#explore_btn`, `click`, (e) => {
+    DOM.ev(explore_btn, `click`, (e) => {
       vars.msg_explore_opts.show()
     })
   }
@@ -143,6 +135,16 @@ window.onload = () => {
   if (register_btn) {
     DOM.ev(register_btn, `click`, (e) => {
       window.location = `/register`
+    })
+  }
+
+  let you_btn = DOM.el(`#you_btn`)
+
+  if (you_btn) {
+    setup_you_opts()
+
+    DOM.ev(you_btn, `click`, (e) => {
+      vars.msg_you_opts.show()
     })
   }
 }
@@ -248,4 +250,69 @@ function show_explore() {
 
 function show_you() {
   window.location = `/you`
+}
+
+function edit_name() {
+  let prompt_args = {
+    placeholder: `Enter your new public name`,
+    value: vars.user_name,
+    max: vars.max_name_length,
+    callback: (value) => {
+      if (!value) {
+        return
+      }
+
+      do_edit(`name`, value, `Name`)
+    },
+  }
+
+  prompt_text(prompt_args)
+}
+
+function edit_password() {
+  let prompt_args = {
+    placeholder: `Enter your new password`,
+    max: vars.max_password_length,
+    callback: (value) => {
+      if (!value) {
+        return
+      }
+
+      let prompt_args_2 = {
+        placeholder: `Enter the password again`,
+        max: vars.max_password_length,
+        callback: (value_2) => {
+          if (value !== value_2) {
+            popmsg(`Passwords do not match.`)
+            return
+          }
+
+          do_edit(`password`, value, `Password`)
+        },
+      }
+
+      prompt_text(prompt_args_2)
+    },
+  }
+
+  prompt_text(prompt_args)
+}
+
+async function do_edit(what, value, title) {
+  let response = await fetch(`/user_edit`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({what, value}),
+  })
+
+  if (response.ok) {
+    popmsg(`${title} updated.`, () => {
+      window.location.reload()
+    })
+  }
+  else {
+    print_error(response.status)
+  }
 }
