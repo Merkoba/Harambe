@@ -29,7 +29,11 @@
 </template>
 
 <div id="top" class="nowrap">
+    {% if mode == "reactions" %}
     <div id="back_btn" class="action_button">Back</div>
+    {% else %}
+    <a class="action_button" href="/">Back</a>
+    {% endif %}
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
