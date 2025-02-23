@@ -1,5 +1,5 @@
 :root {
-    --modal_color: rgb(42, 42, 42);
+    --modal_color: rgb(42 42 42);
     --react_padding: 0.8rem;
 }
 
@@ -166,10 +166,6 @@ a.link:hover,
     overflow: hidden;
 }
 
-.icon_item {
-    cursor: pointer;
-}
-
 #icons_input {
     font-size: 1rem;
 }
@@ -192,6 +188,7 @@ a.link:hover,
     padding-bottom: 0.25rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    cursor: pointer;
 }
 
 .icon_item_text {
@@ -231,7 +228,6 @@ a.link:hover,
 .reaction_item {
     padding: 0.5rem;
     display: flex;
-    align-items: center;
     justify-content: flex-start;
     border: 1px solid var(--frame_color);
     min-width: 28rem;
