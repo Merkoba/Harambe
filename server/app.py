@@ -477,6 +477,7 @@ def admin(what: str, page: int = 1) -> Any:
         next_page=next_page,
         page_size=page_size,
         def_page_size=def_page_size,
+        max_title_length=config.max_title_length,
         username=username,
         sort=sort,
         **theme_configs(),

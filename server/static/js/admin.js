@@ -468,26 +468,34 @@ function do_search() {
 async function edit_title(el) {
   let t = el.dataset.title
   let o = el.dataset.original
+  let current = t || o
 
-  prompt_text(`New title`, t || o, async (title) => {
-    let name = el.dataset.name
+  let prompt_args = {
+    placeholder: `Enter new title`,
+    value: current,
+    max: vars.max_title_length,
+    callback: async (title) => {
+      let name = el.dataset.name
 
-    let response = await fetch(`/edit_title`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({name, title}),
-    })
+      let response = await fetch(`/edit_title`, {
+        method: `POST`,
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        body: JSON.stringify({name, title}),
+      })
 
-    if (response.ok) {
-      el.dataset.title = title
-      DOM.el(`.title`, el).innerText = title || o
-    }
-    else {
-      print_error(response.status)
-    }
-  })
+      if (response.ok) {
+        el.dataset.title = title
+        DOM.el(`.title`, el).innerText = title || o
+      }
+      else {
+        print_error(response.status)
+      }
+    },
+  }
+
+  prompt_text(prompt_args)
 }
 
 function toggle_select() {

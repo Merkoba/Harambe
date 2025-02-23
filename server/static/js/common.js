@@ -52,7 +52,16 @@ function contains_url(text) {
   return text.match(/(https?:\/\/|www\.)\S+/gi)
 }
 
-function prompt_text(placeholder, callback, max = 0, multi = false) {
+function prompt_text(args = {}) {
+  let def_args = {
+    placeholder: `Enter Text`,
+    max: 0,
+    multi: false,
+    value: ``,
+  }
+
+  fill_def_args(def_args, args)
+
   let msg = Msg.factory({
     persistent: false,
     disable_content_padding: true,
@@ -62,7 +71,7 @@ function prompt_text(placeholder, callback, max = 0, multi = false) {
   c.id = `prompt_container`
   let input
 
-  if (multi) {
+  if (args.multi) {
     input = DOM.create(`textarea`)
   }
   else {
@@ -72,7 +81,8 @@ function prompt_text(placeholder, callback, max = 0, multi = false) {
   input.rows = 6
   input.id = `prompt_input`
   input.type = `text`
-  input.placeholder = placeholder
+  input.placeholder = args.placeholder
+  input.value = args.value
   let btn = DOM.create(`div`)
   btn.id = `prompt_submit`
   btn.textContent = `Submit`
@@ -81,13 +91,13 @@ function prompt_text(placeholder, callback, max = 0, multi = false) {
   msg.set(c)
 
   function submit() {
-    callback(input.value)
+    args.callback(input.value)
     msg.close()
   }
 
   function update_btn() {
-    if (max > 0) {
-      btn.textContent = `Submit (${input.value.length}/${max})`
+    if (args.max > 0) {
+      btn.textContent = `Submit (${input.value.length}/${args.max})`
     }
     else {
       btn.textContent = `Submit (${input.value.length})`
@@ -95,9 +105,9 @@ function prompt_text(placeholder, callback, max = 0, multi = false) {
   }
 
   DOM.ev(input, `input`, (e) => {
-    if (max > 0) {
-      if (input.value.length > max) {
-        input.value = input.value.substring(0, max).trim()
+    if (args.max > 0) {
+      if (input.value.length > args.max) {
+        input.value = input.value.substring(0, args.max).trim()
       }
     }
 
@@ -106,7 +116,7 @@ function prompt_text(placeholder, callback, max = 0, multi = false) {
 
   DOM.ev(input, `keydown`, (e) => {
     if (e.key === `Enter`) {
-      if (multi) {
+      if (args.multi) {
         if (e.shiftKey || e.ctrlKey) {
           submit()
           e.preventDefault()
@@ -169,5 +179,13 @@ function setup_admin_opts() {
       vars.msg_admin_opts.close()
       window.location = `/`
     })
+  }
+}
+
+function fill_def_args(def, args) {
+  for (let key in def) {
+    if ((args[key] === undefined) && (def[key] !== undefined)) {
+      args[key] = def[key]
+    }
   }
 }

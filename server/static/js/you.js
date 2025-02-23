@@ -48,28 +48,47 @@ async function do_edit(what, value, title) {
 }
 
 function edit_name() {
-  prompt_text(`Enter your new public name`, (value) => {
-    if (!value) {
-      return
-    }
-
-    do_edit(`name`, value, `Name`)
-  }, vars.max_name_length)
-}
-
-function edit_password() {
-  prompt_text(`Enter your new password`, (value) => {
-    if (!value) {
-      return
-    }
-
-    prompt_text(`Enter the password again`, (value_2) => {
-      if (value !== value_2) {
-        popmsg(`Passwords do not match.`)
+  let prompt_args = {
+    placeholder: `Enter your new public name`,
+    value: vars.name,
+    max: vars.max_name_length,
+    callback: (value) => {
+      if (!value) {
         return
       }
 
-      do_edit(`password`, value, `Password`)
-    }, vars.max_password_length)
-  }, vars.max_password_length)
+      do_edit(`name`, value, `Name`)
+    },
+  }
+
+  prompt_text(prompt_args)
+}
+
+function edit_password() {
+  let prompt_args = {
+    placeholder: `Enter your new password`,
+    max: vars.max_password_length,
+    callback: (value) => {
+      if (!value) {
+        return
+      }
+
+      let prompt_args_2 = {
+        placeholder: `Enter the password again`,
+        max: vars.max_password_length,
+        callback: (value_2) => {
+          if (value !== value_2) {
+            popmsg(`Passwords do not match.`)
+            return
+          }
+
+          do_edit(`password`, value, `Password`)
+        },
+      }
+
+      prompt_text(prompt_args_2)
+    },
+  }
+
+  prompt_text(prompt_args)
 }

@@ -265,35 +265,42 @@ function timeago(date) {
 }
 
 async function edit_title() {
-  prompt_text(`New Title`, vars.title || vars.original, async (title) => {
-    if (!title) {
-      return
-    }
+  let prompt_args = {
+    placeholder: `Edit Title`,
+    value: vars.title || vars.original,
+    max: vars.max_title_length,
+    callback: async (title) => {
+      if (!title) {
+        return
+      }
 
-    title = title.trim()
+      title = title.trim()
 
-    if (title === vars.title) {
-      return
-    }
+      if (title === vars.title) {
+        return
+      }
 
-    let name = vars.name
+      let name = vars.name
 
-    let response = await fetch(`/edit_title`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({name, title}),
-    })
+      let response = await fetch(`/edit_title`, {
+        method: `POST`,
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        body: JSON.stringify({name, title}),
+      })
 
-    if (response.ok) {
-      vars.title = title
-      DOM.el(`#title`).textContent = title || vars.original
-    }
-    else {
-      print_error(response.status)
-    }
-  })
+      if (response.ok) {
+        vars.title = title
+        DOM.el(`#title`).textContent = title || vars.original
+      }
+      else {
+        print_error(response.status)
+      }
+    },
+  }
+
+  prompt_text(prompt_args)
 }
 
 async function delete_post() {
@@ -528,21 +535,28 @@ function react_text() {
   let n = vars.text_reaction_length
   let ns = singplural(`character`, n)
 
-  prompt_text(`Max ${n} ${ns}`, (text) => {
-    if (!text) {
-      return
-    }
+  let prompt_args = {
+    placeholder: `Max ${n} ${ns}`,
+    max: vars.text_reaction_length,
+    multi: true,
+    callback: (text) => {
+      if (!text) {
+        return
+      }
 
-    text = remove_multiple_empty_lines(text)
-    text = Array.from(text).slice(0, n).join(``)
+      text = remove_multiple_empty_lines(text)
+      text = Array.from(text).slice(0, n).join(``)
 
-    if (contains_url(text)) {
-      popmsg(`URLs are not allowed.`)
-      return
-    }
+      if (contains_url(text)) {
+        popmsg(`URLs are not allowed.`)
+        return
+      }
 
-    send_reaction(text, `text`)
-  }, n, true)
+      send_reaction(text, `text`)
+    },
+  }
+
+  prompt_text(prompt_args)
 }
 
 async function send_reaction(text, mode) {
