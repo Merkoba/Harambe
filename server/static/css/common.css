@@ -1,8 +1,3 @@
-@font-face {
-    font-family: custom;
-    src: url("/static/fonts/BubblegumSans-Regular.ttf") format("truetype");
-}
-
 :root {
     --color_1: rgb(67 130 137);
     --border_color: #ddd;
@@ -148,7 +143,7 @@ a.linkbutton:hover {
 
 .aero_button {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 0.5rem 1rem;
     font-size: 1rem;
     font-weight: bold;
     text-align: center;
@@ -157,7 +152,6 @@ a.linkbutton:hover {
     border: 1px solid #777;
     border-radius: 5px;
     cursor: pointer;
-    font-family: custom, sans-serif !important;
     background: linear-gradient(to bottom, #459cc6, #5d6850);
     box-shadow: inset 0 1px 3px rgb(0 0 0 / 30%);
     text-shadow: 0 1px 1px rgb(0 0 0 / 30%);
