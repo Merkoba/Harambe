@@ -127,3 +127,33 @@ function remove_multiple_empty_lines(s) {
 function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
+
+function setup_admin_opts() {
+  vars.msg_admin_opts = Msg.factory()
+  let admin_opts = DOM.el(`#template_admin_opts`)
+  vars.msg_admin_opts.set(admin_opts.innerHTML)
+
+  DOM.ev(`#admin_opts_posts`, `click`, (e) => {
+    vars.msg_admin_opts.close()
+    window.location = `/admin/posts`
+  })
+
+  DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
+    vars.msg_admin_opts.close()
+    window.location = `/admin/reactions`
+  })
+
+  DOM.ev(`#admin_opts_users`, `click`, (e) => {
+    vars.msg_admin_opts.close()
+    window.location = `/admin/users`
+  })
+
+  let ret = DOM.el(`#admin_opts_return`)
+
+  if (ret) {
+    DOM.ev(ret, `click`, (e) => {
+      vars.msg_admin_opts.close()
+      window.location = `/`
+    })
+  }
+}

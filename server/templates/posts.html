@@ -15,13 +15,23 @@
     vars.username = {{username | tojson | safe}}
 </script>
 
+<script src="/static/js/msg.js"></script>
 <script src="/static/js/admin.js"></script>
 {% endblock %}
 
 {% block body %}
+<template id="template_admin_opts">
+    <div class="dialog_container">
+        <div id="admin_opts_posts" class="aero_button">Posts</div>
+        <div id="admin_opts_reactions" class="aero_button">Reactions</div>
+        <div id="admin_opts_users" class="aero_button">Users</div>
+        <div id="admin_opts_return" class="aero_button">Return</div>
+    </div>
+</template>
+
 <div id="top" class="nowrap">
     {% if mode == "posts" %}
-    <a class="action_button" href="/admin">Back</a>
+    <div id="back_btn" class="action_button">Back</div>
     {% else %}
     <a class="action_button" href="/">Back</a>
     {% endif %}

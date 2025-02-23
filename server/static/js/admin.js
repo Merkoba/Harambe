@@ -191,6 +191,16 @@ window.onload = () => {
       delete_all()
     })
   }
+
+  let admin_opts = DOM.el(`#template_admin_opts`)
+
+  if (admin_opts) {
+    setup_admin_opts(true)
+
+    DOM.ev(`#back_btn`, `click`, (e) => {
+      vars.msg_admin_opts.show()
+    })
+  }
 }
 
 function goto_page(page) {
