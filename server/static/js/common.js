@@ -243,10 +243,14 @@ function setup_you_opts(username) {
   })
 
   DOM.ev(`#you_opts_logout`, `click`, (e) => {
-    if (confirm(`Are you sure you want to logout ?`)) {
-      vars.msg_you_opts.close()
-      window.location = `/logout`
+    let confirm_args = {
+      message: `Are you sure you want to logout ?`,
+      callback_yes: () => {
+        window.location = `/logout`
+      },
     }
+
+    confirmbox(confirm_args)
   })
 
   let ret = DOM.el(`#you_opts_return`)
@@ -265,4 +269,53 @@ function fill_def_args(def, args) {
       args[key] = def[key]
     }
   }
+}
+
+function confirmbox(args = {}) {
+  let def_args = {
+    message: `Are you sure ?`,
+    yes: `Yes`,
+    no: `No`,
+  }
+
+  fill_def_args(def_args, args)
+
+  let msg = Msg.factory({
+    persistent: false,
+  })
+
+  let c = DOM.create(`div`)
+  c.id = `confirmbox_container`
+  let m = DOM.create(`div`)
+  m.id = `confirmbox_message`
+  m.textContent = args.message
+  let btns = DOM.create(`div`)
+  btns.id = `confirmbox_buttons`
+  let y = DOM.create(`div`, `aero_button`)
+  y.textContent = args.yes
+  let n = DOM.create(`div`, `aero_button`)
+  n.textContent = args.no
+  c.appendChild(m)
+  btns.appendChild(n)
+  btns.appendChild(y)
+  c.appendChild(btns)
+  msg.set(c)
+
+  DOM.ev(y, `click`, (e) => {
+    if (args.callback_yes) {
+      args.callback_yes()
+    }
+
+    msg.close()
+  })
+
+  DOM.ev(n, `click`, (e) => {
+    if (args.callback_no) {
+      args.callback_no()
+    }
+
+    msg.close()
+  })
+
+  msg.show()
 }

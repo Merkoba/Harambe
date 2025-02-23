@@ -350,15 +350,20 @@ function delete_posts() {
   size = Math.round(size * 100) / 100
   let s = singplural(`post`, vars.selected_items.length)
 
-  if (confirm(`Delete ${vars.selected_items.length} ${s} (${size_string(size)}) ?`)) {
-    let posts = []
+  let confirm_args = {
+    message: `Delete ${vars.selected_items.length} ${s} (${size_string(size)}) ?`,
+    callback_yes: () => {
+      let posts = []
 
-    for (let post of vars.selected_items) {
-      posts.push(post.dataset.name)
-    }
+      for (let post of vars.selected_items) {
+        posts.push(post.dataset.name)
+      }
 
-    delete_selected_posts(posts)
+      delete_selected_posts(posts)
+    },
   }
+
+  confirmbox(confirm_args)
 }
 
 async function delete_selected_posts(names) {
@@ -562,15 +567,20 @@ function delete_users() {
   size = Math.round(size * 100) / 100
   let s = singplural(`user`, vars.selected_items.length)
 
-  if (confirm(`Delete ${vars.selected_items.length} ${s} ?`)) {
-    let users = []
+  let confirm_args = {
+    message: `Delete ${vars.selected_items.length} ${s} ?`,
+    callback_yes: () => {
+      let users = []
 
-    for (let user of vars.selected_items) {
-      users.push(user.dataset.username)
-    }
+      for (let user of vars.selected_items) {
+        users.push(user.dataset.username)
+      }
 
-    delete_selected_users(users)
+      delete_selected_users(users)
+    },
   }
+
+  confirmbox(confirm_args)
 }
 
 async function delete_selected_users(usernames) {
@@ -659,10 +669,15 @@ function mod_user(what, value, vtype) {
   let v = value === 1 ? `Yes` : `No`
   let w = capitalize(what)
 
-  if (confirm(`Modify ${items.length} ${s} (${w}: ${v}) ?`)) {
-    vars.msg_edit.close()
-    do_mod_user(items, what, value, vtype)
+  let confirm_args = {
+    message: `Modify ${items.length} ${s} (${w}: ${v}) ?`,
+    callback_yes: () => {
+      vars.msg_edit.close()
+      do_mod_user(items, what, value, vtype)
+    },
   }
+
+  confirmbox(confirm_args)
 }
 
 async function do_mod_user(items, what, value, vtype) {
@@ -691,25 +706,34 @@ async function do_mod_user(items, what, value, vtype) {
 
 function delete_all() {
   if (vars.mode === `users`) {
-    if (confirm(`Delete all non-admin users ?`)) {
-      if (confirm(`Are you really sure ?`)) {
+    let confirm_args = {
+      message: `Delete all non-admin users ?`,
+      callback_yes: () => {
         delete_normal_users()
-      }
+      },
     }
+
+    confirmbox(confirm_args)
   }
   else if (vars.mode === `posts`) {
-    if (confirm(`Delete ALL posts ?`)) {
-      if (confirm(`Are you really sure ?`)) {
+    let confirm_args = {
+      message: `Delete ALL posts ?`,
+      callback_yes: () => {
         delete_all_posts()
-      }
+      },
     }
+
+    confirmbox(confirm_args)
   }
   else if (vars.mode === `reactions`) {
-    if (confirm(`Delete ALL reactions ?`)) {
-      if (confirm(`Are you really sure ?`)) {
+    let confirm_args = {
+      message: `Delete ALL reactions ?`,
+      callback_yes: () => {
         delete_all_reactions()
-      }
+      },
     }
+
+    confirmbox(confirm_args)
   }
 }
 
@@ -798,15 +822,20 @@ function delete_reactions() {
 
   let s = singplural(`reaction`, vars.selected_items.length)
 
-  if (confirm(`Delete ${vars.selected_items.length} ${s} ?`)) {
-    let reactions = []
+  let confirm_args = {
+    message: `Delete ${vars.selected_items.length} ${s} ?`,
+    callback_yes: () => {
+      let reactions = []
 
-    for (let reaction of vars.selected_items) {
-      reactions.push(parseInt(reaction.dataset.id))
-    }
+      for (let reaction of vars.selected_items) {
+        reactions.push(parseInt(reaction.dataset.id))
+      }
 
-    delete_selected_reactions(reactions)
+      delete_selected_reactions(reactions)
+    },
   }
+
+  confirmbox(confirm_args)
 }
 
 async function delete_selected_reactions(ids) {

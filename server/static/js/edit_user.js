@@ -9,9 +9,14 @@ window.onload = () => {
 
   if (del) {
     DOM.ev(del, `click`, () => {
-      if (confirm(`Delete ${vars.username} ?`)) {
-        delete_user()
+      let confirm_args = {
+        message: `Delete ${vars.username} ?`,
+        callback_yes: () => {
+          delete_user()
+        },
       }
+
+      confirmbox(confirm_args)
     })
   }
 
