@@ -123,3 +123,7 @@ function popmsg(message, callback) {
 function remove_multiple_empty_lines(s) {
   return s.replace(/\n\s*\n/g, `\n\n`)
 }
+
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}

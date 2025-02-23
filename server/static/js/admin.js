@@ -91,32 +91,36 @@ window.onload = () => {
     let t = DOM.el(`#template_edit`)
     vars.msg_edit.set(t.innerHTML)
 
-    DOM.ev(`#edit_reader_yes`, `click`, () => {
-      mod_user(`reader`, 1, `bool`)
-    })
+    if (vars.mode === `users`) {
+      DOM.ev(`#edit_reader_yes`, `click`, () => {
+        mod_user(`reader`, 1, `bool`)
+      })
 
-    DOM.ev(`#edit_reader_no`, `click`, () => {
-      mod_user(`reader`, 0, `bool`)
-    })
+      DOM.ev(`#edit_reader_no`, `click`, () => {
+        mod_user(`reader`, 0, `bool`)
+      })
 
-    DOM.ev(`#edit_lister_yes`, `click`, () => {
-      mod_user(`lister`, 1, `bool`)
-    })
+      DOM.ev(`#edit_lister_yes`, `click`, () => {
+        mod_user(`lister`, 1, `bool`)
+      })
 
-    DOM.ev(`#edit_lister_no`, `click`, () => {
-      mod_user(`lister`, 0, `bool`)
-    })
+      DOM.ev(`#edit_lister_no`, `click`, () => {
+        mod_user(`lister`, 0, `bool`)
+      })
 
-    DOM.ev(`#edit_reacter_yes`, `click`, () => {
-      mod_user(`reacter`, 1, `bool`)
-    })
+      DOM.ev(`#edit_reacter_yes`, `click`, () => {
+        mod_user(`reacter`, 1, `bool`)
+      })
 
-    DOM.ev(`#edit_reacter_no`, `click`, () => {
-      mod_user(`reacter`, 0, `bool`)
-    })
+      DOM.ev(`#edit_reacter_no`, `click`, () => {
+        mod_user(`reacter`, 0, `bool`)
+      })
+    }
 
     DOM.ev(edit, `click`, () => {
-      vars.msg_edit.show()
+      if (get_selected().length > 0) {
+        vars.msg_edit.show()
+      }
     })
   }
 
@@ -623,7 +627,6 @@ function do_sort(what) {
 }
 
 function mod_user(what, value, vtype) {
-  vars.msg_edit.close()
   let items = get_selected()
 
   if (!items.length) {
@@ -631,8 +634,11 @@ function mod_user(what, value, vtype) {
   }
 
   let s = singplural(`user`, items.length)
+  let v = value === 1 ? `Yes` : `No`
+  let w = capitalize(what)
 
-  if (confirm(`Modify ${items.length} ${s} (${what}: ${value}) ?`)) {
+  if (confirm(`Modify ${items.length} ${s} (${w}: ${v}) ?`)) {
+    vars.msg_edit.close()
     do_mod_user(items, what, value, vtype)
   }
 }
