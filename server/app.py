@@ -581,8 +581,8 @@ def logout() -> Any:
 # LIST
 
 
-@app.route("/list", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/list/<int:page>", methods=["GET"])  # type: ignore
+@app.route("/posts", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/posts/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 def show_list(page: int = 1) -> Any:
@@ -628,7 +628,7 @@ def show_list(page: int = 1) -> Any:
 
     return render_template(
         "admin_posts.html",
-        mode="list",
+        mode="post_history",
         items=posts,
         total=total,
         page=page,
@@ -657,8 +657,8 @@ def latest_post() -> Any:
     return redirect(url_for("post", name=post.name))
 
 
-@app.route("/reacts", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/reacts/<int:page>", methods=["GET"])  # type: ignore
+@app.route("/reactions", defaults={"page": 1}, methods=["GET"])  # type: ignore
+@app.route("/reactions/<int:page>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 def show_reacts(page: int = 1) -> Any:
@@ -702,7 +702,7 @@ def show_reacts(page: int = 1) -> Any:
 
     return render_template(
         "admin_reactions.html",
-        mode="reacts",
+        mode="reaction_history",
         items=posts,
         total=total,
         page=page,

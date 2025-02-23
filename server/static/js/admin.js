@@ -742,7 +742,7 @@ function do_filter() {
         mark, reg_date, last_date, admin, list,
       ]
     }
-    else if ((vars.mode === `posts`) || (vars.mode === `list`)) {
+    else if ((vars.mode === `posts`) || (vars.mode === `post_history`)) {
       let name = item.dataset.name
       let ago = item.dataset.ago
       let date = item.dataset.date
@@ -775,8 +775,8 @@ function do_filter() {
 }
 
 function mode_string() {
-  if (vars.mode === `list`) {
-    return `list`
+  if (vars.mode === `post_history`) {
+    return `posts`
   }
 
   return `admin/${vars.mode}`
