@@ -176,6 +176,8 @@ a.linkbutton:hover {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
 }
 
 #confirmbox_buttons div {
