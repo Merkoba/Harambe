@@ -182,6 +182,36 @@ function setup_admin_opts() {
   }
 }
 
+function setup_explore_opts() {
+  vars.msg_explore_opts = Msg.factory()
+  let explore_opts = DOM.el(`#template_explore_opts`)
+  vars.msg_explore_opts.set(explore_opts.innerHTML)
+
+  DOM.ev(`#explore_opts_fresh`, `click`, (e) => {
+    vars.msg_explore_opts.close()
+    window.location = `/fresh`
+  })
+
+  DOM.ev(`#explore_opts_list`, `click`, (e) => {
+    vars.msg_explore_opts.close()
+    window.location = `/list`
+  })
+
+  DOM.ev(`#explore_opts_random`, `click`, (e) => {
+    vars.msg_explore_opts.close()
+    window.location = `/random`
+  })
+
+  let ret = DOM.el(`#explore_opts_return`)
+
+  if (ret) {
+    DOM.ev(ret, `click`, (e) => {
+      vars.msg_admin_opts.close()
+      window.location = `/`
+    })
+  }
+}
+
 function fill_def_args(def, args) {
   for (let key in def) {
     if ((args[key] === undefined) && (def[key] !== undefined)) {

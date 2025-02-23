@@ -359,12 +359,6 @@ def random_post() -> Any:
         session["used_names"] = used_names
         return redirect(url_for("post", name=name))
 
-    if used_names:
-        first = used_names[0]
-        used_names = [first]
-        session["used_names"] = used_names
-        return redirect(url_for("post", name=first))
-
     return over()
 
 

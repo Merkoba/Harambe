@@ -11,7 +11,13 @@ body, html {
     justify-content: center;
 }
 
-button[type="submit"] {
+#buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+#buttons button {
     background-color: var(--accent_color);
     font-family: inherit;
     color: var(--font_color);
@@ -25,7 +31,7 @@ button[type="submit"] {
     filter: brightness(88%);
 }
 
-button[type="submit"]:hover {
+#buttons button:hover {
     background-color: var(--accent_color);
     cursor: pointer;
     filter: brightness(100%);
@@ -155,7 +161,7 @@ a.dialog_button:hover {
 }
 
 #info {
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.1rem;
 }
 
 #links {
@@ -164,6 +170,7 @@ a.dialog_button:hover {
     gap: 0.777rem;
     align-items: center;
     justify-content: center;
+    margin-bottom: 0.8rem;
 }
 
 #title {

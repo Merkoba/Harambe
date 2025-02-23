@@ -76,13 +76,13 @@ window.onload = () => {
     })
   }
 
-  let more_links = DOM.el(`#more_links`)
+  let links_btn = DOM.el(`#links_btn`)
 
-  if (more_links) {
+  if (links_btn) {
     vars.msg_links = Msg.factory()
     let t = DOM.el(`#template_links`)
     vars.msg_links.set(t.innerHTML)
-    let c = DOM.el(`#more_links_container`)
+    let c = DOM.el(`#links_container`)
 
     for (let link of vars.links) {
       let item = DOM.create(`div`, `aero_button`)
@@ -97,7 +97,7 @@ window.onload = () => {
       c.appendChild(item)
     }
 
-    DOM.ev(more_links, `click`, (e) => {
+    DOM.ev(links_btn, `click`, (e) => {
       vars.msg_links.show()
     })
   }
@@ -109,6 +109,32 @@ window.onload = () => {
 
     DOM.ev(`#admin_btn`, `click`, (e) => {
       vars.msg_admin_opts.show()
+    })
+  }
+
+  let explore_btn = DOM.el(`#explore_btn`)
+
+  if (explore_btn) {
+    DOM.ev(explore_btn, `click`, (e) => {
+      show_explore()
+    })
+  }
+
+  let you_btn = DOM.el(`#you_btn`)
+
+  if (you_btn) {
+    DOM.ev(you_btn, `click`, (e) => {
+      show_you()
+    })
+  }
+
+  let explore_opts = DOM.el(`#template_explore_opts`)
+
+  if (explore_opts) {
+    setup_explore_opts()
+
+    DOM.ev(`#explore_btn`, `click`, (e) => {
+      vars.msg_explore_opts.show()
     })
   }
 }
@@ -206,4 +232,12 @@ function reset_video() {
 function show_links() {
   let links_dialog = DOM.el(`#links_dialog`)
   links_dialog.showModal()
+}
+
+function show_explore() {
+
+}
+
+function show_you() {
+  window.location = `/you`
 }

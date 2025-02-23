@@ -21,7 +21,7 @@
 {% block body %}
 {% if links | length > 0 %}
 <template id="template_links">
-    <div id="more_links_container" class="dialog_container"></div>
+    <div id="links_container" class="dialog_container"></div>
 </template>
 
 <template id="template_admin_opts">
@@ -29,6 +29,14 @@
         <div id="admin_opts_posts" class="aero_button">Posts</div>
         <div id="admin_opts_reactions" class="aero_button">Reactions</div>
         <div id="admin_opts_users" class="aero_button">Users</div>
+    </div>
+</template>
+
+<template id="template_explore_opts">
+    <div class="dialog_container">
+        <div id="explore_opts_fresh" class="aero_button">Last Post</div>
+        <div id="explore_opts_list" class="aero_button">Recent Posts</div>
+        <div id="explore_opts_random" class="aero_button">Random Post</div>
     </div>
 </template>
 {% endif %}
@@ -46,30 +54,6 @@
     {% endif %}
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
-        <div id="links">
-            {% if is_user and show_list %}
-            <a class="link" href="/fresh">Fresh</a>
-            <a class="link" href="/list">List</a>
-            <a class="link" href="/random">Random</a>
-            {% endif %}
-
-            {% if is_user and show_admin %}
-            <div id="admin_btn" class="button">Admin</div>
-            {% endif %}
-
-            {% if links | length > 0 %}
-            <div id="more_links" class="button">Links</div>
-            {% endif %}
-
-            {% if is_user %}
-            <a class="link" href="/you">You</a>
-            {% else %}
-            <a class="link" href="/login">Login</a>
-            <a class="link" href="/register">Register</a>
-            {% endif %}
-        </div>
-
-        {% if is_user %}
         <div id="picker">
             <input id="file" type="file" name="file" required max-file-size="{{max_size_str}}mb">
         </div>
@@ -78,8 +62,29 @@
         <input id="title" type="text" name="title" placeholder="Enter a Title (Optional)">
         {% endif %}
 
-        <button type="submit" name="submit">Upload</button>
-        {% endif %}
+        <div id="buttons">
+            {% if is_user %}
+            <button type="submit" name="submit">Upload</button>
+            {% endif %}
+            {% if is_user and show_list %}
+            <button type="button" id="explore_btn">Explore</button>
+            {% endif %}
+
+            {% if is_user and show_admin %}
+            <button type="button" id="admin_btn">Admin</button>
+            {% endif %}
+
+            {% if links | length > 0 %}
+            <button type="button" id="links_btn">Links</button>
+            {% endif %}
+
+            {% if is_user %}
+            <button type="button" id="you_btn">You</button>
+            {% else %}
+            <button type="button" id="login_btn">Login</button>
+            <button type="button" id="register_btn">Register</button>
+            {% endif %}
+        </div>
     </form>
 </div>
 {% endblock %}
