@@ -192,9 +192,14 @@ function setup_explore_opts() {
     window.location = `/fresh`
   })
 
-  DOM.ev(`#explore_opts_list`, `click`, (e) => {
+  DOM.ev(`#explore_opts_posts`, `click`, (e) => {
     vars.msg_explore_opts.close()
-    window.location = `/list`
+    window.location = `/posts`
+  })
+
+  DOM.ev(`#explore_opts_reactions`, `click`, (e) => {
+    vars.msg_explore_opts.close()
+    window.location = `/reactions`
   })
 
   DOM.ev(`#explore_opts_random`, `click`, (e) => {
@@ -212,19 +217,19 @@ function setup_explore_opts() {
   }
 }
 
-function setup_you_opts() {
+function setup_you_opts(username) {
   vars.msg_you_opts = Msg.factory()
   let you_opts = DOM.el(`#template_you_opts`)
   vars.msg_you_opts.set(you_opts.innerHTML)
 
   DOM.ev(`#you_opts_posts`, `click`, (e) => {
     vars.msg_you_opts.close()
-    window.location = `/posts`
+    window.location = `/posts?username=${username}`
   })
 
   DOM.ev(`#you_opts_reactions`, `click`, (e) => {
     vars.msg_you_opts.close()
-    window.location = `/reactions`
+    window.location = `/reactions?username=${username}`
   })
 
   DOM.ev(`#you_opts_edit_name`, `click`, (e) => {

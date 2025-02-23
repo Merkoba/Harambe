@@ -77,7 +77,10 @@
             <div id="post" class="table_cell underline" data-sort="post" title="The post where it was posted">Post</div>
             <div id="username" class="table_cell underline" data-sort="user" title="The username who did the reaction">User</div>
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this reaction was made">Date</div>
+
+            {% if mode == "reactions" %}
             <div class="table_cell actions">Actions</div>
+            {% endif %}
         </div>
 
         {% for item in items %}
@@ -93,12 +96,17 @@
             <!-- Post -->
             <a href="/post/{{item.post}}" class="table_cell" title="{{item.post}}">{{item.post}}</a>
 
+            {% if mode == "reactions" %}
             <!-- Username -->
             <a class="table_cell" href="/admin/posts?username={{item.user}}" title="{{item.uname}}">{{item.user}}</a>
+            {% else %}
+            <div class="table_cell" title="{{item.uname}}">{{item.uname}}</div>
+            {% endif %}
 
             <!-- Date -->
             <div class="table_cell" title="{{item.date_str}}">{{item.ago}}</div>
 
+            {% if mode == "reactions" %}
             <!-- Actions -->
             <div class="table_cell actions rowitem">
                 <div class="edit action_button" title="Edit this item">E</div>
@@ -109,6 +117,7 @@
                 <div class="sep"> | </div>
                 <div class="delete_below action_button" title="Delete all items below this one">B</div>
             </div>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

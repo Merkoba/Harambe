@@ -141,7 +141,7 @@ window.onload = () => {
   let you_btn = DOM.el(`#you_btn`)
 
   if (you_btn) {
-    setup_you_opts()
+    setup_you_opts(vars.username)
 
     DOM.ev(you_btn, `click`, (e) => {
       vars.msg_you_opts.show()
