@@ -778,6 +778,9 @@ function mode_string() {
   if (vars.mode === `post_history`) {
     return `posts`
   }
+  else if (vars.mode === `reaction_history`) {
+    return `reactions`
+  }
 
   return `admin/${vars.mode}`
 }
