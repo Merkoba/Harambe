@@ -701,7 +701,7 @@ def show_reacts(page: int = 1) -> Any:
 
     return render_template(
         "admin_reactions.html",
-        mode="list",
+        mode="reacts",
         items=posts,
         total=total,
         page=page,

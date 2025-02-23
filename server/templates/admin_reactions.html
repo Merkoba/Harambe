@@ -32,10 +32,13 @@
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
+
+    {% if mode == "reactions" %}
     <div class="action_button" id="delete_selected" title="Delete selected items">Delete</div>
     <div class="sep">|</div>
     <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del All</div>
     <div class="sep">|</div>
+    {% endif %}
     <div title="Total storage stats of all items (on all pages)">Total: {{total}}</div>
     <div class="sep">|</div>
     <div title="This is the current page">Page {{page}}</div>
