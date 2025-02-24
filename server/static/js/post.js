@@ -943,19 +943,32 @@ function replace_urls(text) {
   text = text.replace(re, `/post/$1`)
   re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([^/?&]+)\/?$/
   text = text.replace(re, `/wiki/$2`)
+  re = /https?:\/\/www\.youtube\.com\/watch\?v=([^/?&]+)\/?$/
+  text = text.replace(re, `/yt/$1`)
+  re = /https?:\/\/youtu\.be\/([^/?&]+)\/?$/
+  text = text.replace(re, `/yt/$1`)
   return text
 }
 
 function text_html(text) {
+  // Remove < and > to prevent XSS
   text = text.replace(/</g, `&lt;`)
   text = text.replace(/>/g, `&gt;`)
+
+  // Internal posts
   let re = new RegExp(`/post/([^/?&]+)`, `gi`)
   text = text.replace(re, `<a href="/post/$1">$1</a>`)
+
+  // Wikipedia
   re = /\/wiki\/([^/?&]+)(#[^/?&]+)?\/?/gi
 
-  return text.replace(re, (match, g1) => {
+  text = text.replace(re, (match, g1) => {
     let u = g1
     let s = decodeURIComponent(g1)
     return `<a href="https://wikipedia.org/wiki/${u}">${s}</a>`
   })
+
+  // YouTube
+  re = /\/yt\/([^/?&]+)\/?/gi
+  return text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
 }
