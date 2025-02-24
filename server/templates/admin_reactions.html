@@ -36,7 +36,7 @@
 </template>
 
 <div id="top" class="nowrap">
-    {% if mode == "reactions" %}
+    {% if mode == "admin_reactions" %}
     <div id="back_btn" class="action_button">Back</div>
     {% else %}
     <a class="action_button" href="/">Back</a>
@@ -45,7 +45,7 @@
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
 
-    {% if mode == "reactions" %}
+    {% if mode == "admin_reactions" %}
     <div class="action_button" id="delete_selected" title="Delete selected items">Delete</div>
     <div class="sep">|</div>
     <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del All</div>
@@ -85,7 +85,7 @@
             <div id="value" class="table_cell underline" data-sort="value" title="The value of the reaction">Value</div>
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this reaction was made">Date</div>
 
-            {% if mode == "reactions" %}
+            {% if mode == "admin_reactions" %}
             <div class="table_cell actions">Actions</div>
             {% endif %}
         </div>
@@ -100,7 +100,7 @@
                 <input class="select_checkbox" type="checkbox">
             </div>
 
-            {% if mode == "reactions" %}
+            {% if mode == "reactions_admin" %}
             <!-- Username -->
             <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.user}}</div>
             {% else %}
@@ -116,7 +116,7 @@
             <!-- Date -->
             <div class="table_cell" title="{{item.date_str}}">{{item.ago}}</div>
 
-            {% if mode == "reactions" %}
+            {% if mode == "admin_reactions" %}
             <!-- Actions -->
             <div class="table_cell actions rowitem">
                 <div class="edit action_button" title="Edit this item">E</div>
