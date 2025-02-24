@@ -1005,5 +1005,8 @@ function text_html(text) {
 
   // YouTube
   re = /\/yt\/([^/?&]+)\/?/gi
-  return text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
+  text = text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
+
+  // Markdown
+  return parse_markdown(text)
 }

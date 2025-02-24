@@ -125,6 +125,9 @@ class Config:
         # Link color for the web interface
         self.link_color: str = "222, 211, 239"
 
+        # Alt color for some text elements
+        self.alt_color: str = "193 234 178"
+
         # Font family for the web interface
         self.font_family: str = "sans-serif"
 
@@ -308,6 +311,7 @@ class Config:
             set_value(c, "font_color")
             set_value(c, "text_color")
             set_value(c, "link_color")
+            set_value(c, "alt_color")
             set_value(c, "font_family")
             set_value(c, "max_age")
             set_value(c, "show_max_size")

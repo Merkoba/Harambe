@@ -141,6 +141,7 @@ def theme_configs() -> dict[str, Any]:
         "font_color": config.font_color,
         "text_color": config.text_color,
         "link_color": config.link_color,
+        "alt_color": config.alt_color,
         "font_family": config.font_family,
         "font_size": config.font_size,
         "admin_font_size": config.admin_font_size,

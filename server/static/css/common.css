@@ -183,3 +183,8 @@ a.linkbutton:hover {
 #confirmbox_buttons div {
     min-width: 4rem;
 }
+
+.md_highlight {
+    font-weight: bold;
+    color: var(--alt_color);
+}

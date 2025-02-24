@@ -401,3 +401,73 @@ function setup_react_opts() {
     react_icon()
   })
 }
+
+function regex_u (c, n) {
+  return `${c}{${n}}`
+}
+
+function regex_t (c, n) {
+  let u = regex_u(c, n)
+  return `(?:(?!${u}|\\s).)`
+}
+
+function regex_t2 (c, n) {
+  let u = regex_u(c, n)
+  return `(?:(?!${u}).)`
+}
+
+function char_regex_1 (char, n = 1) {
+  let c = escape_regex(char)
+  let u = regex_u(c, n)
+  let t = regex_t(c, n)
+  let t2 = regex_t2(c, n)
+  let regex = `${u}(${t}${t2}*${t}|${t})${u}`
+  return new RegExp(regex, `g`)
+}
+
+function char_regex_2 (char, n = 1) {
+  let c = escape_regex(char)
+  let u = regex_u(c, n)
+  let t = regex_t(c, n)
+  let regex = `(?:^|\\s)${u}(${t}.*?${t}|${t})${u}(?:$|\\s)`
+  return new RegExp(regex, `g`)
+}
+
+function char_regex_3 (char, n = 1) {
+  let c = escape_regex(char)
+  let u = regex_u(c, n)
+  let t2 = regex_t2(c, n)
+  let regex = `${u}(${t2}+)${u}`
+  return new RegExp(regex, `g`)
+}
+
+to_bold = (text) => {
+  return `<span class='md_highlight'>${text}</span>`
+}
+
+function parse_markdown(text) {
+  function action(regex, func, full = false) {
+    let matches = [...text.matchAll(regex)]
+
+    for (let match of matches) {
+      if (full) {
+        text = text.replace(match[0], func(match[0]))
+      }
+      else {
+        text = text.replace(match[0], func(match[1]))
+      }
+    }
+  }
+
+  action(char_regex_3(`\``), to_bold)
+  action(char_regex_3(`"`), to_bold, true)
+  action(char_regex_1(`*`, 2), to_bold)
+  action(char_regex_1(`*`), to_bold)
+  action(char_regex_2(`_`, 2), to_bold)
+  action(char_regex_2(`_`), to_bold)
+  return text
+}
+
+function escape_regex(s) {
+  return s.replace(/[^A-Za-z0-9]/g, `\\$&`)
+}
