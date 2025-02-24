@@ -542,6 +542,11 @@ function add_reaction(reaction) {
   DOM.show(`#totopia`)
   item.dataset.id = r.id
   item.dataset.username = r.user
+
+  if ((r.user === vars.username) || vars.is_admin) {
+    DOM.show(DOM.el(`.reaction_delete`, item))
+  }
+
   reactions.appendChild(item)
 }
 
@@ -807,5 +812,42 @@ function reset_modal_image() {
 function fill_reactions() {
   for (let reaction of vars.reactions) {
     add_reaction(reaction)
+  }
+}
+
+function delete_reaction(id) {
+  let confirm_args = {
+    message: `Delete this reaction ?`,
+    callback_yes: () => {
+      do_delete_reaction(id)
+    },
+  }
+
+  confirmbox(confirm_args)
+}
+
+async function do_delete_reaction(id) {
+  let response = await fetch(`/delete_reaction`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({id}),
+  })
+
+  if (response.ok) {
+    remove_reaction(id)
+  }
+  else {
+    print_error(response.status)
+  }
+}
+
+function remove_reaction(id) {
+  let reactions = DOM.el(`#reactions`)
+  let item = reactions.querySelector(`[data-id="${id}"]`)
+
+  if (item) {
+    item.remove()
   }
 }

@@ -289,8 +289,12 @@ def post(name: str) -> Any:
 
     if user:
         owned = user.admin or ((post.username == user.username) and config.allow_edit)
+        username = user.username
+        is_admin = user.admin
     else:
         owned = False
+        username = ""
+        admin = False
 
     show_list = list_visible(user)
     can_react = False
@@ -312,6 +316,8 @@ def post(name: str) -> Any:
         post_refresh_times=config.post_refresh_times,
         max_post_name_length=config.max_post_name_length,
         max_reaction_name_length=config.max_reaction_name_length,
+        is_admin=is_admin,
+        username=username,
         can_react=can_react,
         show_list=show_list,
         is_user=bool(user),

@@ -24,6 +24,8 @@
     vars.max_post_name_length = {{max_post_name_length | tojson}}
     vars.max_reaction_name_length = {{max_reaction_name_length | tojson}}
     vars.reactions = {{post.reactions | tojson}}
+    vars.username = {{username | tojson | safe}}
+    vars.is_admin = {{is_admin | tojson}}
 </script>
 
 <script src="/static/js/msg.js"></script>
@@ -54,7 +56,7 @@
 
     <div class="reaction_right">
         <div class="reaction_ago"></div>
-        <div class="reaction_delete button">Delete</div>
+        <div class="reaction_delete button hidden">Delete</div>
     </div>
 </template>
 
