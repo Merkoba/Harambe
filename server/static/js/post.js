@@ -990,6 +990,9 @@ function text_html(text) {
   text = text.replace(/</g, `&lt;`)
   text = text.replace(/>/g, `&gt;`)
 
+  // Markdown
+  text = parse_markdown(text)
+
   // Internal posts
   let re = new RegExp(`/post/([^/?&]+)`, `gi`)
   text = text.replace(re, `<a href="/post/$1">$1</a>`)
@@ -1005,8 +1008,5 @@ function text_html(text) {
 
   // YouTube
   re = /\/yt\/([^/?&]+)\/?/gi
-  text = text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
-
-  // Markdown
-  return parse_markdown(text)
+  return text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
 }
