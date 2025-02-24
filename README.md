@@ -99,9 +99,13 @@ If `name` is empty, no name will be displayed.
 
 `max_size` is the max file size permitted to that user.
 
-If `max_size` is set to 0 it will use the default max file size config.
+If `max_size` is set to 0, it will use the default max file size config.
 
-If `reader` is true the user can view the file list page.
+If `reader` is true, the user can view the file list page.
+
+If `lister` is true, the users's post get to be listed.
+
+If `reacter` is true, the users can react to posts.
 
 `mark` is a string that is appended to urls on uploads from that user.
 
@@ -111,13 +115,11 @@ It could be useful to keep track of who uploaded who based on urls and file name
 
 If empty, it won't use a mark.
 
-![](useredit.png)
-
 ---
 
 ## Links
 
-Links can be show in the main page if you create them in the config:
+Links can be shown in the main page if you create them in the config:
 
 ```toml
 [[links]]
@@ -160,16 +162,8 @@ To create and update the database run `schema.py`.
 
 There is [this script](upload.sh) which you can use to upload if you are a user.
 
-Just change `URL`, `USERNAME`, and `PASSWORD`.
+Just change `URL`, `USERNAME`, and `PASSWORD`, and you might also need to change `ENDPOINT`.
 
 The arguments are a file path, and an optional mode argument which you can set to `title`.
 
 If you set that second argument to `title` it will use `zenity` to prompt for a title.
-
-## Reactions
-
-Users can react with icons or with short words:
-
-![](reactions.png)
-
-![](reactions2.png)
