@@ -204,9 +204,8 @@ window.onload = function() {
       if (e.target.classList.contains(`reaction_uname`)) {
         vars.msg_user_opts.show()
       }
-      else if (e.target.classList.contains(`reaction_delete`)) {
-        let id = el.dataset.id
-        delete_reaction(id)
+      else if (e.target.classList.contains(`reaction_edit`)) {
+        vars.msg_reaction_opts.show()
       }
     })
   }
@@ -216,6 +215,12 @@ window.onload = function() {
 
   if (user_opts) {
     setup_user_opts()
+  }
+
+  let reaction_opts = DOM.el(`#template_reaction_opts`)
+
+  if (reaction_opts) {
+    setup_reaction_opts()
   }
 }
 
@@ -544,7 +549,7 @@ function add_reaction(reaction) {
   item.dataset.username = r.user
 
   if ((r.user === vars.username) || vars.is_admin) {
-    DOM.show(DOM.el(`.reaction_delete`, item))
+    DOM.show(DOM.el(`.reaction_edit`, item))
   }
 
   reactions.appendChild(item)
@@ -568,11 +573,8 @@ function react_text() {
     return
   }
 
-  let n = vars.text_reaction_length
-  let ns = singplural(`character`, n)
-
   let prompt_args = {
-    placeholder: `Max ${n} ${ns}`,
+    placeholder: `Write a text reaction`,
     max: vars.text_reaction_length,
     multi: true,
     callback: (text) => {
@@ -580,6 +582,7 @@ function react_text() {
         return
       }
 
+      let n = vars.text_reaction_length
       text = remove_multiple_empty_lines(text)
       text = Array.from(text).slice(0, n).join(``)
 

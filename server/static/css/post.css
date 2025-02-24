@@ -96,6 +96,10 @@ a.link:hover,
     cursor: pointer;
 }
 
+#image:hover {
+    outline: 3px solid var(--highlight_color);
+}
+
 #video {
     width: 38rem;
     max-width: 100%;
@@ -231,7 +235,8 @@ a.link:hover,
     display: flex;
     justify-content: flex-start;
     border: 1px solid var(--frame_color);
-    min-width: 26rem;
+    min-width: 18rem;
+    max-width: 66rem;
     align-items: flex-start;
 }
 
@@ -276,11 +281,12 @@ a.link:hover,
     align-self: stretch;
     padding-left: var(--react_padding);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.15rem;
-    align-items: flex-end;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: flex-end;
     margin-left: auto;
+    gap: 0.5rem;
 }
 
 .reaction_item img {

@@ -349,3 +349,19 @@ function confirmbox(args = {}) {
 
   msg.show()
 }
+
+function setup_reaction_opts() {
+  vars.msg_reaction_opts = Msg.factory()
+  let reaction_opts = DOM.el(`#template_reaction_opts`)
+  vars.msg_reaction_opts.set(reaction_opts.innerHTML)
+
+  DOM.ev(`#reaction_opts_edit`, `click`, (e) => {
+    vars.msg_reaction_opts.close()
+    react_text(vars.active_item.dataset.id)
+  })
+
+  DOM.ev(`#reaction_opts_delete`, `click`, (e) => {
+    vars.msg_reaction_opts.close()
+    delete_reaction(vars.active_item.dataset.id)
+  })
+}
