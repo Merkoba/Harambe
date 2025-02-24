@@ -941,7 +941,7 @@ function replace_urls(text) {
   let here = window.location.origin
   let re = new RegExp(`${here}/post/(\\w+)`, `gi`)
   text = text.replace(re, `/post/$1`)
-  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([A-Za-z0-9_%]+)(#[A-Za-z0-9_%]+)?\/?$/
+  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([^/?&]+)(#[^/?&]+)?\/?$/
   text = text.replace(re, `/wiki/$2$3`)
   return text
 }
@@ -951,7 +951,7 @@ function text_html(text) {
   text = text.replace(/>/g, `&gt;`)
   let re = new RegExp(`/post/(\\w+)`, `gi`)
   text = text.replace(re, `<a href="/post/$1">$1</a>`)
-  re = /\/wiki\/([A-Za-z0-9_%]+)(#[A-Za-z0-9_%]+)?\/?/gi
+  re = /\/wiki\/([^/?&]+)(#[^/?&]+)?\/?/gi
 
   return text.replace(re, (match, p1, p2) => {
     let u = p1
