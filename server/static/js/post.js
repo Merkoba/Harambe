@@ -631,7 +631,7 @@ function react_text(id) {
 
       if (contains_url(text)) {
         popmsg(`URLs are not allowed.`)
-        return
+        return true
       }
 
       if (id) {

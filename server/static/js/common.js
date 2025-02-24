@@ -91,8 +91,9 @@ function prompt_text(args = {}) {
   msg.set(c)
 
   function submit() {
-    args.callback(input.value)
-    msg.close()
+    if (!args.callback(input.value)) {
+      msg.close()
+    }
   }
 
   function update_btn() {
