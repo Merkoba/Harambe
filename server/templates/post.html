@@ -22,6 +22,7 @@
     vars.image_embed = {{post.image_embed | tojson}}
     vars.max_post_name_length = {{max_post_name_length | tojson}}
     vars.max_reaction_name_length = {{max_reaction_name_length | tojson}}
+    vars.reactions = {{post.reactions | tojson}}
 </script>
 
 <script src="/static/js/msg.js"></script>
@@ -194,26 +195,9 @@
     </div>
 
     {% if post.reactions | length > 0 %}
-    <div id="reactions">
+    <div id="reactions"></div>
     {% else %}
-    <div id="reactions" class="hidden">
-    {% endif %}
-        {% for reaction in post.reactions %}
-        <div class="reaction_item">
-            <div class="reaction_uname" title="{{reaction.uname_str}}">{{reaction.uname_str[: max_reaction_name_length] | trim}}</div>
-
-            <div class="reaction_value">
-                {% if reaction.mode == "icon" %}
-                <img src="/static/icons/{{reaction.value}}.gif" title="{{reaction.value}}" loading="lazy">
-                {% elif reaction.mode == "text" %}
-                <div class="reaction_text">{{reaction.value}}</div>
-                {% endif %}
-            </div>
-
-            <div class="reaction_ago" title="{{reaction.date_str}}">{{reaction.ago}}</div>
-        </div>
-        {% endfor %}
-    </div>
+    <div id="reactions" class="hidden"></div>
     {% endif %}
 
     {% if post.reactions | length == 0 %}
@@ -224,5 +208,6 @@
         <div>⬆️</div>
         <div class="icon_btn_text">Go To Top</div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

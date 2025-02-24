@@ -193,6 +193,8 @@ window.onload = function() {
       expand_modal_image()
     })
   }
+
+  fill_reactions()
 }
 
 function timeago(date) {
@@ -776,4 +778,10 @@ function reset_modal_image() {
   let c = DOM.el(`#modal_image_container`)
   c.classList.remove(`expanded`)
   vars.image_expanded = false
+}
+
+function fill_reactions() {
+  for (let reaction of vars.reactions) {
+    add_reaction(reaction)
+  }
 }

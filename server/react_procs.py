@@ -206,9 +206,13 @@ def delete_reaction(id_: int, user: User) -> tuple[str, int]:
     if not reaction:
         return utils.bad("Reaction not found")
 
-    if reaction.user != user.username:
-        if not user.admin:
-            return utils.bad("You can't delete this reaction")
+    if not user.admin:
+        if not config.allow_edit:
+            return utils.bad("Editing is disabled")
+
+        if reaction.user != user.username:
+            if not user.admin:
+                return utils.bad("You can't delete this reaction")
 
     do_delete_reaction(id_)
     return utils.ok("Reaction deleted successfully")
