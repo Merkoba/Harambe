@@ -120,6 +120,12 @@ window.onload = () => {
     DOM.ev(explore_btn, `click`, (e) => {
       vars.msg_explore_opts.show()
     })
+
+    DOM.ev(explore_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        window.location = `/fresh`
+      }
+    })
   }
 
   let login_btn = DOM.el(`#login_btn`)
@@ -145,6 +151,12 @@ window.onload = () => {
 
     DOM.ev(you_btn, `click`, (e) => {
       vars.msg_you_opts.show()
+    })
+
+    DOM.ev(you_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        window.location = `/posts`
+      }
     })
   }
 
