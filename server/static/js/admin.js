@@ -655,14 +655,16 @@ function sort_action(what, desc = false) {
 }
 
 function do_sort(what) {
-  if (what === vars.sort) {
-    sort_action(what, true)
-  }
-  else if (vars.sort.includes(`_desc`)) {
-    sort_action(what)
+  if ((what === vars.sort) || (what === `${vars.sort}_desc`)) {
+    if (vars.sort === `${what}_desc`) {
+      sort_action(what)
+    }
+    else {
+      sort_action(what, true)
+    }
   }
   else {
-    sort_action(what, true)
+    sort_action(what)
   }
 }
 

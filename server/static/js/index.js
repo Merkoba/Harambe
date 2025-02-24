@@ -155,7 +155,7 @@ window.onload = () => {
 
     DOM.ev(you_btn, `auxclick`, (e) => {
       if (e.button === 1) {
-        window.location = `/posts`
+        window.location = `/list/posts`
       }
     })
   }

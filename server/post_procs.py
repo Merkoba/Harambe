@@ -266,6 +266,11 @@ def sort_posts(posts: list[Post], sort: str) -> None:
     elif sort == "uploader_desc":
         posts.sort(key=lambda x: x.uploader, reverse=False)
 
+    elif sort == "mtype":
+        posts.sort(key=lambda x: x.mtype, reverse=True)
+    elif sort == "mtype_desc":
+        posts.sort(key=lambda x: x.mtype, reverse=False)
+
 
 def get_post(name: str, full: bool = False, increase: bool = False) -> Post | None:
     post = database.get_post(name)
