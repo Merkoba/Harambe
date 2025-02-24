@@ -70,7 +70,7 @@ window.onload = function() {
     else {
       function guess_mode() {
         let modelist = ace.require(`ace/ext/modelist`)
-        let modes = modelist.modes;
+        let modes = modelist.modes
 
         for (let mode of modes) {
           if (vars.mtype.includes(mode.name)) {
@@ -88,7 +88,6 @@ window.onload = function() {
       vars.editor.session.setMode(mode)
       vars.editor.session.setValue(vars.sample, -1)
       vars.editor.setReadOnly(true)
-
     }
   }
   else if (vars.mtype.startsWith(`application`)) {
