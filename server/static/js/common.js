@@ -90,8 +90,10 @@ function prompt_text(args = {}) {
   c.appendChild(btn)
   msg.set(c)
 
-  function submit() {
-    if (!args.callback(input.value)) {
+  async function submit() {
+    let ans = await args.callback(input.value)
+
+    if (!ans) {
       msg.close()
     }
   }
