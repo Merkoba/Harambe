@@ -88,6 +88,7 @@ window.onload = function() {
       vars.editor.session.setMode(mode)
       vars.editor.session.setValue(vars.sample, -1)
       vars.editor.setReadOnly(true)
+      vars.editor.setShowPrintMargin(false)
     }
   }
   else if (vars.mtype.startsWith(`application`)) {
