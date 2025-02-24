@@ -937,6 +937,28 @@ def delete_reaction() -> Any:
     return react_procs.delete_reaction(id_, user)
 
 
+@app.route("/edit_reaction", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@login_required
+def edit_reaction() -> Any:
+    user = get_user()
+
+    if not user:
+        return error_json
+
+    data = request.get_json()
+    id_ = int(data.get("id", 0))
+
+    if id_ <= 0:
+        return error_json
+
+    name = data.get("name", "")
+    text = data.get("text", "")
+
+    return react_procs.edit_reaction(id_, name, text, user)
+
+
 @app.route("/delete_all_reactions", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()

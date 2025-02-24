@@ -67,23 +67,18 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if mode not in ["text", "icon"]:
         return utils.bad("Invalid mode")
 
-    if len(text) > max(config.text_reaction_length, 100):
-        return utils.bad("Reaction is too long")
-
-    if utils.contains_url(text):
-        return utils.bad("No URLs allowed")
-
-    if mode == "text":
-        if utils.count_graphemes(text) > config.text_reaction_length:
-            return utils.bad("Invalid reaction")
-    elif mode == "icon":
-        if text not in utils.ICONS:
-            return utils.bad("Invalid reaction")
+    if not check_reaction(text, mode):
+        return utils.bad("Invalid reaction")
 
     if database.get_reaction_count(name, user.username) >= config.max_user_reactions:
         return utils.bad("You can't add more reactions")
 
-    dbr = database.add_reaction(name, user.username, user.name, text, mode)
+    id_ = database.add_reaction(name, user.username, user.name, text, mode)
+
+    if not id_:
+        return utils.bad("Reaction failed")
+
+    dbr = database.get_reaction(id_)
 
     if dbr:
         reaction = make_reaction(dbr, utils.now())
@@ -228,3 +223,63 @@ def do_delete_reaction(id_: int) -> None:
 def delete_all_reactions() -> tuple[str, int]:
     database.delete_all_reactions()
     return utils.ok("All reactions deleted")
+
+
+def edit_reaction(
+    id_: int, name: str, text: str, user: User, mode: str = "text"
+) -> tuple[str, int]:
+    if not id_:
+        return utils.bad("Id was not provided")
+
+    if not user:
+        return utils.bad("You are not logged in")
+
+    if (not name) or (not text):
+        return utils.bad("Missing values")
+
+    text = text.strip()
+    text = utils.remove_multiple_lines(text)
+
+    if not text:
+        return utils.bad("Missing values")
+
+    if not check_reaction(text, mode):
+        return utils.bad("Invalid reaction")
+
+    reaction = database.get_reaction(id_)
+
+    if not reaction:
+        return utils.bad("Reaction not found")
+
+    if not user.admin:
+        if not config.allow_edit:
+            return utils.bad("Editing is disabled")
+
+        if reaction.user != user.username:
+            return utils.bad("You can't edit this reaction")
+
+    database.edit_reaction(id_, text)
+    dbr = database.get_reaction(id_)
+
+    if dbr:
+        new_reaction = make_reaction(dbr, utils.now())
+        return utils.ok(data={"reaction": new_reaction})
+
+    return utils.bad("Reaction edit failed")
+
+
+def check_reaction(text: str, mode: str) -> bool:
+    if len(text) > max(config.text_reaction_length, 100):
+        return False
+
+    if utils.contains_url(text):
+        return False
+
+    if mode == "text":
+        if utils.count_graphemes(text) > config.text_reaction_length:
+            return False
+    elif mode == "icon":
+        if text not in utils.ICONS:
+            return False
+
+    return True

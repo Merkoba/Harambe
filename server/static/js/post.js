@@ -513,9 +513,13 @@ function down_icons() {
 }
 
 function add_reaction(reaction) {
-  let r = reaction
   let reactions = DOM.el(`#reactions`)
   DOM.show(reactions)
+  reactions.appendChild(make_reaction(reaction))
+}
+
+function make_reaction(reaction) {
+  let r = reaction
   let vitem
 
   if (r.mode === `text`) {
@@ -547,12 +551,13 @@ function add_reaction(reaction) {
   DOM.show(`#totopia`)
   item.dataset.id = r.id
   item.dataset.username = r.user
+  item.dataset.value = r.value
 
   if ((r.user === vars.username) || vars.is_admin) {
     DOM.show(DOM.el(`.reaction_edit`, item))
   }
 
-  reactions.appendChild(item)
+  return item
 }
 
 function icons_open() {
@@ -567,16 +572,33 @@ function show_all_icons() {
   }
 }
 
-function react_text() {
+function get_reaction(id) {
+  let reactions = DOM.el(`#reactions`)
+  let item = reactions.querySelector(`[data-id="${id}"]`)
+  return item
+}
+
+function react_text(id) {
   if (!vars.can_react) {
     react_alert()
     return
+  }
+
+  let value
+
+  if (id) {
+    let reaction = get_reaction(id)
+    value = reaction.dataset.value
+  }
+  else {
+    value = ``
   }
 
   let prompt_args = {
     placeholder: `Write a text reaction`,
     max: vars.text_reaction_length,
     multi: true,
+    value,
     callback: (text) => {
       if (!text) {
         return
@@ -591,7 +613,12 @@ function react_text() {
         return
       }
 
-      send_reaction(text, `text`)
+      if (id) {
+        edit_reaction(id, text)
+      }
+      else {
+        send_reaction(text, `text`)
+      }
     },
   }
 
@@ -621,6 +648,42 @@ async function send_reaction(text, mode) {
   else {
     print_error(response.status)
   }
+}
+
+async function edit_reaction(id, text) {
+  if (!vars.can_react) {
+    return
+  }
+
+  let name = vars.name
+
+  let response = await fetch(`/edit_reaction`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({id, name, text}),
+  })
+
+  if (response.ok) {
+    let json = await response.json()
+    modify_reaction(json.reaction)
+    window.scrollTo(0, document.body.scrollHeight)
+  }
+  else {
+    print_error(response.status)
+  }
+}
+
+function modify_reaction(reaction) {
+  let item = get_reaction(reaction.id)
+
+  if (!item) {
+    return
+  }
+
+  new_item = make_reaction(reaction)
+  item.replaceWith(new_item)
 }
 
 async function refresh() {

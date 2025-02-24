@@ -432,30 +432,21 @@ def change_uploader(username: str, new_name: str) -> None:
     conn.close()
 
 
-def add_reaction(
-    post: str, user: str, uname: str, value: str, mode: str
-) -> Reaction | None:
+def add_reaction(post: str, user: str, uname: str, value: str, mode: str) -> int | None:
     check_db()
     conn, c = get_conn()
     cols = ["post", "user", "uname", "value", "mode", "date"]
     placeholders = ", ".join("?" for _ in cols)
 
     c.execute(
-        f"insert into reactions ({','.join(cols)}) values ({placeholders}) returning {', '.join(cols)}",
+        f"insert into reactions ({','.join(cols)}) values ({placeholders}) returning id",
         (post, user, uname, value, mode, utils.now()),
     )
 
-    row = c.fetchone()
-
-    if row:
-        row_dict = dict(zip(cols, row))
-        reaction = make_reaction(row_dict)
-    else:
-        reaction = None
-
+    id_ = c.fetchone()[0]
     conn.commit()
     conn.close()
-    return reaction
+    return int(id_) if id_ is not None else None
 
 
 def make_reaction(row: dict[str, Any]) -> Reaction:
@@ -579,5 +570,13 @@ def delete_all_reactions() -> None:
     check_db()
     conn, c = get_conn()
     c.execute("delete from reactions")
+    conn.commit()
+    conn.close()
+
+
+def edit_reaction(id_: int, value: str) -> None:
+    check_db()
+    conn, c = get_conn()
+    c.execute("update reactions set value = ? where id = ?", (value, id_))
     conn.commit()
     conn.close()
