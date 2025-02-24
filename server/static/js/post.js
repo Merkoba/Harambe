@@ -541,7 +541,7 @@ function make_reaction(reaction) {
 
   if (r.mode === `text`) {
     vitem = DOM.create(`div`)
-    vitem.textContent = r.value
+    vitem.innerHTML = text_html(r.value)
   }
   else if (r.mode === `icon`) {
     vitem = DOM.create(`img`)
@@ -627,6 +627,7 @@ function react_text(id) {
 
       let n = vars.text_reaction_length
       text = remove_multiple_empty_lines(text)
+      text = replace_urls(text)
       text = Array.from(text).slice(0, n).join(``)
 
       if (contains_url(text)) {
@@ -934,4 +935,33 @@ function remove_reaction(id) {
   if (item) {
     item.remove()
   }
+}
+
+function replace_urls(text) {
+  let here = window.location.origin
+  let re = new RegExp(`${here}/post/(\\w+)`, `gi`)
+  text = text.replace(re, `/post/$1`)
+  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([A-Za-z0-9_%]+)(#[A-Za-z0-9_%]+)?\/?$/
+  text = text.replace(re, `/wiki/$2$3`)
+  return text
+}
+
+function text_html(text) {
+  text = text.replace(/</g, `&lt;`)
+  text = text.replace(/>/g, `&gt;`)
+  let re = new RegExp(`/post/(\\w+)`, `gi`)
+  text = text.replace(re, `<a href="/post/$1">$1</a>`)
+  re = /\/wiki\/([A-Za-z0-9_%]+)(#[A-Za-z0-9_%]+)?\/?/gi
+
+  return text.replace(re, (match, p1, p2) => {
+    let u = p1
+    let s = decodeURIComponent(p1)
+
+    if (p2) {
+      u += p2
+      s += p2 ? decodeURIComponent(p2) : ``
+    }
+
+    return `<a href="https://wikipedia.org/wiki/${u}">${s}</a>`
+  })
 }

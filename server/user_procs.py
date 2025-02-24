@@ -275,12 +275,11 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
         if not value:
             return False, None
 
-        if value:
-            if not value.isalnum():
-                return False, None
+        if not value.isalnum():
+            return False, None
 
-            if len(value) > config.max_user_username_length:
-                return False, None
+        if len(value) > config.max_user_username_length:
+            return False, None
     elif what == "password":
         if value:
             if len(value) > config.max_user_password_length:
@@ -296,11 +295,18 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
         if not value:
             return False, None
 
-        if value:
-            value = utils.single_line(value)
+        value = utils.single_line(value)
 
-            if len(value) > config.max_user_name_length:
-                return False, None
+        if len(value) > config.max_user_name_length:
+            return False, None
+    elif what == "mark":
+        value = value.strip()
+
+        if not value:
+            return False, None
+
+        if not value.isalnum():
+            return False, None
     elif value:
         if vtype == "int":
             try:
