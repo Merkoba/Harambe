@@ -268,38 +268,27 @@ function setup_user_opts() {
   let user_opts = DOM.el(`#template_user_opts`)
   vars.msg_user_opts.set(user_opts.innerHTML)
 
-  function get_name() {
-    if (vars.mode.includes(`post`)) {
-      return vars.active_item.dataset.uploader
-    }
-    else if (vars.mode.includes(`reaction`)) {
-      return vars.active_item.dataset.uname
-    }
-  }
-
   DOM.ev(`#user_opts_posts`, `click`, (e) => {
     vars.msg_user_opts.close()
+    let username = vars.active_item.dataset.username
 
-    if (vars.mode.includes(`_history`)) {
-      let name = get_name()
-      window.location = `/posts?query=${name}`
+    if (vars.mode.includes(`_admin`)) {
+      window.location = `/admin/posts?username=${username}`
     }
     else {
-      let username = vars.active_item.dataset.username
-      window.location = `/admin/posts?username=${username}`
+      window.location = `/posts?username=${username}`
     }
   })
 
   DOM.ev(`#user_opts_reactions`, `click`, (e) => {
     vars.msg_user_opts.close()
+    let username = vars.active_item.dataset.username
 
-    if (vars.mode.includes(`_history`)) {
-      let name = get_name()
-      window.location = `/reactions?query=${name}`
+    if (vars.mode.includes(`_admin`)) {
+      window.location = `/admin/reactions?username=${username}`
     }
     else {
-      let username = vars.active_item.dataset.username
-      window.location = `/admin/reactions?username=${username}`
+      window.location = `/reactions?username=${username}`
     }
   })
 }

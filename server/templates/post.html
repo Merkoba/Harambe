@@ -7,6 +7,7 @@
 
 <script>
     const vars = {}
+    vars.mode = `post`
     vars.name = {{post.name | tojson | safe}}
     vars.full = {{post.full | tojson | safe}}
     vars.date = {{post.date}}
@@ -50,12 +51,23 @@
 <template id="template_reaction_item">
     <div class="reaction_uname"></div>
     <div class="reaction_value"></div>
-    <div class="reaction_ago"></div>
+
+    <div class="reaction_right">
+        <div class="reaction_ago"></div>
+        <div class="reaction_delete button">Delete</div>
+    </div>
 </template>
 
 <template id="template_image">
     <div id="modal_image_container">
         <img id="modal_image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}">
+    </div>
+</template>
+
+<template id="template_user_opts">
+    <div class="dialog_container">
+        <div id="user_opts_posts" class="aero_button">Posts</div>
+        <div id="user_opts_reactions" class="aero_button">Reactions</div>
     </div>
 </template>
 

@@ -194,7 +194,29 @@ window.onload = function() {
     })
   }
 
+  let reacts = DOM.el(`#reactions`)
+
+  if (reacts) {
+    DOM.ev(reacts, `click`, (e) => {
+      let el = e.target.closest(`.reaction_item`)
+      vars.active_item = el
+
+      if (e.target.classList.contains(`reaction_uname`)) {
+        vars.msg_user_opts.show()
+      }
+      else if (e.target.classList.contains(`reaction_delete`)) {
+        let id = el.dataset.id
+        delete_reaction(id)
+      }
+    })
+  }
+
   fill_reactions()
+  let user_opts = DOM.el(`#template_user_opts`)
+
+  if (user_opts) {
+    setup_user_opts()
+  }
 }
 
 function timeago(date) {
@@ -518,6 +540,8 @@ function add_reaction(reaction) {
   ago.title = reaction.date_str
   DOM.show(`#to_bottom_container`)
   DOM.show(`#totopia`)
+  item.dataset.id = r.id
+  item.dataset.username = r.user
   reactions.appendChild(item)
 }
 

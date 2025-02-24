@@ -126,9 +126,7 @@
 
         {% for item in items %}
         <div class="table_row item"
-        {% if mode == "users" %}
         data-username="{{item.username}}"
-        {% endif %}
         data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}"
         data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}"
         data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}"

@@ -38,7 +38,7 @@
 </template>
 
 <div id="top" class="nowrap">
-    {% if mode == "posts" %}
+    {% if mode == "posts_admin" %}
     <div id="back_btn" class="action_button">Back</div>
     {% else %}
     <a class="action_button" href="/">Back</a>
@@ -47,7 +47,7 @@
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
 
-    {% if mode == "posts" %}
+    {% if mode == "posts_admin" %}
         <div class="action_button" id="delete_selected" title="Delete selected item">Delete</div>
         <div class="sep">|</div>
         <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del All</div>
@@ -82,7 +82,7 @@
 <div id="items">
     <div class="table">
         <div class="table_row table_header">
-            {% if mode == "posts" %}
+            {% if mode == "posts_admin" %}
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
             {% endif %}
             <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">User</div>
@@ -93,23 +93,20 @@
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this post was created">Date</div>
             <div id="views" class="table_cell underline" data-sort="views" title="The number of times the post has been viewed and the number of reactions it has">Views</div>
 
-            {% if mode == "posts" %}
+            {% if mode == "posts_admin" %}
             <div id="listed" class="table_cell views underline" data-sort="listed" title="The post appears in the list">Listed</div>
             <div class="table_cell actions">Actions</div>
             {% endif %}
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-name="{{item.name}}" data-ext="{{item.ext}}" data-size="{{item.size}}"
+        <div class="table_row item" data-name="{{item.name}}"
+        data-ext="{{item.ext}}" data-size="{{item.size}}"
         data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}"
         data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}"
         data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views_str}}"
-        data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}"
-        {% if mode == "posts" %}
-        data-username="{{item.username}}"
-        {% endif %}
-        >
-            {% if mode == "posts" %}
+        data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}" data-username="{{item.username}}">
+            {% if mode == "posts_admin" %}
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
@@ -117,7 +114,7 @@
             {% endif %}
 
             <!-- User -->
-            {% if mode == "posts" %}
+            {% if mode == "posts_admin" %}
             <div class="table_cell uploader admin_username action_button" title="{{item.uploader_str}}">{{item.username}}</div>
             {% else %}
             <div class="table_cell uploader admin_username action_button">{{item.uploader_str}}</div>
@@ -143,12 +140,12 @@
             <!-- Views -->
             <div class="table_cell" title="Views: {{item.views}} | Reactions: {{item.num_reactions}}">{{item.views_str}}</div>
 
-            {% if mode == "posts" %}
+            {% if mode == "posts_admin" %}
             <!-- Listed -->
             <div class="table_cell" itle="{{item.listed_str}}">{{item.listed_str}}</div>
             {% endif %}
 
-            {% if mode == "posts" %}
+            {% if mode == "posts_admin" %}
             <!-- Actions -->
             <div class="table_cell actions rowitem">
                 <div class="edit action_button" title="Edit this item">E</div>

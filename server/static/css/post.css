@@ -231,7 +231,7 @@ a.link:hover,
     display: flex;
     justify-content: flex-start;
     border: 1px solid var(--frame_color);
-    min-width: 28rem;
+    min-width: 26rem;
     align-items: flex-start;
 }
 
@@ -243,6 +243,11 @@ a.link:hover,
     border-right: 1px solid var(--frame_color);
     align-self: stretch;
     padding-right: var(--react_padding);
+    cursor: pointer;
+}
+
+.reaction_uname:hover {
+    text-decoration: underline;
 }
 
 .reaction_value {
@@ -264,13 +269,18 @@ a.link:hover,
     overflow-wrap: anywhere;
 }
 
-.reaction_ago {
+.reaction_right {
     display: flex;
-    opacity: 0.7;
     flex-grow: 0;
     flex-shrink: 0;
     align-self: stretch;
     padding-left: var(--react_padding);
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    align-items: flex-end;
+    justify-content: flex-start;
+    margin-left: auto;
 }
 
 .reaction_item img {

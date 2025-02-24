@@ -450,6 +450,7 @@ def admin(what: str) -> Any:
     html_page = f"admin_{what}.html"
     title = what.capitalize()
     items: list[Post] | list[User] | list[Reaction]
+    mode = f"{what}_admin"
 
     if what == "posts":
         items = post_items
@@ -460,7 +461,7 @@ def admin(what: str) -> Any:
 
     return render_template(
         html_page,
-        mode=what,
+        mode=mode,
         items=items,
         total=total,
         page=page,
@@ -630,10 +631,11 @@ def show_list(page: int = 1) -> Any:
 
     def_page_size = page_size == config.list_page_size
     title = "List" if not history else "History"
+    mode = "posts_history"
 
     return render_template(
         "admin_posts.html",
-        mode="post_history",
+        mode=mode,
         items=posts,
         total=total,
         page=page,
@@ -704,10 +706,11 @@ def show_reacts(page: int = 1) -> Any:
 
     def_page_size = page_size == config.list_page_size
     title = "List" if not history else "History"
+    mode = "reactions_history"
 
     return render_template(
         "admin_reactions.html",
-        mode="reaction_history",
+        mode=mode,
         items=posts,
         total=total,
         page=page,
