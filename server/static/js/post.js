@@ -982,13 +982,13 @@ function remove_reaction(id) {
 
 function replace_urls(text) {
   let here = window.location.origin
-  let re = new RegExp(`${here}/post/([^/?&]+)/?$`, `gi`)
+  let re = new RegExp(`${here}/post/([0-9A-Za-z]+)/?$`, `gi`)
   text = text.replace(re, `/post/$1`)
-  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([^/?&]+)\/?$/
+  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([0-9A-Za-z_()#-]+)\/?$/
   text = text.replace(re, `/wiki/$2`)
-  re = /https?:\/\/www\.youtube\.com\/watch\?v=([^/?&]+)\/?$/
+  re = /https?:\/\/www\.youtube\.com\/watch\?v=([0-9A-Za-z_-]+)\/?$/
   text = text.replace(re, `/yt/$1`)
-  re = /https?:\/\/youtu\.be\/([^/?&]+)\/?$/
+  re = /https?:\/\/youtu\.be\/([0-9A-Za-z_-]+)\/?$/
   text = text.replace(re, `/yt/$1`)
   return text
 }
@@ -1002,19 +1002,25 @@ function text_html(text) {
   text = parse_markdown(text)
 
   // Internal posts
-  let re = new RegExp(`/post/([^/?&]+)`, `gi`)
+  let re = new RegExp(`/post/([0-9A-Za-z]+)`, `gi`)
   text = text.replace(re, `<a href="/post/$1">$1</a>`)
 
   // Wikipedia
-  re = /\/wiki\/([^/?&]+)(#[^/?&]+)?\/?/gi
+  re = /\/wiki\/([0-9A-Za-z_()-]+)(#[0-9A-Za-z_()-]+)?\/?/gi
 
-  text = text.replace(re, (match, g1) => {
+  text = text.replace(re, (match, g1, g2) => {
     let u = g1
     let s = decodeURIComponent(g1)
+
+    if (g2) {
+      u += g2
+      s += decodeURIComponent(g2)
+    }
+
     return `<a href="https://wikipedia.org/wiki/${u}">${s}</a>`
   })
 
   // YouTube
-  re = /\/yt\/([^/?&]+)\/?/gi
+  re = /\/yt\/([0-9A-Za-z_-]+)\/?/gi
   return text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
 }
