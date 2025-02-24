@@ -574,9 +574,13 @@ def delete_all_reactions() -> None:
     conn.close()
 
 
-def edit_reaction(id_: int, value: str) -> None:
+def edit_reaction(id_: int, value: str, mode: str) -> None:
     check_db()
     conn, c = get_conn()
-    c.execute("update reactions set value = ? where id = ?", (value, id_))
+
+    c.execute(
+        "update reactions set value = ?, mode = ? where id = ?", (value, mode, id_)
+    )
+
     conn.commit()
     conn.close()

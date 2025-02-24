@@ -953,10 +953,10 @@ def edit_reaction() -> Any:
     if id_ <= 0:
         return error_json
 
-    name = data.get("name", "")
     text = data.get("text", "")
+    mode = data.get("mode", "text")
 
-    return react_procs.edit_reaction(id_, name, text, user)
+    return react_procs.edit_reaction(id_, text, user, mode)
 
 
 @app.route("/delete_all_reactions", methods=["POST"])  # type: ignore

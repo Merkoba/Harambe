@@ -383,7 +383,7 @@ function react_alert() {
   popmsg(`You might have to login to react.`)
 }
 
-async function show_icons() {
+async function show_icons(id) {
   if (!vars.can_react) {
     react_alert()
     return
@@ -404,6 +404,7 @@ async function show_icons() {
     show_all_icons()
   }
 
+  vars.icons_id = id
   vars.msg_icons.show()
   let input = DOM.el(`#icons_input`)
   input.value = ``
@@ -465,7 +466,13 @@ async function enter_icons() {
   }
 
   hide_icons()
-  send_reaction(vars.selected_icon, `icon`)
+
+  if (vars.icons_id) {
+    edit_reaction(vars.icons_id, vars.selected_icon, `icon`)
+  }
+  else {
+    send_reaction(vars.selected_icon, `icon`)
+  }
 }
 
 function hide_icons() {
@@ -552,6 +559,7 @@ function make_reaction(reaction) {
   item.dataset.id = r.id
   item.dataset.username = r.user
   item.dataset.value = r.value
+  item.dataset.mode = r.mode
 
   if ((r.user === vars.username) || vars.is_admin) {
     DOM.show(DOM.el(`.reaction_edit`, item))
@@ -587,8 +595,11 @@ function react_text(id) {
   let value
 
   if (id) {
-    let reaction = get_reaction(id)
-    value = reaction.dataset.value
+    let r = get_reaction(id)
+
+    if (r.dataset.mode === `text`) {
+      value = r.dataset.value
+    }
   }
   else {
     value = ``
@@ -614,7 +625,7 @@ function react_text(id) {
       }
 
       if (id) {
-        edit_reaction(id, text)
+        edit_reaction(id, text, `text`)
       }
       else {
         send_reaction(text, `text`)
@@ -650,25 +661,22 @@ async function send_reaction(text, mode) {
   }
 }
 
-async function edit_reaction(id, text) {
+async function edit_reaction(id, text, mode) {
   if (!vars.can_react) {
     return
   }
-
-  let name = vars.name
 
   let response = await fetch(`/edit_reaction`, {
     method: `POST`,
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({id, name, text}),
+    body: JSON.stringify({id, text, mode}),
   })
 
   if (response.ok) {
     let json = await response.json()
     modify_reaction(json.reaction)
-    window.scrollTo(0, document.body.scrollHeight)
   }
   else {
     print_error(response.status)

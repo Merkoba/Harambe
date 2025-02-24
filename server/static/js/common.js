@@ -154,8 +154,8 @@ function capitalize(s) {
 
 function setup_admin_opts() {
   vars.msg_admin_opts = Msg.factory()
-  let admin_opts = DOM.el(`#template_admin_opts`)
-  vars.msg_admin_opts.set(admin_opts.innerHTML)
+  let template = DOM.el(`#template_admin_opts`)
+  vars.msg_admin_opts.set(template.innerHTML)
 
   DOM.ev(`#admin_opts_posts`, `click`, (e) => {
     vars.msg_admin_opts.close()
@@ -184,8 +184,8 @@ function setup_admin_opts() {
 
 function setup_explore_opts() {
   vars.msg_explore_opts = Msg.factory()
-  let explore_opts = DOM.el(`#template_explore_opts`)
-  vars.msg_explore_opts.set(explore_opts.innerHTML)
+  let template = DOM.el(`#template_explore_opts`)
+  vars.msg_explore_opts.set(template.innerHTML)
 
   DOM.ev(`#explore_opts_fresh`, `click`, (e) => {
     vars.msg_explore_opts.close()
@@ -219,8 +219,8 @@ function setup_explore_opts() {
 
 function setup_you_opts(username) {
   vars.msg_you_opts = Msg.factory()
-  let you_opts = DOM.el(`#template_you_opts`)
-  vars.msg_you_opts.set(you_opts.innerHTML)
+  let template = DOM.el(`#template_you_opts`)
+  vars.msg_you_opts.set(template.innerHTML)
 
   DOM.ev(`#you_opts_posts`, `click`, (e) => {
     vars.msg_you_opts.close()
@@ -265,8 +265,8 @@ function setup_you_opts(username) {
 
 function setup_user_opts() {
   vars.msg_user_opts = Msg.factory()
-  let user_opts = DOM.el(`#template_user_opts`)
-  vars.msg_user_opts.set(user_opts.innerHTML)
+  let template = DOM.el(`#template_user_opts`)
+  vars.msg_user_opts.set(template.innerHTML)
 
   DOM.ev(`#user_opts_posts`, `click`, (e) => {
     vars.msg_user_opts.close()
@@ -350,14 +350,33 @@ function confirmbox(args = {}) {
   msg.show()
 }
 
+function edit_reaction_opts() {
+  vars.msg_edit_reaction_opts = Msg.factory()
+  let template = DOM.el(`#template_edit_reaction_opts`)
+  vars.msg_edit_reaction_opts.set(template.innerHTML)
+
+  DOM.ev(`#edit_reaction_opts_text`, `click`, (e) => {
+    vars.msg_edit_reaction_opts.close()
+    let id = parseInt(vars.active_item.dataset.id)
+    react_text(id)
+  })
+
+  DOM.ev(`#edit_reaction_opts_icon`, `click`, (e) => {
+    vars.msg_edit_reaction_opts.close()
+    let id = parseInt(vars.active_item.dataset.id)
+    show_icons(id)
+  })
+}
+
 function setup_reaction_opts() {
+  edit_reaction_opts()
   vars.msg_reaction_opts = Msg.factory()
-  let reaction_opts = DOM.el(`#template_reaction_opts`)
-  vars.msg_reaction_opts.set(reaction_opts.innerHTML)
+  let template = DOM.el(`#template_reaction_opts`)
+  vars.msg_reaction_opts.set(template.innerHTML)
 
   DOM.ev(`#reaction_opts_edit`, `click`, (e) => {
     vars.msg_reaction_opts.close()
-    react_text(vars.active_item.dataset.id)
+    vars.msg_edit_reaction_opts.show()
   })
 
   DOM.ev(`#reaction_opts_delete`, `click`, (e) => {

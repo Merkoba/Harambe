@@ -226,7 +226,7 @@ def delete_all_reactions() -> tuple[str, int]:
 
 
 def edit_reaction(
-    id_: int, name: str, text: str, user: User, mode: str = "text"
+    id_: int, text: str, user: User, mode: str = "text"
 ) -> tuple[str, int]:
     if not id_:
         return utils.bad("Id was not provided")
@@ -234,7 +234,7 @@ def edit_reaction(
     if not user:
         return utils.bad("You are not logged in")
 
-    if (not name) or (not text):
+    if not text:
         return utils.bad("Missing values")
 
     text = text.strip()
@@ -258,7 +258,7 @@ def edit_reaction(
         if reaction.user != user.username:
             return utils.bad("You can't edit this reaction")
 
-    database.edit_reaction(id_, text)
+    database.edit_reaction(id_, text, mode)
     dbr = database.get_reaction(id_)
 
     if dbr:
