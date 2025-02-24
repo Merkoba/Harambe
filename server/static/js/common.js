@@ -402,21 +402,21 @@ function setup_react_opts() {
   })
 }
 
-function regex_u (c, n) {
+function regex_u(c, n) {
   return `${c}{${n}}`
 }
 
-function regex_t (c, n) {
+function regex_t(c, n) {
   let u = regex_u(c, n)
   return `(?:(?!${u}|\\s).)`
 }
 
-function regex_t2 (c, n) {
+function regex_t2(c, n) {
   let u = regex_u(c, n)
   return `(?:(?!${u}).)`
 }
 
-function char_regex_1 (char, n = 1) {
+function char_regex_1(char, n = 1) {
   let c = escape_regex(char)
   let u = regex_u(c, n)
   let t = regex_t(c, n)
@@ -425,7 +425,7 @@ function char_regex_1 (char, n = 1) {
   return new RegExp(regex, `g`)
 }
 
-function char_regex_2 (char, n = 1) {
+function char_regex_2(char, n = 1) {
   let c = escape_regex(char)
   let u = regex_u(c, n)
   let t = regex_t(c, n)
@@ -433,7 +433,7 @@ function char_regex_2 (char, n = 1) {
   return new RegExp(regex, `g`)
 }
 
-function char_regex_3 (char, n = 1) {
+function char_regex_3(char, n = 1) {
   let c = escape_regex(char)
   let u = regex_u(c, n)
   let t2 = regex_t2(c, n)
