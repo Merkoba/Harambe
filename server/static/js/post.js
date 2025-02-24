@@ -83,7 +83,7 @@ window.onload = function() {
 
       ace.config.set(`basePath`, `/static/ace`)
       vars.editor = ace.edit(`editor`)
-      vars.editor.setTheme("ace/theme/tomorrow_night_eighties")
+      vars.editor.setTheme(`ace/theme/tomorrow_night_eighties`)
       let mode = guess_mode(vars.sample)
       vars.editor.session.setMode(mode)
       vars.editor.session.setValue(vars.sample, -1)
