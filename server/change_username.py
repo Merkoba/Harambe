@@ -9,8 +9,12 @@ import user_procs
 # However in case the username has to be changed, there is this script.
 
 
+def feedback(s: str) -> None:
+    print(s)  # noqa
+
+
 if len(sys.argv) != 3:
-    print("Usage: change_username.py <old_username> <new_username>")
+    feedback("Usage: change_username.py <old_username> <new_username>")
     exit(1)
 
 
@@ -20,24 +24,24 @@ ok, _ = user_procs.check_value(None, "username", new_username)
 
 
 if (not old_username) or (not new_username):
-    print("Please provide both the old and new usernames")
+    feedback("Please provide both the old and new usernames.")
     exit(1)
 
 
 if not ok:
-    print("Invalid new username")
+    feedback("Invalid new username.")
     exit(1)
 
 
 if not database.username_exists(old_username):
-    print("Old username does not exist")
+    feedback("Old username does not exist.")
     exit(1)
 
 
 if database.username_exists(new_username):
-    print("New username already exists")
+    feedback("New username already exists.")
     exit(1)
 
 
 database.change_username(old_username, new_username)
-print("Username changed successfully")
+feedback("Username changed successfully.")

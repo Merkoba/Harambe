@@ -598,8 +598,18 @@ def username_exists(username: str) -> bool:
 def change_username(old_username: str, new_username: str) -> None:
     check_db()
     conn, c = get_conn()
-    c.execute("update users set username = ? where username = ?", (new_username, old_username))
-    c.execute("update posts set username = ? where username = ?", (new_username, old_username))
-    c.execute("update reactions set user = ? where user = ?", (new_username, old_username))
+
+    c.execute(
+        "update users set username = ? where username = ?", (new_username, old_username)
+    )
+
+    c.execute(
+        "update posts set username = ? where username = ?", (new_username, old_username)
+    )
+
+    c.execute(
+        "update reactions set user = ? where user = ?", (new_username, old_username)
+    )
+
     conn.commit()
     conn.close()
