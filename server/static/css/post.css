@@ -115,15 +115,6 @@ a.link:hover,
     max-height: var(--max_height);
 }
 
-.text_embed {
-    max-height: 100%;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    background-color: var(--contrast_background);
-}
-
 #text_view {
     white-space: pre-wrap;
 }
@@ -327,4 +318,33 @@ a.link:hover,
     height: var(--max_height);
     max-width: var(--max_width);
     max-height: var(--max_height);
+}
+
+#markdown {
+    width: 50rem;
+    max-width: 50rem;
+    height: 33rem;
+    max-height: 33rem;
+    overflow: auto;
+    background-color: var(--contrast_background);
+}
+
+#markdown.max {
+    width: var(--max_width);
+    height: var(--max_height);
+    max-width: var(--max_width);
+    max-height: var(--max_height);
+}
+
+#markdown_inner {
+    font-size: 1rem;
+    max-height: 100%;
+    padding: 0.5rem;
+}
+
+#flash.max {
+    width: var(--max_width) !important;
+    height: var(--max_height) !important;
+    max-width: var(--max_width) !important;
+    max-height: var(--max_height) !important;
 }

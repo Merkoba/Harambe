@@ -9,8 +9,8 @@ window.onload = function() {
   vars.icons_loaded = false
   vars.selected_icon = ``
   vars.refresh_count = 0
-  vars.video_max = false
-  vars.editor_max = false
+  vars.max_on = false
+  vars.max_id = ``
   vars.image_expanded = false
 
   let delay = 30
@@ -53,7 +53,7 @@ window.onload = function() {
 
   if (vars.mtype.startsWith(`text`)) {
     if (vars.mtype === `text/markdown`) {
-      let view = DOM.el(`#markdown_view`)
+      let view = DOM.el(`#markdown`)
       let sample = view.textContent.trim()
       vars.original_markdown = sample
 
@@ -62,7 +62,7 @@ window.onload = function() {
           sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
         )
 
-        DOM.el(`#markdown_view`).innerHTML = html
+        DOM.el(`#markdown`).innerHTML = html
       }
       catch (e) {
         print_error(e)
@@ -190,7 +190,7 @@ window.onload = function() {
 
   if (max_video) {
     DOM.ev(max_video, `click`, () => {
-      toggle_max_video()
+      toggle_max(`video`)
     })
   }
 
@@ -198,16 +198,29 @@ window.onload = function() {
 
   if (max_editor) {
     DOM.ev(max_editor, `click`, () => {
-      toggle_max_editor()
+      toggle_max(`editor`)
+    })
+  }
+
+  let max_markdown = DOM.el(`#max_markdown`)
+
+  if (max_markdown) {
+    DOM.ev(max_markdown, `click`, () => {
+      toggle_max(`markdown`)
+    })
+  }
+
+  let max_flash = DOM.el(`#max_flash`)
+
+  if (max_flash) {
+    DOM.ev(max_flash, `click`, () => {
+      toggle_max(`flash`)
     })
   }
 
   DOM.ev(window, `resize`, () => {
-    if (video && vars.video_max) {
-      resize_max(`video`)
-    }
-    else if (editor && vars.editor_max) {
-      resize_max(`editor`)
+    if (vars.max_on) {
+      resize_max()
     }
   })
 
@@ -421,9 +434,10 @@ function update_date() {
 function start_flash(file) {
   let ruffle = window.RufflePlayer.newest()
   let player = ruffle.createPlayer()
+  player.id = `flash`
   player.style.width = `800px`
   player.style.height = `600px`
-  let container = DOM.el(`#flash`)
+  let container = DOM.el(`#flash_container`)
   container.appendChild(player)
   player.ruffle().load(`/${vars.file_path}/${file}`)
 }
@@ -807,9 +821,13 @@ function copy_all_text() {
 function select_all_text() {
   if (vars.editor) {
     vars.editor.selectAll()
+    return
   }
-  else {
-    select_all(DOM.el(`.text_embed`))
+
+  let markdown = DOM.el(`#markdown`)
+
+  if (markdown) {
+    select_all(markdown)
   }
 }
 
@@ -818,64 +836,32 @@ function get_text_value() {
     return vars.editor.getValue()
   }
 
-  let el = DOM.el(`.text_embed`)
+  let markdown = DOM.el(`#mardkwon`)
 
-  if (el.id === `markdown_view`) {
+  if (markdown) {
     return vars.original_markdown
   }
-
-  return el.textContent
 }
 
-function maximize_media() {
-  let image = DOM.el(`#image`)
-
-  if (image) {
-    toggle_modal_image()
-    return
-  }
-
-  let video = DOM.el(`#video`)
-
-  if (video) {
-    toggle_max_video()
-  }
-}
-
-function toggle_max_video() {
-  let video = DOM.el(`#video`)
-  let details = DOM.el(`#details`)
-  vars.video_max = !vars.video_max
-
-  if (vars.video_max) {
-    resize_max(`video`)
-    DOM.hide(details)
-    video.classList.add(`max`)
-  }
-  else {
-    DOM.show(details)
-    video.classList.remove(`max`)
-  }
-}
-
-function toggle_max_editor() {
-  let editor = DOM.el(`#editor`)
-  let details = DOM.el(`#details`)
-  vars.editor_max = !vars.editor_max
-
-  if (vars.editor_max) {
-    resize_max(`editor`)
-    DOM.hide(details)
-    editor.classList.add(`max`)
-  }
-  else {
-    DOM.show(details)
-    editor.classList.remove(`max`)
-  }
-}
-
-function resize_max(what) {
+function toggle_max(what) {
   let el = DOM.el(`#${what}`)
+  let details = DOM.el(`#details`)
+  vars.max_on = !vars.max_on
+  vars.max_id = what
+
+  if (vars.max_on) {
+    resize_max()
+    DOM.hide(details)
+    el.classList.add(`max`)
+  }
+  else {
+    DOM.show(details)
+    el.classList.remove(`max`)
+  }
+}
+
+function resize_max() {
+  let el = DOM.el(`#${vars.max_id}`)
   let w_width = window.innerWidth
   let w_height = window.innerHeight
   let v_rect = el.getBoundingClientRect()

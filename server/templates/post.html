@@ -132,6 +132,20 @@
         </div>
         {% endif %}
 
+        {% if post.markdown_embed %}
+        <div class="rowitem nowrap">
+            <div id="max_markdown" class="button" title="Maximize the markdown">Max</div>
+            <div class="sep">|</div>
+        </div>
+        {% endif %}
+
+        {% if post.flash_embed %}
+        <div class="rowitem nowrap">
+            <div id="max_flash" class="button" title="Maximize the flash player">Max</div>
+            <div class="sep">|</div>
+        </div>
+        {% endif %}
+
         {% if post.title or post.original %}
         <div id="title" title="{{post.title or post.original}}">{{post.title or post.original}}</div>
         {% endif %}
@@ -191,8 +205,8 @@
         </div>
 
         {% if post.markdown_embed %}
-        <div class="text_container">
-            <div id="markdown_view" class="text_embed">{{post.sample}}</div>
+        <div id="markdown_container">
+            <div id="markdown">{{post.sample}}</div>
         </div>
         {% else %}
         <div id="editor"></div>
@@ -201,9 +215,7 @@
     {% endif %}
 
     {% if post.flash_embed %}
-    <div class="embed">
-        <div id="flash"></div>
-    </div>
+    <div id="flash_container" class="embed"></div>
     {% endif %}
 
     {% if reactions_enabled %}
