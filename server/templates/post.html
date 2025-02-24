@@ -73,6 +73,13 @@
     </div>
 </template>
 
+<template id="template_react_opts">
+    <div class="dialog_container">
+        <div id="react_opts_text" class="aero_button">Text</div>
+        <div id="react_opts_icon" class="aero_button">Icon</div>
+    </div>
+</template>
+
 <template id="template_reaction_opts">
     <div class="dialog_container">
         <div id="reaction_opts_edit" class="aero_button">Edit</div>
@@ -194,16 +201,9 @@
 
     <div id="react_buttons" class="nowrap">
         {% if is_user %}
-        <div id="react_text" class="icon_btn">
-            <div>📝</div>
-            <div class="icon_btn_text">React with Text</div>
-        </div>
-
-        <div class="sep">|</div>
-
-        <div id="react_icon" class="icon_btn">
+        <div id="react_btn" class="icon_btn">
             <div>🫠</div>
-            <div class="icon_btn_text">React with an Icon</div>
+            <div class="icon_btn_text">React To This Post</div>
         </div>
         {% endif %}
 

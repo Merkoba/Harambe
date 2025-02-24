@@ -78,7 +78,7 @@ function prompt_text(args = {}) {
     input = DOM.create(`input`)
   }
 
-  input.rows = 6
+  input.rows = 5
   input.id = `prompt_input`
   input.type = `text`
   input.placeholder = args.placeholder
@@ -364,7 +364,7 @@ function edit_reaction_opts() {
   DOM.ev(`#edit_reaction_opts_icon`, `click`, (e) => {
     vars.msg_edit_reaction_opts.close()
     let id = parseInt(vars.active_item.dataset.id)
-    show_icons(id)
+    react_icon(id)
   })
 }
 
@@ -382,5 +382,21 @@ function setup_reaction_opts() {
   DOM.ev(`#reaction_opts_delete`, `click`, (e) => {
     vars.msg_reaction_opts.close()
     delete_reaction(vars.active_item.dataset.id)
+  })
+}
+
+function setup_react_opts() {
+  vars.msg_react_opts = Msg.factory()
+  let template = DOM.el(`#template_react_opts`)
+  vars.msg_react_opts.set(template.innerHTML)
+
+  DOM.ev(`#react_opts_text`, `click`, (e) => {
+    vars.msg_react_opts.close()
+    react_text()
+  })
+
+  DOM.ev(`#react_opts_icon`, `click`, (e) => {
+    vars.msg_react_opts.close()
+    react_icon()
   })
 }

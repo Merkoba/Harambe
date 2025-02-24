@@ -95,7 +95,7 @@ window.onload = function() {
 
   if (r_icon) {
     DOM.ev(r_icon, `click`, () => {
-      show_icons()
+      react_icon()
     })
   }
 
@@ -221,6 +221,16 @@ window.onload = function() {
 
   if (reaction_opts) {
     setup_reaction_opts()
+  }
+
+  let react_btn = DOM.el(`#react_btn`)
+
+  if (react_btn) {
+    setup_react_opts()
+
+    DOM.ev(react_btn, `click`, () => {
+      vars.msg_react_opts.show()
+    })
   }
 }
 
@@ -383,7 +393,7 @@ function react_alert() {
   popmsg(`You might have to login to react.`)
 }
 
-async function show_icons(id) {
+async function react_icon(id) {
   if (!vars.can_react) {
     react_alert()
     return
