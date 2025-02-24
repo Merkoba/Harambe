@@ -939,29 +939,23 @@ function remove_reaction(id) {
 
 function replace_urls(text) {
   let here = window.location.origin
-  let re = new RegExp(`${here}/post/(\\w+)`, `gi`)
+  let re = new RegExp(`${here}/post/([^/?&]+)\/?$`, `gi`)
   text = text.replace(re, `/post/$1`)
-  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([^/?&]+)(#[^/?&]+)?\/?$/
-  text = text.replace(re, `/wiki/$2$3`)
+  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([^/?&]+)\/?$/
+  text = text.replace(re, `/wiki/$2`)
   return text
 }
 
 function text_html(text) {
   text = text.replace(/</g, `&lt;`)
   text = text.replace(/>/g, `&gt;`)
-  let re = new RegExp(`/post/(\\w+)`, `gi`)
+  let re = new RegExp(`/post/([^/?&]+)`, `gi`)
   text = text.replace(re, `<a href="/post/$1">$1</a>`)
   re = /\/wiki\/([^/?&]+)(#[^/?&]+)?\/?/gi
 
-  return text.replace(re, (match, p1, p2) => {
-    let u = p1
-    let s = decodeURIComponent(p1)
-
-    if (p2) {
-      u += p2
-      s += p2 ? decodeURIComponent(p2) : ``
-    }
-
+  return text.replace(re, (match, g1) => {
+    let u = g1
+    let s = decodeURIComponent(g1)
     return `<a href="https://wikipedia.org/wiki/${u}">${s}</a>`
   })
 }
