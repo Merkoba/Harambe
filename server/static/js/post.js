@@ -939,7 +939,7 @@ function remove_reaction(id) {
 
 function replace_urls(text) {
   let here = window.location.origin
-  let re = new RegExp(`${here}/post/([^/?&]+)\/?$`, `gi`)
+  let re = new RegExp(`${here}/post/([^/?&]+)/?$`, `gi`)
   text = text.replace(re, `/post/$1`)
   re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([^/?&]+)\/?$/
   text = text.replace(re, `/wiki/$2`)
