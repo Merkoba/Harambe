@@ -20,6 +20,7 @@ class Reaction:
     uname: str
     value: str
     mode: str
+    listed: bool
     date: int
     ago: str
     uname_str: str
@@ -43,6 +44,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         reaction.uname,
         reaction.value,
         reaction.mode,
+        reaction.listed,
         reaction.date,
         ago,
         uname_str,
@@ -73,7 +75,7 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if database.get_reaction_count(name, user.username) >= config.max_user_reactions:
         return utils.bad("You can't add more reactions")
 
-    id_ = database.add_reaction(name, user.username, user.name, text, mode)
+    id_ = database.add_reaction(name, user.username, user.name, text, mode, user.lister)
 
     if not id_:
         return utils.bad("Reaction failed")
@@ -102,6 +104,7 @@ def get_reactions(
     admin: bool = False,
     username: str = "",
     max_reactions: int = 0,
+    only_listed: bool = False,
 ) -> tuple[list[Reaction], str, bool]:
     psize = 0
 
@@ -116,6 +119,10 @@ def get_reactions(
     query = utils.clean_query(query)
 
     for reaction in get_reactionlist():
+        if only_listed:
+            if not reaction.listed:
+                continue
+
         if username:
             if reaction.user != username:
                 continue

@@ -135,6 +135,7 @@ def get_users(
     query: str = "",
     sort: str = "register_date",
     admin: bool = False,
+    username: str = "",
 ) -> tuple[list[User], str, bool]:
     psize = 0
 
@@ -149,6 +150,10 @@ def get_users(
     query = utils.clean_query(query)
 
     for user in get_userlist():
+        if username:
+            if user.username != username:
+                continue
+
         ok = (
             not query
             or query in utils.clean_query(user.username)
@@ -293,20 +298,24 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
         value = value.strip()
 
         if not value:
-            return False, None
+            if user and user.name:
+                value = user.name
 
-        value = utils.single_line(value)
+        if value:
+            value = utils.single_line(value)
 
-        if len(value) > config.max_user_name_length:
-            return False, None
+            if len(value) > config.max_user_name_length:
+                return False, None
     elif what == "mark":
         value = value.strip()
 
         if not value:
-            return False, None
+            if user and user.mark:
+                value = user.mark
 
-        if not value.isalnum():
-            return False, None
+        if value:
+            if not value.isalnum():
+                return False, None
     elif value:
         if vtype == "int":
             try:
@@ -435,9 +444,7 @@ def edit_user(
         n_args["reacter"],
     )
 
-    if user and (user.name != n_args["name"]):
-        database.change_uploader(user.username, n_args["name"])
-
+    check_user_changes(user, n_args)
     return True, uname
 
 
@@ -454,11 +461,7 @@ def user_edit(user: User, what: str, value: Any) -> tuple[str, int]:
         return utils.bad("Invalid value")
 
     database.mod_user([user.username], what, value)
-
-    if (what == "name") and (user.name != value):
-        database.change_uploader(user.username, value)
-        database.change_reacter(user.username, value)
-
+    check_user_changes(user, {"name": value})
     return utils.ok()
 
 
@@ -616,3 +619,17 @@ def register(request: Request) -> tuple[bool, str, User | None]:
         return False, "User not found", None
 
     return True, "User registered successfully", user
+
+
+def check_user_changes(user: User | None, args: dict[str, Any]) -> None:
+    if not user:
+        return
+
+    if "name" in args:
+        if user.name != args["name"]:
+            database.change_uploader(user.username, args["name"])
+            database.change_reacter(user.username, args["name"])
+
+    if "lister" in args:
+        if user.lister != args["lister"]:
+            database.change_listed(user.username, args["lister"])

@@ -225,12 +225,12 @@ function setup_you_opts(username) {
 
   DOM.ev(`#you_opts_posts`, `click`, (e) => {
     vars.msg_you_opts.close()
-    window.location = `/posts?username=${username}`
+    window.location = `/list/posts?username=${username}`
   })
 
   DOM.ev(`#you_opts_reactions`, `click`, (e) => {
     vars.msg_you_opts.close()
-    window.location = `/reactions?username=${username}`
+    window.location = `/list/reactions?username=${username}`
   })
 
   DOM.ev(`#you_opts_edit_name`, `click`, (e) => {
@@ -273,11 +273,11 @@ function setup_user_opts() {
     vars.msg_user_opts.close()
     let username = vars.active_item.dataset.username
 
-    if (vars.mode.includes(`_admin`)) {
+    if (vars.mode.includes(`admin`)) {
       window.location = `/admin/posts?username=${username}`
     }
     else {
-      window.location = `/posts?username=${username}`
+      window.location = `/list/posts?username=${username}`
     }
   })
 
@@ -285,13 +285,21 @@ function setup_user_opts() {
     vars.msg_user_opts.close()
     let username = vars.active_item.dataset.username
 
-    if (vars.mode.includes(`_admin`)) {
+    if (vars.mode.includes(`admin`)) {
       window.location = `/admin/reactions?username=${username}`
     }
     else {
-      window.location = `/reactions?username=${username}`
+      window.location = `/list/reactions?username=${username}`
     }
   })
+
+  if (vars.mode.includes(`admin`)) {
+    DOM.ev(`#user_opts_user`, `click`, (e) => {
+      vars.msg_user_opts.close()
+      let username = vars.active_item.dataset.username
+      window.location = `/admin/users?username=${username}`
+    })
+  }
 }
 
 function fill_def_args(def, args) {

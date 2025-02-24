@@ -439,6 +439,7 @@ def admin(what: str) -> Any:
             page_size,
             query=query,
             sort=sort,
+            username=username,
             admin=True,
         )
     elif what == "reactions":
@@ -642,6 +643,7 @@ def show_list(what: str) -> Any:
             page,
             page_size,
             max_reactions=config.list_max_reactions,
+            only_listed=only_listed,
             query=query,
             sort=sort,
             admin=True,

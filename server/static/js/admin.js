@@ -12,23 +12,23 @@ window.onload = () => {
     vars.active_item = item
 
     if (e.target.classList.contains(`edit`)) {
-      if (vars.mode === `users_admin`) {
+      if (vars.mode === `admin_users`) {
         window.location = `/edit_user/${item.dataset.username}`
       }
-      else if (vars.mode === `posts_admin`) {
+      else if (vars.mode === `admin_posts`) {
         edit_title(item)
       }
     }
     else if (e.target.classList.contains(`delete`)) {
       vars.selected_items = [e.target.closest(`.item`)]
 
-      if (vars.mode === `users_admin`) {
+      if (vars.mode === `admin_users`) {
         delete_users()
       }
-      else if (vars.mode === `posts_admin`) {
+      else if (vars.mode === `admin_posts`) {
         delete_posts()
       }
-      else if (vars.mode === `reactions_admin`) {
+      else if (vars.mode === `admin_reactions`) {
         delete_reactions()
       }
     }
@@ -62,7 +62,7 @@ window.onload = () => {
     let item = e.target.closest(`.item`)
 
     if (e.target.classList.contains(`edit`)) {
-      if (vars.mode === `users_admin`) {
+      if (vars.mode === `admin_users`) {
         window.open(`/edit_user/${item.dataset.username}`, `_blank`)
       }
     }
@@ -93,7 +93,7 @@ window.onload = () => {
     let t = DOM.el(`#template_edit`)
     vars.msg_edit.set(t.innerHTML)
 
-    if (vars.mode === `users_admin`) {
+    if (vars.mode === `admin_users`) {
       DOM.ev(`#edit_reader_yes`, `click`, () => {
         mod_user(`reader`, 1, `bool`)
       })
@@ -550,13 +550,13 @@ function delete_selected() {
 
   vars.selected_items = items
 
-  if (vars.mode === `users_admin`) {
+  if (vars.mode === `admin_users`) {
     delete_users()
   }
-  else if (vars.mode === `posts_admin`) {
+  else if (vars.mode === `admin_posts`) {
     delete_posts()
   }
-  else if (vars.mode === `reactions_admin`) {
+  else if (vars.mode === `admin_reactions`) {
     delete_reactions()
   }
 }
@@ -713,7 +713,7 @@ async function do_mod_user(items, what, value, vtype) {
 }
 
 function delete_all() {
-  if (vars.mode === `users_admin`) {
+  if (vars.mode === `admin_users`) {
     let confirm_args = {
       message: `Delete all non-admin users ?`,
       callback_yes: () => {
@@ -723,7 +723,7 @@ function delete_all() {
 
     confirmbox(confirm_args)
   }
-  else if (vars.mode === `posts_admin`) {
+  else if (vars.mode === `admin_posts`) {
     let confirm_args = {
       message: `Delete ALL posts ?`,
       callback_yes: () => {
@@ -733,7 +733,7 @@ function delete_all() {
 
     confirmbox(confirm_args)
   }
-  else if (vars.mode === `reactions_admin`) {
+  else if (vars.mode === `admin_reactions`) {
     let confirm_args = {
       message: `Delete ALL reactions ?`,
       callback_yes: () => {

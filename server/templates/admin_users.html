@@ -55,12 +55,22 @@
     </div>
 </template>
 
+{% if mode == "admin_users" %}
+<template id="template_user_opts">
+    <div class="dialog_container">
+        <div id="user_opts_posts" class="aero_button">Posts</div>
+        <div id="user_opts_reactions" class="aero_button">Reactions</div>
+        <div id="user_opts_user" class="aero_button">User</div>
+    </div>
+</template>
+{% else %}
 <template id="template_user_opts">
     <div class="dialog_container">
         <div id="user_opts_posts" class="aero_button">Posts</div>
         <div id="user_opts_reactions" class="aero_button">Reactions</div>
     </div>
 </template>
+{% endif %}
 
 <div id="top" class="nowrap">
     <div id="back_btn" class="action_button">Back</div>

@@ -17,7 +17,9 @@
     <div>{{title}}</div>
 
     <form id="form" action="/edit_user/{{user.username}}" method="post">
+        {% if mode != "edit" %}
         <input type="text" id="username" name="username" placeholder="Username">
+        {% endif %}
         <input type="password" id="password" name="password" placeholder="Password" value="">
         <input type="text" id="name" name="name" placeholder="Name" value="{{user.name}}">
         <input type="text" id="rpm" name="rpm" placeholder="Requests Per Minute" value="{% if user and (user.rpm > 0) %}{{user.rpm}}{% endif %}">
@@ -65,7 +67,7 @@
         </div>
 
         <div class="checkbox">
-            <div>Activity Appears In The Lists</div>
+            <div>Appears In Lists</div>
 
             {% if (not user) or (user and user.lister) %}
             <input id="lister" name="lister" type="checkbox" checked>

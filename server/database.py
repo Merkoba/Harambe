@@ -68,6 +68,7 @@ class Reaction:
     uname: str
     value: str
     mode: str
+    listed: bool
     date: int
 
 
@@ -432,15 +433,27 @@ def change_uploader(username: str, new_name: str) -> None:
     conn.close()
 
 
-def add_reaction(post: str, user: str, uname: str, value: str, mode: str) -> int | None:
+def change_listed(username: str, listed: bool) -> None:
+    utils.q(username, listed)
     check_db()
     conn, c = get_conn()
-    cols = ["post", "user", "uname", "value", "mode", "date"]
+    c.execute("update posts set listed = ? where username = ?", (listed, username))
+    c.execute("update reactions set listed = ? where user = ?", (listed, username))
+    conn.commit()
+    conn.close()
+
+
+def add_reaction(
+    post: str, user: str, uname: str, value: str, mode: str, listed: bool
+) -> int | None:
+    check_db()
+    conn, c = get_conn()
+    cols = ["post", "user", "uname", "value", "mode", "listed", "date"]
     placeholders = ", ".join("?" for _ in cols)
 
     c.execute(
         f"insert into reactions ({','.join(cols)}) values ({placeholders}) returning id",
-        (post, user, uname, value, mode, utils.now()),
+        (post, user, uname, value, mode, listed, utils.now()),
     )
 
     id_ = c.fetchone()[0]
@@ -457,6 +470,7 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
         uname=row.get("uname") or "",
         value=row.get("value") or "",
         mode=row.get("mode") or "",
+        listed=bool(row.get("listed")),
         date=int(row.get("date") or 0),
     )
 

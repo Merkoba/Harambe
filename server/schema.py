@@ -22,6 +22,16 @@ schemas = {
         "sample": "text default ''",
         "reactions": "integer default 0",
     },
+    "reactions": {
+        "id": "integer primary key autoincrement",
+        "post": "text default ''",
+        "user": "text default ''",
+        "uname": "text default ''",
+        "value": "text default ''",
+        "mode": "text default ''",
+        "listed": "int default 1",
+        "date": "int default 0",
+    },
     "users": {
         "username": "text primary key default ''",
         "password": "text default ''",
@@ -38,15 +48,6 @@ schemas = {
         "reactions": "integer default 0",
         "poster": "integer default 1",
         "reacter": "integer default 1",
-    },
-    "reactions": {
-        "id": "integer primary key autoincrement",
-        "post": "text default ''",
-        "user": "text default ''",
-        "uname": "text default ''",
-        "value": "text default ''",
-        "mode": "text default ''",
-        "date": "int default 0",
     },
 }
 
