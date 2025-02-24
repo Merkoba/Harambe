@@ -294,7 +294,7 @@ def post(name: str) -> Any:
     else:
         owned = False
         username = ""
-        admin = False
+        is_admin = False
 
     show_list = list_visible(user)
     can_react = False
