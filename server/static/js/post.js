@@ -784,10 +784,19 @@ function copy_all_text() {
 }
 
 function select_all_text() {
-  select_all(DOM.el(`.text_embed`))
+  if (vars.editor) {
+    vars.editor.selectAll()
+  }
+  else {
+    select_all(DOM.el(`.text_embed`))
+  }
 }
 
 function get_text_value() {
+  if (vars.editor) {
+    return vars.editor.getValue()
+  }
+
   let el = DOM.el(`.text_embed`)
 
   if (el.id === `markdown_view`) {
