@@ -235,7 +235,6 @@ a.link:hover,
     display: flex;
     justify-content: flex-start;
     border: 1px solid var(--frame_color);
-    min-width: 18rem;
     max-width: 66rem;
     align-items: flex-start;
 }

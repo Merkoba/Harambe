@@ -588,14 +588,22 @@ function make_reaction(reaction) {
   DOM.el(`.reaction_uname`, item).textContent = name
   DOM.el(`.reaction_value`, item).appendChild(vitem)
   let ago = DOM.el(`.reaction_ago`, item)
+
+  new Tooltip({
+    element: ago,
+    generate: () => {
+      return dateFormat(r.date * 1000, `d mmmm yyyy hh:MM TT`)
+    },
+  })
+
   ago.textContent = reaction.ago
-  ago.title = reaction.date_str
   DOM.show(`#to_bottom_container`)
   DOM.show(`#totopia`)
   item.dataset.id = r.id
   item.dataset.username = r.user
   item.dataset.value = r.value
   item.dataset.mode = r.mode
+  item.dataset.date = r.date
 
   if ((r.user === vars.username) || vars.is_admin) {
     DOM.show(DOM.el(`.reaction_edit`, item))

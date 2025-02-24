@@ -471,3 +471,54 @@ function parse_markdown(text) {
 function escape_regex(s) {
   return s.replace(/[^A-Za-z0-9]/g, `\\$&`)
 }
+
+function create_debouncer(func, delay) {
+  if (typeof func !== `function`) {
+    print_error(`Invalid debouncer function`)
+    return
+  }
+
+  if ((typeof delay !== `number`) || (delay < 1)) {
+    print_error(`Invalid debouncer delay`)
+    return
+  }
+
+  let timer
+  let obj = {}
+
+  function clear() {
+    clearTimeout(timer)
+    timer = undefined
+  }
+
+  function run(...args) {
+    func(...args)
+  }
+
+  obj.call = (...args) => {
+    clear()
+
+    timer = setTimeout(() => {
+      run(...args)
+    }, delay)
+  }
+
+  obj.call_2 = (...args) => {
+    if (timer) {
+      return
+    }
+
+    obj.call(args)
+  }
+
+  obj.now = (...args) => {
+    clear()
+    run(...args)
+  }
+
+  obj.cancel = () => {
+    clear()
+  }
+
+  return obj
+}
