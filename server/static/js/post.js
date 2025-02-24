@@ -982,15 +982,16 @@ function remove_reaction(id) {
 
 function replace_urls(text) {
   let here = window.location.origin
-  let re = new RegExp(`${here}/post/([0-9A-Za-z]+)/?$`, `gi`)
+  let re = new RegExp(`${here}/post/([0-9A-Za-z]+)/?$`, `g`)
   text = text.replace(re, `/post/$1`)
-  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([0-9A-Za-z_()#-]+)\/?$/
+  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([0-9A-Za-z_()#-]+)\/?$/g
   text = text.replace(re, `/wiki/$2`)
-  re = /https?:\/\/www\.youtube\.com\/watch\?v=([0-9A-Za-z_-]+)\/?$/
+  re = /https?:\/\/www\.youtube\.com\/watch\?v=([0-9A-Za-z_-]+)\/?$/g
   text = text.replace(re, `/yt/$1`)
-  re = /https?:\/\/youtu\.be\/([0-9A-Za-z_-]+)\/?$/
+  re = /https?:\/\/youtu\.be\/([0-9A-Za-z_-]+)\/?$/g
   text = text.replace(re, `/yt/$1`)
-  return text
+  re = /https?:\/\/github\.com\/([0-9A-Za-z_-]+)\/([0-9A-Za-z_-]+)\/?$/g
+  return text.replace(re, `/github/$1/$2`)
 }
 
 function text_html(text) {
@@ -1022,5 +1023,10 @@ function text_html(text) {
 
   // YouTube
   re = /\/yt\/([0-9A-Za-z_-]+)\/?/gi
-  return text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
+  text = text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
+
+  // GitHub
+  re = /\/github\/([0-9A-Za-z_-]+)\/([0-9A-Za-z_-]+)\/?/gi
+  text = text.replace(re, `<a href="https://github.com/$1/$2">$1/$2</a>`)
+  return text
 }
