@@ -50,24 +50,51 @@ window.onload = function() {
     })
   }
 
-  if (vars.mtype === `text/markdown`) {
-    let view = DOM.el(`#markdown_view`)
-    let sample = view.textContent.trim()
-    vars.original_markdown = sample
+  if (vars.mtype.startsWith(`text`)) {
+    if (vars.mtype === `text/markdown`) {
+      let view = DOM.el(`#markdown_view`)
+      let sample = view.textContent.trim()
+      vars.original_markdown = sample
 
-    try {
-      let html = marked.parse(
-        sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
-      )
+      try {
+        let html = marked.parse(
+          sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
+        )
 
-      DOM.el(`#markdown_view`).innerHTML = html
+        DOM.el(`#markdown_view`).innerHTML = html
+      }
+      catch (e) {
+        print_error(e)
+      }
     }
-    catch (e) {
-      print_error(e)
+    else {
+      function guess_mode() {
+        let modelist = ace.require(`ace/ext/modelist`)
+        let modes = modelist.modes;
+
+        for (let mode of modes) {
+          if (vars.mtype.includes(mode.name)) {
+            return mode.mode
+          }
+        }
+
+        return `ace/mode/text`
+      }
+
+      ace.config.set(`basePath`, `/static/ace`)
+      vars.editor = ace.edit(`editor`)
+      vars.editor.setTheme("ace/theme/tomorrow_night_eighties")
+      let mode = guess_mode(vars.sample)
+      vars.editor.session.setMode(mode)
+      vars.editor.session.setValue(vars.sample, -1)
+      vars.editor.setReadOnly(true)
+
     }
   }
-  else if (vars.mtype.startsWith(`application`) && vars.mtype.includes(`flash`)) {
-    start_flash(vars.name)
+  else if (vars.mtype.startsWith(`application`)) {
+    if (vars.mtype.includes(`flash`)) {
+      start_flash(vars.name)
+    }
   }
 
   let image = DOM.el(`#image`)

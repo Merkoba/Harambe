@@ -26,12 +26,16 @@
     vars.reactions = {{post.reactions | tojson}}
     vars.username = {{username | tojson | safe}}
     vars.is_admin = {{is_admin | tojson}}
+    vars.sample = {{post.sample | tojson | safe}}
 </script>
 
+<script src="/static/ruffle/ruffle.js"></script>
 <script src="/static/js/msg.js"></script>
 <script src="/static/js/marked.js"></script>
 <script src="/static/js/dateformat.js"></script>
-<script src="/static/ruffle/ruffle.js"></script>
+<script src="/static/ace/ace.js"></script>
+<script src="/static/ace/ext-modelist.js"></script>
+<script src="/static/ace/theme-tomorrow_night_eighties.js"></script>
 <script src="/static/js/post.js"></script>
 {% endblock %}
 
@@ -183,9 +187,7 @@
             <div id="markdown_view" class="text_embed">{{post.sample}}</div>
         </div>
         {% else %}
-        <div class="text_container">
-            <div id="text_view" class="text_embed">{{post.sample}}</div>
-        </div>
+        <div id="editor"></div>
         {% endif %}
     </div>
     {% endif %}
