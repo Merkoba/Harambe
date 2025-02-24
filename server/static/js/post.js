@@ -1004,7 +1004,7 @@ function text_html(text) {
 
   // Internal posts
   let re = new RegExp(`/post/([0-9A-Za-z]+)`, `gi`)
-  text = text.replace(re, `<a href="/post/$1">$1</a>`)
+  text = text.replace(re, `<a href="/post/$1">Post: $1</a>`)
 
   // Wikipedia
   re = /\/wiki\/([0-9A-Za-z_()-]+)(#[0-9A-Za-z_()-]+)?\/?/gi
@@ -1018,15 +1018,15 @@ function text_html(text) {
       s += decodeURIComponent(g2)
     }
 
-    return `<a href="https://wikipedia.org/wiki/${u}">${s}</a>`
+    return `<a href="https://wikipedia.org/wiki/${u}">Wiki: ${s}</a>`
   })
 
   // YouTube
   re = /\/yt\/([0-9A-Za-z_-]+)\/?/gi
-  text = text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">$1</a>`)
+  text = text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">YT: $1</a>`)
 
   // GitHub
   re = /\/github\/([0-9A-Za-z_-]+)\/([0-9A-Za-z_-]+)\/?/gi
-  text = text.replace(re, `<a href="https://github.com/$1/$2">$1/$2</a>`)
+  text = text.replace(re, `<a href="https://github.com/$1/$2">GH: $1/$2</a>`)
   return text
 }
