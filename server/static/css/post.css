@@ -321,3 +321,10 @@ a.link:hover,
     max-height: 33rem;
     font-size: 1rem;
 }
+
+#editor.max {
+    width: var(--max_width);
+    height: var(--max_height);
+    max-width: var(--max_width);
+    max-height: var(--max_height);
+}

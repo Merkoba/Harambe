@@ -125,6 +125,13 @@
         </div>
         {% endif %}
 
+        {% if post.text_embed and not post.markdown_embed %}
+        <div class="rowitem nowrap">
+            <div id="max_editor" class="button" title="Maximize the editor">Max</div>
+            <div class="sep">|</div>
+        </div>
+        {% endif %}
+
         {% if post.title or post.original %}
         <div id="title" title="{{post.title or post.original}}">{{post.title or post.original}}</div>
         {% endif %}

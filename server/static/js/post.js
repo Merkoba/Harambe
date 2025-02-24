@@ -10,6 +10,7 @@ window.onload = function() {
   vars.selected_icon = ``
   vars.refresh_count = 0
   vars.video_max = false
+  vars.editor_max = false
   vars.image_expanded = false
 
   let delay = 30
@@ -193,9 +194,20 @@ window.onload = function() {
     })
   }
 
+  let max_editor = DOM.el(`#max_editor`)
+
+  if (max_editor) {
+    DOM.ev(max_editor, `click`, () => {
+      toggle_max_editor()
+    })
+  }
+
   DOM.ev(window, `resize`, () => {
     if (video && vars.video_max) {
-      resize_video()
+      resize_max(`video`)
+    }
+    else if (editor && vars.editor_max) {
+      resize_max(`editor`)
     }
   })
 
@@ -836,8 +848,9 @@ function toggle_max_video() {
   vars.video_max = !vars.video_max
 
   if (vars.video_max) {
+    resize_max(`video`)
     DOM.hide(details)
-    resize_video()
+    video.classList.add(`max`)
   }
   else {
     DOM.show(details)
@@ -845,15 +858,31 @@ function toggle_max_video() {
   }
 }
 
-function resize_video() {
+function toggle_max_editor() {
+  let editor = DOM.el(`#editor`)
+  let details = DOM.el(`#details`)
+  vars.editor_max = !vars.editor_max
+
+  if (vars.editor_max) {
+    resize_max(`editor`)
+    DOM.hide(details)
+    editor.classList.add(`max`)
+  }
+  else {
+    DOM.show(details)
+    editor.classList.remove(`max`)
+  }
+}
+
+function resize_max(what) {
+  let el = DOM.el(`#${what}`)
   let w_width = window.innerWidth
   let w_height = window.innerHeight
-  let v_rect = video.getBoundingClientRect()
+  let v_rect = el.getBoundingClientRect()
   let v_width = w_width - v_rect.left - 20
   let v_height = w_height - v_rect.top - 20
   set_css_var(`max_width`, `${v_width}px`)
   set_css_var(`max_height`, `${v_height}px`)
-  video.classList.add(`max`)
 }
 
 function add_icon_events() {
