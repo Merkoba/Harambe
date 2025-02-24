@@ -797,14 +797,8 @@ function do_filter() {
 }
 
 function mode_string() {
-  if (vars.mode === `post_history`) {
-    return `posts`
-  }
-  else if (vars.mode === `reaction_history`) {
-    return `reactions`
-  }
-
-  return `admin/${vars.mode}`
+  let split = vars.mode.split(`_`)
+  return split.join(`/`)
 }
 
 function delete_reactions() {

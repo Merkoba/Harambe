@@ -457,7 +457,7 @@ def admin(what: str) -> Any:
     html_page = f"admin_{what}.html"
     title = what.capitalize()
     items: list[Post] | list[User] | list[Reaction]
-    mode = f"{what}_admin"
+    mode = f"admin_{what}"
 
     if what == "posts":
         items = post_items
@@ -594,11 +594,10 @@ def logout() -> Any:
 # LIST
 
 
-@app.route("/posts", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/posts/<int:page>", methods=["GET"])  # type: ignore
+@app.route("/list/<string:what>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-def show_list(page: int = 1) -> Any:
+def show_list(what: str) -> Any:
     user = get_user()
 
     if not user:
@@ -624,26 +623,48 @@ def show_list(page: int = 1) -> Any:
     sort = request.args.get("sort", "date")
     query = request.args.get("query", "")
     only_listed = not history
+    post_items: list[Post] = []
+    reaction_items: list[Reaction] = []
 
-    posts, total, next_page = post_procs.get_posts(
-        page,
-        page_size,
-        max_posts=config.list_max_posts,
-        sort=sort,
-        query=query,
-        only_listed=only_listed,
-        username=username,
-        admin=False,
-    )
+    if what == "posts":
+        post_items, total, next_page = post_procs.get_posts(
+            page,
+            page_size,
+            max_posts=config.list_max_posts,
+            sort=sort,
+            query=query,
+            only_listed=only_listed,
+            username=username,
+            admin=False,
+        )
+    elif what == "reactions":
+        reaction_items, total, next_page = react_procs.get_reactions(
+            page,
+            page_size,
+            max_reactions=config.list_max_reactions,
+            query=query,
+            sort=sort,
+            admin=True,
+            username=username,
+        )
+    else:
+        return over()
 
     def_page_size = page_size == config.list_page_size
+    html_page = f"admin_{what}.html"
     title = "List" if not history else "History"
-    mode = "posts_history"
+    items: list[Post] | list[Reaction]
+    mode = f"list_{what}"
+
+    if what == "posts":
+        items = post_items
+    elif what == "reactions":
+        items = reaction_items
 
     return render_template(
-        "admin_posts.html",
+        html_page,
         mode=mode,
-        items=posts,
+        items=items,
         total=total,
         page=page,
         title=title,
@@ -669,67 +690,6 @@ def latest_post() -> Any:
         return over()
 
     return redirect(url_for("post", name=post.name))
-
-
-@app.route("/reactions", defaults={"page": 1}, methods=["GET"])  # type: ignore
-@app.route("/reactions/<int:page>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def show_reacts(page: int = 1) -> Any:
-    user = get_user()
-
-    if not user:
-        return over()
-
-    admin = user.admin
-    username = request.args.get("username", "")
-    history = user.username == username
-
-    if not history:
-        if not config.list_enabled and (not admin):
-            return redirect(url_for("index"))
-
-        if config.list_private and (not admin):
-            if not logged_in():
-                return redirect(url_for("login"))
-
-            if not user.reader:
-                return redirect(url_for("index"))
-
-    page = int(request.args.get("page", 1))
-    page_size = request.args.get("page_size", config.list_page_size)
-    sort = request.args.get("sort", "date")
-    query = request.args.get("query", "")
-
-    posts, total, next_page = react_procs.get_reactions(
-        page,
-        page_size,
-        max_reactions=config.list_max_reactions,
-        sort=sort,
-        query=query,
-        username=username,
-        admin=False,
-    )
-
-    def_page_size = page_size == config.list_page_size
-    title = "List" if not history else "History"
-    mode = "reactions_history"
-
-    return render_template(
-        "admin_reactions.html",
-        mode=mode,
-        items=posts,
-        total=total,
-        page=page,
-        title=title,
-        next_page=next_page,
-        page_size=page_size,
-        def_page_size=def_page_size,
-        username=username,
-        sort=sort,
-        back="/",
-        **theme_configs(),
-    )
 
 
 # USERS

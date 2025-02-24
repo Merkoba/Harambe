@@ -195,12 +195,12 @@ function setup_explore_opts() {
 
   DOM.ev(`#explore_opts_posts`, `click`, (e) => {
     vars.msg_explore_opts.close()
-    window.location = `/posts`
+    window.location = `/list/posts`
   })
 
   DOM.ev(`#explore_opts_reactions`, `click`, (e) => {
     vars.msg_explore_opts.close()
-    window.location = `/reactions`
+    window.location = `/list/reactions`
   })
 
   DOM.ev(`#explore_opts_random`, `click`, (e) => {
