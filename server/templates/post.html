@@ -168,8 +168,11 @@
             <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
             <div class="sep">|</div>
             <div>{{post.size_str}}</div>
+
+            {% if post.mtype %}
             <div class="sep">|</div>
-            <div>{{post.mtype or 'No type detected'}}</div>
+            <div>{{post.mtype}}</div>
+            {% endif %}
 
             <div id="resolution_container" class="hidden rowitem nowrap">
                 <div class="sep">|</div>
