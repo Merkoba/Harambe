@@ -277,7 +277,7 @@ window.onload = function() {
 
   if (uploader) {
     DOM.ev(uploader, `click`, () => {
-      vars.user_opts_username = vars.uploader
+      vars.user_opts_username = vars.username
       vars.msg_user_opts.show()
     })
   }

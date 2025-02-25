@@ -318,13 +318,11 @@ function setup_user_opts() {
     }
   })
 
-  if (vars.mode.includes(`admin`)) {
-    DOM.ev(`#user_opts_user`, `click`, (e) => {
-      vars.msg_user_opts.close()
-      let username = vars.active_item.dataset.username
-      window.location = `/admin/users?username=${username}`
-    })
-  }
+  DOM.ev(`#user_opts_user`, `click`, (e) => {
+    vars.msg_user_opts.close()
+    let username = vars.user_opts_username
+    window.location = `/admin/users?username=${username}`
+  })
 }
 
 function fill_def_args(def, args) {
