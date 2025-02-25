@@ -1,5 +1,3 @@
-popmsg_instance = null
-
 DOM.ev(document, `keydown`, (e) => {
   if (e.key === `Enter`) {
     if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
@@ -25,18 +23,28 @@ DOM.ev(document, `keydown`, (e) => {
     }
   }
   else if (!isNaN(parseInt(e.key)) && (parseInt(e.key) >= 1) && (parseInt(e.key) <= 9)) {
+    let n = parseInt(e.key)
+
     if (Msg.msg.any_open()) {
       let content = Msg.msg.highest_instance().content
       let dialog = DOM.el(`.dialog_container`, content)
 
       if (dialog) {
-        let n = parseInt(e.key)
         let buttons = dialog.children
 
         if (buttons.length >= n) {
           e.preventDefault()
           buttons[n - 1].click()
         }
+      }
+    }
+    else if (vars && (vars.mode === `index`)) {
+      let c = DOM.el(`#buttons`)
+      let buttons = DOM.els(`button`, c)
+
+      if (n <= buttons.length) {
+        e.preventDefault()
+        buttons[n - 1].click()
       }
     }
   }
@@ -200,14 +208,17 @@ function setup_admin_opts() {
   vars.msg_admin_opts.set(template.innerHTML)
 
   DOM.ev(`#admin_opts_posts`, `click`, (e) => {
+    vars.msg_admin_opts.close()
     window.location = `/admin/posts`
   })
 
   DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
+    vars.msg_admin_opts.close()
     window.location = `/admin/reactions`
   })
 
   DOM.ev(`#admin_opts_users`, `click`, (e) => {
+    vars.msg_admin_opts.close()
     window.location = `/admin/users`
   })
 
@@ -227,18 +238,22 @@ function setup_explore_opts() {
   vars.msg_explore_opts.set(template.innerHTML)
 
   DOM.ev(`#explore_opts_fresh`, `click`, (e) => {
+    vars.msg_explore_opts.close()
     window.location = `/fresh`
   })
 
   DOM.ev(`#explore_opts_posts`, `click`, (e) => {
+    vars.msg_explore_opts.close()
     window.location = `/list/posts`
   })
 
   DOM.ev(`#explore_opts_reactions`, `click`, (e) => {
+    vars.msg_explore_opts.close()
     window.location = `/list/reactions`
   })
 
   DOM.ev(`#explore_opts_random`, `click`, (e) => {
+    vars.msg_explore_opts.close()
     window.location = `/random`
   })
 

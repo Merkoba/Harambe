@@ -131,7 +131,7 @@ def rate_limit(n: int) -> str:
 
 
 def over() -> Any:
-    return render_template("over.j2")
+    return render_template("over.jinja")
 
 
 def theme_configs() -> dict[str, Any]:
@@ -210,7 +210,7 @@ def index() -> Any:
     banner = utils.get_banner()
 
     return render_template(
-        "index.j2",
+        "index.jinja",
         max_size=max_size,
         max_size_str=max_size_str,
         show_max_size=config.show_max_size,
@@ -263,7 +263,7 @@ def message() -> Any:
         return redirect(url_for("index"))
 
     return render_template(
-        "message.j2",
+        "message.jinja",
         mode=data["mode"],
         message=data["message"],
         **theme_configs(),
@@ -306,7 +306,7 @@ def post(name: str) -> Any:
                 can_react = user.reacter
 
     return render_template(
-        "post.j2",
+        "post.jinja",
         post=post,
         owned=owned,
         file_path=config.file_path,
@@ -455,7 +455,7 @@ def admin(what: str) -> Any:
         return over()
 
     def_page_size = page_size == config.admin_page_size
-    html_page = f"admin_{what}.j2"
+    html_page = f"admin_{what}.jinja"
     title = what.capitalize()
     items: list[Post] | list[User] | list[Reaction]
     mode = f"admin_{what}"
@@ -554,7 +554,7 @@ def login() -> Any:
             return redirect(url_for("index"))
 
     return render_template(
-        "login.j2",
+        "login.jinja",
         message=message,
         **theme_configs(),
     )
@@ -578,7 +578,7 @@ def register() -> Any:
             return redirect(url_for("index"))
 
     return render_template(
-        "register.j2",
+        "register.jinja",
         message=message,
         **theme_configs(),
     )
@@ -653,7 +653,7 @@ def show_list(what: str) -> Any:
         return over()
 
     def_page_size = page_size == config.list_page_size
-    html_page = f"admin_{what}.j2"
+    html_page = f"admin_{what}.jinja"
     title = "List" if not history else "History"
     items: list[Post] | list[Reaction]
     mode = f"list_{what}"
@@ -725,7 +725,7 @@ def edit_user(username: str = "") -> Any:
         uname = user.username if user else ""
 
         return render_template(
-            "edit_user.j2",
+            "edit_user.jinja",
             user=user or {},
             username=uname,
             title=title,

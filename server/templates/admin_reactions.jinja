@@ -1,4 +1,4 @@
-{% extends "base.j2" %}
+{% extends "base.jinja" %}
 
 {% block head %}
 <title>{{title}}</title>
@@ -45,11 +45,7 @@
 {% endif %}
 
 <div id="top" class="nowrap">
-    {% if mode == "reactions_admin" %}
     <div id="back_btn" class="action_button">Back</div>
-    {% else %}
-    <a class="action_button" href="/">Back</a>
-    {% endif %}
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>

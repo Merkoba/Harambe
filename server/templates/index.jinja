@@ -1,4 +1,4 @@
-{% extends "base.j2" %}
+{% extends "base.jinja" %}
 
 {% block head %}
 <meta name="description" content="{{description}}">
@@ -7,6 +7,7 @@
 
 <script>
     const vars = {}
+    vars.mode = `index`
     vars.max_size = {{max_size}}
     vars.max_title_length = {{max_title_length}}
     vars.banner = {{banner | tojson | safe}}
