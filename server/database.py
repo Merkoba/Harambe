@@ -183,10 +183,8 @@ def get_posts(name: str | None = None) -> list[Post]:
 
     for row in rows:
         post = make_post(dict(row))
-        c.execute(
-            "select * from reactions where post = ? and user = ?",
-            (post.name, post.username),
-        )
+        utils.q(post.name, post.username)
+        c.execute("select * from reactions where post = ?", (post.name,))
         reactions = c.fetchall()
 
         if reactions:
