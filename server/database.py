@@ -85,7 +85,11 @@ def check_db() -> None:
     tables = [table[0] for table in c.fetchall()]
     conn.close()
 
-    if ("posts" not in tables) or ("reactions" not in tables) or ("users" not in tables):
+    if (
+        ("posts" not in tables)
+        or ("reactions" not in tables)
+        or ("users" not in tables)
+    ):
         sys.exit(msg)
 
 
@@ -217,10 +221,12 @@ def delete_post(name: str) -> None:
 def increase_post_views(name: str) -> None:
     check_db()
     conn, c = get_conn()
+
     c.execute(
         "update posts set views = views + 1, view_date = ? where name = ?",
         (utils.now(), name),
     )
+
     conn.commit()
     conn.close()
 
@@ -427,14 +433,6 @@ def get_random_post(ignore_names: list[str]) -> Post | None:
         return make_post(dict(row))
 
     return None
-
-
-def increase_user_posts(username: str) -> None:
-    check_db()
-    conn, c = get_conn()
-    c.execute("update users set posts = posts + 1 where username = ?", (username,))
-    conn.commit()
-    conn.close()
 
 
 def update_file_size(name: str, size: int) -> None:

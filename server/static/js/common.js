@@ -283,7 +283,7 @@ function setup_user_opts() {
 
   DOM.ev(`#user_opts_posts`, `click`, (e) => {
     vars.msg_user_opts.close()
-    let username = vars.active_item.dataset.username
+    let username = vars.user_opts_username
 
     if (vars.mode.includes(`admin`)) {
       window.location = `/admin/posts?username=${username}`
@@ -295,7 +295,7 @@ function setup_user_opts() {
 
   DOM.ev(`#user_opts_reactions`, `click`, (e) => {
     vars.msg_user_opts.close()
-    let username = vars.active_item.dataset.username
+    let username = vars.user_opts_username
 
     if (vars.mode.includes(`admin`)) {
       window.location = `/admin/reactions?username=${username}`

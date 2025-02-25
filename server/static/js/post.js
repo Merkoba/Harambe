@@ -251,9 +251,9 @@ window.onload = function() {
   if (reacts) {
     DOM.ev(reacts, `click`, (e) => {
       let el = e.target.closest(`.reaction_item`)
-      vars.active_item = el
 
       if (e.target.classList.contains(`reaction_uname`)) {
+        vars.user_opts_username = el.dataset.username
         vars.msg_user_opts.show()
       }
       else if (e.target.classList.contains(`reaction_edit`)) {
@@ -263,16 +263,22 @@ window.onload = function() {
   }
 
   fill_reactions()
+
   let user_opts = DOM.el(`#template_user_opts`)
 
   if (user_opts) {
     setup_user_opts()
   }
 
-  let reaction_opts = DOM.el(`#template_reaction_opts`)
+  setup_reaction_opts()
 
-  if (reaction_opts) {
-    setup_reaction_opts()
+  let uploader = DOM.el(`#uploader`)
+
+  if (uploader) {
+    DOM.ev(uploader, `click`, () => {
+      vars.user_opts_username = vars.uploader
+      vars.msg_user_opts.show()
+    })
   }
 
   let react_btn = DOM.el(`#react_btn`)

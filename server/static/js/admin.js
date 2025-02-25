@@ -39,6 +39,7 @@ window.onload = () => {
       select_below(item)
     }
     else if (e.target.classList.contains(`admin_username`)) {
+      vars.user_opts_username = item.dataset.username
       vars.msg_user_opts.show()
     }
     else {

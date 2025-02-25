@@ -27,6 +27,7 @@
     vars.username = {{username | tojson | safe}}
     vars.is_admin = {{is_admin | tojson}}
     vars.sample = {{post.sample | tojson | safe}}
+    vars.uploader = {{post.uploader | tojson | safe}}
 </script>
 
 <script src="/static/ruffle/ruffle.js"></script>
@@ -98,6 +99,23 @@
         <div id="edit_reaction_opts_icon" class="aero_button">Icon</div>
     </div>
 </template>
+
+{% if is_admin %}
+<template id="template_user_opts">
+    <div class="dialog_container">
+        <div id="user_opts_posts" class="aero_button">Posts</div>
+        <div id="user_opts_reactions" class="aero_button">Reactions</div>
+        <div id="user_opts_user" class="aero_button">User</div>
+    </div>
+</template>
+{% else %}
+<template id="template_user_opts">
+    <div class="dialog_container">
+        <div id="user_opts_posts" class="aero_button">Posts</div>
+        <div id="user_opts_reactions" class="aero_button">Reactions</div>
+    </div>
+</template>
+{% endif %}
 
 <div id="main" class="colitem">
     <div id="top" class="nowrap">
@@ -177,7 +195,7 @@
         <!-- Uploader -->
         <div class="rowitem nowrap">
             <div class="title">Uploader:</div>
-            <div title="{{post.uploader_str}}">{{post.uploader_str[: max_post_name_length] | trim}}</div>
+            <div id="uploader" class="button" title="{{post.uploader_str}}">{{post.uploader_str[: max_post_name_length] | trim}}</div>
             <div class="sep">|</div>
             <div class="title">Views:</div>
             <div id="views">{{post.views}}</div>
