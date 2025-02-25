@@ -6,6 +6,12 @@ DOM.ev(document, `keydown`, (e) => {
       popmsg_instance.close()
     }
   }
+
+  if (Confirmbox.instance && Confirmbox.instance.msg.is_open()) {
+    if (e.key === `Enter`) {
+      Confirmbox.instance.action()
+    }
+  }
 })
 
 function singplural(what, length) {
@@ -323,52 +329,7 @@ function fill_def_args(def, args) {
 }
 
 function confirmbox(args = {}) {
-  let def_args = {
-    message: `Are you sure ?`,
-    yes: `Yes`,
-    no: `No`,
-  }
-
-  fill_def_args(def_args, args)
-
-  let msg = Msg.factory({
-    persistent: false,
-  })
-
-  let c = DOM.create(`div`)
-  c.id = `confirmbox_container`
-  let m = DOM.create(`div`)
-  m.id = `confirmbox_message`
-  m.textContent = args.message
-  let btns = DOM.create(`div`)
-  btns.id = `confirmbox_buttons`
-  let y = DOM.create(`div`, `aero_button`)
-  y.textContent = args.yes
-  let n = DOM.create(`div`, `aero_button`)
-  n.textContent = args.no
-  c.appendChild(m)
-  btns.appendChild(n)
-  btns.appendChild(y)
-  c.appendChild(btns)
-  msg.set(c)
-
-  DOM.ev(y, `click`, (e) => {
-    if (args.callback_yes) {
-      args.callback_yes()
-    }
-
-    msg.close()
-  })
-
-  DOM.ev(n, `click`, (e) => {
-    if (args.callback_no) {
-      args.callback_no()
-    }
-
-    msg.close()
-  })
-
-  msg.show()
+  new Confirmbox(args)
 }
 
 function edit_reaction_opts() {
