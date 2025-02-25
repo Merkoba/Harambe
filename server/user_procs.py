@@ -257,6 +257,11 @@ def sort_users(users: list[User], sort: str) -> None:
     elif sort == "num_reactions_desc":
         users.sort(key=lambda x: x.num_reactions, reverse=False)
 
+    elif sort == "mark":
+        users.sort(key=lambda x: x.mark, reverse=True)
+    elif sort == "mark_desc":
+        users.sort(key=lambda x: x.mark, reverse=False)
+
 
 def get_user(username: str) -> User | None:
     user = database.get_user(username)
