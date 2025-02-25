@@ -1066,6 +1066,7 @@ function on_image_load() {
   if (img) {
     let w = img.naturalWidth
     let h = img.naturalHeight
-    img.title = `${w} x ${h}`
+    DOM.el(`#resolution`).textContent = `${w} x ${h}`
+    DOM.show(`#resolution_container`)
   }
 }
