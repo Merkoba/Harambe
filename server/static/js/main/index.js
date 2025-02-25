@@ -2,7 +2,7 @@ let clicked = false
 
 window.onload = () => {
   DOM.ev(document, `keydown`, (e) => {
-    if (!isNaN(parseInt(e.key)) && parseInt(e.key) >= 1 && parseInt(e.key) <= 9) {
+    if (!isNaN(parseInt(e.key)) && (parseInt(e.key) >= 1) && (parseInt(e.key) <= 9)) {
       if (!Msg.msg.any_open()) {
         let n = parseInt(e.key)
         let c = DOM.el(`#buttons`)
