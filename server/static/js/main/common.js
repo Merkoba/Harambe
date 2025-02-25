@@ -24,6 +24,22 @@ DOM.ev(document, `keydown`, (e) => {
       }
     }
   }
+  else if (!isNaN(parseInt(e.key)) && (parseInt(e.key) >= 1) && (parseInt(e.key) <= 9)) {
+    if (Msg.msg.any_open()) {
+      let content = Msg.msg.highest_instance().content
+      let dialog = DOM.el(`.dialog_container`, content)
+
+      if (dialog) {
+        let n = parseInt(e.key)
+        let buttons = DOM.els(`.aero_button`, dialog)
+
+        if (buttons.length >= n) {
+          e.preventDefault()
+          buttons[n - 1].click()
+        }
+      }
+    }
+  }
 })
 
 function singplural(what, length) {
