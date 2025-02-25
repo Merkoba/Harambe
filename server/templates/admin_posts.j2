@@ -95,10 +95,10 @@
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
             {% endif %}
             <div id="name" class="table_cell underline" data-sort="name" title="The name or id of the post">Name</div>
-            <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">User</div>
+            <div id="mtype" class="table_cell underline" data-sort="mtype" title="The mime type of the file or the extension">Type</div>
             <div id="title" class="table_cell underline" data-sort="title" title="The title of the post">Title</div>
             <div id="size" class="table_cell underline" data-sort="size" title="The size of the file">Size</div>
-            <div id="mtype" class="table_cell underline" data-sort="mtype" title="The mime type of the file or the extension">Type</div>
+            <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">User</div>
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this post was created">Date</div>
             <div id="views" class="table_cell underline" data-sort="views" title="The number of times the post has been viewed and the number of reactions it has">Views</div>
 
@@ -127,12 +127,8 @@
                 <a href="/post/{{item.name}}" title="{{item.show}}">{{item.show}}</a>
             </div>
 
-            <!-- User -->
-            {% if mode == "admin_posts" %}
-            <div class="table_cell uploader admin_username action_button" title="{{item.uploader_str}}">{{item.username}}</div>
-            {% else %}
-            <div class="table_cell uploader admin_username action_button">{{item.uploader_str}}</div>
-            {% endif %}
+            <!-- Type -->
+            <div class="table_cell" title="{{item.mtype}}">{{item.mtype_str}}</div>
 
             <!-- Title -->
             <div class="table_cell title" title="{{item.title or item.original}}">{{item.title or item.original}}</div>
@@ -140,8 +136,12 @@
             <!-- Size -->
             <div class="table_cell" title="{{item.size_str}}">{{item.size_str}}</div>
 
-            <!-- Type -->
-            <div class="table_cell" title="{{item.mtype}}">{{item.mtype_str}}</div>
+            <!-- User -->
+            {% if mode == "admin_posts" %}
+            <div class="table_cell uploader admin_username action_button" title="{{item.uploader_str}}">{{item.username}}</div>
+            {% else %}
+            <div class="table_cell uploader admin_username action_button">{{item.uploader_str}}</div>
+            {% endif %}
 
             <!-- Date -->
             <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
