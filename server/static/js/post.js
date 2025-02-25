@@ -251,6 +251,7 @@ window.onload = function() {
   if (reacts) {
     DOM.ev(reacts, `click`, (e) => {
       let el = e.target.closest(`.reaction_item`)
+      vars.active_item = el
 
       if (e.target.classList.contains(`reaction_uname`)) {
         vars.user_opts_username = el.dataset.username

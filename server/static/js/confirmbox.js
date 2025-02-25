@@ -35,7 +35,7 @@ class Confirmbox {
     msg.set(c)
 
     DOM.ev(y, `click`, (e) => {
-      confirmbox_action()
+      this.action()
     })
 
     DOM.ev(n, `click`, (e) => {
