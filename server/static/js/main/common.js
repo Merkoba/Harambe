@@ -1,15 +1,27 @@
 popmsg_instance = null
 
 DOM.ev(document, `keydown`, (e) => {
-  if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
-    if (e.key === `Enter`) {
+  if (e.key === `Enter`) {
+    if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
+      e.preventDefault()
       Popmsg.instance.msg.close()
     }
-  }
-
-  if (Confirmbox.instance && Confirmbox.instance.msg.is_open()) {
-    if (e.key === `Enter`) {
+    else if (Confirmbox.instance && Confirmbox.instance.msg.is_open()) {
+      e.preventDefault()
       Confirmbox.instance.action()
+    }
+    else if (Msg.msg.any_open()) {
+      let content = Msg.msg.highest_instance().content
+      let dialog = DOM.el(`.dialog_container`, content)
+
+      if (dialog) {
+        let first = DOM.el(`.aero_button`, dialog)
+
+        if (first) {
+          e.preventDefault()
+          first.click()
+        }
+      }
     }
   }
 })
