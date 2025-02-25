@@ -20,13 +20,13 @@ class Post:
     views: int
     original: str
     username: str
-    uploader: str
     mtype: str
     view_date: int
     listed: bool
     size: int
     sample: str
-    reactions: int
+    reactions: list[Reaction] | None = None
+    user: User | None = None
 
     def full(self) -> str:
         if self.ext:
@@ -54,8 +54,6 @@ class User:
     register_date: int
     last_date: int
     lister: bool
-    posts: int
-    reactions: int
     poster: bool
     reacter: bool
 
@@ -87,7 +85,7 @@ def check_db() -> None:
     tables = [table[0] for table in c.fetchall()]
     conn.close()
 
-    if ("posts" not in tables) or ("users" not in tables):
+    if ("posts" not in tables) or ("reactions" not in tables) or ("users" not in tables):
         sys.exit(msg)
 
 
@@ -110,7 +108,6 @@ def add_post(
     title: str,
     original: str,
     username: str,
-    uploader: str,
     mtype: str,
     listed: bool,
     size: int,
@@ -128,7 +125,6 @@ def add_post(
         0,
         original,
         username,
-        uploader,
         mtype,
         date,
         listed,
@@ -138,7 +134,7 @@ def add_post(
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (name, ext, date, title, views, original, username, uploader, mtype, view_date, listed, size, sample, reactions) values ({placeholders})"
+    query = f"insert into posts (name, ext, date, title, views, original, username, mtype, view_date, listed, size, sample) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -153,37 +149,61 @@ def make_post(row: dict[str, Any]) -> Post:
         views=int(row.get("views") or 0),
         original=row.get("original") or "",
         username=row.get("username") or "",
-        uploader=row.get("uploader") or "",
         mtype=row.get("mtype") or "",
         view_date=int(row.get("view_date") or 0),
         listed=bool(row.get("listed")),
         size=int(row.get("size") or 0),
         sample=row.get("sample") or "",
-        reactions=int(row.get("reactions") or 0),
     )
 
 
 def get_post(name: str) -> Post | None:
+    return get_posts(name)
+
+
+def get_posts(name: str | None = None) -> list[Post] | Post | None:
     check_db()
     conn, c = row_conn()
-    c.execute("select * from posts where name = ?", (name,))
-    row = c.fetchone()
+
+    if name:
+        c.execute("select * from posts where name = ?", (name,))
+        rows = [c.fetchone()]
+    else:
+        c.execute("select * from posts")
+        rows = c.fetchall()
+
+    posts = []
+
+    for row in rows:
+        post = make_post(dict(row))
+        username = post.username
+        c.execute("select * from reactions where user = ?", (username,))
+        reactions = c.fetchall()
+
+        if reactions:
+            post.reactions = [make_reaction(dict(reaction)) for reaction in reactions]
+        else:
+            post.reactions = None
+
+        c.execute("select * from users where username = ?", (username,))
+        user = c.fetchone()
+
+        if user:
+            post.user = make_user(dict(user))
+        else:
+            post.user = None
+
+        posts.append(post)
+
     conn.close()
 
-    if row:
-        return make_post(dict(row))
+    if not posts:
+        return None
 
-    return None
+    if name:
+        return posts[0]
 
-
-def get_posts() -> list[Post]:
-    check_db()
-    conn, c = row_conn()
-    c.execute("select * from posts")
-    rows = c.fetchall()
-    conn.close()
-
-    return [make_post(dict(row)) for row in rows]
+    return posts
 
 
 def delete_post(name: str) -> None:
@@ -225,10 +245,12 @@ def get_next_post(current: str) -> Post | None:
         return None
 
     date = current_row["date"]
+
     c.execute(
         "select * from posts where date < ? and listed = 1 order by date desc limit 1",
         (date,),
     )
+
     next_row = c.fetchone()
     conn.close()
 
@@ -295,8 +317,8 @@ def add_user(
             conn.close()
             return False
 
-        values.extend([date, date, 0, 0])
-        columns.extend(["register_date", "last_date", "posts", "reactions"])
+        values.extend([date, date])
+        columns.extend(["register_date", "last_date"])
         placeholders = ", ".join(["?"] * len(values))
         query = f"insert into users ({', '.join(columns)}) values ({placeholders})"
     elif mode == "edit":
@@ -325,8 +347,6 @@ def make_user(row: dict[str, Any]) -> User:
         register_date=int(row.get("register_date") or 0),
         last_date=row.get("last_date") or 0,
         lister=bool(row.get("lister")),
-        posts=int(row.get("posts") or 0),
-        reactions=int(row.get("reactions") or 0),
         poster=bool(row.get("poster")),
         reacter=bool(row.get("reacter")),
     )
@@ -425,14 +445,6 @@ def update_file_size(name: str, size: int) -> None:
     conn.close()
 
 
-def change_uploader(username: str, new_name: str) -> None:
-    check_db()
-    conn, c = get_conn()
-    c.execute("update posts set uploader = ? where username = ?", (new_name, username))
-    conn.commit()
-    conn.close()
-
-
 def change_listed(username: str, listed: bool) -> None:
     utils.q(username, listed)
     check_db()
@@ -511,26 +523,6 @@ def get_latest_post() -> Post | None:
         return make_post(dict(row))
 
     return None
-
-
-def increase_post_reactions(name: str) -> None:
-    check_db()
-    conn, c = get_conn()
-    c.execute("update posts set reactions = reactions + 1 where name = ?", (name,))
-    conn.commit()
-    conn.close()
-
-
-def increase_user_reactions(username: str) -> None:
-    check_db()
-    conn, c = get_conn()
-
-    c.execute(
-        "update users set reactions = reactions + 1 where username = ?", (username,)
-    )
-
-    conn.commit()
-    conn.close()
 
 
 def change_reacter(username: str, new_name: str) -> None:

@@ -62,7 +62,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     size = post.size
     views = post.views
     username = post.username
-    uploader = post.uploader
+    uploader = post.user.name if post.user else ""
     mtype = post.mtype
     listed = post.listed
     original = post.original
@@ -77,20 +77,17 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     uploader_str = uploader or "Anon"
     mtype_str = mtype or ext or "?"
 
-    if isinstance(post.reactions, int):
-        num_reactions = post.reactions
+    if post.reactions:
+        num_reactions = len(post.reactions)
     else:
         num_reactions = 0
 
     if all_data:
         sample = post.sample
 
-        try:
-            reactions = [
-                react_procs.make_reaction(r, now) for r in database.get_reactions(name)
-            ]
-        except Exception as e:
-            utils.error(e)
+        if post.reactions:
+            reactions = [react_procs.make_reaction(r, now) for r in post.reactions]
+        else:
             reactions = []
     else:
         sample = ""

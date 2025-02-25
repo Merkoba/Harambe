@@ -56,8 +56,6 @@ class User:
     reader_str: str
     lister: bool
     lister_str: str
-    posts: int
-    reactions: int
     poster: bool
     reacter: bool
     poster_str: str
@@ -116,8 +114,6 @@ def make_user(user: DbUser) -> User:
         reader_str,
         user.lister,
         lister_str,
-        user.posts,
-        user.reactions,
         user.poster,
         user.reacter,
         poster_str,
