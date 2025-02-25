@@ -5,7 +5,7 @@ import sys
 import sqlite3
 from typing import Any
 from pathlib import Path
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # Modules
 import utils
@@ -25,7 +25,7 @@ class Post:
     listed: bool
     size: int
     sample: str
-    reactions: list[Reaction] | None = None
+    reactions: list[Reaction] = field(default_factory=list)
     user: User | None = None
 
     def full(self) -> str:
@@ -179,19 +179,22 @@ def get_posts(name: str | None = None) -> list[Post]:
         rows = c.fetchall()
 
     posts = []
+    rows = [row for row in rows if row]
 
     for row in rows:
         post = make_post(dict(row))
-        username = post.username
-        c.execute("select * from reactions where user = ?", (username,))
+        c.execute(
+            "select * from reactions where post = ? and user = ?",
+            (post.name, post.username),
+        )
         reactions = c.fetchall()
 
         if reactions:
             post.reactions = [make_reaction(dict(reaction)) for reaction in reactions]
         else:
-            post.reactions = None
+            post.reactions = []
 
-        c.execute("select * from users where username = ?", (username,))
+        c.execute("select * from users where username = ?", (post.username,))
         user = c.fetchone()
 
         if user:
@@ -370,6 +373,7 @@ def get_users(username: str | None = None) -> list[User]:
         rows = c.fetchall()
 
     users = []
+    rows = [row for row in rows if row]
 
     for row in rows:
         user = make_user(dict(row))
@@ -446,7 +450,6 @@ def update_file_size(name: str, size: int) -> None:
 
 
 def change_listed(username: str, listed: bool) -> None:
-    utils.q(username, listed)
     check_db()
     conn, c = get_conn()
     c.execute("update posts set listed = ? where username = ?", (listed, username))

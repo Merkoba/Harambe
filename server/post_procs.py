@@ -76,19 +76,11 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     post_title = title or original or name
     uploader_str = uploader or "Anon"
     mtype_str = mtype or ext or "?"
-
-    if post.reactions:
-        num_reactions = len(post.reactions)
-    else:
-        num_reactions = 0
+    num_reactions = len(post.reactions)
 
     if all_data:
         sample = post.sample
-
-        if post.reactions:
-            reactions = [react_procs.make_reaction(r, now) for r in post.reactions]
-        else:
-            reactions = []
+        reactions = [react_procs.make_reaction(r, now) for r in post.reactions]
     else:
         sample = ""
         reactions = []
