@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.j2" %}
 
 {% block head %}
 <title>{{title}}</title>
@@ -89,8 +89,8 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
-            <div id="username" class="table_cell underline" data-sort="user" title="The username who did the reaction">User</div>
             <div id="post" class="table_cell underline" data-sort="post" title="The post where it was posted">Post</div>
+            <div id="username" class="table_cell underline" data-sort="user" title="The username who did the reaction">User</div>
             <div id="value" class="table_cell underline" data-sort="value" title="The value of the reaction">Value</div>
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this reaction was made">Date</div>
 
@@ -109,15 +109,15 @@
                 <input class="select_checkbox" type="checkbox">
             </div>
 
+            <!-- Post -->
+            <a href="/post/{{item.post}}" class="table_cell" title="{{item.post}}">{{item.post}}</a>
+
             {% if mode == "reactions_admin" %}
             <!-- Username -->
             <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.user}}</div>
             {% else %}
             <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.uname}}</div>
             {% endif %}
-
-            <!-- Post -->
-            <a href="/post/{{item.post}}" class="table_cell" title="{{item.post}}">{{item.post}}</a>
 
             <!-- Value -->
             <div class="table_cell" title="{{item.value_sample}}">{{item.value_sample}}</div>
