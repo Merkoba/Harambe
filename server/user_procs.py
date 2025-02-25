@@ -96,6 +96,8 @@ def make_user(user: DbUser) -> User:
     lister_str = "L: Yes" if user.lister else "R: No"
     poster_str = "P: Yes" if user.poster else "P: No"
     reacter_str = "R: Yes" if user.reacter else "R: No"
+    num_posts = user.num_posts if user.num_posts else 0
+    num_reactions = user.num_reactions if user.num_reactions else 0
 
     return User(
         user.username,
@@ -120,13 +122,18 @@ def make_user(user: DbUser) -> User:
         user.reacter,
         poster_str,
         reacter_str,
-        user.num_posts,
-        user.num_reactions,
+        num_posts,
+        num_reactions,
     )
 
 
 def get_userlist() -> list[User]:
-    return [make_user(user) for user in database.get_users()]
+    users = database.get_users()
+
+    if not users:
+        return []
+
+    return [make_user(user) for user in users]
 
 
 def get_users(
@@ -166,8 +173,8 @@ def get_users(
             or query in utils.clean_query(user.mark)
             or query in utils.clean_query(user.rpm)
             or query in utils.clean_query(user.reader_str)
-            or query in utils.clean_query(user.posts)
-            or query in utils.clean_query(user.reactions)
+            or query in utils.clean_query(user.num_posts)
+            or query in utils.clean_query(user.num_reactions)
         )
 
         if not ok:
@@ -245,15 +252,15 @@ def sort_users(users: list[User], sort: str) -> None:
     elif sort == "reacter_desc":
         users.sort(key=lambda x: x.reacter, reverse=False)
 
-    elif sort == "posts":
-        users.sort(key=lambda x: x.posts, reverse=True)
-    elif sort == "posts_desc":
-        users.sort(key=lambda x: x.posts, reverse=False)
+    elif sort == "num_posts":
+        users.sort(key=lambda x: x.num_posts, reverse=True)
+    elif sort == "num_posts_desc":
+        users.sort(key=lambda x: x.num_posts, reverse=False)
 
-    elif sort == "reactions":
-        users.sort(key=lambda x: x.reactions, reverse=True)
-    elif sort == "reactions_desc":
-        users.sort(key=lambda x: x.reactions, reverse=False)
+    elif sort == "num_reactions":
+        users.sort(key=lambda x: x.num_reactions, reverse=True)
+    elif sort == "num_reactions_desc":
+        users.sort(key=lambda x: x.num_reactions, reverse=False)
 
 
 def get_user(username: str) -> User | None:

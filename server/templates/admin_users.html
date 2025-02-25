@@ -122,8 +122,8 @@
             <div id="reacter" class="table_cell underline" data-sort="reacter" title="This user can react in posts">Reacter</div>
             <div id="lister" class="table_cell underline" data-sort="lister" title="The posts of this user will appear in the list">Lister</div>
             <div id="list" class="table_cell underline" data-sort="reader" title="Can view the list of posts">Reader</div>
-            <div id="posts" class="table_cell small underline" data-sort="posts" title="The number of posts this user has done">Posts</div>
-            <div id="reactions" class="table_cell small underline" data-sort="reactions" title="The number of reactions this user has done">Reactions</div>
+            <div id="num_posts" class="table_cell small underline" data-sort="num_posts" title="The number of posts this user has done">Posts</div>
+            <div id="num_reactions" class="table_cell small underline" data-sort="num_reactions" title="The number of reactions this user has done">Reactions</div>
 
             {% if show_marks %}
             <div id="mark" class="table_cell underline" data-sort="mark" title="A mark added to the end of file names to identify a certain kind of upload">Mark</div>
@@ -141,7 +141,8 @@
         data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}"
         data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}"
         data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}"
-        data-lister="{{lister_str}}" data-reacter="{{reacter_str}}">
+        data-lister="{{lister_str}}" data-reacter="{{reacter_str}}"
+        data-num_posts="{{item.num_posts}}" data-num_reactions="{{item.num_reactions}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">

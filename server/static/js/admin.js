@@ -780,11 +780,13 @@ function do_filter() {
     let admin = item.dataset.admin
     let list = item.dataset.reader
     let value_ = item.dataset.value
+    let num_posts = item.dataset.num_posts
+    let num_reactions = item.dataset.num_reactions
 
     let opts = [
       name, ago, date, size, title, original, uploader, views,
       listed, mtype, uname, ext, username, rpm, max_size, mark,
-      reg_date, last_date, admin, list, value_,
+      reg_date, last_date, admin, list, value_, num_posts, num_reactions,
     ]
 
     opts = opts.filter(x => x)

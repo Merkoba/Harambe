@@ -56,6 +56,8 @@ class User:
     lister: bool
     poster: bool
     reacter: bool
+    num_posts: int | None = None
+    num_reactions: int | None = None
 
 
 @dataclass
