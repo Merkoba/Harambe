@@ -1,5 +1,5 @@
 class Confirmbox {
-  instance = null
+  static instance = null
 
   constructor(args = {}) {
     let def_args = {

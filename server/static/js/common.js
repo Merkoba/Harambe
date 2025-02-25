@@ -1,9 +1,9 @@
 popmsg_instance = null
 
 DOM.ev(document, `keydown`, (e) => {
-  if (popmsg_instance && popmsg_instance.is_open()) {
+  if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
     if (e.key === `Enter`) {
-      popmsg_instance.close()
+      Popmsg.instance.msg.close()
     }
   }
 
@@ -155,12 +155,7 @@ function prompt_text(args = {}) {
 }
 
 function popmsg(message, callback) {
-  popmsg_instance = Msg.factory({
-    persistent: false,
-    after_close: callback,
-  })
-
-  popmsg_instance.show(message)
+  new Popmsg(message, callback)
 }
 
 function remove_multiple_empty_lines(s) {
