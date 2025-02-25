@@ -65,11 +65,11 @@ class Reaction:
     id: int
     post: str
     user: str
-    uname: str
     value: str
     mode: str
     listed: bool
     date: int
+    uname: str | None = None
 
 
 db_path = "database.sqlite3"
@@ -183,20 +183,17 @@ def get_posts(name: str | None = None) -> list[Post]:
 
     for row in rows:
         post = make_post(dict(row))
-        utils.q(post.name, post.username)
-        c.execute("select * from reactions where post = ?", (post.name,))
-        reactions = c.fetchall()
+        reactions = get_reactions(post.name, oconn=conn)
 
         if reactions:
-            post.reactions = [make_reaction(dict(reaction)) for reaction in reactions]
+            post.reactions = reactions
         else:
             post.reactions = []
 
-        c.execute("select * from users where username = ?", (post.username,))
-        user = c.fetchone()
+        user = get_user(post.username, oconn=conn)
 
         if user:
-            post.user = make_user(dict(user))
+            post.user = user
         else:
             post.user = None
 
@@ -354,14 +351,20 @@ def make_user(row: dict[str, Any]) -> User:
     )
 
 
-def get_user(username: str) -> User | None:
-    users = get_users(username)
+def get_user(username: str, oconn: sqlite3.Connection | None = None) -> User | None:
+    users = get_users(username, oconn=oconn)
     return users[0] if users else None
 
 
-def get_users(username: str | None = None) -> list[User]:
-    check_db()
-    conn, c = row_conn()
+def get_users(
+    username: str | None = None, oconn: sqlite3.Connection | None = None
+) -> list[User]:
+    if not oconn:
+        check_db()
+        conn, c = row_conn()
+    else:
+        conn = oconn
+        c = conn.cursor()
 
     if username:
         c.execute("select * from users where username = ?", (username,))
@@ -381,7 +384,9 @@ def get_users(username: str | None = None) -> list[User]:
         user.num_reactions = c.fetchone()[0]
         users.append(user)
 
-    conn.close()
+    if not oconn:
+        conn.close()
+
     return users
 
 
@@ -457,16 +462,16 @@ def change_listed(username: str, listed: bool) -> None:
 
 
 def add_reaction(
-    post: str, user: str, uname: str, value: str, mode: str, listed: bool
+    post: str, user: str, value: str, mode: str, listed: bool
 ) -> int | None:
     check_db()
     conn, c = get_conn()
-    cols = ["post", "user", "uname", "value", "mode", "listed", "date"]
+    cols = ["post", "user", "value", "mode", "listed", "date"]
     placeholders = ", ".join("?" for _ in cols)
 
     c.execute(
         f"insert into reactions ({','.join(cols)}) values ({placeholders}) returning id",
-        (post, user, uname, value, mode, listed, utils.now()),
+        (post, user, value, mode, listed, utils.now()),
     )
 
     id_ = c.fetchone()[0]
@@ -480,7 +485,6 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
         id=int(row.get("id") or 0),
         post=row.get("post") or "",
         user=row.get("user") or "",
-        uname=row.get("uname") or "",
         value=row.get("value") or "",
         mode=row.get("mode") or "",
         listed=bool(row.get("listed")),
@@ -488,14 +492,45 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
     )
 
 
-def get_reactions(post: str) -> list[Reaction]:
-    check_db()
-    conn, c = row_conn()
-    c.execute("select * from reactions where post = ?", (post,))
-    rows = c.fetchall()
-    conn.close()
+def get_reaction(id_: int, oconn: sqlite3.Connection | None = None) -> Reaction | None:
+    reactions = get_reactions(None, id_, oconn=oconn)
+    return reactions[0] if reactions else None
 
-    return [make_reaction(dict(row)) for row in rows]
+
+def get_reactions(
+    post: str | None, id_: int | None = None, oconn: sqlite3.Connection | None = None
+) -> list[Reaction]:
+    if not oconn:
+        check_db()
+        conn, c = row_conn()
+    else:
+        conn = oconn
+        c = conn.cursor()
+
+    if id_:
+        c.execute("select * from reactions where id = ?", (id_,))
+        rows = [c.fetchone()]
+    else:
+        c.execute("select * from reactions where post = ?", (post,))
+        rows = c.fetchall()
+
+    reactions = []
+    rows = [row for row in rows if row]
+
+    for row in rows:
+        reaction = make_reaction(dict(row))
+        c.execute("select * from users where username = ?", (row["user"],))
+        user = c.fetchone()
+
+        if user:
+            reaction.uname = user["name"]
+
+        reactions.append(reaction)
+
+    if not oconn:
+        conn.close()
+
+    return reactions
 
 
 def get_reaction_count(post: str, user: str) -> int:
@@ -542,19 +577,6 @@ def delete_reaction(id_: int) -> None:
     c.execute("delete from reactions where id = ?", (id_,))
     conn.commit()
     conn.close()
-
-
-def get_reaction(id_: int) -> Reaction | None:
-    check_db()
-    conn, c = row_conn()
-    c.execute("select * from reactions where id = ?", (id_,))
-    row = c.fetchone()
-    conn.close()
-
-    if row:
-        return make_reaction(dict(row))
-
-    return None
 
 
 def delete_all_posts() -> None:

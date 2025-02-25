@@ -17,7 +17,6 @@ class Reaction:
     id: int
     post: str
     user: str
-    uname: str
     value: str
     mode: str
     listed: bool
@@ -26,6 +25,7 @@ class Reaction:
     uname_str: str
     value_sample: str
     date_str: str
+    uname: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -36,12 +36,12 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     uname_str = reaction.uname or "Anon"
     value_sample = utils.space_string(reaction.value)[:140]
     date_str = utils.nice_date(reaction.date)
+    uname = reaction.uname or "Anon"
 
     return Reaction(
         reaction.id,
         reaction.post,
         reaction.user,
-        reaction.uname,
         reaction.value,
         reaction.mode,
         reaction.listed,
@@ -50,6 +50,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         uname_str,
         value_sample,
         date_str,
+        uname,
     )
 
 
@@ -75,7 +76,7 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if database.get_reaction_count(name, user.username) >= config.max_user_reactions:
         return utils.bad("You can't add more reactions")
 
-    id_ = database.add_reaction(name, user.username, user.name, text, mode, user.lister)
+    id_ = database.add_reaction(name, user.username, text, mode, user.lister)
 
     if not id_:
         return utils.bad("Reaction failed")
