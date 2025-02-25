@@ -1001,6 +1001,12 @@ function remove_reaction(id) {
   if (item) {
     item.remove()
   }
+
+  if (!reactions.children.length) {
+    DOM.hide(reactions)
+    DOM.hide(`#to_bottom_container`)
+    DOM.hide(`#totopia`)
+  }
 }
 
 function replace_urls(text) {
