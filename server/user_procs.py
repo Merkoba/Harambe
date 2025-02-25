@@ -60,6 +60,8 @@ class User:
     reacter: bool
     poster_str: str
     reacter_str: str
+    num_posts: int
+    num_reactions: int
 
 
 user_types = {
@@ -118,11 +120,13 @@ def make_user(user: DbUser) -> User:
         user.reacter,
         poster_str,
         reacter_str,
+        user.num_posts,
+        user.num_reactions,
     )
 
 
 def get_userlist() -> list[User]:
-    return [make_user(user) for user in database.get_userlist()]
+    return [make_user(user) for user in database.get_users()]
 
 
 def get_users(

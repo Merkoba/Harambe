@@ -162,10 +162,11 @@ def make_post(row: dict[str, Any]) -> Post:
 
 
 def get_post(name: str) -> Post | None:
-    return get_posts(name)
+    posts = get_posts(name)
+    return posts[0] if posts else None
 
 
-def get_posts(name: str | None = None) -> list[Post] | Post | None:
+def get_posts(name: str | None = None) -> list[Post] | None:
     check_db()
     conn, c = row_conn()
 
@@ -203,9 +204,6 @@ def get_posts(name: str | None = None) -> list[Post] | Post | None:
 
     if not posts:
         return None
-
-    if name:
-        return posts[0]
 
     return posts
 
@@ -358,27 +356,38 @@ def make_user(row: dict[str, Any]) -> User:
     )
 
 
-def get_userlist() -> list[User]:
-    check_db()
-    conn, c = row_conn()
-    c.execute("select * from users")
-    rows = c.fetchall()
-    conn.close()
-
-    return [make_user(dict(row)) for row in rows]
-
-
 def get_user(username: str) -> User | None:
+    users = get_users(username)
+    return users[0] if users else None
+
+
+def get_users(username: str | None = None) -> list[User] | None:
     check_db()
     conn, c = row_conn()
-    c.execute("select * from users where username = ?", (username,))
-    row = c.fetchone()
+
+    if username:
+        c.execute("select * from users where username = ?", (username,))
+        rows = [c.fetchone()]
+    else:
+        c.execute("select * from users")
+        rows = c.fetchall()
+
+    users = []
+
+    for row in rows:
+        user = make_user(dict(row))
+        c.execute("select count(*) from posts where username = ?", (row["username"],))
+        user.num_posts = c.fetchone()[0]
+        c.execute("select count(*) from reactions where user = ?", (row["username"],))
+        user.num_reactions = c.fetchone()[0]
+        users.append(user)
+
     conn.close()
 
-    if row:
-        return make_user(dict(row))
+    if not users:
+        return None
 
-    return None
+    return users
 
 
 def delete_user(username: str) -> None:
