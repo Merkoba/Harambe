@@ -1,12 +1,6 @@
 window.onload = () => {
   vars.selected_items = []
 
-  DOM.ev(document, `keyup`, async (e) => {
-    if (e.key === `Enter`) {
-      do_search()
-    }
-  })
-
   DOM.ev(document, `click`, async (e) => {
     let item = e.target.closest(`.item`)
     vars.active_item = item
@@ -142,6 +136,16 @@ window.onload = () => {
   if (filter) {
     DOM.ev(filter, `input`, () => {
       do_filter()
+    })
+
+    DOM.ev(filter, `keydown`, (e) => {
+      if (e.key === `Enter`) {
+        do_search()
+      }
+      else if (e.key === `Escape`) {
+        filter.value = ``
+        do_filter()
+      }
     })
 
     filter.focus()
