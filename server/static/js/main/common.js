@@ -31,7 +31,7 @@ DOM.ev(document, `keydown`, (e) => {
 
       if (dialog) {
         let n = parseInt(e.key)
-        let buttons = DOM.els(`.aero_button`, dialog)
+        let buttons = dialog.children
 
         if (buttons.length >= n) {
           e.preventDefault()
@@ -200,17 +200,14 @@ function setup_admin_opts() {
   vars.msg_admin_opts.set(template.innerHTML)
 
   DOM.ev(`#admin_opts_posts`, `click`, (e) => {
-    vars.msg_admin_opts.close()
     window.location = `/admin/posts`
   })
 
   DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
-    vars.msg_admin_opts.close()
     window.location = `/admin/reactions`
   })
 
   DOM.ev(`#admin_opts_users`, `click`, (e) => {
-    vars.msg_admin_opts.close()
     window.location = `/admin/users`
   })
 
@@ -230,22 +227,18 @@ function setup_explore_opts() {
   vars.msg_explore_opts.set(template.innerHTML)
 
   DOM.ev(`#explore_opts_fresh`, `click`, (e) => {
-    vars.msg_explore_opts.close()
     window.location = `/fresh`
   })
 
   DOM.ev(`#explore_opts_posts`, `click`, (e) => {
-    vars.msg_explore_opts.close()
     window.location = `/list/posts`
   })
 
   DOM.ev(`#explore_opts_reactions`, `click`, (e) => {
-    vars.msg_explore_opts.close()
     window.location = `/list/reactions`
   })
 
   DOM.ev(`#explore_opts_random`, `click`, (e) => {
-    vars.msg_explore_opts.close()
     window.location = `/random`
   })
 
