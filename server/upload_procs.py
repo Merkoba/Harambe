@@ -92,7 +92,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                         title = ""
 
                     username = user.username
-                    uploader = user.name
                     listed = user.lister
                     mtype, _ = mimetypes.guess_type(path)
                     mtype = mtype or ""
@@ -105,16 +104,15 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                         sample = ""
 
                     database.add_post(
-                        name,
-                        cext,
-                        title,
-                        pfile.stem,
-                        username,
-                        uploader,
-                        mtype,
-                        listed,
-                        size,
-                        sample,
+                        name=name,
+                        ext=cext,
+                        title=title,
+                        original=pfile.stem,
+                        username=username,
+                        mtype=mtype,
+                        listed=listed,
+                        size=size,
+                        sample=sample,
                     )
 
                     database.update_user_last_date(username)

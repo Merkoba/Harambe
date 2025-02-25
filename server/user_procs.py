@@ -128,12 +128,7 @@ def make_user(user: DbUser) -> User:
 
 
 def get_userlist() -> list[User]:
-    users = database.get_users()
-
-    if not users:
-        return []
-
-    return [make_user(user) for user in users]
+    return [make_user(user) for user in database.get_users()]
 
 
 def get_users(
@@ -631,11 +626,6 @@ def register(request: Request) -> tuple[bool, str, User | None]:
 def check_user_changes(user: User | None, args: dict[str, Any]) -> None:
     if not user:
         return
-
-    if "name" in args:
-        if user.name != args["name"]:
-            database.change_uploader(user.username, args["name"])
-            database.change_reacter(user.username, args["name"])
 
     if "lister" in args:
         if user.lister != args["lister"]:

@@ -136,7 +136,6 @@ def add_post(
         listed,
         size,
         sample,
-        0,
     ]
 
     placeholders = ", ".join(["?"] * len(values))
@@ -168,7 +167,7 @@ def get_post(name: str) -> Post | None:
     return posts[0] if posts else None
 
 
-def get_posts(name: str | None = None) -> list[Post] | None:
+def get_posts(name: str | None = None) -> list[Post]:
     check_db()
     conn, c = row_conn()
 
@@ -203,10 +202,6 @@ def get_posts(name: str | None = None) -> list[Post] | None:
         posts.append(post)
 
     conn.close()
-
-    if not posts:
-        return None
-
     return posts
 
 
@@ -363,7 +358,7 @@ def get_user(username: str) -> User | None:
     return users[0] if users else None
 
 
-def get_users(username: str | None = None) -> list[User] | None:
+def get_users(username: str | None = None) -> list[User]:
     check_db()
     conn, c = row_conn()
 
@@ -385,10 +380,6 @@ def get_users(username: str | None = None) -> list[User] | None:
         users.append(user)
 
     conn.close()
-
-    if not users:
-        return None
-
     return users
 
 
@@ -532,14 +523,6 @@ def get_latest_post() -> Post | None:
         return make_post(dict(row))
 
     return None
-
-
-def change_reacter(username: str, new_name: str) -> None:
-    check_db()
-    conn, c = get_conn()
-    c.execute("update reactions set uname = ? where user = ?", (new_name, username))
-    conn.commit()
-    conn.close()
 
 
 def get_reactionlist() -> list[Reaction]:
