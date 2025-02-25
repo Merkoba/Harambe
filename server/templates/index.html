@@ -46,7 +46,12 @@
 
 <template id="template_you_opts">
     <div class="dialog_container">
-        <div>{{username}}</div>
+        <div class="rowitem">
+            <div id="user_name">{{user_name[:12] | trim}}</div>
+            <div class="sep">|</div>
+            {{username[:12] | trim}}
+        </div>
+
         <div id="you_opts_posts" class="aero_button">Posts</div>
         <div id="you_opts_reactions" class="aero_button">Reactions</div>
         <div id="you_opts_edit_name" class="aero_button">Change Name</div>

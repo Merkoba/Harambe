@@ -202,7 +202,7 @@
 
     {% if post.image_embed %}
     <div class="embed">
-        <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}">
+        <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}" onload="on_image_load()">
     </div>
     {% endif %}
 

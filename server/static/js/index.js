@@ -288,6 +288,7 @@ function edit_name() {
 
       do_edit(`name`, value, `Name`, () => {
         vars.user_name = value
+        DOM.el(`#user_name`).textContent = value
       })
     },
   }

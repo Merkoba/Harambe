@@ -1052,3 +1052,13 @@ function text_html(text) {
   text = text.replace(re, `<a href="https://github.com/$1/$2">GH: $1/$2</a>`)
   return text
 }
+
+function on_image_load() {
+  let img = DOM.el(`#image`)
+
+  if (img) {
+    let w = img.naturalWidth
+    let h = img.naturalHeight
+    img.title = `${w} x ${h}`
+  }
+}
