@@ -1,4 +1,6 @@
 DOM.ev(document, `keydown`, (e) => {
+  let n = parseInt(e.key)
+
   if (e.key === `Enter`) {
     if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
       e.preventDefault()
@@ -22,9 +24,7 @@ DOM.ev(document, `keydown`, (e) => {
       }
     }
   }
-  else if (!isNaN(parseInt(e.key)) && (parseInt(e.key) >= 1) && (parseInt(e.key) <= 9)) {
-    let n = parseInt(e.key)
-
+  else if (!isNaN(n) && (n >= 1) && (n <= 9)) {
     if (Msg.msg.any_open()) {
       let content = Msg.msg.highest_instance().content
       let dialog = DOM.el(`.dialog_container`, content)
