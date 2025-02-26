@@ -137,6 +137,26 @@ window.onload = () => {
       DOM.ev(`#edit_reacter_no`, `click`, () => {
         mod_user(`reacter`, 0, `bool`)
       })
+
+      DOM.ev(`#edit_admin_yes`, `click`, () => {
+        mod_user(`admin`, 1, `bool`)
+      })
+
+      DOM.ev(`#edit_admin_no`, `click`, () => {
+        mod_user(`admin`, 0, `bool`)
+      })
+
+      DOM.ev(`#edit_rpm`, `click`, () => {
+        user_mod_input(`rpm`, `number`)
+      })
+
+      DOM.ev(`#edit_max_size`, `click`, () => {
+        user_mod_input(`max_size`, `number`)
+      })
+
+      DOM.ev(`#edit_mark`, `click`, () => {
+        user_mod_input(`mark`, `string`)
+      })
     }
 
     DOM.ev(edit, `click`, () => {
@@ -696,11 +716,10 @@ function mod_user(what, value, vtype) {
   }
 
   let s = singplural(`user`, items.length)
-  let v = value === 1 ? `Yes` : `No`
   let w = capitalize(what)
 
   let confirm_args = {
-    message: `Modify ${items.length} ${s} (${w}: ${v}) ?`,
+    message: `Modify ${items.length} ${s} (${w}) ?`,
     callback_yes: () => {
       vars.msg_edit.close()
       do_mod_user(items, what, value, vtype)
@@ -915,4 +934,26 @@ function go_back() {
 function filter_focused() {
   let filter = DOM.el(`#filter`)
   return filter && (document.activeElement === filter)
+}
+
+function user_mod_input(what, vtype) {
+  let prompt_args = {
+    placeholder: `New value for ${what}`,
+    max: vars.text_reaction_length,
+    callback: (value) => {
+      value = value.trim()
+
+      if (vtype === `number`) {
+        value = parseInt(value)
+
+        if (isNaN(value)) {
+          value = 0
+        }
+      }
+
+      mod_user(what, value, vtype)
+    },
+  }
+
+  prompt_text(prompt_args)
 }

@@ -559,6 +559,8 @@ def mod_user(
         new_value = str(value)
     elif vtype == "bool":
         new_value = bool(value)
+    elif vtype == "number":
+        new_value = int(value)
 
     if new_value is None:
         return utils.bad("Invalid value")
