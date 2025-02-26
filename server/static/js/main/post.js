@@ -593,6 +593,14 @@ function add_reaction(reaction) {
   let reactions = DOM.el(`#reactions`)
   DOM.show(reactions)
   reactions.appendChild(make_reaction(reaction))
+  check_reactions()
+}
+
+function check_reactions() {
+  if (DOM.els(`.reaction_item`).length >= 3) {
+    DOM.show(`#to_bottom_container`)
+    DOM.show(`#totopia`)
+  }
 }
 
 function make_reaction(reaction) {
@@ -631,8 +639,6 @@ function make_reaction(reaction) {
   })
 
   ago.textContent = reaction.ago
-  DOM.show(`#to_bottom_container`)
-  DOM.show(`#totopia`)
   item.dataset.id = r.id
   item.dataset.username = r.user
   item.dataset.value = r.value
@@ -733,6 +739,7 @@ async function send_reaction(text, mode) {
   if (response.ok) {
     let json = await response.json()
     add_reaction(json.reaction)
+    check_reactions()
     window.scrollTo(0, document.body.scrollHeight)
   }
   else {
@@ -801,6 +808,8 @@ function apply_update(update) {
     for (let reaction of update.reactions) {
       add_reaction(reaction)
     }
+
+    check_reactions()
   }
 
   vars.title = update.title
