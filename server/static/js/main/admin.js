@@ -1,6 +1,31 @@
 window.onload = () => {
   vars.selected_items = []
 
+  DOM.ev(document, `keyup`, (e) => {
+    if (!filter_focused() && !Msg.msg.any_open()){
+      if (e.key === `Escape`) {
+        go_back()
+      }
+    }
+  })
+
+  DOM.ev(document, `keydown`, (e) => {
+    if (filter_focused()) {
+      if (e.key === `Enter`) {
+        do_search()
+      }
+      else if (e.key === `Escape`) {
+        if (filter.value) {
+          filter.value = ``
+          do_filter()
+        }
+        else {
+          filter.blur()
+        }
+      }
+    }
+  })
+
   DOM.ev(document, `click`, async (e) => {
     let item = e.target.closest(`.item`)
     vars.active_item = item
@@ -138,16 +163,6 @@ window.onload = () => {
       do_filter()
     })
 
-    DOM.ev(filter, `keydown`, (e) => {
-      if (e.key === `Enter`) {
-        do_search()
-      }
-      else if (e.key === `Escape`) {
-        filter.value = ``
-        do_filter()
-      }
-    })
-
     filter.focus()
   }
 
@@ -208,7 +223,7 @@ window.onload = () => {
 
     if (back_btn) {
       DOM.ev(back_btn, `click`, (e) => {
-        vars.msg_admin_opts.show()
+        go_back()
       })
     }
   }
@@ -891,4 +906,13 @@ async function delete_all_reactions() {
   catch (error) {
     print_error(error)
   }
+}
+
+function go_back() {
+  vars.msg_admin_opts.show()
+}
+
+function filter_focused() {
+  let filter = DOM.el(`#filter`)
+  return filter && (document.activeElement === filter)
 }
