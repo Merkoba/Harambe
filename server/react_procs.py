@@ -92,7 +92,8 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
 
 def get_reactionlist() -> list[Reaction]:
     now = utils.now()
-    return [make_reaction(reaction, now) for reaction in database.get_reactionlist()]
+    reactions = database.get_reactions()
+    return [make_reaction(reaction, now) for reaction in reactions]
 
 
 def get_reactions(

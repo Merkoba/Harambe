@@ -542,12 +542,14 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
 
 
 def get_reaction(id_: int, oconn: sqlite3.Connection | None = None) -> Reaction | None:
-    reactions = get_reactions(None, id_, oconn=oconn)
+    reactions = get_reactions(id_=id_, oconn=oconn)
     return reactions[0] if reactions else None
 
 
 def get_reactions(
-    post: str | None, id_: int | None = None, oconn: sqlite3.Connection | None = None
+    post: str | None = None,
+    id_: int | None = None,
+    oconn: sqlite3.Connection | None = None,
 ) -> list[Reaction]:
     if not oconn:
         check_db()
@@ -559,8 +561,11 @@ def get_reactions(
     if id_:
         c.execute("select * from reactions where id = ?", (id_,))
         rows = [c.fetchone()]
-    else:
+    elif post:
         c.execute("select * from reactions where post = ?", (post,))
+        rows = c.fetchall()
+    else:
+        c.execute("select * from reactions")
         rows = c.fetchall()
 
     reactions = []
@@ -608,16 +613,6 @@ def get_latest_post() -> Post | None:
         return make_post(dict(row))
 
     return None
-
-
-def get_reactionlist() -> list[Reaction]:
-    check_db()
-    conn, c = row_conn()
-    c.execute("select * from reactions")
-    rows = c.fetchall()
-    conn.close()
-
-    return [make_reaction(dict(row)) for row in rows]
 
 
 def delete_reaction(id_: int) -> None:
