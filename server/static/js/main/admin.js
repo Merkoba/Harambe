@@ -157,6 +157,10 @@ window.onload = () => {
       DOM.ev(`#edit_mark`, `click`, () => {
         user_mod_input(`mark`, `string`)
       })
+
+      DOM.ev(`#edit_name`, `click`, () => {
+        user_mod_input(`name`, `string`)
+      })
     }
 
     DOM.ev(edit, `click`, () => {

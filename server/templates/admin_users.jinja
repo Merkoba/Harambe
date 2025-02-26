@@ -53,6 +53,7 @@
         </div>
 
         <div>
+            <div id="edit_name" class="aero_button">Name</div>
             <div id="edit_mark" class="aero_button">Mark</div>
         </div>
     </div>
@@ -126,7 +127,8 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
-            <div id="username" class="table_cell underline" data-sort="username" title="The username of the user. It acts as the ID and can't be changed">User</div>
+            <div id="username" class="table_cell underline" data-sort="username" title="The username of the user">User</div>
+            <div id="username" class="table_cell underline" data-sort="username" title="The name of the user">Name</div>
             <div id="limit" class="table_cell small underline" data-sort="rpm" title="Requests per minute the user can make">RPM</div>
             <div id="max" class="table_cell small underline" data-sort="max_size" title="The max size in megabytes this user can upload at once">Max</div>
             <div id="list" class="table_cell underline" data-sort="admin" title="This user is an admin and can use the admin pages">Admin</div>
@@ -161,7 +163,10 @@
             </div>
 
             <!-- Username -->
-            <div class="table_cell admin_username action_button" title="{{item.name}}">{{item.username}}</div>
+            <div class="table_cell admin_username action_button" title="{{item.username}}">{{item.username}}</div>
+
+            <!-- Name -->
+            <div class="table_cell admin_username action_button" title="{{item.name}}">{{item.name}}</div>
 
             <!-- RPM -->
             <div class="table_cell small">{{item.rpm_fill}}</div>
