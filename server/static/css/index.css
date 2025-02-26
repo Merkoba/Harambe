@@ -139,6 +139,10 @@ a.dialog_button:hover {
     width: 100%;
 }
 
+#picker:hover {
+    outline: 1px solid var(--text_color);
+}
+
 #bottom {
     position: relative;
     display: flex;
@@ -182,4 +186,8 @@ a.dialog_button:hover {
 
 .link {
     user-select: none;
+}
+
+#file {
+    cursor: pointer;
 }
