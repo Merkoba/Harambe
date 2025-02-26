@@ -76,7 +76,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     post_title = title or original or name
     uploader_str = uploader or "Anon"
     mtype_str = mtype or ext or "?"
-    num_reactions = len(post.reactions)
+    num_reactions = post.num_reactions
 
     if all_data:
         sample = post.sample
@@ -144,9 +144,9 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     )
 
 
-def get_postlist(username: str = "") -> list[Post]:
+def get_postlist(username: str = "", full_reactions: bool = False) -> list[Post]:
     now = utils.now()
-    posts = database.get_posts(username=username)
+    posts = database.get_posts(username=username, full_reactions=full_reactions)
     return [make_post(post, now) for post in posts]
 
 

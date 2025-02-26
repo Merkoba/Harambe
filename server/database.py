@@ -76,6 +76,7 @@ class Post:
     sample: str
     reactions: list[Reaction] = field(default_factory=list)
     user: User | None = None
+    num_reactions: int = 0
 
     def full(self) -> str:
         if self.ext:
@@ -211,12 +212,14 @@ def make_post(row: dict[str, Any]) -> Post:
     )
 
 
-def get_post(name: str) -> Post | None:
-    posts = get_posts(name)
+def get_post(name: str, full_reactions: bool = True) -> Post | None:
+    posts = get_posts(name, full_reactions=full_reactions)
     return posts[0] if posts else None
 
 
-def get_posts(name: str | None = None, username: str | None = None) -> list[Post]:
+def get_posts(
+    name: str | None = None, username: str | None = None, full_reactions: bool = False
+) -> list[Post]:
     check_db()
     conn, c = row_conn()
 
@@ -242,12 +245,17 @@ def get_posts(name: str | None = None, username: str | None = None) -> list[Post
 
     for row in rows:
         post = make_post(dict(row))
-        reactions = get_reactions(post.name, oconn=conn)
 
-        if reactions:
-            post.reactions = reactions
+        if full_reactions:
+            reactions = get_reactions(post.name, oconn=conn)
+
+            if reactions:
+                post.reactions = reactions
+            else:
+                post.reactions = []
         else:
             post.reactions = []
+            post.num_reactions = get_reaction_count(post.name, oconn=conn)
 
         user = get_user(post.username, oconn=conn)
 
@@ -608,18 +616,30 @@ def get_reactions(
     return reactions
 
 
-def get_reaction_count(post: str, user: str) -> int:
-    check_db()
-    conn, c = get_conn()
+def get_reaction_count(
+    post: str, user: str | None = None, oconn: sqlite3.Connection | None = None
+) -> int:
+    if not oconn:
+        check_db()
+        conn, c = get_conn()
+    else:
+        conn = oconn
+        c = conn.cursor()
 
-    c.execute(
-        "select count(*) from reactions where post = ? and user = ?",
-        (post, user),
-    )
+    if user:
+        c.execute(
+            "select count(*) from reactions where post = ? and user = ?",
+            (post, user),
+        )
+    else:
+        c.execute("select count(*) from reactions where post = ?", (post,))
 
     result = c.fetchone()
     count = result[0] if result is not None else 0
-    conn.close()
+
+    if not oconn:
+        conn.close()
+
     return count
 
 
