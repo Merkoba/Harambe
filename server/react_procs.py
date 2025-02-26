@@ -90,9 +90,9 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     return utils.bad("Reaction failed")
 
 
-def get_reactionlist() -> list[Reaction]:
+def get_reactionlist(username: str = "") -> list[Reaction]:
     now = utils.now()
-    reactions = database.get_reactions()
+    reactions = database.get_reactions(username=username)
     return [make_reaction(reaction, now) for reaction in reactions]
 
 
@@ -118,13 +118,9 @@ def get_reactions(
     reactions = []
     query = utils.clean_query(query)
 
-    for reaction in get_reactionlist():
+    for reaction in get_reactionlist(username):
         if only_listed:
             if not reaction.listed:
-                continue
-
-        if username:
-            if reaction.user != username:
                 continue
 
         ok = (

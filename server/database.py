@@ -216,15 +216,25 @@ def get_post(name: str) -> Post | None:
     return posts[0] if posts else None
 
 
-def get_posts(name: str | None = None) -> list[Post]:
+def get_posts(name: str | None = None, username: str | None = None) -> list[Post]:
     check_db()
     conn, c = row_conn()
 
     if name:
-        c.execute("select * from posts where name = ?", (name,))
+        if username:
+            c.execute(
+                "select * from posts where name = ? and username = ?", (name, username)
+            )
+        else:
+            c.execute("select * from posts where name = ?", (name,))
+
         rows = [c.fetchone()]
     else:
-        c.execute("select * from posts")
+        if username:
+            c.execute("select * from posts where username = ?", (username,))
+        else:
+            c.execute("select * from posts")
+
         rows = c.fetchall()
 
     posts = []
@@ -549,6 +559,7 @@ def get_reaction(id_: int, oconn: sqlite3.Connection | None = None) -> Reaction 
 def get_reactions(
     post: str | None = None,
     id_: int | None = None,
+    username: str | None = None,
     oconn: sqlite3.Connection | None = None,
 ) -> list[Reaction]:
     if not oconn:
@@ -562,10 +573,20 @@ def get_reactions(
         c.execute("select * from reactions where id = ?", (id_,))
         rows = [c.fetchone()]
     elif post:
-        c.execute("select * from reactions where post = ?", (post,))
+        if username:
+            c.execute(
+                "select * from reactions where post = ? and user = ?", (post, username)
+            )
+        else:
+            c.execute("select * from reactions where post = ?", (post,))
+
         rows = c.fetchall()
     else:
-        c.execute("select * from reactions")
+        if username:
+            c.execute("select * from reactions where user = ?", (username,))
+        else:
+            c.execute("select * from reactions")
+
         rows = c.fetchall()
 
     reactions = []

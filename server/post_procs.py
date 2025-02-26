@@ -144,6 +144,12 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     )
 
 
+def get_postlist(username: str = "") -> list[Post]:
+    now = utils.now()
+    posts = database.get_posts(username=username)
+    return [make_post(post, now) for post in posts]
+
+
 def get_posts(
     page: int = 1,
     page_size: str = "default",
@@ -165,41 +171,34 @@ def get_posts(
 
     posts = []
     total_size = 0
-    now = utils.now()
     query = utils.clean_query(query)
 
-    for post in database.get_posts():
+    for post in get_postlist(username):
         if only_listed:
             if not post.listed:
                 continue
 
-        if username:
-            if post.username != username:
-                continue
-
-        f = make_post(post, now, False)
-
         ok = (
             not query
-            or (admin and (query in utils.clean_query(f.username)))
-            or query in utils.clean_query(f.full)
-            or query in utils.clean_query(f.original)
-            or query in utils.clean_query(f.title)
-            or query in utils.clean_query(f.uploader)
-            or query in utils.clean_query(f.date_3)
-            or query in utils.clean_query(f.size_str)
-            or query in utils.clean_query(f.views_str)
-            or query in utils.clean_query(f.mtype)
-            or query in utils.clean_query(f.uploader_str)
-            or query in utils.clean_query(f.ago)
-            or query in utils.clean_query(f.listed_str)
+            or (admin and (query in utils.clean_query(post.username)))
+            or query in utils.clean_query(post.full)
+            or query in utils.clean_query(post.original)
+            or query in utils.clean_query(post.title)
+            or query in utils.clean_query(post.uploader)
+            or query in utils.clean_query(post.date_3)
+            or query in utils.clean_query(post.size_str)
+            or query in utils.clean_query(post.views_str)
+            or query in utils.clean_query(post.mtype)
+            or query in utils.clean_query(post.uploader_str)
+            or query in utils.clean_query(post.ago)
+            or query in utils.clean_query(post.listed_str)
         )
 
         if not ok:
             continue
 
-        total_size += f.size
-        posts.append(f)
+        total_size += post.size
+        posts.append(post)
 
     total_size_str = utils.get_size(total_size)
     total_str = f"{total_size_str} ({len(posts)} Posts)"
