@@ -136,6 +136,7 @@ a.dialog_button:hover {
     background-color: var(--accent_color);
     padding: var(--padding_1);
     box-sizing: border-box;
+    cursor: pointer;
     width: 100%;
 }
 

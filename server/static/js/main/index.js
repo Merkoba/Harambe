@@ -2,6 +2,7 @@ let clicked = false
 
 window.onload = () => {
   let image = DOM.el(`#image`)
+  let file = DOM.el(`#file`)
 
   if (image) {
     DOM.ev(image, `click`, (e) => {
@@ -15,8 +16,9 @@ window.onload = () => {
         return
       }
 
-      let file = DOM.el(`#file`)
-      file.click()
+      if (file) {
+        file.click()
+      }
     })
 
     DOM.ev(image, `auxclick`, (e) => {
@@ -25,29 +27,27 @@ window.onload = () => {
         reset_file()
       }
     })
+  }
 
-    let file = DOM.el(`#file`)
+  if (file) {
+    DOM.ev(file, `change`, (e) => {
+      clicked = false
+      reflect_file()
+    })
 
-    if (file) {
-      DOM.ev(file, `change`, (e) => {
-        clicked = false
-        reflect_file()
-      })
+    DOM.ev(file, `click`, (e) => {
+      if (e.shiftKey || e.ctrlKey || e.altKey) {
+        e.preventDefault()
+        reset_file()
+      }
+    })
 
-      DOM.ev(file, `click`, (e) => {
-        if (e.shiftKey || e.ctrlKey || e.altKey) {
-          e.preventDefault()
-          reset_file()
-        }
-      })
-
-      DOM.ev(file, `auxclick`, (e) => {
-        if (e.button === 1) {
-          e.preventDefault()
-          reset_file()
-        }
-      })
-    }
+    DOM.ev(file, `auxclick`, (e) => {
+      if (e.button === 1) {
+        e.preventDefault()
+        reset_file()
+      }
+    })
   }
 
   DOM.ev(document, `dragover`, (e) => {
@@ -168,6 +168,14 @@ window.onload = () => {
         let form = DOM.el(`#form`)
         form.submit()
       }
+    })
+  }
+
+  let picker = DOM.el(`#picker`)
+
+  if (picker && file) {
+    DOM.ev(picker, `click`, (e) => {
+      file.click()
     })
   }
 }
