@@ -105,7 +105,7 @@ window.onload = () => {
   let admin_btn = DOM.el(`#admin_btn`)
 
   if (admin_btn) {
-    setup_admin_opts()
+    setup_admin_opts(`admin`)
 
     DOM.ev(admin_btn, `click`, (e) => {
       vars.msg_admin_opts.show()

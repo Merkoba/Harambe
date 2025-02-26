@@ -202,7 +202,7 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function setup_admin_opts() {
+function setup_admin_opts(mode = `normal`) {
   vars.msg_admin_opts = Msg.factory()
   let template = DOM.el(`#template_admin_opts`)
   vars.msg_admin_opts.set(template.innerHTML)
@@ -210,7 +210,7 @@ function setup_admin_opts() {
   DOM.ev(`#admin_opts_posts`, `click`, (e) => {
     vars.msg_admin_opts.close()
 
-    if (vars.mode.includes(`admin`)) {
+    if (vars.mode.includes(`admin`) || (mode === `admin`)) {
       window.location = `/admin/posts`
     }
     else {
@@ -221,7 +221,7 @@ function setup_admin_opts() {
   DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
     vars.msg_admin_opts.close()
 
-    if (vars.mode.includes(`admin`)) {
+    if (vars.mode.includes(`admin`) || (mode === `admin`)) {
       window.location = `/admin/reactions`
     }
     else {
