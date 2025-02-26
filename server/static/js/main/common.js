@@ -30,9 +30,9 @@ DOM.ev(document, `keydown`, (e) => {
       let dialog = DOM.el(`.dialog_container`, content)
 
       if (dialog) {
-        let buttons = dialog.children
+        let buttons = DOM.els(`.aero_button`, dialog)
 
-        if (buttons.length >= n) {
+        if (n <= buttons.length) {
           e.preventDefault()
           buttons[n - 1].click()
         }
