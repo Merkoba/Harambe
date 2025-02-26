@@ -456,23 +456,6 @@ def edit_user(
     return True, uname
 
 
-def user_edit(user: User, what: str, value: Any) -> tuple[str, int]:
-    if not user:
-        return utils.bad("User not found")
-
-    if not what:
-        return utils.bad("No field provided")
-
-    ok, value = check_value(user, what, value)
-
-    if not ok:
-        return utils.bad("Invalid value")
-
-    database.mod_user([user.username], what, value)
-    check_user_changes(user, {"name": value})
-    return utils.ok()
-
-
 def check_auth(username: str, password: str) -> User | None:
     user = get_user(username)
 
@@ -543,7 +526,7 @@ def check_user_max(user: User, size: int) -> bool:
 
 
 def mod_user(
-    usernames: list[str], what: str, value: str, vtype: str
+    usernames: list[str], what: str, value: str, vtype: str, user: User
 ) -> tuple[str, int]:
     if not what:
         return utils.bad("No field provided")
@@ -565,7 +548,16 @@ def mod_user(
     if new_value is None:
         return utils.bad("Invalid value")
 
+    if user.admin and (what == "admin"):
+        usernames.remove(user.username)
+
+    ok, value = check_value(None, what, value)
+
+    if not ok:
+        return utils.bad("Invalid value")
+
     database.mod_user(usernames, what, new_value)
+    check_user_changes(user, {"name": value})
     return utils.ok()
 
 

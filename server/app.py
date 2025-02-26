@@ -772,7 +772,12 @@ def user_edit() -> Any:
     if not getattr(config, f"allow_{what}_edit"):
         return error_json
 
-    return user_procs.user_edit(user, what, value)
+    if (what == "name") or (what == "password"):
+        vtype = "string"
+    else:
+        return error_json
+
+    return user_procs.mod_user([user.username], what, value, vtype, user)
 
 
 @app.route("/delete_users", methods=["POST"])  # type: ignore
@@ -840,7 +845,7 @@ def mod_user() -> Any:
     if not user:
         return error_json
 
-    return user_procs.mod_user(usernames, what, value, vtype)
+    return user_procs.mod_user(usernames, what, value, vtype, user)
 
 
 # ICONS
