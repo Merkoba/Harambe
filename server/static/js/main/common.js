@@ -209,18 +209,32 @@ function setup_admin_opts() {
 
   DOM.ev(`#admin_opts_posts`, `click`, (e) => {
     vars.msg_admin_opts.close()
-    window.location = `/admin/posts`
+
+    if (vars.mode.includes(`admin`)) {
+      window.location = `/admin/posts`
+    }
+    else {
+      window.location = `/list/posts`
+    }
   })
 
   DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
     vars.msg_admin_opts.close()
-    window.location = `/admin/reactions`
+
+    if (vars.mode.includes(`admin`)) {
+      window.location = `/admin/reactions`
+    }
+    else {
+      window.location = `/list/reactions`
+    }
   })
 
-  DOM.ev(`#admin_opts_users`, `click`, (e) => {
-    vars.msg_admin_opts.close()
-    window.location = `/admin/users`
-  })
+  if (DOM.el(`#admin_opts_users`)) {
+    DOM.ev(`#admin_opts_users`, `click`, (e) => {
+      vars.msg_admin_opts.close()
+      window.location = `/admin/users`
+    })
+  }
 
   let ret = DOM.el(`#admin_opts_return`)
 

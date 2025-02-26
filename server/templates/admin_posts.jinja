@@ -20,6 +20,7 @@
 {% endblock %}
 
 {% block body %}
+{% if mode == "admin_posts "%}
 <template id="template_admin_opts">
     <div class="dialog_container">
         <div id="admin_opts_posts" class="aero_button">Posts</div>
@@ -28,6 +29,15 @@
         <div id="admin_opts_return" class="aero_button">Return</div>
     </div>
 </template>
+{% else %}
+<template id="template_admin_opts">
+    <div class="dialog_container">
+        <div id="admin_opts_posts" class="aero_button">Posts</div>
+        <div id="admin_opts_reactions" class="aero_button">Reactions</div>
+        <div id="admin_opts_return" class="aero_button">Return</div>
+    </div>
+</template>
+{% endif %}
 
 {% if mode == "admin_posts" %}
 <template id="template_user_opts">
