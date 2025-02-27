@@ -537,14 +537,14 @@ def delete_post() -> Any:
 @login_required
 def edit_title() -> Any:
     data = request.get_json()
-    name = data.get("name", None)
+    post_id = data.get("post_id", None)
     title = data.get("title", None)
     user = get_user()
 
     if not user:
         return error_json
 
-    return post_procs.edit_post_title(name, title, user=user)
+    return post_procs.edit_post_title(post_id, title, user=user)
 
 
 # AUTH

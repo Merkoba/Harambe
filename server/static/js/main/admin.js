@@ -35,7 +35,7 @@ window.onload = () => {
         window.location = `/edit_user/${item.dataset.username}`
       }
       else if (vars.mode === `admin_posts`) {
-        edit_title(item)
+        edit_post_title(item)
       }
     }
     else if (e.target.classList.contains(`delete`)) {
@@ -526,7 +526,7 @@ function do_search() {
   }
 }
 
-async function edit_title(el) {
+async function edit_post_title(el) {
   let t = el.dataset.title
   let o = el.dataset.original
   let current = t || o
@@ -536,14 +536,14 @@ async function edit_title(el) {
     value: current,
     max: vars.max_title_length,
     callback: async (title) => {
-      let name = el.dataset.name
+      let post_id = el.dataset.post_id
 
       let response = await fetch(`/edit_title`, {
         method: `POST`,
         headers: {
           "Content-Type": `application/json`,
         },
-        body: JSON.stringify({name, title}),
+        body: JSON.stringify({post_id, title}),
       })
 
       if (response.ok) {
