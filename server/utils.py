@@ -103,7 +103,7 @@ def log(s: str) -> None:
 
 
 def error(e: Exception) -> None:
-    print(e)  # noqa
+    q(e)
 
 
 def get_dtime(date: int) -> datetime:

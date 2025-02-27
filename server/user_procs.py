@@ -607,13 +607,11 @@ def register(request: Request) -> tuple[bool, str, User | None]:
     if not ok:
         return False, "Invalid name", None
 
-    user = get_user(username)
-
-    if user:
+    if database.username_exists(username):
         return False, "User already exists", None
 
-    database.add_user("add", username=username, password=password, name=name)
-    user = get_user(username)
+    user_id = database.add_user("add", username=username, password=password, name=name)
+    user = get_user(user_id)
 
     if not user:
         return False, "User not found", None

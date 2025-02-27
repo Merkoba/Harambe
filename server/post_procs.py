@@ -18,6 +18,7 @@ from react_procs import Reaction
 
 @dataclass
 class Post:
+    id: int
     name: str
     ext: str
     full: str
@@ -108,6 +109,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     markdown_embed = (mtype == "text/markdown") and embed_size("markdown")
 
     return Post(
+        post.id,
         name,
         ext,
         full,

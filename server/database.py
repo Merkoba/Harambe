@@ -193,7 +193,7 @@ def add_post(
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (user_id, name, ext, date, title, views, original, mtype, view_date, size, sample) values ({placeholders})"
+    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, sample) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -222,7 +222,7 @@ def get_post(
     if (not post_id) and (not name):
         return None
 
-    posts = get_posts(post_id, full_reactions=full_reactions)
+    posts = get_posts(post_id=post_id, name=name, full_reactions=full_reactions)
     return posts[0] if posts else None
 
 
@@ -446,7 +446,7 @@ def get_user(
     if (not user_id) and (not username):
         return None
 
-    users = get_users(user_id, oconn=oconn)
+    users = get_users(user_id=user_id, username=username, oconn=oconn)
     return users[0] if users else None
 
 
