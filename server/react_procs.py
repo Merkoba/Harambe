@@ -21,7 +21,6 @@ class Reaction:
     username: str
     uname: str
     value: str
-    mode: str
     listed: bool
     date: int
     ago: str
@@ -50,7 +49,6 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         username,
         uname,
         reaction.value,
-        reaction.mode,
         reaction.listed,
         reaction.date,
         ago,
@@ -60,7 +58,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     )
 
 
-def react(post_id: int, text: str, user: User, mode: str) -> tuple[str, int]:
+def react(post_id: int, text: str, user: User) -> tuple[str, int]:
     if not user:
         return utils.bad("You are not logged in")
 
@@ -73,16 +71,13 @@ def react(post_id: int, text: str, user: User, mode: str) -> tuple[str, int]:
     if not text:
         return utils.bad("Missing values")
 
-    if mode not in ["text", "icon"]:
-        return utils.bad("Invalid mode")
-
-    if not check_reaction(text, mode):
+    if not check_reaction(text):
         return utils.bad("Invalid reaction")
 
     if database.get_reaction_count(post_id, user.id) >= config.max_user_reactions:
         return utils.bad("You can't add more reactions")
 
-    reaction_id = database.add_reaction(post_id, user.id, text, mode)
+    reaction_id = database.add_reaction(post_id, user.id, text)
 
     if not reaction_id:
         return utils.bad("Reaction failed")
@@ -243,9 +238,7 @@ def delete_all_reactions() -> tuple[str, int]:
     return utils.ok("All reactions deleted")
 
 
-def edit_reaction(
-    reaction_id: int, text: str, user: User, mode: str = "text"
-) -> tuple[str, int]:
+def edit_reaction(reaction_id: int, text: str, user: User) -> tuple[str, int]:
     if not reaction_id:
         return utils.bad("Id was not provided")
 
@@ -261,7 +254,7 @@ def edit_reaction(
     if not text:
         return utils.bad("Missing values")
 
-    if not check_reaction(text, mode):
+    if not check_reaction(text):
         return utils.bad("Invalid reaction")
 
     reaction = get_reaction(reaction_id)
@@ -276,7 +269,7 @@ def edit_reaction(
         if reaction.user_id != user.id:
             return utils.bad("You can't edit this reaction")
 
-    database.edit_reaction(reaction_id, text, mode)
+    database.edit_reaction(reaction_id, text)
     new_reaction = get_reaction(reaction_id)
 
     if new_reaction:
@@ -285,18 +278,11 @@ def edit_reaction(
     return utils.bad("Reaction edit failed")
 
 
-def check_reaction(text: str, mode: str) -> bool:
+def check_reaction(text: str) -> bool:
     if len(text) > max(config.text_reaction_length, 100):
         return False
 
     if utils.contains_url(text):
         return False
 
-    if mode == "text":
-        if utils.count_graphemes(text) > config.text_reaction_length:
-            return False
-    elif mode == "icon":
-        if text not in utils.ICONS:
-            return False
-
-    return True
+    return utils.count_graphemes(text) <= config.text_reaction_length

@@ -113,4 +113,10 @@ class Promptext {
       this.msg.close()
     }
   }
+
+  insert(text) {
+    let value = this.input.value.trim()
+    this.input.value = `${value} ${text}`.trim()
+    this.input.selectionStart = this.input.value.length
+  }
 }

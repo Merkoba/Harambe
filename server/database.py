@@ -31,7 +31,6 @@ schemas = {
     "reactions": {
         "id": "integer primary key autoincrement",
         "value": "text default ''",
-        "mode": "text default ''",
         "date": "int default 0",
         #
         "post": "integer",
@@ -90,7 +89,6 @@ class Reaction:
     post: int
     user: int
     value: str
-    mode: str
     date: int
     pname: str | None = None
     username: str | None = None
@@ -520,15 +518,15 @@ def update_file_size(name: str, size: int) -> None:
     conn.close()
 
 
-def add_reaction(post_id: int, user_id: int, value: str, mode: str) -> int | None:
+def add_reaction(post_id: int, user_id: int, value: str) -> int | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    cols = ["post", "user", "value", "mode", "date"]
+    cols = ["post", "user", "value", "date"]
     placeholders = ", ".join("?" for _ in cols)
 
     c.execute(
         f"insert into reactions ({','.join(cols)}) values ({placeholders}) returning id",
-        (post_id, user_id, value, mode, utils.now()),
+        (post_id, user_id, value, utils.now()),
     )
 
     reaction_id = c.fetchone()[0]
@@ -543,7 +541,6 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
         post=int(row.get("post") or 0),
         user=int(row.get("user") or 0),
         value=row.get("value") or "",
-        mode=row.get("mode") or "",
         date=int(row.get("date") or 0),
     )
 
@@ -703,13 +700,13 @@ def delete_all_reactions() -> None:
     conn.close()
 
 
-def edit_reaction(reaction_id: int, value: str, mode: str) -> None:
+def edit_reaction(reaction_id: int, value: str) -> None:
     connection = get_conn()
     conn, c = connection.tuple()
 
     c.execute(
-        "update reactions set value = ?, mode = ? where id = ?",
-        (value, mode, reaction_id),
+        "update reactions set value = ?, where id = ?",
+        (value, reaction_id),
     )
 
     conn.commit()

@@ -887,9 +887,8 @@ def react() -> Any:
     data = request.get_json()
     post_id = int(data.get("post_id", 0))
     text = str(data.get("text", ""))
-    mode = str(data.get("mode", ""))
 
-    return react_procs.react(post_id, text, user, mode)
+    return react_procs.react(post_id, text, user)
 
 
 @app.route("/delete_reactions", methods=["POST"])  # type: ignore
@@ -934,9 +933,7 @@ def edit_reaction() -> Any:
         return error_json
 
     text = data.get("text", "")
-    mode = data.get("mode", "text")
-
-    return react_procs.edit_reaction(id_, text, user, mode)
+    return react_procs.edit_reaction(id_, text, user)
 
 
 @app.route("/delete_all_reactions", methods=["POST"])  # type: ignore

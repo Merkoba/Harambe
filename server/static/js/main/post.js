@@ -535,11 +535,8 @@ async function enter_icons() {
 
   hide_icons()
 
-  if (vars.icons_id) {
-    edit_reaction(vars.icons_id, vars.selected_icon, `icon`)
-  }
-  else {
-    send_reaction(vars.selected_icon, `icon`)
+  if (Promptext.instance) {
+    Promptext.instance.insert(`:${vars.selected_icon}:`)
   }
 }
 
@@ -604,17 +601,8 @@ function check_reactions() {
 function make_reaction(reaction) {
   let r = reaction
   let vitem
-
-  if (r.mode === `text`) {
-    vitem = DOM.create(`div`)
-    vitem.innerHTML = text_html(r.value)
-  }
-  else if (r.mode === `icon`) {
-    vitem = DOM.create(`img`)
-    vitem.loading = `lazy`
-    vitem.src = `/static/icons/${r.value}.gif`
-    vitem.title = r.value
-  }
+  vitem = DOM.create(`div`, `reaction_content`)
+  vitem.innerHTML = text_html(r.value)
 
   if (!vitem) {
     return
@@ -641,7 +629,6 @@ function make_reaction(reaction) {
   item.dataset.user_id = r.user_id
   item.dataset.username = r.username
   item.dataset.value = r.value
-  item.dataset.mode = r.mode
   item.dataset.date = r.date
 
   if ((r.user_id === vars.user_id) || vars.is_admin) {
@@ -679,10 +666,7 @@ function react_text(id) {
 
   if (id) {
     let r = get_reaction(id)
-
-    if (r.dataset.mode === `text`) {
-      value = r.dataset.value
-    }
+    value = r.dataset.value
   }
   else {
     value = ``
@@ -708,18 +692,17 @@ function react_text(id) {
       }
 
       if (id) {
-        edit_reaction(id, text, `text`)
+        edit_reaction(id, text)
       }
       else {
-        send_reaction(text, `text`)
+        send_reaction(text)
       }
     },
     buttons: [
       {
         text: `Icon`,
         callback: () => {
-          react_icon(id)
-          return true
+          react_icon()
         },
       },
     ],
@@ -728,7 +711,7 @@ function react_text(id) {
   prompt_text(prompt_args)
 }
 
-async function send_reaction(text, mode) {
+async function send_reaction(text) {
   if (!vars.can_react) {
     return
   }
@@ -740,7 +723,7 @@ async function send_reaction(text, mode) {
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({post_id, text, mode}),
+    body: JSON.stringify({post_id, text}),
   })
 
   if (response.ok) {
@@ -754,7 +737,7 @@ async function send_reaction(text, mode) {
   }
 }
 
-async function edit_reaction(id, text, mode) {
+async function edit_reaction(id, text) {
   if (!vars.can_react) {
     return
   }
@@ -764,7 +747,7 @@ async function edit_reaction(id, text, mode) {
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({id, text, mode}),
+    body: JSON.stringify({id, text}),
   })
 
   if (response.ok) {
@@ -1073,6 +1056,11 @@ function text_html(text) {
   // GitHub
   re = /\/github\/([0-9A-Za-z_-]+)\/([0-9A-Za-z_-]+)\/?/gi
   text = text.replace(re, `<a href="https://github.com/$1/$2">GH: $1/$2</a>`)
+
+  // :image_names:
+  re = /:(\w+):/gi
+  text = text.replace(re, `<img src="/static/icons/$1.gif" class="reaction_icon" alt="$1">`)
+
   return text
 }
 

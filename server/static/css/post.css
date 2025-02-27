@@ -260,6 +260,12 @@ a.link:hover,
     overflow: auto;
 }
 
+.reaction_content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .reaction_text {
     overflow-wrap: anywhere;
 }
