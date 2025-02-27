@@ -104,6 +104,8 @@ class Reaction:
     value: str
     mode: str
     date: int
+    pname: str | None = None
+    username: str | None = None
     uname: str | None = None
     listed: bool = False
 
@@ -254,18 +256,6 @@ def get_posts(
 
     for row in rows:
         post = make_post(dict(row))
-
-        if full_reactions:
-            reactions = get_reactions(post.id, oconn=conn)
-
-            if reactions:
-                post.reactions = reactions
-            else:
-                post.reactions = []
-        else:
-            post.reactions = []
-            post.num_reactions = get_reaction_count(post.id, oconn=conn)
-
         user = get_user(post.user, oconn=conn)
 
         if user:
@@ -276,6 +266,17 @@ def get_posts(
             post.username = ""
             post.uploader = ""
             post.listed = False
+
+        if full_reactions:
+            reactions = get_reactions(post.id, post=post, user=user, oconn=conn)
+
+            if reactions:
+                post.reactions = reactions
+            else:
+                post.reactions = []
+        else:
+            post.reactions = []
+            post.num_reactions = get_reaction_count(post.id, oconn=conn)
 
         posts.append(post)
 
@@ -446,9 +447,6 @@ def get_users(
     username: str | None = None,
     oconn: sqlite3.Connection | None = None,
 ) -> list[User]:
-    if (not user_id) and (not username):
-        return []
-
     if not oconn:
         check_db()
         conn, c = row_conn()
@@ -580,6 +578,8 @@ def get_reactions(
     post_id: int | None = None,
     reaction_id: int | None = None,
     user_id: int | None = None,
+    post: Post | None = None,
+    user: User | None = None,
     oconn: sqlite3.Connection | None = None,
 ) -> list[Reaction]:
     if not oconn:
@@ -615,13 +615,43 @@ def get_reactions(
 
     for row in rows:
         reaction = make_reaction(dict(row))
-        c.execute("select * from users where id = ?", (row["user"],))
-        user = c.fetchone()
+
+        if post:
+            rpost = post
+        else:
+            rpost = None
 
         if user:
-            reaction.uname = user["name"]
-            reaction.listed = user["lister"]
+            ruser = user
         else:
+            ruser = None
+
+        if not rpost:
+            c.execute("select * from posts where id = ?", (row["post"],))
+            dbpost = c.fetchone()
+
+            if dbpost:
+                rpost = make_post(dict(dbpost))
+
+        if rpost:
+            reaction.pname = rpost.name
+        else:
+            reaction.pname = ""
+
+        if not ruser:
+            c.execute("select * from users where id = ?", (row["user"],))
+            dbuser = c.fetchone()
+
+            if dbuser:
+                utils.q(dbuser["username"])
+                ruser = make_user(dict(dbuser))
+
+        if ruser:
+            reaction.username = ruser.username
+            reaction.uname = ruser.name
+            reaction.listed = ruser.lister
+        else:
+            reaction.username = ""
             reaction.uname = ""
             reaction.listed = False
 

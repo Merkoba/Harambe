@@ -15,8 +15,9 @@ from user_procs import User
 @dataclass
 class Reaction:
     id: int
-    post: int
-    user: int
+    pname: str
+    username: str
+    uname: str
     value: str
     mode: str
     listed: bool
@@ -25,7 +26,6 @@ class Reaction:
     uname_str: str
     value_sample: str
     date_str: str
-    uname: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -36,12 +36,15 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     uname_str = reaction.uname or "Anon"
     value_sample = utils.space_string(reaction.value)[:140]
     date_str = utils.nice_date(reaction.date)
+    username = reaction.username or "?"
+    pname = reaction.pname or "?"
     uname = reaction.uname or "Anon"
 
     return Reaction(
         reaction.id,
-        reaction.post,
-        reaction.user,
+        pname,
+        username,
+        uname,
         reaction.value,
         reaction.mode,
         reaction.listed,
@@ -50,7 +53,6 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         uname_str,
         value_sample,
         date_str,
-        uname,
     )
 
 
@@ -125,12 +127,12 @@ def get_reactions(
 
         ok = (
             not query
-            or (admin and (query in utils.clean_query(reaction.user)))
+            or (admin and (query in utils.clean_query(reaction.username)))
+            or query in utils.clean_query(reaction.pname)
             or query in utils.clean_query(reaction.uname)
             or query in utils.clean_query(reaction.value)
             or query in utils.clean_query(reaction.date_str)
             or query in utils.clean_query(reaction.ago)
-            or query in utils.clean_query(reaction.post)
         )
 
         if not ok:
@@ -162,14 +164,14 @@ def sort_reactions(reactions: list[Reaction], sort: str) -> None:
         reactions.sort(key=lambda x: x.date, reverse=False)
 
     if sort == "user":
-        reactions.sort(key=lambda x: x.user, reverse=True)
+        reactions.sort(key=lambda x: x.uname, reverse=True)
     elif sort == "user_desc":
-        reactions.sort(key=lambda x: x.user, reverse=False)
+        reactions.sort(key=lambda x: x.uname, reverse=False)
 
     if sort == "post":
-        reactions.sort(key=lambda x: x.post, reverse=True)
+        reactions.sort(key=lambda x: x.pname, reverse=True)
     elif sort == "post_desc":
-        reactions.sort(key=lambda x: x.post, reverse=False)
+        reactions.sort(key=lambda x: x.pname, reverse=False)
 
     if sort == "value":
         reactions.sort(key=lambda x: x.value, reverse=True)

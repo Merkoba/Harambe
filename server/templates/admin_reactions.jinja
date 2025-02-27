@@ -108,8 +108,8 @@
 
         {% for item in items %}
         <div class="table_row item" data-id="{{item.id}}"
-        data-username="{{item.user}}" data-name="{{item.name}}"
-        data-post="{{item.post}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}"
+        data-username="{{item.username}}" data-name="{{item.name}}"
+        data-post="{{item.pname}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}"
         data-value="{{item.value}}" data-uname="{{item.uname}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
@@ -117,14 +117,14 @@
             </div>
 
             <!-- Post -->
-            <a href="/post/{{item.post}}" class="table_cell" title="{{item.post}}">{{item.post}}</a>
+            <a href="/post/{{item.pname}}" class="table_cell" title="{{item.pname}}">{{item.pname}}</a>
 
             <!-- Value -->
             <div class="table_cell" title="{{item.value_sample}}">{{item.value_sample}}</div>
 
             {% if mode == "reactions_admin" %}
             <!-- Username -->
-            <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.user}}</div>
+            <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.username}}</div>
             {% else %}
             <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.uname}}</div>
             {% endif %}

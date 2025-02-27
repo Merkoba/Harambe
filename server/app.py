@@ -139,6 +139,12 @@ def fill_session(user: User) -> None:
     session["admin"] = user.admin
 
 
+def clear_session() -> None:
+    session.pop("user_id", None)
+    session.pop("username", None)
+    session.pop("admin", None)
+
+
 def theme_configs() -> dict[str, Any]:
     return {
         "background_color": config.background_color,
@@ -593,7 +599,7 @@ def register() -> Any:
 @limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()
 def logout() -> Any:
-    session.pop("username", None)
+    clear_session()
     return redirect(url_for("index"))
 
 

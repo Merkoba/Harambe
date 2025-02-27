@@ -25,7 +25,7 @@ for post in posts:
     c.execute("SELECT * FROM users WHERE username = ?", (post["username"],))
     user = c.fetchone()
     c2.execute(
-        "INSERT INTO posts (id, name, ext, date, title, views, original, mtype, view_date, listed, size, sample, user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO posts (id, name, ext, date, title, views, original, mtype, view_date, size, sample, user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
             post["id"],
             post["name"],
@@ -36,7 +36,6 @@ for post in posts:
             post["original"],
             post["mtype"],
             post["view_date"],
-            post["listed"],
             post["size"],
             post["sample"],
             user["id"],
@@ -55,12 +54,11 @@ for reaction in reactions:
         continue
 
     c2.execute(
-        "INSERT INTO reactions (id, value, mode, listed, date, post, user) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO reactions (id, value, mode, date, post, user) VALUES (?, ?, ?, ?, ?, ?)",
         (
             reaction["id"],
             reaction["value"],
             reaction["mode"],
-            reaction["listed"],
             reaction["date"],
             post["id"],
             user["id"],
