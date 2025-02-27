@@ -118,6 +118,15 @@ class User:
     num_reactions: int | None = None
 
 
+@dataclass
+class Connection:
+    conn: sqlite3.Connection
+    c: sqlite3.Cursor
+
+    def tuple(self) -> tuple[sqlite3.Connection, sqlite3.Cursor]:
+        return (self.conn, self.c)
+
+
 db_path = "database.sqlite3"
 
 
@@ -128,7 +137,8 @@ def check_db() -> None:
     if not path.exists():
         sys.exit(msg)
 
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("select name from sqlite_master where type='table'")
     tables = [table[0] for table in c.fetchall()]
     conn.close()
@@ -141,15 +151,14 @@ def check_db() -> None:
         sys.exit(msg)
 
 
-def get_conn(
-    conn: sqlite3.Connection | None = None,
-) -> tuple[sqlite3.Connection, sqlite3.Cursor]:
-    if not conn:
+def get_conn(connection: Connection | None = None) -> Connection:
+    if not connection:
         conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute("PRAGMA foreign_keys = ON;")
+        return Connection(conn, c)
 
-    c = conn.cursor()
-    c.execute("PRAGMA foreign_keys = ON;")
-    return conn, c
+    return connection
 
 
 def row_conn() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
@@ -169,7 +178,8 @@ def add_post(
     size: int,
     sample: str,
 ) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     date = utils.now()
 
     values = [
@@ -216,9 +226,10 @@ def get_posts(
     user_id: int | None = None,
     extra: bool = True,
     full_reactions: bool = False,
-    oconn: sqlite3.Connection | None = None,
+    oconn: Connection | None = None,
 ) -> list[Post]:
-    conn, c = get_conn(oconn)
+    connection = get_conn(oconn)
+    conn, c = connection.tuple()
 
     if post_id:
         c.execute("select * from posts where id = ?", (post_id,))
@@ -241,7 +252,7 @@ def get_posts(
         post = make_post(dict(zip(cols, row)))
 
         if extra:
-            users = get_users(post.user, oconn=conn)
+            users = get_users(post.user, oconn=connection)
             user = users[0] if users else None
 
             if user:
@@ -254,7 +265,9 @@ def get_posts(
                 post.listed = False
 
             if full_reactions:
-                reactions = get_reactions(post.id, post=post, user=user, oconn=conn)
+                reactions = get_reactions(
+                    post_id=post.id, post=post, user=user, oconn=connection
+                )
 
                 if reactions:
                     post.reactions = reactions
@@ -262,7 +275,7 @@ def get_posts(
                     post.reactions = []
             else:
                 post.reactions = []
-                post.num_reactions = get_reaction_count(post.id, oconn=conn)
+                post.num_reactions = get_reaction_count(post.id, oconn=connection)
 
         posts.append(post)
 
@@ -271,14 +284,16 @@ def get_posts(
 
 
 def delete_post(post_id: int) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("delete from posts where id = ?", (post_id,))
     conn.commit()
     conn.close()
 
 
 def increase_post_views(post_id: int) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
 
     c.execute(
         "update posts set views = views + 1, view_date = ? where id = ?",
@@ -290,14 +305,16 @@ def increase_post_views(post_id: int) -> None:
 
 
 def edit_post_title(post_id: int, title: str) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("update posts set title = ? where id = ?", (title, post_id))
     conn.commit()
     conn.close()
 
 
 def get_next_post(current: str) -> Post | None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("select * from posts where name = ?", (current,))
     row = c.fetchone()
 
@@ -339,7 +356,8 @@ def add_user(
     if (not username) or (not password):
         return None
 
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     date = utils.now()
 
     values = [
@@ -412,9 +430,10 @@ def make_user(row: dict[str, Any]) -> User:
 def get_users(
     user_id: int | None = None,
     username: str | None = None,
-    oconn: sqlite3.Connection | None = None,
+    oconn: Connection | None = None,
 ) -> list[User]:
-    conn, c = get_conn(oconn)
+    connection = get_conn(oconn)
+    conn, c = connection.tuple()
 
     if user_id:
         c.execute("select * from users where id = ?", (user_id,))
@@ -432,8 +451,8 @@ def get_users(
 
     for row in rows:
         user = make_user(dict(zip(cols, row)))
-        user.num_posts = get_post_count(user.id, oconn=conn)
-        user.num_reactions = get_reaction_count(user_id=user.id, oconn=conn)
+        user.num_posts = get_post_count(user.id, oconn=connection)
+        user.num_reactions = get_reaction_count(user_id=user.id, oconn=connection)
         users.append(user)
 
     if not oconn:
@@ -443,14 +462,16 @@ def get_users(
 
 
 def delete_user(user_id: int) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("delete from users where id = ?", (user_id,))
     conn.commit()
     conn.close()
 
 
 def delete_normal_users() -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     query = "delete from users where admin != 1"
     c.execute(query)
     conn.commit()
@@ -458,7 +479,8 @@ def delete_normal_users() -> None:
 
 
 def mod_user(ids: list[int], what: str, value: Any) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     placeholders = ", ".join("?" for _ in ids)
     query = f"update users set {what} = ? where id in ({placeholders})"
     c.execute(query, (value, *ids))
@@ -467,14 +489,16 @@ def mod_user(ids: list[int], what: str, value: Any) -> None:
 
 
 def update_user_last_date(user_id: int) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("update users set last_date = ? where id = ?", (utils.now(), user_id))
     conn.commit()
     conn.close()
 
 
 def get_random_post(ignore_ids: list[int]) -> Post | None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     query = "select * from posts p join users u on p.user = u.id where p.id not in ({}) and u.lister = 1 order by random() limit 1"
     placeholders = ", ".join("?" for _ in ignore_ids)
     c.execute(query.format(placeholders), ignore_ids)
@@ -488,14 +512,16 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
 
 
 def update_file_size(name: str, size: int) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("update posts set size = ? where name = ?", (size, name))
     conn.commit()
     conn.close()
 
 
 def add_reaction(post_id: int, user_id: int, value: str, mode: str) -> int | None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     cols = ["post", "user", "value", "mode", "date"]
     placeholders = ", ".join("?" for _ in cols)
 
@@ -522,14 +548,16 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
 
 
 def get_reactions(
-    post_id: int | None = None,
     reaction_id: int | None = None,
+    post_id: int | None = None,
     user_id: int | None = None,
     post: Post | None = None,
     user: User | None = None,
-    oconn: sqlite3.Connection | None = None,
+    extra: bool = True,
+    oconn: Connection | None = None,
 ) -> list[Reaction]:
-    conn, c = get_conn(oconn)
+    connection = get_conn(oconn)
+    conn, c = connection.tuple()
 
     if reaction_id:
         c.execute("select * from reactions where id = ?", (reaction_id,))
@@ -559,37 +587,38 @@ def get_reactions(
     for row in rows:
         reaction = make_reaction(dict(zip(cols, row)))
 
-        if post:
-            rpost = post
-        else:
-            rpost = None
+        if extra:
+            if post:
+                rpost = post
+            else:
+                rpost = None
 
-        if user:
-            ruser = user
-        else:
-            ruser = None
+            if user:
+                ruser = user
+            else:
+                ruser = None
 
-        if not rpost:
-            rposts = get_posts(post_id=reaction.post, extra=False, oconn=conn)
-            rpost = rposts[0] if rposts else None
+            if not rpost:
+                rposts = get_posts(post_id=reaction.post, extra=False, oconn=connection)
+                rpost = rposts[0] if rposts else None
 
-        if rpost:
-            reaction.pname = rpost.name
-        else:
-            reaction.pname = ""
+            if rpost:
+                reaction.pname = rpost.name
+            else:
+                reaction.pname = ""
 
-        if not ruser:
-            rusers = get_users(user_id=reaction.user, oconn=conn)
-            ruser = rusers[0] if rusers else None
+            if not ruser:
+                rusers = get_users(user_id=reaction.user, oconn=connection)
+                ruser = rusers[0] if rusers else None
 
-        if ruser:
-            reaction.username = ruser.username
-            reaction.uname = ruser.name
-            reaction.listed = ruser.lister
-        else:
-            reaction.username = ""
-            reaction.uname = ""
-            reaction.listed = False
+            if ruser:
+                reaction.username = ruser.username
+                reaction.uname = ruser.name
+                reaction.listed = ruser.lister
+            else:
+                reaction.username = ""
+                reaction.uname = ""
+                reaction.listed = False
 
         reactions.append(reaction)
 
@@ -602,9 +631,10 @@ def get_reactions(
 def get_reaction_count(
     post_id: int | None = None,
     user_id: int | None = None,
-    oconn: sqlite3.Connection | None = None,
+    oconn: Connection | None = None,
 ) -> int:
-    conn, c = get_conn(oconn)
+    connection = get_conn(oconn)
+    conn, c = connection.tuple()
 
     if user_id:
         c.execute(
@@ -623,10 +653,9 @@ def get_reaction_count(
     return count
 
 
-def get_post_count(
-    user_id: int | None = None, oconn: sqlite3.Connection | None = None
-) -> int:
-    conn, c = get_conn(oconn)
+def get_post_count(user_id: int | None = None, oconn: Connection | None = None) -> int:
+    connection = get_conn(oconn)
+    conn, c = connection.tuple()
     c.execute("select count(*) from posts where user = ?", (user_id,))
     result = c.fetchone()
     count = result[0] if result is not None else 0
@@ -638,7 +667,8 @@ def get_post_count(
 
 
 def get_latest_post() -> Post | None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("select * from posts order by date desc limit 1")
     row = c.fetchone()
     conn.close()
@@ -650,28 +680,32 @@ def get_latest_post() -> Post | None:
 
 
 def delete_reaction(reaction_id: int) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("delete from reactions where id = ?", (reaction_id,))
     conn.commit()
     conn.close()
 
 
 def delete_all_posts() -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("delete from posts")
     conn.commit()
     conn.close()
 
 
 def delete_all_reactions() -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("delete from reactions")
     conn.commit()
     conn.close()
 
 
 def edit_reaction(reaction_id: int, value: str, mode: str) -> None:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
 
     c.execute(
         "update reactions set value = ?, mode = ? where id = ?",
@@ -683,7 +717,8 @@ def edit_reaction(reaction_id: int, value: str, mode: str) -> None:
 
 
 def username_exists(username: str) -> bool:
-    conn, c = get_conn()
+    connection = get_conn()
+    conn, c = connection.tuple()
     c.execute("select username from users where username = ?", (username,))
     result = c.fetchone()
     conn.close()

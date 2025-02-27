@@ -8,7 +8,8 @@ import database
 # Create tables or fill missing values
 def make_database() -> None:
     tables = ["posts", "users", "reactions"]
-    conn, c = database.get_conn()
+    connection = database.get_conn()
+    conn, c = connection.tuple()
 
     for table in tables:
         c.execute(f"create table if not exists {table} ({database.get_schema(table)})")
