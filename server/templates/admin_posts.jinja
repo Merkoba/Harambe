@@ -13,7 +13,6 @@
     vars.sort = {{sort | tojson | safe}}
     vars.next_page = {{next_page | tojson}}
     vars.user_id = {{user_id}}
-    vars.username = {{username | tojson | safe}}
     vars.max_title_length = {{max_title_length}}
 </script>
 
@@ -117,7 +116,7 @@
 
         {% for item in items %}
         <div class="table_row item" data-name="{{item.name}}"
-        data-ext="{{item.ext}}" data-size="{{item.size}}"
+        data-ext="{{item.ext}}" data-size="{{item.size}}" data-user_id="{{item.user_id}}"
         data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}"
         data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}"
         data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views_str}}"
@@ -145,9 +144,9 @@
 
             <!-- User -->
             {% if mode == "admin_posts" %}
-            <div class="table_cell uploader admin_username action_button" title="{{item.uploader_str}}">{{item.username}}</div>
+            <div class="table_cell uploader admin_user action_button" title="{{item.uploader_str}}">{{item.username}}</div>
             {% else %}
-            <div class="table_cell uploader admin_username action_button">{{item.uploader_str}}</div>
+            <div class="table_cell uploader admin_user action_button">{{item.uploader_str}}</div>
             {% endif %}
 
             <!-- Date -->

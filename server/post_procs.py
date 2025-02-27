@@ -19,6 +19,7 @@ from react_procs import Reaction
 @dataclass
 class Post:
     id: int
+    user_id: int
     name: str
     ext: str
     full: str
@@ -110,6 +111,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
     return Post(
         post.id,
+        post.user,
         name,
         ext,
         full,

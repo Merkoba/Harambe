@@ -57,8 +57,8 @@ window.onload = () => {
     else if (e.target.classList.contains(`delete_below`)) {
       select_below(item)
     }
-    else if (e.target.classList.contains(`admin_username`)) {
-      vars.user_opts_username = item.dataset.username
+    else if (e.target.classList.contains(`admin_user`)) {
+      vars.user_opts_user_id = item.dataset.user_id
       vars.msg_user_opts.show()
     }
     else {

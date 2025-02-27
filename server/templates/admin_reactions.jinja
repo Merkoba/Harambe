@@ -107,8 +107,8 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-id="{{item.id}}"
-        data-username="{{item.username}}" data-name="{{item.name}}"
+        <div class="table_row item" data-id="{{item.id}}" data-user_id="{{item.user_id}}"
+        data-username="{{item.username}}" data-name="{{item.name}}" data-user_id="{{item.user_id}}"
         data-post="{{item.pname}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}"
         data-value="{{item.value}}" data-uname="{{item.uname}}">
             <!-- Checkbox -->
@@ -124,9 +124,9 @@
 
             {% if mode == "reactions_admin" %}
             <!-- Username -->
-            <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.username}}</div>
+            <div class="table_cell admin_user action_button" title="{{item.uname}}">{{item.username}}</div>
             {% else %}
-            <div class="table_cell admin_username action_button" title="{{item.uname}}">{{item.uname}}</div>
+            <div class="table_cell admin_user action_button" title="{{item.uname}}">{{item.uname}}</div>
             {% endif %}
 
             <!-- Date -->

@@ -15,6 +15,8 @@ from user_procs import User
 @dataclass
 class Reaction:
     id: int
+    post_id: int
+    user_id: int
     pname: str
     username: str
     uname: str
@@ -42,6 +44,8 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
 
     return Reaction(
         reaction.id,
+        reaction.post,
+        reaction.user,
         pname,
         username,
         uname,

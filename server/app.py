@@ -428,7 +428,6 @@ def admin(what: str) -> Any:
     query = request.args.get("query", "")
     def_date = "register_date" if what == "users" else "date"
     sort = request.args.get("sort", def_date)
-    username = request.args.get("username", "")
     user_id = request.args.get("user_id", 0)
     page = int(request.args.get("page", 1))
     page_size = request.args.get("page_size", config.admin_page_size)
@@ -491,7 +490,6 @@ def admin(what: str) -> Any:
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
         user_id=user_id,
-        username=username,
         sort=sort,
         **theme_configs(),
     )
@@ -616,9 +614,8 @@ def show_list(what: str) -> Any:
         return over()
 
     admin = user.admin
-    username = request.args.get("username", "")
     user_id = request.args.get("user_id", 0)
-    history = user.username == username
+    history = user.id == user_id
 
     if not history:
         if not config.list_enabled and (not admin):
@@ -687,7 +684,6 @@ def show_list(what: str) -> Any:
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
         user_id=user_id,
-        username=username,
         sort=sort,
         back="/",
         **theme_configs(),

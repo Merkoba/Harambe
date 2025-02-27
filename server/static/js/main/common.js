@@ -334,33 +334,33 @@ function setup_user_opts() {
 
   DOM.ev(`#user_opts_posts`, `click`, (e) => {
     vars.msg_user_opts.close()
-    let username = vars.user_opts_username
+    let user_id = vars.user_opts_user_id
 
     if (vars.mode.includes(`admin`)) {
-      window.location = `/admin/posts?username=${username}`
+      window.location = `/admin/posts?user_id=${user_id}`
     }
     else {
-      window.location = `/list/posts?username=${username}`
+      window.location = `/list/posts?user_id=${user_id}`
     }
   })
 
   DOM.ev(`#user_opts_reactions`, `click`, (e) => {
     vars.msg_user_opts.close()
-    let username = vars.user_opts_username
+    let user_id = vars.user_opts_user_id
 
     if (vars.mode.includes(`admin`)) {
-      window.location = `/admin/reactions?username=${username}`
+      window.location = `/admin/reactions?user_id=${user_id}`
     }
     else {
-      window.location = `/list/reactions?username=${username}`
+      window.location = `/list/reactions?user_id=${user_id}`
     }
   })
 
   if (DOM.el(`#user_opts_user`)) {
     DOM.ev(`#user_opts_user`, `click`, (e) => {
       vars.msg_user_opts.close()
-      let username = vars.user_opts_username
-      window.location = `/admin/users?username=${username}`
+      let user_id = vars.user_opts_user_id
+      window.location = `/admin/users?user_id=${user_id}`
     })
   }
 }
