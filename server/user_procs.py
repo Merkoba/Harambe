@@ -155,11 +155,7 @@ def get_users(
     users = []
     query = utils.clean_query(query)
 
-    for user in get_userlist():
-        if user_id:
-            if user.id != user_id:
-                continue
-
+    for user in get_userlist(user_id):
         ok = (
             not query
             or query in utils.clean_query(user.username)
