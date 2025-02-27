@@ -645,7 +645,7 @@ function make_reaction(reaction) {
   item.dataset.mode = r.mode
   item.dataset.date = r.date
 
-  if ((r.user === vars.username) || vars.is_admin) {
+  if ((r.user_id === vars.user_id) || vars.is_admin) {
     DOM.show(DOM.el(`.reaction_edit`, item))
   }
 
