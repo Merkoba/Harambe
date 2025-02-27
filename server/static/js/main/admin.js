@@ -1,5 +1,6 @@
 window.onload = () => {
   vars.selected_items = []
+  vars.last_checkbox = null
 
   DOM.ev(document, `keyup`, (e) => {
     if (!filter_focused() && !Msg.msg.any_open()){
@@ -30,7 +31,10 @@ window.onload = () => {
     let item = e.target.closest(`.item`)
     vars.active_item = item
 
-    if (e.target.classList.contains(`admin_user`)) {
+    if (e.target.classList.contains(`select_checkbox`)) {
+      on_checkbox_click(e)
+    }
+    else if (e.target.classList.contains(`admin_user`)) {
       vars.user_opts_user_id = item.dataset.user_id
       vars.msg_user_opts.show()
     }
@@ -243,64 +247,6 @@ function goto_page(page) {
   }
 
   window.location.href = url.href
-}
-
-function select_above(el) {
-  let items = DOM.els(`.item`)
-  let changed = false
-  let start = true
-
-  for (let item of items) {
-    let cb = DOM.el(`.select_checkbox`, item)
-
-    if (start) {
-      if (!cb.checked) {
-        cb.checked = true
-        changed = true
-      }
-    }
-    else if (cb.checked) {
-      cb.checked = false
-      changed = true
-    }
-
-    if (item === el) {
-      start = false
-    }
-  }
-
-  if (!changed) {
-    unselect_all()
-  }
-}
-
-function select_below(el) {
-  let items = DOM.els(`.item`)
-  let start = false
-  let changed = false
-
-  for (let item of items) {
-    let cb = DOM.el(`.select_checkbox`, item)
-
-    if (item === el) {
-      start = true
-    }
-
-    if (start) {
-      if (!cb.checked) {
-        cb.checked = true
-        changed = true
-      }
-    }
-    else if (cb.checked) {
-      cb.checked = false
-      changed = true
-    }
-  }
-
-  if (!changed) {
-    unselect_all()
-  }
 }
 
 function fill_page_select(page_select) {
@@ -933,4 +879,39 @@ function user_mod_input(what, vtype) {
   }
 
   prompt_text(prompt_args)
+}
+
+function on_checkbox_click(e) {
+  if (e.shiftKey && vars.last_checkbox) {
+    let checked = vars.last_checkbox.checked
+    let boxes = DOM.els(`.select_checkbox`)
+    let selected = [e.target]
+    let waypoints = 0
+
+    for (let box of boxes) {
+      if (box === e.target) {
+        waypoints += 1
+
+        if (waypoints >= 2) {
+          break
+        }
+      }
+      else if (box === vars.last_checkbox) {
+        waypoints += 1
+
+        if (waypoints >= 2) {
+          break
+        }
+      }
+      else if (waypoints === 1) {
+        selected.push(box)
+      }
+    }
+
+    for (let box of selected) {
+      box.checked = checked
+    }
+  }
+
+  vars.last_checkbox = e.target
 }
