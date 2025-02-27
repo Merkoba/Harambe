@@ -8,7 +8,16 @@ class Popmsg {
     })
 
     this.msg = msg
+    this.date = Date.now()
     Popmsg.instance = this
-    msg.show(message)
+    let content = DOM.create(`div`, `popmsg_content`)
+
+    content.textContent = message
+    content.tabIndex = 0
+
+    msg.set(content)
+    msg.show()
+
+    DOM.el(`.popmsg_content`, message.content).focus()
   }
 }

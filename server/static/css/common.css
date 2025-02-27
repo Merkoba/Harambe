@@ -209,3 +209,7 @@ a.linkbutton:hover {
     font-weight: bold;
     color: var(--alt_color);
 }
+
+.popmsg_content {
+    outline: none;
+}

@@ -137,4 +137,8 @@ class Promptext {
       this.msg.close()
     }
   }
+
+  focus() {
+    this.input.focus()
+  }
 }

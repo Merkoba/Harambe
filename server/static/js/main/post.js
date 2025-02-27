@@ -687,7 +687,11 @@ function react_text(id) {
       text = Array.from(text).slice(0, n).join(``).trim()
 
       if (contains_url(text)) {
-        popmsg(`URLs are not allowed.`)
+        popmsg(`URLs are not allowed.`, () => {
+          if (Promptext.instance && Promptext.instance.msg.is_open()) {
+            Promptext.instance.focus()
+          }
+        })
         return true
       }
 

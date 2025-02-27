@@ -3,8 +3,12 @@ DOM.ev(document, `keydown`, (e) => {
 
   if (e.key === `Enter`) {
     if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
-      e.preventDefault()
-      Popmsg.instance.msg.close()
+      let now = Date.now()
+
+      if ((now - Popmsg.instance.date) > 100) {
+        e.preventDefault()
+        Popmsg.instance.msg.close()
+      }
     }
     else if (Confirmbox.instance && Confirmbox.instance.msg.is_open()) {
       e.preventDefault()
