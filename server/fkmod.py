@@ -22,11 +22,13 @@ c.execute("SELECT * FROM users")
 users = c.fetchall()
 
 for post in posts:
-    if not post["username"]:
-        continue
-
     c.execute("SELECT * FROM users WHERE username = ?", (post["username"],))
     user = c.fetchone()
+
+    if not user:
+        utils.q("User for post not found")
+        continue
+
     c2.execute(
         "INSERT INTO posts (id, name, ext, date, title, views, original, mtype, view_date, size, sample, user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
