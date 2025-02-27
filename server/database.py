@@ -705,7 +705,7 @@ def edit_reaction(reaction_id: int, value: str) -> None:
     conn, c = connection.tuple()
 
     c.execute(
-        "update reactions set value = ?, where id = ?",
+        "update reactions set value = ? where id = ?",
         (value, reaction_id),
     )
 
