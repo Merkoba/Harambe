@@ -22,6 +22,9 @@ c.execute("SELECT * FROM users")
 users = c.fetchall()
 
 for post in posts:
+    if not post["username"]:
+        continue
+
     c.execute("SELECT * FROM users WHERE username = ?", (post["username"],))
     user = c.fetchone()
     c2.execute(
