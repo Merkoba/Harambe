@@ -286,8 +286,12 @@ def get_post(
     name: str | None = None,
     full: bool = False,
     increase: bool = False,
+    full_reactions: bool = False,
 ) -> Post | None:
-    posts = database.get_posts(post_id=post_id, name=name)
+    posts = database.get_posts(
+        post_id=post_id, name=name, full_reactions=full_reactions
+    )
+
     post = posts[0] if posts else None
 
     if post:

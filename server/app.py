@@ -297,7 +297,7 @@ def post(name: str) -> Any:
         if not user:
             return over()
 
-    post = post_procs.get_post(name=name, full=True, increase=True)
+    post = post_procs.get_post(name=name, full=True, increase=True, full_reactions=True)
 
     if not post:
         return over()

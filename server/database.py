@@ -279,7 +279,9 @@ def get_posts(
 
         posts.append(post)
 
-    conn.close()
+    if not oconn:
+        conn.close()
+
     return posts
 
 
@@ -333,7 +335,8 @@ def get_next_post(current: str) -> Post | None:
     conn.close()
 
     if next_row:
-        return make_post(dict(next_row))
+        cols = [desc[0] for desc in c.description]
+        return make_post(dict(zip(cols, next_row)))
 
     return None
 
@@ -506,7 +509,8 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
     conn.close()
 
     if row:
-        return make_post(dict(row))
+        cols = [desc[0] for desc in c.description]
+        return make_post(dict(zip(cols, row)))
 
     return None
 
@@ -674,7 +678,8 @@ def get_latest_post() -> Post | None:
     conn.close()
 
     if row:
-        return make_post(dict(row))
+        cols = [desc[0] for desc in c.description]
+        return make_post(dict(zip(cols, row)))
 
     return None
 
