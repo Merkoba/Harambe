@@ -408,7 +408,7 @@ function delete_posts() {
       let posts = []
 
       for (let post of vars.selected_items) {
-        posts.push(post.dataset.name)
+        posts.push(post.dataset.post_id)
       }
 
       delete_selected_posts(posts)
@@ -418,18 +418,18 @@ function delete_posts() {
   confirmbox(confirm_args)
 }
 
-async function delete_selected_posts(names) {
+async function delete_selected_posts(ids) {
   try {
     let response = await fetch(`/delete_posts`, {
       method: `POST`,
       headers: {
         "Content-Type": `application/json`,
       },
-      body: JSON.stringify({names}),
+      body: JSON.stringify({ids}),
     })
 
     if (response.ok) {
-      remove_posts(names)
+      remove_posts(ids)
     }
     else {
       print_error(response.status)
@@ -442,7 +442,7 @@ async function delete_selected_posts(names) {
 
 function remove_posts(posts) {
   for (let post of posts) {
-    let el = DOM.el(`.item[data-name="${post}"]`)
+    let el = DOM.el(`.item[data-post_id="${post}"]`)
 
     if (el) {
       el.remove()

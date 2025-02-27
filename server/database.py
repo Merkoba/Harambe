@@ -283,10 +283,10 @@ def get_posts(
     return posts
 
 
-def delete_post(name: str) -> None:
+def delete_post(post_id: str) -> None:
     check_db()
     conn, c = get_conn()
-    c.execute("delete from posts where name = ?", (name,))
+    c.execute("delete from posts where id = ?", (post_id,))
     conn.commit()
     conn.close()
 

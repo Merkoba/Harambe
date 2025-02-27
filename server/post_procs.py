@@ -354,8 +354,11 @@ def do_delete_post(post: DbPost) -> None:
     if not post:
         return
 
-    database.delete_post(post.name)
+    database.delete_post(post.id)
     file_name = post.full()
+
+    if not file_name:
+        return
 
     if file_name.startswith("."):
         return

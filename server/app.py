@@ -504,8 +504,8 @@ def admin(what: str) -> Any:
 @admin_required
 def delete_posts() -> Any:
     data = request.get_json()
-    names = data.get("names", None)
-    return post_procs.delete_posts(names)
+    ids = data.get("ids", None)
+    return post_procs.delete_posts(ids)
 
 
 @app.route("/delete_all_posts", methods=["POST"])  # type: ignore
