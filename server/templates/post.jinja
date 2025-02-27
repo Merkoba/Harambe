@@ -66,7 +66,7 @@
 
 <template id="template_image">
     <div id="modal_image_container">
-        <img id="modal_image" src="/{{file_path}}/{{post.id}}/{{post.original_full}}">
+        <img id="modal_image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}">
     </div>
 </template>
 
@@ -166,7 +166,7 @@
     <div id="details" class="colitem">
         <div id="file" class="rowitem nowrap">
             <div class="title">File:</div>
-            <a class="link" href="/{{file_path}}/{{post.id}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
+            <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
             <div class="sep">|</div>
             <div>{{post.size_str}}</div>
 
@@ -203,13 +203,13 @@
 
     {% if post.image_embed %}
     <div class="embed">
-        <img id="image" src="/{{file_path}}/{{post.id}}/{{post.original_full}}" onload="on_image_load()">
+        <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}" onload="on_image_load()">
     </div>
     {% endif %}
 
     {% if post.video_embed or post.audio_embed %}
     <div class="embed">
-        <video id="video" src="/{{file_path}}/{{post.id}}" controls preload="none" poster="/static/img/cover.jpg"></video>
+        <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none" poster="/static/img/cover.jpg"></video>
     </div>
     {% endif %}
 

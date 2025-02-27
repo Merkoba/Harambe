@@ -446,7 +446,7 @@ function start_flash() {
   player.style.height = `600px`
   let container = DOM.el(`#flash_container`)
   container.appendChild(player)
-  player.ruffle().load(`/${vars.file_path}/${vars.post_id}`)
+  player.ruffle().load(`/${vars.file_path}/${vars.name}`)
 }
 
 function react_alert() {
@@ -692,7 +692,6 @@ function react_text(id) {
   let prompt_args = {
     placeholder: `Write a text reaction`,
     max: vars.text_reaction_length,
-    multi: true,
     value,
     callback: (text) => {
       if (!text) {

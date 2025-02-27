@@ -381,11 +381,11 @@ def random_post() -> Any:
 # FILE
 
 
-@app.route(f"/{config.file_path}/<int:post_id>", methods=["GET"])  # type: ignore
-@app.route(f"/{config.file_path}/<int:post_id>/<string:original>", methods=["GET"])  # type: ignore
+@app.route(f"/{config.file_path}/<string:name>", methods=["GET"])  # type: ignore
+@app.route(f"/{config.file_path}/<string:name>/<string:original>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-def get_file(post_id: int, original: str | None = None) -> Any:
+def get_file(name: str, original: str | None = None) -> Any:
     if not config.allow_hotlinks:
         referrer = request.referrer
         host = request.host_url
@@ -399,7 +399,7 @@ def get_file(post_id: int, original: str | None = None) -> Any:
         if not user:
             return over()
 
-    post = post_procs.get_post(post_id, full=False, increase=True)
+    post = post_procs.get_post(name=name, full=False, increase=True)
 
     if not post:
         return over()

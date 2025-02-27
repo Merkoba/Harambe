@@ -232,9 +232,6 @@ def get_posts(
     user_id: int | None = None,
     full_reactions: bool = False,
 ) -> list[Post]:
-    if (not post_id) and (not name) and (not user_id):
-        return []
-
     check_db()
     conn, c = row_conn()
 
@@ -245,15 +242,11 @@ def get_posts(
         c.execute("select * from posts where name = ?", (name,))
         rows = [c.fetchone()]
     elif user_id:
-        c.execute("select * from posts where user = ?", (post_id, user_id))
+        c.execute("select * from posts where user = ?", (user_id,))
 
         rows = [c.fetchone()]
     else:
-        if user_id:
-            c.execute("select * from posts where user = ?", (user_id,))
-        else:
-            c.execute("select * from posts")
-
+        c.execute("select * from posts")
         rows = c.fetchall()
 
     posts = []
@@ -333,7 +326,7 @@ def get_next_post(current: int) -> Post | None:
     date = current_row["date"]
 
     c.execute(
-        "select * from posts p join users u on p.user = u.id where u.listed = 1 and p.date < ? order by p.date desc limit 1",
+        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? order by p.date desc limit 1",
         (date,),
     )
 
@@ -600,21 +593,21 @@ def get_reactions(
         c.execute("select * from reactions where id = ?", (reaction_id,))
         rows = [c.fetchone()]
     elif post_id:
-        if user_id:
-            c.execute(
-                "select * from reactions where post = ? and user = ?",
-                (post_id, user_id),
-            )
-        else:
-            c.execute("select * from reactions where post = ?", (post_id,))
+        c.execute(
+            "select * from reactions where post = ?",
+            (post_id,),
+        )
+
+        rows = c.fetchall()
+    elif user_id:
+        c.execute(
+            "select * from reactions where user = ?",
+            (user_id,),
+        )
 
         rows = c.fetchall()
     else:
-        if user_id:
-            c.execute("select * from reactions where user = ?", (user_id,))
-        else:
-            c.execute("select * from reactions")
-
+        c.execute("select * from reactions")
         rows = c.fetchall()
 
     reactions = []
