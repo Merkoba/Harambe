@@ -30,34 +30,7 @@ window.onload = () => {
     let item = e.target.closest(`.item`)
     vars.active_item = item
 
-    if (e.target.classList.contains(`edit`)) {
-      if (vars.mode === `admin_users`) {
-        window.location = `/edit_user/${item.dataset.user_id}`
-      }
-      else if (vars.mode === `admin_posts`) {
-        edit_post_title(item)
-      }
-    }
-    else if (e.target.classList.contains(`delete`)) {
-      vars.selected_items = [e.target.closest(`.item`)]
-
-      if (vars.mode === `admin_users`) {
-        delete_users()
-      }
-      else if (vars.mode === `admin_posts`) {
-        delete_posts()
-      }
-      else if (vars.mode === `admin_reactions`) {
-        delete_reactions()
-      }
-    }
-    else if (e.target.classList.contains(`delete_above`)) {
-      select_above(item)
-    }
-    else if (e.target.classList.contains(`delete_below`)) {
-      select_below(item)
-    }
-    else if (e.target.classList.contains(`admin_user`)) {
+    if (e.target.classList.contains(`admin_user`)) {
       vars.user_opts_user_id = item.dataset.user_id
       vars.msg_user_opts.show()
     }

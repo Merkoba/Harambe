@@ -146,7 +146,6 @@
 
             <div id="reg_date" class="table_cell underline" data-sort="register_date" title="The date when the user was registered">RegDate</div>
             <div id="last_date" class="table_cell underline" data-sort="last_date" title="The date when the user made their latest post">LastDate</div>
-            <div class="table_cell actions">Actions</div>
         </div>
 
         {% for item in items %}
@@ -165,10 +164,10 @@
             </div>
 
             <!-- Username -->
-            <div class="table_cell admin_username action_button" title="{{item.username}}">{{item.username}}</div>
+            <div class="table_cell admin_user action_button" title="{{item.username}}">{{item.username}}</div>
 
             <!-- Name -->
-            <div class="table_cell admin_username action_button" title="{{item.name}}">{{item.name}}</div>
+            <div class="table_cell admin_user action_button" title="{{item.name}}">{{item.name}}</div>
 
             <!-- RPM -->
             <div class="table_cell small">{{item.rpm_fill}}</div>
@@ -207,17 +206,6 @@
 
             <!-- Last Date -->
             <div class="table_cell" title="{{item.last_date_str}}">{{item.last_date_str}}</div>
-
-            <!-- Actions -->
-            <div class="table_cell actions rowitem">
-                <div class="edit action_button" title="Edit this item">E</div>
-                <div class="sep"> | </div>
-                <div class="delete action_button" title="Delete this item">D</div>
-                <div class="sep"> | </div>
-                <div class="delete_above action_button" title="Delete all items above this one">A</div>
-                <div class="sep"> | </div>
-                <div class="delete_below action_button" title="Delete all items below this one">B</div>
-            </div>
         </div>
         {% endfor %}
     </div>

@@ -106,11 +106,11 @@
             <div id="size" class="table_cell underline" data-sort="size" title="The size of the file">Size</div>
             <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">User</div>
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this post was created">Date</div>
-            <div id="views" class="table_cell underline" data-sort="views" title="The number of times the post has been viewed and the number of reactions it has">Views</div>
+            <div id="views" class="table_cell underline small" data-sort="views" title="The number of times the post has been viewed">Views</div>
+            <div id="reactions" class="table_cell underline small" data-sort="reactions" title="The number of reactions the post has">Reactions</div>
 
             {% if mode == "admin_posts" %}
-            <div id="listed" class="table_cell views underline" data-sort="listed" title="The post appears in the list">Listed</div>
-            <div class="table_cell actions">Actions</div>
+            <div id="listed" class="table_cell views underline small" data-sort="listed" title="The post appears in the list">Listed</div>
             {% endif %}
         </div>
 
@@ -153,24 +153,14 @@
             <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
 
             <!-- Views -->
-            <div class="table_cell" title="Views: {{item.views}} | Reactions: {{item.num_reactions}}">{{item.views_str}}</div>
+            <div class="table_cell small" title="{{item.views}}">{{item.views}}</div>
+
+            <!-- Reactions -->
+            <div class="table_cell small" title="{{item.num_reactions}}">{{item.num_reactions}}</div>
 
             {% if mode == "admin_posts" %}
             <!-- Listed -->
-            <div class="table_cell" itle="{{item.listed_str}}">{{item.listed_str}}</div>
-            {% endif %}
-
-            {% if mode == "admin_posts" %}
-            <!-- Actions -->
-            <div class="table_cell actions rowitem">
-                <div class="edit action_button" title="Edit this item">E</div>
-                <div class="sep"> | </div>
-                <div class="delete action_button" title="Delete this item">D</div>
-                <div class="sep"> | </div>
-                <div class="delete_above action_button" title="Delete all items above this one">A</div>
-                <div class="sep"> | </div>
-                <div class="delete_below action_button" title="Delete all items below this one">B</div>
-            </div>
+            <div class="table_cell small" itle="{{item.listed_str}}">{{item.listed_str}}</div>
             {% endif %}
         </div>
         {% endfor %}

@@ -44,7 +44,6 @@ class Post:
     post_title: str
     reactions: list[Reaction]
     num_reactions: int
-    views_str: str
     uploader_str: str
     mtype_str: str
     image_embed: bool
@@ -88,7 +87,6 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         reactions = []
 
     show = f"{name} {ext}".strip()
-    views_str = f"V: {views} | R: {num_reactions}"
 
     def embed_size(mtype: str) -> bool:
         max_size = int(getattr(config, f"embed_max_size_{mtype}"))
@@ -136,7 +134,6 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         post_title,
         reactions,
         num_reactions,
-        views_str,
         uploader_str,
         mtype_str,
         image_embed,
@@ -193,7 +190,6 @@ def get_posts(
             or query in utils.clean_query(post.uploader)
             or query in utils.clean_query(post.date_3)
             or query in utils.clean_query(post.size_str)
-            or query in utils.clean_query(post.views_str)
             or query in utils.clean_query(post.mtype)
             or query in utils.clean_query(post.uploader_str)
             or query in utils.clean_query(post.ago)
@@ -239,6 +235,11 @@ def sort_posts(posts: list[Post], sort: str) -> None:
         posts.sort(key=lambda x: x.views, reverse=True)
     elif sort == "views_desc":
         posts.sort(key=lambda x: x.views, reverse=False)
+
+    elif sort == "reactions":
+        posts.sort(key=lambda x: x.num_reactions, reverse=True)
+    elif sort == "reactions_desc":
+        posts.sort(key=lambda x: x.num_reactions, reverse=False)
 
     elif sort == "title":
         posts.sort(key=lambda x: x.title, reverse=True)
