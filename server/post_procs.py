@@ -463,8 +463,6 @@ def check_storage() -> None:
 
 
 def edit_post_title(post_id: int, title: str, user: User) -> tuple[str, int]:
-    utils.q(post_id)
-
     if not post_id:
         return utils.bad("Missing values")
 

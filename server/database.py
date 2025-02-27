@@ -154,6 +154,7 @@ def check_db() -> None:
 def get_conn(connection: Connection | None = None) -> Connection:
     if not connection:
         conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
         c = conn.cursor()
         c.execute("PRAGMA foreign_keys = ON;")
         return Connection(conn, c)
@@ -246,10 +247,9 @@ def get_posts(
 
     posts = []
     rows = [row for row in rows if row]
-    cols = [desc[0] for desc in c.description]
 
     for row in rows:
-        post = make_post(dict(zip(cols, row)))
+        post = make_post(dict(row))
 
         if extra:
             users = get_users(post.user, oconn=connection)
@@ -324,19 +324,18 @@ def get_next_post(current: str) -> Post | None:
         conn.close()
         return None
 
-    date = row["date"]
+    post = make_post(dict(row))
 
     c.execute(
         "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? order by p.date desc limit 1",
-        (date,),
+        (post.date,),
     )
 
-    next_row = c.fetchone()
+    row = c.fetchone()
     conn.close()
 
-    if next_row:
-        cols = [desc[0] for desc in c.description]
-        return make_post(dict(zip(cols, next_row)))
+    if row:
+        return make_post(dict(row))
 
     return None
 
@@ -450,10 +449,9 @@ def get_users(
 
     users = []
     rows = [row for row in rows if row]
-    cols = [desc[0] for desc in c.description]
 
     for row in rows:
-        user = make_user(dict(zip(cols, row)))
+        user = make_user(dict(row))
         user.num_posts = get_post_count(user.id, oconn=connection)
         user.num_reactions = get_reaction_count(user_id=user.id, oconn=connection)
         users.append(user)
@@ -509,8 +507,7 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
     conn.close()
 
     if row:
-        cols = [desc[0] for desc in c.description]
-        return make_post(dict(zip(cols, row)))
+        return make_post(dict(row))
 
     return None
 
@@ -586,10 +583,9 @@ def get_reactions(
 
     reactions = []
     rows = [row for row in rows if row]
-    cols = [desc[0] for desc in c.description]
 
     for row in rows:
-        reaction = make_reaction(dict(zip(cols, row)))
+        reaction = make_reaction(dict(row))
 
         if extra:
             if post:
@@ -678,8 +674,7 @@ def get_latest_post() -> Post | None:
     conn.close()
 
     if row:
-        cols = [desc[0] for desc in c.description]
-        return make_post(dict(zip(cols, row)))
+        return make_post(dict(row))
 
     return None
 
