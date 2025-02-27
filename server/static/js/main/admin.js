@@ -625,7 +625,7 @@ function delete_users() {
       let users = []
 
       for (let user of vars.selected_items) {
-        users.push(user.dataset.username)
+        users.push(user.dataset.user_id)
       }
 
       delete_selected_users(users)
@@ -635,18 +635,18 @@ function delete_users() {
   confirmbox(confirm_args)
 }
 
-async function delete_selected_users(usernames) {
+async function delete_selected_users(ids) {
   try {
     let response = await fetch(`/delete_users`, {
       method: `POST`,
       headers: {
         "Content-Type": `application/json`,
       },
-      body: JSON.stringify({usernames}),
+      body: JSON.stringify({ids}),
     })
 
     if (response.ok) {
-      remove_users(usernames)
+      remove_users(ids)
     }
     else {
       print_error(response.status)
@@ -657,9 +657,9 @@ async function delete_selected_users(usernames) {
   }
 }
 
-function remove_users(usernames) {
-  for (let username of usernames) {
-    let el = DOM.el(`.item[data-username="${username}"]`)
+function remove_users(ids) {
+  for (let id of ids) {
+    let el = DOM.el(`.item[data-user_id="${id}"]`)
 
     if (el) {
       el.remove()
