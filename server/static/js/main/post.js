@@ -726,14 +726,14 @@ async function send_reaction(text, mode) {
     return
   }
 
-  let name = vars.name
+  let post_id = vars.post_id
 
   let response = await fetch(`/react`, {
     method: `POST`,
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({name, text, mode}),
+    body: JSON.stringify({post_id, text, mode}),
   })
 
   if (response.ok) {

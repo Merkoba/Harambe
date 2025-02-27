@@ -880,11 +880,11 @@ def react() -> Any:
         return error_json
 
     data = request.get_json()
-    name = data.get("name", None)
-    text = data.get("text", None)
-    mode = data.get("mode", None)
+    post_id = int(data.get("post_id", 0))
+    text = str(data.get("text", ""))
+    mode = str(data.get("mode", ""))
 
-    return react_procs.react(name, text, user, mode)
+    return react_procs.react(post_id, text, user, mode)
 
 
 @app.route("/delete_reactions", methods=["POST"])  # type: ignore
