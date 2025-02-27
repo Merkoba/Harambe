@@ -283,7 +283,7 @@ def get_posts(
     return posts
 
 
-def delete_post(post_id: str) -> None:
+def delete_post(post_id: int) -> None:
     check_db()
     conn, c = get_conn()
     c.execute("delete from posts where id = ?", (post_id,))
