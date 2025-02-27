@@ -51,20 +51,6 @@ window.onload = () => {
     }
   })
 
-  DOM.ev(document, `auxclick`, async (e) => {
-    if (e.button !== 1) {
-      return
-    }
-
-    let item = e.target.closest(`.item`)
-
-    if (e.target.classList.contains(`edit`)) {
-      if (vars.mode === `admin_users`) {
-        window.open(`/edit_user/${item.dataset.user_id}`, `_blank`)
-      }
-    }
-  })
-
   let refresh = DOM.el(`#refresh`)
 
   if (refresh) {
@@ -137,6 +123,10 @@ window.onload = () => {
 
       DOM.ev(`#edit_name`, `click`, () => {
         user_mod_input(`name`, `string`)
+      })
+
+      DOM.ev(`#edit_password`, `click`, () => {
+        user_mod_input(`password`, `string`)
       })
     }
 

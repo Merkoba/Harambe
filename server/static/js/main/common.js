@@ -282,7 +282,7 @@ function setup_user_opts() {
     DOM.ev(`#user_opts_user`, `click`, (e) => {
       vars.msg_user_opts.close()
       let user_id = vars.user_opts_user_id
-      window.location = `/admin/users?user_id=${user_id}`
+      window.location = `/edit_user/${user_id}`
     })
   }
 }

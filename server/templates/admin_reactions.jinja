@@ -107,10 +107,6 @@
             <div id="value" class="table_cell underline" data-sort="value" title="The value of the reaction">Value</div>
             <div id="username" class="table_cell underline" data-sort="user" title="The username who did the reaction">User</div>
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this reaction was made">Date</div>
-
-            {% if mode == "reactions_admin" %}
-            <div class="table_cell actions">Actions</div>
-            {% endif %}
         </div>
 
         {% for item in items %}
@@ -138,19 +134,6 @@
 
             <!-- Date -->
             <div class="table_cell" title="{{item.date_str}}">{{item.ago}}</div>
-
-            {% if mode == "reactions_admin" %}
-            <!-- Actions -->
-            <div class="table_cell actions rowitem">
-                <div class="edit action_button" title="Edit this item">E</div>
-                <div class="sep"> | </div>
-                <div class="delete action_button" title="Delete this item">D</div>
-                <div class="sep"> | </div>
-                <div class="delete_above action_button" title="Delete all items above this one">A</div>
-                <div class="sep"> | </div>
-                <div class="delete_below action_button" title="Delete all items below this one">B</div>
-            </div>
-            {% endif %}
         </div>
         {% endfor %}
     </div>
