@@ -922,7 +922,6 @@ async function fill_icons() {
     return
   }
 
-  console.log(response)
   let json = await response.json()
   let icons = shuffle_array(json.icons)
 
