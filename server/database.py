@@ -643,7 +643,6 @@ def get_reactions(
             dbuser = c.fetchone()
 
             if dbuser:
-                utils.q(dbuser["username"])
                 ruser = make_user(dict(dbuser))
 
         if ruser:
