@@ -495,7 +495,7 @@ def delete_normal_users() -> None:
     conn.close()
 
 
-def mod_user(ids: list[str], what: str, value: Any) -> None:
+def mod_user(ids: list[int], what: str, value: Any) -> None:
     check_db()
     conn, c = get_conn()
     placeholders = ", ".join("?" for _ in ids)

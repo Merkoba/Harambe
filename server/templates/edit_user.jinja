@@ -6,7 +6,7 @@
 
 <script>
     const vars = {}
-    vars.username = {{username | tojson | safe}}
+    vars.user_id = {{user.id if user else null}}
 </script>
 
 <script src="/static/js/main/edit_user.js"></script>
@@ -16,7 +16,7 @@
 <div>
     <div>{{title}}</div>
 
-    <form id="form" action="/edit_user/{{user.username}}" method="post">
+    <form id="form" action="/edit_user/{{user.id}}" method="post">
         {% if mode != "edit" %}
         <input type="text" id="username" name="username" placeholder="Username">
         {% endif %}

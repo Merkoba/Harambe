@@ -724,19 +724,16 @@ def edit_user(user_id: int = 0) -> Any:
             return redirect(url_for("admin", what="users"))
 
         if user and (mode == "edit"):
-            title = f"Edit: {user.id}"
+            title = f"Edit: {user.username}"
         else:
             title = "Add User"
 
         if message:
             title = f"{title} ({message})"
 
-        uname = user.username if user else ""
-
         return render_template(
             "edit_user.jinja",
             user=user or {},
-            username=uname,
             title=title,
             mode=mode,
             **theme_configs(),
@@ -786,7 +783,7 @@ def user_edit() -> Any:
     else:
         return error_json
 
-    return user_procs.mod_user([user.username], what, value, vtype, user)
+    return user_procs.mod_user([user.id], what, value, vtype, user)
 
 
 @app.route("/delete_users", methods=["POST"])  # type: ignore
@@ -841,12 +838,12 @@ def delete_user() -> Any:
 @admin_required
 def mod_user() -> Any:
     data = request.get_json()
-    usernames = data.get("usernames", None)
+    ids = data.get("ids", None)
     what = data.get("what", None)
     value = data.get("value", None)
     vtype = data.get("vtype", None)
 
-    if (not usernames) or (not what) or (value is None) or (not vtype):
+    if (not ids) or (not what) or (value is None) or (not vtype):
         return error_json
 
     user = get_user()
@@ -854,7 +851,7 @@ def mod_user() -> Any:
     if not user:
         return error_json
 
-    return user_procs.mod_user(usernames, what, value, vtype, user)
+    return user_procs.mod_user(ids, what, value, vtype, user)
 
 
 # ICONS

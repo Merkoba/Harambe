@@ -32,7 +32,7 @@ window.onload = () => {
 
     if (e.target.classList.contains(`edit`)) {
       if (vars.mode === `admin_users`) {
-        window.location = `/edit_user/${item.dataset.username}`
+        window.location = `/edit_user/${item.dataset.user_id}`
       }
       else if (vars.mode === `admin_posts`) {
         edit_post_title(item)
@@ -83,7 +83,7 @@ window.onload = () => {
 
     if (e.target.classList.contains(`edit`)) {
       if (vars.mode === `admin_users`) {
-        window.open(`/edit_user/${item.dataset.username}`, `_blank`)
+        window.open(`/edit_user/${item.dataset.user_id}`, `_blank`)
       }
     }
   })
@@ -734,7 +734,7 @@ function mod_user(what, value, vtype) {
 }
 
 async function do_mod_user(items, what, value, vtype) {
-  let usernames = items.map(x => x.dataset.username)
+  let ids = items.map(x => x.dataset.user_id)
 
   try {
     let response = await fetch(`/mod_user`, {
@@ -742,7 +742,7 @@ async function do_mod_user(items, what, value, vtype) {
       headers: {
         "Content-Type": `application/json`,
       },
-      body: JSON.stringify({usernames, what, value, vtype}),
+      body: JSON.stringify({ids, what, value, vtype}),
     })
 
     if (response.ok) {

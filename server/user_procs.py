@@ -415,11 +415,11 @@ def edit_user(
         args["max_size"] = 0
 
     n_args = {}
-    user = None
 
     for key in args:
         if mode == "edit":
             if key in ["username"]:
+                n_args[key] = args[key]
                 continue
 
         ok, value = check_value(user, key, args[key])
@@ -450,6 +450,7 @@ def edit_user(
         n_args["lister"],
         n_args["poster"],
         n_args["reacter"],
+        user_id=user_id,
     )
 
     return True, "Ok", user_id
@@ -525,7 +526,7 @@ def check_user_max(user: User, size: int) -> bool:
 
 
 def mod_user(
-    usernames: list[str], what: str, value: str, vtype: str, user: User
+    ids: list[int], what: str, value: str, vtype: str, user: User
 ) -> tuple[str, int]:
     if not what:
         return utils.bad("No field provided")
@@ -548,14 +549,14 @@ def mod_user(
         return utils.bad("Invalid value")
 
     if user.admin and (what == "admin"):
-        usernames.remove(user.username)
+        ids.remove(user.id)
 
     ok, value = check_value(None, what, value)
 
     if not ok:
         return utils.bad("Invalid value")
 
-    database.mod_user(usernames, what, new_value)
+    database.mod_user(ids, what, new_value)
     return utils.ok()
 
 

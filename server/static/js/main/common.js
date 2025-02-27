@@ -10,7 +10,7 @@ DOM.ev(document, `keydown`, (e) => {
       e.preventDefault()
       Confirmbox.instance.action()
     }
-    else if (Msg.msg.any_open()) {
+    else if (Msg.msg && Msg.msg.any_open()) {
       let content = Msg.msg.highest_instance().content
       let dialog = DOM.el(`.dialog_container`, content)
 
@@ -25,7 +25,7 @@ DOM.ev(document, `keydown`, (e) => {
     }
   }
   else if (!isNaN(n) && (n >= 1) && (n <= 9)) {
-    if (Msg.msg.any_open()) {
+    if (Msg.msg && Msg.msg.any_open()) {
       let content = Msg.msg.highest_instance().content
       let dialog = DOM.el(`.dialog_container`, content)
 
