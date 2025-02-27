@@ -878,7 +878,7 @@ def get_icons() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check(max_post=9096)
 @login_required
-def react() -> Any:
+def add_reaction() -> Any:
     user = get_user()
 
     if not user:
@@ -888,7 +888,7 @@ def react() -> Any:
     post_id = int(data.get("post_id", 0))
     text = str(data.get("text", ""))
 
-    return react_procs.react(post_id, text, user)
+    return react_procs.add_reaction(post_id, text, user)
 
 
 @app.route("/delete_reactions", methods=["POST"])  # type: ignore

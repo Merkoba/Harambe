@@ -684,7 +684,7 @@ function react_text(id) {
       let n = vars.text_reaction_length
       text = remove_multiple_empty_lines(text)
       text = replace_urls(text)
-      text = Array.from(text).slice(0, n).join(``)
+      text = Array.from(text).slice(0, n).join(``).trim()
 
       if (contains_url(text)) {
         popmsg(`URLs are not allowed.`)

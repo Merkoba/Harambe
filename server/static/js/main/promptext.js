@@ -49,9 +49,7 @@ class Promptext {
       el.textContent = btn.text
 
       DOM.ev(el, `click`, () => {
-        if (btn.callback(input.value)) {
-          msg.close()
-        }
+        this.button_action(btn)
       })
 
       buttons.appendChild(el)
@@ -91,6 +89,19 @@ class Promptext {
           e.preventDefault()
         }
       }
+      else if (e.key === `Tab`) {
+        e.preventDefault()
+      }
+    })
+
+    DOM.ev(input, `keyup`, (e) => {
+      if (e.key === `Tab`) {
+        if (args.buttons.length > 0) {
+          this.button_action(args.buttons[0])
+        }
+
+        e.preventDefault()
+      }
     })
 
     DOM.ev(submit_button, `click`, () => {
@@ -116,7 +127,14 @@ class Promptext {
 
   insert(text) {
     let value = this.input.value.trim()
-    this.input.value = `${value} ${text}`.trim()
+    this.input.value = `${value} ${text.trim()} `
     this.input.selectionStart = this.input.value.length
+    this.input.focus()
+  }
+
+  button_action(btn) {
+    if (btn.callback(this.input.value)) {
+      this.msg.close()
+    }
   }
 }

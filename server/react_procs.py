@@ -58,7 +58,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     )
 
 
-def react(post_id: int, text: str, user: User) -> tuple[str, int]:
+def add_reaction(post_id: int, text: str, user: User) -> tuple[str, int]:
     if not user:
         return utils.bad("You are not logged in")
 
