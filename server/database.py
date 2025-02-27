@@ -238,17 +238,15 @@ def get_posts(
     check_db()
     conn, c = row_conn()
 
-    if user_id:
-        if user_id:
-            c.execute(
-                "select * from posts where id = ? and user = ?", (post_id, user_id)
-            )
-        else:
-            c.execute("select * from posts where id = ?", (post_id,))
-
+    if post_id:
+        c.execute("select * from posts where id = ?", (post_id,))
         rows = [c.fetchone()]
     elif name:
         c.execute("select * from posts where name = ?", (name,))
+        rows = [c.fetchone()]
+    elif user_id:
+        c.execute("select * from posts where user = ?", (post_id, user_id))
+
         rows = [c.fetchone()]
     else:
         if user_id:

@@ -781,14 +781,14 @@ function modify_reaction(reaction) {
 }
 
 async function refresh() {
-  let name = vars.name
+  let post_id = vars.post_id
 
   let response = await fetch(`/refresh`, {
     method: `POST`,
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({name}),
+    body: JSON.stringify({post_id}),
   })
 
   if (response.ok) {
