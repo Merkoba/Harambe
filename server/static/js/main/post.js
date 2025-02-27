@@ -1063,7 +1063,7 @@ function text_html(text) {
 
   // :image_names:
   re = /:(\w+):/gi
-  text = text.replace(re, `<img src="/static/icons/$1.gif" class="reaction_icon" alt="$1">`)
+  text = text.replace(re, `<img src="/static/icons/$1.gif" class="reaction_icon" title="$1">`)
 
   return text
 }
