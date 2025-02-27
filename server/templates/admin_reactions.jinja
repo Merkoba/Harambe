@@ -61,6 +61,13 @@
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>
 
+    {% if mode == "admin_reactions" %}
+        <div class="action_button" id="delete_selected" title="Delete selected item">Delete</div>
+        <div class="sep">|</div>
+        <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del All</div>
+        <div class="sep">|</div>
+    {% endif %}
+
     {% if mode == "reactions_admin" %}
     <div class="action_button" id="delete_selected" title="Delete selected items">Delete</div>
     <div class="sep">|</div>
