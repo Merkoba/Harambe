@@ -54,10 +54,24 @@ class Post:
     markdown_embed: bool
 
 
+def get_full_name(dbpost: DbPost) -> str:
+    if dbpost.ext:
+        return f"{dbpost.name}.{dbpost.ext}"
+
+    return dbpost.name
+
+
+def get_original_name(dbpost: DbPost) -> str:
+    if dbpost.ext:
+        return f"{dbpost.original}.{dbpost.ext}"
+
+    return dbpost.original
+
+
 def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     name = post.name
     ext = post.ext
-    full = post.full()
+    full = get_full_name(post)
     title = post.title
     date = post.date
     size = post.size
@@ -67,7 +81,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     mtype = post.mtype
     listed = post.listed
     original = post.original
-    original_full = post.original_full()
+    original_full = get_original_name(post)
     ago = utils.time_ago(date, now)
     date_1 = utils.nice_date(date, "date")
     date_2 = utils.nice_date(date, "time")
@@ -273,7 +287,8 @@ def get_post(
     full: bool = False,
     increase: bool = False,
 ) -> Post | None:
-    post = database.get_post(post_id=post_id, name=name)
+    posts = database.get_posts(post_id=post_id, name=name)
+    post = posts[0] if posts else None
 
     if post:
         now = utils.now()
@@ -322,7 +337,7 @@ def delete_posts(ids: list[int]) -> tuple[str, int]:
         return utils.bad("Post ids were not provided")
 
     for post_id in ids:
-        post = database.get_post(post_id)
+        post = get_post(post_id)
 
         if post:
             do_delete_post(post)
@@ -332,21 +347,21 @@ def delete_posts(ids: list[int]) -> tuple[str, int]:
 
 def delete_post(post_id: int, user: User) -> tuple[str, int]:
     if not post_id:
-        return utils.bad("Post post_id was not provided")
+        return utils.bad("Post id was not provided")
 
     if not user.admin:
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        db_post = database.get_post(post_id)
+        post = get_post(post_id)
 
-        if not db_post:
+        if not post:
             return utils.bad("Post not found")
 
-        if db_post.username != user.username:
+        if post.username != user.username:
             return utils.bad("You are not the uploader")
 
-    post = database.get_post(post_id)
+    post = get_post(post_id)
 
     if post:
         do_delete_post(post)
@@ -356,7 +371,7 @@ def delete_post(post_id: int, user: User) -> tuple[str, int]:
 
 
 # Be extra careful with this function!
-def do_delete_post(post: DbPost) -> None:
+def do_delete_post(post: Post) -> None:
     if not config.allow_delete:
         return
 
@@ -364,7 +379,7 @@ def do_delete_post(post: DbPost) -> None:
         return
 
     database.delete_post(post.id)
-    file_name = post.full()
+    file_name = post.full
 
     if not file_name:
         return
@@ -437,7 +452,7 @@ def check_storage() -> None:
         total_files -= 1
         total_size -= oldest_file[1]
         name = oldest_file[0].name
-        post = database.get_post(name=name)
+        post = get_post(name=name)
 
         if post:
             do_delete_post(post)
@@ -456,12 +471,12 @@ def edit_post_title(post_id: int, title: str, user: User) -> tuple[str, int]:
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        db_post = database.get_post(post_id)
+        post = get_post(post_id)
 
-        if not db_post:
+        if not post:
             return utils.bad("Post not found")
 
-        if db_post.username != user.username:
+        if post.username != user.username:
             return utils.bad("You are not the uploader")
 
     database.edit_post_title(post_id, title)

@@ -26,7 +26,7 @@ schemas = {
         "sample": "text default ''",
         #
         "user": "integer",
-        "foreign key(user)": "references users(id)",
+        "foreign key(user)": "references users(id) on delete cascade",
     },
     "reactions": {
         "id": "integer primary key autoincrement",
@@ -36,8 +36,8 @@ schemas = {
         #
         "post": "integer",
         "user": "integer",
-        "foreign key(post)": "references posts(id)",
-        "foreign key(user)": "references users(id)",
+        "foreign key(post)": "references posts(id) on delete cascade",
+        "foreign key(user)": "references users(id) on delete cascade",
     },
     "users": {
         "id": "integer primary key autoincrement",
@@ -82,18 +82,6 @@ class Post:
     uploader: str = ""
     num_reactions: int = 0
     listed: bool = False
-
-    def full(self) -> str:
-        if self.ext:
-            return f"{self.name}.{self.ext}"
-
-        return self.name
-
-    def original_full(self) -> str:
-        if self.ext:
-            return f"{self.original}.{self.ext}"
-
-        return self.original
 
 
 @dataclass
@@ -153,9 +141,14 @@ def check_db() -> None:
         sys.exit(msg)
 
 
-def get_conn() -> tuple[sqlite3.Connection, sqlite3.Cursor]:
-    conn = sqlite3.connect(db_path)
+def get_conn(
+    conn: sqlite3.Connection | None = None,
+) -> tuple[sqlite3.Connection, sqlite3.Cursor]:
+    if not conn:
+        conn = sqlite3.connect(db_path)
+
     c = conn.cursor()
+    c.execute("PRAGMA foreign_keys = ON;")
     return conn, c
 
 
@@ -176,7 +169,6 @@ def add_post(
     size: int,
     sample: str,
 ) -> None:
-    check_db()
     conn, c = get_conn()
     date = utils.now()
 
@@ -218,24 +210,15 @@ def make_post(row: dict[str, Any]) -> Post:
     )
 
 
-def get_post(
-    post_id: int | None = None, name: str | None = None, full_reactions: bool = True
-) -> Post | None:
-    if (not post_id) and (not name):
-        return None
-
-    posts = get_posts(post_id=post_id, name=name, full_reactions=full_reactions)
-    return posts[0] if posts else None
-
-
 def get_posts(
     post_id: int | None = None,
     name: str | None = None,
     user_id: int | None = None,
+    extra: bool = True,
     full_reactions: bool = False,
+    oconn: sqlite3.Connection | None = None,
 ) -> list[Post]:
-    check_db()
-    conn, c = row_conn()
+    conn, c = get_conn(oconn)
 
     if post_id:
         c.execute("select * from posts where id = ?", (post_id,))
@@ -252,30 +235,34 @@ def get_posts(
 
     posts = []
     rows = [row for row in rows if row]
+    cols = [desc[0] for desc in c.description]
 
     for row in rows:
-        post = make_post(dict(row))
-        user = get_user(post.user, oconn=conn)
+        post = make_post(dict(zip(cols, row)))
 
-        if user:
-            post.username = user.username
-            post.uploader = user.name
-            post.listed = user.lister
-        else:
-            post.username = ""
-            post.uploader = ""
-            post.listed = False
+        if extra:
+            users = get_users(post.user, oconn=conn)
+            user = users[0] if users else None
 
-        if full_reactions:
-            reactions = get_reactions(post.id, post=post, user=user, oconn=conn)
+            if user:
+                post.username = user.username
+                post.uploader = user.name
+                post.listed = user.lister
+            else:
+                post.username = ""
+                post.uploader = ""
+                post.listed = False
 
-            if reactions:
-                post.reactions = reactions
+            if full_reactions:
+                reactions = get_reactions(post.id, post=post, user=user, oconn=conn)
+
+                if reactions:
+                    post.reactions = reactions
+                else:
+                    post.reactions = []
             else:
                 post.reactions = []
-        else:
-            post.reactions = []
-            post.num_reactions = get_reaction_count(post.id, oconn=conn)
+                post.num_reactions = get_reaction_count(post.id, oconn=conn)
 
         posts.append(post)
 
@@ -284,7 +271,6 @@ def get_posts(
 
 
 def delete_post(post_id: int) -> None:
-    check_db()
     conn, c = get_conn()
     c.execute("delete from posts where id = ?", (post_id,))
     conn.commit()
@@ -292,7 +278,6 @@ def delete_post(post_id: int) -> None:
 
 
 def increase_post_views(post_id: int) -> None:
-    check_db()
     conn, c = get_conn()
 
     c.execute(
@@ -305,7 +290,6 @@ def increase_post_views(post_id: int) -> None:
 
 
 def edit_post_title(post_id: int, title: str) -> None:
-    check_db()
     conn, c = get_conn()
     c.execute("update posts set title = ? where id = ?", (title, post_id))
     conn.commit()
@@ -313,17 +297,15 @@ def edit_post_title(post_id: int, title: str) -> None:
 
 
 def get_next_post(current: str) -> Post | None:
-    check_db()
-    conn, c = row_conn()
-
+    conn, c = get_conn()
     c.execute("select * from posts where name = ?", (current,))
-    current_row = c.fetchone()
+    row = c.fetchone()
 
-    if not current_row:
+    if not row:
         conn.close()
         return None
 
-    date = current_row["date"]
+    date = row["date"]
 
     c.execute(
         "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? order by p.date desc limit 1",
@@ -354,8 +336,6 @@ def add_user(
     reacter: bool = True,
     user_id: int | None = None,
 ) -> int | None:
-    check_db()
-
     if (not username) or (not password):
         return None
 
@@ -429,29 +409,12 @@ def make_user(row: dict[str, Any]) -> User:
     )
 
 
-def get_user(
-    user_id: int | None = None,
-    username: str | None = None,
-    oconn: sqlite3.Connection | None = None,
-) -> User | None:
-    if (not user_id) and (not username):
-        return None
-
-    users = get_users(user_id=user_id, username=username, oconn=oconn)
-    return users[0] if users else None
-
-
 def get_users(
     user_id: int | None = None,
     username: str | None = None,
     oconn: sqlite3.Connection | None = None,
 ) -> list[User]:
-    if not oconn:
-        check_db()
-        conn, c = row_conn()
-    else:
-        conn = oconn
-        c = conn.cursor()
+    conn, c = get_conn(oconn)
 
     if user_id:
         c.execute("select * from users where id = ?", (user_id,))
@@ -465,11 +428,12 @@ def get_users(
 
     users = []
     rows = [row for row in rows if row]
+    cols = [desc[0] for desc in c.description]
 
     for row in rows:
-        user = make_user(dict(row))
-        user.num_posts = get_post_count(row["id"], oconn=conn)
-        user.num_reactions = get_reaction_count(user_id=row["id"], oconn=conn)
+        user = make_user(dict(zip(cols, row)))
+        user.num_posts = get_post_count(user.id, oconn=conn)
+        user.num_reactions = get_reaction_count(user_id=user.id, oconn=conn)
         users.append(user)
 
     if not oconn:
@@ -479,7 +443,6 @@ def get_users(
 
 
 def delete_user(user_id: int) -> None:
-    check_db()
     conn, c = get_conn()
     c.execute("delete from users where id = ?", (user_id,))
     conn.commit()
@@ -487,7 +450,6 @@ def delete_user(user_id: int) -> None:
 
 
 def delete_normal_users() -> None:
-    check_db()
     conn, c = get_conn()
     query = "delete from users where admin != 1"
     c.execute(query)
@@ -496,7 +458,6 @@ def delete_normal_users() -> None:
 
 
 def mod_user(ids: list[int], what: str, value: Any) -> None:
-    check_db()
     conn, c = get_conn()
     placeholders = ", ".join("?" for _ in ids)
     query = f"update users set {what} = ? where id in ({placeholders})"
@@ -506,18 +467,14 @@ def mod_user(ids: list[int], what: str, value: Any) -> None:
 
 
 def update_user_last_date(user_id: int) -> None:
-    check_db()
     conn, c = get_conn()
-
     c.execute("update users set last_date = ? where id = ?", (utils.now(), user_id))
-
     conn.commit()
     conn.close()
 
 
 def get_random_post(ignore_ids: list[int]) -> Post | None:
-    check_db()
-    conn, c = row_conn()
+    conn, c = get_conn()
     query = "select * from posts p join users u on p.user = u.id where p.id not in ({}) and u.lister = 1 order by random() limit 1"
     placeholders = ", ".join("?" for _ in ignore_ids)
     c.execute(query.format(placeholders), ignore_ids)
@@ -531,7 +488,6 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
 
 
 def update_file_size(name: str, size: int) -> None:
-    check_db()
     conn, c = get_conn()
     c.execute("update posts set size = ? where name = ?", (size, name))
     conn.commit()
@@ -539,7 +495,6 @@ def update_file_size(name: str, size: int) -> None:
 
 
 def add_reaction(post_id: int, user_id: int, value: str, mode: str) -> int | None:
-    check_db()
     conn, c = get_conn()
     cols = ["post", "user", "value", "mode", "date"]
     placeholders = ", ".join("?" for _ in cols)
@@ -566,13 +521,6 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
     )
 
 
-def get_reaction(
-    reaction_id: int, oconn: sqlite3.Connection | None = None
-) -> Reaction | None:
-    reactions = get_reactions(reaction_id=reaction_id, oconn=oconn)
-    return reactions[0] if reactions else None
-
-
 def get_reactions(
     post_id: int | None = None,
     reaction_id: int | None = None,
@@ -581,12 +529,7 @@ def get_reactions(
     user: User | None = None,
     oconn: sqlite3.Connection | None = None,
 ) -> list[Reaction]:
-    if not oconn:
-        check_db()
-        conn, c = row_conn()
-    else:
-        conn = oconn
-        c = conn.cursor()
+    conn, c = get_conn(oconn)
 
     if reaction_id:
         c.execute("select * from reactions where id = ?", (reaction_id,))
@@ -611,9 +554,10 @@ def get_reactions(
 
     reactions = []
     rows = [row for row in rows if row]
+    cols = [desc[0] for desc in c.description]
 
     for row in rows:
-        reaction = make_reaction(dict(row))
+        reaction = make_reaction(dict(zip(cols, row)))
 
         if post:
             rpost = post
@@ -626,11 +570,8 @@ def get_reactions(
             ruser = None
 
         if not rpost:
-            c.execute("select * from posts where id = ?", (row["post"],))
-            dbpost = c.fetchone()
-
-            if dbpost:
-                rpost = make_post(dict(dbpost))
+            rposts = get_posts(post_id=reaction.post, extra=False, oconn=conn)
+            rpost = rposts[0] if rposts else None
 
         if rpost:
             reaction.pname = rpost.name
@@ -638,11 +579,8 @@ def get_reactions(
             reaction.pname = ""
 
         if not ruser:
-            c.execute("select * from users where id = ?", (row["user"],))
-            dbuser = c.fetchone()
-
-            if dbuser:
-                ruser = make_user(dict(dbuser))
+            rusers = get_users(user_id=reaction.user, oconn=conn)
+            ruser = rusers[0] if rusers else None
 
         if ruser:
             reaction.username = ruser.username
@@ -666,12 +604,7 @@ def get_reaction_count(
     user_id: int | None = None,
     oconn: sqlite3.Connection | None = None,
 ) -> int:
-    if not oconn:
-        check_db()
-        conn, c = get_conn()
-    else:
-        conn = oconn
-        c = conn.cursor()
+    conn, c = get_conn(oconn)
 
     if user_id:
         c.execute(
@@ -693,13 +626,7 @@ def get_reaction_count(
 def get_post_count(
     user_id: int | None = None, oconn: sqlite3.Connection | None = None
 ) -> int:
-    if not oconn:
-        check_db()
-        conn, c = get_conn()
-    else:
-        conn = oconn
-        c = conn.cursor()
-
+    conn, c = get_conn(oconn)
     c.execute("select count(*) from posts where user = ?", (user_id,))
     result = c.fetchone()
     count = result[0] if result is not None else 0
@@ -711,8 +638,7 @@ def get_post_count(
 
 
 def get_latest_post() -> Post | None:
-    check_db()
-    conn, c = row_conn()
+    conn, c = get_conn()
     c.execute("select * from posts order by date desc limit 1")
     row = c.fetchone()
     conn.close()
@@ -724,7 +650,6 @@ def get_latest_post() -> Post | None:
 
 
 def delete_reaction(reaction_id: int) -> None:
-    check_db()
     conn, c = get_conn()
     c.execute("delete from reactions where id = ?", (reaction_id,))
     conn.commit()
@@ -732,7 +657,6 @@ def delete_reaction(reaction_id: int) -> None:
 
 
 def delete_all_posts() -> None:
-    check_db()
     conn, c = get_conn()
     c.execute("delete from posts")
     conn.commit()
@@ -740,7 +664,6 @@ def delete_all_posts() -> None:
 
 
 def delete_all_reactions() -> None:
-    check_db()
     conn, c = get_conn()
     c.execute("delete from reactions")
     conn.commit()
@@ -748,7 +671,6 @@ def delete_all_reactions() -> None:
 
 
 def edit_reaction(reaction_id: int, value: str, mode: str) -> None:
-    check_db()
     conn, c = get_conn()
 
     c.execute(
@@ -761,7 +683,6 @@ def edit_reaction(reaction_id: int, value: str, mode: str) -> None:
 
 
 def username_exists(username: str) -> bool:
-    check_db()
     conn, c = get_conn()
     c.execute("select username from users where username = ?", (username,))
     result = c.fetchone()

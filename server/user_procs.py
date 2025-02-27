@@ -268,7 +268,8 @@ def sort_users(users: list[User], sort: str) -> None:
 
 
 def get_user(user_id: int | None = None, username: str | None = None) -> User | None:
-    user = database.get_user(user_id=user_id, username=username)
+    users = database.get_users(user_id=user_id, username=username)
+    user = users[0] if users else None
 
     if not user:
         return None

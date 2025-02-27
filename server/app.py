@@ -18,11 +18,14 @@ import upload_procs
 import post_procs
 import user_procs
 import react_procs
+import database
 from config import config
 from post_procs import Post
 from user_procs import User
 from react_procs import Reaction
 
+# Possible exit here
+database.check_db()
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -522,13 +525,13 @@ def delete_all_posts() -> Any:
 @login_required
 def delete_post() -> Any:
     data = request.get_json()
-    name = data.get("name", None)
+    post_id = data.get("post_id", None)
     user = get_user()
 
     if not user:
         return error_json
 
-    return post_procs.delete_post(name, user=user)
+    return post_procs.delete_post(post_id, user=user)
 
 
 @app.route("/edit_title", methods=["POST"])  # type: ignore

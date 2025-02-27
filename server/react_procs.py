@@ -87,13 +87,22 @@ def react(post_id: int, text: str, user: User, mode: str) -> tuple[str, int]:
     if not reaction_id:
         return utils.bad("Reaction failed")
 
-    dbr = database.get_reaction(reaction_id)
+    reaction = get_reaction(reaction_id)
 
-    if dbr:
-        reaction = make_reaction(dbr, utils.now())
+    if reaction:
         return utils.ok(data={"reaction": reaction})
 
     return utils.bad("Reaction failed")
+
+
+def get_reaction(reaction_id: int) -> Reaction | None:
+    reactions = database.get_reactions(reaction_id)
+    reaction = reactions[0] if reactions else None
+
+    if not reaction:
+        return None
+
+    return make_reaction(reaction, utils.now())
 
 
 def get_reactionlist(user_id: int | None = None) -> list[Reaction]:
@@ -205,7 +214,7 @@ def delete_reaction(reaction_id: int, user: User) -> tuple[str, int]:
     if not user:
         return utils.bad("You are not logged in")
 
-    reaction = database.get_reaction(reaction_id)
+    reaction = get_reaction(reaction_id)
 
     if not reaction:
         return utils.bad("Reaction not found")
@@ -214,7 +223,7 @@ def delete_reaction(reaction_id: int, user: User) -> tuple[str, int]:
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        if reaction.user != user.id:
+        if reaction.user_id != user.id:
             if not user.admin:
                 return utils.bad("You can't delete this reaction")
 
@@ -255,7 +264,7 @@ def edit_reaction(
     if not check_reaction(text, mode):
         return utils.bad("Invalid reaction")
 
-    reaction = database.get_reaction(reaction_id)
+    reaction = get_reaction(reaction_id)
 
     if not reaction:
         return utils.bad("Reaction not found")
@@ -264,14 +273,13 @@ def edit_reaction(
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        if reaction.user != user.id:
+        if reaction.user_id != user.id:
             return utils.bad("You can't edit this reaction")
 
     database.edit_reaction(reaction_id, text, mode)
-    dbr = database.get_reaction(reaction_id)
+    new_reaction = get_reaction(reaction_id)
 
-    if dbr:
-        new_reaction = make_reaction(dbr, utils.now())
+    if new_reaction:
         return utils.ok(data={"reaction": new_reaction})
 
     return utils.bad("Reaction edit failed")
