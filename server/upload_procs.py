@@ -91,8 +91,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                     else:
                         title = ""
 
-                    username = user.username
-                    listed = user.lister
                     mtype, _ = mimetypes.guess_type(path)
                     mtype = mtype or ""
 
@@ -104,18 +102,17 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                         sample = ""
 
                     database.add_post(
+                        user_id=user.id,
                         name=name,
                         ext=cext,
                         title=title,
                         original=pfile.stem,
-                        username=username,
                         mtype=mtype,
-                        listed=listed,
                         size=size,
                         sample=sample,
                     )
 
-                    database.update_user_last_date(username)
+                    database.update_user_last_date(user.id)
                 except Exception as e:
                     utils.error(e)
                     return error("Failed to save file")

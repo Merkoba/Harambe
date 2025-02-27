@@ -356,6 +356,8 @@ def edit_user(
     if not request:
         return error("No Request")
 
+    user = None
+
     if mode == "edit":
         user = get_user(user_id)
 

@@ -262,8 +262,13 @@ def sort_posts(posts: list[Post], sort: str) -> None:
         posts.sort(key=lambda x: x.mtype, reverse=False)
 
 
-def get_post(post_id: int, full: bool = False, increase: bool = False) -> Post | None:
-    post = database.get_post(post_id)
+def get_post(
+    post_id: int | None = None,
+    name: str | None = None,
+    full: bool = False,
+    increase: bool = False,
+) -> Post | None:
+    post = database.get_post(post_id=post_id, name=name)
 
     if post:
         now = utils.now()
@@ -279,7 +284,10 @@ def get_post(post_id: int, full: bool = False, increase: bool = False) -> Post |
     return None
 
 
-def increase_post_views(post_id: int) -> None:
+def increase_post_views(post_id: int | None) -> None:
+    if not post_id:
+        return
+
     database.increase_post_views(post_id)
 
 
@@ -453,8 +461,8 @@ def get_latest_post() -> Post | None:
     return None
 
 
-def get_post_update(name: str) -> tuple[bool, dict[str, Any]]:
-    post = get_post(name, full=True, increase=False)
+def get_post_update(post_id: int) -> tuple[bool, dict[str, Any]]:
+    post = get_post(post_id, full=True, increase=False)
 
     if post:
         return True, {

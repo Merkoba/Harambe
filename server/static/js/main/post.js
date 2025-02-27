@@ -94,7 +94,7 @@ window.onload = function() {
   }
   else if (vars.mtype.startsWith(`application`)) {
     if (vars.mtype.includes(`flash`)) {
-      start_flash(vars.name)
+      start_flash()
     }
   }
 
@@ -438,7 +438,7 @@ function update_date() {
   DOM.el(`#date_2`).textContent = date_2
 }
 
-function start_flash(file) {
+function start_flash() {
   let ruffle = window.RufflePlayer.newest()
   let player = ruffle.createPlayer()
   player.id = `flash`
@@ -446,7 +446,7 @@ function start_flash(file) {
   player.style.height = `600px`
   let container = DOM.el(`#flash_container`)
   container.appendChild(player)
-  player.ruffle().load(`/${vars.file_path}/${file}`)
+  player.ruffle().load(`/${vars.file_path}/${vars.post_id}`)
 }
 
 function react_alert() {

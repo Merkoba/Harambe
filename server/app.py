@@ -32,22 +32,21 @@ app.secret_key = config.app_key
 CORS(app)
 
 
-def get_username() -> str:
-    return str(session.get("username", ""))
+def get_user_id() -> int:
+    return int(session.get("user_id", 0))
 
 
 def get_user() -> User | None:
-    username = get_username()
-    return user_procs.get_user(username)
+    return user_procs.get_user(get_user_id())
 
 
 def logged_in() -> bool:
-    return bool(get_username())
+    return bool(get_user_id())
 
 
 def can_read(user: User | None = None) -> bool:
     if not user:
-        user = user_procs.get_user(get_username())
+        user = user_procs.get_user(get_user_id())
 
     if not user:
         return False
@@ -65,7 +64,7 @@ def login_required(f: Any) -> Any:
         if not logged_in():
             return redirect(url_for("login"))
 
-        user = user_procs.get_user(get_username())
+        user = user_procs.get_user(get_user_id())
 
         if not user:
             return redirect(url_for("login"))
@@ -81,7 +80,7 @@ def admin_required(f: Any) -> Any:
         if not logged_in():
             return redirect(url_for("login"))
 
-        user = user_procs.get_user(get_username())
+        user = user_procs.get_user(get_user_id())
 
         if (not user) or (not user.admin):
             return redirect(url_for("login"))
@@ -94,7 +93,7 @@ def admin_required(f: Any) -> Any:
 def reader_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
-        user = user_procs.get_user(get_username())
+        user = user_procs.get_user(get_user_id())
 
         if not list_visible(user):
             return redirect(url_for("index"))
@@ -132,6 +131,12 @@ def rate_limit(n: int) -> str:
 
 def over() -> Any:
     return render_template("over.jinja")
+
+
+def fill_session(user: User) -> None:
+    session["user_id"] = user.id
+    session["username"] = user.username
+    session["admin"] = user.admin
 
 
 def theme_configs() -> dict[str, Any]:
@@ -283,7 +288,7 @@ def post(name: str) -> Any:
         if not user:
             return over()
 
-    post = post_procs.get_post(name, full=True, increase=True)
+    post = post_procs.get_post(name=name, full=True, increase=True)
 
     if not post:
         return over()
@@ -331,12 +336,12 @@ def post(name: str) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def refresh() -> Any:
     data = request.get_json()
-    name = data.get("name", None)
+    post_id = data.get("post_id", None)
 
-    if not name:
+    if not post_id:
         return error_json
 
-    ok, update = post_procs.get_post_update(name)
+    ok, update = post_procs.get_post_update(post_id)
 
     if not ok:
         return error_json
@@ -344,11 +349,11 @@ def refresh() -> Any:
     return {"update": update}, 200
 
 
-@app.route("/next/<string:current>", methods=["GET"])  # type: ignore
+@app.route("/next/<int:current>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 @reader_required
-def next_post(current: str) -> Any:
+def next_post(current: int) -> Any:
     name = post_procs.get_next_post(current)
 
     if not name:
@@ -376,11 +381,11 @@ def random_post() -> Any:
 # FILE
 
 
-@app.route(f"/{config.file_path}/<path:name>", methods=["GET"])  # type: ignore
-@app.route(f"/{config.file_path}/<path:name>/<string:original>", methods=["GET"])  # type: ignore
+@app.route(f"/{config.file_path}/<int:post_id>", methods=["GET"])  # type: ignore
+@app.route(f"/{config.file_path}/<int:post_id>/<string:original>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-def get_file(name: str, original: str | None = None) -> Any:
+def get_file(post_id: int, original: str | None = None) -> Any:
     if not config.allow_hotlinks:
         referrer = request.referrer
         host = request.host_url
@@ -394,7 +399,7 @@ def get_file(name: str, original: str | None = None) -> Any:
         if not user:
             return over()
 
-    post = post_procs.get_post(name, full=False, increase=True)
+    post = post_procs.get_post(post_id, full=False, increase=True)
 
     if not post:
         return over()
@@ -551,8 +556,7 @@ def login() -> Any:
         ok, message, user = user_procs.login(request)
 
         if ok and user:
-            session["username"] = user.username
-            session["admin"] = user.admin
+            fill_session(user)
             return redirect(url_for("index"))
 
     return render_template(
@@ -575,8 +579,7 @@ def register() -> Any:
         ok, message, user = user_procs.register(request)
 
         if ok and user:
-            session["username"] = user.username
-            session["admin"] = user.admin
+            fill_session(user)
             return redirect(url_for("index"))
 
     return render_template(
@@ -701,25 +704,25 @@ def latest_post() -> Any:
 # USERS
 
 
-@app.route("/edit_user", defaults={"username": ""}, methods=["GET", "POST"])  # type: ignore
-@app.route("/edit_user/<string:username>", methods=["GET", "POST"])  # type: ignore
+@app.route("/edit_user", defaults={"user_id": 0}, methods=["GET", "POST"])  # type: ignore
+@app.route("/edit_user/<int:user_id>", methods=["GET", "POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 @admin_required
-def edit_user(username: str = "") -> Any:
-    if username:
+def edit_user(user_id: int = 0) -> Any:
+    if user_id:
         mode = "edit"
     else:
         mode = "add"
 
     def show_edit(message: str = "") -> Any:
-        user = user_procs.get_user(username)
+        user = user_procs.get_user(user_id)
 
         if (not user) and mode == "edit":
             return redirect(url_for("admin", what="users"))
 
         if user and (mode == "edit"):
-            title = f"Edit: {user.username}"
+            title = f"Edit: {user.id}"
         else:
             title = "Add User"
 
@@ -743,15 +746,15 @@ def edit_user(username: str = "") -> Any:
         return redirect(url_for("admin", what="users"))
 
     if request.method == "POST":
-        ok, user_id = user_procs.edit_user(mode, request, username, user)
+        ok, msg, uid = user_procs.edit_user(mode, request, user, user_id)
 
         if ok:
             if mode == "add":
-                return redirect(url_for("edit_user", username=user_id))
+                return redirect(url_for("edit_user", user_id=uid))
 
             return show_edit("Updated")
 
-        return show_edit(user_id)
+        return show_edit(msg)
 
     return show_edit()
 
@@ -817,9 +820,9 @@ def delete_normal_users() -> Any:
 @admin_required
 def delete_user() -> Any:
     data = request.get_json()
-    username = data.get("username", None)
+    user_id = data.get("user_id", None)
 
-    if not username:
+    if not user_id:
         return error_json
 
     user = get_user()
@@ -827,7 +830,7 @@ def delete_user() -> Any:
     if not user:
         return error_json
 
-    return user_procs.delete_user(username, user.username)
+    return user_procs.delete_user(user_id, user.id)
 
 
 @app.route("/mod_user", methods=["POST"])  # type: ignore
