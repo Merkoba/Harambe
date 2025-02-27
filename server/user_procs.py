@@ -38,6 +38,7 @@ class UserData:
 
 @dataclass
 class User:
+    id: int
     username: str
     password: str
     admin: bool
@@ -65,6 +66,7 @@ class User:
 
 
 user_types = {
+    "id": "int",
     "username": "string",
     "password": "string",
     "admin": "bool",
@@ -100,6 +102,7 @@ def make_user(user: DbUser) -> User:
     num_reactions = user.num_reactions if user.num_reactions else 0
 
     return User(
+        user.id,
         user.username,
         user.password,
         user.admin,
@@ -127,8 +130,8 @@ def make_user(user: DbUser) -> User:
     )
 
 
-def get_userlist(username: str = "") -> list[User]:
-    users = database.get_users(username=username)
+def get_userlist(user_id: int | None = None) -> list[User]:
+    users = database.get_users(user_id=user_id)
     return [make_user(user) for user in users]
 
 
@@ -138,7 +141,7 @@ def get_users(
     query: str = "",
     sort: str = "register_date",
     admin: bool = False,
-    username: str = "",
+    user_id: int | None = None,
 ) -> tuple[list[User], str, bool]:
     psize = 0
 
@@ -153,8 +156,8 @@ def get_users(
     query = utils.clean_query(query)
 
     for user in get_userlist():
-        if username:
-            if user.username != username:
+        if user_id:
+            if user.id != user_id:
                 continue
 
         ok = (
@@ -264,16 +267,13 @@ def sort_users(users: list[User], sort: str) -> None:
         users.sort(key=lambda x: x.mark, reverse=False)
 
 
-def get_user(username: str) -> User | None:
-    user = database.get_user(username)
+def get_user(user_id: int | None = None, username: str | None = None) -> User | None:
+    user = database.get_user(user_id=user_id, username=username)
 
     if not user:
         return None
 
-    if user.username == username:
-        return make_user(user)
-
-    return None
+    return make_user(user)
 
 
 def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
@@ -348,17 +348,32 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
 
 
 def edit_user(
-    mode: str, request: Request, username: str, admin: User
-) -> tuple[bool, str]:
+    mode: str, request: Request, admin: User, user_id: int | None = None
+) -> tuple[bool, str, int | None]:
+    def error(msg: str) -> tuple[bool, str, None]:
+        return False, msg, None
+
     if not request:
-        return False, "No Request"
+        return error("No Request")
+
+    if mode == "edit":
+        user = get_user(user_id)
+
+        if not user:
+            return error("User not found")
 
     args = {}
 
     if mode == "add":
         args["username"] = request.form.get("username").lower()
+
+        if database.username_exists(args["username"]):
+            return error("Username already exists")
     elif mode == "edit":
-        args["username"] = username
+        if user:
+            args["username"] = user.username
+        else:
+            return error("User not found")
 
     args["password"] = request.form.get("password")
     args["name"] = request.form.get("name")
@@ -400,12 +415,6 @@ def edit_user(
     n_args = {}
     user = None
 
-    if mode == "edit":
-        user = get_user(username)
-
-        if not user:
-            return False, "User not found"
-
     for key in args:
         if mode == "edit":
             if key in ["username"]:
@@ -414,32 +423,21 @@ def edit_user(
         ok, value = check_value(user, key, args[key])
 
         if not ok:
-            return False, f"Invalid Value '{key}'"
+            return error(f"Invalid Value '{key}'")
 
         n_args[key] = value
 
-    uname = username or n_args["username"]
-
-    if not uname:
-        return False, "Missing Username"
-
-    if mode == "add":
-        user = get_user(uname)
-
-        if user:
-            return False, "Already Exists"
-
-    if uname == admin.username:
+    if user and (user.id == admin.id):
         args["admin"] = True
 
-    required = ["password"]
+    required = ["username", "password"]
 
     if not all(n_args.get(key) for key in required):
-        return False, "Missing Required"
+        return error("Missing Required")
 
-    database.add_user(
+    user_id = database.add_user(
         mode,
-        uname,
+        n_args["username"],
         n_args["password"],
         n_args["admin"],
         n_args["name"],
@@ -452,12 +450,11 @@ def edit_user(
         n_args["reacter"],
     )
 
-    check_user_changes(user, n_args)
-    return True, uname
+    return True, "Ok", user_id
 
 
 def check_auth(username: str, password: str) -> User | None:
-    user = get_user(username)
+    user = get_user(username=username)
 
     if not user:
         return None
@@ -469,35 +466,35 @@ def check_auth(username: str, password: str) -> User | None:
     return None
 
 
-def delete_users(usernames: list[str], admin: str) -> tuple[str, int]:
-    if not usernames:
+def delete_users(ids: list[int], admin_id: int) -> tuple[str, int]:
+    if not ids:
         return utils.bad("Usernames were not provided")
 
-    if admin in usernames:
+    if admin_id in ids:
         return utils.bad("You can't delete yourself")
 
-    for username in usernames:
+    for username in ids:
         do_delete_user(username)
 
     return utils.ok("User deleted successfully")
 
 
-def delete_user(username: str, admin: str) -> tuple[str, int]:
-    if not username:
-        return utils.bad("Usename was not provided")
+def delete_user(user_id: int, admin_id: int) -> tuple[str, int]:
+    if not user_id:
+        return utils.bad("User id was not provided")
 
-    if username == admin:
+    if user_id == admin_id:
         return utils.bad("You can't delete yourself")
 
-    do_delete_user(username)
+    do_delete_user(user_id)
     return utils.ok("User deleted successfully")
 
 
-def do_delete_user(username: str) -> None:
-    if not username:
+def do_delete_user(user_id: int) -> None:
+    if not user_id:
         return
 
-    database.delete_user(username)
+    database.delete_user(user_id)
 
 
 def delete_normal_users() -> tuple[str, int]:
@@ -557,7 +554,6 @@ def mod_user(
         return utils.bad("Invalid value")
 
     database.mod_user(usernames, what, new_value)
-    check_user_changes(user, {"name": value})
     return utils.ok()
 
 
@@ -621,12 +617,3 @@ def register(request: Request) -> tuple[bool, str, User | None]:
         return False, "User not found", None
 
     return True, "User registered successfully", user
-
-
-def check_user_changes(user: User | None, args: dict[str, Any]) -> None:
-    if not user:
-        return
-
-    if "lister" in args:
-        if user.lister != args["lister"]:
-            database.change_listed(user.username, args["lister"])

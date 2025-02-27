@@ -3,7 +3,6 @@ import re
 
 # Modules
 import database
-import utils
 
 
 # Create tables or fill missing values

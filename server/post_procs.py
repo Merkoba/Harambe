@@ -62,7 +62,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     size = post.size
     views = post.views
     username = post.username
-    uploader = post.user.name if post.user else ""
+    uploader = post.uploader
     mtype = post.mtype
     listed = post.listed
     original = post.original
@@ -262,8 +262,8 @@ def sort_posts(posts: list[Post], sort: str) -> None:
         posts.sort(key=lambda x: x.mtype, reverse=False)
 
 
-def get_post(name: str, full: bool = False, increase: bool = False) -> Post | None:
-    post = database.get_post(name)
+def get_post(post_id: int, full: bool = False, increase: bool = False) -> Post | None:
+    post = database.get_post(post_id)
 
     if post:
         now = utils.now()
@@ -272,36 +272,36 @@ def get_post(name: str, full: bool = False, increase: bool = False) -> Post | No
             diff = now - post.view_date
 
             if diff > config.view_delay:
-                increase_post_views(name)
+                increase_post_views(post_id)
 
         return make_post(post, now, full)
 
     return None
 
 
-def increase_post_views(name: str) -> None:
-    database.increase_post_views(name)
+def increase_post_views(post_id: int) -> None:
+    database.increase_post_views(post_id)
 
 
-def get_next_post(name: str) -> str | None:
-    if not name:
+def get_next_post(post_id: int) -> str | None:
+    if not post_id:
         return None
 
-    post = database.get_next_post(name)
+    post = database.get_next_post(post_id)
     return post.name if post else None
 
 
-def get_random_post(used_names: list[str]) -> str | None:
-    post = database.get_random_post(used_names)
+def get_random_post(used_ids: list[int]) -> str | None:
+    post = database.get_random_post(used_ids)
     return post.name if post else None
 
 
-def delete_posts(names: list[str]) -> tuple[str, int]:
-    if not names:
-        return utils.bad("Post names were not provided")
+def delete_posts(ids: list[int]) -> tuple[str, int]:
+    if not ids:
+        return utils.bad("Post ids were not provided")
 
-    for name in names:
-        post = database.get_post(name)
+    for post_id in ids:
+        post = database.get_post(post_id)
 
         if post:
             do_delete_post(post)
@@ -309,15 +309,15 @@ def delete_posts(names: list[str]) -> tuple[str, int]:
     return utils.ok("Post deleted successfully")
 
 
-def delete_post(name: str, user: User) -> tuple[str, int]:
-    if not name:
-        return utils.bad("Post name was not provided")
+def delete_post(post_id: int, user: User) -> tuple[str, int]:
+    if not post_id:
+        return utils.bad("Post post_id was not provided")
 
     if not user.admin:
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        db_post = database.get_post(name)
+        db_post = database.get_post(post_id)
 
         if not db_post:
             return utils.bad("Post not found")
@@ -325,7 +325,7 @@ def delete_post(name: str, user: User) -> tuple[str, int]:
         if db_post.username != user.username:
             return utils.bad("You are not the uploader")
 
-    post = database.get_post(name)
+    post = database.get_post(post_id)
 
     if post:
         do_delete_post(post)
@@ -413,16 +413,16 @@ def check_storage() -> None:
         total_files -= 1
         total_size -= oldest_file[1]
         name = oldest_file[0].name
-        post = database.get_post(name)
+        post = database.get_post(name=name)
 
         if post:
             do_delete_post(post)
 
 
-def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
+def edit_post_title(post_id: int, title: str, user: User) -> tuple[str, int]:
     title = title or ""
 
-    if not name:
+    if not post_id:
         return utils.bad("Missing values")
 
     if len(title) > config.max_title_length:
@@ -432,7 +432,7 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        db_post = database.get_post(name)
+        db_post = database.get_post(post_id)
 
         if not db_post:
             return utils.bad("Post not found")
@@ -440,7 +440,7 @@ def edit_post_title(name: str, title: str, user: User) -> tuple[str, int]:
         if db_post.username != user.username:
             return utils.bad("You are not the uploader")
 
-    database.edit_post_title(name, title)
+    database.edit_post_title(post_id, title)
     return utils.ok("Title updated")
 
 

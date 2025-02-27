@@ -1,5 +1,4 @@
 import sqlite3
-import database
 import utils
 from pathlib import Path
 

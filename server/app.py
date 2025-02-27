@@ -362,12 +362,12 @@ def next_post(current: str) -> Any:
 @payload_check()
 @reader_required
 def random_post() -> Any:
-    used_names = session["used_names"] if "used_names" in session else []
-    name = post_procs.get_random_post(used_names)
+    used_ids = session["used_ids"] if "used_ids" in session else []
+    name = post_procs.get_random_post(used_ids)
 
     if name:
-        used_names.append(name)
-        session["used_names"] = used_names
+        used_ids.append(name)
+        session["used_ids"] = used_ids
         return redirect(url_for("post", name=name))
 
     return over()
@@ -743,15 +743,15 @@ def edit_user(username: str = "") -> Any:
         return redirect(url_for("admin", what="users"))
 
     if request.method == "POST":
-        ok, value = user_procs.edit_user(mode, request, username, user)
+        ok, user_id = user_procs.edit_user(mode, request, username, user)
 
         if ok:
             if mode == "add":
-                return redirect(url_for("edit_user", username=value))
+                return redirect(url_for("edit_user", username=user_id))
 
             return show_edit("Updated")
 
-        return show_edit(value)
+        return show_edit(user_id)
 
     return show_edit()
 
@@ -790,9 +790,9 @@ def user_edit() -> Any:
 @admin_required
 def delete_users() -> Any:
     data = request.get_json()
-    usernames = data.get("usernames", None)
+    ids = data.get("ids", None)
 
-    if not usernames:
+    if not ids:
         return error_json
 
     user = get_user()
@@ -800,7 +800,7 @@ def delete_users() -> Any:
     if not user:
         return error_json
 
-    return user_procs.delete_users(usernames, user.username)
+    return user_procs.delete_users(ids, user.id)
 
 
 @app.route("/delete_normal_users", methods=["POST"])  # type: ignore

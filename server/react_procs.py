@@ -15,8 +15,8 @@ from user_procs import User
 @dataclass
 class Reaction:
     id: int
-    post: str
-    user: str
+    post: int
+    user: int
     value: str
     mode: str
     listed: bool
@@ -54,11 +54,11 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     )
 
 
-def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
+def react(post_id: int, text: str, user: User, mode: str) -> tuple[str, int]:
     if not user:
         return utils.bad("You are not logged in")
 
-    if not name:
+    if not post_id:
         return utils.bad("Missing values")
 
     text = text.strip()
@@ -73,15 +73,15 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     if not check_reaction(text, mode):
         return utils.bad("Invalid reaction")
 
-    if database.get_reaction_count(name, user.username) >= config.max_user_reactions:
+    if database.get_reaction_count(post_id, user.id) >= config.max_user_reactions:
         return utils.bad("You can't add more reactions")
 
-    id_ = database.add_reaction(name, user.username, text, mode, user.lister)
+    reaction_id = database.add_reaction(post_id, user.id, text, mode)
 
-    if not id_:
+    if not reaction_id:
         return utils.bad("Reaction failed")
 
-    dbr = database.get_reaction(id_)
+    dbr = database.get_reaction(reaction_id)
 
     if dbr:
         reaction = make_reaction(dbr, utils.now())
@@ -90,9 +90,9 @@ def react(name: str, text: str, user: User, mode: str) -> tuple[str, int]:
     return utils.bad("Reaction failed")
 
 
-def get_reactionlist(username: str = "") -> list[Reaction]:
+def get_reactionlist(user_id: int | None = None) -> list[Reaction]:
     now = utils.now()
-    reactions = database.get_reactions(username=username)
+    reactions = database.get_reactions(user_id=user_id)
     return [make_reaction(reaction, now) for reaction in reactions]
 
 
@@ -102,7 +102,7 @@ def get_reactions(
     query: str = "",
     sort: str = "date",
     admin: bool = False,
-    username: str = "",
+    user_id: int | None = None,
     max_reactions: int = 0,
     only_listed: bool = False,
 ) -> tuple[list[Reaction], str, bool]:
@@ -118,7 +118,7 @@ def get_reactions(
     reactions = []
     query = utils.clean_query(query)
 
-    for reaction in get_reactionlist(username):
+    for reaction in get_reactionlist(user_id):
         if only_listed:
             if not reaction.listed:
                 continue
@@ -186,20 +186,20 @@ def delete_reactions(ids: list[int]) -> tuple[str, int]:
     if not ids:
         return utils.bad("Ids were not provided")
 
-    for id_ in ids:
-        do_delete_reaction(id_)
+    for reaction_id in ids:
+        do_delete_reaction(reaction_id)
 
     return utils.ok("Reaction deleted successfully")
 
 
-def delete_reaction(id_: int, user: User) -> tuple[str, int]:
-    if not id_:
+def delete_reaction(reaction_id: int, user: User) -> tuple[str, int]:
+    if not reaction_id:
         return utils.bad("Id was not provided")
 
     if not user:
         return utils.bad("You are not logged in")
 
-    reaction = database.get_reaction(id_)
+    reaction = database.get_reaction(reaction_id)
 
     if not reaction:
         return utils.bad("Reaction not found")
@@ -208,19 +208,19 @@ def delete_reaction(id_: int, user: User) -> tuple[str, int]:
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        if reaction.user != user.username:
+        if reaction.user != user.id:
             if not user.admin:
                 return utils.bad("You can't delete this reaction")
 
-    do_delete_reaction(id_)
+    do_delete_reaction(reaction_id)
     return utils.ok("Reaction deleted successfully")
 
 
-def do_delete_reaction(id_: int) -> None:
-    if not id_:
+def do_delete_reaction(reaction_id: int) -> None:
+    if not reaction_id:
         return
 
-    database.delete_reaction(id_)
+    database.delete_reaction(reaction_id)
 
 
 def delete_all_reactions() -> tuple[str, int]:
@@ -229,9 +229,9 @@ def delete_all_reactions() -> tuple[str, int]:
 
 
 def edit_reaction(
-    id_: int, text: str, user: User, mode: str = "text"
+    reaction_id: int, text: str, user: User, mode: str = "text"
 ) -> tuple[str, int]:
-    if not id_:
+    if not reaction_id:
         return utils.bad("Id was not provided")
 
     if not user:
@@ -249,7 +249,7 @@ def edit_reaction(
     if not check_reaction(text, mode):
         return utils.bad("Invalid reaction")
 
-    reaction = database.get_reaction(id_)
+    reaction = database.get_reaction(reaction_id)
 
     if not reaction:
         return utils.bad("Reaction not found")
@@ -258,11 +258,11 @@ def edit_reaction(
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        if reaction.user != user.username:
+        if reaction.user != user.id:
             return utils.bad("You can't edit this reaction")
 
-    database.edit_reaction(id_, text, mode)
-    dbr = database.get_reaction(id_)
+    database.edit_reaction(reaction_id, text, mode)
+    dbr = database.get_reaction(reaction_id)
 
     if dbr:
         new_reaction = make_reaction(dbr, utils.now())
