@@ -144,9 +144,11 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     )
 
 
-def get_postlist(username: str = "", full_reactions: bool = False) -> list[Post]:
+def get_postlist(
+    user_id: int | None = None, full_reactions: bool = False
+) -> list[Post]:
     now = utils.now()
-    posts = database.get_posts(username=username, full_reactions=full_reactions)
+    posts = database.get_posts(user_id=user_id, full_reactions=full_reactions)
     return [make_post(post, now) for post in posts]
 
 
@@ -156,7 +158,7 @@ def get_posts(
     query: str = "",
     sort: str = "date",
     max_posts: int = 0,
-    username: str = "",
+    user_id: int | None = None,
     only_listed: bool = False,
     admin: bool = False,
 ) -> tuple[list[Post], str, bool]:
@@ -173,7 +175,7 @@ def get_posts(
     total_size = 0
     query = utils.clean_query(query)
 
-    for post in get_postlist(username):
+    for post in get_postlist(user_id):
         if only_listed:
             if not post.listed:
                 continue

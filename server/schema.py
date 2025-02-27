@@ -3,6 +3,7 @@ import re
 
 # Modules
 import database
+import utils
 
 
 # Create tables or fill missing values
@@ -19,6 +20,9 @@ def make_database() -> None:
         schema = database.schemas[what]
 
         for column, c_type in schema.items():
+            if "foreign" in column:
+                continue
+
             if column not in columns:
                 c.execute(f"alter table {what} add column {column} {c_type}")
             else:
@@ -26,6 +30,7 @@ def make_database() -> None:
 
                 if match:
                     defvalue = match.group(1)
+
                     c.execute(
                         f"update {what} set {column} = {defvalue} where {column} is null"
                     )

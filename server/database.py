@@ -20,21 +20,24 @@ schemas = {
         "title": "text default ''",
         "views": "integer default 0",
         "original": "text default ''",
-        "username": "text default ''",
         "mtype": "text default ''",
         "view_date": "integer default 0",
-        "listed": "integer default 1",
         "size": "integer default 0",
         "sample": "text default ''",
+        #
+        "user": "integer",
+        "foreign key(user)": "references users(id)",
     },
     "reactions": {
         "id": "integer primary key autoincrement",
-        "post": "text default ''",
-        "user": "text default ''",
         "value": "text default ''",
         "mode": "text default ''",
-        "listed": "int default 1",
         "date": "int default 0",
+        #
+        "post": "integer",
+        "user": "integer",
+        "foreign key(post)": "references posts(id)",
+        "foreign key(user)": "references users(id)",
     },
     "users": {
         "id": "integer primary key autoincrement",
@@ -71,7 +74,6 @@ class Post:
     username: str
     mtype: str
     view_date: int
-    listed: bool
     size: int
     sample: str
     reactions: list[Reaction] = field(default_factory=list)
@@ -117,7 +119,6 @@ class Reaction:
     user: str
     value: str
     mode: str
-    listed: bool
     date: int
     uname: str | None = None
 
@@ -165,7 +166,6 @@ def add_post(
     original: str,
     username: str,
     mtype: str,
-    listed: bool,
     size: int,
     sample: str,
 ) -> None:
@@ -183,13 +183,12 @@ def add_post(
         username,
         mtype,
         date,
-        listed,
         size,
         sample,
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (name, ext, date, title, views, original, username, mtype, view_date, listed, size, sample) values ({placeholders})"
+    query = f"insert into posts (name, ext, date, title, views, original, username, mtype, view_date, size, sample) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -197,6 +196,7 @@ def add_post(
 
 def make_post(row: dict[str, Any]) -> Post:
     return Post(
+        id=int(row.get("id")),
         name=row["name"],
         ext=row["ext"],
         date=row["date"],
@@ -206,7 +206,6 @@ def make_post(row: dict[str, Any]) -> Post:
         username=row.get("username") or "",
         mtype=row.get("mtype") or "",
         view_date=int(row.get("view_date") or 0),
-        listed=bool(row.get("listed")),
         size=int(row.get("size") or 0),
         sample=row.get("sample") or "",
     )
@@ -218,23 +217,23 @@ def get_post(name: str, full_reactions: bool = True) -> Post | None:
 
 
 def get_posts(
-    name: str | None = None, username: str | None = None, full_reactions: bool = False
+    post_id: int | None = None, user_id: int | None = None, full_reactions: bool = False
 ) -> list[Post]:
     check_db()
     conn, c = row_conn()
 
     if name:
-        if username:
+        if user_id:
             c.execute(
-                "select * from posts where name = ? and username = ?", (name, username)
+                "select * from posts where id = ? and user = ?", (post_id, user_id)
             )
         else:
-            c.execute("select * from posts where name = ?", (name,))
+            c.execute("select * from posts where id = ?", (post_id,))
 
         rows = [c.fetchone()]
     else:
-        if username:
-            c.execute("select * from posts where username = ?", (username,))
+        if user_id:
+            c.execute("select * from posts where user = ?", (user_id,))
         else:
             c.execute("select * from posts")
 
@@ -247,7 +246,7 @@ def get_posts(
         post = make_post(dict(row))
 
         if full_reactions:
-            reactions = get_reactions(post.name, oconn=conn)
+            reactions = get_reactions(post.id, oconn=conn)
 
             if reactions:
                 post.reactions = reactions
@@ -255,9 +254,9 @@ def get_posts(
                 post.reactions = []
         else:
             post.reactions = []
-            post.num_reactions = get_reaction_count(post.name, oconn=conn)
+            post.num_reactions = get_reaction_count(post.id, oconn=conn)
 
-        user = get_user(post.username, oconn=conn)
+        user = get_user(post.user, oconn=conn)
 
         if user:
             post.user = user
@@ -299,11 +298,11 @@ def edit_post_title(name: str, title: str) -> None:
     conn.close()
 
 
-def get_next_post(current: str) -> Post | None:
+def get_next_post(current: int) -> Post | None:
     check_db()
     conn, c = row_conn()
 
-    c.execute("select * from posts where name = ?", (current,))
+    c.execute("select * from posts where id = ?", (current,))
     current_row = c.fetchone()
 
     if not current_row:
@@ -313,7 +312,7 @@ def get_next_post(current: str) -> Post | None:
     date = current_row["date"]
 
     c.execute(
-        "select * from posts where date < ? and listed = 1 order by date desc limit 1",
+        "select * from posts p join users u on p.user = u.id where u.listed = 1 and p.date < ? order by p.date desc limit 1",
         (date,),
     )
 
@@ -339,6 +338,7 @@ def add_user(
     lister: bool = True,
     poster: bool = True,
     reacter: bool = True,
+    user_id: int | None = None,
 ) -> bool:
     check_db()
 
@@ -377,20 +377,14 @@ def add_user(
     ]
 
     if mode == "add":
-        c.execute("select * from users where username = ?", (username,))
-
-        if c.fetchone():
-            conn.close()
-            return False
-
         values.extend([date, date])
         columns.extend(["register_date", "last_date"])
         placeholders = ", ".join(["?"] * len(values))
         query = f"insert into users ({', '.join(columns)}) values ({placeholders})"
     elif mode == "edit":
-        values.append(username)
+        values.append(user_id)
         clause = ", ".join([f"{col} = ?" for col in columns])
-        query = f"update users set {clause} where username = ?"
+        query = f"update users set {clause} where id = ?"
     else:
         return False
 
@@ -402,6 +396,7 @@ def add_user(
 
 def make_user(row: dict[str, Any]) -> User:
     return User(
+        id=int(row.get("id")),
         username=row.get("username") or "",
         password=row.get("password") or "",
         admin=bool(row.get("admin")),
@@ -418,13 +413,13 @@ def make_user(row: dict[str, Any]) -> User:
     )
 
 
-def get_user(username: str, oconn: sqlite3.Connection | None = None) -> User | None:
-    users = get_users(username, oconn=oconn)
+def get_user(user_id: str, oconn: sqlite3.Connection | None = None) -> User | None:
+    users = get_users(user_id, oconn=oconn)
     return users[0] if users else None
 
 
 def get_users(
-    username: str | None = None, oconn: sqlite3.Connection | None = None
+    user_id: int | None = None, oconn: sqlite3.Connection | None = None
 ) -> list[User]:
     if not oconn:
         check_db()
@@ -433,8 +428,8 @@ def get_users(
         conn = oconn
         c = conn.cursor()
 
-    if username:
-        c.execute("select * from users where username = ?", (username,))
+    if user_id:
+        c.execute("select * from users where id = ?", (user_id,))
         rows = [c.fetchone()]
     else:
         c.execute("select * from users")
@@ -445,10 +440,8 @@ def get_users(
 
     for row in rows:
         user = make_user(dict(row))
-        c.execute("select count(*) from posts where username = ?", (row["username"],))
-        user.num_posts = c.fetchone()[0]
-        c.execute("select count(*) from reactions where user = ?", (row["username"],))
-        user.num_reactions = c.fetchone()[0]
+        user.num_posts = get_post_count(user=row["id"], oconn=conn)
+        user.num_reactions = get_reaction_count(user=row["id"], oconn=conn)
         users.append(user)
 
     if not oconn:
@@ -457,10 +450,10 @@ def get_users(
     return users
 
 
-def delete_user(username: str) -> None:
+def delete_user(user_id: int) -> None:
     check_db()
     conn, c = get_conn()
-    c.execute("delete from users where username = ?", (username,))
+    c.execute("delete from users where id = ?", (user_id,))
     conn.commit()
     conn.close()
 
@@ -474,23 +467,21 @@ def delete_normal_users() -> None:
     conn.close()
 
 
-def mod_user(usernames: list[str], what: str, value: Any) -> None:
+def mod_user(ids: list[str], what: str, value: Any) -> None:
     check_db()
     conn, c = get_conn()
-    placeholders = ", ".join("?" for _ in usernames)
-    query = f"update users set {what} = ? where username in ({placeholders})"
-    c.execute(query, (value, *usernames))
+    placeholders = ", ".join("?" for _ in ids)
+    query = f"update users set {what} = ? where id in ({placeholders})"
+    c.execute(query, (value, *ids))
     conn.commit()
     conn.close()
 
 
-def update_user_last_date(username: str) -> None:
+def update_user_last_date(user_id: int) -> None:
     check_db()
     conn, c = get_conn()
 
-    c.execute(
-        "update users set last_date = ? where username = ?", (utils.now(), username)
-    )
+    c.execute("update users set last_date = ? where id = ?", (utils.now(), user_id))
 
     conn.commit()
     conn.close()
@@ -519,32 +510,21 @@ def update_file_size(name: str, size: int) -> None:
     conn.close()
 
 
-def change_listed(username: str, listed: bool) -> None:
+def add_reaction(post: str, user: str, value: str, mode: str) -> int | None:
     check_db()
     conn, c = get_conn()
-    c.execute("update posts set listed = ? where username = ?", (listed, username))
-    c.execute("update reactions set listed = ? where user = ?", (listed, username))
-    conn.commit()
-    conn.close()
-
-
-def add_reaction(
-    post: str, user: str, value: str, mode: str, listed: bool
-) -> int | None:
-    check_db()
-    conn, c = get_conn()
-    cols = ["post", "user", "value", "mode", "listed", "date"]
+    cols = ["post", "user", "value", "mode", "date"]
     placeholders = ", ".join("?" for _ in cols)
 
     c.execute(
         f"insert into reactions ({','.join(cols)}) values ({placeholders}) returning id",
-        (post, user, value, mode, listed, utils.now()),
+        (post, user, value, mode, utils.now()),
     )
 
-    id_ = c.fetchone()[0]
+    reaction_id = c.fetchone()[0]
     conn.commit()
     conn.close()
-    return int(id_) if id_ is not None else None
+    return int(reaction_id) if reaction_id is not None else None
 
 
 def make_reaction(row: dict[str, Any]) -> Reaction:
@@ -554,20 +534,21 @@ def make_reaction(row: dict[str, Any]) -> Reaction:
         user=row.get("user") or "",
         value=row.get("value") or "",
         mode=row.get("mode") or "",
-        listed=bool(row.get("listed")),
         date=int(row.get("date") or 0),
     )
 
 
-def get_reaction(id_: int, oconn: sqlite3.Connection | None = None) -> Reaction | None:
-    reactions = get_reactions(id_=id_, oconn=oconn)
+def get_reaction(
+    reaction_id: int, oconn: sqlite3.Connection | None = None
+) -> Reaction | None:
+    reactions = get_reactions(reaction_id=reaction_id, oconn=oconn)
     return reactions[0] if reactions else None
 
 
 def get_reactions(
-    post: str | None = None,
-    id_: int | None = None,
-    username: str | None = None,
+    post_id: int | None = None,
+    reaction_id: int | None = None,
+    user_id: int | None = None,
     oconn: sqlite3.Connection | None = None,
 ) -> list[Reaction]:
     if not oconn:
@@ -577,21 +558,22 @@ def get_reactions(
         conn = oconn
         c = conn.cursor()
 
-    if id_:
-        c.execute("select * from reactions where id = ?", (id_,))
+    if reaction_id:
+        c.execute("select * from reactions where id = ?", (reaction_id,))
         rows = [c.fetchone()]
-    elif post:
-        if username:
+    elif post_id:
+        if user_id:
             c.execute(
-                "select * from reactions where post = ? and user = ?", (post, username)
+                "select * from reactions where post = ? and user = ?",
+                (post_id, user_id),
             )
         else:
-            c.execute("select * from reactions where post = ?", (post,))
+            c.execute("select * from reactions where post = ?", (post_id,))
 
         rows = c.fetchall()
     else:
-        if username:
-            c.execute("select * from reactions where user = ?", (username,))
+        if user_id:
+            c.execute("select * from reactions where user = ?", (user_id,))
         else:
             c.execute("select * from reactions")
 
@@ -602,7 +584,7 @@ def get_reactions(
 
     for row in rows:
         reaction = make_reaction(dict(row))
-        c.execute("select * from users where username = ?", (row["user"],))
+        c.execute("select * from users where id = ?", (row["user"],))
         user = c.fetchone()
 
         if user:
@@ -617,7 +599,7 @@ def get_reactions(
 
 
 def get_reaction_count(
-    post: str, user: str | None = None, oconn: sqlite3.Connection | None = None
+    post: int, user: int | None = None, oconn: sqlite3.Connection | None = None
 ) -> int:
     if not oconn:
         check_db()
@@ -643,6 +625,26 @@ def get_reaction_count(
     return count
 
 
+def get_post_count(
+    user: int | None = None, oconn: sqlite3.Connection | None = None
+) -> int:
+    if not oconn:
+        check_db()
+        conn, c = get_conn()
+    else:
+        conn = oconn
+        c = conn.cursor()
+
+    c.execute("select count(*) from posts where user = ?", (user,))
+    result = c.fetchone()
+    count = result[0] if result is not None else 0
+
+    if not oconn:
+        conn.close()
+
+    return count
+
+
 def get_latest_post() -> Post | None:
     check_db()
     conn, c = row_conn()
@@ -656,10 +658,10 @@ def get_latest_post() -> Post | None:
     return None
 
 
-def delete_reaction(id_: int) -> None:
+def delete_reaction(reaction_id: int) -> None:
     check_db()
     conn, c = get_conn()
-    c.execute("delete from reactions where id = ?", (id_,))
+    c.execute("delete from reactions where id = ?", (reaction_id,))
     conn.commit()
     conn.close()
 
@@ -680,41 +682,12 @@ def delete_all_reactions() -> None:
     conn.close()
 
 
-def edit_reaction(id_: int, value: str, mode: str) -> None:
+def edit_reaction(reaction_id: int, value: str, mode: str) -> None:
     check_db()
     conn, c = get_conn()
 
     c.execute(
-        "update reactions set value = ?, mode = ? where id = ?", (value, mode, id_)
-    )
-
-    conn.commit()
-    conn.close()
-
-
-def username_exists(username: str) -> bool:
-    check_db()
-    conn, c = get_conn()
-    c.execute("select * from users where username = ?", (username,))
-    row = c.fetchone()
-    conn.close()
-    return bool(row)
-
-
-def change_username(old_username: str, new_username: str) -> None:
-    check_db()
-    conn, c = get_conn()
-
-    c.execute(
-        "update users set username = ? where username = ?", (new_username, old_username)
-    )
-
-    c.execute(
-        "update posts set username = ? where username = ?", (new_username, old_username)
-    )
-
-    c.execute(
-        "update reactions set user = ? where user = ?", (new_username, old_username)
+        "update reactions set value = ?, mode = ? where id = ?", (value, mode, reaction_id)
     )
 
     conn.commit()

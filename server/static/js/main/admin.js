@@ -266,7 +266,7 @@ function goto_page(page) {
   url.searchParams.set(`page_size`, psize)
 
   if (vars.username) {
-    url.searchParams.set(`username`, vars.username)
+    url.searchParams.set(`user_id`, vars.user_id)
   }
 
   window.location.href = url.href
