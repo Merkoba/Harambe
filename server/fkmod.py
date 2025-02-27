@@ -59,11 +59,10 @@ for reaction in reactions:
         continue
 
     c2.execute(
-        "INSERT INTO reactions (id, value, mode, date, post, user) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO reactions (id, value, date, post, user) VALUES (?, ?, ?, ?, ?, ?)",
         (
             reaction["id"],
             reaction["value"],
-            reaction["mode"],
             reaction["date"],
             post["id"],
             user["id"],
