@@ -381,14 +381,14 @@ async function edit_title() {
         return
       }
 
-      let name = vars.name
+      let post_id = vars.post_id
 
       let response = await fetch(`/edit_title`, {
         method: `POST`,
         headers: {
           "Content-Type": `application/json`,
         },
-        body: JSON.stringify({name, title}),
+        body: JSON.stringify({post_id, title}),
       })
 
       if (response.ok) {
