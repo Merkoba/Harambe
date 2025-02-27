@@ -330,22 +330,6 @@ function setup_reaction_opts() {
   })
 }
 
-function setup_react_opts() {
-  vars.msg_react_opts = Msg.factory()
-  let template = DOM.el(`#template_react_opts`)
-  vars.msg_react_opts.set(template.innerHTML)
-
-  DOM.ev(`#react_opts_text`, `click`, (e) => {
-    vars.msg_react_opts.close()
-    react_text()
-  })
-
-  DOM.ev(`#react_opts_icon`, `click`, (e) => {
-    vars.msg_react_opts.close()
-    react_icon()
-  })
-}
-
 function regex_u(c, n) {
   return `${c}{${n}}`
 }

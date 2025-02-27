@@ -254,11 +254,11 @@ window.onload = function() {
       vars.active_item = el
 
       if (e.target.classList.contains(`reaction_uname`)) {
-        vars.user_opts_username = el.dataset.username
+        vars.user_opts_user_id = el.dataset.user_id
         vars.msg_user_opts.show()
       }
       else if (e.target.classList.contains(`reaction_edit`)) {
-        vars.msg_reaction_opts.show()
+        react_text(el.dataset.id)
       }
     })
   }
@@ -285,8 +285,6 @@ window.onload = function() {
   let react_btn = DOM.el(`#react_btn`)
 
   if (react_btn) {
-    setup_react_opts()
-
     DOM.ev(react_btn, `click`, () => {
       react_text()
     })
@@ -640,7 +638,8 @@ function make_reaction(reaction) {
 
   ago.textContent = reaction.ago
   item.dataset.id = r.id
-  item.dataset.username = r.user
+  item.dataset.user_id = r.user_id
+  item.dataset.username = r.username
   item.dataset.value = r.value
   item.dataset.mode = r.mode
   item.dataset.date = r.date
@@ -719,7 +718,7 @@ function react_text(id) {
       {
         text: `Icon`,
         callback: () => {
-          react_icon()
+          react_icon(id)
           return true
         },
       },
