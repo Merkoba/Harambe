@@ -312,11 +312,11 @@ def edit_post_title(post_id: int, title: str) -> None:
     conn.close()
 
 
-def get_next_post(current: int) -> Post | None:
+def get_next_post(current: str) -> Post | None:
     check_db()
     conn, c = row_conn()
 
-    c.execute("select * from posts where id = ?", (current,))
+    c.execute("select * from posts where name = ?", (current,))
     current_row = c.fetchone()
 
     if not current_row:
@@ -518,7 +518,7 @@ def update_user_last_date(user_id: int) -> None:
 def get_random_post(ignore_ids: list[int]) -> Post | None:
     check_db()
     conn, c = row_conn()
-    query = "select * from posts where id not in ({}) and mtype is not null and mtype != '' and listed = 1 order by random() limit 1"
+    query = "select * from posts p join users u on p.user = u.id where p.id not in ({}) and u.lister = 1 order by random() limit 1"
     placeholders = ", ".join("?" for _ in ignore_ids)
     c.execute(query.format(placeholders), ignore_ids)
     row = c.fetchone()

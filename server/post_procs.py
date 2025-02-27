@@ -295,17 +295,25 @@ def increase_post_views(post_id: int | None) -> None:
     database.increase_post_views(post_id)
 
 
-def get_next_post(post_id: int) -> str | None:
-    if not post_id:
+def get_next_post(name: str) -> Post | None:
+    if not name:
         return None
 
-    post = database.get_next_post(post_id)
-    return post.name if post else None
+    db_post = database.get_next_post(name)
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
 
 
-def get_random_post(used_ids: list[int]) -> str | None:
-    post = database.get_random_post(used_ids)
-    return post.name if post else None
+def get_random_post(used_ids: list[int]) -> Post | None:
+    db_post = database.get_random_post(used_ids)
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
 
 
 def delete_posts(ids: list[int]) -> tuple[str, int]:

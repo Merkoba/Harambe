@@ -355,17 +355,17 @@ def refresh() -> Any:
     return {"update": update}, 200
 
 
-@app.route("/next/<int:current>", methods=["GET"])  # type: ignore
+@app.route("/next/<string:current>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 @reader_required
-def next_post(current: int) -> Any:
-    name = post_procs.get_next_post(current)
+def next_post(current: str) -> Any:
+    post = post_procs.get_next_post(current)
 
-    if not name:
-        return redirect(url_for("post", name=current))
+    if not post:
+        return over()
 
-    return redirect(url_for("post", name=name))
+    return redirect(url_for("post", name=post.name))
 
 
 @app.route("/random", methods=["GET"])  # type: ignore
@@ -374,12 +374,12 @@ def next_post(current: int) -> Any:
 @reader_required
 def random_post() -> Any:
     used_ids = session["used_ids"] if "used_ids" in session else []
-    name = post_procs.get_random_post(used_ids)
+    post = post_procs.get_random_post(used_ids)
 
-    if name:
-        used_ids.append(name)
+    if post:
+        used_ids.append(post.id)
         session["used_ids"] = used_ids
-        return redirect(url_for("post", name=name))
+        return redirect(url_for("post", name=post.name))
 
     return over()
 
