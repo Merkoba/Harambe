@@ -40,7 +40,12 @@ def get_user_id() -> int:
 
 
 def get_user() -> User | None:
-    return user_procs.get_user(get_user_id())
+    user_id = get_user_id()
+
+    if not user_id:
+        return None
+
+    return user_procs.get_user(user_id)
 
 
 def logged_in() -> bool:
@@ -142,12 +147,6 @@ def fill_session(user: User) -> None:
     session["admin"] = user.admin
 
 
-def clear_session() -> None:
-    session.pop("user_id", None)
-    session.pop("username", None)
-    session.pop("admin", None)
-
-
 def theme_configs() -> dict[str, Any]:
     return {
         "background_color": config.background_color,
@@ -183,6 +182,7 @@ text_mtype = "text/plain"
 def index() -> Any:
     user = get_user()
     is_user = bool(user)
+    utils.q(user)
     admin = user and user.admin
 
     if request.method == "POST":
@@ -603,7 +603,7 @@ def register() -> Any:
 @limiter.limit(rate_limit(5))  # type: ignore
 @payload_check()
 def logout() -> Any:
-    clear_session()
+    session.clear()
     return redirect(url_for("index"))
 
 
