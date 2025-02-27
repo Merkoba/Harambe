@@ -288,7 +288,7 @@ window.onload = function() {
     setup_react_opts()
 
     DOM.ev(react_btn, `click`, () => {
-      vars.msg_react_opts.show()
+      react_text()
     })
   }
 }
@@ -715,6 +715,15 @@ function react_text(id) {
         send_reaction(text, `text`)
       }
     },
+    buttons: [
+      {
+        text: `Icon`,
+        callback: () => {
+          react_icon()
+          return true
+        },
+      },
+    ],
   }
 
   prompt_text(prompt_args)

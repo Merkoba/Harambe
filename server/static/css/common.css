@@ -120,7 +120,15 @@ a.linkbutton:hover {
     box-sizing: border-box;
 }
 
-#prompt_submit {
+#prompt_buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.prompt_button {
     font-size: 1rem;
     padding: 0.35rem;
     flex-grow: 1;
@@ -133,8 +141,20 @@ a.linkbutton:hover {
     cursor: pointer;
 }
 
-#prompt_submit:hover {
+.prompt_button:hover {
     background-color: rgb(133 116 161);
+}
+
+.prompt_button_2 {
+    background-color: rgb(75, 157, 166);
+}
+
+.prompt_button_2:hover {
+    background-color: rgb(80, 169, 179);
+}
+
+.prompt_button:hover {
+    filter: brightness(1.1);
 }
 
 .Msg-content {

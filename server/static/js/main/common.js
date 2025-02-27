@@ -105,7 +105,7 @@ function contains_url(text) {
 }
 
 function prompt_text(args = {}) {
-  new Promptext(args)
+  a = new Promptext(args)
 }
 
 function popmsg(message, callback) {

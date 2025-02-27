@@ -33,19 +33,38 @@ class Promptext {
     input.type = `text`
     input.placeholder = args.placeholder
     input.value = args.value
-    let btn = DOM.create(`div`)
-    btn.id = `prompt_submit`
-    btn.textContent = `Submit`
     c.appendChild(input)
-    c.appendChild(btn)
+
+    let buttons = DOM.create(`div`)
+    buttons.id = `prompt_buttons`
+    c.appendChild(buttons)
+
+    let submit_button = DOM.create(`div`, `prompt_button`)
+    submit_button.id = `prompt_submit`
+    submit_button.textContent = `Submit`
+    buttons.appendChild(submit_button)
+
+    for (let btn of args.buttons) {
+      let el = DOM.create(`div`, `prompt_button prompt_button_2`)
+      el.textContent = btn.text
+
+      DOM.ev(el, `click`, () => {
+        if (btn.callback(input.value)) {
+          msg.close()
+        }
+      })
+
+      buttons.appendChild(el)
+    }
+
     msg.set(c)
 
-    function update_btn() {
+    function update_submit_button() {
       if (args.max > 0) {
-        btn.textContent = `Submit (${input.value.length}/${args.max})`
+        submit_button.textContent = `Submit (${input.value.length}/${args.max})`
       }
       else {
-        btn.textContent = `Submit (${input.value.length})`
+        submit_button.textContent = `Submit (${input.value.length})`
       }
     }
 
@@ -56,7 +75,7 @@ class Promptext {
         }
       }
 
-      update_btn()
+      update_submit_button()
     })
 
     DOM.ev(input, `keydown`, (e) => {
@@ -74,8 +93,11 @@ class Promptext {
       }
     })
 
-    DOM.ev(btn, `click`, this.submit)
-    update_btn()
+    DOM.ev(submit_button, `click`, () => {
+      this.submit()
+    })
+
+    update_submit_button()
     this.input = input
     this.args = args
     this.msg = msg
