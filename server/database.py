@@ -245,8 +245,7 @@ def get_posts(
         rows = [c.fetchone()]
     elif user_id:
         c.execute("select * from posts where user = ?", (user_id,))
-
-        rows = [c.fetchone()]
+        rows = c.fetchall()
     else:
         c.execute("select * from posts")
         rows = c.fetchall()
