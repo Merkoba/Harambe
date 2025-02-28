@@ -132,7 +132,7 @@ function setup_admin_opts(mode = `normal`) {
   DOM.ev(`#admin_opts_posts`, `click`, (e) => {
     vars.msg_admin_opts.close()
 
-    if (vars.mode.includes(`admin`) || (mode === `admin`)) {
+    if ((vars.mode.includes(`admin`) || (mode === `admin`)) && (mode !== `user`)) {
       window.location = `/admin/posts`
     }
     else {
@@ -143,7 +143,7 @@ function setup_admin_opts(mode = `normal`) {
   DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
     vars.msg_admin_opts.close()
 
-    if (vars.mode.includes(`admin`) || (mode === `admin`)) {
+    if ((vars.mode.includes(`admin`) || (mode === `admin`)) && (mode !== `user`)) {
       window.location = `/admin/reactions`
     }
     else {

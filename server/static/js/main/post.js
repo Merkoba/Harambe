@@ -289,6 +289,16 @@ window.onload = function() {
       react_text()
     })
   }
+
+  let list_btn = DOM.el(`#list`)
+
+  if (list_btn) {
+    setup_admin_opts(`user`)
+
+    DOM.ev(list_btn, `click`, () => {
+      vars.msg_admin_opts.show()
+    })
+  }
 }
 
 function timeago(date) {
