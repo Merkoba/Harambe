@@ -224,6 +224,11 @@ window.onload = () => {
   if (user_opts) {
     setup_user_opts()
   }
+
+  for (let el of DOM.els(`.reaction_value`)) {
+    let v = el.innerText
+    el.innerHTML = text_html(v)
+  }
 }
 
 function goto_page(page) {

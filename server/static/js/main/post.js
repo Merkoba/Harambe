@@ -1023,62 +1023,6 @@ function remove_reaction(id) {
   }
 }
 
-function replace_urls(text) {
-  let here = window.location.origin
-  let re = new RegExp(`${here}/post/([0-9A-Za-z]+)/?$`, `g`)
-  text = text.replace(re, `/post/$1`)
-  re = /https?:\/\/([a-z]{2,3})\.wikipedia\.org\/wiki\/([0-9A-Za-z_()#-]+)\/?$/g
-  text = text.replace(re, `/wiki/$2`)
-  re = /https?:\/\/www\.youtube\.com\/watch\?v=([0-9A-Za-z_-]+)\/?$/g
-  text = text.replace(re, `/yt/$1`)
-  re = /https?:\/\/youtu\.be\/([0-9A-Za-z_-]+)\/?$/g
-  text = text.replace(re, `/yt/$1`)
-  re = /https?:\/\/github\.com\/([0-9A-Za-z_-]+)\/([0-9A-Za-z_-]+)\/?$/g
-  return text.replace(re, `/github/$1/$2`)
-}
-
-function text_html(text) {
-  // Remove < and > to prevent XSS
-  text = text.replace(/</g, `&lt;`)
-  text = text.replace(/>/g, `&gt;`)
-
-  // Markdown
-  text = parse_markdown(text)
-
-  // Internal posts
-  let re = new RegExp(`/post/([0-9A-Za-z]+)`, `gi`)
-  text = text.replace(re, `<a href="/post/$1">Post: $1</a>`)
-
-  // Wikipedia
-  re = /\/wiki\/([0-9A-Za-z_()-]+)(#[0-9A-Za-z_()-]+)?\/?/gi
-
-  text = text.replace(re, (match, g1, g2) => {
-    let u = g1
-    let s = decodeURIComponent(g1)
-
-    if (g2) {
-      u += g2
-      s += decodeURIComponent(g2)
-    }
-
-    return `<a href="https://wikipedia.org/wiki/${u}">Wiki: ${s}</a>`
-  })
-
-  // YouTube
-  re = /\/yt\/([0-9A-Za-z_-]+)\/?/gi
-  text = text.replace(re, `<a href="https://www.youtube.com/watch?v=$1">YT: $1</a>`)
-
-  // GitHub
-  re = /\/github\/([0-9A-Za-z_-]+)\/([0-9A-Za-z_-]+)\/?/gi
-  text = text.replace(re, `<a href="https://github.com/$1/$2">GH: $1/$2</a>`)
-
-  // :image_names:
-  re = /:(\w+):/gi
-  text = text.replace(re, `<img src="/static/icons/$1.gif" class="reaction_icon" title="$1">`)
-
-  return text
-}
-
 function on_image_load() {
   let img = DOM.el(`#image`)
 
