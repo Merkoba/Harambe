@@ -263,7 +263,8 @@ a.link:hover,
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.45rem;
+    white-space: normal;
+    gap: 0.5rem;
 }
 
 .reaction_text {
