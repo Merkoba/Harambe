@@ -612,7 +612,7 @@ function make_reaction(reaction) {
   let item = DOM.create(`div`, `reaction_item`)
   item.innerHTML = t.innerHTML
   let n = vars.max_reaction_name_length
-  let name = reaction.uname_str.substring(0, n).trim()
+  let name = reaction.uname.substring(0, n).trim()
   DOM.el(`.reaction_uname`, item).textContent = name
   DOM.el(`.reaction_value`, item).appendChild(vitem)
   let ago = DOM.el(`.reaction_ago`, item)

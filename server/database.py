@@ -263,9 +263,7 @@ def get_posts(
                 post.listed = False
 
             if full_reactions:
-                reactions = get_reactions(
-                    post_id=post.id, post=post, user=user, oconn=connection
-                )
+                reactions = get_reactions(post_id=post.id, post=post, oconn=connection)
 
                 if reactions:
                     post.reactions = reactions
@@ -550,7 +548,6 @@ def get_reactions(
     post_id: int | None = None,
     user_id: int | None = None,
     post: Post | None = None,
-    user: User | None = None,
     extra: bool = True,
     oconn: Connection | None = None,
 ) -> list[Reaction]:
@@ -590,10 +587,7 @@ def get_reactions(
             else:
                 rpost = None
 
-            if user:
-                ruser = user
-            else:
-                ruser = None
+            ruser = None
 
             if not rpost:
                 rposts = get_posts(post_id=reaction.post, extra=False, oconn=connection)

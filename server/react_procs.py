@@ -24,7 +24,6 @@ class Reaction:
     listed: bool
     date: int
     ago: str
-    uname_str: str
     value_sample: str
     date_str: str
 
@@ -34,7 +33,6 @@ class Reaction:
 
 def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     ago = utils.time_ago(reaction.date, now)
-    uname_str = reaction.uname or "Anon"
     value_sample = utils.space_string(reaction.value)[:140]
     date_str = utils.nice_date(reaction.date)
     username = reaction.username or "?"
@@ -52,7 +50,6 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         reaction.listed,
         reaction.date,
         ago,
-        uname_str,
         value_sample,
         date_str,
     )
