@@ -301,7 +301,7 @@ def get_post(
             diff = now - post.view_date
 
             if diff > config.view_delay:
-                increase_post_views(post_id)
+                increase_post_views(post.id)
 
         return make_post(post, now, full)
 
