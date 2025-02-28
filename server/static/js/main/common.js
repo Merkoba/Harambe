@@ -99,6 +99,11 @@ function set_css_var(name, value) {
   document.documentElement.style.setProperty(`--${name}`, value)
 }
 
+function print_info(msg) {
+  // eslint-disable-next-line no-console
+  console.log(msg)
+}
+
 function print_error(msg) {
   // eslint-disable-next-line no-console
   console.log(`Error: ${msg}`)

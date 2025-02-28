@@ -785,6 +785,7 @@ function modify_reaction(reaction) {
 }
 
 async function refresh() {
+  print_info(`Refreshing post...`)
   let post_id = vars.post_id
 
   let response = await fetch(`/refresh`, {
