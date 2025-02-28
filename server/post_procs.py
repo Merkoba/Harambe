@@ -495,7 +495,7 @@ def get_latest_post() -> Post | None:
 
 
 def get_post_update(post_id: int) -> tuple[bool, dict[str, Any]]:
-    post = get_post(post_id, full=True, increase=False)
+    post = get_post(post_id, full=True, increase=False, full_reactions=True)
 
     if post:
         return True, {
