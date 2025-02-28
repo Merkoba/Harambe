@@ -234,7 +234,7 @@ class Config:
         self.post_refresh_interval = 30
 
         # The number of times to refresh posts before stopping
-        self.post_refresh_times = 10
+        self.post_refresh_times = 30
 
         # Allow users to edit their name
         self.allow_name_edit = True
