@@ -8,6 +8,7 @@ class Promptext {
       multi: false,
       value: ``,
       buttons: [],
+      password: false,
     }
 
     fill_def_args(def_args, args)
@@ -33,8 +34,12 @@ class Promptext {
     input.type = `text`
     input.placeholder = args.placeholder
     input.value = args.value
-    c.appendChild(input)
 
+    if (args.password) {
+      input.type = `password`
+    }
+
+    c.appendChild(input)
     let buttons = DOM.create(`div`)
     buttons.id = `prompt_buttons`
     c.appendChild(buttons)

@@ -294,6 +294,7 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
         if value:
             if len(value) > config.max_user_password_length:
                 return False, None
+
             value = hashpass(value)
         elif user and user.password:
             value = user.password
@@ -548,12 +549,12 @@ def mod_user(
     if user.admin and (what == "admin"):
         ids.remove(user.id)
 
-    ok, value = check_value(None, what, value)
+    ok, checked_value = check_value(None, what, new_value)
 
     if not ok:
         return utils.bad("Invalid value")
 
-    database.mod_user(ids, what, new_value)
+    database.mod_user(ids, what, checked_value)
     return utils.ok()
 
 

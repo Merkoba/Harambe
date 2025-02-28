@@ -182,7 +182,6 @@ text_mtype = "text/plain"
 def index() -> Any:
     user = get_user()
     is_user = bool(user)
-    utils.q(user)
     admin = user and user.admin
 
     if request.method == "POST":
