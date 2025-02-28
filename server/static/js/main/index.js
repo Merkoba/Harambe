@@ -308,6 +308,7 @@ function edit_password() {
   let prompt_args = {
     placeholder: `Enter your new password`,
     max: vars.max_password_length,
+    password: true,
     callback: (value) => {
       if (!value) {
         return
@@ -316,6 +317,7 @@ function edit_password() {
       let prompt_args_2 = {
         placeholder: `Enter the password again`,
         max: vars.max_password_length,
+        password: true,
         callback: (value_2) => {
           if (value !== value_2) {
             popmsg(`Passwords do not match.`)
