@@ -125,7 +125,7 @@ a.linkbutton:hover {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.25rem;
 }
 
 .prompt_button {
