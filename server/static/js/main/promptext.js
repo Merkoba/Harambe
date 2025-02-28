@@ -44,10 +44,10 @@ class Promptext {
     buttons.id = `prompt_buttons`
     c.appendChild(buttons)
 
-    let submit_button = DOM.create(`div`, `prompt_button`)
-    submit_button.id = `prompt_submit`
-    submit_button.textContent = `Submit`
-    buttons.appendChild(submit_button)
+    let button = DOM.create(`div`, `prompt_button`)
+    button.id = `prompt_submit`
+    button.textContent = `Submit`
+    buttons.appendChild(button)
 
     for (let btn of args.buttons) {
       let el = DOM.create(`div`, `prompt_button prompt_button_2`)
@@ -62,15 +62,6 @@ class Promptext {
 
     msg.set(c)
 
-    function update_submit_button() {
-      if (args.max > 0) {
-        submit_button.textContent = `Submit (${input.value.length}/${args.max})`
-      }
-      else {
-        submit_button.textContent = `Submit (${input.value.length})`
-      }
-    }
-
     DOM.ev(input, `input`, (e) => {
       if (args.max > 0) {
         if (input.value.length > args.max) {
@@ -78,7 +69,7 @@ class Promptext {
         }
       }
 
-      update_submit_button()
+      this.update_button()
     })
 
     DOM.ev(input, `keydown`, (e) => {
@@ -109,15 +100,16 @@ class Promptext {
       }
     })
 
-    DOM.ev(submit_button, `click`, () => {
+    DOM.ev(button, `click`, () => {
       this.submit()
     })
 
-    update_submit_button()
+    this.button = button
     this.input = input
     this.args = args
     this.msg = msg
     Promptext.instance = this
+    this.update_button()
     msg.show()
     input.focus()
   }
@@ -133,6 +125,7 @@ class Promptext {
   insert(text) {
     let value = this.input.value.trim()
     this.input.value = `${value} ${text.trim()} `
+    this.update_button()
     this.input.selectionStart = this.input.value.length
     this.input.focus()
   }
@@ -145,5 +138,14 @@ class Promptext {
 
   focus() {
     this.input.focus()
+  }
+
+  update_button() {
+    if (this.args.max > 0) {
+      this.button.textContent = `Submit (${this.input.value.length}/${this.args.max})`
+    }
+    else {
+      this.button.textContent = `Submit (${this.input.value.length})`
+    }
   }
 }
