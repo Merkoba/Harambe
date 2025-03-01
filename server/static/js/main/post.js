@@ -293,7 +293,7 @@ window.onload = function() {
   let menu = DOM.el(`#menu`)
 
   if (menu) {
-    setup_explore_opts(`user`)
+    setup_explore_opts()
 
     DOM.ev(menu, `click`, () => {
       vars.msg_explore_opts.show()

@@ -129,7 +129,11 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function setup_explore_opts(mode = `normal`) {
+function setup_explore_opts(username) {
+  if (vars.msg_explore_opts) {
+    return
+  }
+
   vars.msg_explore_opts = Msg.factory()
   let template = DOM.el(`#template_explore_opts`)
   vars.msg_explore_opts.set(template.innerHTML)
@@ -179,6 +183,10 @@ function setup_explore_opts(mode = `normal`) {
     window.location = `/random`
   })
 
+  DOM.ev(`#explore_opts_you`, `click`, (e) => {
+    setup_you_opts(vars.user_id, true)
+  })
+
   let ret = DOM.el(`#explore_opts_return`)
 
   if (ret) {
@@ -189,19 +197,26 @@ function setup_explore_opts(mode = `normal`) {
   }
 }
 
-function setup_you_opts(username) {
+function setup_you_opts(user_id, show = false) {
+  if (vars.msg_you_opts) {
+    if (show) {
+      vars.msg_you_opts.show()
+      return
+    }
+  }
+
   vars.msg_you_opts = Msg.factory()
   let template = DOM.el(`#template_you_opts`)
   vars.msg_you_opts.set(template.innerHTML)
 
   DOM.ev(`#you_opts_posts`, `click`, (e) => {
     vars.msg_you_opts.close()
-    window.location = `/list/posts?username=${username}`
+    window.location = `/list/posts?user_id=${user_id}`
   })
 
   DOM.ev(`#you_opts_reactions`, `click`, (e) => {
     vars.msg_you_opts.close()
-    window.location = `/list/reactions?username=${username}`
+    window.location = `/list/reactions?user_id=${user_id}`
   })
 
   DOM.ev(`#you_opts_edit_name`, `click`, (e) => {
@@ -225,13 +240,8 @@ function setup_you_opts(username) {
     confirmbox(confirm_args)
   })
 
-  let ret = DOM.el(`#you_opts_return`)
-
-  if (ret) {
-    DOM.ev(ret, `click`, (e) => {
-      vars.msg_admin_opts.close()
-      window.location = `/`
-    })
+  if (show) {
+    vars.msg_you_opts.show()
   }
 }
 

@@ -134,22 +134,6 @@ window.onload = () => {
     })
   }
 
-  let you_btn = DOM.el(`#you_btn`)
-
-  if (you_btn) {
-    setup_you_opts(vars.username)
-
-    DOM.ev(you_btn, `click`, (e) => {
-      vars.msg_you_opts.show()
-    })
-
-    DOM.ev(you_btn, `auxclick`, (e) => {
-      if (e.button === 1) {
-        window.location = `/list/posts`
-      }
-    })
-  }
-
   let submit_btn = DOM.el(`#submit_btn`)
 
   if (submit_btn) {

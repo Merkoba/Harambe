@@ -211,7 +211,7 @@ window.onload = () => {
   let explore_opts = DOM.el(`#template_explore_opts`)
 
   if (explore_opts) {
-    setup_explore_opts(true)
+    setup_explore_opts()
 
     let menu = DOM.el(`#menu`)
 

@@ -235,12 +235,12 @@ def index() -> Any:
         links=config.links,
         show_list=show_list,
         show_admin=admin,
-        is_admin=admin,
-        description=config.description_index,
         is_user=is_user,
+        is_admin=admin,
         user_id=user.id if user else 0,
         username=user.username if user else "",
         user_name=user.name if user else "",
+        description=config.description_index,
         upload_enabled=config.web_uploads_enabled,
         max_name_length=config.max_user_name_length,
         max_password_length=config.max_user_password_length,
@@ -305,9 +305,11 @@ def post(name: str) -> Any:
 
     if user:
         owned = user.admin or ((post.username == user.username) and config.allow_edit)
+        is_user = True
         is_admin = user.admin
     else:
         owned = False
+        is_user = False
         is_admin = False
 
     show_list = list_visible(user)
@@ -330,10 +332,13 @@ def post(name: str) -> Any:
         post_refresh_times=config.post_refresh_times,
         max_post_name_length=config.max_post_name_length,
         max_reaction_name_length=config.max_reaction_name_length,
+        is_user=is_user,
         is_admin=is_admin,
+        user_id=user.id if user else 0,
+        username=user.username if user else "",
+        user_name=user.name if user else "",
         can_react=can_react,
         show_list=show_list,
-        is_user=bool(user),
         **theme_configs(),
     )
 
@@ -426,6 +431,11 @@ def admin(what: str) -> Any:
     if what not in ["posts", "users", "reactions"]:
         return redirect(url_for("index"))
 
+    user = get_user()
+
+    if not user:
+        return over()
+
     query = request.args.get("query", "")
     def_date = "register_date" if what == "users" else "date"
     sort = request.args.get("sort", def_date)
@@ -490,9 +500,12 @@ def admin(what: str) -> Any:
         page_size=page_size,
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
-        user_id=user_id,
         sort=sort,
+        is_user=True,
         is_admin=True,
+        user_id=user_id,
+        username=user.username if user else "",
+        user_name=user.name if user else "",
         **theme_configs(),
     )
 
@@ -609,6 +622,7 @@ def logout() -> Any:
 @app.route("/list/<string:what>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
+@reader_required
 def show_list(what: str) -> Any:
     user = get_user()
 
@@ -685,8 +699,11 @@ def show_list(what: str) -> Any:
         page_size=page_size,
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
-        user_id=user_id,
+        is_user=True,
         is_admin=admin,
+        user_id=user_id,
+        username=user.username,
+        user_name=user.name,
         sort=sort,
         back="/",
         **theme_configs(),
