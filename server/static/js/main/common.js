@@ -565,3 +565,41 @@ function user_mod_input(what, vtype, callback) {
 
   prompt_text(prompt_args)
 }
+
+function edit_name() {
+  user_mod_input(`name`, `string`, (what, value, vtype) => {
+    do_user_edit(what, value, vtype, `Name`, () => {
+      vars.user_name = value
+      DOM.el(`#user_name`).textContent = value
+    })
+  })
+}
+
+function edit_password() {
+  user_mod_input(`password`, `password`, (what, value, vtype) => {
+    do_user_edit(what, value, vtype, `Password`)
+  })
+}
+
+async function do_user_edit(what, value, vtype, title, callback) {
+  let ids = [vars.user_id]
+
+  let response = await fetch(`/mod_user`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({ids, what, value, vtype}),
+  })
+
+  if (response.ok) {
+    popmsg(`${title} updated.`, () => {
+      if (callback) {
+        callback()
+      }
+    })
+  }
+  else {
+    print_error(response.status)
+  }
+}
