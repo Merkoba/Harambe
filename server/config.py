@@ -228,7 +228,7 @@ class Config:
         self.max_user_reactions = 20
 
         # Max reactions allowed on a post
-        self.post_reaction_limit = 200
+        self.post_reaction_limit = 250
 
         # Seconds interval to refresh post pages
         self.post_refresh_interval = 30

@@ -272,6 +272,12 @@ def get_posts(
             else:
                 post.reactions = []
                 post.num_reactions = get_reaction_count(post.id, oconn=connection)
+                last_reaction = get_last_reaction(post.id, oconn=connection)
+
+                if last_reaction:
+                    post.reactions = [last_reaction]
+                else:
+                    post.reactions = []
 
         posts.append(post)
 
@@ -642,6 +648,23 @@ def get_reaction_count(
         conn.close()
 
     return count
+
+
+def get_last_reaction(post_id: int, oconn: Connection | None = None) -> Reaction | None:
+    connection = get_conn(oconn)
+    conn, c = connection.tuple()
+    c.execute(
+        "select * from reactions where post = ? order by date desc limit 1", (post_id,)
+    )
+    row = c.fetchone()
+
+    if not oconn:
+        conn.close()
+
+    if row:
+        return make_reaction(dict(row))
+
+    return None
 
 
 def get_post_count(user_id: int | None = None, oconn: Connection | None = None) -> int:

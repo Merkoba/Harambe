@@ -52,6 +52,7 @@ class Post:
     flash_embed: bool
     text_embed: bool
     markdown_embed: bool
+    last_reaction: str
 
 
 def get_full_name(dbpost: DbPost) -> str:
@@ -92,6 +93,11 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     uploader_str = uploader or "Anon"
     mtype_str = mtype or ext or "?"
     num_reactions = post.num_reactions
+
+    if post.reactions:
+        last_reaction = post.reactions[-1].value
+    else:
+        last_reaction = ""
 
     if all_data:
         sample = post.sample
@@ -156,6 +162,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         flash_embed,
         text_embed,
         markdown_embed,
+        last_reaction,
     )
 
 

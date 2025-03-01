@@ -229,6 +229,11 @@ window.onload = () => {
     let v = el.innerText
     el.innerHTML = text_html(v)
   }
+
+  for (let el of DOM.els(`.last_reaction`)) {
+    let v = el.innerText
+    el.innerHTML = text_html(v)
+  }
 }
 
 function goto_page(page) {

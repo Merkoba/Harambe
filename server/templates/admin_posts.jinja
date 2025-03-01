@@ -108,6 +108,7 @@
             <div id="date" class="table_cell underline" data-sort="date" title="The date when this post was created">Date</div>
             <div id="views" class="table_cell underline small" data-sort="views" title="The number of times the post has been viewed">Views</div>
             <div id="reactions" class="table_cell underline small" data-sort="reactions" title="The number of reactions the post has">Reactions</div>
+            <div id="last_reaction" class="table_cell underline" data-sort="reactions" title="The last reaction to this post">Reaction</div>
 
             {% if mode == "admin_posts" %}
             <div id="listed" class="table_cell views underline small" data-sort="listed" title="The post appears in the list">Listed</div>
@@ -157,6 +158,9 @@
 
             <!-- Reactions -->
             <div class="table_cell small" title="{{item.num_reactions}}">{{item.num_reactions}}</div>
+
+            <!-- Last Reaction -->
+            <div class="table_cell last_reaction" title="{{item.last_reaction}}">{{item.last_reaction}}</div>
 
             {% if mode == "admin_posts" %}
             <!-- Listed -->
