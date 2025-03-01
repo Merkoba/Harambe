@@ -155,17 +155,17 @@ function setup_explore_opts(mode = `normal`) {
     })
   }
 
-  if (DOM.el(`#explore_opts_list_reactions`)) {
-    DOM.ev(`#explore_opts_list_reactions`, `click`, (e) => {
+  if (DOM.el(`#explore_opts_admin_reactions`)) {
+    DOM.ev(`#explore_opts_admin_reactions`, `click`, (e) => {
       vars.msg_explore_opts.close()
-      window.location = `/list/reactions`
+      window.location = `/admin/reactions`
     })
   }
 
-  if (DOM.el(`#explore_opts_list_users`)) {
-    DOM.ev(`#explore_opts_list_users`, `click`, (e) => {
+  if (DOM.el(`#explore_opts_admin_users`)) {
+    DOM.ev(`#explore_opts_admin_users`, `click`, (e) => {
       vars.msg_explore_opts.close()
-      window.location = `/list/users`
+      window.location = `/admin/users`
     })
   }
 

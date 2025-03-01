@@ -72,9 +72,9 @@ window.onload = () => {
   let edit = DOM.el(`#edit`)
 
   if (edit) {
-    vars.msg_edit = Msg.factory()
-    let t = DOM.el(`#template_edit`)
-    vars.msg_edit.set(t.innerHTML)
+    vars.msg_user_edit = Msg.factory()
+    let t = DOM.el(`#template_user_edit`)
+    vars.msg_user_edit.set(t.innerHTML)
 
     if (vars.mode === `admin_users`) {
       DOM.ev(`#edit_reader_yes`, `click`, () => {
@@ -132,7 +132,10 @@ window.onload = () => {
 
     DOM.ev(edit, `click`, () => {
       if (get_selected().length > 0) {
-        vars.msg_edit.show()
+        vars.msg_user_edit.show()
+      }
+      else {
+        popmsg(`No users are selected`)
       }
     })
   }
