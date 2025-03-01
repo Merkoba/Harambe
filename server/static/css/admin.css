@@ -73,6 +73,12 @@ a:hover {
     border-right: 1px solid var(--border_color);
 }
 
+.table_cell img {
+    height: 1.6rem;
+    max-height: 100%;
+    width: auto;
+}
+
 .table_cell.checkbox {
     flex: 0 0 auto;
     width: 3rem;
