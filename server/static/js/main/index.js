@@ -285,63 +285,29 @@ function show_you() {
 }
 
 function edit_name() {
-  let prompt_args = {
-    placeholder: `Enter your new public name`,
-    value: vars.user_name,
-    max: vars.max_name_length,
-    callback: (value) => {
-      if (!value) {
-        return
-      }
-
-      do_edit(`name`, value, `Name`, () => {
-        vars.user_name = value
-        DOM.el(`#user_name`).textContent = value
-      })
-    },
-  }
-
-  prompt_text(prompt_args)
+  user_mod_input(`name`, `string`, (what, value, vtype) => {
+    do_edit(what, value, vtype, `Name`, () => {
+      vars.user_name = value
+      DOM.el(`#user_name`).textContent = value
+    })
+  })
 }
 
 function edit_password() {
-  let prompt_args = {
-    placeholder: `Enter your new password`,
-    max: vars.max_password_length,
-    password: true,
-    callback: (value) => {
-      if (!value) {
-        return
-      }
-
-      let prompt_args_2 = {
-        placeholder: `Enter the password again`,
-        max: vars.max_password_length,
-        password: true,
-        callback: (value_2) => {
-          if (value !== value_2) {
-            popmsg(`Passwords do not match.`)
-            return
-          }
-
-          do_edit(`password`, value, `Password`)
-        },
-      }
-
-      prompt_text(prompt_args_2)
-    },
-  }
-
-  prompt_text(prompt_args)
+  user_mod_input(`password`, `password`, (what, value, vtype) => {
+    do_edit(what, value, vtype, `Password`)
+  })
 }
 
-async function do_edit(what, value, title, callback) {
-  let response = await fetch(`/user_edit`, {
+async function do_edit(what, value, vtype, title, callback) {
+  let ids = [vars.user_id]
+
+  let response = await fetch(`/mod_user`, {
     method: `POST`,
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({what, value}),
+    body: JSON.stringify({ids, what, value, vtype}),
   })
 
   if (response.ok) {

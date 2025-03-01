@@ -237,6 +237,7 @@ def index() -> Any:
         show_admin=admin,
         description=config.description_index,
         is_user=is_user,
+        user_id=user.id if user else 0,
         username=user.username if user else "",
         user_name=user.name if user else "",
         upload_enabled=config.web_uploads_enabled,
@@ -755,34 +756,6 @@ def edit_user(user_id: int = 0) -> Any:
         return show_edit(msg)
 
     return show_edit()
-
-
-@app.route("/user_edit", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-@login_required
-def user_edit() -> Any:
-    user = get_user()
-
-    if not user:
-        return error_json
-
-    data = request.get_json()
-    what = data.get("what", None)
-    value = data.get("value", None)
-
-    if what not in ["name", "password"]:
-        return error_json
-
-    if not getattr(config, f"allow_{what}_edit"):
-        return error_json
-
-    if (what == "name") or (what == "password"):
-        vtype = "string"
-    else:
-        return error_json
-
-    return user_procs.mod_user([user.id], what, value, vtype, user)
 
 
 @app.route("/delete_users", methods=["POST"])  # type: ignore

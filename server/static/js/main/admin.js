@@ -859,60 +859,6 @@ function filter_focused() {
   return filter && (document.activeElement === filter)
 }
 
-function user_mod_input(what, vtype) {
-  let repeat = false
-
-  if (vtype === `password`) {
-    repeat = true
-  }
-
-  function send(value) {
-    if (vtype === `password`) {
-      vtype = `string`
-    }
-
-    if (vtype === `number`) {
-      value_1 = parseInt(value)
-
-      if (isNaN(value)) {
-        value_1 = 0
-      }
-    }
-
-    mod_user(what, value, vtype)
-  }
-
-  let prompt_args = {
-    placeholder: `New value for ${what}`,
-    max: vars.text_reaction_length,
-    password: vtype === `password`,
-    callback: (value_1) => {
-      if (!repeat) {
-        send(value_1)
-        return
-      }
-
-      let prompt_args_2 = {
-        placeholder: `Enter value again`,
-        max: vars.text_reaction_length,
-        password: vtype === `password`,
-        callback: (value_2) => {
-          if (value_1 !== value_2) {
-            popmsg(`Values don't match`)
-            return
-          }
-
-          send(value_2)
-        },
-      }
-
-      prompt_text(prompt_args_2)
-    },
-  }
-
-  prompt_text(prompt_args)
-}
-
 function on_checkbox_click(e) {
   if (e.shiftKey && vars.last_checkbox) {
     let checked = vars.last_checkbox.checked
