@@ -184,6 +184,7 @@ function setup_explore_opts(username) {
   })
 
   DOM.ev(`#explore_opts_you`, `click`, (e) => {
+    vars.msg_explore_opts.close()
     setup_you_opts(vars.user_id, true)
   })
 
