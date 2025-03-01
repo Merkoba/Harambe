@@ -235,6 +235,7 @@ def index() -> Any:
         links=config.links,
         show_list=show_list,
         show_admin=admin,
+        is_admin=admin,
         description=config.description_index,
         is_user=is_user,
         user_id=user.id if user else 0,
@@ -491,6 +492,7 @@ def admin(what: str) -> Any:
         max_title_length=config.max_title_length,
         user_id=user_id,
         sort=sort,
+        is_admin=True,
         **theme_configs(),
     )
 
@@ -684,6 +686,7 @@ def show_list(what: str) -> Any:
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
         user_id=user_id,
+        is_admin=admin,
         sort=sort,
         back="/",
         **theme_configs(),

@@ -290,13 +290,13 @@ window.onload = function() {
     })
   }
 
-  let list_btn = DOM.el(`#list`)
+  let menu = DOM.el(`#menu`)
 
-  if (list_btn) {
-    setup_admin_opts(`user`)
+  if (menu) {
+    setup_explore_opts(`user`)
 
-    DOM.ev(list_btn, `click`, () => {
-      vars.msg_admin_opts.show()
+    DOM.ev(menu, `click`, () => {
+      vars.msg_explore_opts.show()
     })
   }
 }

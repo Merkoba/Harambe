@@ -64,34 +64,8 @@
     </div>
 </template>
 
-<template id="template_admin_opts">
-    <div class="dialog_container">
-        <div id="admin_opts_posts" class="aero_button">Posts</div>
-        <div id="admin_opts_reactions" class="aero_button">Reactions</div>
-        <div id="admin_opts_users" class="aero_button">Users</div>
-        <div id="admin_opts_return" class="aero_button">Return</div>
-    </div>
-</template>
-
-{% if mode == "admin_users" %}
-<template id="template_user_opts">
-    <div class="dialog_container">
-        <div id="user_opts_posts" class="aero_button">Posts</div>
-        <div id="user_opts_reactions" class="aero_button">Reactions</div>
-        <div id="user_opts_user" class="aero_button">User</div>
-    </div>
-</template>
-{% else %}
-<template id="template_user_opts">
-    <div class="dialog_container">
-        <div id="user_opts_posts" class="aero_button">Posts</div>
-        <div id="user_opts_reactions" class="aero_button">Reactions</div>
-    </div>
-</template>
-{% endif %}
-
 <div id="top" class="nowrap">
-    <div id="back_btn" class="action_button">List</div>
+    <div id="menu" class="action_button">Menu</div>
     <div class="sep">|</div>
     <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
     <div class="sep">|</div>

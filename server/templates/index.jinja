@@ -24,26 +24,8 @@
 {% endblock %}
 
 {% block body %}
-{% if links | length > 0 %}
 <template id="template_links">
     <div id="links_container" class="dialog_container"></div>
-</template>
-
-<template id="template_admin_opts">
-    <div class="dialog_container">
-        <div id="admin_opts_posts" class="aero_button">Posts</div>
-        <div id="admin_opts_reactions" class="aero_button">Reactions</div>
-        <div id="admin_opts_users" class="aero_button">Users</div>
-    </div>
-</template>
-
-<template id="template_explore_opts">
-    <div class="dialog_container">
-        <div id="explore_opts_fresh" class="aero_button">Fresh</div>
-        <div id="explore_opts_posts" class="aero_button">Posts</div>
-        <div id="explore_opts_reactions" class="aero_button">Reactions</div>
-        <div id="explore_opts_random" class="aero_button">Random</div>
-    </div>
 </template>
 
 <template id="template_you_opts">
@@ -61,7 +43,6 @@
         <div id="you_opts_logout" class="aero_button">Logout</div>
     </div>
 </template>
-{% endif %}
 
 <div id="main">
     <div id="info">
@@ -92,10 +73,6 @@
             {% endif %}
             {% if is_user and show_list %}
             <button type="button" id="explore_btn">Explore</button>
-            {% endif %}
-
-            {% if is_user and show_admin %}
-            <button type="button" id="admin_btn">Admin</button>
             {% endif %}
 
             {% if links | length > 0 %}

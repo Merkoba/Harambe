@@ -5,7 +5,7 @@ window.onload = () => {
   DOM.ev(document, `keyup`, (e) => {
     if (!filter_focused() && !Msg.msg.any_open()){
       if (e.key === `Escape`) {
-        go_back()
+        show_menu()
       }
     }
   })
@@ -205,16 +205,16 @@ window.onload = () => {
     })
   }
 
-  let admin_opts = DOM.el(`#template_admin_opts`)
+  let explore_opts = DOM.el(`#template_explore_opts`)
 
-  if (admin_opts) {
-    setup_admin_opts(true)
+  if (explore_opts) {
+    setup_explore_opts(true)
 
-    let back_btn = DOM.el(`#back_btn`)
+    let menu = DOM.el(`#menu`)
 
-    if (back_btn) {
-      DOM.ev(back_btn, `click`, (e) => {
-        go_back()
+    if (menu) {
+      DOM.ev(menu, `click`, (e) => {
+        show_menu()
       })
     }
   }
@@ -850,8 +850,8 @@ async function delete_all_reactions() {
   }
 }
 
-function go_back() {
-  vars.msg_admin_opts.show()
+function show_menu() {
+  vars.msg_explore_opts.show()
 }
 
 function filter_focused() {

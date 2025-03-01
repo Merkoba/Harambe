@@ -36,6 +36,93 @@
     </head>
 
     <body>
+        {% if is_admin %}
+        <template id="template_explore_opts">
+            <div class="dialog_container">
+                <div id="explore_opts_fresh" class="aero_button">Fresh</div>
+                <div id="explore_opts_random" class="aero_button">Random</div>
+                <div id="explore_opts_list_posts" class="aero_button">List Posts</div>
+                <div id="explore_opts_list_reactions" class="aero_button">List Reactions</div>
+                <div id="explore_opts_admin_posts" class="aero_button">Admin Posts</div>
+                <div id="explore_opts_admin_reactions" class="aero_button">Admin Reactions</div>
+                <div id="explore_opts_admin_users" class="aero_button">Admin Users</div>
+                <div id="explore_opts_return" class="aero_button">Return</div>
+            </div>
+        </template>
+        {% else %}
+        <template id="template_explore_opts">
+            <div class="dialog_container">
+                <div id="explore_opts_fresh" class="aero_button">Fresh</div>
+                <div id="explore_opts_random" class="aero_button">Random</div>
+                <div id="explore_opts_list_posts" class="aero_button">Posts</div>
+                <div id="explore_opts_list_reactions" class="aero_button">Reactions</div>
+                <div id="explore_opts_return" class="aero_button">Return</div>
+            </div>
+        </template>
+        {% endif %}
+
+        <template id="template_edit">
+            <div class="dialog_container">
+                <div id="edit_title" class="aero_button">Edit Title</div>
+                <div id="edit_delete" class="aero_button">Delete Post</div>
+            </div>
+        </template>
+
+        <template id="template_icons">
+            <div id="icons_container">
+                <input type="text" id="icons_input" placeholder="Type To Filter">
+                <div id="icons"></div>
+            </div>
+        </template>
+
+        <template id="template_reaction_item">
+            <div class="reaction_uname"></div>
+            <div class="reaction_value"></div>
+
+            <div class="reaction_right">
+                <div class="reaction_ago"></div>
+                <div class="reaction_edit button hidden">Edit</div>
+            </div>
+        </template>
+
+        <template id="template_react_opts">
+            <div class="dialog_container">
+                <div id="react_opts_text" class="aero_button">Text</div>
+                <div id="react_opts_icon" class="aero_button">Icon</div>
+            </div>
+        </template>
+
+        <template id="template_reaction_opts">
+            <div class="dialog_container">
+                <div id="reaction_opts_edit" class="aero_button">Edit</div>
+                <div id="reaction_opts_delete" class="aero_button">Delete</div>
+            </div>
+        </template>
+
+        <template id="template_edit_reaction_opts">
+            <div class="dialog_container">
+                <div id="edit_reaction_opts_text" class="aero_button">Text</div>
+                <div id="edit_reaction_opts_icon" class="aero_button">Icon</div>
+            </div>
+        </template>
+
+        {% if is_admin %}
+        <template id="template_user_opts">
+            <div class="dialog_container">
+                <div id="user_opts_posts" class="aero_button">Posts</div>
+                <div id="user_opts_reactions" class="aero_button">Reactions</div>
+                <div id="user_opts_user" class="aero_button">User</div>
+            </div>
+        </template>
+        {% else %}
+        <template id="template_user_opts">
+            <div class="dialog_container">
+                <div id="user_opts_posts" class="aero_button">Posts</div>
+                <div id="user_opts_reactions" class="aero_button">Reactions</div>
+            </div>
+        </template>
+        {% endif %}
+
         {% block body %}{% endblock %}
     </body>
 </html>

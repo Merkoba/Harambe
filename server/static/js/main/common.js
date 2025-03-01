@@ -129,68 +129,49 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function setup_admin_opts(mode = `normal`) {
-  vars.msg_admin_opts = Msg.factory()
-  let template = DOM.el(`#template_admin_opts`)
-  vars.msg_admin_opts.set(template.innerHTML)
-
-  DOM.ev(`#admin_opts_posts`, `click`, (e) => {
-    vars.msg_admin_opts.close()
-
-    if ((vars.mode.includes(`admin`) || (mode === `admin`)) && (mode !== `user`)) {
-      window.location = `/admin/posts`
-    }
-    else {
-      window.location = `/list/posts`
-    }
-  })
-
-  DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
-    vars.msg_admin_opts.close()
-
-    if ((vars.mode.includes(`admin`) || (mode === `admin`)) && (mode !== `user`)) {
-      window.location = `/admin/reactions`
-    }
-    else {
-      window.location = `/list/reactions`
-    }
-  })
-
-  if (DOM.el(`#admin_opts_users`)) {
-    DOM.ev(`#admin_opts_users`, `click`, (e) => {
-      vars.msg_admin_opts.close()
-      window.location = `/admin/users`
-    })
-  }
-
-  let ret = DOM.el(`#admin_opts_return`)
-
-  if (ret) {
-    DOM.ev(ret, `click`, (e) => {
-      vars.msg_admin_opts.close()
-      window.location = `/`
-    })
-  }
-}
-
-function setup_explore_opts() {
+function setup_explore_opts(mode = `normal`) {
   vars.msg_explore_opts = Msg.factory()
   let template = DOM.el(`#template_explore_opts`)
   vars.msg_explore_opts.set(template.innerHTML)
 
+  if (DOM.el(`#explore_opts_list_posts`)) {
+    DOM.ev(`#explore_opts_list_posts`, `click`, (e) => {
+      vars.msg_explore_opts.close()
+      window.location = `/list/posts`
+    })
+  }
+
+  if (DOM.el(`#explore_opts_list_reactions`)) {
+    DOM.ev(`#explore_opts_list_reactions`, `click`, (e) => {
+      vars.msg_explore_opts.close()
+      window.location = `/list/reactions`
+    })
+  }
+
+  if (DOM.el(`#explore_opts_admin_posts`)) {
+    DOM.ev(`#explore_opts_admin_posts`, `click`, (e) => {
+      vars.msg_explore_opts.close()
+      window.location = `/admin/posts`
+    })
+  }
+
+  if (DOM.el(`#explore_opts_list_reactions`)) {
+    DOM.ev(`#explore_opts_list_reactions`, `click`, (e) => {
+      vars.msg_explore_opts.close()
+      window.location = `/list/reactions`
+    })
+  }
+
+  if (DOM.el(`#explore_opts_list_users`)) {
+    DOM.ev(`#explore_opts_list_users`, `click`, (e) => {
+      vars.msg_explore_opts.close()
+      window.location = `/list/users`
+    })
+  }
+
   DOM.ev(`#explore_opts_fresh`, `click`, (e) => {
     vars.msg_explore_opts.close()
     window.location = `/fresh`
-  })
-
-  DOM.ev(`#explore_opts_posts`, `click`, (e) => {
-    vars.msg_explore_opts.close()
-    window.location = `/list/posts`
-  })
-
-  DOM.ev(`#explore_opts_reactions`, `click`, (e) => {
-    vars.msg_explore_opts.close()
-    window.location = `/list/reactions`
   })
 
   DOM.ev(`#explore_opts_random`, `click`, (e) => {
@@ -202,7 +183,7 @@ function setup_explore_opts() {
 
   if (ret) {
     DOM.ev(ret, `click`, (e) => {
-      vars.msg_admin_opts.close()
+      vars.msg_explore_opts.close()
       window.location = `/`
     })
   }
