@@ -592,15 +592,19 @@ function setup_list_opts(show = false) {
   let template = DOM.el(`#template_list_opts`)
   vars.msg_list_opts.set(template.innerHTML)
 
-  DOM.ev(`#list_opts_posts`, `click`, (e) => {
-    vars.msg_list_opts.close()
-    window.location = `/list/posts`
-  })
+  function bind(what, location) {
+    let el = DOM.el(`#${what}`)
 
-  DOM.ev(`#list_opts_reactions`, `click`, (e) => {
-    vars.msg_list_opts.close()
-    window.location = `/list/reactions`
-  })
+    if (el) {
+      DOM.ev(el, `click`, (e) => {
+        vars.msg_list_opts.close()
+        window.location = location
+      })
+    }
+  }
+
+  bind(`list_opts_posts`, `/list/posts`)
+  bind(`list_opts_reactions`, `/list/reactions`)
 
   if (show) {
     vars.msg_list_opts.show()
@@ -619,20 +623,20 @@ function setup_admin_opts(show = false) {
   let template = DOM.el(`#template_admin_opts`)
   vars.msg_admin_opts.set(template.innerHTML)
 
-  DOM.ev(`#admin_opts_posts`, `click`, (e) => {
-    vars.msg_admin_opts.close()
-    window.location = `/admin/posts`
-  })
+  function bind(what, location) {
+    let el = DOM.el(`#${what}`)
 
-  DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
-    vars.msg_admin_opts.close()
-    window.location = `/admin/reactions`
-  })
+    if (el) {
+      DOM.ev(el, `click`, (e) => {
+        vars.msg_admin_opts.close()
+        window.location = location
+      })
+    }
+  }
 
-  DOM.ev(`#admin_opts_users`, `click`, (e) => {
-    vars.msg_admin_opts.close()
-    window.location = `/admin/users`
-  })
+  bind(`admin_opts_posts`, `/admin/posts`)
+  bind(`admin_opts_reactions`, `/admin/reactions`)
+  bind(`admin_opts_users`, `/admin/users`)
 
   if (show) {
     vars.msg_admin_opts.show()
