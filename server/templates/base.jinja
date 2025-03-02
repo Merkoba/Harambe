@@ -35,12 +35,12 @@
 
         <script>
             const vars = {}
-            vars.is_user = {{is_user | tojson or "undefined"}}
-            vars.is_admin = {{is_admin | tojson or "undefined"}}
-            vars.user_id = {{user_id or "undefined"}}
-            vars.username = {{username | tojson | safe or "undefined"}}
-            vars.user_name = {{user_name | tojson | safe or "undefined"}}
-            vars.links = {{links | tojson or "undefined"}}
+            vars.is_user = {{is_user | tojson or 0}}
+            vars.is_admin = {{is_admin | tojson or 0}}
+            vars.user_id = {{user_id or 0}}
+            vars.username = {{username | tojson | safe or 0}}
+            vars.user_name = {{user_name | tojson | safe or 0}}
+            vars.links = {{links | tojson or 0}}
         </script>
 
         {% block head %}{% endblock %}
@@ -57,11 +57,12 @@
                 <div id="explore_opts_admin" class="aero_button">Admin</div>
                 {% endif %}
 
+                <div id="explore_opts_links" class="aero_button">Links</div>
+
                 {% if is_user %}
                 <div id="explore_opts_you" class="aero_button">You</div>
                 {% endif %}
 
-                <div id="explore_opts_links" class="aero_button">Links</div>
                 <div id="explore_opts_return" class="aero_button">Return</div>
             </div>
         </template>
