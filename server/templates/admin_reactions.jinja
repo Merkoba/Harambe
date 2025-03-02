@@ -15,6 +15,7 @@
     vars.username = {{username | tojson | safe}}
     vars.user_name = {{user_name | tojson | safe}}
     vars.next_page = {{next_page | tojson}}
+    vars.used_user_id = {{used_user_id}}
 </script>
 
 <script src="/static/js/main/admin.js"></script>
@@ -48,7 +49,7 @@
     {% if page > 1 %}
     <div id="prev_page" title="Go to the previous page" class="action_button">Prev</div>
     {% else %}
-    <div>Prev</div>
+    <div class="unselectable">Prev</div>
     {% endif %}
 
     <div class="sep">|</div>
@@ -56,7 +57,7 @@
     {% if next_page %}
     <div id="next_page" class="action_button" title="Go to the next page">Next</div>
     {% else %}
-    <div class="">Next</div>
+    <div class="unselectable">Next</div>
     {% endif %}
 
     <div class="sep">|</div>
@@ -69,10 +70,22 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
-            <div id="post" class="table_cell underline" data-sort="post" title="The post where it was posted">Post</div>
-            <div id="value" class="table_cell underline" data-sort="value" title="The value of the reaction">Value</div>
-            <div id="username" class="table_cell underline" data-sort="user" title="The username who did the reaction">User</div>
-            <div id="date" class="table_cell underline" data-sort="date" title="The date when this reaction was made">Date</div>
+
+            <div id="post" class="table_cell" title="The post where it was posted">
+                <div class="header_text" data-sort="post">Post</div>
+            </div>
+
+            <div id="value" class="table_cell" title="The value of the reaction">
+                <div class="header_text" data-sort="value">Value</div>
+            </div>
+
+            <div id="username" class="table_cell" title="The username who did the reaction">
+                <div class="header_text" data-sort="user">User</div>
+            </div>
+
+            <div id="date" class="table_cell" title="The date when this reaction was made">
+                <div class="header_text" data-sort="date">Date</div>
+            </div>
         </div>
 
         {% for item in items %}

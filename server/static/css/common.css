@@ -215,3 +215,7 @@ a.linkbutton:hover {
 .popmsg_content {
     outline: none;
 }
+
+.unselectable {
+    user-select: none;
+}

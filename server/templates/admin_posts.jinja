@@ -16,6 +16,7 @@
     vars.username = {{username | tojson | safe}}
     vars.user_name = {{user_name | tojson | safe}}
     vars.max_title_length = {{max_title_length}}
+    vars.used_user_id = {{used_user_id}}
 </script>
 
 <script src="/static/js/main/admin.js"></script>
@@ -43,7 +44,7 @@
     {% if page > 1 %}
     <div id="prev_page" class="action_button" title="Go to the previous page">Prev</div>
     {% else %}
-    <div>Prev</div>
+    <div class="unselectable">Prev</div>
     {% endif %}
 
     <div class="sep">|</div>
@@ -51,7 +52,7 @@
     {% if next_page %}
     <div id="next_page" class="action_button" title="Go to the next page">Next</div>
     {% else %}
-    <div>Next</div>
+    <div class="unselectable">Next</div>
     {% endif %}
 
     <div class="sep">|</div>
