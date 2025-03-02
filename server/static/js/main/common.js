@@ -157,13 +157,13 @@ function setup_explore_opts(show_return = true) {
   bind(`explore_opts_random`, `/random`)
   bind(`explore_opts_return`, `/`)
 
-  function submenu(what, setup) {
+  function submenu(what, func) {
     let el = DOM.el(`#${what}`)
 
     if (el) {
       DOM.ev(el, `click`, (e) => {
         vars.msg_explore_opts.close()
-        setup()
+        func()
       })
     }
   }
@@ -234,10 +234,19 @@ function setup_user_opts() {
   let template = DOM.el(`#template_user_opts`)
   vars.msg_user_opts.set(template.innerHTML)
 
-  DOM.ev(`#user_opts_posts`, `click`, (e) => {
-    vars.msg_user_opts.close()
-    let user_id = vars.user_opts_user_id
+  function bind(what, func) {
+    let el = DOM.el(`#${what}`)
 
+    if (el) {
+      DOM.ev(el, `click`, (e) => {
+        vars.msg_user_opts.close()
+        let user_id = vars.user_opts_user_id
+        func(user_id)
+      })
+    }
+  }
+
+  bind(`user_opts_posts`, (user_id) => {
     if (vars.mode.includes(`admin`)) {
       window.location = `/admin/posts?user_id=${user_id}`
     }
@@ -246,10 +255,7 @@ function setup_user_opts() {
     }
   })
 
-  DOM.ev(`#user_opts_reactions`, `click`, (e) => {
-    vars.msg_user_opts.close()
-    let user_id = vars.user_opts_user_id
-
+  bind(`user_opts_reactions`, (user_id) => {
     if (vars.mode.includes(`admin`)) {
       window.location = `/admin/reactions?user_id=${user_id}`
     }
@@ -258,13 +264,9 @@ function setup_user_opts() {
     }
   })
 
-  if (DOM.el(`#user_opts_user`)) {
-    DOM.ev(`#user_opts_user`, `click`, (e) => {
-      vars.msg_user_opts.close()
-      let user_id = vars.user_opts_user_id
-      window.location = `/edit_user/${user_id}`
-    })
-  }
+  bind(`user_opts_user`, (user_id) => {
+    window.location = `/edit_user/${user_id}`
+  })
 }
 
 function fill_def_args(def, args) {
@@ -279,37 +281,27 @@ function confirmbox(args = {}) {
   new Confirmbox(args)
 }
 
-function edit_reaction_opts() {
-  vars.msg_edit_reaction_opts = Msg.factory()
-  let template = DOM.el(`#template_edit_reaction_opts`)
-  vars.msg_edit_reaction_opts.set(template.innerHTML)
-
-  DOM.ev(`#edit_reaction_opts_text`, `click`, (e) => {
-    vars.msg_edit_reaction_opts.close()
-    let id = parseInt(vars.active_item.dataset.id)
-    react_text(id)
-  })
-
-  DOM.ev(`#edit_reaction_opts_icon`, `click`, (e) => {
-    vars.msg_edit_reaction_opts.close()
-    let id = parseInt(vars.active_item.dataset.id)
-    react_icon(id)
-  })
-}
-
 function setup_reaction_opts() {
-  edit_reaction_opts()
   vars.msg_reaction_opts = Msg.factory()
   let template = DOM.el(`#template_reaction_opts`)
   vars.msg_reaction_opts.set(template.innerHTML)
 
-  DOM.ev(`#reaction_opts_edit`, `click`, (e) => {
-    vars.msg_reaction_opts.close()
-    vars.msg_edit_reaction_opts.show()
+  function bind(what, func) {
+    let el = DOM.el(`#${what}`)
+
+    if (el) {
+      DOM.ev(el, `click`, (e) => {
+        vars.msg_reaction_opts.close()
+        func()
+      })
+    }
+  }
+
+  bind(`reaction_opts_edit`, () => {
+    react_prompt()
   })
 
-  DOM.ev(`#reaction_opts_delete`, `click`, (e) => {
-    vars.msg_reaction_opts.close()
+  bind(`reaction_opts_delete`, () => {
     delete_reaction(vars.active_item.dataset.id)
   })
 }

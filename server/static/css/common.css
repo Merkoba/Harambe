@@ -189,7 +189,7 @@ a.linkbutton:hover {
 }
 
 .aero_button:active {
-    background: linear-gradient(to bottom, #6495ed, #4682b4);
+    background: linear-gradient(to bottom, #76ac95, #46b48f);
     box-shadow: inset 0 1px 8px rgb(0 0 0 / 70%);
 }
 

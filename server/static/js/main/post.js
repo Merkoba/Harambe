@@ -119,22 +119,6 @@ window.onload = function() {
     }
   })
 
-  let r_icon = DOM.el(`#react_icon`)
-
-  if (r_icon) {
-    DOM.ev(r_icon, `click`, () => {
-      react_icon()
-    })
-  }
-
-  let r_text = DOM.el(`#react_text`)
-
-  if (r_text) {
-    DOM.ev(r_text, `click`, () => {
-      react_text()
-    })
-  }
-
   let r_bottom = DOM.el(`#lobottomy`)
 
   if (r_bottom) {
@@ -258,7 +242,25 @@ window.onload = function() {
         vars.msg_user_opts.show()
       }
       else if (e.target.classList.contains(`reaction_edit`)) {
-        react_text(el.dataset.id)
+        vars.msg_reaction_opts.show()
+      }
+    })
+
+    DOM.ev(reacts, `auxclick`, (e) => {
+      if (e.button !== 1) {
+        return
+      }
+
+      let el = e.target.closest(`.reaction_item`)
+      vars.active_item = el
+
+      if (e.target.classList.contains(`reaction_uname`)) {
+        let user_id = el.dataset.user_id
+        window.location = `/list/posts?user_id=${user_id}`
+      }
+      else if (e.target.classList.contains(`reaction_edit`)) {
+        vars.active_item.dataset.id
+        delete_reaction(el.dataset.id)
       }
     })
   }
@@ -286,7 +288,7 @@ window.onload = function() {
 
   if (react_btn) {
     DOM.ev(react_btn, `click`, () => {
-      react_text()
+      react_prompt()
     })
   }
 
@@ -666,7 +668,7 @@ function get_reaction(id) {
   return item
 }
 
-function react_text(id) {
+function react_prompt(id) {
   if (!vars.can_react) {
     react_alert()
     return
