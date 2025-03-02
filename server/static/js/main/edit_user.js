@@ -53,7 +53,7 @@ async function delete_user() {
     })
 
     if (response.ok) {
-      popmsg(`Deleted`)
+      popmsg(`Deleted.`)
     }
     else {
       print_error(response.status)

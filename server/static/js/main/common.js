@@ -531,7 +531,7 @@ function user_mod_input(what, vtype, callback) {
         password: vtype === `password`,
         callback: (value_2) => {
           if (value_1 !== value_2) {
-            popmsg(`Values don't match`)
+            popmsg(`Values don't match.`)
             return
           }
 
