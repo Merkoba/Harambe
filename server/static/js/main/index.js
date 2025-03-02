@@ -143,6 +143,12 @@ window.onload = () => {
         form.submit()
       }
     })
+
+    DOM.ev(submit_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        reset_file()
+      }
+    })
   }
 
   let picker = DOM.el(`#picker`)
