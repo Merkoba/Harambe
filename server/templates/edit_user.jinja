@@ -3,12 +3,6 @@
 {% block head %}
 <title>Edit User</title>
 <link rel="stylesheet" href="/static/css/edit_user.css">
-
-<script>
-    const vars = {}
-    vars.user_id = {{user.id if user else null}}
-</script>
-
 <script src="/static/js/main/edit_user.js"></script>
 {% endblock %}
 

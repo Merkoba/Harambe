@@ -5,15 +5,11 @@
 <link rel="stylesheet" href="/static/css/admin.css">
 
 <script>
-    const vars = {}
     vars.mode = {{mode | tojson | safe}}
     vars.page_size = {{page_size | tojson | safe}}
     vars.def_page_size = {{def_page_size | tojson}}
     vars.sort = {{sort | tojson | safe}}
     vars.page = {{page}}
-    vars.user_id = {{user_id}}
-    vars.username = {{username | tojson | safe}}
-    vars.user_name = {{user_name | tojson | safe}}
     vars.next_page = {{next_page | tojson}}
     vars.used_user_id = {{used_user_id}}
 </script>

@@ -147,8 +147,13 @@ def fill_session(user: User) -> None:
     session["admin"] = user.admin
 
 
-def theme_configs() -> dict[str, Any]:
+def common_configs(user: User | None = None) -> dict[str, Any]:
     return {
+        "is_user": bool(user),
+        "is_admin": user.admin if user else False,
+        "user_id": user.id if user else 0,
+        "username": user.username if user else "",
+        "user_name": user.name if user else "",
         "background_color": config.background_color,
         "accent_color": config.accent_color,
         "font_color": config.font_color,
@@ -158,6 +163,7 @@ def theme_configs() -> dict[str, Any]:
         "font_family": config.font_family,
         "font_size": config.font_size,
         "admin_font_size": config.admin_font_size,
+        "links": config.links,
     }
 
 
@@ -181,7 +187,6 @@ text_mtype = "text/plain"
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def index() -> Any:
     user = get_user()
-    is_user = bool(user)
     admin = user and user.admin
 
     if request.method == "POST":
@@ -232,20 +237,14 @@ def index() -> Any:
         image_tooltip=config.image_tooltip,
         max_title_length=config.max_title_length,
         allow_titles=config.allow_titles,
-        links=config.links,
         show_list=show_list,
         show_admin=admin,
-        is_user=is_user,
-        is_admin=admin,
-        user_id=user.id if user else 0,
-        username=user.username if user else "",
-        user_name=user.name if user else "",
         description=config.description_index,
         upload_enabled=config.web_uploads_enabled,
         max_name_length=config.max_user_name_length,
         max_password_length=config.max_user_password_length,
         banner=banner,
-        **theme_configs(),
+        **common_configs(user),
     )
 
 
@@ -281,7 +280,7 @@ def message() -> Any:
         "message.jinja",
         mode=data["mode"],
         message=data["message"],
-        **theme_configs(),
+        **common_configs(),
     )
 
 
@@ -305,12 +304,8 @@ def post(name: str) -> Any:
 
     if user:
         owned = user.admin or ((post.username == user.username) and config.allow_edit)
-        is_user = True
-        is_admin = user.admin
     else:
         owned = False
-        is_user = False
-        is_admin = False
 
     show_list = list_visible(user)
     can_react = False
@@ -332,14 +327,9 @@ def post(name: str) -> Any:
         post_refresh_times=config.post_refresh_times,
         max_post_name_length=config.max_post_name_length,
         max_reaction_name_length=config.max_reaction_name_length,
-        is_user=is_user,
-        is_admin=is_admin,
-        user_id=user.id if user else 0,
-        username=user.username if user else "",
-        user_name=user.name if user else "",
         can_react=can_react,
         show_list=show_list,
-        **theme_configs(),
+        **common_configs(user),
     )
 
 
@@ -500,14 +490,9 @@ def admin(what: str) -> Any:
         page_size=page_size,
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
-        sort=sort,
-        is_user=True,
-        is_admin=True,
         used_user_id=user_id,
-        user_id=user.id if user else 0,
-        username=user.username if user else "",
-        user_name=user.name if user else "",
-        **theme_configs(),
+        sort=sort,
+        **common_configs(user),
     )
 
 
@@ -582,7 +567,7 @@ def login() -> Any:
     return render_template(
         "login.jinja",
         message=message,
-        **theme_configs(),
+        **common_configs(),
     )
 
 
@@ -605,7 +590,7 @@ def register() -> Any:
     return render_template(
         "register.jinja",
         message=message,
-        **theme_configs(),
+        **common_configs(),
     )
 
 
@@ -697,14 +682,10 @@ def show_list(what: str) -> Any:
         page_size=page_size,
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
-        is_user=True,
-        is_admin=admin,
-        user_id=user.id if user else 0,
-        username=user.username if user else "",
-        user_name=user.name if user else "",
+        used_user_id=user_id,
         sort=sort,
         back="/",
-        **theme_configs(),
+        **common_configs(user),
     )
 
 
@@ -754,7 +735,7 @@ def edit_user(user_id: int = 0) -> Any:
             user=user or {},
             title=title,
             mode=mode,
-            **theme_configs(),
+            **common_configs(),
         )
 
     user = get_user()

@@ -6,10 +6,8 @@
 <link rel="stylesheet" href="/static/css/post.css">
 
 <script>
-    const vars = {}
     vars.mode = `post`
     vars.post_id = {{post.id}}
-    vars.user_id = {{post.user_id}}
     vars.name = {{post.name | tojson | safe}}
     vars.full = {{post.full | tojson | safe}}
     vars.date = {{post.date}}
@@ -26,7 +24,6 @@
     vars.max_post_name_length = {{max_post_name_length | tojson}}
     vars.max_reaction_name_length = {{max_reaction_name_length | tojson}}
     vars.reactions = {{post.reactions | tojson}}
-    vars.is_admin = {{is_admin | tojson}}
     vars.sample = {{post.sample | tojson | safe}}
     vars.uploader = {{post.uploader | tojson | safe}}
 </script>

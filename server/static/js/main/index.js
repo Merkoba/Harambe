@@ -76,32 +76,6 @@ window.onload = () => {
     })
   }
 
-  let links_btn = DOM.el(`#links_btn`)
-
-  if (links_btn) {
-    vars.msg_links = Msg.factory()
-    let t = DOM.el(`#template_links`)
-    vars.msg_links.set(t.innerHTML)
-    let c = DOM.el(`#links_container`)
-
-    for (let link of vars.links) {
-      let item = DOM.create(`div`, `aero_button`)
-      item.textContent = link.name
-      item.title = link.url
-
-      DOM.ev(item, `click`, (e) => {
-        vars.msg_links.close()
-        window.open(link.url, item.target)
-      })
-
-      c.appendChild(item)
-    }
-
-    DOM.ev(links_btn, `click`, (e) => {
-      vars.msg_links.show()
-    })
-  }
-
   let explore_btn = DOM.el(`#explore_btn`)
 
   if (explore_btn) {
@@ -249,9 +223,4 @@ function reset_video() {
   let video = DOM.el(`#video`)
   video.pause()
   DOM.hide(video)
-}
-
-function show_links() {
-  let links_dialog = DOM.el(`#links_dialog`)
-  links_dialog.showModal()
 }

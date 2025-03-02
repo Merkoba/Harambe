@@ -6,29 +6,18 @@
 <link rel="stylesheet" href="static/css/index.css">
 
 <script>
-    const vars = {}
     vars.mode = `index`
     vars.max_size = {{max_size}}
     vars.max_title_length = {{max_title_length}}
     vars.banner = {{banner | tojson | safe}}
-    vars.is_user = {{is_user | tojson}}
-    vars.is_admin = {{is_admin | tojson}}
-    vars.links = {{links | tojson}}
-    vars.username = {{username | tojson | safe}}
-    vars.user_name = {{user_name | tojson | safe}}
     vars.max_name_length = {{max_name_length}}
     vars.max_password_length = {{max_password_length}}
-    vars.user_id = {{user_id}}
 </script>
 
 <script src="/static/js/main/index.js"></script>
 {% endblock %}
 
 {% block body %}
-<template id="template_links">
-    <div id="links_container" class="dialog_container"></div>
-</template>
-
 <div id="main">
     <div id="info">
         {% if is_user and show_max_size %}
@@ -57,11 +46,7 @@
             <button id="submit_btn" type="button">Upload</button>
             {% endif %}
             {% if is_user and show_list %}
-            <button type="button" id="explore_btn">Explore</button>
-            {% endif %}
-
-            {% if links | length > 0 %}
-            <button type="button" id="links_btn">Links</button>
+            <button type="button" id="explore_btn">Menu</button>
             {% endif %}
 
             {% if not is_user %}

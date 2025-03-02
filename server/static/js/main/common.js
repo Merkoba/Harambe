@@ -129,151 +129,103 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function setup_explore_opts(show_return = true) {
-  if (vars.msg_explore_opts) {
-    return
-  }
+function setup_explore_opts(show_return = true, show = false) {
+  let name = `explore`
 
-  vars.msg_explore_opts = Msg.factory()
-  let template = DOM.el(`#template_explore_opts`)
-  vars.msg_explore_opts.set(template.innerHTML)
-
-  if (!show_return) {
-    DOM.el(`#explore_opts_return`).remove()
-  }
-
-  function bind(what, location) {
-    let el = DOM.el(`#${what}`)
-
-    if (el) {
-      DOM.ev(el, `click`, (e) => {
-        vars.msg_explore_opts.close()
-        window.location = location
-      })
+  make_opts(name, () => {
+    if (!show_return) {
+      DOM.el(`#${name}_opts_return`).remove()
     }
-  }
 
-  bind(`explore_opts_fresh`, `/fresh`)
-  bind(`explore_opts_random`, `/random`)
-  bind(`explore_opts_return`, `/`)
+    bind_button(`${name}_opts_fresh`, () => {
+      window.location = `/fresh`
+    })
 
-  function submenu(what, func) {
-    let el = DOM.el(`#${what}`)
+    bind_button(`${name}_opts_random`, () => {
+      window.location = `/random`
+    })
 
-    if (el) {
-      DOM.ev(el, `click`, (e) => {
-        vars.msg_explore_opts.close()
-        func()
-      })
-    }
-  }
+    bind_button(`${name}_opts_return`, () => {
+      window.location = `/`
+    })
 
-  submenu(`explore_opts_you`, () => {
-    setup_you_opts(vars.user_id, true)
-  })
+    bind_button(`${name}_opts_you`, () => {
+      setup_you_opts(vars.user_id, true)
+    })
 
-  submenu(`explore_opts_list`, () => {
-    setup_list_opts(true)
-  })
+    bind_button(`${name}_opts_list`, () => {
+      setup_list_opts(true)
+    })
 
-  submenu(`explore_opts_admin`, () => {
-    setup_admin_opts(true)
-  })
+    bind_button(`${name}_opts_admin`, () => {
+      setup_admin_opts(true)
+    })
+
+    bind_button(`${name}_opts_links`, () => {
+      setup_link_opts(true)
+    })
+  }, show)
 }
 
 function setup_you_opts(user_id, show = false) {
-  if (vars.msg_you_opts) {
-    if (show) {
-      vars.msg_you_opts.show()
-      return
-    }
-  }
+  let name = `you`
 
-  vars.msg_you_opts = Msg.factory()
-  let template = DOM.el(`#template_you_opts`)
-  vars.msg_you_opts.set(template.innerHTML)
+  make_opts(name, () => {
+    bind_button(`${name}_opts_posts`, () => {
+      window.location = `/list/posts?user_id=${user_id}`
+    })
 
-  function bind(what, func) {
-    let el = DOM.el(`#${what}`)
+    bind_button(`${name}_opts_reactions`, () => {
+      window.location = `/list/reactions?user_id=${user_id}`
+    })
 
-    if (el) {
-      DOM.ev(el, `click`, (e) => {
-        vars.msg_you_opts.close()
-        func()
-      })
-    }
-  }
+    bind_button(`${name}_opts_edit_name`, () => {
+      edit_name()
+    })
 
-  bind(`you_opts_posts`, () => {
-    window.location = `/list/posts?user_id=${user_id}`
-  })
+    bind_button(`${name}_opts_edit_password`, () => {
+      edit_password()
+    })
 
-  bind(`you_opts_reactions`, () => {
-    window.location = `/list/reactions?user_id=${user_id}`
-  })
+    bind_button(`${name}_opts_logout`, () => {
+      let confirm_args = {
+        message: `Visne profecto discedere ?`,
+        callback_yes: () => {
+          window.location = `/logout`
+        },
+      }
 
-  bind(`you_opts_edit_name`, () => {
-    edit_name()
-  })
-
-  bind(`you_opts_edit_password`, () => {
-    edit_password()
-  })
-
-  bind(`you_opts_logout`, () => {
-    let confirm_args = {
-      message: `Visne profecto discedere ?`,
-      callback_yes: () => {
-        window.location = `/logout`
-      },
-    }
-
-    confirmbox(confirm_args)
-  })
-
-  if (show) {
-    vars.msg_you_opts.show()
-  }
+      confirmbox(confirm_args)
+    })
+  }, show)
 }
 
-function setup_user_opts() {
-  vars.msg_user_opts = Msg.factory()
-  let template = DOM.el(`#template_user_opts`)
-  vars.msg_user_opts.set(template.innerHTML)
+function setup_user_opts(show = false) {
+  let name = `user`
 
-  function bind(what, func) {
-    let el = DOM.el(`#${what}`)
+  make_opts(name, () => {
+    bind_button(`${name}_opts_posts`, (user_id) => {
+      if (vars.mode.includes(`admin`)) {
+        window.location = `/admin/posts?user_id=${user_id}`
+      }
+      else {
+        window.location = `/list/posts?user_id=${user_id}`
+      }
+    })
 
-    if (el) {
-      DOM.ev(el, `click`, (e) => {
-        vars.msg_user_opts.close()
-        let user_id = vars.user_opts_user_id
-        func(user_id)
-      })
-    }
-  }
+    bind_button(`${name}_opts_reactions`, (user_id) => {
+      if (vars.mode.includes(`admin`)) {
+        window.location = `/admin/reactions?user_id=${user_id}`
+      }
+      else {
+        window.location = `/list/reactions?user_id=${user_id}`
+      }
+    })
 
-  bind(`user_opts_posts`, (user_id) => {
-    if (vars.mode.includes(`admin`)) {
-      window.location = `/admin/posts?user_id=${user_id}`
-    }
-    else {
-      window.location = `/list/posts?user_id=${user_id}`
-    }
-  })
-
-  bind(`user_opts_reactions`, (user_id) => {
-    if (vars.mode.includes(`admin`)) {
-      window.location = `/admin/reactions?user_id=${user_id}`
-    }
-    else {
-      window.location = `/list/reactions?user_id=${user_id}`
-    }
-  })
-
-  bind(`user_opts_user`, (user_id) => {
-    window.location = `/edit_user/${user_id}`
-  })
+    bind_button(`${name}_opts_user`, (user_id) => {
+      window.location = `/edit_user/${user_id}`
+    })
+  }, show)
 }
 
 function fill_def_args(def, args) {
@@ -288,29 +240,18 @@ function confirmbox(args = {}) {
   new Confirmbox(args)
 }
 
-function setup_reaction_opts() {
-  vars.msg_reaction_opts = Msg.factory()
-  let template = DOM.el(`#template_reaction_opts`)
-  vars.msg_reaction_opts.set(template.innerHTML)
+function setup_reaction_opts(show = false) {
+  let name = `reaction`
 
-  function bind(what, func) {
-    let el = DOM.el(`#${what}`)
+  make_opts(name, () => {
+    bind_button(`${name}_opts_edit`, () => {
+      react_prompt()
+    })
 
-    if (el) {
-      DOM.ev(el, `click`, (e) => {
-        vars.msg_reaction_opts.close()
-        func()
-      })
-    }
-  }
-
-  bind(`reaction_opts_edit`, () => {
-    react_prompt()
-  })
-
-  bind(`reaction_opts_delete`, () => {
-    delete_reaction(vars.active_item.dataset.id)
-  })
+    bind_button(`${name}_opts_delete`, () => {
+      delete_reaction(vars.active_item.dataset.id)
+    })
+  }, show)
 }
 
 function regex_u(c, n) {
@@ -588,64 +529,86 @@ async function do_user_edit(what, value, vtype, title, callback) {
 }
 
 function setup_list_opts(show = false) {
-  if (vars.msg_list_opts) {
-    if (show) {
-      vars.msg_list_opts.show()
-      return
-    }
-  }
+  let name = `list`
 
-  vars.msg_list_opts = Msg.factory()
-  let template = DOM.el(`#template_list_opts`)
-  vars.msg_list_opts.set(template.innerHTML)
+  make_opts(name, () => {
+    bind_button(`${name}_opts_posts`, () => {
+      window.location = `/list/posts`
+    })
 
-  function bind(what, location) {
-    let el = DOM.el(`#${what}`)
-
-    if (el) {
-      DOM.ev(el, `click`, (e) => {
-        vars.msg_list_opts.close()
-        window.location = location
-      })
-    }
-  }
-
-  bind(`list_opts_posts`, `/list/posts`)
-  bind(`list_opts_reactions`, `/list/reactions`)
-
-  if (show) {
-    vars.msg_list_opts.show()
-  }
+    bind_button(`${name}_opts_reactions`, () => {
+      window.location = `/list/reactions`
+    })
+  }, show)
 }
 
 function setup_admin_opts(show = false) {
-  if (vars.msg_admin_opts) {
-    if (show) {
-      vars.msg_admin_opts.show()
-      return
-    }
-  }
+  let name = `admin`
 
-  vars.msg_admin_opts = Msg.factory()
-  let template = DOM.el(`#template_admin_opts`)
-  vars.msg_admin_opts.set(template.innerHTML)
+  make_opts(name, () => {
+    bind_button(`${name}_opts_posts`, () => {
+      window.location = `/admin/posts`
+    })
 
-  function bind(what, location) {
-    let el = DOM.el(`#${what}`)
+    bind_button(`${name}_opts_reactions`, () => {
+      window.location = `/admin/reactions`
+    })
 
-    if (el) {
-      DOM.ev(el, `click`, (e) => {
-        vars.msg_admin_opts.close()
-        window.location = location
+    bind_button(`${name}_opts_users`, () => {
+      window.location = `/admin/users`
+    })
+  }, show)
+}
+
+function setup_link_opts(show = false) {
+  let name = `link`
+
+  make_opts(name, () => {
+    let c = DOM.el(`#links_container`)
+
+    for (let [i, link] of vars.links.entries()) {
+      let item = DOM.create(`div`, `aero_button`, `${name}_opts_${i}`)
+      item.textContent = link.name
+      item.title = link.url
+      c.appendChild(item)
+
+      bind_button(`${name}_opts_${i}`, () => {
+        window.open(link.url, item.target)
       })
     }
+  }, show)
+}
+
+function make_opts(name, setup, show = false) {
+  let msg_name = `msg_${name}_opts`
+
+  if (vars[msg_name]) {
+    if (show) {
+      vars[msg_name].show()
+    }
+
+    return
   }
 
-  bind(`admin_opts_posts`, `/admin/posts`)
-  bind(`admin_opts_reactions`, `/admin/reactions`)
-  bind(`admin_opts_users`, `/admin/users`)
+  vars[msg_name] = Msg.factory()
+  let t = DOM.el(`#template_${name}_opts`)
+  vars[msg_name].set(t.innerHTML)
+  setup()
 
   if (show) {
-    vars.msg_admin_opts.show()
+    vars[msg_name].show()
+  }
+}
+
+function bind_button(what, func) {
+  let name = what.split(`_`)[0]
+  let msg_name = `msg_${name}_opts`
+  let el = DOM.el(`#${what}`)
+
+  if (el) {
+    DOM.ev(el, `click`, (e) => {
+      vars[msg_name].close()
+      func()
+    })
   }
 }
