@@ -129,7 +129,7 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function setup_explore_opts(username) {
+function setup_explore_opts() {
   if (vars.msg_explore_opts) {
     return
   }
@@ -138,64 +138,43 @@ function setup_explore_opts(username) {
   let template = DOM.el(`#template_explore_opts`)
   vars.msg_explore_opts.set(template.innerHTML)
 
-  if (DOM.el(`#explore_opts_list_posts`)) {
-    DOM.ev(`#explore_opts_list_posts`, `click`, (e) => {
-      vars.msg_explore_opts.close()
-      window.location = `/list/posts`
-    })
+  function bind(what, location) {
+    let el = DOM.el(`#${what}`)
+
+    if (el) {
+      DOM.ev(el, `click`, (e) => {
+        vars.msg_explore_opts.close()
+        window.location = location
+      })
+    }
   }
 
-  if (DOM.el(`#explore_opts_list_reactions`)) {
-    DOM.ev(`#explore_opts_list_reactions`, `click`, (e) => {
-      vars.msg_explore_opts.close()
-      window.location = `/list/reactions`
-    })
+  bind(`explore_opts_fresh`, `/fresh`)
+  bind(`explore_opts_random`, `/random`)
+  bind(`explore_opts_return`, `/`)
+
+  function submenu(what, setup) {
+    let el = DOM.el(`#${what}`)
+
+    if (el) {
+      DOM.ev(el, `click`, (e) => {
+        vars.msg_explore_opts.close()
+        setup()
+      })
+    }
   }
 
-  if (DOM.el(`#explore_opts_admin_posts`)) {
-    DOM.ev(`#explore_opts_admin_posts`, `click`, (e) => {
-      vars.msg_explore_opts.close()
-      window.location = `/admin/posts`
-    })
-  }
-
-  if (DOM.el(`#explore_opts_admin_reactions`)) {
-    DOM.ev(`#explore_opts_admin_reactions`, `click`, (e) => {
-      vars.msg_explore_opts.close()
-      window.location = `/admin/reactions`
-    })
-  }
-
-  if (DOM.el(`#explore_opts_admin_users`)) {
-    DOM.ev(`#explore_opts_admin_users`, `click`, (e) => {
-      vars.msg_explore_opts.close()
-      window.location = `/admin/users`
-    })
-  }
-
-  DOM.ev(`#explore_opts_fresh`, `click`, (e) => {
-    vars.msg_explore_opts.close()
-    window.location = `/fresh`
-  })
-
-  DOM.ev(`#explore_opts_random`, `click`, (e) => {
-    vars.msg_explore_opts.close()
-    window.location = `/random`
-  })
-
-  DOM.ev(`#explore_opts_you`, `click`, (e) => {
-    vars.msg_explore_opts.close()
+  submenu(`explore_opts_you`, () => {
     setup_you_opts(vars.user_id, true)
   })
 
-  let ret = DOM.el(`#explore_opts_return`)
+  submenu(`explore_opts_list`, () => {
+    setup_list_opts(true)
+  })
 
-  if (ret) {
-    DOM.ev(ret, `click`, (e) => {
-      vars.msg_explore_opts.close()
-      window.location = `/`
-    })
-  }
+  submenu(`explore_opts_admin`, () => {
+    setup_admin_opts(true)
+  })
 }
 
 function setup_you_opts(user_id, show = false) {
@@ -602,5 +581,64 @@ async function do_user_edit(what, value, vtype, title, callback) {
   }
   else {
     print_error(response.status)
+  }
+}
+
+function setup_list_opts(show = false) {
+  if (vars.msg_list_opts) {
+    if (show) {
+      vars.msg_list_opts.show()
+      return
+    }
+  }
+
+  vars.msg_list_opts = Msg.factory()
+  let template = DOM.el(`#template_list_opts`)
+  vars.msg_list_opts.set(template.innerHTML)
+
+  DOM.ev(`#list_opts_posts`, `click`, (e) => {
+    vars.msg_list_opts.close()
+    window.location = `/list/posts`
+  })
+
+  DOM.ev(`#list_opts_reactions`, `click`, (e) => {
+    vars.msg_list_opts.close()
+    window.location = `/list/reactions`
+  })
+
+  if (show) {
+    vars.msg_list_opts.show()
+  }
+}
+
+function setup_admin_opts(show = false) {
+  if (vars.msg_admin_opts) {
+    if (show) {
+      vars.msg_admin_opts.show()
+      return
+    }
+  }
+
+  vars.msg_admin_opts = Msg.factory()
+  let template = DOM.el(`#template_admin_opts`)
+  vars.msg_admin_opts.set(template.innerHTML)
+
+  DOM.ev(`#admin_opts_posts`, `click`, (e) => {
+    vars.msg_admin_opts.close()
+    window.location = `/admin/posts`
+  })
+
+  DOM.ev(`#admin_opts_reactions`, `click`, (e) => {
+    vars.msg_admin_opts.close()
+    window.location = `/admin/reactions`
+  })
+
+  DOM.ev(`#admin_opts_users`, `click`, (e) => {
+    vars.msg_admin_opts.close()
+    window.location = `/admin/users`
+  })
+
+  if (show) {
+    vars.msg_admin_opts.show()
   }
 }

@@ -622,7 +622,6 @@ def logout() -> Any:
 @app.route("/list/<string:what>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@reader_required
 def show_list(what: str) -> Any:
     user = get_user()
 
@@ -660,7 +659,6 @@ def show_list(what: str) -> Any:
             sort=sort,
             query=query,
             only_listed=only_listed,
-            user_id=user_id,
             admin=False,
         )
     elif what == "reactions":
@@ -672,7 +670,6 @@ def show_list(what: str) -> Any:
             query=query,
             sort=sort,
             admin=True,
-            user_id=user_id,
         )
     else:
         return over()
@@ -701,9 +698,9 @@ def show_list(what: str) -> Any:
         max_title_length=config.max_title_length,
         is_user=True,
         is_admin=admin,
-        user_id=user_id,
-        username=user.username,
-        user_name=user.name,
+        user_id=user.id if user else 0,
+        username=user.username if user else "",
+        user_name=user.name if user else "",
         sort=sort,
         back="/",
         **theme_configs(),
