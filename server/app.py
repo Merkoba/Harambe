@@ -441,7 +441,7 @@ def admin(what: str) -> Any:
     sort = request.args.get("sort", def_date)
     user_id = request.args.get("user_id", 0)
     page = int(request.args.get("page", 1))
-    page_size = int(request.args.get("page_size", config.admin_page_size))
+    page_size = str(request.args.get("page_size", config.admin_page_size))
     post_items: list[Post] = []
     user_items: list[User] = []
     reaction_items: list[Reaction] = []
@@ -476,7 +476,7 @@ def admin(what: str) -> Any:
     else:
         return over()
 
-    def_page_size = page_size == config.admin_page_size
+    def_page_size = page_size == str(config.admin_page_size)
     html_page = f"admin_{what}.jinja"
     title = what.capitalize()
     items: list[Post] | list[User] | list[Reaction]
@@ -645,7 +645,7 @@ def show_list(what: str) -> Any:
                 return redirect(url_for("index"))
 
     page = int(request.args.get("page", 1))
-    page_size = int(request.args.get("page_size", config.list_page_size))
+    page_size = str(request.args.get("page_size", config.list_page_size))
     sort = request.args.get("sort", "date")
     query = request.args.get("query", "")
     only_listed = not history
@@ -675,7 +675,7 @@ def show_list(what: str) -> Any:
     else:
         return over()
 
-    def_page_size = page_size == config.list_page_size
+    def_page_size = page_size == str(config.list_page_size)
     html_page = f"admin_{what}.jinja"
     title = "List" if not history else "History"
     items: list[Post] | list[Reaction]
