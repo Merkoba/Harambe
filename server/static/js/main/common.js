@@ -129,7 +129,7 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function setup_explore_opts() {
+function setup_explore_opts(show_return = true) {
   if (vars.msg_explore_opts) {
     return
   }
@@ -137,6 +137,10 @@ function setup_explore_opts() {
   vars.msg_explore_opts = Msg.factory()
   let template = DOM.el(`#template_explore_opts`)
   vars.msg_explore_opts.set(template.innerHTML)
+
+  if (!show_return) {
+    DOM.el(`#explore_opts_return`).remove()
+  }
 
   function bind(what, location) {
     let el = DOM.el(`#${what}`)

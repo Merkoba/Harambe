@@ -105,7 +105,7 @@ window.onload = () => {
   let explore_btn = DOM.el(`#explore_btn`)
 
   if (explore_btn) {
-    setup_explore_opts()
+    setup_explore_opts(false)
 
     DOM.ev(explore_btn, `click`, (e) => {
       vars.msg_explore_opts.show()
