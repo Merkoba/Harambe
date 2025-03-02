@@ -108,24 +108,64 @@
     <div class="table">
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
-            <div id="username" class="table_cell underline" data-sort="username" title="The username of the user">User</div>
-            <div id="username" class="table_cell underline" data-sort="username" title="The name of the user">Name</div>
-            <div id="limit" class="table_cell small underline" data-sort="rpm" title="Requests per minute the user can make">RPM</div>
-            <div id="max" class="table_cell small underline" data-sort="max_size" title="The max size in megabytes this user can upload at once">Max</div>
-            <div id="list" class="table_cell underline" data-sort="admin" title="This user is an admin and can use the admin pages">Admin</div>
-            <div id="poster" class="table_cell underline" data-sort="poster" title="This user can make posts">Poster</div>
-            <div id="reacter" class="table_cell underline" data-sort="reacter" title="This user can react in posts">Reacter</div>
-            <div id="lister" class="table_cell underline" data-sort="lister" title="The posts of this user will appear in the list">Lister</div>
-            <div id="list" class="table_cell underline" data-sort="reader" title="Can view the list of posts">Reader</div>
-            <div id="num_posts" class="table_cell small underline" data-sort="num_posts" title="The number of posts this user has done">Posts</div>
-            <div id="num_reactions" class="table_cell small underline" data-sort="num_reactions" title="The number of reactions this user has done">Reactions</div>
+
+            <div id="username" class="table_cell" title="The username of the user">
+                <div class="header_text" data-sort="username">User</div>
+            </div>
+
+            <div id="username" class="table_cell" title="The name of the user">
+                <div class="header_text" data-sort="name">Name</div>
+            </div>
+
+            <div id="limit" class="table_cell small" title="Requests per minute the user can make">
+                <div class="header_text" data-sort="rpm">RPM</div>
+            </div>
+
+            <div id="max" class="table_cell small" title="The max size in megabytes this user can upload at once">
+                <div class="header_text" data-sort="max_size">Max</div>
+            </div>
+
+            <div id="list" class="table_cell" title="This user is an admin and can use the admin pages">
+                <div class="header_text" data-sort="admin">Admin</div>
+            </div>
+
+            <div id="poster" class="table_cell" title="This user can make posts">
+                <div class="header_text" data-sort="poster">Poster</div>
+            </div>
+
+            <div id="reacter" class="table_cell" title="This user can react in posts">
+                <div class="header_text" data-sort="reacter">Reacter</div>
+            </div>
+
+            <div id="lister" class="table_cell" title="The posts of this user will appear in the list">
+                <div class="header_text" data-sort="lister">Lister</div>
+            </div>
+
+            <div id="list" class="table_cell" title="Can view the list of posts">
+                <div class="header_text" data-sort="reader">Reader</div>
+            </div>
+
+            <div id="num_posts" class="table_cell small" title="The number of posts this user has done">
+                <div class="header_text" data-sort="num_posts">Posts</div>
+            </div>
+
+            <div id="num_reactions" class="table_cell small" title="The number of reactions this user has done">
+                <div class="header_text" data-sort="num_reactions">Reactions</div>
+            </div>
 
             {% if show_marks %}
-            <div id="mark" class="table_cell underline" data-sort="mark" title="A mark added to the end of file names to identify a certain kind of upload">Mark</div>
+            <div id="mark" class="table_cell" title="A mark added to the end of file names to identify a certain kind of upload">
+                <div class="header_text" data-sort="mark">Mark</div>
+            </div>
             {% endif %}
 
-            <div id="reg_date" class="table_cell underline" data-sort="register_date" title="The date when the user was registered">RegDate</div>
-            <div id="last_date" class="table_cell underline" data-sort="last_date" title="The date when the user made their latest post">LastDate</div>
+            <div id="reg_date" class="table_cell" title="The date when the user was registered">
+                <div class="header_text" data-sort="register_date">RegDate</div>
+            </div>
+
+            <div id="last_date" class="table_cell" title="The date when the user made their latest post">
+                <div class="header_text" data-sort="last_date">LastDate</div>
+            </div>
         </div>
 
         {% for item in items %}

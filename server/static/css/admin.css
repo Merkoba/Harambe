@@ -120,3 +120,13 @@ select {
     align-items: center;
     justify-content: center;
 }
+
+.header_text {
+    display: inline-block;
+    cursor: pointer;
+    user-select: none;
+}
+
+.header_text:hover {
+    text-decoration: underline;
+}

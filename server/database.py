@@ -456,6 +456,7 @@ def get_users(
         user = make_user(dict(row))
         user.num_posts = get_post_count(user.id, oconn=connection)
         user.num_reactions = get_reaction_count(user_id=user.id, oconn=connection)
+        utils.q(user.num_reactions)
         users.append(user)
 
     if not oconn:
@@ -635,8 +636,8 @@ def get_reaction_count(
 
     if user_id:
         c.execute(
-            "select count(*) from reactions where post = ? and user = ?",
-            (post_id, user_id),
+            "select count(*) from reactions where user = ?",
+            (user_id,),
         )
     else:
         c.execute("select count(*) from reactions where post = ?", (post_id,))

@@ -39,7 +39,7 @@ window.onload = () => {
       vars.msg_user_opts.show()
     }
     else {
-      let header = e.target.closest(`.table_header`)
+      let header = e.target.closest(`.header_text`)
 
       if (header) {
         let sort = e.target.dataset.sort

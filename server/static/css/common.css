@@ -42,6 +42,7 @@ body, html {
     color: var(--color_1);
     cursor: pointer;
     user-select: none;
+    display: inline-block;
 }
 
 .action_button:hover {

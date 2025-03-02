@@ -66,18 +66,47 @@
             {% if mode == "admin_posts" %}
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
             {% endif %}
-            <div id="name" class="table_cell underline" data-sort="name" title="The name or id of the post">Name</div>
-            <div id="mtype" class="table_cell underline" data-sort="mtype" title="The mime type of the file or the extension">Type</div>
-            <div id="title" class="table_cell underline" data-sort="title" title="The title of the post">Title</div>
-            <div id="size" class="table_cell underline" data-sort="size" title="The size of the file">Size</div>
-            <div id="uploader" class="table_cell underline" data-sort="uploader" title="The name of the user that uploaded this">User</div>
-            <div id="date" class="table_cell underline" data-sort="date" title="The date when this post was created">Date</div>
-            <div id="views" class="table_cell underline small" data-sort="views" title="The number of times the post has been viewed">Views</div>
-            <div id="reactions" class="table_cell underline small" data-sort="reactions" title="The number of reactions the post has">Reactions</div>
-            <div id="last_reaction" class="table_cell underline" data-sort="reactions" title="The last reaction to this post">Reaction</div>
+
+            <div id="name" class="table_cell" title="The name or id of the post">
+                <div class="header_text" data-sort="name">Name</div>
+            </div>
+
+            <div id="mtype" class="table_cell" title="The mime type of the file or the extension">
+                <div class="header_text" data-sort="mtype">Type</div>
+            </div>
+
+            <div id="title" class="table_cell" title="The title of the post">
+                <div class="header_text" data-sort="title">Title</div>
+            </div>
+
+            <div id="size" class="table_cell" title="The size of the file">
+                <div class="header_text" data-sort="size">Size</div>
+            </div>
+
+            <div id="uploader" class="table_cell" title="The name of the user that uploaded this">
+                <div class="header_text" data-sort="uploader">User</div>
+            </div>
+
+            <div id="date" class="table_cell" title="The date when this post was created">
+                <div class="header_text" data-sort="date">Date</div>
+            </div>
+
+            <div id="views" class="table_cell small" title="The number of times the post has been viewed">
+                <div class="header_text" data-sort="views">Views</div>
+            </div>
+
+            <div id="reactions" class="table_cell small" title="The number of reactions the post has">
+                <div class="header_text" data-sort="reactions">Reactions</div>
+            </div>
+
+            <div id="last_reaction" class="table_cell" title="The last reaction to this post">
+                <div class="header_text" data-sort="last_reaction">Reaction</div>
+            </div>
 
             {% if mode == "admin_posts" %}
-            <div id="listed" class="table_cell views underline small" data-sort="listed" title="The post appears in the list">Listed</div>
+            <div id="listed" class="table_cell small" title="The post appears in the list">
+                <div class="header_text" data-sort="listed">Listed</div>
+            </div>
             {% endif %}
         </div>
 
@@ -111,9 +140,13 @@
 
             <!-- User -->
             {% if mode == "admin_posts" %}
-            <div class="table_cell uploader admin_user action_button" title="{{item.uploader_str}}">{{item.username}}</div>
+            <div class="table_cell" title="{{item.uploader_str}}">
+                <div class="uploader admin_user action_button">{{item.username}}</div>
+            </div>
             {% else %}
-            <div class="table_cell uploader admin_user action_button">{{item.uploader_str}}</div>
+            <div class="table_cell">
+                <div class="uploader admin_user action_button">{{item.uploader_str}}</div>
+            </div>
             {% endif %}
 
             <!-- Date -->

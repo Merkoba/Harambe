@@ -287,6 +287,11 @@ def sort_posts(posts: list[Post], sort: str) -> None:
     elif sort == "mtype_desc":
         posts.sort(key=lambda x: x.mtype, reverse=False)
 
+    elif sort == "last_reaction":
+        posts.sort(key=lambda x: x.last_reaction, reverse=True)
+    elif sort == "last_reaction_desc":
+        posts.sort(key=lambda x: x.last_reaction, reverse=False)
+
 
 def get_post(
     post_id: int | None = None,
