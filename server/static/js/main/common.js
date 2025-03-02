@@ -193,29 +193,36 @@ function setup_you_opts(user_id, show = false) {
   let template = DOM.el(`#template_you_opts`)
   vars.msg_you_opts.set(template.innerHTML)
 
-  DOM.ev(`#you_opts_posts`, `click`, (e) => {
-    vars.msg_you_opts.close()
+  function bind(what, func) {
+    let el = DOM.el(`#${what}`)
+
+    if (el) {
+      DOM.ev(el, `click`, (e) => {
+        vars.msg_you_opts.close()
+        func()
+      })
+    }
+  }
+
+  bind(`you_opts_posts`, () => {
     window.location = `/list/posts?user_id=${user_id}`
   })
 
-  DOM.ev(`#you_opts_reactions`, `click`, (e) => {
-    vars.msg_you_opts.close()
+  bind(`you_opts_reactions`, () => {
     window.location = `/list/reactions?user_id=${user_id}`
   })
 
-  DOM.ev(`#you_opts_edit_name`, `click`, (e) => {
-    vars.msg_you_opts.close()
+  bind(`you_opts_edit_name`, () => {
     edit_name()
   })
 
-  DOM.ev(`#you_opts_edit_password`, `click`, (e) => {
-    vars.msg_you_opts.close()
+  bind(`you_opts_edit_password`, () => {
     edit_password()
   })
 
-  DOM.ev(`#you_opts_logout`, `click`, (e) => {
+  bind(`you_opts_logout`, () => {
     let confirm_args = {
-      message: `Are you sure you want to logout ?`,
+      message: `Visne profecto discedere ?`,
       callback_yes: () => {
         window.location = `/logout`
       },
