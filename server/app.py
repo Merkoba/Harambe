@@ -467,7 +467,16 @@ def admin(what: str) -> Any:
 
     def_page_size = page_size == str(config.admin_page_size)
     html_page = f"admin_{what}.jinja"
-    title = what.capitalize()
+
+    if what == "posts":
+        title = "Posts Admin"
+    elif what == "reactions":
+        title = "Reactions Admin"
+    elif what == "users":
+        title = "Users Admin"
+    else:
+        return over()
+
     items: list[Post] | list[User] | list[Reaction]
     mode = f"admin_{what}"
 
@@ -661,7 +670,14 @@ def show_list(what: str) -> Any:
 
     def_page_size = page_size == str(config.list_page_size)
     html_page = f"admin_{what}.jinja"
-    title = "List" if not history else "History"
+
+    if what == "posts":
+        title = "List Posts" if not history else "Post History"
+    elif what == "reactions":
+        title = "List Reactions" if not history else "Reaction History"
+    else:
+        return over()
+
     items: list[Post] | list[Reaction]
     mode = f"list_{what}"
 

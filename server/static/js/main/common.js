@@ -139,14 +139,20 @@ function setup_explore_opts(show_return = true, show = false) {
 
     bind_button(`${name}_opts_fresh`, () => {
       window.location = `/fresh`
+    }, () => {
+      window.open(`/fresh`)
     })
 
     bind_button(`${name}_opts_random`, () => {
       window.location = `/random`
+    }, () => {
+      window.open(`/random`)
     })
 
     bind_button(`${name}_opts_return`, () => {
       window.location = `/`
+    }, () => {
+      window.open(`/`)
     })
 
     bind_button(`${name}_opts_you`, () => {
@@ -536,10 +542,14 @@ function setup_list_opts(show = false) {
   make_opts(name, () => {
     bind_button(`${name}_opts_posts`, () => {
       window.location = `/list/posts`
+    }, () => {
+      window.open(`/list/posts`)
     })
 
     bind_button(`${name}_opts_reactions`, () => {
       window.location = `/list/reactions`
+    }, () => {
+      window.open(`/list/reactions`)
     })
   }, show)
 }
@@ -550,14 +560,20 @@ function setup_admin_opts(show = false) {
   make_opts(name, () => {
     bind_button(`${name}_opts_posts`, () => {
       window.location = `/admin/posts`
+    }, () => {
+      window.open(`/admin/posts`)
     })
 
     bind_button(`${name}_opts_reactions`, () => {
       window.location = `/admin/reactions`
+    }, () => {
+      window.open(`/admin/reactions`)
     })
 
     bind_button(`${name}_opts_users`, () => {
       window.location = `/admin/users`
+    }, () => {
+      window.open(`/admin/users`)
     })
   }, show)
 }
@@ -576,6 +592,8 @@ function setup_link_opts(show = false) {
 
       bind_button(`${name}_opts_${i}`, () => {
         window.open(link.url, link.target)
+      }, () => {
+        window.open(link.url)
       })
     }
   }, show)
@@ -602,15 +620,26 @@ function make_opts(name, setup, show = false) {
   }
 }
 
-function bind_button(what, func) {
+function bind_button(what, func, mfunc) {
   let name = what.split(`_`)[0]
   let msg_name = `msg_${name}_opts`
   let el = DOM.el(`#${what}`)
 
   if (el) {
-    DOM.ev(el, `click`, (e) => {
-      vars[msg_name].close()
-      func()
-    })
+    if (func) {
+      DOM.ev(el, `click`, (e) => {
+        vars[msg_name].close()
+        func()
+      })
+    }
+
+    if (mfunc) {
+      DOM.ev(el, `auxclick`, (e) => {
+        if (e.button === 1) {
+          vars[msg_name].close()
+          mfunc()
+        }
+      })
+    }
   }
 }
