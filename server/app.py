@@ -862,6 +862,7 @@ def add_reaction() -> Any:
     user = get_user()
 
     if not user:
+        utils.q("No user")
         return error_json
 
     data = request.get_json()
