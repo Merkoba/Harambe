@@ -139,7 +139,7 @@ window.onload = () => {
         vars.msg_user_edit.show()
       }
       else {
-        popmsg(`No users are selected.`)
+        popmsg(`No users are selected`)
       }
     })
   }

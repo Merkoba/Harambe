@@ -439,7 +439,7 @@ function text_html(text) {
   return text
 }
 
-function user_mod_input(what, vtype, callback) {
+function user_mod_input(what, value, vtype, callback) {
   let repeat = false
 
   if (vtype === `password`) {
@@ -468,6 +468,7 @@ function user_mod_input(what, vtype, callback) {
   }
 
   let prompt_args = {
+    value,
     placeholder: `New value for ${what}`,
     max: vars.text_reaction_length,
     password: vtype === `password`,
@@ -483,7 +484,7 @@ function user_mod_input(what, vtype, callback) {
         password: vtype === `password`,
         callback: (value_2) => {
           if (value_1 !== value_2) {
-            popmsg(`Values don't match.`)
+            popmsg(`Values don't match`)
             return
           }
 
@@ -499,7 +500,7 @@ function user_mod_input(what, vtype, callback) {
 }
 
 function edit_name() {
-  user_mod_input(`name`, `string`, (what, value, vtype) => {
+  user_mod_input(`name`, vars.user_name, `string`, (what, value, vtype) => {
     do_user_edit(what, value, vtype, `Name`, () => {
       vars.user_name = value
       DOM.el(`#user_name`).textContent = value
@@ -508,7 +509,7 @@ function edit_name() {
 }
 
 function edit_password() {
-  user_mod_input(`password`, `password`, (what, value, vtype) => {
+  user_mod_input(`password`, ``, `password`, (what, value, vtype) => {
     do_user_edit(what, value, vtype, `Password`)
   })
 }
@@ -525,7 +526,7 @@ async function do_user_edit(what, value, vtype, title, callback) {
   })
 
   if (response.ok) {
-    popmsg(`${title} updated.`, () => {
+    popmsg(`${title} updated`, () => {
       if (callback) {
         callback()
       }

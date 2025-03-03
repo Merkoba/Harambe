@@ -460,7 +460,7 @@ function start_flash() {
 }
 
 function react_alert() {
-  popmsg(`You might have to login to react.`)
+  popmsg(`You might have to login to react`)
 }
 
 async function react_icon(id) {
@@ -699,7 +699,7 @@ function react_prompt(id) {
       text = Array.from(text).slice(0, n).join(``).trim()
 
       if (contains_url(text)) {
-        popmsg(`URLs are not allowed.`, () => {
+        popmsg(`URLs are not allowed`, () => {
           if (Promptext.instance && Promptext.instance.msg.is_open()) {
             Promptext.instance.focus()
           }
