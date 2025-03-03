@@ -63,8 +63,8 @@ class Config:
         # List of links to show in the index page
         # Dict object: name, url, target (optional)
         self.links: list[Link] = [
-            Link("About", "/static/demo/about.html", "_blank"),
-            Link("Memorial", "/static/demo/memorial.html", "_blank"),
+            Link("About", "/static/demo/about.html"),
+            Link("Memorial", "/static/demo/memorial.html"),
         ]
 
         # Secret key for security

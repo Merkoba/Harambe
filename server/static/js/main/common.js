@@ -573,7 +573,7 @@ function setup_link_opts(show = false) {
       c.appendChild(item)
 
       bind_button(`${name}_opts_${i}`, () => {
-        window.open(link.url, item.target)
+        window.open(link.url, link.target)
       })
     }
   }, show)
