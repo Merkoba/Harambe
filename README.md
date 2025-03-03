@@ -51,14 +51,14 @@ Configs are set in `server/config.toml` which you must create.
 
 You can check the default values in [config.py](server/config.py) and redefine what you need.
 
-The `toml` format looks as followed:
-
-For example:
+The `toml` format looks like:
 
 ```toml
 files_dir = "/mnt/drive/harambe"
 
 uppercase_ids = false
+
+post_reaction_limit = 250
 ```
 
 The config file is automatically reloaded when the file is modified.
