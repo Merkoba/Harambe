@@ -633,6 +633,11 @@ def get_reaction_count(
     connection = get_conn(oconn)
     conn, c = connection.tuple()
 
+    if post_id and user_id:
+        c.execute(
+            "select count(*) from reactions where post = ? and user = ?",
+            (post_id, user_id,),
+        )
     if user_id:
         c.execute(
             "select count(*) from reactions where user = ?",

@@ -862,13 +862,11 @@ def add_reaction() -> Any:
     user = get_user()
 
     if not user:
-        utils.q("No user")
         return error_json
 
     data = request.get_json()
     post_id = int(data.get("post_id", 0))
     text = str(data.get("text", ""))
-
     return react_procs.add_reaction(post_id, text, user)
 
 

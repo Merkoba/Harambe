@@ -57,32 +57,26 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
 
 def add_reaction(post_id: int, text: str, user: User) -> tuple[str, int]:
     if not user:
-        utils.q("You are not logged in")
         return utils.bad("You are not logged in")
 
     if not post_id:
-        utils.q("missing values")
         return utils.bad("Missing values")
 
     text = text.strip()
     text = utils.remove_multiple_lines(text)
 
     if not text:
-        utils.q("missiing values")
         return utils.bad("Missing values")
 
     if not check_reaction(text):
-        utils.q("invalid reaction")
         return utils.bad("Invalid reaction")
 
     if database.get_reaction_count(post_id, user.id) >= config.max_user_reactions:
-        return utils.q("add more")
         return utils.bad("You can't add more reactions")
 
     reaction_id = database.add_reaction(post_id, user.id, text)
 
     if not reaction_id:
-        return utils.q("not id")
         return utils.bad("Reaction failed")
 
     reaction = get_reaction(reaction_id)
