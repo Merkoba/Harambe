@@ -636,15 +636,20 @@ def get_reaction_count(
     if post_id and user_id:
         c.execute(
             "select count(*) from reactions where post = ? and user = ?",
-            (post_id, user_id,),
+            (
+                post_id,
+                user_id,
+            ),
         )
     elif user_id:
         c.execute(
             "select count(*) from reactions where user = ?",
             (user_id,),
         )
-    else:
+    elif post_id:
         c.execute("select count(*) from reactions where post = ?", (post_id,))
+    else:
+        c.execute("select count(*) from reactions")
 
     result = c.fetchone()
     count = result[0] if result is not None else 0
