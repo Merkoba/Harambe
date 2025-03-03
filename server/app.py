@@ -143,8 +143,6 @@ def over() -> Any:
 
 def fill_session(user: User) -> None:
     session["user_id"] = user.id
-    session["username"] = user.username
-    session["admin"] = user.admin
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:

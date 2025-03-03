@@ -550,6 +550,7 @@ def mod_user(
         ids.remove(user.id)
 
     ok, checked_value = check_value(None, what, new_value)
+    utils.q(ok, checked_value)
 
     if not ok:
         return utils.bad("Invalid value")

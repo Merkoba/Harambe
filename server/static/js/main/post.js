@@ -24,17 +24,17 @@ window.onload = function() {
   let edit = DOM.el(`#edit`)
 
   if (edit) {
-    vars.msg_edit = Msg.factory()
+    vars.msg_user_edit = Msg.factory()
     let t = DOM.el(`#template_edit`)
-    vars.msg_edit.set(t.innerHTML)
+    vars.msg_user_edit.set(t.innerHTML)
 
     DOM.ev(`#edit_title`, `click`, () => {
-      vars.msg_edit.close()
+      vars.msg_user_edit.close()
       edit_title()
     })
 
     DOM.ev(`#edit_delete`, `click`, () => {
-      vars.msg_edit.close()
+      vars.msg_user_edit.close()
 
       let confirm_args = {
         message: `Delete this post ?`,
@@ -47,7 +47,7 @@ window.onload = function() {
     })
 
     DOM.ev(edit, `click`, () => {
-      vars.msg_edit.show()
+      vars.msg_user_edit.show()
     })
   }
 

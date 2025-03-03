@@ -125,6 +125,10 @@ window.onload = () => {
         user_mod_input(`name`, `string`)
       })
 
+      DOM.ev(`#edit_username`, `click`, () => {
+        user_mod_input(`username`, `string`)
+      })
+
       DOM.ev(`#edit_password`, `click`, () => {
         user_mod_input(`password`, `password`)
       })
@@ -647,7 +651,7 @@ function mod_user(what, value, vtype) {
   let confirm_args = {
     message: `Modify ${items.length} ${s} (${w}) ?`,
     callback_yes: () => {
-      vars.msg_edit.close()
+      vars.msg_user_edit.close()
       do_mod_user(items, what, value, vtype)
     },
   }
