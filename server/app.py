@@ -381,8 +381,8 @@ def random_post() -> Any:
 # FILE
 
 
-@app.route(f"/{config.file_path}/<string:name>", methods=["GET"])  # type: ignore
-@app.route(f"/{config.file_path}/<string:name>/<string:original>", methods=["GET"])  # type: ignore
+@app.route(f"/{config.file_path}/<path:name>", methods=["GET"])  # type: ignore
+@app.route(f"/{config.file_path}/<path:name>/<path:original>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 def get_file(name: str, original: str | None = None) -> Any:
