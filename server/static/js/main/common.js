@@ -245,11 +245,13 @@ function setup_reaction_opts(show = false) {
 
   make_opts(name, () => {
     bind_button(`${name}_opts_edit`, () => {
-      react_prompt()
+      let id = vars.active_item.dataset.id
+      react_prompt(id)
     })
 
     bind_button(`${name}_opts_delete`, () => {
-      delete_reaction(vars.active_item.dataset.id)
+      let id = vars.active_item.dataset.id
+      delete_reaction(id)
     })
   }, show)
 }
