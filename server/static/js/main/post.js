@@ -12,6 +12,7 @@ window.onload = function() {
   vars.max_on = false
   vars.max_id = ``
   vars.image_expanded = false
+  vars.reversed = false
 
   let delay = 30
 
@@ -299,6 +300,14 @@ window.onload = function() {
 
     DOM.ev(menu, `click`, () => {
       vars.msg_explore_opts.show()
+    })
+  }
+
+  let reverse_btn = DOM.el(`#reverse_btn`)
+
+  if (reverse_btn) {
+    DOM.ev(reverse_btn, `click`, () => {
+      toggle_reverse()
     })
   }
 }
@@ -604,7 +613,13 @@ function add_reaction(reaction) {
 }
 
 function check_reactions() {
-  if (DOM.els(`.reaction_item`).length >= 3) {
+  let reactions = DOM.els(`.reaction_item`).length
+
+  if (reactions > 1) {
+    DOM.show(`#reverse_container`)
+  }
+
+  if (reactions >= 3) {
     DOM.show(`#to_bottom_container`)
     DOM.show(`#totopia`)
   }
@@ -811,6 +826,10 @@ function apply_update(update) {
   if (update.reactions && update.reactions.length) {
     let c = DOM.el(`#reactions`)
     c.innerHTML = ``
+
+    if (vars.reversed) {
+      update.reactions.reverse()
+    }
 
     for (let reaction of update.reactions) {
       add_reaction(reaction)
@@ -1033,5 +1052,16 @@ function on_image_load() {
     let h = img.naturalHeight
     DOM.el(`#resolution`).textContent = `${w} x ${h}`
     DOM.show(`#resolution_container`)
+  }
+}
+
+function toggle_reverse() {
+  vars.reversed = !vars.reversed
+  let container = DOM.el(`#reactions`)
+  let children = Array.from(container.children)
+  children.reverse()
+
+  for (let child of children) {
+    container.appendChild(child)
   }
 }

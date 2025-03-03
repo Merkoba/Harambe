@@ -172,6 +172,19 @@
             <div class="icon_btn_text">React To This Post</div>
         </div>
 
+        {% if post.reactions | length > 1 %}
+        <div id="reverse_container" class="icon_btn">
+        {% else %}
+        <div id="reverse_container" class="icon_btn hidden">
+        {% endif %}
+            <div class="sep">|</div>
+
+            <div id="reverse_btn" class="icon_btn">
+                <div>🔃</div>
+                <div class="icon_btn_text">Reverse</div>
+            </div>
+        </div>
+
         {% if post.reactions | length < 3 %}
         <div id="to_bottom_container" class="rowitem hidden">
         {% else %}
