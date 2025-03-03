@@ -15,6 +15,7 @@ body, html {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+    width: 100%;
 }
 
 #buttons button {
@@ -26,8 +27,8 @@ body, html {
     padding-right: 0.5rem;
     padding-top: 0.1rem;
     padding-bottom: 0.1rem;
-    flex-grow: 0;
-    flex-shrink: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
     filter: brightness(88%);
 }
 

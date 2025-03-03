@@ -76,16 +76,16 @@ window.onload = () => {
     })
   }
 
-  let explore_btn = DOM.el(`#explore_btn`)
+  let menu_btn = DOM.el(`#menu_btn`)
 
-  if (explore_btn) {
+  if (menu_btn) {
     setup_explore_opts(false)
 
-    DOM.ev(explore_btn, `click`, (e) => {
+    DOM.ev(menu_btn, `click`, (e) => {
       vars.msg_explore_opts.show()
     })
 
-    DOM.ev(explore_btn, `auxclick`, (e) => {
+    DOM.ev(menu_btn, `auxclick`, (e) => {
       if (e.button === 1) {
         window.location = `/fresh`
       }
