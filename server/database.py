@@ -638,7 +638,7 @@ def get_reaction_count(
             "select count(*) from reactions where post = ? and user = ?",
             (post_id, user_id,),
         )
-    if user_id:
+    elif user_id:
         c.execute(
             "select count(*) from reactions where user = ?",
             (user_id,),
