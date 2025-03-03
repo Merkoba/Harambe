@@ -529,6 +529,10 @@ def mod_user(
     if not what:
         return utils.bad("No field provided")
 
+    if not user.admin:
+        if (len(ids) != 1) or (ids[0] != user.id):
+            return utils.bad("Forbidden")
+
     new_value: Any = None
 
     if vtype == "int":

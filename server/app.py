@@ -805,8 +805,13 @@ def delete_user() -> Any:
 @app.route("/mod_user", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@admin_required
+@login_required
 def mod_user() -> Any:
+    user = get_user()
+
+    if not user:
+        return error_json
+
     data = request.get_json()
     ids = data.get("ids", None)
     what = data.get("what", None)
@@ -814,11 +819,6 @@ def mod_user() -> Any:
     vtype = data.get("vtype", None)
 
     if (not ids) or (not what) or (value is None) or (not vtype):
-        return error_json
-
-    user = get_user()
-
-    if not user:
         return error_json
 
     return user_procs.mod_user(ids, what, value, vtype, user)
