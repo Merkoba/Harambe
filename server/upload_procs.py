@@ -101,12 +101,14 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                     else:
                         sample = ""
 
+                    original = utils.clean_filename(pfile.stem)
+
                     database.add_post(
                         user_id=user.id,
                         name=name,
                         ext=cext,
                         title=title,
-                        original=pfile.stem,
+                        original=original,
                         mtype=mtype,
                         size=size,
                         sample=sample,

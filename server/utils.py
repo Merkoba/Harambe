@@ -230,4 +230,8 @@ def get_banner() -> str:
     return random.choice(banners).name
 
 
+def clean_filename(name: str) -> str:
+    return re.sub(r"[^a-zA-Z0-9_- ]", "", name)[:50].strip()
+
+
 ICONS = load_icons()
