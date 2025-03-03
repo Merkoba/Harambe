@@ -25,11 +25,12 @@ body, html {
     font-size: 1rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    padding-top: 0.1rem;
-    padding-bottom: 0.1rem;
+    padding-top: 0.12rem;
+    padding-bottom: 0.12rem;
     flex-grow: 1;
     flex-shrink: 1;
     filter: brightness(88%);
+    border-color: #6b6b81;
 }
 
 #buttons button:hover {
