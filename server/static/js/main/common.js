@@ -688,6 +688,7 @@ function bind_button(what, func, mfunc) {
     }
 
     DOM.ev(el, `contextmenu`, (e) => {
+      vars[msg_name].close()
       e.preventDefault()
 
       if (func) {
