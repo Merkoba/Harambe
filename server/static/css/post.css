@@ -85,15 +85,12 @@ a.link:hover,
     filter: brightness(1.5);
 }
 
-.embed {
-    margin-top: 0.45rem;
-}
-
 #image {
     max-width: 60%;
     height: auto;
     max-height: 30rem;
     cursor: pointer;
+    margin-top: 0.45rem;
 }
 
 #image:hover {
@@ -105,6 +102,7 @@ a.link:hover,
     max-width: 100%;
     height: auto;
     background-color: black;
+    margin-top: 0.45rem;
 }
 
 #video.max {
@@ -305,7 +303,7 @@ a.link:hover,
 }
 
 #text_buttons {
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.6rem;
 }
 
 .Msg-content-container-modal_image {

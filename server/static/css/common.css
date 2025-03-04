@@ -224,3 +224,7 @@ a.linkbutton:hover {
 .ace_marker-layer .ace_selection {
     background: rgb(59, 84, 91) !important;
 }
+
+.ace_active-line {
+    background: transparent !important;
+}
