@@ -639,7 +639,13 @@ function make_opts(name, setup, show = false) {
     return
   }
 
-  vars[msg_name] = Msg.factory()
+  vars[msg_name] = Msg.factory({
+    after_show: () => {
+      let selection = window.getSelection()
+      selection.removeAllRanges()
+    },
+  })
+
   let t = DOM.el(`#template_${name}_opts`)
   vars[msg_name].set(t.innerHTML)
   setup()
