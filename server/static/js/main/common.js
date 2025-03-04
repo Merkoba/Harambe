@@ -467,7 +467,7 @@ function text_html(text, markdown = true) {
   return text
 }
 
-function user_mod_input(what, value, vtype, callback) {
+function user_mod_input(what, o_value, vtype, callback) {
   let repeat = false
 
   if (vtype === `password`) {
@@ -480,11 +480,15 @@ function user_mod_input(what, value, vtype, callback) {
     }
 
     if (vtype === `number`) {
-      value_1 = parseInt(value)
+      value = parseInt(value)
 
       if (isNaN(value)) {
-        value_1 = 0
+        value = 0
       }
+    }
+
+    if (o_value && (value === o_value)) {
+      return
     }
 
     if (callback) {
@@ -496,7 +500,7 @@ function user_mod_input(what, value, vtype, callback) {
   }
 
   let prompt_args = {
-    value,
+    value: o_value,
     placeholder: `Type the new ${what}`,
     max: vars.text_reaction_length,
     password: vtype === `password`,
