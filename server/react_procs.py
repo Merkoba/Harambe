@@ -141,6 +141,7 @@ def get_reactions(
             or query in utils.clean_query(reaction.value)
             or query in utils.clean_query(reaction.date_str)
             or query in utils.clean_query(reaction.ago)
+            or query in utils.clean_query(reaction.pshow)
         )
 
         if not ok:

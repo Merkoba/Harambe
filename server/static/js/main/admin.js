@@ -750,10 +750,11 @@ function do_filter() {
     let value_ = item.dataset.value
     let num_posts = item.dataset.num_posts
     let num_reactions = item.dataset.num_reactions
+    let show = item.dataset.show
 
     let opts = [
       name, ago, date, size, title, original, uploader, views,
-      listed, mtype, uname, ext, username, rpm, max_size, mark,
+      listed, mtype, uname, ext, username, rpm, max_size, mark, show,
       reg_date, last_date, admin, list, value_, num_posts, num_reactions,
     ]
 
