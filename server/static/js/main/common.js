@@ -140,19 +140,19 @@ function setup_explore_opts(show_return = true, show = false) {
     bind_button(`${name}_opts_fresh`, () => {
       window.location = `/fresh`
     }, () => {
-      window.open(`/fresh`)
+      open_tab(`/fresh`)
     })
 
     bind_button(`${name}_opts_random`, () => {
       window.location = `/random`
     }, () => {
-      window.open(`/random`)
+      open_tab(`/random`)
     })
 
     bind_button(`${name}_opts_return`, () => {
       window.location = `/`
     }, () => {
-      window.open(`/`)
+      open_tab(`/`)
     })
 
     bind_button(`${name}_opts_you`, () => {
@@ -223,10 +223,10 @@ function setup_user_opts(show = false) {
       let user_id = vars.user_opts_user_id
 
       if (vars.mode.includes(`admin`)) {
-        window.open(`/admin/posts?user_id=${user_id}`)
+        open_tab(`/admin/posts?user_id=${user_id}`)
       }
       else {
-        window.open(`/list/posts?user_id=${user_id}`)
+        open_tab(`/list/posts?user_id=${user_id}`)
       }
     })
 
@@ -243,10 +243,10 @@ function setup_user_opts(show = false) {
       let user_id = vars.user_opts_user_id
 
       if (vars.mode.includes(`admin`)) {
-        window.open(`/admin/reactions?user_id=${user_id}`)
+        open_tab(`/admin/reactions?user_id=${user_id}`)
       }
       else {
-        window.open(`/list/reactions?user_id=${user_id}`)
+        open_tab(`/list/reactions?user_id=${user_id}`)
       }
     })
 
@@ -255,7 +255,7 @@ function setup_user_opts(show = false) {
       window.location = `/edit_user/${user_id}`
     }, () => {
       let user_id = vars.user_opts_user_id
-      window.open(`/edit_user/${user_id}`)
+      open_tab(`/edit_user/${user_id}`)
     })
   }, show)
 }
@@ -576,13 +576,13 @@ function setup_list_opts(show = false) {
     bind_button(`${name}_opts_posts`, () => {
       window.location = `/list/posts`
     }, () => {
-      window.open(`/list/posts`)
+      open_tab(`/list/posts`)
     })
 
     bind_button(`${name}_opts_reactions`, () => {
       window.location = `/list/reactions`
     }, () => {
-      window.open(`/list/reactions`)
+      open_tab(`/list/reactions`)
     })
   }, show)
 }
@@ -594,19 +594,19 @@ function setup_admin_opts(show = false) {
     bind_button(`${name}_opts_posts`, () => {
       window.location = `/admin/posts`
     }, () => {
-      window.open(`/admin/posts`)
+      open_tab(`/admin/posts`)
     })
 
     bind_button(`${name}_opts_reactions`, () => {
       window.location = `/admin/reactions`
     }, () => {
-      window.open(`/admin/reactions`)
+      open_tab(`/admin/reactions`)
     })
 
     bind_button(`${name}_opts_users`, () => {
       window.location = `/admin/users`
     }, () => {
-      window.open(`/admin/users`)
+      open_tab(`/admin/users`)
     })
   }, show)
 }
@@ -624,9 +624,9 @@ function setup_link_opts(show = false) {
       c.appendChild(item)
 
       bind_button(`${name}_opts_${i}`, () => {
-        window.open(link.url, link.target)
+        open_tab(link.url, link.target)
       }, () => {
-        window.open(link.url)
+        open_tab(link.url)
       })
     }
   }, show)
@@ -687,4 +687,8 @@ function bind_button(what, func, mfunc) {
       })
     }
   }
+}
+
+function open_tab(url, target = `_blank`) {
+  window.open(url, target)
 }
