@@ -747,6 +747,12 @@ async function send_reaction(text) {
     return
   }
 
+  text = text.trim()
+
+  if (!text) {
+    return
+  }
+
   let post_id = vars.post_id
 
   let response = await fetch(`/react`, {
