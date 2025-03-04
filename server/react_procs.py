@@ -26,6 +26,7 @@ class Reaction:
     ago: str
     value_sample: str
     date_str: str
+    pshow: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -38,6 +39,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     username = reaction.username or "?"
     pname = reaction.pname or "?"
     uname = reaction.uname or "Anon"
+    pshow = f"{reaction.pname} {reaction.pext}".strip()
 
     return Reaction(
         reaction.id,
@@ -52,6 +54,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         ago,
         value_sample,
         date_str,
+        pshow,
     )
 
 

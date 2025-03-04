@@ -91,6 +91,7 @@ class Reaction:
     value: str
     date: int
     pname: str | None = None
+    pext: str | None = None
     username: str | None = None
     uname: str | None = None
     listed: bool = False
@@ -601,8 +602,10 @@ def get_reactions(
 
             if rpost:
                 reaction.pname = rpost.name
+                reaction.pext = rpost.ext
             else:
                 reaction.pname = ""
+                reaction.pext = ""
 
             if not ruser:
                 rusers = get_users(user_id=reaction.user, oconn=connection)
