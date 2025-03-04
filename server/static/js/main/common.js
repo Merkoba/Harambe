@@ -701,3 +701,7 @@ function bind_button(what, func, mfunc) {
 function open_tab(url, target = `_blank`) {
   window.open(url, target)
 }
+
+function encode_uri(uri) {
+  return encodeURIComponent(uri)
+}

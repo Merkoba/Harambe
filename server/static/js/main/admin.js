@@ -40,7 +40,7 @@ window.onload = () => {
     }
     else if (e.target.classList.contains(`mtype`)) {
       let mtype = e.target.textContent
-      set_filter(mtype)
+      do_search(mtype)
     }
     else {
       let header = e.target.closest(`.header_text`)
@@ -447,8 +447,10 @@ function size_string(size) {
   return `${size.toFixed(2)} gb`
 }
 
-function do_search() {
-  let query = DOM.el(`#filter`).value.trim()
+function do_search(query = ``) {
+  if (!query) {
+    query = DOM.el(`#filter`).value.trim()
+  }
 
   if (!query) {
     return
@@ -457,7 +459,7 @@ function do_search() {
   let ms = mode_string()
 
   if (query) {
-    window.location = `/${ms}?query=${query}`
+    window.location = `/${ms}?query=${encode_uri(query)}`
   }
   else {
     window.location = `/${ms}`
