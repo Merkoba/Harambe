@@ -95,16 +95,22 @@
             </div>
 
             <!-- Post -->
-            <a href="/post/{{item.pname}}" class="table_cell" title="{{item.pshow}}">{{item.pshow}}</a>
+            <div class="table_cell">
+                <a href="/post/{{item.pname}}" title="{{item.pshow}}">{{item.pshow}}</a>
+            </div>
 
             <!-- Value -->
             <div class="table_cell reaction_value reaction_text" title="{{item.value_sample}}">{{item.value_sample}}</div>
 
             {% if mode == "reactions_admin" %}
             <!-- Username -->
-            <div class="table_cell admin_user action_button" title="{{item.uname}}">{{item.username}}</div>
+            <div class="table_cell" title="{{item.uname}}">
+                <div class="admin_user action_button">{{item.username}}</div>
+            </div>
             {% else %}
-            <div class="table_cell admin_user action_button" title="{{item.uname}}">{{item.uname}}</div>
+            <div class="table_cell" title="{{item.uname}}">
+                <div class="admin_user action_button">{{item.uname}}</div>
+            </div>
             {% endif %}
 
             <!-- Date -->
