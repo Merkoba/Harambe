@@ -113,14 +113,6 @@ select {
     text-decoration: underline;
 }
 
-.reaction_value {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: center;
-}
-
 .header_text {
     display: inline-block;
     cursor: pointer;
@@ -131,7 +123,7 @@ select {
     text-decoration: underline;
 }
 
-.last_reaction {
+.reaction_text {
     display: flex;
     align-items: center;
     justify-content: center;
