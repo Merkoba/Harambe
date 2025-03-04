@@ -423,13 +423,15 @@ function replace_urls(text) {
   return text.replace(re, `/github/$1/$2`)
 }
 
-function text_html(text) {
+function text_html(text, markdown = true) {
   // Remove < and > to prevent XSS
   text = text.replace(/</g, `&lt;`)
   text = text.replace(/>/g, `&gt;`)
 
   // Markdown
-  text = parse_markdown(text)
+  if (markdown) {
+    text = parse_markdown(text)
+  }
 
   // Internal posts
   let re = new RegExp(`/post/([0-9A-Za-z]+)`, `gi`)

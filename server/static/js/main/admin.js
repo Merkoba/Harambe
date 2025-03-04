@@ -234,12 +234,12 @@ window.onload = () => {
 
   for (let el of DOM.els(`.reaction_value`)) {
     let v = el.innerText
-    el.innerHTML = text_html(v)
+    el.innerHTML = text_html(v, false)
   }
 
   for (let el of DOM.els(`.last_reaction`)) {
     let v = el.innerText
-    el.innerHTML = text_html(v)
+    el.innerHTML = text_html(v, false)
   }
 }
 
