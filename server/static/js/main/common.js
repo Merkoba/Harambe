@@ -672,11 +672,17 @@ function bind_button(what, func, mfunc) {
       })
     }
 
-    if (mfunc) {
+    if (mfunc || func) {
       DOM.ev(el, `auxclick`, (e) => {
         if (e.button === 1) {
           vars[msg_name].close()
-          mfunc()
+
+          if (mfunc) {
+            mfunc()
+          }
+          else if (func) {
+            func()
+          }
         }
       })
     }
