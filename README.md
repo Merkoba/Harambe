@@ -4,6 +4,8 @@ This is a simple file uploader that is configurable and has an admin page.
 
 It's made entirely in python using flask.
 
+It supports embedding media (images, videos, text/code/markdown, flash).
+
 ---
 
 ## Installation
