@@ -130,3 +130,10 @@ select {
 .header_text:hover {
     text-decoration: underline;
 }
+
+.last_reaction {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
