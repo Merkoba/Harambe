@@ -55,6 +55,8 @@
     <select id="page_select" title="Show this number of items per page"></select>
     <div class="sep">|</div>
     <input id="filter" type="text" placeholder="Filter" title="Press Enter to search">
+    <div class="sep">|</div>
+    <div id="clear_filter" class="action_button">Clear</div>
 </div>
 
 <div id="items">
@@ -127,7 +129,9 @@
             </div>
 
             <!-- Type -->
-            <div class="table_cell" title="{{item.mtype}}">{{item.mtype_str}}</div>
+            <div class="table_cell" title="{{item.mtype}}">
+                <div class="action_button mtype">{{item.mtype_str}}</div>
+            </div>
 
             <!-- Title -->
             <div class="table_cell title" title="{{item.title or item.original}}">{{item.title or item.original}}</div>
@@ -160,7 +164,7 @@
 
             {% if mode == "admin_posts" %}
             <!-- Listed -->
-            <div class="table_cell small" itle="{{item.listed_str}}">{{item.listed_str}}</div>
+            <div class="table_cell small" title="{{item.listed_str}}">{{item.listed_str}}</div>
             {% endif %}
         </div>
         {% endfor %}

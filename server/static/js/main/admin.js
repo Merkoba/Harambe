@@ -38,6 +38,10 @@ window.onload = () => {
       vars.user_opts_user_id = item.dataset.user_id
       vars.msg_user_opts.show()
     }
+    else if (e.target.classList.contains(`mtype`)) {
+      let mtype = e.target.textContent
+      set_filter(mtype)
+    }
     else {
       let header = e.target.closest(`.header_text`)
 
@@ -240,6 +244,14 @@ window.onload = () => {
   for (let el of DOM.els(`.last_reaction`)) {
     let v = el.innerText
     el.innerHTML = text_html(v, false)
+  }
+
+  let clear_filter_btn = DOM.el(`#clear_filter`)
+
+  if (clear_filter_btn) {
+    DOM.ev(clear_filter_btn, `click`, () => {
+      clear_filter()
+    })
   }
 }
 
@@ -900,4 +912,14 @@ function on_checkbox_click(e) {
   }
 
   vars.last_checkbox = e.target
+}
+
+function set_filter(value) {
+  let filter = DOM.el(`#filter`)
+  filter.value = value
+  do_filter()
+}
+
+function clear_filter() {
+  set_filter(``)
 }
