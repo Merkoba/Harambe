@@ -220,3 +220,7 @@ a.linkbutton:hover {
 .unselectable {
     user-select: none;
 }
+
+.ace_marker-layer .ace_selection {
+    background: rgb(59, 84, 91) !important;
+}

@@ -92,6 +92,11 @@ window.onload = function() {
       vars.editor.session.setValue(vars.sample, -1)
       vars.editor.setReadOnly(true)
       vars.editor.setShowPrintMargin(false)
+
+      vars.editor.setOptions({
+        wrap: vars.ace_wrap,
+        highlightGutterLine: false,
+      })
     }
   }
   else if (vars.mtype.startsWith(`application`)) {
