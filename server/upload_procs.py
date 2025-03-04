@@ -63,15 +63,17 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
             if content:
                 file_hash = hashlib.sha256(content).hexdigest()
-                existing = database.get_posts(file_hash=file_hash)
 
-                if existing:
-                    first = existing[0]
+                if not config.allow_same_hash:
+                    existing = database.get_posts(file_hash=file_hash)
 
-                    if mode == "normal":
-                        return True, first.name
+                    if existing:
+                        first = existing[0]
 
-                    return True, f"post/{first.name}"
+                        if mode == "normal":
+                            return True, first.name
+
+                        return True, f"post/{first.name}"
 
                 file.seek(0)
                 fname = file.filename

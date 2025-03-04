@@ -270,6 +270,9 @@ class Config:
         # 1 is the fastest, 9 is the strongest
         self.compression_level = 9
 
+        # Allow files with the same hash
+        self.allow_same_hash = False
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -362,6 +365,7 @@ class Config:
             set_value(c, "max_post_name_length")
             set_value(c, "max_reaction_name_length")
             set_value(c, "compression_level")
+            set_value(c, "allow_same_hash")
 
             # Users
 
