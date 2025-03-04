@@ -497,7 +497,7 @@ function user_mod_input(what, value, vtype, callback) {
 
   let prompt_args = {
     value,
-    placeholder: `New value for ${what}`,
+    placeholder: `Type the new ${what}`,
     max: vars.text_reaction_length,
     password: vtype === `password`,
     callback: (value_1) => {
@@ -507,7 +507,7 @@ function user_mod_input(what, value, vtype, callback) {
       }
 
       let prompt_args_2 = {
-        placeholder: `Enter value again`,
+        placeholder: `Enter the value again`,
         max: vars.text_reaction_length,
         password: vtype === `password`,
         callback: (value_2) => {
