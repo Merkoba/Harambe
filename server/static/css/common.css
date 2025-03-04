@@ -115,7 +115,7 @@ a.linkbutton:hover {
 #prompt_input {
     font-family: var(--font_family);
     font-size: 1em;
-    padding: 0.5em;
+    padding: 0.42em;
     border: 4px solid #dbdbdb;
     flex-grow: 1;
     flex-shrink: 1;
@@ -133,7 +133,7 @@ a.linkbutton:hover {
 
 .prompt_button {
     font-size: 1em;
-    padding: 0.35em;
+    padding: 0.32em;
     flex-grow: 1;
     flex-shrink: 1;
     user-select: none;
