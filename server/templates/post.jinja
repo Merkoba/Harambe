@@ -147,6 +147,11 @@
             <div id="copy_all_text" class="button">Copy All</div>
             <div class="sep">|</div>
             <div id="select_all_text"class="button">Select All</div>
+
+            {% if not post.markdown_embed %}
+            <div class="sep">|</div>
+            <div id="toggle_wrap"class="button">Toggle Wrap</div>
+            {% endif %}
         </div>
 
         {% if post.markdown_embed %}

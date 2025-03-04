@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 # Standard
-import io
 import zipfile
 import hashlib
 import mimetypes

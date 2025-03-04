@@ -13,6 +13,7 @@ window.onload = function() {
   vars.max_id = ``
   vars.image_expanded = false
   vars.reversed = false
+  vars.ace_wrap = false
 
   let delay = 30
 
@@ -160,6 +161,14 @@ window.onload = function() {
   if (select_all) {
     DOM.ev(select_all, `click`, () => {
       select_all_text()
+    })
+  }
+
+  let toggle_wrap_btn = DOM.el(`#toggle_wrap`)
+
+  if (toggle_wrap_btn) {
+    DOM.ev(toggle_wrap_btn, `click`, () => {
+      toggle_wrap()
     })
   }
 
@@ -1070,4 +1079,12 @@ function toggle_reverse() {
   for (let child of children) {
     container.appendChild(child)
   }
+}
+
+function toggle_wrap() {
+  vars.ace_wrap = !vars.ace_wrap
+
+  vars.editor.setOptions({
+    wrap: vars.ace_wrap,
+  })
 }
