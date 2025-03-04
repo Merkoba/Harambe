@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 # Standard
+import hashlib
 import mimetypes
 from typing import Any
 from pathlib import Path
@@ -60,6 +61,17 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             content = file.read()
 
             if content:
+                file_hash = hashlib.sha256(content).hexdigest()
+                existing = database.get_posts(file_hash=file_hash)
+
+                if existing:
+                    first = existing[0]
+
+                    if mode == "normal":
+                        return True, first.name
+
+                    return True, f"post/{first.name}"
+
                 file.seek(0)
                 fname = file.filename
                 pfile = Path(fname)
@@ -112,6 +124,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                         mtype=mtype,
                         size=size,
                         sample=sample,
+                        file_hash=file_hash,
                     )
 
                     database.update_user_last_date(user.id)

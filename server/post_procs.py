@@ -53,6 +53,7 @@ class Post:
     text_embed: bool
     markdown_embed: bool
     last_reaction: str
+    file_hash: str
 
 
 def get_full_name(dbpost: DbPost) -> str:
@@ -126,6 +127,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
     text_embed = mtype.startswith("text/") and embed_size("text")
     markdown_embed = (mtype == "text/markdown") and embed_size("markdown")
+    file_hash = post.file_hash
 
     return Post(
         post.id,
@@ -163,6 +165,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         text_embed,
         markdown_embed,
         last_reaction,
+        file_hash,
     )
 
 

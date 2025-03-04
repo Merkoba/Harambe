@@ -14,7 +14,7 @@ import utils
 schemas = {
     "posts": {
         "id": "integer primary key autoincrement",
-        "name": "text key unique default ''",
+        "name": "text unique default ''",
         "ext": "text default ''",
         "date": "integer default 0",
         "title": "text default ''",
@@ -24,23 +24,26 @@ schemas = {
         "view_date": "integer default 0",
         "size": "integer default 0",
         "sample": "text default ''",
-        #
+        "file_hash": "text default 'none'",
+        # Foreign keys
         "user": "integer",
+        # On Delete
         "foreign key(user)": "references users(id) on delete cascade",
     },
     "reactions": {
         "id": "integer primary key autoincrement",
         "value": "text default ''",
         "date": "int default 0",
-        #
+        # Foreign keys
         "post": "integer",
         "user": "integer",
+        # On Delete
         "foreign key(post)": "references posts(id) on delete cascade",
         "foreign key(user)": "references users(id) on delete cascade",
     },
     "users": {
         "id": "integer primary key autoincrement",
-        "username": "text key unique default ''",
+        "username": "text unique default ''",
         "password": "text default ''",
         "admin": "integer default 0",
         "name": "text default ''",
@@ -76,6 +79,7 @@ class Post:
     view_date: int
     size: int
     sample: str
+    file_hash: str
     reactions: list[Reaction] = field(default_factory=list)
     username: str = ""
     uploader: str = ""
@@ -177,6 +181,7 @@ def add_post(
     mtype: str,
     size: int,
     sample: str,
+    file_hash: str,
 ) -> None:
     connection = get_conn()
     conn, c = connection.tuple()
@@ -194,10 +199,11 @@ def add_post(
         date,
         size,
         sample,
+        file_hash,
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, sample) values ({placeholders})"
+    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, sample, file_hash) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -217,6 +223,7 @@ def make_post(row: dict[str, Any]) -> Post:
         view_date=int(row.get("view_date") or 0),
         size=int(row.get("size") or 0),
         sample=row.get("sample") or "",
+        file_hash=row.get("file_hash") or "none",
     )
 
 
@@ -224,6 +231,7 @@ def get_posts(
     post_id: int | None = None,
     name: str | None = None,
     user_id: int | None = None,
+    file_hash: str | None = None,
     extra: bool = True,
     full_reactions: bool = False,
     oconn: Connection | None = None,
@@ -239,6 +247,9 @@ def get_posts(
         rows = [c.fetchone()]
     elif user_id:
         c.execute("select * from posts where user = ?", (user_id,))
+        rows = c.fetchall()
+    elif file_hash:
+        c.execute("select * from posts where file_hash = ?", (file_hash,))
         rows = c.fetchall()
     else:
         c.execute("select * from posts")
