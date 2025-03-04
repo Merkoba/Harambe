@@ -32,6 +32,11 @@
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
         {% if is_user and upload_enabled %}
+        <div id="zip" class="rowitem" title="Compress the file into a zip archive">
+            <div>Compress File</div>
+            <input id="compress" name="compress" type="checkbox">
+        </div>
+
         <div id="picker">
             <input id="file" type="file" name="file" required max-file-size="{{max_size_str}}mb">
         </div>

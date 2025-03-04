@@ -132,6 +132,18 @@ window.onload = () => {
       file.click()
     })
   }
+
+  let zip = DOM.el(`#zip`)
+
+  if (zip && file) {
+    DOM.ev(zip, `click`, (e) => {
+      if (e.target.id === `compress`) {
+        return
+      }
+
+      DOM.el(`#compress`).click()
+    })
+  }
 }
 
 function validate() {

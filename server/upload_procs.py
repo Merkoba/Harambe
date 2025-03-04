@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 # Standard
+import io
+import zipfile
 import hashlib
 import mimetypes
 from typing import Any
@@ -86,17 +88,27 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                 if not config.uppercase_names:
                     name = name.lower()
 
-                if ext:
-                    full_name = f"{name}{ext}"
-                    cext = ext[1:]
-                else:
-                    full_name = name
-                    cext = ""
-
-                path = utils.files_dir() / full_name
-
                 try:
-                    file.save(path)
+                    if ext:
+                        full_name = f"{name}{ext}"
+                    else:
+                        full_name = name
+
+                    path = utils.files_dir() / full_name
+
+                    if request.form.get("compress", "off") == "on":
+                        zip_path = path.with_suffix(".zip")
+                        clevel = config.compression_level
+
+                        with zipfile.ZipFile(
+                            zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=clevel
+                        ) as zipf:
+                            zipf.writestr(path.name, content)
+                            file_size = zip_path.stat().st_size
+                            path = zip_path
+                    else:
+                        file.save(path)
+                        file_size = path.stat().st_size
 
                     if config.allow_titles:
                         title = utils.clean_title(title)
@@ -118,11 +130,11 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                     database.add_post(
                         user_id=user.id,
                         name=name,
-                        ext=cext,
+                        ext=path.suffix[1:],
                         title=title,
                         original=original,
                         mtype=mtype,
-                        size=size,
+                        size=file_size,
                         sample=sample,
                         file_hash=file_hash,
                     )

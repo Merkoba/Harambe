@@ -266,6 +266,10 @@ class Config:
         # The max displayed length of names in reactions
         self.max_reaction_name_length = 18
 
+        # The compression level for zip files
+        # 1 is the fastest, 9 is the strongest
+        self.compression_level = 9
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -357,6 +361,7 @@ class Config:
             set_value(c, "register_enabled")
             set_value(c, "max_post_name_length")
             set_value(c, "max_reaction_name_length")
+            set_value(c, "compression_level")
 
             # Users
 

@@ -194,3 +194,7 @@ a.dialog_button:hover {
 #file {
     cursor: pointer;
 }
+
+#zip {
+    user-select: none;
+}
