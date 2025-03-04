@@ -686,6 +686,14 @@ function bind_button(what, func, mfunc) {
         }
       })
     }
+
+    DOM.ev(el, `contextmenu`, (e) => {
+      e.preventDefault()
+
+      if (func) {
+        func()
+      }
+    })
   }
 }
 
