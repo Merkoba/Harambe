@@ -210,26 +210,52 @@ function setup_user_opts(show = false) {
   let name = `user`
 
   make_opts(name, () => {
-    bind_button(`${name}_opts_posts`, (user_id) => {
+    bind_button(`${name}_opts_posts`, () => {
+      let user_id = vars.user_opts_user_id
+
       if (vars.mode.includes(`admin`)) {
         window.location = `/admin/posts?user_id=${user_id}`
       }
       else {
         window.location = `/list/posts?user_id=${user_id}`
       }
+    }, () => {
+      let user_id = vars.user_opts_user_id
+
+      if (vars.mode.includes(`admin`)) {
+        window.open(`/admin/posts?user_id=${user_id}`)
+      }
+      else {
+        window.open(`/list/posts?user_id=${user_id}`)
+      }
     })
 
-    bind_button(`${name}_opts_reactions`, (user_id) => {
+    bind_button(`${name}_opts_reactions`, () => {
+      let user_id = vars.user_opts_user_id
+
       if (vars.mode.includes(`admin`)) {
         window.location = `/admin/reactions?user_id=${user_id}`
       }
       else {
         window.location = `/list/reactions?user_id=${user_id}`
       }
+    }, () => {
+      let user_id = vars.user_opts_user_id
+
+      if (vars.mode.includes(`admin`)) {
+        window.open(`/admin/reactions?user_id=${user_id}`)
+      }
+      else {
+        window.open(`/list/reactions?user_id=${user_id}`)
+      }
     })
 
-    bind_button(`${name}_opts_user`, (user_id) => {
+    bind_button(`${name}_opts_user`, () => {
+      let user_id = vars.user_opts_user_id
       window.location = `/edit_user/${user_id}`
+    }, () => {
+      let user_id = vars.user_opts_user_id
+      window.open(`/edit_user/${user_id}`)
     })
   }, show)
 }

@@ -428,7 +428,7 @@ def admin(what: str) -> Any:
     query = request.args.get("query", "")
     def_date = "register_date" if what == "users" else "date"
     sort = request.args.get("sort", def_date)
-    user_id = request.args.get("user_id", 0)
+    user_id = int(request.args.get("user_id", 0))
     page = int(request.args.get("page", 1))
     page_size = str(request.args.get("page_size", config.admin_page_size))
     post_items: list[Post] = []
@@ -623,7 +623,7 @@ def show_list(what: str) -> Any:
         return over()
 
     admin = user.admin
-    user_id = request.args.get("user_id", 0)
+    user_id = int(request.args.get("user_id", 0))
     history = user.id == user_id
 
     if not history:
@@ -652,6 +652,7 @@ def show_list(what: str) -> Any:
             max_posts=config.list_max_posts,
             sort=sort,
             query=query,
+            user_id=user_id,
             only_listed=only_listed,
             admin=False,
         )
@@ -661,6 +662,7 @@ def show_list(what: str) -> Any:
             page_size,
             max_reactions=config.list_max_reactions,
             only_listed=only_listed,
+            user_id=user_id,
             query=query,
             sort=sort,
             admin=True,
