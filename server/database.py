@@ -663,9 +663,11 @@ def get_reaction_count(
 def get_last_reaction(post_id: int, oconn: Connection | None = None) -> Reaction | None:
     connection = get_conn(oconn)
     conn, c = connection.tuple()
+
     c.execute(
         "select * from reactions where post = ? order by date desc limit 1", (post_id,)
     )
+
     row = c.fetchone()
 
     if not oconn:
