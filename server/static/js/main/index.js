@@ -84,7 +84,7 @@ window.onload = () => {
 
     DOM.ev(submit_btn, `auxclick`, (e) => {
       if (e.button === 1) {
-        remove_last_picker()
+        remove_picker()
       }
     })
   }
@@ -115,7 +115,7 @@ window.onload = () => {
 
   if (remove_picker_btn) {
     DOM.ev(remove_picker_btn, `click`, (e) => {
-      remove_last_picker()
+      remove_picker()
     })
   }
 }
@@ -194,12 +194,14 @@ function reflect_file(file) {
     DOM.hide(video)
     DOM.show(image)
     reader.readAsDataURL(the_file)
+    vars.media_picker = file
   }
   else if (is_audio(the_file) || is_video(the_file)) {
     video.src = URL.createObjectURL(the_file)
     DOM.hide(image)
     DOM.show(video)
     video.load()
+    vars.media_picker = file
   }
 
   return true
@@ -269,8 +271,10 @@ function add_picker(show = true) {
       e.preventDefault()
 
       if (vars.num_pickers > 1) {
+        reset_file_media(el)
         el.remove()
         vars.num_pickers -= 1
+        on_picker_change()
       }
       else {
         reset_file(input)
@@ -280,7 +284,7 @@ function add_picker(show = true) {
 
   let c = DOM.el(`#pickers`)
   c.appendChild(el)
-  check_compress()
+  on_picker_change()
 
   if (show) {
     input.click()
@@ -324,7 +328,7 @@ function get_empty_picker() {
   return files[0]
 }
 
-function remove_last_picker() {
+function remove_picker() {
   let pickers = DOM.els(`.picker_file`)
 
   if (!pickers.length) {
@@ -336,6 +340,36 @@ function remove_last_picker() {
     return
   }
 
-  pickers.at(-1).parentNode.remove()
+  let picker = pickers.at(-1)
+  reset_file_media(picker)
+  picker.parentNode.remove()
   vars.num_pickers -= 1
+  on_picker_change()
+}
+
+function check_required_file() {
+  let files = DOM.els(`.picker_file`)
+
+  for (let [i, file] of files.entries()) {
+    if (i === 0) {
+      file.required = true
+    }
+    else {
+      file.required = false
+    }
+  }
+}
+
+function on_picker_change() {
+  check_compress()
+  check_required_file()
+}
+
+function reset_file_media(picker) {
+  let file = DOM.el(`input`, picker)
+
+  if (vars.media_picker === file) {
+    reset_image()
+    reset_video()
+  }
 }
