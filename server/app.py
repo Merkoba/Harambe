@@ -157,7 +157,8 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "user_id": user.id if user else 0,
         "username": user.username if user else "",
         "user_name": user.name if user else "",
-        "reader": (user.admin or user.reader) if user else False,
+        "reader": (not config.list_private)
+        or ((user.admin or user.reader) if user else False),
         "background_color": config.background_color,
         "accent_color": config.accent_color,
         "font_color": config.font_color,

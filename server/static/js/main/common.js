@@ -62,6 +62,11 @@ DOM.ev(document, `keydown`, (e) => {
   }
   else if (e.key === `ArrowUp`) {
     if (e.ctrlKey) {
+      fresh_post()
+    }
+  }
+  else if (e.key === `ArrowDown`) {
+    if (e.ctrlKey) {
       random_post()
     }
   }
@@ -754,6 +759,10 @@ function next_post() {
   else {
     window.location = `/random`
   }
+}
+
+function fresh_post() {
+  window.location = `/fresh`
 }
 
 function random_post() {
