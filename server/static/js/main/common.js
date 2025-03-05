@@ -732,8 +732,6 @@ function setup_editpost_opts(show = false) {
   make_opts(name, () => {
     bind_button(`${name}_opts_title`, () => {
       edit_title()
-    }, () => {
-
     })
 
     bind_button(`${name}_opts_delete`, () => {
@@ -745,8 +743,6 @@ function setup_editpost_opts(show = false) {
       }
 
       confirmbox(confirm_args)
-    }, () => {
-
     })
   }, show)
 }
