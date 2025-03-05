@@ -42,13 +42,16 @@ DOM.ev(document, `keydown`, (e) => {
         }
       }
     }
-    else if (vars && (vars.mode === `index`)) {
-      let c = DOM.el(`#buttons`)
-      let buttons = DOM.els(`button`, c)
-
-      if (n <= buttons.length) {
+  }
+  else if (e.key === `m`) {
+    if (e.ctrlKey) {
+      if (Msg.msg && Msg.msg.any_open()) {
+        // Do nothing
+      }
+      else {
         e.preventDefault()
-        buttons[n - 1].click()
+        let show_return = vars.mode !== `index`
+        setup_explore_opts(show_return, true)
       }
     }
   }
