@@ -162,10 +162,10 @@ To create and update the database run `schema.py`.
 
 ## Script
 
-There is [this script](upload.sh) which you can use to upload if you are a user.
+There is [this script](upload.rb) which you can use to upload if you are a user.
 
-Just change `URL`, `USERNAME`, and `PASSWORD`, and you might also need to change `ENDPOINT`.
+Just change `url`, `username`, and `password`, and you might also need to change `endpoint`.
 
-The arguments are a file path, and an optional mode argument which you can set to `title`.
+Optional flag `--prompt` triggers a `zenity` prompt for the title.
 
-If you set that second argument to `title` it will use `zenity` to prompt for a title.
+Optional flag `--compress` makes a zip file on the server.
