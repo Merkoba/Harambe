@@ -667,38 +667,45 @@ function bind_button(what, func, mfunc) {
   let msg_name = `msg_${name}_opts`
   let el = DOM.el(`#${what}`)
 
-  if (el) {
-    if (func) {
-      DOM.ev(el, `click`, (e) => {
-        vars[msg_name].close()
-        func()
-      })
-    }
+  if (!el) {
+    return
+  }
 
-    if (mfunc || func) {
-      DOM.ev(el, `auxclick`, (e) => {
-        if (e.button === 1) {
-          vars[msg_name].close()
+  let c = DOM.el(`.dialog_container`, vars[msg_name].content)
+  let btns = DOM.els(`.aero_button`, c)
+  let index = btns.indexOf(el)
+  el.textContent = `${index + 1}. ${el.textContent}`
 
-          if (mfunc) {
-            mfunc()
-          }
-          else if (func) {
-            func()
-          }
-        }
-      })
-    }
-
-    DOM.ev(el, `contextmenu`, (e) => {
+  if (func) {
+    DOM.ev(el, `click`, (e) => {
       vars[msg_name].close()
-      e.preventDefault()
+      func()
+    })
+  }
 
-      if (func) {
-        func()
+  if (mfunc || func) {
+    DOM.ev(el, `auxclick`, (e) => {
+      if (e.button === 1) {
+        vars[msg_name].close()
+
+        if (mfunc) {
+          mfunc()
+        }
+        else if (func) {
+          func()
+        }
       }
     })
   }
+
+  DOM.ev(el, `contextmenu`, (e) => {
+    vars[msg_name].close()
+    e.preventDefault()
+
+    if (func) {
+      func()
+    }
+  })
 }
 
 function open_tab(url, target = `_blank`) {
