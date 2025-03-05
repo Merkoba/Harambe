@@ -259,6 +259,9 @@ function add_picker(show = true) {
       e.preventDefault()
       reset_file(input)
     }
+    else if (e.target !== input) {
+      input.click()
+    }
   })
 
   DOM.ev(el, `auxclick`, (e) => {
