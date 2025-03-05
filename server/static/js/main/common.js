@@ -715,3 +715,28 @@ function open_tab(url, target = `_blank`) {
 function encode_uri(uri) {
   return encodeURIComponent(uri)
 }
+
+function setup_editpost_opts(show = false) {
+  let name = `editpost`
+
+  make_opts(name, () => {
+    bind_button(`${name}_opts_title`, () => {
+      edit_title()
+    }, () => {
+
+    })
+
+    bind_button(`${name}_opts_delete`, () => {
+      let confirm_args = {
+        message: `Delete this post ?`,
+        callback_yes: () => {
+          delete_post()
+        },
+      }
+
+      confirmbox(confirm_args)
+    }, () => {
+
+    })
+  }, show)
+}

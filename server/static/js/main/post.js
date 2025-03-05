@@ -26,30 +26,10 @@ window.onload = function() {
   let edit = DOM.el(`#edit`)
 
   if (edit) {
-    vars.msg_user_edit = Msg.factory()
-    let t = DOM.el(`#template_edit`)
-    vars.msg_user_edit.set(t.innerHTML)
-
-    DOM.ev(`#edit_title`, `click`, () => {
-      vars.msg_user_edit.close()
-      edit_title()
-    })
-
-    DOM.ev(`#edit_delete`, `click`, () => {
-      vars.msg_user_edit.close()
-
-      let confirm_args = {
-        message: `Delete this post ?`,
-        callback_yes: () => {
-          delete_post()
-        },
-      }
-
-      confirmbox(confirm_args)
-    })
+    setup_editpost_opts()
 
     DOM.ev(edit, `click`, () => {
-      vars.msg_user_edit.show()
+      edit_post()
     })
   }
 
@@ -299,6 +279,19 @@ window.onload = function() {
       toggle_reverse()
     })
   }
+
+  DOM.ev(document, `keydown`, (e) => {
+    if (e.key === `e`) {
+      if (e.ctrlKey) {
+        edit_post()
+      }
+    }
+    else if (e.key === `ArrowRight`) {
+      if (e.ctrlKey) {
+        next_post()
+      }
+    }
+  })
 }
 
 function timeago(date) {
@@ -1100,4 +1093,12 @@ function start_editor() {
     wrap: vars.ace_wrap,
     highlightGutterLine: false,
   })
+}
+
+function edit_post() {
+  vars.msg_editpost_opts.show()
+}
+
+function next_post() {
+  window.location = `/next/${vars.name}`
 }
