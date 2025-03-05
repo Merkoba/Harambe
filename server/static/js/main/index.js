@@ -268,6 +268,7 @@ function add_picker() {
 
       if (vars.num_pickers > 1) {
         el.remove()
+        vars.num_pickers -= 1
       }
     }
   })
