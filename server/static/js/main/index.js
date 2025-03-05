@@ -223,7 +223,7 @@ function reset_video() {
   DOM.hide(video)
 }
 
-function add_picker() {
+function add_picker(show = true) {
   if (vars.num_pickers > 0) {
     let empty = get_empty_picker()
 
@@ -250,7 +250,7 @@ function add_picker() {
     vars.clicked = false
 
     if (reflect_file(input)) {
-      add_picker()
+      add_picker(false)
     }
   })
 
@@ -277,8 +277,11 @@ function add_picker() {
 
   let c = DOM.el(`#pickers`)
   c.appendChild(el)
-  input.click()
   check_compress()
+
+  if (show) {
+    input.click()
+  }
 }
 
 function remove_picker() {
