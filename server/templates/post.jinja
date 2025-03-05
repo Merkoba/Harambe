@@ -168,6 +168,10 @@
     <div id="flash_container" class="embed"></div>
     {% endif %}
 
+    {% if post.zip_embed %}
+    <hr><div id="zip_sample">{{post.sample}}</div>
+    {% endif %}
+
     {% if reactions_enabled %}
     <hr>
 

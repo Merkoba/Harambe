@@ -9,8 +9,9 @@ from pathlib import Path
 from io import BytesIO
 
 # Libraries
-from flask import Request  # type: ignore
 import ulid  # type: ignore
+from flask import Request  # type: ignore
+from werkzeug.datastructures import FileStorage  # type: ignore
 
 # Modules
 import utils
@@ -23,6 +24,57 @@ from user_procs import User
 
 def error(s: str) -> tuple[bool, str]:
     return False, f"Error: {s}"
+
+
+def get_name(user: User) -> str:
+    u = ulid.new()
+    name = str(u.str)[: config.get_post_name_length()].strip()
+
+    if user.mark:
+        name = f"{name}_{user.mark}".strip()
+
+    if not config.uppercase_names:
+        name = name.lower()
+
+    return name
+
+
+def make_zip(files: list[FileStorage]) -> bytes:
+    buffer = BytesIO()
+    clevel = config.compression_level
+    fixed_time = (1980, 1, 1, 0, 0, 0)
+
+    with zipfile.ZipFile(
+        buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=clevel
+    ) as zipf:
+        for file in sorted(files, key=lambda f: f.filename):
+            content = file.read()
+            filename = Path(file.filename).name
+            zip_info = zipfile.ZipInfo(filename)
+            zip_info.date_time = fixed_time
+            zip_info.comment = b""
+            zip_info.extra = b""
+            zip_info.create_system = 0
+            zip_info.create_version = 20
+            zip_info.extract_version = 20
+            zip_info.external_attr = 0
+            zipf.writestr(zip_info, content)
+            file.seek(0)
+
+    buffer.seek(0)
+    return buffer.getvalue()
+
+
+def check_hash(content: bytes) -> tuple[str, str]:
+    file_hash = hashlib.sha256(content).hexdigest()
+
+    if not config.allow_same_hash:
+        existing = database.get_posts(file_hash=file_hash)
+
+        if existing:
+            return "", existing[0].name
+
+    return file_hash, ""
 
 
 def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
@@ -64,55 +116,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if not user_procs.check_user_max(user, total_size):
         return error("Upload is too big")
 
-    def get_name() -> str:
-        u = ulid.new()
-        name = str(u.str)[: config.get_post_name_length()].strip()
-
-        if user.mark:
-            name = f"{name}_{user.mark}".strip()
-
-        if not config.uppercase_names:
-            name = name.lower()
-
-        return name
-
-    def make_zip() -> bytes:
-        buffer = BytesIO()
-        clevel = config.compression_level
-        fixed_time = (1980, 1, 1, 0, 0, 0)
-
-        with zipfile.ZipFile(
-            buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=clevel
-        ) as zipf:
-            for file in sorted(files, key=lambda f: f.filename):
-                content = file.read()
-                filename = Path(file.filename).name
-                zip_info = zipfile.ZipInfo(filename)
-                zip_info.date_time = fixed_time
-                zip_info.comment = b""
-                zip_info.extra = b""
-                zip_info.create_system = 0
-                zip_info.create_version = 20
-                zip_info.extract_version = 20
-                zip_info.external_attr = 0
-                zipf.writestr(zip_info, content)
-                file.seek(0)
-
-        buffer.seek(0)
-        return buffer.getvalue()
-
-    def check_hash(content: bytes) -> tuple[str, str]:
-        file_hash = hashlib.sha256(content).hexdigest()
-
-        if not config.allow_same_hash:
-            existing = database.get_posts(file_hash=file_hash)
-
-            if existing:
-                return "", existing[0].name
-
-        return file_hash, ""
-
-    post_name = get_name()
+    post_name = get_name(user)
     compress = request.form.get("compress", "off") == "on"
     sample = ""
 
@@ -121,9 +125,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     if compress:
         try:
-            content = make_zip()
-            ext = ".zip"
+            content = make_zip(files)
             original = post_name
+            sample = "\n".join([Path(file.filename).name for file in files])
+            ext = ".zip"
 
         except Exception as e:
             utils.error(e)

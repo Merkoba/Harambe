@@ -52,6 +52,7 @@ class Post:
     flash_embed: bool
     text_embed: bool
     markdown_embed: bool
+    zip_embed: bool
     last_reaction: str
     file_hash: str
 
@@ -101,7 +102,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         last_reaction = ""
 
     if all_data:
-        sample = post.sample
+        sample = post.sample.strip()
         reactions = [react_procs.make_reaction(r, now) for r in post.reactions]
     else:
         sample = ""
@@ -126,7 +127,10 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     )
 
     text_embed = mtype.startswith("text/") and embed_size("text")
-    markdown_embed = (mtype == "text/markdown") and embed_size("markdown")
+    markdown_embed = (
+        mtype.startswith("text/") and ("markdown" in mtype) and embed_size("markdown")
+    )
+    zip_embed = mtype.startswith("application/") and ("zip" in mtype)
     file_hash = post.file_hash
 
     return Post(
@@ -164,6 +168,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         flash_embed,
         text_embed,
         markdown_embed,
+        zip_embed,
         last_reaction,
         file_hash,
     )

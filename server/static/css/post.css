@@ -353,3 +353,7 @@ a.link:hover,
     max-width: var(--max_width) !important;
     max-height: var(--max_height) !important;
 }
+
+#zip_sample {
+    white-space: pre-wrap;
+}

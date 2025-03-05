@@ -71,32 +71,7 @@ window.onload = function() {
       }
     }
     else {
-      function guess_mode() {
-        let modelist = ace.require(`ace/ext/modelist`)
-        let modes = modelist.modes
-
-        for (let mode of modes) {
-          if (vars.mtype.includes(mode.name)) {
-            return mode.mode
-          }
-        }
-
-        return `ace/mode/text`
-      }
-
-      ace.config.set(`basePath`, `/static/ace`)
-      vars.editor = ace.edit(`editor`)
-      vars.editor.setTheme(`ace/theme/tomorrow_night_eighties`)
-      let mode = guess_mode(vars.sample)
-      vars.editor.session.setMode(mode)
-      vars.editor.session.setValue(vars.sample, -1)
-      vars.editor.setReadOnly(true)
-      vars.editor.setShowPrintMargin(false)
-
-      vars.editor.setOptions({
-        wrap: vars.ace_wrap,
-        highlightGutterLine: false,
-      })
+      start_editor()
     }
   }
   else if (vars.mtype.startsWith(`application`)) {
@@ -1091,5 +1066,38 @@ function toggle_wrap() {
 
   vars.editor.setOptions({
     wrap: vars.ace_wrap,
+  })
+}
+
+function guess_mode() {
+  let modelist = ace.require(`ace/ext/modelist`)
+  let modes = modelist.modes
+
+  for (let mode of modes) {
+    if (vars.mtype.includes(mode.name)) {
+      return mode.mode
+    }
+  }
+
+  return `ace/mode/text`
+}
+
+function start_editor() {
+  if (!vars.sample) {
+    return
+  }
+
+  ace.config.set(`basePath`, `/static/ace`)
+  vars.editor = ace.edit(`editor`)
+  vars.editor.setTheme(`ace/theme/tomorrow_night_eighties`)
+  let mode = guess_mode(vars.sample)
+  vars.editor.session.setMode(mode)
+  vars.editor.session.setValue(vars.sample, -1)
+  vars.editor.setReadOnly(true)
+  vars.editor.setShowPrintMargin(false)
+
+  vars.editor.setOptions({
+    wrap: vars.ace_wrap,
+    highlightGutterLine: false,
   })
 }
