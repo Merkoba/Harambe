@@ -36,7 +36,12 @@ CORS(app)
 
 
 def get_user_id() -> int | None:
-    return session.get("user_id")
+    uid = session.get("user_id")
+
+    if uid:
+        return int(uid)
+
+    return None
 
 
 def get_user() -> User | None:
