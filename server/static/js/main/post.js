@@ -286,11 +286,6 @@ window.onload = function() {
         edit_post()
       }
     }
-    else if (e.key === `ArrowRight`) {
-      if (e.ctrlKey) {
-        next_post()
-      }
-    }
   })
 }
 
@@ -1097,8 +1092,4 @@ function start_editor() {
 
 function edit_post() {
   vars.msg_editpost_opts.show()
-}
-
-function next_post() {
-  window.location = `/next/${vars.name}`
 }

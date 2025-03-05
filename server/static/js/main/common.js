@@ -55,6 +55,16 @@ DOM.ev(document, `keydown`, (e) => {
       }
     }
   }
+  else if (e.key === `ArrowRight`) {
+    if (e.ctrlKey) {
+      next_post()
+    }
+  }
+  else if (e.key === `ArrowUp`) {
+    if (e.ctrlKey) {
+      random_post()
+    }
+  }
 })
 
 function singplural(what, length) {
@@ -739,4 +749,17 @@ function setup_editpost_opts(show = false) {
 
     })
   }, show)
+}
+
+function next_post() {
+  if (vars.name) {
+    window.location = `/next/${vars.name}`
+  }
+  else {
+    window.location = `/random`
+  }
+}
+
+function random_post() {
+  window.location = `/random`
 }
