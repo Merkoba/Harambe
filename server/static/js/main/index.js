@@ -263,13 +263,17 @@ function add_picker() {
   DOM.ev(el, `auxclick`, (e) => {
     if (e.button === 1) {
       e.preventDefault()
-      reset_file(input)
+
+      if (vars.num_pickers > 1) {
+        el.remove()
+      }
     }
   })
 
   let c = DOM.el(`#pickers`)
   c.appendChild(el)
-  check_archive()
+  input.click()
+  check_compress()
 }
 
 function remove_picker() {
@@ -280,11 +284,15 @@ function remove_picker() {
   let c = DOM.el(`#pickers`)
   c.removeChild(c.lastChild)
   vars.num_pickers -= 1
-  check_archive()
+  check_compress()
 }
 
-function check_archive() {
+function check_compress() {
   let checkbox = DOM.el(`#compress`)
+
+  if (!checkbox) {
+    return
+  }
 
   if (vars.num_pickers > 1) {
     checkbox.checked = true

@@ -242,6 +242,7 @@ def index() -> Any:
         max_name_length=config.max_user_name_length,
         max_password_length=config.max_user_password_length,
         max_upload_files=config.max_upload_files,
+        show_compress=config.show_compress,
         banner=banner,
         **common_configs(user),
     )

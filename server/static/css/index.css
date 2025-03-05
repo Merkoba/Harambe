@@ -202,6 +202,15 @@ a.dialog_button:hover {
     cursor: pointer;
 }
 
+#toprow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    user-select: none;
+    gap: 0.5rem;
+}
+
 #zip {
     display: flex;
     align-items: center;
