@@ -48,14 +48,14 @@
 
         <div id="buttons">
             {% if is_user and upload_enabled %}
-            <button id="submit_btn" type="button">🔼&nbsp;&nbsp;Upload</button>
+            <button id="submit_btn" type="button" title="Upload the file">🔼&nbsp;&nbsp;Upload</button>
             {% endif %}
 
-            <button type="button" id="menu_btn">🧭&nbsp;&nbsp;Menu</button>
+            <button type="button" id="menu_btn" title="Ctrl+M">🧭&nbsp;&nbsp;Menu</button>
 
             {% if not is_user %}
-            <button type="button" id="login_btn">Login</button>
-            <button type="button" id="register_btn">Register</button>
+            <button type="button" id="login_btn" title="Login to your user account">Login</button>
+            <button type="button" id="register_btn" title="Register a new account">Register</button>
             {% endif %}
         </div>
     </form>
