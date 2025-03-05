@@ -22,12 +22,12 @@ class Confirmbox {
     let m = DOM.create(`div`)
     m.id = `confirmbox_message`
     m.textContent = args.message
-    let btns = DOM.create(`div`)
+    let btns = DOM.create(`div`, `dialog_container`)
     btns.id = `confirmbox_buttons`
-    let y = DOM.create(`div`, `aero_button`)
-    y.textContent = args.yes
     let n = DOM.create(`div`, `aero_button`)
-    n.textContent = args.no
+    n.textContent = `1. ${args.no}`
+    let y = DOM.create(`div`, `aero_button`)
+    y.textContent = `2. ${args.yes}`
     c.appendChild(m)
     btns.appendChild(n)
     btns.appendChild(y)
