@@ -10,9 +10,7 @@ window.onload = () => {
         return
       }
 
-      if (file) {
-        file_trigger()
-      }
+      file_trigger()
     })
   }
 
@@ -315,8 +313,7 @@ function check_compress() {
 }
 
 function file_trigger() {
-  let c = DOM.el(`#pickers`)
-  let file = DOM.el(`input`, c)
+  let file = get_empty_picker()
 
   if (file) {
     file.click()
