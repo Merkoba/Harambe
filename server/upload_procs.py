@@ -103,8 +103,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
         return file_hash, ""
 
+    post_name = get_name()
     compress = request.form.get("compress", "off") == "on"
-    original = ""
     sample = ""
 
     if len(files) > 1:
@@ -114,6 +114,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         try:
             content = make_zip()
             ext = ".zip"
+            original = post_name
+
         except Exception as e:
             utils.error(e)
             return error("Failed to compress files")
@@ -132,8 +134,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return True, f"post/{existing}"
 
     try:
-        post_name = get_name()
-
         if ext:
             full_name = post_name + ext
         else:
