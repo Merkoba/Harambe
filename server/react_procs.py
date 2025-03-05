@@ -91,6 +91,9 @@ def add_reaction(post_id: int, text: str, user: User) -> tuple[str, int]:
 
 
 def get_reaction(reaction_id: int) -> Reaction | None:
+    if not reaction_id:
+        return None
+
     reactions = database.get_reactions(reaction_id)
     reaction = reactions[0] if reactions else None
 

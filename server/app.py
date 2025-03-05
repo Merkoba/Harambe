@@ -35,8 +35,8 @@ app.secret_key = config.app_key
 CORS(app)
 
 
-def get_user_id() -> int:
-    return int(session.get("user_id", 0))
+def get_user_id() -> int | None:
+    return session.get("user_id")
 
 
 def get_user() -> User | None:
@@ -54,7 +54,7 @@ def logged_in() -> bool:
 
 def can_read(user: User | None = None) -> bool:
     if not user:
-        user = user_procs.get_user(get_user_id())
+        user = get_user()
 
     if not user:
         return False
@@ -72,7 +72,7 @@ def login_required(f: Any) -> Any:
         if not logged_in():
             return redirect(url_for("login"))
 
-        user = user_procs.get_user(get_user_id())
+        user = get_user()
 
         if not user:
             return redirect(url_for("login"))
@@ -88,7 +88,7 @@ def admin_required(f: Any) -> Any:
         if not logged_in():
             return redirect(url_for("login"))
 
-        user = user_procs.get_user(get_user_id())
+        user = get_user()
 
         if (not user) or (not user.admin):
             return redirect(url_for("login"))
@@ -101,7 +101,7 @@ def admin_required(f: Any) -> Any:
 def reader_required(f: Any) -> Any:
     @wraps(f)
     def decorated_function(*args: Any, **kwargs: Any) -> Any:
-        user = user_procs.get_user(get_user_id())
+        user = get_user()
 
         if not list_visible(user):
             return redirect(url_for("index"))

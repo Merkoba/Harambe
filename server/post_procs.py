@@ -313,6 +313,9 @@ def get_post(
     increase: bool = False,
     full_reactions: bool = False,
 ) -> Post | None:
+    if (not post_id) and (not name):
+        return None
+
     posts = database.get_posts(
         post_id=post_id, name=name, full_reactions=full_reactions
     )
