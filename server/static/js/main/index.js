@@ -147,6 +147,14 @@ window.onload = () => {
       add_picker()
     })
   }
+
+  let remove_picker_btn = DOM.el(`#remove_picker_btn`)
+
+  if (remove_picker_btn) {
+    DOM.ev(remove_picker_btn, `click`, (e) => {
+      remove_picker()
+    })
+  }
 }
 
 function validate() {
@@ -260,4 +268,29 @@ function add_picker() {
 
   let c = DOM.el(`#pickers`)
   c.appendChild(el)
+  check_archive()
+}
+
+function remove_picker() {
+  if (vars.num_pickers <= 1) {
+    return
+  }
+
+  let c = DOM.el(`#pickers`)
+  c.removeChild(c.lastChild)
+  vars.num_pickers -= 1
+  check_archive()
+}
+
+function check_archive() {
+  let checkbox = DOM.el(`#compress`)
+
+  if (vars.num_pickers > 1) {
+    checkbox.checked = true
+    checkbox.disabled = true
+  }
+  else {
+    checkbox.checked = false
+    checkbox.disabled = false
+  }
 }
