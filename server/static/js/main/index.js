@@ -227,6 +227,11 @@ function add_picker(show = true) {
 
   DOM.ev(el, `change`, (e) => {
     vars.clicked = false
+    remove_duplicate_files()
+
+    if (input.files.length === 0) {
+      return
+    }
 
     if (reflect_file(input)) {
       add_picker(false)
@@ -373,4 +378,25 @@ function num_active_files() {
   }
 
   return active
+}
+
+function remove_duplicate_files() {
+  let files = DOM.els(`.picker_file`)
+  let names = []
+
+  for (let file of files) {
+    let file_length = file.files.length
+
+    if (file_length === 0) {
+      continue
+    }
+
+    let name = file.files[0].name
+
+    if (names.includes(name)) {
+      reset_file(file)
+    }
+
+    names.push(name)
+  }
 }
