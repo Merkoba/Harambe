@@ -145,7 +145,9 @@ function validate() {
       return false
     }
 
-    ok_file = true
+    if (file.files[0].name) {
+      ok_file = true
+    }
   }
 
   if (!ok_file) {
