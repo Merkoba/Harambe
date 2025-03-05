@@ -213,6 +213,8 @@ function reflect_file(file) {
     DOM.show(video)
     video.load()
   }
+
+  add_picker()
 }
 
 function reset_file() {

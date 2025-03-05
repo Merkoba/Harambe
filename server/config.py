@@ -274,7 +274,7 @@ class Config:
         self.allow_same_hash = False
 
         # Max number of files to be uploaded at the same time
-        self.max_upload_files = 5
+        self.max_upload_files = 10
 
         # Show the compress checkbox in the web interface
         self.show_compress = True
