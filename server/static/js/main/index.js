@@ -125,30 +125,7 @@ function validate() {
     return false
   }
 
-  let files = DOM.els(`.picker_file`)
-  let ok_file = false
-
-  for (let file of files) {
-    let file_length = file.files.length
-
-    if (file_length === 0) {
-      continue
-    }
-
-    if (file_length > 1) {
-      return false
-    }
-
-    if (file.files[0].size > vars.max_size) {
-      return false
-    }
-
-    if (file.files[0].name) {
-      ok_file = true
-    }
-  }
-
-  if (!ok_file) {
+  if (num_active_files() === 0) {
     file_trigger()
     return false
   }
@@ -289,7 +266,7 @@ function check_compress() {
     return
   }
 
-  if (vars.num_pickers > 1) {
+  if (num_active_files() > 1) {
     checkbox.checked = true
     checkbox.disabled = true
   }
@@ -367,4 +344,33 @@ function reset_file_media(picker) {
     reset_image()
     reset_video()
   }
+}
+
+function num_active_files() {
+  let files = DOM.els(`.picker_file`)
+  let active = 0
+
+  for (let file of files) {
+    let file_length = file.files.length
+
+    if (file_length === 0) {
+      continue
+    }
+
+    if (file_length > 1) {
+      continue
+    }
+
+    if (file.files[0].size > vars.max_size) {
+      continue
+    }
+
+    if (!file.files[0].name) {
+      continue
+    }
+
+    active += 1
+  }
+
+  return active
 }
