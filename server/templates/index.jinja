@@ -12,12 +12,17 @@
     vars.banner = {{banner | tojson | safe}}
     vars.max_name_length = {{max_name_length}}
     vars.max_password_length = {{max_password_length}}
+    vars.max_upload_files = {{max_upload_files}}
 </script>
 
 <script src="/static/js/main/index.js"></script>
 {% endblock %}
 
 {% block body %}
+<template id="template_picker">
+    <input type="file" required max-file-size="{{max_size_str}}mb">
+</template>
+
 <div id="main">
     <div id="info">
         {% if is_user and show_max_size %}
@@ -35,11 +40,11 @@
         <div id="zip" title="Compress the file into a zip archive">
             <div>Compress File</div>
             <input id="compress" name="compress" type="checkbox">
+            <div class="sep">|</div>
+            <div id="add_picker_btn" class="button">Add File</div>
         </div>
 
-        <div id="picker">
-            <input id="file" type="file" name="file" required max-file-size="{{max_size_str}}mb">
-        </div>
+        <div id="pickers"></div>
         {% endif %}
 
         {% if allow_titles and is_user and upload_enabled %}

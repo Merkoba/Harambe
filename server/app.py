@@ -186,7 +186,6 @@ text_mtype = "text/plain"
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 def index() -> Any:
     user = get_user()
-    admin = user and user.admin
 
     if request.method == "POST":
         if not user:
@@ -237,11 +236,12 @@ def index() -> Any:
         max_title_length=config.max_title_length,
         allow_titles=config.allow_titles,
         show_list=show_list,
-        show_admin=admin,
+        show_admin=user and user.admin,
         description=config.description_index,
         upload_enabled=config.web_uploads_enabled,
         max_name_length=config.max_user_name_length,
         max_password_length=config.max_user_password_length,
+        max_upload_files=config.max_upload_files,
         banner=banner,
         **common_configs(user),
     )

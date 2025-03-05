@@ -134,7 +134,14 @@ a.dialog_button:hover {
     align-self: center;
 }
 
-#picker {
+#pickers {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.picker {
     background-color: var(--accent_color);
     padding: var(--padding_1);
     box-sizing: border-box;

@@ -3,6 +3,7 @@ let clicked = false
 window.onload = () => {
   let image = DOM.el(`#image`)
   let file = DOM.el(`#file`)
+  vars.num_pickers = 0
 
   if (image) {
     DOM.ev(image, `click`, (e) => {
@@ -125,14 +126,6 @@ window.onload = () => {
     })
   }
 
-  let picker = DOM.el(`#picker`)
-
-  if (picker && file) {
-    DOM.ev(picker, `click`, (e) => {
-      file.click()
-    })
-  }
-
   let zip = DOM.el(`#zip`)
 
   if (zip && file) {
@@ -142,6 +135,16 @@ window.onload = () => {
       }
 
       DOM.el(`#compress`).click()
+    })
+  }
+
+  add_picker()
+
+  let add_picker_btn = DOM.el(`#add_picker_btn`)
+
+  if (add_picker_btn) {
+    DOM.ev(add_picker_btn, `click`, (e) => {
+      add_picker()
     })
   }
 }
@@ -235,4 +238,26 @@ function reset_video() {
   let video = DOM.el(`#video`)
   video.pause()
   DOM.hide(video)
+}
+
+function add_picker() {
+  vars.num_pickers += 1
+
+  if (vars.num_pickers > vars.max_upload_files) {
+    return
+  }
+
+  let t = DOM.el(`#template_picker`)
+  let el = DOM.create(`div`, `picker`)
+  el.innerHTML = t.innerHTML
+  let input = DOM.el(`input`, el)
+  input.id = `file_${vars.num_pickers}`
+  input.name = `file_${vars.num_pickers}`
+
+  DOM.ev(el, `click`, (e) => {
+    input.click()
+  })
+
+  let c = DOM.el(`#pickers`)
+  c.appendChild(el)
 }

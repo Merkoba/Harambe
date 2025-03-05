@@ -273,6 +273,9 @@ class Config:
         # Allow files with the same hash
         self.allow_same_hash = False
 
+        # Max number of files to be uploaded at the same time
+        self.max_upload_files = 5
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -366,6 +369,7 @@ class Config:
             set_value(c, "max_reaction_name_length")
             set_value(c, "compression_level")
             set_value(c, "allow_same_hash")
+            set_value(c, "max_upload_files")
 
             # Users
 
