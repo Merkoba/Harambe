@@ -149,7 +149,7 @@ a.dialog_button:hover {
     width: 100%;
 }
 
-#picker:hover {
+.picker:hover {
     outline: 1px solid var(--text_color);
 }
 

@@ -189,7 +189,7 @@ function reflect_file(file) {
   if (the_file.size > vars.max_size) {
     reset_file()
     popmsg(`That file is too big`)
-    return
+    return false
   }
 
   reset_image()
@@ -214,7 +214,7 @@ function reflect_file(file) {
     video.load()
   }
 
-  add_picker()
+  return true
 }
 
 function reset_file() {
@@ -237,6 +237,15 @@ function reset_video() {
 }
 
 function add_picker() {
+  if (vars.num_pickers > 0) {
+    let empty = get_empty_picker()
+
+    if (empty.files.length === 0) {
+      empty.click()
+      return
+    }
+  }
+
   vars.num_pickers += 1
 
   if (vars.num_pickers > vars.max_upload_files) {
@@ -252,7 +261,10 @@ function add_picker() {
 
   DOM.ev(el, `change`, (e) => {
     vars.clicked = false
-    reflect_file(input)
+
+    if (reflect_file(input)) {
+      add_picker()
+    }
   })
 
   DOM.ev(el, `click`, (e) => {
