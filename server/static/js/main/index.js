@@ -269,16 +269,7 @@ function add_picker(show = true) {
   DOM.ev(el, `auxclick`, (e) => {
     if (e.button === 1) {
       e.preventDefault()
-
-      if (vars.num_pickers > 1) {
-        reset_file_media(el)
-        el.remove()
-        vars.num_pickers -= 1
-        on_picker_change()
-      }
-      else {
-        reset_file(input)
-      }
+      remove_picker(el)
     }
   })
 
@@ -328,21 +319,25 @@ function get_empty_picker() {
   return files[0]
 }
 
-function remove_picker() {
-  let pickers = DOM.els(`.picker_file`)
+function remove_picker(picker) {
+  let pickers = DOM.els(`.picker`)
 
   if (!pickers.length) {
     return
   }
 
   if (pickers.length === 1) {
-    reset_file(pickers[0])
+    let file = DOM.el(`input`, pickers[0])
+    reset_file(file)
     return
   }
 
-  let picker = pickers.at(-1)
+  if (!picker) {
+    picker = pickers.at(-1)
+  }
+
   reset_file_media(picker)
-  picker.parentNode.remove()
+  picker.remove()
   vars.num_pickers -= 1
   on_picker_change()
 }
