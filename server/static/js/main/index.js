@@ -115,7 +115,7 @@ window.onload = () => {
 
   if (remove_picker_btn) {
     DOM.ev(remove_picker_btn, `click`, (e) => {
-      remove_picker()
+      remove_last_picker()
     })
   }
 }
@@ -284,17 +284,6 @@ function add_picker(show = true) {
   }
 }
 
-function remove_picker() {
-  if (vars.num_pickers <= 1) {
-    return
-  }
-
-  let c = DOM.el(`#pickers`)
-  c.removeChild(c.lastChild)
-  vars.num_pickers -= 1
-  check_compress()
-}
-
 function check_compress() {
   let checkbox = DOM.el(`#compress`)
 
@@ -345,4 +334,5 @@ function remove_last_picker() {
   }
 
   pickers.at(-1).parentNode.remove()
+  vars.num_pickers -= 1
 }
