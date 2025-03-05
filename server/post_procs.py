@@ -126,11 +126,13 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         mtype.startswith("application/") and ("flash" in mtype) and embed_size("flash")
     )
 
-    text_embed = mtype.startswith("text/") and embed_size("text")
+    text_embed = sample and mtype.startswith("text/") and embed_size("text")
+
     markdown_embed = (
-        mtype.startswith("text/") and ("markdown" in mtype) and embed_size("markdown")
+        sample and mtype.startswith("text/") and ("markdown" in mtype) and embed_size("markdown")
     )
-    zip_embed = mtype.startswith("application/") and ("zip" in mtype)
+
+    zip_embed = sample and mtype.startswith("application/") and ("zip" in mtype)
     file_hash = post.file_hash
 
     return Post(
