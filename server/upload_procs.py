@@ -78,12 +78,12 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     post_name = get_name()
 
-    def make_zip() -> BytesIO:
-        zip_buffer = BytesIO()
+    def make_zip() -> bytes:
+        buffer = BytesIO()
         clevel = config.compression_level
 
         with zipfile.ZipFile(
-            zip_buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=clevel
+            buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=clevel
         ) as zipf:
             for file in files:
                 content = file.read()
@@ -91,10 +91,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                 zipf.writestr(filename, content)
                 file.seek(0)
 
-        zip_buffer.seek(0)
-        return zip_buffer
+        buffer.seek(0)
+        return buffer.getvalue()
 
-    def check_hash(content: BytesIO | Buffer) -> tuple[str, str]:
+    def check_hash(content: bytes) -> tuple[str, str]:
         file_hash = hashlib.sha256(content).hexdigest()
 
         if not config.allow_same_hash:
@@ -115,36 +115,32 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if compress:
         try:
             content = make_zip()
+            ext = ".zip"
         except Exception as e:
             utils.error(e)
             return error("Failed to compress files")
     else:
+        file = files[0]
         content = file.read()
-        original = utils.clean_filename(Path(files[0].filename).stem)
+        original = utils.clean_filename(Path(file.filename).stem)
+        ext = Path(file.filename).suffix
 
     file_hash, existing = check_hash(content)
 
     if existing:
         if mode == "normal":
-            return file_hash, existing
+            return True, existing
 
-        return file_hash, f"post/{existing}"
+        return True, f"post/{existing}"
 
     try:
-        ext = Path(file.filename).suffix
-
         if ext:
             full_name = post_name + ext
         else:
             full_name = post_name
 
         path = Path(full_name)
-
-        if compress:
-            with path.open("wb") as f:
-                f.write(content.getvalue())
-        else:
-            file.save(path)
+        path.write_bytes(content)
     except Exception as e:
         utils.error(e)
         return error("Failed to save file")
