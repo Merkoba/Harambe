@@ -1,9 +1,7 @@
-let clicked = false
-
 window.onload = () => {
   let image = DOM.el(`#image`)
-  let file = DOM.el(`#file`)
   vars.num_pickers = 0
+  vars.clicked = false
 
   if (image) {
     DOM.ev(image, `click`, (e) => {
@@ -18,32 +16,11 @@ window.onload = () => {
       }
 
       if (file) {
-        file.click()
+        file_trigger()
       }
     })
 
     DOM.ev(image, `auxclick`, (e) => {
-      if (e.button === 1) {
-        e.preventDefault()
-        reset_file()
-      }
-    })
-  }
-
-  if (file) {
-    DOM.ev(file, `change`, (e) => {
-      clicked = false
-      reflect_file()
-    })
-
-    DOM.ev(file, `click`, (e) => {
-      if (e.shiftKey || e.ctrlKey || e.altKey) {
-        e.preventDefault()
-        reset_file()
-      }
-    })
-
-    DOM.ev(file, `auxclick`, (e) => {
       if (e.button === 1) {
         e.preventDefault()
         reset_file()
@@ -60,11 +37,11 @@ window.onload = () => {
     let files = e.dataTransfer.files
 
     if (files && (files.length > 0)) {
-      let file = DOM.el(`#file`)
+      let file = get_empty_picker()
       let dataTransfer = new DataTransfer()
       dataTransfer.items.add(files[0])
       file.files = dataTransfer.files
-      reflect_file()
+      reflect_file(file)
     }
   })
 
@@ -128,7 +105,7 @@ window.onload = () => {
 
   let zip = DOM.el(`#zip`)
 
-  if (zip && file) {
+  if (zip) {
     DOM.ev(zip, `click`, (e) => {
       if (e.target.id === `compress`) {
         return
@@ -158,23 +135,33 @@ window.onload = () => {
 }
 
 function validate() {
-  if (clicked) {
+  if (vars.clicked) {
     return false
   }
 
-  let file = DOM.el(`#file`)
-  let file_length = file.files.length
+  let files = DOM.els(`.picker_file`)
+  let ok_file = false
 
-  if (file_length === 0) {
-    file.click()
-    return false
+  for (let file of files) {
+    let file_length = file.files.length
+
+    if (file_length === 0) {
+      continue
+    }
+
+    if (file_length > 1) {
+      return false
+    }
+
+    if (file.files[0].size > vars.max_size) {
+      return false
+    }
+
+    ok_file = true
   }
 
-  if (file_length > 1) {
-    return false
-  }
-
-  if (file.files[0].size > vars.max_size) {
+  if (!ok_file) {
+    file_trigger()
     return false
   }
 
@@ -186,18 +173,17 @@ function validate() {
     }
   }
 
-  clicked = true
+  vars.clicked = true
   return true
 }
 
-function reflect_file() {
+function reflect_file(file) {
   let title = DOM.el(`#title`)
 
   if (title) {
     title.focus()
   }
 
-  let file = DOM.el(`#file`)
   let the_file = file.files[0]
 
   if (the_file.size > vars.max_size) {
@@ -262,8 +248,23 @@ function add_picker() {
   input.id = `file_${vars.num_pickers}`
   input.name = `file`
 
+  DOM.ev(el, `change`, (e) => {
+    vars.clicked = false
+    reflect_file(input)
+  })
+
   DOM.ev(el, `click`, (e) => {
-    input.click()
+    if (e.shiftKey || e.ctrlKey || e.altKey) {
+      e.preventDefault()
+      reset_file(input)
+    }
+  })
+
+  DOM.ev(el, `auxclick`, (e) => {
+    if (e.button === 1) {
+      e.preventDefault()
+      reset_file(input)
+    }
   })
 
   let c = DOM.el(`#pickers`)
@@ -293,4 +294,25 @@ function check_archive() {
     checkbox.checked = false
     checkbox.disabled = false
   }
+}
+
+function file_trigger() {
+  let c = DOM.el(`#pickers`)
+  let file = DOM.el(`input`, c)
+
+  if (file) {
+    file.click()
+  }
+}
+
+function get_empty_picker() {
+  let files = DOM.els(`.picker_file`)
+
+  for (let file of files) {
+    if (file.files.length === 0) {
+      return file
+    }
+  }
+
+  return files[0]
 }

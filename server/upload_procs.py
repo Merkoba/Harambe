@@ -76,8 +76,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
         return name
 
-    post_name = get_name()
-
     def make_zip() -> bytes:
         buffer = BytesIO()
         clevel = config.compression_level
@@ -134,12 +132,14 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return True, f"post/{existing}"
 
     try:
+        post_name = get_name()
+
         if ext:
             full_name = post_name + ext
         else:
             full_name = post_name
 
-        path = Path(full_name)
+        path = utils.files_dir() / Path(full_name)
         path.write_bytes(content)
     except Exception as e:
         utils.error(e)
