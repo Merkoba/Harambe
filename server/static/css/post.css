@@ -357,3 +357,7 @@ a.link:hover,
 #zip_sample {
     white-space: pre-wrap;
 }
+
+.embed {
+    width: 100%;
+}
