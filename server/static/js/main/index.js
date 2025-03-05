@@ -260,7 +260,7 @@ function add_picker() {
   el.innerHTML = t.innerHTML
   let input = DOM.el(`input`, el)
   input.id = `file_${vars.num_pickers}`
-  input.name = `file_${vars.num_pickers}`
+  input.name = `file`
 
   DOM.ev(el, `click`, (e) => {
     input.click()

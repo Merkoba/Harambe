@@ -6,6 +6,7 @@ import hashlib
 import mimetypes
 from typing import Any
 from pathlib import Path
+from io import BytesIO
 
 # Libraries
 from flask import Request  # type: ignore
@@ -39,127 +40,141 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         if not u_ok:
             return error(u_msg)
 
-    file = request.files.get("file", None)
+    files = request.files.getlist("file")
 
-    if not file:
-        return error("No file")
+    if (len(files) < 1) or (len(files) > config.max_upload_files):
+        return error("Wrong file length")
 
-    if not file.name:
-        return error("No file name")
+    total_size = 0
 
-    if len(file.name) > 255:
-        return error("File name is too long")
+    for file in files:
+        if not file.name:
+            return error("No file name")
 
-    if hasattr(file, "read"):
-        try:
-            file.seek(0, 2)
-            size = file.tell()
-            file.seek(0)
+        if len(file.name) > 255:
+            return error("File name is too long")
 
-            if not user_procs.check_user_max(user, size):
-                return error("File is too big")
+        if not hasattr(file, "read"):
+            return error("File object has no 'read' attribute")
 
-            content = file.read()
+        file.seek(0, 2)
+        total_size += file.tell()
+        file.seek(0)
 
-            if content:
-                file_hash = hashlib.sha256(content).hexdigest()
+    if not user_procs.check_user_max(user, total_size):
+        return error("Upload is too big")
 
-                if not config.allow_same_hash:
-                    existing = database.get_posts(file_hash=file_hash)
+    def get_name() -> str:
+        u = ulid.new()
+        name = str(u.str)[: config.get_post_name_length()].strip()
 
-                    if existing:
-                        first = existing[0]
+        if user.mark:
+            name = f"{name}_{user.mark}".strip()
 
-                        if mode == "normal":
-                            return True, first.name
+        if not config.uppercase_names:
+            name = name.lower()
 
-                        return True, f"post/{first.name}"
+        return name
 
+    post_name = get_name()
+
+    def make_zip() -> BytesIO:
+        zip_buffer = BytesIO()
+        clevel = config.compression_level
+
+        with zipfile.ZipFile(
+            zip_buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=clevel
+        ) as zipf:
+            for file in files:
+                content = file.read()
+                filename = Path(file.filename).name
+                zipf.writestr(filename, content)
                 file.seek(0)
-                fname = file.filename
-                pfile = Path(fname)
-                ext = pfile.suffix.lower()
-                name = pfile.stem
-                u = ulid.new()
-                name = u.str[: config.get_post_name_length()]
 
-                if user.mark:
-                    name = f"{name}_{user.mark}".strip()
+        zip_buffer.seek(0)
+        return zip_buffer
 
-                if not config.uppercase_names:
-                    name = name.lower()
+    def check_hash(content: BytesIO | Buffer) -> tuple[str, str]:
+        file_hash = hashlib.sha256(content).hexdigest()
 
-                try:
-                    if ext:
-                        full_name = f"{name}{ext}"
-                    else:
-                        full_name = name
+        if not config.allow_same_hash:
+            existing = database.get_posts(file_hash=file_hash)
 
-                    path = utils.files_dir() / full_name
+            if existing:
+                return "", existing[0].name
 
-                    if request.form.get("compress", "off") == "on":
-                        zip_path = path.with_suffix(".zip")
-                        clevel = config.compression_level
+        return file_hash, ""
 
-                        with zipfile.ZipFile(
-                            zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=clevel
-                        ) as zipf:
-                            zipf.writestr(path.name, content)
-                            file_size = zip_path.stat().st_size
-                            path = zip_path
-                    else:
-                        file.save(path)
-                        file_size = path.stat().st_size
+    compress = request.form.get("compress", "off") == "on"
+    original = ""
+    sample = ""
 
-                    if config.allow_titles:
-                        title = utils.clean_title(title)
-                    else:
-                        title = ""
+    if len(files) > 1:
+        compress = True
 
-                    mtype, _ = mimetypes.guess_type(path)
-                    mtype = mtype or ""
-
-                    if mtype.startswith("text"):
-                        sample = content[: config.sample_size].decode(
-                            "utf-8", errors="ignore"
-                        )
-                    else:
-                        sample = ""
-
-                    original = utils.clean_filename(pfile.stem)
-
-                    database.add_post(
-                        user_id=user.id,
-                        name=name,
-                        ext=path.suffix[1:],
-                        title=title,
-                        original=original,
-                        mtype=mtype,
-                        size=file_size,
-                        sample=sample,
-                        file_hash=file_hash,
-                    )
-
-                    database.update_user_last_date(user.id)
-                except Exception as e:
-                    utils.error(e)
-                    return error("Failed to save file")
-
-                post_procs.check_storage()
-
-                if mode == "normal":
-                    return True, name
-
-                return True, f"post/{name}"
-
-            return error("File is empty")
+    if compress:
+        try:
+            content = make_zip()
         except Exception as e:
             utils.error(e)
-            return error("Failed to read file")
+            return error("Failed to compress files")
     else:
-        return error("File object has no 'read' attribute")
+        content = file.read()
+        original = utils.clean_filename(Path(files[0].filename).stem)
 
-    return error("Nothing was uploaded")
+    file_hash, existing = check_hash(content)
+
+    if existing:
+        if mode == "normal":
+            return file_hash, existing
+
+        return file_hash, f"post/{existing}"
+
+    try:
+        ext = Path(file.filename).suffix
+
+        if ext:
+            full_name = post_name + ext
+        else:
+            full_name = post_name
+
+        path = Path(full_name)
+
+        if compress:
+            with path.open("wb") as f:
+                f.write(content.getvalue())
+        else:
+            file.save(path)
+    except Exception as e:
+        utils.error(e)
+        return error("Failed to save file")
+
+    file_size = path.stat().st_size
+    mtype, _ = mimetypes.guess_type(path)
+    mtype = mtype or ""
+
+    if mtype.startswith("text"):
+        sample = content[: config.sample_size].decode("utf-8", errors="ignore").strip()
+
+    database.add_post(
+        user_id=user.id,
+        name=post_name,
+        ext=path.suffix[1:],
+        title=title,
+        original=original,
+        mtype=mtype,
+        size=file_size,
+        sample=sample,
+        file_hash=file_hash,
+    )
+
+    database.update_user_last_date(user.id)
+    post_procs.check_storage()
+
+    if mode == "normal":
+        return True, post_name
+
+    return True, f"post/{post_name}"
 
 
 def api_upload(request: Request) -> tuple[bool, str]:
