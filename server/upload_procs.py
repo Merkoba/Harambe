@@ -79,14 +79,23 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     def make_zip() -> bytes:
         buffer = BytesIO()
         clevel = config.compression_level
+        fixed_time = (1980, 1, 1, 0, 0, 0)
 
         with zipfile.ZipFile(
             buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=clevel
         ) as zipf:
-            for file in files:
+            for file in sorted(files, key=lambda f: f.filename):
                 content = file.read()
                 filename = Path(file.filename).name
-                zipf.writestr(filename, content)
+                zip_info = zipfile.ZipInfo(filename)
+                zip_info.date_time = fixed_time
+                zip_info.comment = b""
+                zip_info.extra = b""
+                zip_info.create_system = 0
+                zip_info.create_version = 20
+                zip_info.extract_version = 20
+                zip_info.external_attr = 0
+                zipf.writestr(zip_info, content)
                 file.seek(0)
 
         buffer.seek(0)
