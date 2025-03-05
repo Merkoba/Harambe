@@ -10,20 +10,8 @@ window.onload = () => {
         return
       }
 
-      if (e.shiftKey || e.ctrlKey || e.altKey) {
-        reset_file()
-        return
-      }
-
       if (file) {
         file_trigger()
-      }
-    })
-
-    DOM.ev(image, `auxclick`, (e) => {
-      if (e.button === 1) {
-        e.preventDefault()
-        reset_file()
       }
     })
   }
@@ -98,7 +86,7 @@ window.onload = () => {
 
     DOM.ev(submit_btn, `auxclick`, (e) => {
       if (e.button === 1) {
-        reset_file()
+        remove_last_picker()
       }
     })
   }
@@ -187,7 +175,7 @@ function reflect_file(file) {
   let the_file = file.files[0]
 
   if (the_file.size > vars.max_size) {
-    reset_file()
+    reset_file(file)
     popmsg(`That file is too big`)
     return false
   }
@@ -217,8 +205,7 @@ function reflect_file(file) {
   return true
 }
 
-function reset_file() {
-  let file = DOM.el(`#file`)
+function reset_file(file) {
   file.value = null
   reset_image()
   reset_video()
@@ -282,6 +269,9 @@ function add_picker() {
         el.remove()
         vars.num_pickers -= 1
       }
+      else {
+        reset_file(input)
+      }
     }
   })
 
@@ -338,4 +328,19 @@ function get_empty_picker() {
   }
 
   return files[0]
+}
+
+function remove_last_picker() {
+  let pickers = DOM.els(`.picker_file`)
+
+  if (!pickers.length) {
+    return
+  }
+
+  if (pickers.length === 1) {
+    reset_file(pickers[0])
+    return
+  }
+
+  pickers.at(-1).parentNode.remove()
 }

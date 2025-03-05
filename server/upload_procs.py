@@ -92,7 +92,16 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         if not u_ok:
             return error(u_msg)
 
-    files = [file for file in request.files.getlist("file") if file and file.filename]
+    files = []
+    seen_files = set()
+
+    for file in request.files.getlist("file"):
+        if file and file.filename:
+            filename = Path(file.filename).name
+
+            if filename and (filename not in seen_files):
+                seen_files.add(filename)
+                files.append(file)
 
     if (len(files) < 1) or (len(files) > config.max_upload_files):
         return error("Wrong file length")
