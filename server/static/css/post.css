@@ -367,3 +367,10 @@ a.link:hover,
 #title {
     white-space: wrap;
 }
+
+#details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.38rem;
+}
