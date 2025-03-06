@@ -281,9 +281,16 @@ window.onload = function() {
   }
 
   DOM.ev(document, `keydown`, (e) => {
-    if (e.key === `e`) {
-      if (e.ctrlKey) {
+    if (e.key === `ArrowUp`) {
+      if (e.ctrlKey && e.shiftKey) {
         edit_post()
+      }
+    }
+    else if (e.key === `ArrowDown`) {
+      if (e.ctrlKey && !e.shiftKey) {
+        if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
+          react_prompt()
+        }
       }
     }
   })

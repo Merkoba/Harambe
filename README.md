@@ -179,3 +179,25 @@ When multiple files are uploaded, a zip archive is created as the file.
 As each post contains only one file.
 
 The web interface makes it easy to pick multiple files quickly.
+
+## Menus and Keyboard
+
+There is a main menu to navigate to most locations.
+
+Menu buttons can be triggered with numbers on the keyboard.
+
+For example 1 will trigger the first button.
+
+There are some global shortcuts:
+
+`Ctrl+m`: Show the main menu.
+
+`Ctrl+Up`: Go to the fresh post.
+
+`Ctrl+Right`: Go to the next post.
+
+`Ctrl+Shift+Right`: Go to a random post.
+
+`Ctrl+Shift+Up`: Edit a post.
+
+`Ctrl+Down`: React to a post.

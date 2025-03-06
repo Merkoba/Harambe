@@ -44,7 +44,7 @@ DOM.ev(document, `keydown`, (e) => {
     }
   }
   else if (e.key === `m`) {
-    if (e.ctrlKey) {
+    if (e.ctrlKey && !e.shiftKey) {
       if (Msg.msg && Msg.msg.any_open()) {
         // Do nothing
       }
@@ -56,18 +56,16 @@ DOM.ev(document, `keydown`, (e) => {
     }
   }
   else if (e.key === `ArrowRight`) {
-    if (e.ctrlKey) {
+    if (e.ctrlKey && !e.shiftKey) {
       next_post()
+    }
+    else if (e.ctrlKey && e.shiftKey) {
+      random_post()
     }
   }
   else if (e.key === `ArrowUp`) {
-    if (e.ctrlKey) {
+    if (e.ctrlKey && !e.shiftKey) {
       fresh_post()
-    }
-  }
-  else if (e.key === `ArrowDown`) {
-    if (e.ctrlKey) {
-      random_post()
     }
   }
 })
