@@ -142,6 +142,10 @@ function validate() {
     return false
   }
 
+  if (!check_total_size()) {
+    return false
+  }
+
   let title = DOM.el(`#title`)
 
   if (title) {
@@ -161,9 +165,7 @@ function reflect_file(file) {
     title.focus()
   }
 
-  let the_file = file.files[0]
-
-  if (the_file.size > vars.max_size) {
+  if (!check_total_size()) {
     reset_file(file)
     popmsg(`That file is too big`)
     return false
@@ -172,6 +174,8 @@ function reflect_file(file) {
   reset_image()
   video.pause()
   DOM.hide(video)
+
+  let the_file = file.files[0]
 
   if (is_image(the_file)) {
     let reader = new FileReader()
@@ -447,4 +451,19 @@ function remove_all_pickers() {
   for (let file of files) {
     remove_picker(file.parentElement)
   }
+}
+
+function check_total_size() {
+  let files = DOM.els(`.picker_file`)
+  let total = 0
+
+  for (let file of files) {
+    if (file.files.length === 0) {
+      continue
+    }
+
+    total += file.files[0].size
+  }
+
+  return total <= vars.max_size
 }
