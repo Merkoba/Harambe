@@ -44,44 +44,46 @@
 </template>
 
 <div id="main" class="colitem">
-    <div id="top" class="nowrap">
-        <div id="menu" class="button" title="Ctrl+M">Menu</div>
-        <div class="sep">|</div>
-        <a href="/next/{{post.name}}" class="button" title="Next post by date">Next</a>
-        <div class="sep">|</div>
-
-        {% if owned %}
-        <div id="edit" class="button" title="Edit this post">Edit</div>
-        <div class="sep">|</div>
-        {% endif %}
-
-        {% if post.video_embed %}
-        <div class="rowitem nowrap">
-            <div id="max_video" class="button" title="Maximize the video">Max</div>
+    <div id="top">
+        <div id="topbuttons" class="rowitem">
+            <div id="menu" class="button" title="Ctrl+M">Menu</div>
             <div class="sep">|</div>
-        </div>
-        {% endif %}
-
-        {% if post.text_embed and not post.markdown_embed %}
-        <div class="rowitem nowrap">
-            <div id="max_editor" class="button" title="Maximize the editor">Max</div>
+            <a href="/next/{{post.name}}" class="button" title="Next post by date">Next</a>
             <div class="sep">|</div>
-        </div>
-        {% endif %}
 
-        {% if post.markdown_embed %}
-        <div class="rowitem nowrap">
-            <div id="max_markdown" class="button" title="Maximize the markdown">Max</div>
+            {% if owned %}
+            <div id="edit" class="button" title="Edit this post">Edit</div>
             <div class="sep">|</div>
-        </div>
-        {% endif %}
+            {% endif %}
 
-        {% if post.flash_embed %}
-        <div class="rowitem nowrap">
-            <div id="max_flash" class="button" title="Maximize the flash player">Max</div>
-            <div class="sep">|</div>
+            {% if post.video_embed %}
+            <div class="rowitem nowrap">
+                <div id="max_video" class="button" title="Maximize the video">Max</div>
+                <div class="sep">|</div>
+            </div>
+            {% endif %}
+
+            {% if post.text_embed and not post.markdown_embed %}
+            <div class="rowitem nowrap">
+                <div id="max_editor" class="button" title="Maximize the editor">Max</div>
+                <div class="sep">|</div>
+            </div>
+            {% endif %}
+
+            {% if post.markdown_embed %}
+            <div class="rowitem nowrap">
+                <div id="max_markdown" class="button" title="Maximize the markdown">Max</div>
+                <div class="sep">|</div>
+            </div>
+            {% endif %}
+
+            {% if post.flash_embed %}
+            <div class="rowitem nowrap">
+                <div id="max_flash" class="button" title="Maximize the flash player">Max</div>
+                <div class="sep">|</div>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
 
         {% if post.title or post.original %}
         <div id="title" title="{{post.title or post.original}}">{{post.title or post.original}}</div>
