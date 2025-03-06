@@ -169,3 +169,13 @@ Just change `url`, `username`, and `password`, and you might also need to change
 Optional flag `--prompt` triggers a `zenity` prompt for the title.
 
 Optional flag `--compress` makes a zip file on the server.
+
+## Archives
+
+Multiple files can be uploaded at the same time.
+
+When multiple files are uploaded, a zip archive is created as the file.
+
+As each post contains only one file.
+
+The web interface makes it easy to pick multiple files quickly.
