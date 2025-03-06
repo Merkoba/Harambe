@@ -92,15 +92,18 @@
 
     <!-- File -->
     <div id="details" class="colitem">
-        <div id="file" class="rowitem nowrap">
-            <div class="title">File:</div>
-            <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
+        <div id="file" class="rowitem">
+            <div class="rowitem nowrap">
+                <div class="title">File:</div>
+                <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
+            </div>
+
             <div class="sep">|</div>
-            <div>{{post.size_str}}</div>
+            <div class="nowrap">{{post.size_str}}</div>
 
             {% if post.mtype %}
             <div class="sep">|</div>
-            <div>{{post.mtype}}</div>
+            <div class="nowrap">{{post.mtype}}</div>
             {% endif %}
 
             <div id="resolution_container" class="hidden rowitem nowrap">
@@ -110,22 +113,28 @@
         </div>
 
         <!-- Date -->
-        <div class="rowitem nowrap">
-            <div class="title">Date:</div>
-            <div id="date_1">{{post.date_1}}</div>
+        <div class="rowitem">
+            <div class="title nowrap">Date:</div>
+            <div id="date_1" class="nowrap">{{post.date_1}}</div>
             <div class="sep">|</div>
-            <div id="date_2">{{post.date_2}}</div>
+            <div id="date_2" class="nowrap">{{post.date_2}}</div>
             <div class="sep">|</div>
-            <div id="ago">{{post.ago}}</div>
+            <div id="ago" class="nowrap">{{post.ago}}</div>
         </div>
 
         <!-- Uploader -->
-        <div class="rowitem nowrap">
-            <div class="title">Uploader:</div>
-            <div id="uploader" class="button" title="{{post.uploader_str}}">{{post.uploader_str[: max_post_name_length] | trim}}</div>
+        <div class="rowitem">
+            <div class="rowitem nowrap">
+                <div class="title">Uploader:</div>
+                <div id="uploader" class="button" title="{{post.uploader_str}}">{{post.uploader_str[: max_post_name_length] | trim}}</div>
+            </div>
+
             <div class="sep">|</div>
-            <div class="title">Views:</div>
-            <div id="views">{{post.views}}</div>
+
+            <div class="rowitem nowrap">
+                <div class="title">Views:</div>
+                <div id="views">{{post.views}}</div>
+            </div>
         </div>
     </div>
 
