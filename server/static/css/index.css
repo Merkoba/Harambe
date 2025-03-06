@@ -154,6 +154,10 @@ a.dialog_button:hover {
     outline: 1px solid var(--text_color);
 }
 
+.picker.unused {
+    opacity: 0.77;
+}
+
 #bottom {
     position: relative;
     display: flex;

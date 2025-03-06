@@ -125,6 +125,10 @@ window.onload = () => {
     DOM.ev(remove_picker_btn, `click`, (e) => {
       remove_picker()
     })
+
+    DOM.ev(remove_picker_btn, `auxclick`, (e) => {
+      remove_all_pickers()
+    })
   }
 }
 
@@ -247,6 +251,8 @@ function add_picker(show = true) {
     if (reflect_file(input)) {
       add_picker(false)
     }
+
+    check_files_used()
   })
 
   DOM.ev(el, `click`, (e) => {
@@ -351,6 +357,7 @@ function check_required_file() {
 function on_picker_change() {
   check_compress()
   check_required_file()
+  check_files_used()
 }
 
 function reset_file_media(picker) {
@@ -408,5 +415,34 @@ function remove_duplicate_files() {
     }
 
     names.push(name)
+  }
+}
+
+function check_files_used() {
+  let files = DOM.els(`.picker_file`)
+
+  if (files.length < 2) {
+    for (let file of files) {
+      file.parentElement.classList.remove(`unused`)
+    }
+
+    return
+  }
+
+  for (let file of files) {
+    if (file.files.length === 0) {
+      file.parentElement.classList.add(`unused`)
+    }
+    else {
+      file.parentElement.classList.remove(`unused`)
+    }
+  }
+}
+
+function remove_all_pickers() {
+  let files = DOM.els(`.picker_file`)
+
+  for (let file of files) {
+    remove_picker(file.parentElement)
   }
 }
