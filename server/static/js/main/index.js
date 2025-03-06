@@ -13,6 +13,10 @@ window.onload = () => {
       file_trigger()
     })
 
+    DOM.ev(image, `auxclick`, (e) => {
+      reset_file()
+    })
+
     DOM.ev(image, `error`, (e) => {
       reset_file()
     })
@@ -41,6 +45,10 @@ window.onload = () => {
     DOM.ev(video, `loadeddata`, () => {
       video.muted = true
       video.play()
+    })
+
+    DOM.ev(video, `auxclick`, (e) => {
+      reset_file()
     })
 
     DOM.ev(video, `error`, (e) => {
