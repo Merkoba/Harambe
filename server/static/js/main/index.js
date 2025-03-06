@@ -291,10 +291,12 @@ function check_compress() {
   if (num_active_files() > 1) {
     checkbox.checked = true
     checkbox.disabled = true
+    DOM.el(`#zip`).classList.add(`inactive`)
   }
   else {
     checkbox.checked = false
     checkbox.disabled = false
+    DOM.el(`#zip`).classList.remove(`inactive`)
   }
 }
 
