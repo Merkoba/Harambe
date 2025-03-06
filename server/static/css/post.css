@@ -361,3 +361,7 @@ a.link:hover,
 .embed {
     width: 100%;
 }
+
+#title {
+    white-space: wrap;
+}
