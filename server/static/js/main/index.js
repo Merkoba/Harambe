@@ -12,6 +12,10 @@ window.onload = () => {
 
       file_trigger()
     })
+
+    DOM.ev(image, `error`, (e) => {
+      reset_file()
+    })
   }
 
   DOM.ev(document, `dragover`, (e) => {
@@ -37,6 +41,10 @@ window.onload = () => {
     DOM.ev(video, `loadeddata`, () => {
       video.muted = true
       video.play()
+    })
+
+    DOM.ev(video, `error`, (e) => {
+      reset_file()
     })
   }
 
@@ -185,7 +193,10 @@ function reflect_file(file) {
 }
 
 function reset_file(file) {
-  file.value = null
+  if (file) {
+    file.value = null
+  }
+
   reset_image()
   reset_video()
   DOM.show(`#image`)
@@ -346,8 +357,7 @@ function reset_file_media(picker) {
   let file = DOM.el(`input`, picker)
 
   if (vars.media_picker === file) {
-    reset_image()
-    reset_video()
+    reset_file(file)
   }
 }
 
