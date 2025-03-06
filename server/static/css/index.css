@@ -1,5 +1,6 @@
 :root {
     --padding_1: 0.5rem;
+    --media_height: 15rem;
 }
 
 body, html {
@@ -111,9 +112,9 @@ a.dialog_button:hover {
 }
 
 #image {
-    width: 15rem;
+    height: var(--media_height);
+    width: auto;
     margin-bottom: 1.1rem;
-    max-height: 15rem;
     object-fit: contain;
     outline: 5px solid transparent;
     transition: outline-color 0.55s;
@@ -125,8 +126,8 @@ a.dialog_button:hover {
 }
 
 #video {
-    width: 360px;
-    max-height: 300px;
+    height: var(--media_height);
+    width: auto;
     margin-bottom: 1.25rem;
 }
 
