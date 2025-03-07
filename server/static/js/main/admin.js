@@ -59,7 +59,7 @@ App.init = () => {
 
   if (add) {
     DOM.ev(add, `click`, () => {
-      window.location = `/edit_user`
+      App.location(`/edit_user`)
     })
   }
 
@@ -256,7 +256,7 @@ App.delete_all_posts = async () => {
     })
 
     if (response.ok) {
-      window.location = `/admin/posts`
+      App.location(`/admin/posts`)
     }
     else {
       App.print_error(response.status)
@@ -317,10 +317,10 @@ App.do_search = (query = ``) => {
   let ms = App.mode_string()
 
   if (query) {
-    window.location = `/${ms}?query=${App.encode_uri(query)}`
+    App.location(`/${ms}?query=${App.encode_uri(query)}`)
   }
   else {
-    window.location = `/${ms}`
+    App.location(`/${ms}`)
   }
 }
 
@@ -477,7 +477,7 @@ App.delete_normal_users = async () => {
     })
 
     if (response.ok) {
-      window.location = `/admin/users`
+      App.location(`/admin/users`)
     }
     else {
       App.print_error(response.status)
@@ -494,7 +494,7 @@ App.sort_action = (what, desc = false) => {
   }
 
   let ms = App.mode_string()
-  window.location = `/${ms}?sort=${what}`
+  App.location(`/${ms}?sort=${what}`)
 }
 
 App.do_sort = (what) => {
@@ -545,7 +545,7 @@ App.do_mod_user = async (items, what, value, vtype) => {
     })
 
     if (response.ok) {
-      window.location = `/admin/users`
+      App.location(`/admin/users`)
     }
     else {
       App.print_error(response.status)
@@ -720,7 +720,7 @@ App.delete_all_reactions = async () => {
     })
 
     if (response.ok) {
-      window.location = `/admin/reactions`
+      App.location(`/admin/reactions`)
     }
     else {
       App.print_error(response.status)
@@ -968,5 +968,5 @@ App.setup_pages = () => {
 
 App.refresh = () => {
   let ms = App.mode_string()
-  window.location = `/${ms}`
+  App.location(`/${ms}`)
 }

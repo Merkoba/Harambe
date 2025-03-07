@@ -39,7 +39,7 @@ App.init = () => {
     let files = e.dataTransfer.files
 
     if (files && (files.length > 0)) {
-      window.location = `/`
+      App.location(`/`)
     }
   })
 
@@ -1071,7 +1071,7 @@ App.setup_reactions = () => {
 
       if (e.target.classList.contains(`reaction_uname`)) {
         let user_id = el.dataset.user_id
-        window.location = `/list/posts?user_id=${user_id}`
+        App.location(`/list/posts?user_id=${user_id}`)
       }
       else if (e.target.classList.contains(`reaction_edit`)) {
         App.active_item.dataset.id

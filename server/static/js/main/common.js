@@ -164,19 +164,19 @@ App.setup_menu_opts = (show_return = true, show = false) => {
     }
 
     App.bind_button(`${name}_opts_fresh`, () => {
-      window.location = `/fresh`
+      App.location(`/fresh`)
     }, () => {
       App.open_tab(`/fresh`)
     })
 
     App.bind_button(`${name}_opts_random`, () => {
-      window.location = `/random`
+      App.location(`/random`)
     }, () => {
       App.open_tab(`/random`)
     })
 
     App.bind_button(`${name}_opts_return`, () => {
-      window.location = `/`
+      App.location(`/`)
     }, () => {
       App.open_tab(`/`)
     })
@@ -204,11 +204,11 @@ App.setup_you_opts = (user_id, show = false, back = false) => {
 
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_posts`, () => {
-      window.location = `/list/posts?user_id=${user_id}`
+      App.location(`/list/posts?user_id=${user_id}`)
     })
 
     App.bind_button(`${name}_opts_reactions`, () => {
-      window.location = `/list/reactions?user_id=${user_id}`
+      App.location(`/list/reactions?user_id=${user_id}`)
     })
 
     App.bind_button(`${name}_opts_edit_name`, () => {
@@ -223,7 +223,7 @@ App.setup_you_opts = (user_id, show = false, back = false) => {
       let confirm_args = {
         message: `Visne profecto discedere ?`,
         callback_yes: () => {
-          window.location = `/logout`
+          App.location(`/logout`)
         },
       }
 
@@ -240,10 +240,10 @@ App.setup_user_opts = (show = false, back = false) => {
       let user_id = App.user_opts_user_id
 
       if (App.mode.includes(`admin`)) {
-        window.location = `/admin/posts?user_id=${user_id}`
+        App.location(`/admin/posts?user_id=${user_id}`)
       }
       else {
-        window.location = `/list/posts?user_id=${user_id}`
+        App.location(`/list/posts?user_id=${user_id}`)
       }
     }, () => {
       let user_id = App.user_opts_user_id
@@ -260,10 +260,10 @@ App.setup_user_opts = (show = false, back = false) => {
       let user_id = App.user_opts_user_id
 
       if (App.mode.includes(`admin`)) {
-        window.location = `/admin/reactions?user_id=${user_id}`
+        App.location(`/admin/reactions?user_id=${user_id}`)
       }
       else {
-        window.location = `/list/reactions?user_id=${user_id}`
+        App.location(`/list/reactions?user_id=${user_id}`)
       }
     }, () => {
       let user_id = App.user_opts_user_id
@@ -278,7 +278,7 @@ App.setup_user_opts = (show = false, back = false) => {
 
     App.bind_button(`${name}_opts_user`, () => {
       let user_id = App.user_opts_user_id
-      window.location = `/edit_user/${user_id}`
+      App.location(`/edit_user/${user_id}`)
     }, () => {
       let user_id = App.user_opts_user_id
       App.open_tab(`/edit_user/${user_id}`)
@@ -600,13 +600,13 @@ App.setup_list_opts = (show = false, back = false) => {
 
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_posts`, () => {
-      window.location = `/list/posts`
+      App.location(`/list/posts`)
     }, () => {
       App.open_tab(`/list/posts`)
     })
 
     App.bind_button(`${name}_opts_reactions`, () => {
-      window.location = `/list/reactions`
+      App.location(`/list/reactions`)
     }, () => {
       App.open_tab(`/list/reactions`)
     })
@@ -618,19 +618,19 @@ App.setup_admin_opts = (show = false, back = false) => {
 
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_posts`, () => {
-      window.location = `/admin/posts`
+      App.location(`/admin/posts`)
     }, () => {
       App.open_tab(`/admin/posts`)
     })
 
     App.bind_button(`${name}_opts_reactions`, () => {
-      window.location = `/admin/reactions`
+      App.location(`/admin/reactions`)
     }, () => {
       App.open_tab(`/admin/reactions`)
     })
 
     App.bind_button(`${name}_opts_users`, () => {
-      window.location = `/admin/users`
+      App.location(`/admin/users`)
     }, () => {
       App.open_tab(`/admin/users`)
     })
@@ -773,19 +773,19 @@ App.setup_editpost_opts = (show = false) => {
 
 App.next_post = () => {
   if (App.name) {
-    window.location = `/next/${App.name}`
+    App.location(`/next/${App.name}`)
   }
   else {
-    window.location = `/random`
+    App.location(`/random`)
   }
 }
 
 App.fresh_post = () => {
-  window.location = `/fresh`
+  App.location(`/fresh`)
 }
 
 App.random_post = () => {
-  window.location = `/random`
+  App.location(`/random`)
 }
 
 App.msg_show = (what) => {
@@ -794,4 +794,27 @@ App.msg_show = (what) => {
   if (msg) {
     msg.show()
   }
+}
+
+App.show_loading = (close = true) => {
+  if (close) {
+    App.close_all_modals()
+  }
+
+  if (App.msg_loading) {
+    App.msg_loading.show()
+  }
+
+  App.msg_loading = Msg.factory()
+  App.msg_loading.set(`⏳ Cursus Viarum`)
+  App.msg_loading.show()
+}
+
+App.location = (where) => {
+  App.show_loading()
+  window.location = where
+}
+
+App.close_all_modals = () => {
+  Msg.msg.close_all()
 }

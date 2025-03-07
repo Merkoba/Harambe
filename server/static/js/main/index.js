@@ -71,7 +71,7 @@ App.init = () => {
 
     DOM.ev(menu_btn, `auxclick`, (e) => {
       if (e.button === 1) {
-        window.location = `/fresh`
+        App.location(`/fresh`)
       }
     })
   }
@@ -80,7 +80,7 @@ App.init = () => {
 
   if (login_btn) {
     DOM.ev(login_btn, `click`, (e) => {
-      window.location = `/login`
+      App.location(`/login`)
     })
   }
 
@@ -88,7 +88,7 @@ App.init = () => {
 
   if (register_btn) {
     DOM.ev(register_btn, `click`, (e) => {
-      window.location = `/register`
+      App.location(`/register`)
     })
   }
 
