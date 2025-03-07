@@ -48,6 +48,7 @@ input[type="checkbox"] {
     gap: 1rem;
     align-items: center;
     justify-content: center;
+    user-select: none;
 }
 
 a:link, a:visited {
