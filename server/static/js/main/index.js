@@ -1,24 +1,28 @@
 window.onload = () => {
+  App.init()
+}
+
+App.init = () => {
   let image = DOM.el(`#image`)
-  vars.num_pickers = 0
-  vars.clicked = false
+  App.num_pickers = 0
+  App.clicked = false
 
   if (image) {
     DOM.ev(image, `click`, (e) => {
-      if (!vars.is_user) {
-        popmsg(`Login or register first`)
+      if (!App.is_user) {
+        App.popmsg(`Login or register first`)
         return
       }
 
-      file_trigger()
+      App.file_trigger()
     })
 
     DOM.ev(image, `auxclick`, (e) => {
-      reset_file()
+      App.reset_file()
     })
 
     DOM.ev(image, `error`, (e) => {
-      reset_file()
+      App.reset_file()
     })
   }
 
@@ -35,7 +39,7 @@ window.onload = () => {
       let dataTransfer = new DataTransfer()
       dataTransfer.items.add(files[0])
       file.files = dataTransfer.files
-      reflect_file(file)
+      App.reflect_file(file)
     }
   })
 
@@ -48,21 +52,21 @@ window.onload = () => {
     })
 
     DOM.ev(video, `auxclick`, (e) => {
-      reset_file()
+      App.reset_file()
     })
 
     DOM.ev(video, `error`, (e) => {
-      reset_file()
+      App.reset_file()
     })
   }
 
   let menu_btn = DOM.el(`#menu_btn`)
 
   if (menu_btn) {
-    setup_explore_opts(false)
+    App.setup_explore_opts(false)
 
     DOM.ev(menu_btn, `click`, (e) => {
-      vars.msg_explore_opts.show()
+      App.msg_explore_opts.show()
     })
 
     DOM.ev(menu_btn, `auxclick`, (e) => {
@@ -92,7 +96,7 @@ window.onload = () => {
 
   if (submit_btn) {
     DOM.ev(submit_btn, `click`, (e) => {
-      if (validate()) {
+      if (App.validate()) {
         let form = DOM.el(`#form`)
         form.submit()
       }
@@ -100,7 +104,7 @@ window.onload = () => {
 
     DOM.ev(submit_btn, `auxclick`, (e) => {
       if (e.button === 1) {
-        remove_picker()
+        App.remove_picker()
       }
     })
   }
@@ -117,13 +121,13 @@ window.onload = () => {
     })
   }
 
-  add_picker()
+  App.add_picker()
 
   let add_picker_btn = DOM.el(`#add_picker_btn`)
 
   if (add_picker_btn) {
     DOM.ev(add_picker_btn, `click`, (e) => {
-      add_picker()
+      App.add_picker()
     })
   }
 
@@ -131,22 +135,22 @@ window.onload = () => {
 
   if (remove_picker_btn) {
     DOM.ev(remove_picker_btn, `click`, (e) => {
-      remove_picker()
+      App.remove_picker()
     })
 
     DOM.ev(remove_picker_btn, `auxclick`, (e) => {
-      remove_all_pickers()
+      App.remove_all_pickers()
     })
   }
 }
 
-function validate() {
-  if (vars.clicked) {
+App.validate = () => {
+  if (App.clicked) {
     return false
   }
 
   if (num_active_files() === 0) {
-    file_trigger()
+    App.file_trigger()
     return false
   }
 
@@ -157,16 +161,16 @@ function validate() {
   let title = DOM.el(`#title`)
 
   if (title) {
-    if (title.value.length > vars.max_title_length) {
+    if (title.value.length > App.max_title_length) {
       return false
     }
   }
 
-  vars.clicked = true
+  App.clicked = true
   return true
 }
 
-function reflect_file(file) {
+App.reflect_file = (file) => {
   let title = DOM.el(`#title`)
 
   if (title) {
@@ -174,12 +178,12 @@ function reflect_file(file) {
   }
 
   if (!check_total_size()) {
-    reset_file(file)
-    popmsg(`That file is too big`)
+    App.reset_file(file)
+    App.popmsg(`That file is too big`)
     return false
   }
 
-  reset_image()
+  App.reset_image()
   video.pause()
   DOM.hide(video)
 
@@ -195,42 +199,42 @@ function reflect_file(file) {
     DOM.hide(video)
     DOM.show(image)
     reader.readAsDataURL(the_file)
-    vars.media_picker = file
+    App.media_picker = file
   }
   else if (is_audio(the_file) || is_video(the_file)) {
     video.src = URL.createObjectURL(the_file)
     DOM.hide(image)
     DOM.show(video)
     video.load()
-    vars.media_picker = file
+    App.media_picker = file
   }
 
   return true
 }
 
-function reset_file(file) {
+App.reset_file = (file) => {
   if (file) {
     file.value = null
   }
 
-  reset_image()
-  reset_video()
+  App.reset_image()
+  App.reset_video()
   DOM.show(`#image`)
 }
 
-function reset_image() {
+App.reset_image = () => {
   let image = DOM.el(`#image`)
-  image.src = `/static/img/banners/${vars.banner}`
+  image.src = `/static/img/banners/${App.banner}`
 }
 
-function reset_video() {
+App.reset_video = () => {
   let video = DOM.el(`#video`)
   video.pause()
   DOM.hide(video)
 }
 
-function add_picker(show = true) {
-  if (vars.num_pickers > 0) {
+App.add_picker = (show = true) => {
+  if (App.num_pickers > 0) {
     let empty = get_empty_picker()
 
     if (empty.files.length === 0) {
@@ -239,9 +243,9 @@ function add_picker(show = true) {
     }
   }
 
-  vars.num_pickers += 1
+  App.num_pickers += 1
 
-  if (vars.num_pickers > vars.max_upload_files) {
+  if (App.num_pickers > App.max_upload_files) {
     return
   }
 
@@ -249,28 +253,28 @@ function add_picker(show = true) {
   let el = DOM.create(`div`, `picker`)
   el.innerHTML = t.innerHTML
   let input = DOM.el(`input`, el)
-  input.id = `file_${vars.num_pickers}`
+  input.id = `file_${App.num_pickers}`
   input.name = `file`
 
   DOM.ev(el, `change`, (e) => {
-    vars.clicked = false
-    remove_duplicate_files()
+    App.clicked = false
+    App.remove_duplicate_files()
 
     if (input.files.length === 0) {
       return
     }
 
     if (reflect_file(input)) {
-      add_picker(false)
+      App.add_picker(false)
     }
 
-    check_files_used()
+    App.check_files_used()
   })
 
   DOM.ev(el, `click`, (e) => {
     if (e.shiftKey || e.ctrlKey || e.altKey) {
       e.preventDefault()
-      reset_file(input)
+      App.reset_file(input)
     }
     else if (e.target !== input) {
       input.click()
@@ -280,27 +284,27 @@ function add_picker(show = true) {
   DOM.ev(el, `auxclick`, (e) => {
     if (e.button === 1) {
       e.preventDefault()
-      remove_picker(el)
+      App.remove_picker(el)
     }
   })
 
   let c = DOM.el(`#pickers`)
   c.appendChild(el)
-  on_picker_change()
+  App.on_picker_change()
 
   if (show) {
     input.click()
   }
 }
 
-function check_compress() {
+App.check_compress = () => {
   let checkbox = DOM.el(`#compress`)
 
   if (!checkbox) {
     return
   }
 
-  if (num_active_files() > 1) {
+  if (App.num_active_files() > 1) {
     checkbox.checked = true
     checkbox.disabled = true
     DOM.el(`#zip`).classList.add(`inactive`)
@@ -312,7 +316,7 @@ function check_compress() {
   }
 }
 
-function file_trigger() {
+App.file_trigger = () => {
   let file = get_empty_picker()
 
   if (file) {
@@ -320,7 +324,7 @@ function file_trigger() {
   }
 }
 
-function get_empty_picker() {
+App.get_empty_picker = () => {
   let files = DOM.els(`.picker_file`)
 
   for (let file of files) {
@@ -332,7 +336,7 @@ function get_empty_picker() {
   return files[0]
 }
 
-function remove_picker(picker) {
+App.remove_picker = (picker) => {
   let pickers = DOM.els(`.picker`)
 
   if (!pickers.length) {
@@ -341,7 +345,7 @@ function remove_picker(picker) {
 
   if (pickers.length === 1) {
     let file = DOM.el(`input`, pickers[0])
-    reset_file(file)
+    App.reset_file(file)
     return
   }
 
@@ -349,13 +353,13 @@ function remove_picker(picker) {
     picker = pickers.at(-1)
   }
 
-  reset_file_media(picker)
+  App.reset_file_media(picker)
   picker.remove()
-  vars.num_pickers -= 1
-  on_picker_change()
+  App.num_pickers -= 1
+  App.on_picker_change()
 }
 
-function check_required_file() {
+App.check_required_file = () => {
   let files = DOM.els(`.picker_file`)
 
   for (let [i, file] of files.entries()) {
@@ -368,21 +372,21 @@ function check_required_file() {
   }
 }
 
-function on_picker_change() {
-  check_compress()
-  check_required_file()
-  check_files_used()
+App.on_picker_change = () => {
+  App.check_compress()
+  App.check_required_file()
+  App.check_files_used()
 }
 
-function reset_file_media(picker) {
+App.reset_file_media = (picker) => {
   let file = DOM.el(`input`, picker)
 
-  if (vars.media_picker === file) {
-    reset_file(file)
+  if (App.media_picker === file) {
+    App.reset_file(file)
   }
 }
 
-function num_active_files() {
+App.num_active_files = () => {
   let files = DOM.els(`.picker_file`)
   let active = 0
 
@@ -397,7 +401,7 @@ function num_active_files() {
       continue
     }
 
-    if (file.files[0].size > vars.max_size) {
+    if (file.files[0].size > App.max_size) {
       continue
     }
 
@@ -411,7 +415,7 @@ function num_active_files() {
   return active
 }
 
-function remove_duplicate_files() {
+App.remove_duplicate_files = () => {
   let files = DOM.els(`.picker_file`)
   let names = []
 
@@ -425,14 +429,14 @@ function remove_duplicate_files() {
     let name = file.files[0].name
 
     if (names.includes(name)) {
-      reset_file(file)
+      App.reset_file(file)
     }
 
     names.push(name)
   }
 }
 
-function check_files_used() {
+App.check_files_used = () => {
   let files = DOM.els(`.picker_file`)
 
   if (files.length < 2) {
@@ -453,15 +457,15 @@ function check_files_used() {
   }
 }
 
-function remove_all_pickers() {
+App.remove_all_pickers = () => {
   let files = DOM.els(`.picker_file`)
 
   for (let file of files) {
-    remove_picker(file.parentElement)
+    App.remove_picker(file.parentElement)
   }
 }
 
-function check_total_size() {
+App.check_total_size = () => {
   let files = DOM.els(`.picker_file`)
   let total = 0
 
@@ -473,5 +477,5 @@ function check_total_size() {
     total += file.files[0].size
   }
 
-  return total <= vars.max_size
+  return total <= App.max_size
 }

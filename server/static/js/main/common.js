@@ -51,7 +51,7 @@ App.setup_keyboard = () => {
         }
         else {
           e.preventDefault()
-          let show_return = vars.mode !== `index`
+          let show_return = App.mode !== `index`
           setup_explore_opts(show_return, true)
         }
       }
@@ -174,7 +174,7 @@ App.setup_explore_opts = (show_return = true, show = false) => {
     })
 
     bind_button(`${name}_opts_you`, () => {
-      setup_you_opts(vars.user_id, true)
+      setup_you_opts(App.user_id, true)
     })
 
     bind_button(`${name}_opts_list`, () => {
@@ -229,18 +229,18 @@ App.setup_user_opts = (show = false) => {
 
   make_opts(name, () => {
     bind_button(`${name}_opts_posts`, () => {
-      let user_id = vars.user_opts_user_id
+      let user_id = App.user_opts_user_id
 
-      if (vars.mode.includes(`admin`)) {
+      if (App.mode.includes(`admin`)) {
         window.location = `/admin/posts?user_id=${user_id}`
       }
       else {
         window.location = `/list/posts?user_id=${user_id}`
       }
     }, () => {
-      let user_id = vars.user_opts_user_id
+      let user_id = App.user_opts_user_id
 
-      if (vars.mode.includes(`admin`)) {
+      if (App.mode.includes(`admin`)) {
         open_tab(`/admin/posts?user_id=${user_id}`)
       }
       else {
@@ -249,18 +249,18 @@ App.setup_user_opts = (show = false) => {
     })
 
     bind_button(`${name}_opts_reactions`, () => {
-      let user_id = vars.user_opts_user_id
+      let user_id = App.user_opts_user_id
 
-      if (vars.mode.includes(`admin`)) {
+      if (App.mode.includes(`admin`)) {
         window.location = `/admin/reactions?user_id=${user_id}`
       }
       else {
         window.location = `/list/reactions?user_id=${user_id}`
       }
     }, () => {
-      let user_id = vars.user_opts_user_id
+      let user_id = App.user_opts_user_id
 
-      if (vars.mode.includes(`admin`)) {
+      if (App.mode.includes(`admin`)) {
         open_tab(`/admin/reactions?user_id=${user_id}`)
       }
       else {
@@ -269,10 +269,10 @@ App.setup_user_opts = (show = false) => {
     })
 
     bind_button(`${name}_opts_user`, () => {
-      let user_id = vars.user_opts_user_id
+      let user_id = App.user_opts_user_id
       window.location = `/edit_user/${user_id}`
     }, () => {
-      let user_id = vars.user_opts_user_id
+      let user_id = App.user_opts_user_id
       open_tab(`/edit_user/${user_id}`)
     })
   }, show)
@@ -295,12 +295,12 @@ App.setup_reaction_opts = (show = false) => {
 
   make_opts(name, () => {
     bind_button(`${name}_opts_edit`, () => {
-      let id = vars.active_item.dataset.id
+      let id = App.active_item.dataset.id
       react_prompt(id)
     })
 
     bind_button(`${name}_opts_delete`, () => {
-      let id = vars.active_item.dataset.id
+      let id = App.active_item.dataset.id
       delete_reaction(id)
     })
   }, show)
@@ -520,7 +520,7 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
   let prompt_args = {
     value: o_value,
     placeholder: `Type the new ${what}`,
-    max: vars.text_reaction_length,
+    max: App.text_reaction_length,
     password: vtype === `password`,
     callback: (value_1) => {
       if (!repeat) {
@@ -530,7 +530,7 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
 
       let prompt_args_2 = {
         placeholder: `Enter the value again`,
-        max: vars.text_reaction_length,
+        max: App.text_reaction_length,
         password: vtype === `password`,
         callback: (value_2) => {
           if (value_1 !== value_2) {
@@ -550,9 +550,9 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
 }
 
 App.edit_name = () => {
-  user_mod_input(`name`, vars.user_name, `string`, (what, value, vtype) => {
+  user_mod_input(`name`, App.user_name, `string`, (what, value, vtype) => {
     do_user_edit(what, value, vtype, `Name`, () => {
-      vars.user_name = value
+      App.user_name = value
       DOM.el(`#user_name`).textContent = value
     })
   })
@@ -565,7 +565,7 @@ App.edit_password = () => {
 }
 
 App.do_user_edit = async (what, value, vtype, title, callback) => {
-  let ids = [vars.user_id]
+  let ids = [App.user_id]
 
   let response = await fetch(`/mod_user`, {
     method: `POST`,
@@ -635,7 +635,7 @@ App.setup_link_opts = (show = false) => {
   make_opts(name, () => {
     let c = DOM.el(`#links_container`)
 
-    for (let [i, link] of vars.links.entries()) {
+    for (let [i, link] of App.links.entries()) {
       let item = DOM.create(`div`, `aero_button`, `${name}_opts_${i}`)
       item.textContent = link.name
       item.title = link.url
@@ -653,15 +653,15 @@ App.setup_link_opts = (show = false) => {
 App.make_opts = (name, setup, show = false) => {
   let msg_name = `msg_${name}_opts`
 
-  if (vars[msg_name]) {
+  if (App[msg_name]) {
     if (show) {
-      vars[msg_name].show()
+      App[msg_name].show()
     }
 
     return
   }
 
-  vars[msg_name] = Msg.factory({
+  App[msg_name] = Msg.factory({
     after_show: () => {
       let selection = window.getSelection()
       selection.removeAllRanges()
@@ -669,11 +669,11 @@ App.make_opts = (name, setup, show = false) => {
   })
 
   let t = DOM.el(`#template_${name}_opts`)
-  vars[msg_name].set(t.innerHTML)
+  App[msg_name].set(t.innerHTML)
   setup()
 
   if (show) {
-    vars[msg_name].show()
+    App[msg_name].show()
   }
 }
 
@@ -686,14 +686,14 @@ App.bind_button = (what, func, mfunc) => {
     return
   }
 
-  let c = DOM.el(`.dialog_container`, vars[msg_name].content)
+  let c = DOM.el(`.dialog_container`, App[msg_name].content)
   let btns = DOM.els(`.aero_button`, c)
   let index = btns.indexOf(el)
   el.textContent = `${index + 1}. ${el.textContent}`
 
   if (func) {
     DOM.ev(el, `click`, (e) => {
-      vars[msg_name].close()
+      App[msg_name].close()
       func()
     })
   }
@@ -701,7 +701,7 @@ App.bind_button = (what, func, mfunc) => {
   if (mfunc || func) {
     DOM.ev(el, `auxclick`, (e) => {
       if (e.button === 1) {
-        vars[msg_name].close()
+        App[msg_name].close()
 
         if (mfunc) {
           mfunc()
@@ -714,7 +714,7 @@ App.bind_button = (what, func, mfunc) => {
   }
 
   DOM.ev(el, `contextmenu`, (e) => {
-    vars[msg_name].close()
+    App[msg_name].close()
     e.preventDefault()
 
     if (func) {
@@ -753,8 +753,8 @@ App.setup_editpost_opts = (show = false) => {
 }
 
 App.next_post = () => {
-  if (vars.name) {
-    window.location = `/next/${vars.name}`
+  if (App.name) {
+    window.location = `/next/${App.name}`
   }
   else {
     window.location = `/random`

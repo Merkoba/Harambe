@@ -1,6 +1,10 @@
 window.onload = () => {
-  vars.selected_items = []
-  vars.last_checkbox = null
+  App.init()
+}
+
+App.init = () => {
+  App.selected_items = []
+  App.last_checkbox = null
 
   DOM.ev(document, `keydown`, (e) => {
     if (filter_focused()) {
@@ -21,14 +25,14 @@ window.onload = () => {
 
   DOM.ev(document, `click`, async (e) => {
     let item = e.target.closest(`.item`)
-    vars.active_item = item
+    App.active_item = item
 
     if (e.target.classList.contains(`select_checkbox`)) {
       on_checkbox_click(e)
     }
     else if (e.target.classList.contains(`admin_user`)) {
-      vars.user_opts_user_id = item.dataset.user_id
-      vars.msg_user_opts.show()
+      App.user_opts_user_id = item.dataset.user_id
+      App.msg_user_opts.show()
     }
     else if (e.target.classList.contains(`mtype`)) {
       let mtype = e.target.textContent
@@ -68,11 +72,11 @@ window.onload = () => {
   let edit = DOM.el(`#edit`)
 
   if (edit) {
-    vars.msg_user_edit = Msg.factory()
+    App.msg_user_edit = Msg.factory()
     let t = DOM.el(`#template_user_edit`)
-    vars.msg_user_edit.set(t.innerHTML)
+    App.msg_user_edit.set(t.innerHTML)
 
-    if (vars.mode === `admin_users`) {
+    if (App.mode === `admin_users`) {
       DOM.ev(`#edit_reader_yes`, `click`, () => {
         mod_user(`reader`, 1, `bool`)
       })
@@ -132,7 +136,7 @@ window.onload = () => {
 
     DOM.ev(edit, `click`, () => {
       if (get_selected().length > 0) {
-        vars.msg_user_edit.show()
+        App.msg_user_edit.show()
       }
       else {
         popmsg(`No users are selected`)
@@ -180,11 +184,11 @@ window.onload = () => {
 
   if (prev_page) {
     DOM.ev(prev_page, `click`, () => {
-      if (vars.page <= 1) {
+      if (App.page <= 1) {
         return
       }
 
-      goto_page(vars.page - 1)
+      goto_page(App.page - 1)
     })
   }
 
@@ -192,11 +196,11 @@ window.onload = () => {
 
   if (next_page) {
     DOM.ev(next_page, `click`, () => {
-      if (!vars.next_page) {
+      if (!App.next_page) {
         return
       }
 
-      goto_page(vars.page + 1)
+      goto_page(App.page + 1)
     })
   }
 
@@ -247,20 +251,20 @@ window.onload = () => {
   }
 }
 
-function goto_page(page) {
-  let psize = vars.page_size
+App.goto_page = (page) => {
+  let psize = App.page_size
   let url = new URL(window.location.href)
   url.searchParams.set(`page`, page)
   url.searchParams.set(`page_size`, psize)
 
-  if (vars.used_user_id) {
-    url.searchParams.set(`user_id`, vars.used_user_id)
+  if (App.used_user_id) {
+    url.searchParams.set(`user_id`, App.used_user_id)
   }
 
   window.location.href = url.href
 }
 
-function fill_page_select(page_select) {
+App.fill_page_select = (page_select) => {
   function add_option(n, selected = false) {
     let option = document.createElement(`option`)
     option.value = n
@@ -274,7 +278,7 @@ function fill_page_select(page_select) {
     page_select.appendChild(sep)
   }
 
-  add_option(`Default`, vars.def_page_size)
+  add_option(`Default`, App.def_page_size)
   add_separator()
 
   let nums = [5, 10, 20, 50, 100, 200, 500, 1000]
@@ -282,8 +286,8 @@ function fill_page_select(page_select) {
   for (let n of nums) {
     let selected = false
 
-    if (!vars.def_page_size) {
-      if (vars.page_size === n.toString()) {
+    if (!App.def_page_size) {
+      if (App.page_size === n.toString()) {
         selected = true
       }
     }
@@ -292,10 +296,10 @@ function fill_page_select(page_select) {
   }
 
   add_separator()
-  add_option(`All`, vars.page_size === `all`)
+  add_option(`All`, App.page_size === `all`)
 }
 
-function on_page_select_change(page_select) {
+App.on_page_select_change = (page_select) => {
   let value = page_select.value
   let psize
 
@@ -318,26 +322,26 @@ function on_page_select_change(page_select) {
   window.location.href = url.href
 }
 
-function delete_posts() {
-  if (vars.selected_items.length === 0) {
+App.delete_posts = () => {
+  if (App.selected_items.length === 0) {
     return
   }
 
   let size = 0
 
-  for (let post of vars.selected_items) {
+  for (let post of App.selected_items) {
     size += parseFloat(post.dataset.size)
   }
 
   size = Math.round(size * 100) / 100
-  let s = singplural(`post`, vars.selected_items.length)
+  let s = singplural(`post`, App.selected_items.length)
 
   let confirm_args = {
-    message: `Delete ${vars.selected_items.length} ${s} (${size_string(size)}) ?`,
+    message: `Delete ${App.selected_items.length} ${s} (${size_string(size)}) ?`,
     callback_yes: () => {
       let posts = []
 
-      for (let post of vars.selected_items) {
+      for (let post of App.selected_items) {
         posts.push(post.dataset.post_id)
       }
 
@@ -348,7 +352,7 @@ function delete_posts() {
   confirmbox(confirm_args)
 }
 
-async function delete_selected_posts(ids) {
+App.delete_selected_posts = async (ids) => {
   try {
     let response = await fetch(`/delete_posts`, {
       method: `POST`,
@@ -370,7 +374,7 @@ async function delete_selected_posts(ids) {
   }
 }
 
-function remove_posts(posts) {
+App.remove_posts = (posts) => {
   for (let post of posts) {
     let el = DOM.el(`.item[data-post_id="${post}"]`)
 
@@ -380,7 +384,7 @@ function remove_posts(posts) {
   }
 }
 
-async function delete_all_posts() {
+App.delete_all_posts = async () => {
   try {
     let response = await fetch(`/delete_all_posts`, {
       method: `POST`,
@@ -402,7 +406,7 @@ async function delete_all_posts() {
   }
 }
 
-function select_all() {
+App.select_all = () => {
   let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
@@ -412,7 +416,7 @@ function select_all() {
   DOM.el(`#checkbox`).checked = true
 }
 
-function unselect_all() {
+App.unselect_all = () => {
   let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
@@ -422,7 +426,7 @@ function unselect_all() {
   DOM.el(`#checkbox`).checked = false
 }
 
-function size_string(size) {
+App.size_string = (size) => {
   size /= 1000
 
   if (size < 1000) {
@@ -439,7 +443,7 @@ function size_string(size) {
   return `${size.toFixed(2)} gb`
 }
 
-function do_search(query = ``) {
+App.do_search = (query = ``) => {
   if (!query) {
     query = DOM.el(`#filter`).value.trim()
   }
@@ -458,7 +462,7 @@ function do_search(query = ``) {
   }
 }
 
-async function edit_post_title(el) {
+App.edit_post_title = (el) => {
   let t = el.dataset.title
   let o = el.dataset.original
   let current = t || o
@@ -466,7 +470,7 @@ async function edit_post_title(el) {
   let prompt_args = {
     placeholder: `Enter new title`,
     value: current,
-    max: vars.max_title_length,
+    max: App.max_title_length,
     callback: async (title) => {
       let post_id = el.dataset.post_id
 
@@ -491,7 +495,7 @@ async function edit_post_title(el) {
   prompt_text(prompt_args)
 }
 
-function toggle_select() {
+App.toggle_select = () => {
   let checkboxes = DOM.els(`.select_checkbox`)
 
   for (let checkbox of checkboxes) {
@@ -504,7 +508,7 @@ function toggle_select() {
   unselect_all()
 }
 
-function get_selected() {
+App.get_selected = () => {
   let items = []
   let checkboxes = DOM.els(`.select_checkbox`)
 
@@ -517,46 +521,46 @@ function get_selected() {
   return items
 }
 
-function delete_selected() {
+App.delete_selected = () => {
   let items = get_selected()
 
   if (items.length === 0) {
     return
   }
 
-  vars.selected_items = items
+  App.selected_items = items
 
-  if (vars.mode === `admin_users`) {
+  if (App.mode === `admin_users`) {
     delete_users()
   }
-  else if (vars.mode === `admin_posts`) {
+  else if (App.mode === `admin_posts`) {
     delete_posts()
   }
-  else if (vars.mode === `admin_reactions`) {
+  else if (App.mode === `admin_reactions`) {
     delete_reactions()
   }
 }
 
-function delete_users() {
-  if (vars.selected_items.length === 0) {
+App.delete_users = () => {
+  if (App.selected_items.length === 0) {
     return
   }
 
   let size = 0
 
-  for (let user of vars.selected_items) {
+  for (let user of App.selected_items) {
     size += parseFloat(user.dataset.size)
   }
 
   size = Math.round(size * 100) / 100
-  let s = singplural(`user`, vars.selected_items.length)
+  let s = singplural(`user`, App.selected_items.length)
 
   let confirm_args = {
-    message: `Delete ${vars.selected_items.length} ${s} ?`,
+    message: `Delete ${App.selected_items.length} ${s} ?`,
     callback_yes: () => {
       let users = []
 
-      for (let user of vars.selected_items) {
+      for (let user of App.selected_items) {
         users.push(user.dataset.user_id)
       }
 
@@ -567,7 +571,7 @@ function delete_users() {
   confirmbox(confirm_args)
 }
 
-async function delete_selected_users(ids) {
+App.delete_selected_users = async (ids) => {
   try {
     let response = await fetch(`/delete_users`, {
       method: `POST`,
@@ -589,7 +593,7 @@ async function delete_selected_users(ids) {
   }
 }
 
-function remove_users(ids) {
+App.remove_users = (ids) => {
   for (let id of ids) {
     let el = DOM.el(`.item[data-user_id="${id}"]`)
 
@@ -599,7 +603,7 @@ function remove_users(ids) {
   }
 }
 
-async function delete_normal_users() {
+App.delete_normal_users = async () => {
   try {
     let response = await fetch(`/delete_normal_users`, {
       method: `POST`,
@@ -621,7 +625,7 @@ async function delete_normal_users() {
   }
 }
 
-function sort_action(what, desc = false) {
+App.sort_action = (what, desc = false) => {
   if (desc) {
     what = what + `_desc`
   }
@@ -630,9 +634,9 @@ function sort_action(what, desc = false) {
   window.location = `/${ms}?sort=${what}`
 }
 
-function do_sort(what) {
-  if ((what === vars.sort) || (what === `${vars.sort}_desc`)) {
-    if (vars.sort === `${what}_desc`) {
+App.do_sort = (what) => {
+  if ((what === App.sort) || (what === `${App.sort}_desc`)) {
+    if (App.sort === `${what}_desc`) {
       sort_action(what)
     }
     else {
@@ -644,7 +648,7 @@ function do_sort(what) {
   }
 }
 
-function mod_user(what, value, vtype) {
+App.mod_user = (what, value, vtype) => {
   let items = get_selected()
 
   if (!items.length) {
@@ -657,7 +661,7 @@ function mod_user(what, value, vtype) {
   let confirm_args = {
     message: `Modify ${items.length} ${s} (${w}) ?`,
     callback_yes: () => {
-      vars.msg_user_edit.close()
+      App.msg_user_edit.close()
       do_mod_user(items, what, value, vtype)
     },
   }
@@ -665,7 +669,7 @@ function mod_user(what, value, vtype) {
   confirmbox(confirm_args)
 }
 
-async function do_mod_user(items, what, value, vtype) {
+App.do_mod_user = async (items, what, value, vtype) => {
   let ids = items.map(x => x.dataset.user_id)
 
   try {
@@ -689,8 +693,8 @@ async function do_mod_user(items, what, value, vtype) {
   }
 }
 
-function delete_all() {
-  if (vars.mode === `admin_users`) {
+App.delete_all = () => {
+  if (App.mode === `admin_users`) {
     let confirm_args = {
       message: `Delete all non-admin users ?`,
       callback_yes: () => {
@@ -700,7 +704,7 @@ function delete_all() {
 
     confirmbox(confirm_args)
   }
-  else if (vars.mode === `admin_posts`) {
+  else if (App.mode === `admin_posts`) {
     let confirm_args = {
       message: `Delete ALL posts ?`,
       callback_yes: () => {
@@ -710,7 +714,7 @@ function delete_all() {
 
     confirmbox(confirm_args)
   }
-  else if (vars.mode === `admin_reactions`) {
+  else if (App.mode === `admin_reactions`) {
     let confirm_args = {
       message: `Delete ALL reactions ?`,
       callback_yes: () => {
@@ -722,7 +726,7 @@ function delete_all() {
   }
 }
 
-function do_filter() {
+App.do_filter = () => {
   function clean(s) {
     s = s.toLowerCase()
     return s.replace(/[\s:]/g, ``).trim()
@@ -776,30 +780,30 @@ function do_filter() {
   }
 }
 
-function mode_string() {
-  let split = vars.mode.split(`_`)
+App.mode_string = () => {
+  let split = App.mode.split(`_`)
   return split.join(`/`)
 }
 
-function delete_reactions() {
-  if (vars.selected_items.length === 0) {
+App.delete_reactions = () => {
+  if (App.selected_items.length === 0) {
     return
   }
 
   let size = 0
 
-  for (let reaction of vars.selected_items) {
+  for (let reaction of App.selected_items) {
     size += parseFloat(reaction.dataset.size)
   }
 
-  let s = singplural(`reaction`, vars.selected_items.length)
+  let s = singplural(`reaction`, App.selected_items.length)
 
   let confirm_args = {
-    message: `Delete ${vars.selected_items.length} ${s} ?`,
+    message: `Delete ${App.selected_items.length} ${s} ?`,
     callback_yes: () => {
       let reactions = []
 
-      for (let reaction of vars.selected_items) {
+      for (let reaction of App.selected_items) {
         reactions.push(parseInt(reaction.dataset.id))
       }
 
@@ -810,7 +814,7 @@ function delete_reactions() {
   confirmbox(confirm_args)
 }
 
-async function delete_selected_reactions(ids) {
+App.delete_selected_reactions = async (ids) => {
   try {
     let response = await fetch(`/delete_reactions`, {
       method: `POST`,
@@ -832,7 +836,7 @@ async function delete_selected_reactions(ids) {
   }
 }
 
-function remove_reactions(reactions) {
+App.remove_reactions = (reactions) => {
   for (let id of reactions) {
     let el = DOM.el(`.item[data-id="${id}"]`)
 
@@ -842,7 +846,7 @@ function remove_reactions(reactions) {
   }
 }
 
-async function delete_all_reactions() {
+App.delete_all_reactions = async () => {
   try {
     let response = await fetch(`/delete_all_reactions`, {
       method: `POST`,
@@ -864,18 +868,18 @@ async function delete_all_reactions() {
   }
 }
 
-function show_menu() {
-  vars.msg_explore_opts.show()
+App.show_menu = () => {
+  App.msg_explore_opts.show()
 }
 
-function filter_focused() {
+App.filter_focused = () => {
   let filter = DOM.el(`#filter`)
   return filter && (document.activeElement === filter)
 }
 
-function on_checkbox_click(e) {
-  if (e.shiftKey && vars.last_checkbox) {
-    let checked = vars.last_checkbox.checked
+App.on_checkbox_click = (e) => {
+  if (e.shiftKey && App.last_checkbox) {
+    let checked = App.last_checkbox.checked
     let boxes = DOM.els(`.select_checkbox`)
     let selected = [e.target]
     let waypoints = 0
@@ -888,7 +892,7 @@ function on_checkbox_click(e) {
           break
         }
       }
-      else if (box === vars.last_checkbox) {
+      else if (box === App.last_checkbox) {
         waypoints += 1
 
         if (waypoints >= 2) {
@@ -905,15 +909,15 @@ function on_checkbox_click(e) {
     }
   }
 
-  vars.last_checkbox = e.target
+  App.last_checkbox = e.target
 }
 
-function set_filter(value) {
+App.set_filter = (value) => {
   let filter = DOM.el(`#filter`)
   filter.value = value
   do_filter()
 }
 
-function clear_filter() {
+App.clear_filter = () => {
   set_filter(``)
 }

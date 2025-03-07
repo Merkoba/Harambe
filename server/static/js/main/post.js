@@ -1,8 +1,8 @@
-const MINUTE = 60000
-const HOUR = MINUTE * 60
-const DAY = HOUR * 24
-const MONTH = DAY * 30
-const YEAR = DAY * 365
+App.MINUTE = 60000
+App.HOUR = App.MINUTE * 60
+App.DAY = App.HOUR * 24
+App.MONTH = App.DAY * 30
+App.YEAR = App.DAY * 365
 
 window.onload = function() {
   App.init()
@@ -104,12 +104,12 @@ App.timeago = (date) => {
   let places = 1
   let result
 
-  if (diff < MINUTE) {
+  if (diff < App.MINUTE) {
     result = `just now`
     level = 1
   }
   else if (diff < HOUR) {
-    let n = parseFloat((diff / MINUTE).toFixed(places))
+    let n = parseFloat((diff / App.MINUTE).toFixed(places))
 
     if (n === 1) {
       result = `${n} min ago`
@@ -120,8 +120,8 @@ App.timeago = (date) => {
 
     level = 2
   }
-  else if ((diff >= HOUR) && (diff < DAY)) {
-    let n = parseFloat(diff / HOUR).toFixed(places)
+  else if ((diff >= App.HOUR) && (diff < DAY)) {
+    let n = parseFloat(diff / App.HOUR).toFixed(places)
 
     if (n === 1) {
       result = `${n} hr ago`
@@ -132,8 +132,8 @@ App.timeago = (date) => {
 
     level = 3
   }
-  else if ((diff >= DAY) && (diff < MONTH)) {
-    let n = parseFloat(diff / DAY).toFixed(places)
+  else if ((diff >= App.DAY) && (diff < MONTH)) {
+    let n = parseFloat(diff / App.DAY).toFixed(places)
 
     if (n === 1) {
       result = `${n} day ago`
@@ -144,8 +144,8 @@ App.timeago = (date) => {
 
     level = 4
   }
-  else if ((diff >= MONTH) && (diff < YEAR)) {
-    let n = parseFloat(diff / MONTH).toFixed(places)
+  else if ((diff >= App.MONTH) && (diff < YEAR)) {
+    let n = parseFloat(diff / App.MONTH).toFixed(places)
 
     if (n === 1) {
       result = `${n} month ago`
@@ -156,8 +156,8 @@ App.timeago = (date) => {
 
     level = 5
   }
-  else if (diff >= YEAR) {
-    let n = parseFloat(diff / YEAR).toFixed(places)
+  else if (diff >= App.YEAR) {
+    let n = parseFloat(diff / App.YEAR).toFixed(places)
 
     if (n === 1) {
       result = `${n} year ago`
