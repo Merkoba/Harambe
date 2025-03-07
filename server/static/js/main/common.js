@@ -805,7 +805,12 @@ App.show_loading = (close = true) => {
     App.msg_loading.show()
   }
 
-  App.msg_loading = Msg.factory()
+  App.msg_loading = Msg.factory({
+    preset: `popup`,
+    position: `bottomright`,
+    class: `black`,
+  })
+
   App.msg_loading.set(`⏳ Cursus Viarum`)
   App.msg_loading.show()
 }
