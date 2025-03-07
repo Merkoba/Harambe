@@ -9,6 +9,14 @@
 {% set show_reaction = items | selectattr("last_reaction") | list | length > 0 %}
 
 {% block body %}
+<template id="template_post_edit">
+    <div class="dialog_container">
+        <div>
+            <div id="edit_title" class="aero_button">Edit Title</div>
+        </div>
+    </div>
+</template>
+
 <div id="top" class="nowrap">
     <div id="menu" class="action_button" title="Ctrl+M">Menu</div>
     <div class="sep">|</div>
@@ -16,6 +24,8 @@
     <div class="sep">|</div>
 
     {% if mode == "admin_posts" %}
+    <div class="action_button" id="edit" title="Some edit actions">Edit</div>
+    <div class="sep">|</div>
     <div class="action_button" id="delete_selected" title="Delete selected item">Delete</div>
     <div class="sep">|</div>
     <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del All</div>

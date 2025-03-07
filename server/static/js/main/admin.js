@@ -69,80 +69,7 @@ App.init = () => {
     })
   }
 
-  let edit = DOM.el(`#edit`)
-
-  if (edit) {
-    App.msg_user_edit = Msg.factory()
-    let t = DOM.el(`#template_user_edit`)
-    App.msg_user_edit.set(t.innerHTML)
-
-    if (App.mode === `admin_users`) {
-      DOM.ev(`#edit_reader_yes`, `click`, () => {
-        App.mod_user(`reader`, 1, `bool`)
-      })
-
-      DOM.ev(`#edit_reader_no`, `click`, () => {
-        App.mod_user(`reader`, 0, `bool`)
-      })
-
-      DOM.ev(`#edit_lister_yes`, `click`, () => {
-        App.mod_user(`lister`, 1, `bool`)
-      })
-
-      DOM.ev(`#edit_lister_no`, `click`, () => {
-        App.mod_user(`lister`, 0, `bool`)
-      })
-
-      DOM.ev(`#edit_reacter_yes`, `click`, () => {
-        App.mod_user(`reacter`, 1, `bool`)
-      })
-
-      DOM.ev(`#edit_reacter_no`, `click`, () => {
-        App.mod_user(`reacter`, 0, `bool`)
-      })
-
-      DOM.ev(`#edit_admin_yes`, `click`, () => {
-        App.mod_user(`admin`, 1, `bool`)
-      })
-
-      DOM.ev(`#edit_admin_no`, `click`, () => {
-        App.mod_user(`admin`, 0, `bool`)
-      })
-
-      DOM.ev(`#edit_rpm`, `click`, () => {
-        App.user_mod_input(`rpm`, `number`)
-      })
-
-      DOM.ev(`#edit_max_size`, `click`, () => {
-        App.user_mod_input(`max_size`, `number`)
-      })
-
-      DOM.ev(`#edit_mark`, `click`, () => {
-        App.user_mod_input(`mark`, `string`)
-      })
-
-      DOM.ev(`#edit_name`, `click`, () => {
-        App.user_mod_input(`name`, `string`)
-      })
-
-      DOM.ev(`#edit_username`, `click`, () => {
-        App.user_mod_input(`username`, `string`)
-      })
-
-      DOM.ev(`#edit_password`, `click`, () => {
-        App.user_mod_input(`password`, `password`)
-      })
-    }
-
-    DOM.ev(edit, `click`, () => {
-      if (App.get_selected().length > 0) {
-        App.msg_user_edit.show()
-      }
-      else {
-        App.popmsg(`No users are selected`)
-      }
-    })
-  }
+  App.setup_edit()
 
   let page_select = DOM.el(`#page_select`)
 
@@ -463,6 +390,7 @@ App.do_search = (query = ``) => {
 }
 
 App.edit_post_title = (el) => {
+  App.msg_post_edit.close()
   let t = el.dataset.title
   let o = el.dataset.original
   let current = t || o
@@ -920,4 +848,102 @@ App.set_filter = (value) => {
 
 App.clear_filter = () => {
   App.set_filter(``)
+}
+
+App.setup_edit = () => {
+  let edit = DOM.el(`#edit`)
+
+  if (!edit) {
+    return
+  }
+
+  if (App.mode === `admin_users`) {
+    App.msg_user_edit = Msg.factory()
+    let t = DOM.el(`#template_user_edit`)
+    App.msg_user_edit.set(t.innerHTML)
+
+    DOM.ev(`#edit_reader_yes`, `click`, () => {
+      App.mod_user(`reader`, 1, `bool`)
+    })
+
+    DOM.ev(`#edit_reader_no`, `click`, () => {
+      App.mod_user(`reader`, 0, `bool`)
+    })
+
+    DOM.ev(`#edit_lister_yes`, `click`, () => {
+      App.mod_user(`lister`, 1, `bool`)
+    })
+
+    DOM.ev(`#edit_lister_no`, `click`, () => {
+      App.mod_user(`lister`, 0, `bool`)
+    })
+
+    DOM.ev(`#edit_reacter_yes`, `click`, () => {
+      App.mod_user(`reacter`, 1, `bool`)
+    })
+
+    DOM.ev(`#edit_reacter_no`, `click`, () => {
+      App.mod_user(`reacter`, 0, `bool`)
+    })
+
+    DOM.ev(`#edit_admin_yes`, `click`, () => {
+      App.mod_user(`admin`, 1, `bool`)
+    })
+
+    DOM.ev(`#edit_admin_no`, `click`, () => {
+      App.mod_user(`admin`, 0, `bool`)
+    })
+
+    DOM.ev(`#edit_rpm`, `click`, () => {
+      App.user_mod_input(`rpm`, `number`)
+    })
+
+    DOM.ev(`#edit_max_size`, `click`, () => {
+      App.user_mod_input(`max_size`, `number`)
+    })
+
+    DOM.ev(`#edit_mark`, `click`, () => {
+      App.user_mod_input(`mark`, `string`)
+    })
+
+    DOM.ev(`#edit_name`, `click`, () => {
+      App.user_mod_input(`name`, `string`)
+    })
+
+    DOM.ev(`#edit_username`, `click`, () => {
+      App.user_mod_input(`username`, `string`)
+    })
+
+    DOM.ev(`#edit_password`, `click`, () => {
+      App.user_mod_input(`password`, `password`)
+    })
+
+    DOM.ev(edit, `click`, () => {
+      if (App.get_selected().length > 0) {
+        App.msg_user_edit.show()
+      }
+      else {
+        App.popmsg(`No users are selected`)
+      }
+    })
+  }
+  else if (App.mode === `admin_posts`) {
+    App.msg_post_edit = Msg.factory()
+    let t = DOM.el(`#template_post_edit`)
+    App.msg_post_edit.set(t.innerHTML)
+
+    DOM.ev(DOM.el(`#edit_title`), `click`, () => {
+      let item = App.get_selected()[0]
+      App.edit_post_title(item)
+    })
+
+    DOM.ev(edit, `click`, () => {
+      if (App.get_selected().length > 0) {
+        App.msg_post_edit.show()
+      }
+      else {
+        App.popmsg(`No posts are selected`)
+      }
+    })
+  }
 }
