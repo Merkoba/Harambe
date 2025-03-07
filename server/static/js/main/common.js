@@ -72,6 +72,14 @@ App.setup_keyboard = () => {
   })
 }
 
+App.setup_mouse = () => {
+  DOM.ev(document, `mousedown`, (e) => {
+    if (e.button === 1) {
+      e.preventDefault()
+    }
+  })
+}
+
 App.singplural = (what, length) => {
   if (length === 1) {
     return what

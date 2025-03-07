@@ -213,7 +213,7 @@ App.reset_video = () => {
   DOM.hide(video)
 }
 
-App.add_picker = (show = true) => {
+App.add_picker = (show = false) => {
   if (App.num_pickers > 0) {
     let empty = App.get_empty_picker()
 
@@ -245,7 +245,7 @@ App.add_picker = (show = true) => {
     }
 
     if (App.reflect_file(input)) {
-      App.add_picker(false)
+      App.add_picker()
     }
 
     App.check_files_used()
@@ -465,7 +465,7 @@ App.setup_pickers = () => {
 
   if (add_picker_btn) {
     DOM.ev(add_picker_btn, `click`, (e) => {
-      App.add_picker()
+      App.add_picker(true)
     })
   }
 
