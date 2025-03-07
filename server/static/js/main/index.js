@@ -121,27 +121,7 @@ App.init = () => {
     })
   }
 
-  App.add_picker()
-
-  let add_picker_btn = DOM.el(`#add_picker_btn`)
-
-  if (add_picker_btn) {
-    DOM.ev(add_picker_btn, `click`, (e) => {
-      App.add_picker()
-    })
-  }
-
-  let remove_picker_btn = DOM.el(`#remove_picker_btn`)
-
-  if (remove_picker_btn) {
-    DOM.ev(remove_picker_btn, `click`, (e) => {
-      App.remove_picker()
-    })
-
-    DOM.ev(remove_picker_btn, `auxclick`, (e) => {
-      App.remove_all_pickers()
-    })
-  }
+  App.setup_pickers()
 }
 
 App.validate = () => {
@@ -478,4 +458,30 @@ App.check_total_size = () => {
   }
 
   return total <= App.max_size
+}
+
+App.setup_pickers = () => {
+  let add_picker_btn = DOM.el(`#add_picker_btn`)
+
+  if (add_picker_btn) {
+    DOM.ev(add_picker_btn, `click`, (e) => {
+      App.add_picker()
+    })
+  }
+
+  let remove_picker_btn = DOM.el(`#remove_picker_btn`)
+
+  if (remove_picker_btn) {
+    DOM.ev(remove_picker_btn, `click`, (e) => {
+      App.remove_picker()
+    })
+
+    DOM.ev(remove_picker_btn, `auxclick`, (e) => {
+      App.remove_all_pickers()
+    })
+  }
+
+  if (App.is_user && App.upload_enabled) {
+    App.add_picker()
+  }
 }
