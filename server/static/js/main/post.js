@@ -120,7 +120,7 @@ App.timeago = (date) => {
 
     level = 2
   }
-  else if ((diff >= App.HOUR) && (diff < DAY)) {
+  else if ((diff >= App.HOUR) && (diff < App.DAY)) {
     let n = parseFloat(diff / App.HOUR).toFixed(places)
 
     if (n === 1) {
@@ -132,7 +132,7 @@ App.timeago = (date) => {
 
     level = 3
   }
-  else if ((diff >= App.DAY) && (diff < MONTH)) {
+  else if ((diff >= App.DAY) && (diff < App.MONTH)) {
     let n = parseFloat(diff / App.DAY).toFixed(places)
 
     if (n === 1) {
@@ -144,7 +144,7 @@ App.timeago = (date) => {
 
     level = 4
   }
-  else if ((diff >= App.MONTH) && (diff < YEAR)) {
+  else if ((diff >= App.MONTH) && (diff < App.YEAR)) {
     let n = parseFloat(diff / App.MONTH).toFixed(places)
 
     if (n === 1) {
