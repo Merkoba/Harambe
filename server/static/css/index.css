@@ -31,12 +31,13 @@ body, html {
     flex-grow: 1;
     flex-shrink: 1;
     border-color: var(--frame_color);
+    border-width: 1px;
 }
 
 #buttons button:hover {
     cursor: pointer;
     background-color: var(--accent_color);
-    border-color: var(--text_color);
+    filter: brightness(0.95);
 }
 
 input[type="text"] {
@@ -151,7 +152,7 @@ a.dialog_button:hover {
 }
 
 .picker:hover {
-    outline: 1px solid var(--text_color);
+    outline: 1px solid var(--frame_color);
 }
 
 .picker.unused {
