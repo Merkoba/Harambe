@@ -887,7 +887,7 @@ App.start_editor = () => {
   ace.config.set(`basePath`, `/static/ace`)
   App.editor = ace.edit(`editor`)
   App.editor.setTheme(`ace/theme/tomorrow_night_eighties`)
-  let mode = guess_mode(App.sample)
+  let mode = App.guess_mode(App.sample)
   App.editor.session.setMode(mode)
   App.editor.session.setValue(App.sample, -1)
   App.editor.setReadOnly(true)
