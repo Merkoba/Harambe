@@ -135,7 +135,7 @@ App.init = () => {
     }
 
     DOM.ev(edit, `click`, () => {
-      if (get_selected().length > 0) {
+      if (App.get_selected().length > 0) {
         App.msg_user_edit.show()
       }
       else {
@@ -234,12 +234,12 @@ App.init = () => {
 
   for (let el of DOM.els(`.reaction_value`)) {
     let v = el.innerText
-    el.innerHTML = text_html(v, false)
+    el.innerHTML = App.text_html(v, false)
   }
 
   for (let el of DOM.els(`.last_reaction`)) {
     let v = el.innerText
-    el.innerHTML = text_html(v, false)
+    el.innerHTML = App.text_html(v, false)
   }
 
   let clear_filter_btn = DOM.el(`#clear_filter`)
@@ -337,7 +337,7 @@ App.delete_posts = () => {
   let s = App.singplural(`post`, App.selected_items.length)
 
   let confirm_args = {
-    message: `Delete ${App.selected_items.length} ${s} (${size_string(size)}) ?`,
+    message: `Delete ${App.selected_items.length} ${s} (${App.size_string(size)}) ?`,
     callback_yes: () => {
       let posts = []
 
@@ -452,10 +452,10 @@ App.do_search = (query = ``) => {
     return
   }
 
-  let ms = mode_string()
+  let ms = App.mode_string()
 
   if (query) {
-    window.location = `/${ms}?query=${encode_uri(query)}`
+    window.location = `/${ms}?query=${App.encode_uri(query)}`
   }
   else {
     window.location = `/${ms}`
@@ -522,7 +522,7 @@ App.get_selected = () => {
 }
 
 App.delete_selected = () => {
-  let items = get_selected()
+  let items = App.get_selected()
 
   if (items.length === 0) {
     return
@@ -630,7 +630,7 @@ App.sort_action = (what, desc = false) => {
     what = what + `_desc`
   }
 
-  let ms = mode_string()
+  let ms = App.mode_string()
   window.location = `/${ms}?sort=${what}`
 }
 
@@ -649,7 +649,7 @@ App.do_sort = (what) => {
 }
 
 App.mod_user = (what, value, vtype) => {
-  let items = get_selected()
+  let items = App.get_selected()
 
   if (!items.length) {
     return
