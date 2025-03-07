@@ -328,7 +328,7 @@ App.esc_icons = () => {
 
   if (r_input.value) {
     r_input.value = ``
-    filter_icons()
+    App.filter_icons()
   }
   else {
     App.msg_icons.close()
@@ -589,7 +589,7 @@ App.modify_reaction = (reaction) => {
     return
   }
 
-  new_item = App.make_reaction(reaction)
+  let new_item = App.make_reaction(reaction)
   item.replaceWith(new_item)
 }
 
@@ -649,7 +649,7 @@ App.toggle_modal_image = () => {
 }
 
 App.copy_all_text = () => {
-  App.copy_to_clipboard(get_text_value())
+  App.copy_to_clipboard(App.get_text_value())
 }
 
 App.select_all_text = () => {

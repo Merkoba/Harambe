@@ -140,7 +140,7 @@ App.contains_url = (text) => {
 }
 
 App.prompt_text = (args = {}) => {
-  a = new Promptext(args)
+  new Promptext(args)
 }
 
 App.popmsg = (message, callback) => {

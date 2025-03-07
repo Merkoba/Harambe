@@ -12,7 +12,7 @@ export default [
 
   {
     rules: {
-      "no-undef": "off",
+      "no-undef": "error",
       "no-unused-vars": "off",
       "indent": ["error", 2],
       "linebreak-style": ["error", "unix"],
@@ -110,8 +110,12 @@ export default [
         AColorPicker: "readonly",
         process: "readonly",
         require: "readonly",
-        vars: "readonly",
         marked: "readonly",
+        Popmsg: "readonly",
+        Promptext: "readonly",
+        Confirmbox: "readonly",
+        Tooltip: "readonly",
+        ace: "readonly",
       }
     }
   }

@@ -415,7 +415,7 @@ App.edit_post_title = (el) => {
         DOM.el(`.title`, el).innerText = title || o
       }
       else {
-        print_error(response.status)
+        App.print_error(response.status)
       }
     },
   }
@@ -428,7 +428,7 @@ App.toggle_select = () => {
 
   for (let checkbox of checkboxes) {
     if (!checkbox.checked) {
-      select_all()
+      App.select_all()
       return
     }
   }
@@ -481,7 +481,7 @@ App.delete_users = () => {
   }
 
   size = Math.round(size * 100) / 100
-  let s = singplural(`user`, App.selected_items.length)
+  let s = App.singplural(`user`, App.selected_items.length)
 
   let confirm_args = {
     message: `Delete ${App.selected_items.length} ${s} ?`,
@@ -590,7 +590,7 @@ App.mod_user = (what, value, vtype) => {
     message: `Modify ${items.length} ${s} (${w}) ?`,
     callback_yes: () => {
       App.msg_user_edit.close()
-      do_mod_user(items, what, value, vtype)
+      App.do_mod_user(items, what, value, vtype)
     },
   }
 
@@ -630,7 +630,7 @@ App.delete_all = () => {
       },
     }
 
-    confirmbox(confirm_args)
+    App.confirmbox(confirm_args)
   }
   else if (App.mode === `admin_posts`) {
     let confirm_args = {

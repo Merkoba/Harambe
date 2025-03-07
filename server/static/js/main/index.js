@@ -164,10 +164,11 @@ App.reflect_file = (file) => {
   }
 
   App.reset_image()
-  video.pause()
-  DOM.hide(video)
+  App.reset_video()
 
   let the_file = file.files[0]
+  let image = DOM.el(`#image`)
+  let video = DOM.el(`#video`)
 
   if (App.is_image(the_file)) {
     let reader = new FileReader()
