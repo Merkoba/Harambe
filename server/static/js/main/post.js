@@ -87,10 +87,10 @@ App.init = () => {
   let menu = DOM.el(`#menu`)
 
   if (menu) {
-    App.setup_explore_opts()
+    App.setup_menu_opts()
 
     DOM.ev(menu, `click`, () => {
-      App.msg_explore_opts.show()
+      App.msg_menu_opts.show()
     })
   }
 

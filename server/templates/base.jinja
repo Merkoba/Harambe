@@ -90,28 +90,28 @@
     </head>
 
     <body>
-        <template id="template_explore_opts">
+        <template id="template_menu_opts">
             <div class="dialog_container">
                 {% if reader %}
-                <div id="explore_opts_fresh" class="aero_button" title="Ctrl+ArrowUp">Fresh</div>
-                <div id="explore_opts_random" class="aero_button" title="Ctrl+ArrowDown">Random</div>
+                <div id="menu_opts_fresh" class="aero_button" title="Ctrl+ArrowUp">Fresh</div>
+                <div id="menu_opts_random" class="aero_button" title="Ctrl+ArrowDown">Random</div>
                 {% endif %}
 
                 {% if is_user %}
-                <div id="explore_opts_list" class="aero_button">List</div>
+                <div id="menu_opts_list" class="aero_button">List</div>
                 {% endif %}
 
                 {% if is_admin %}
-                <div id="explore_opts_admin" class="aero_button">Admin</div>
+                <div id="menu_opts_admin" class="aero_button">Admin</div>
                 {% endif %}
 
-                <div id="explore_opts_links" class="aero_button">Links</div>
+                <div id="menu_opts_links" class="aero_button">Links</div>
 
                 {% if is_user %}
-                <div id="explore_opts_you" class="aero_button">You</div>
+                <div id="menu_opts_you" class="aero_button">You</div>
                 {% endif %}
 
-                <div id="explore_opts_return" class="aero_button">Return</div>
+                <div id="menu_opts_return" class="aero_button">Return</div>
             </div>
         </template>
 

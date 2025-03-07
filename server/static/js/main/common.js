@@ -52,7 +52,7 @@ App.setup_keyboard = () => {
         else {
           e.preventDefault()
           let show_return = App.mode !== `index`
-          App.setup_explore_opts(show_return, true)
+          App.setup_menu_opts(show_return, true)
         }
       }
     }
@@ -155,8 +155,8 @@ App.capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-App.setup_explore_opts = (show_return = true, show = false) => {
-  let name = `explore`
+App.setup_menu_opts = (show_return = true, show = false) => {
+  let name = `menu`
 
   App.make_opts(name, () => {
     if (!show_return) {
@@ -182,24 +182,24 @@ App.setup_explore_opts = (show_return = true, show = false) => {
     })
 
     App.bind_button(`${name}_opts_you`, () => {
-      App.setup_you_opts(App.user_id, true)
+      App.setup_you_opts(App.user_id, true, true)
     })
 
     App.bind_button(`${name}_opts_list`, () => {
-      App.setup_list_opts(true)
+      App.setup_list_opts(true, true)
     })
 
     App.bind_button(`${name}_opts_admin`, () => {
-      App.setup_admin_opts(true)
+      App.setup_admin_opts(true, true)
     })
 
     App.bind_button(`${name}_opts_links`, () => {
-      App.setup_link_opts(true)
+      App.setup_link_opts(true, true)
     })
   }, show)
 }
 
-App.setup_you_opts = (user_id, show = false) => {
+App.setup_you_opts = (user_id, show = false, back = false) => {
   let name = `you`
 
   App.make_opts(name, () => {
@@ -229,10 +229,10 @@ App.setup_you_opts = (user_id, show = false) => {
 
       App.confirmbox(confirm_args)
     })
-  }, show)
+  }, show, back)
 }
 
-App.setup_user_opts = (show = false) => {
+App.setup_user_opts = (show = false, back = false) => {
   let name = `user`
 
   App.make_opts(name, () => {
@@ -283,7 +283,7 @@ App.setup_user_opts = (show = false) => {
       let user_id = App.user_opts_user_id
       App.open_tab(`/edit_user/${user_id}`)
     })
-  }, show)
+  }, show, back)
 }
 
 App.fill_def_args = (def, args) => {
@@ -595,7 +595,7 @@ App.do_user_edit = async (what, value, vtype, title, callback) => {
   }
 }
 
-App.setup_list_opts = (show = false) => {
+App.setup_list_opts = (show = false, back = false) => {
   let name = `list`
 
   App.make_opts(name, () => {
@@ -610,10 +610,10 @@ App.setup_list_opts = (show = false) => {
     }, () => {
       App.open_tab(`/list/reactions`)
     })
-  }, show)
+  }, show, back)
 }
 
-App.setup_admin_opts = (show = false) => {
+App.setup_admin_opts = (show = false, back = false) => {
   let name = `admin`
 
   App.make_opts(name, () => {
@@ -634,10 +634,10 @@ App.setup_admin_opts = (show = false) => {
     }, () => {
       App.open_tab(`/admin/users`)
     })
-  }, show)
+  }, show, back)
 }
 
-App.setup_link_opts = (show = false) => {
+App.setup_link_opts = (show = false, back = false) => {
   let name = `link`
 
   App.make_opts(name, () => {
@@ -655,10 +655,10 @@ App.setup_link_opts = (show = false) => {
         App.open_tab(link.url)
       })
     }
-  }, show)
+  }, show, back)
 }
 
-App.make_opts = (name, setup, show = false) => {
+App.make_opts = (name, setup, show = false, back = false) => {
   let msg_name = `msg_${name}_opts`
 
   if (App[msg_name]) {
@@ -679,6 +679,17 @@ App.make_opts = (name, setup, show = false) => {
   let t = DOM.el(`#template_${name}_opts`)
   App[msg_name].set(t.innerHTML)
   setup()
+
+  if (back && App.msg_menu_opts) {
+    let c = DOM.el(`.dialog_container`, App[msg_name].content)
+    let btn = DOM.create(`div`, `aero_button`, `${name}_opts_back`)
+    btn.textContent = `Back`
+    c.appendChild(btn)
+
+    App.bind_button(`${name}_opts_back`, () => {
+      App.msg_menu_opts.show()
+    })
+  }
 
   if (show) {
     App[msg_name].show()

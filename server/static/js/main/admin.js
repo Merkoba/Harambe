@@ -139,10 +139,10 @@ App.init = () => {
     })
   }
 
-  let explore_opts = DOM.el(`#template_explore_opts`)
+  let menu_opts = DOM.el(`#template_menu_opts`)
 
-  if (explore_opts) {
-    App.setup_explore_opts()
+  if (menu_opts) {
+    App.setup_menu_opts()
 
     let menu = DOM.el(`#menu`)
 
@@ -797,7 +797,7 @@ App.delete_all_reactions = async () => {
 }
 
 App.show_menu = () => {
-  App.msg_explore_opts.show()
+  App.msg_menu_opts.show()
 }
 
 App.filter_focused = () => {
