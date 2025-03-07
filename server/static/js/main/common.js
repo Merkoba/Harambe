@@ -1,76 +1,78 @@
-DOM.ev(document, `keydown`, (e) => {
-  let n = parseInt(e.key)
+App.setup_keyboard = () => {
+  DOM.ev(document, `keydown`, (e) => {
+    let n = parseInt(e.key)
 
-  if (e.key === `Enter`) {
-    if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
-      let now = Date.now()
+    if (e.key === `Enter`) {
+      if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
+        let now = Date.now()
 
-      if ((now - Popmsg.instance.date) > 100) {
+        if ((now - Popmsg.instance.date) > 100) {
+          e.preventDefault()
+          Popmsg.instance.msg.close()
+        }
+      }
+      else if (Confirmbox.instance && Confirmbox.instance.msg.is_open()) {
         e.preventDefault()
-        Popmsg.instance.msg.close()
+        Confirmbox.instance.action()
       }
-    }
-    else if (Confirmbox.instance && Confirmbox.instance.msg.is_open()) {
-      e.preventDefault()
-      Confirmbox.instance.action()
-    }
-    else if (Msg.msg && Msg.msg.any_open()) {
-      let content = Msg.msg.highest_instance().content
-      let dialog = DOM.el(`.dialog_container`, content)
+      else if (Msg.msg && Msg.msg.any_open()) {
+        let content = Msg.msg.highest_instance().content
+        let dialog = DOM.el(`.dialog_container`, content)
 
-      if (dialog) {
-        let first = DOM.el(`.aero_button`, dialog)
+        if (dialog) {
+          let first = DOM.el(`.aero_button`, dialog)
 
-        if (first) {
-          e.preventDefault()
-          first.click()
+          if (first) {
+            e.preventDefault()
+            first.click()
+          }
         }
       }
     }
-  }
-  else if (!isNaN(n) && (n >= 1) && (n <= 9)) {
-    if (Msg.msg && Msg.msg.any_open()) {
-      let content = Msg.msg.highest_instance().content
-      let dialog = DOM.el(`.dialog_container`, content)
-
-      if (dialog) {
-        let buttons = DOM.els(`.aero_button`, dialog)
-
-        if (n <= buttons.length) {
-          e.preventDefault()
-          buttons[n - 1].click()
-        }
-      }
-    }
-  }
-  else if (e.key === `m`) {
-    if (e.ctrlKey && !e.shiftKey) {
+    else if (!isNaN(n) && (n >= 1) && (n <= 9)) {
       if (Msg.msg && Msg.msg.any_open()) {
-        // Do nothing
-      }
-      else {
-        e.preventDefault()
-        let show_return = vars.mode !== `index`
-        setup_explore_opts(show_return, true)
-      }
-    }
-  }
-  else if (e.key === `ArrowRight`) {
-    if (e.ctrlKey && !e.shiftKey) {
-      next_post()
-    }
-    else if (e.ctrlKey && e.shiftKey) {
-      random_post()
-    }
-  }
-  else if (e.key === `ArrowUp`) {
-    if (e.ctrlKey && !e.shiftKey) {
-      fresh_post()
-    }
-  }
-})
+        let content = Msg.msg.highest_instance().content
+        let dialog = DOM.el(`.dialog_container`, content)
 
-function singplural(what, length) {
+        if (dialog) {
+          let buttons = DOM.els(`.aero_button`, dialog)
+
+          if (n <= buttons.length) {
+            e.preventDefault()
+            buttons[n - 1].click()
+          }
+        }
+      }
+    }
+    else if (e.key === `m`) {
+      if (e.ctrlKey && !e.shiftKey) {
+        if (Msg.msg && Msg.msg.any_open()) {
+          // Do nothing
+        }
+        else {
+          e.preventDefault()
+          let show_return = vars.mode !== `index`
+          setup_explore_opts(show_return, true)
+        }
+      }
+    }
+    else if (e.key === `ArrowRight`) {
+      if (e.ctrlKey && !e.shiftKey) {
+        next_post()
+      }
+      else if (e.ctrlKey && e.shiftKey) {
+        random_post()
+      }
+    }
+    else if (e.key === `ArrowUp`) {
+      if (e.ctrlKey && !e.shiftKey) {
+        fresh_post()
+      }
+    }
+  })
+}
+
+App.singplural = (what, length) => {
   if (length === 1) {
     return what
   }
@@ -78,7 +80,7 @@ function singplural(what, length) {
   return `${what}s`
 }
 
-function shuffle_array(array) {
+App.shuffle_array = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]]
@@ -87,11 +89,11 @@ function shuffle_array(array) {
   return array
 }
 
-async function copy_to_clipboard(text) {
+App.copy_to_clipboard = (text) => {
   navigator.clipboard.writeText(text)
 }
 
-function select_all(el) {
+App.select_all = (el) => {
   let selection = window.getSelection()
   let range = document.createRange()
   range.selectNodeContents(el)
@@ -99,53 +101,53 @@ function select_all(el) {
   selection.addRange(range)
 }
 
-function is_image(file) {
+App.is_image = (file) => {
   return file.type.match(`image/*`)
 }
 
-function is_audio(file) {
+App.is_audio = (file) => {
   return file.type.match(`audio/*`)
 }
 
-function is_video(file) {
+App.is_video = (file) => {
   return file.type.match(`video/*`)
 }
 
-function set_css_var(name, value) {
+App.set_css_var = (name, value) => {
   document.documentElement.style.setProperty(`--${name}`, value)
 }
 
-function print_info(msg) {
+App.print_info = (msg) => {
   // eslint-disable-next-line no-console
   console.log(msg)
 }
 
-function print_error(msg) {
+App.print_error = (msg) => {
   // eslint-disable-next-line no-console
   console.log(`Error: ${msg}`)
 }
 
-function contains_url(text) {
+App.contains_url = (text) => {
   return text.match(/(https?:\/\/|www\.)\S+/gi)
 }
 
-function prompt_text(args = {}) {
+App.prompt_text = (args = {}) => {
   a = new Promptext(args)
 }
 
-function popmsg(message, callback) {
+App.popmsg = (message, callback) => {
   new Popmsg(message, callback)
 }
 
-function remove_multiple_empty_lines(s) {
+App.remove_multiple_empty_lines = (s) => {
   return s.replace(/\n\s*\n/g, `\n\n`)
 }
 
-function capitalize(s) {
+App.capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-function setup_explore_opts(show_return = true, show = false) {
+App.setup_explore_opts = (show_return = true, show = false) => {
   let name = `explore`
 
   make_opts(name, () => {
@@ -189,7 +191,7 @@ function setup_explore_opts(show_return = true, show = false) {
   }, show)
 }
 
-function setup_you_opts(user_id, show = false) {
+App.setup_you_opts = (user_id, show = false) => {
   let name = `you`
 
   make_opts(name, () => {
@@ -222,7 +224,7 @@ function setup_you_opts(user_id, show = false) {
   }, show)
 }
 
-function setup_user_opts(show = false) {
+App.setup_user_opts = (show = false) => {
   let name = `user`
 
   make_opts(name, () => {
@@ -276,7 +278,7 @@ function setup_user_opts(show = false) {
   }, show)
 }
 
-function fill_def_args(def, args) {
+App.fill_def_args = (def, args) => {
   for (let key in def) {
     if ((args[key] === undefined) && (def[key] !== undefined)) {
       args[key] = def[key]
@@ -284,11 +286,11 @@ function fill_def_args(def, args) {
   }
 }
 
-function confirmbox(args = {}) {
+App.confirmbox = (args = {}) => {
   new Confirmbox(args)
 }
 
-function setup_reaction_opts(show = false) {
+App.setup_reaction_opts = (show = false) => {
   let name = `reaction`
 
   make_opts(name, () => {
@@ -304,21 +306,21 @@ function setup_reaction_opts(show = false) {
   }, show)
 }
 
-function regex_u(c, n) {
+App.regex_u = (c, n) => {
   return `${c}{${n}}`
 }
 
-function regex_t(c, n) {
+App.regex_t = (c, n) => {
   let u = regex_u(c, n)
   return `(?:(?!${u}|\\s).)`
 }
 
-function regex_t2(c, n) {
+App.regex_t2 = (c, n) => {
   let u = regex_u(c, n)
   return `(?:(?!${u}).)`
 }
 
-function char_regex_1(char, n = 1) {
+App.char_regex_1 = (char, n = 1) => {
   let c = escape_regex(char)
   let u = regex_u(c, n)
   let t = regex_t(c, n)
@@ -327,7 +329,7 @@ function char_regex_1(char, n = 1) {
   return new RegExp(regex, `g`)
 }
 
-function char_regex_2(char, n = 1) {
+App.char_regex_2 = (char, n = 1) => {
   let c = escape_regex(char)
   let u = regex_u(c, n)
   let t = regex_t(c, n)
@@ -335,7 +337,7 @@ function char_regex_2(char, n = 1) {
   return new RegExp(regex, `g`)
 }
 
-function char_regex_3(char, n = 1) {
+App.char_regex_3 = (char, n = 1) => {
   let c = escape_regex(char)
   let u = regex_u(c, n)
   let t2 = regex_t2(c, n)
@@ -347,7 +349,7 @@ to_bold = (text) => {
   return `<span class='md_highlight'>${text}</span>`
 }
 
-function parse_markdown(text) {
+App.parse_markdown = (text) => {
   function action(regex, func, full = false) {
     let matches = [...text.matchAll(regex)]
 
@@ -370,11 +372,11 @@ function parse_markdown(text) {
   return text
 }
 
-function escape_regex(s) {
+App.escape_regex = (s) => {
   return s.replace(/[^A-Za-z0-9]/g, `\\$&`)
 }
 
-function create_debouncer(func, delay) {
+App.create_debouncer = (func, delay) => {
   if (typeof func !== `function`) {
     print_error(`Invalid debouncer function`)
     return
@@ -425,7 +427,7 @@ function create_debouncer(func, delay) {
   return obj
 }
 
-function replace_urls(text) {
+App.replace_urls = (text) => {
   let here = window.location.origin
   let re = new RegExp(`${here}/post/([0-9A-Za-z]+)/?$`, `g`)
   text = text.replace(re, `/post/$1`)
@@ -439,7 +441,7 @@ function replace_urls(text) {
   return text.replace(re, `/github/$1/$2`)
 }
 
-function text_html(text, markdown = true) {
+App.text_html = (text, markdown = true) => {
   // Remove < and > to prevent XSS
   text = text.replace(/</g, `&lt;`)
   text = text.replace(/>/g, `&gt;`)
@@ -483,7 +485,7 @@ function text_html(text, markdown = true) {
   return text
 }
 
-function user_mod_input(what, o_value, vtype, callback) {
+App.user_mod_input = (what, o_value, vtype, callback) => {
   let repeat = false
 
   if (vtype === `password`) {
@@ -547,7 +549,7 @@ function user_mod_input(what, o_value, vtype, callback) {
   prompt_text(prompt_args)
 }
 
-function edit_name() {
+App.edit_name = () => {
   user_mod_input(`name`, vars.user_name, `string`, (what, value, vtype) => {
     do_user_edit(what, value, vtype, `Name`, () => {
       vars.user_name = value
@@ -556,13 +558,13 @@ function edit_name() {
   })
 }
 
-function edit_password() {
+App.edit_password = () => {
   user_mod_input(`password`, ``, `password`, (what, value, vtype) => {
     do_user_edit(what, value, vtype, `Password`)
   })
 }
 
-async function do_user_edit(what, value, vtype, title, callback) {
+App.do_user_edit = async (what, value, vtype, title, callback) => {
   let ids = [vars.user_id]
 
   let response = await fetch(`/mod_user`, {
@@ -585,7 +587,7 @@ async function do_user_edit(what, value, vtype, title, callback) {
   }
 }
 
-function setup_list_opts(show = false) {
+App.setup_list_opts = (show = false) => {
   let name = `list`
 
   make_opts(name, () => {
@@ -603,7 +605,7 @@ function setup_list_opts(show = false) {
   }, show)
 }
 
-function setup_admin_opts(show = false) {
+App.setup_admin_opts = (show = false) => {
   let name = `admin`
 
   make_opts(name, () => {
@@ -627,7 +629,7 @@ function setup_admin_opts(show = false) {
   }, show)
 }
 
-function setup_link_opts(show = false) {
+App.setup_link_opts = (show = false) => {
   let name = `link`
 
   make_opts(name, () => {
@@ -648,7 +650,7 @@ function setup_link_opts(show = false) {
   }, show)
 }
 
-function make_opts(name, setup, show = false) {
+App.make_opts = (name, setup, show = false) => {
   let msg_name = `msg_${name}_opts`
 
   if (vars[msg_name]) {
@@ -675,7 +677,7 @@ function make_opts(name, setup, show = false) {
   }
 }
 
-function bind_button(what, func, mfunc) {
+App.bind_button = (what, func, mfunc) => {
   let name = what.split(`_`)[0]
   let msg_name = `msg_${name}_opts`
   let el = DOM.el(`#${what}`)
@@ -721,15 +723,15 @@ function bind_button(what, func, mfunc) {
   })
 }
 
-function open_tab(url, target = `_blank`) {
+App.open_tab = (url, target = `_blank`) => {
   window.open(url, target)
 }
 
-function encode_uri(uri) {
+App.encode_uri = (uri) => {
   return encodeURIComponent(uri)
 }
 
-function setup_editpost_opts(show = false) {
+App.setup_editpost_opts = (show = false) => {
   let name = `editpost`
 
   make_opts(name, () => {
@@ -750,7 +752,7 @@ function setup_editpost_opts(show = false) {
   }, show)
 }
 
-function next_post() {
+App.next_post = () => {
   if (vars.name) {
     window.location = `/next/${vars.name}`
   }
@@ -759,10 +761,10 @@ function next_post() {
   }
 }
 
-function fresh_post() {
+App.fresh_post = () => {
   window.location = `/fresh`
 }
 
-function random_post() {
+App.random_post = () => {
   window.location = `/random`
 }

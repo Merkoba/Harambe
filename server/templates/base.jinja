@@ -34,13 +34,16 @@
         <link rel="stylesheet" href="/static/css/common.css">
 
         <script>
-            const vars = {}
-            vars.is_user = {{is_user | tojson or 0}}
-            vars.is_admin = {{is_admin | tojson or 0}}
-            vars.user_id = {{user_id or 0}}
-            vars.username = {{username | tojson | safe or 0}}
-            vars.user_name = {{user_name | tojson | safe or 0}}
-            vars.links = {{links | tojson or 0}}
+            const App = {}
+
+            App.is_user = {{is_user | tojson or 0}}
+            App.is_admin = {{is_admin | tojson or 0}}
+            App.user_id = {{user_id or 0}}
+            App.username = {{username | tojson | safe or 0}}
+            App.user_name = {{user_name | tojson | safe or 0}}
+            App.links = {{links | tojson or 0}}
+
+            App.setup_keyboard()
         </script>
 
         {% block head %}{% endblock %}

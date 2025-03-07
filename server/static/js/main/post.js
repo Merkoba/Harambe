@@ -5,68 +5,30 @@ const MONTH = DAY * 30
 const YEAR = DAY * 365
 
 window.onload = function() {
-  vars.date_ms = vars.date * 1000
-  vars.icons_loaded = false
-  vars.selected_icon = ``
-  vars.refresh_count = 0
-  vars.max_on = false
-  vars.max_id = ``
-  vars.image_expanded = false
-  vars.reversed = false
-  vars.ace_wrap = false
+  App.init()
+}
 
-  let delay = 30
-
-  setInterval(function() {
-    update_date()
-  }, 1000 * delay)
-
-  update_date()
-
+App.init = () => {
+  App.date_ms = App.date * 1000
+  App.icons_loaded = false
+  App.selected_icon = ``
+  App.refresh_count = 0
+  App.max_on = false
+  App.max_id = ``
+  App.image_expanded = false
+  App.reversed = false
+  App.ace_wrap = false
   let edit = DOM.el(`#edit`)
 
   if (edit) {
-    setup_editpost_opts()
+    App.setup_editpost_opts()
 
     DOM.ev(edit, `click`, () => {
       edit_post()
     })
   }
 
-  if (vars.mtype.startsWith(`text`)) {
-    if (vars.mtype === `text/markdown`) {
-      let view = DOM.el(`#markdown`)
-      let sample = view.textContent.trim()
-      vars.original_markdown = sample
-
-      try {
-        let html = marked.parse(
-          sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
-        )
-
-        DOM.el(`#markdown`).innerHTML = html
-      }
-      catch (e) {
-        print_error(e)
-      }
-    }
-    else {
-      start_editor()
-    }
-  }
-  else if (vars.mtype.startsWith(`application`)) {
-    if (vars.mtype.includes(`flash`)) {
-      start_flash()
-    }
-  }
-
-  let image = DOM.el(`#image`)
-
-  if (image) {
-    DOM.ev(image, `click`, () => {
-      show_modal_image()
-    })
-  }
+  App.start_embed()
 
   DOM.ev(document, `dragover`, (e) => {
     e.preventDefault()
@@ -97,206 +59,46 @@ window.onload = function() {
     })
   }
 
-  if (vars.post_refresh_times > 0) {
-    vars.refresh_interval = setInterval(() => {
-      refresh()
-      vars.refresh_count += 1
-
-      if (vars.refresh_count >= vars.post_refresh_times) {
-        clearInterval(vars.refresh_interval)
-      }
-    }, vars.post_refresh_interval * 1000)
-  }
-
-  let copy_all = DOM.el(`#copy_all_text`)
-
-  if (copy_all) {
-    DOM.ev(copy_all, `click`, () => {
-      copy_all_text()
-    })
-  }
-
-  let select_all = DOM.el(`#select_all_text`)
-
-  if (select_all) {
-    DOM.ev(select_all, `click`, () => {
-      select_all_text()
-    })
-  }
-
-  let toggle_wrap_btn = DOM.el(`#toggle_wrap`)
-
-  if (toggle_wrap_btn) {
-    DOM.ev(toggle_wrap_btn, `click`, () => {
-      toggle_wrap()
-    })
-  }
-
-  let video = DOM.el(`#video`)
-
-  if (video) {
-    video.muted = true
-    video.play()
-    video.muted = false
-  }
-
-  let max_video = DOM.el(`#max_video`)
-
-  if (max_video) {
-    DOM.ev(max_video, `click`, () => {
-      toggle_max(`video`)
-    })
-  }
-
-  let max_editor = DOM.el(`#max_editor`)
-
-  if (max_editor) {
-    DOM.ev(max_editor, `click`, () => {
-      toggle_max(`editor`)
-    })
-  }
-
-  let max_markdown = DOM.el(`#max_markdown`)
-
-  if (max_markdown) {
-    DOM.ev(max_markdown, `click`, () => {
-      toggle_max(`markdown`)
-    })
-  }
-
-  let max_flash = DOM.el(`#max_flash`)
-
-  if (max_flash) {
-    DOM.ev(max_flash, `click`, () => {
-      toggle_max(`flash`)
-    })
-  }
+  App.setup_refresh()
 
   DOM.ev(window, `resize`, () => {
-    if (vars.max_on) {
-      resize_max()
+    if (App.max_on) {
+      App.resize_max()
     }
   })
-
-  if (vars.image_embed) {
-    vars.msg_image = Msg.factory({
-      class: `modal_image`,
-      disable_content_padding: true,
-      before_show: () => {
-        reset_modal_image()
-      },
-    })
-
-    let t = DOM.el(`#template_image`)
-    vars.msg_image.set(t.innerHTML)
-    let img = DOM.el(`#modal_image`)
-
-    DOM.ev(img, `click`, () => {
-      hide_modal_image()
-    })
-
-    DOM.ev(img, `wheel`, () => {
-      expand_modal_image()
-    })
-  }
-
-  let reacts = DOM.el(`#reactions`)
-
-  if (reacts) {
-    DOM.ev(reacts, `click`, (e) => {
-      let el = e.target.closest(`.reaction_item`)
-      vars.active_item = el
-
-      if (e.target.classList.contains(`reaction_uname`)) {
-        vars.user_opts_user_id = el.dataset.user_id
-        vars.msg_user_opts.show()
-      }
-      else if (e.target.classList.contains(`reaction_edit`)) {
-        vars.msg_reaction_opts.show()
-      }
-    })
-
-    DOM.ev(reacts, `auxclick`, (e) => {
-      if (e.button !== 1) {
-        return
-      }
-
-      let el = e.target.closest(`.reaction_item`)
-      vars.active_item = el
-
-      if (e.target.classList.contains(`reaction_uname`)) {
-        let user_id = el.dataset.user_id
-        window.location = `/list/posts?user_id=${user_id}`
-      }
-      else if (e.target.classList.contains(`reaction_edit`)) {
-        vars.active_item.dataset.id
-        delete_reaction(el.dataset.id)
-      }
-    })
-  }
-
-  fill_reactions()
 
   let user_opts = DOM.el(`#template_user_opts`)
 
   if (user_opts) {
-    setup_user_opts()
+    App.setup_user_opts()
   }
 
-  setup_reaction_opts()
+  App.setup_reaction_opts()
 
   let uploader = DOM.el(`#uploader`)
 
   if (uploader) {
     DOM.ev(uploader, `click`, () => {
-      vars.user_opts_user_id = vars.user_id
-      vars.msg_user_opts.show()
-    })
-  }
-
-  let react_btn = DOM.el(`#react_btn`)
-
-  if (react_btn) {
-    DOM.ev(react_btn, `click`, () => {
-      react_prompt()
+      App.user_opts_user_id = App.user_id
+      App.msg_user_opts.show()
     })
   }
 
   let menu = DOM.el(`#menu`)
 
   if (menu) {
-    setup_explore_opts()
+    App.setup_explore_opts()
 
     DOM.ev(menu, `click`, () => {
-      vars.msg_explore_opts.show()
+      App.msg_explore_opts.show()
     })
   }
 
-  let reverse_btn = DOM.el(`#reverse_btn`)
-
-  if (reverse_btn) {
-    DOM.ev(reverse_btn, `click`, () => {
-      toggle_reverse()
-    })
-  }
-
-  DOM.ev(document, `keydown`, (e) => {
-    if (e.key === `ArrowUp`) {
-      if (e.ctrlKey && e.shiftKey) {
-        edit_post()
-      }
-    }
-    else if (e.key === `ArrowDown`) {
-      if (e.ctrlKey && !e.shiftKey) {
-        if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
-          react_prompt()
-        }
-      }
-    }
-  })
+  App.setup_reactions()
+  App.keyboard_events()
 }
 
-function timeago(date) {
+App.timeago = (date) => {
   let level = 0
   let diff = Date.now() - date
   let places = 1
@@ -370,11 +172,11 @@ function timeago(date) {
   return [result, level]
 }
 
-async function edit_title() {
+App.edit_title = () => {
   let prompt_args = {
     placeholder: `Edit Title`,
-    value: vars.title || vars.original,
-    max: vars.max_title_length,
+    value: App.title || App.original,
+    max: App.max_title_length,
     callback: async (title) => {
       if (!title) {
         return
@@ -382,11 +184,11 @@ async function edit_title() {
 
       title = title.trim()
 
-      if (title === vars.title) {
+      if (title === App.title) {
         return
       }
 
-      let post_id = vars.post_id
+      let post_id = App.post_id
 
       let response = await fetch(`/edit_title`, {
         method: `POST`,
@@ -397,8 +199,8 @@ async function edit_title() {
       })
 
       if (response.ok) {
-        vars.title = title
-        DOM.el(`#title`).textContent = title || vars.original
+        App.title = title
+        DOM.el(`#title`).textContent = title || App.original
       }
       else {
         print_error(response.status)
@@ -406,11 +208,11 @@ async function edit_title() {
     },
   }
 
-  prompt_text(prompt_args)
+  App.prompt_text(prompt_args)
 }
 
-async function delete_post() {
-  let post_id = vars.post_id
+App.delete_post = async () => {
+  let post_id = App.post_id
 
   let response = await fetch(`/delete_post`, {
     method: `POST`,
@@ -424,24 +226,24 @@ async function delete_post() {
     DOM.el(`#title`).textContent = `DELETED 👻`
   }
   else {
-    print_error(response.status)
+    App.print_error(response.status)
   }
 }
 
-function update_date() {
-  let [str, level] = timeago(vars.date_ms)
+App.update_date = () => {
+  let [str, level] = timeago(App.date_ms)
 
   if (level > 1) {
     DOM.el(`#ago`).textContent = str
   }
 
-  let date_1 = dateFormat(vars.date_ms, `d mmmm yyyy`)
-  let date_2 = dateFormat(vars.date_ms, `hh:MM TT`)
+  let date_1 = dateFormat(App.date_ms, `d mmmm yyyy`)
+  let date_2 = dateFormat(App.date_ms, `hh:MM TT`)
   DOM.el(`#date_1`).textContent = date_1
   DOM.el(`#date_2`).textContent = date_2
 }
 
-function start_flash() {
+App.start_flash = () => {
   let ruffle = window.RufflePlayer.newest()
   let player = ruffle.createPlayer()
   player.id = `flash`
@@ -449,44 +251,44 @@ function start_flash() {
   player.style.height = `600px`
   let container = DOM.el(`#flash_container`)
   container.appendChild(player)
-  player.ruffle().load(`/${vars.file_path}/${vars.name}`)
+  player.ruffle().load(`/${App.file_path}/${App.name}`)
 }
 
-function react_alert() {
-  popmsg(`You might have to login to react`)
+App.react_alert = () => {
+  App.popmsg(`You might have to login to react`)
 }
 
-async function react_icon(id) {
-  if (!vars.can_react) {
-    react_alert()
+App.react_icon = async (id) => {
+  if (!App.can_react) {
+    App.react_alert()
     return
   }
 
-  if (!vars.icons_loaded) {
-    vars.msg_icons = Msg.factory({
+  if (!App.icons_loaded) {
+    App.msg_icons = Msg.factory({
       disable_content_padding: true,
     })
 
     let t = DOM.el(`#template_icons`)
-    vars.msg_icons.set(t.innerHTML)
-    await fill_icons()
-    add_icon_events()
-    vars.icons_loaded = true
+    App.msg_icons.set(t.innerHTML)
+    await App.fill_icons()
+    App.add_icon_events()
+    App.icons_loaded = true
   }
   else {
-    show_all_icons()
+    App.show_all_icons()
   }
 
-  vars.icons_id = id
-  vars.msg_icons.show()
+  App.icons_id = id
+  App.msg_icons.show()
   let input = DOM.el(`#icons_input`)
   input.value = ``
   input.focus()
-  select_first_icon()
+  App.select_first_icon()
   DOM.el(`#icons`).scrollTop = 0
 }
 
-function filter_icons() {
+App.filter_icons = () => {
   let r_input = DOM.el(`#icons_input`)
   let value = r_input.value.toLowerCase()
   let icons = DOM.el(`#icons`)
@@ -501,10 +303,10 @@ function filter_icons() {
     }
   }
 
-  select_first_icon()
+  App.select_first_icon()
 }
 
-function select_first_icon() {
+App.select_first_icon = () => {
   let icons = DOM.el(`#icons`)
   let children = icons.children
   let selected = false
@@ -515,13 +317,13 @@ function select_first_icon() {
     }
     else if (!DOM.is_hidden(child)) {
       child.classList.add(`selected`)
-      vars.selected_icon = child.textContent
+      App.selected_icon = child.textContent
       selected = true
     }
   }
 }
 
-function esc_icons() {
+App.esc_icons = () => {
   let r_input = DOM.el(`#icons_input`)
 
   if (r_input.value) {
@@ -529,27 +331,27 @@ function esc_icons() {
     filter_icons()
   }
   else {
-    vars.msg_icons.close()
+    App.msg_icons.close()
   }
 }
 
-async function enter_icons() {
-  if (!vars.selected_icon) {
+App.enter_icons = () => {
+  if (!App.selected_icon) {
     return
   }
 
-  hide_icons()
+  App.hide_icons()
 
   if (Promptext.instance) {
-    Promptext.instance.insert(`:${vars.selected_icon}:`)
+    Promptext.instance.insert(`:${App.selected_icon}:`)
   }
 }
 
-function hide_icons() {
-  vars.msg_icons.close()
+App.hide_icons = () => {
+  App.msg_icons.close()
 }
 
-function up_icons() {
+App.up_icons = () => {
   let icons = DOM.el(`#icons`)
   let children = Array.from(icons.children)
   let visible = children.filter(c => !DOM.is_hidden(c))
@@ -560,7 +362,7 @@ function up_icons() {
         let prev = visible[i - 1]
         child.classList.remove(`selected`)
         prev.classList.add(`selected`)
-        vars.selected_icon = prev.textContent
+        App.selected_icon = prev.textContent
         prev.scrollIntoView({block: `center`})
       }
 
@@ -569,7 +371,7 @@ function up_icons() {
   }
 }
 
-function down_icons() {
+App.down_icons = () => {
   let icons = DOM.el(`#icons`)
   let children = Array.from(icons.children)
   let visible = children.filter(c => !DOM.is_hidden(c))
@@ -580,7 +382,7 @@ function down_icons() {
         let next = visible[i + 1]
         child.classList.remove(`selected`)
         next.classList.add(`selected`)
-        vars.selected_icon = next.textContent
+        App.selected_icon = next.textContent
         next.scrollIntoView({block: `center`})
       }
 
@@ -589,14 +391,14 @@ function down_icons() {
   }
 }
 
-function add_reaction(reaction) {
+App.add_reaction = (reaction) => {
   let reactions = DOM.el(`#reactions`)
   DOM.show(reactions)
   reactions.appendChild(make_reaction(reaction))
-  check_reactions()
+  App.check_reactions()
 }
 
-function check_reactions() {
+App.check_reactions = () => {
   let reactions = DOM.els(`.reaction_item`).length
 
   if (reactions > 1) {
@@ -609,7 +411,7 @@ function check_reactions() {
   }
 }
 
-function make_reaction(reaction) {
+App.make_reaction = (reaction) => {
   let r = reaction
   let vitem
   vitem = DOM.create(`div`, `reaction_content`)
@@ -622,7 +424,7 @@ function make_reaction(reaction) {
   let t = DOM.el(`#template_reaction_item`)
   let item = DOM.create(`div`, `reaction_item`)
   item.innerHTML = t.innerHTML
-  let n = vars.max_reaction_name_length
+  let n = App.max_reaction_name_length
   let name = reaction.uname.substring(0, n).trim()
   DOM.el(`.reaction_uname`, item).textContent = name
   DOM.el(`.reaction_value`, item).appendChild(vitem)
@@ -642,18 +444,18 @@ function make_reaction(reaction) {
   item.dataset.value = r.value
   item.dataset.date = r.date
 
-  if ((r.user_id === vars.user_id) || vars.is_admin) {
+  if ((r.user_id === App.user_id) || App.is_admin) {
     DOM.show(DOM.el(`.reaction_edit`, item))
   }
 
   return item
 }
 
-function icons_open() {
-  return vars.msg_icons && vars.msg_icons.is_open()
+App.icons_open = () => {
+  return App.msg_icons && App.msg_icons.is_open()
 }
 
-function show_all_icons() {
+App.show_all_icons = () => {
   let icons = DOM.el(`#icons`)
 
   for (let child of icons.children) {
@@ -661,14 +463,14 @@ function show_all_icons() {
   }
 }
 
-function get_reaction(id) {
+App.get_reaction = (id) => {
   let reactions = DOM.el(`#reactions`)
   let item = reactions.querySelector(`[data-id="${id}"]`)
   return item
 }
 
-function react_prompt(id) {
-  if (!vars.can_react) {
+App.react_prompt = (id) => {
+  if (!App.can_react) {
     react_alert()
     return
   }
@@ -685,14 +487,14 @@ function react_prompt(id) {
 
   let prompt_args = {
     placeholder: `Write a text reaction`,
-    max: vars.text_reaction_length,
+    max: App.text_reaction_length,
     value,
     callback: (text) => {
       if (!text) {
         return
       }
 
-      let n = vars.text_reaction_length
+      let n = App.text_reaction_length
       text = remove_multiple_empty_lines(text)
       text = replace_urls(text)
       text = Array.from(text).slice(0, n).join(``).trim()
@@ -707,27 +509,27 @@ function react_prompt(id) {
       }
 
       if (id) {
-        edit_reaction(id, text)
+        App.edit_reaction(id, text)
       }
       else {
-        send_reaction(text)
+        App.send_reaction(text)
       }
     },
     buttons: [
       {
         text: `Icon`,
         callback: () => {
-          react_icon()
+          App.react_icon()
         },
       },
     ],
   }
 
-  prompt_text(prompt_args)
+  App.prompt_text(prompt_args)
 }
 
-async function send_reaction(text) {
-  if (!vars.can_react) {
+App.send_reaction = async (text) => {
+  if (!App.can_react) {
     return
   }
 
@@ -737,7 +539,7 @@ async function send_reaction(text) {
     return
   }
 
-  let post_id = vars.post_id
+  let post_id = App.post_id
 
   let response = await fetch(`/react`, {
     method: `POST`,
@@ -749,17 +551,17 @@ async function send_reaction(text) {
 
   if (response.ok) {
     let json = await response.json()
-    add_reaction(json.reaction)
-    check_reactions()
+    App.add_reaction(json.reaction)
+    App.check_reactions()
     window.scrollTo(0, document.body.scrollHeight)
   }
   else {
-    print_error(response.status)
+    App.print_error(response.status)
   }
 }
 
-async function edit_reaction(id, text) {
-  if (!vars.can_react) {
+App.edit_reaction = async (id, text) => {
+  if (!App.can_react) {
     return
   }
 
@@ -773,27 +575,27 @@ async function edit_reaction(id, text) {
 
   if (response.ok) {
     let json = await response.json()
-    modify_reaction(json.reaction)
+    App.modify_reaction(json.reaction)
   }
   else {
-    print_error(response.status)
+    App.print_error(response.status)
   }
 }
 
-function modify_reaction(reaction) {
+App.modify_reaction = (reaction) => {
   let item = get_reaction(reaction.id)
 
   if (!item) {
     return
   }
 
-  new_item = make_reaction(reaction)
+  new_item = App.make_reaction(reaction)
   item.replaceWith(new_item)
 }
 
-async function refresh() {
-  print_info(`Refreshing post...`)
-  let post_id = vars.post_id
+App.refresh = async () => {
+  App.print_info(`Refreshing post...`)
+  let post_id = App.post_id
 
   let response = await fetch(`/refresh`, {
     method: `POST`,
@@ -805,84 +607,84 @@ async function refresh() {
 
   if (response.ok) {
     let json = await response.json()
-    apply_update(json.update)
+    App.apply_update(json.update)
   }
   else {
-    print_error(response.status)
+    App.print_error(response.status)
   }
 }
 
-function apply_update(update) {
+App.apply_update = (update) => {
   if (update.reactions && update.reactions.length) {
     let c = DOM.el(`#reactions`)
     c.innerHTML = ``
 
-    if (vars.reversed) {
+    if (App.reversed) {
       update.reactions.reverse()
     }
 
     for (let reaction of update.reactions) {
-      add_reaction(reaction)
+      App.add_reaction(reaction)
     }
 
-    check_reactions()
+    App.check_reactions()
   }
 
-  vars.title = update.title
+  App.title = update.title
   document.title = update.post_title
-  DOM.el(`#title`).textContent = update.title || vars.original
+  DOM.el(`#title`).textContent = update.title || App.original
   DOM.el(`#views`).textContent = update.views
 }
 
-function show_modal_image() {
-  vars.msg_image.show()
+App.show_modal_image = () => {
+  App.msg_image.show()
 }
 
-function hide_modal_image() {
-  vars.msg_image.close()
+App.hide_modal_image = () => {
+  App.msg_image.close()
 }
 
-function toggle_modal_image() {
-  vars.msg_image.toggle()
+App.toggle_modal_image = () => {
+  App.msg_image.toggle()
 }
 
-function copy_all_text() {
-  copy_to_clipboard(get_text_value())
+App.copy_all_text = () => {
+  App.copy_to_clipboard(get_text_value())
 }
 
-function select_all_text() {
-  if (vars.editor) {
-    vars.editor.selectAll()
+App.select_all_text = () => {
+  if (App.editor) {
+    App.editor.selectAll()
     return
   }
 
   let markdown = DOM.el(`#markdown`)
 
   if (markdown) {
-    select_all(markdown)
+    App.select_all(markdown)
   }
 }
 
-function get_text_value() {
-  if (vars.editor) {
-    return vars.editor.getValue()
+App.get_text_value = () => {
+  if (App.editor) {
+    return App.editor.getValue()
   }
 
   let markdown = DOM.el(`#mardkwon`)
 
   if (markdown) {
-    return vars.original_markdown
+    return App.original_markdown
   }
 }
 
-function toggle_max(what) {
+App.toggle_max = (what) => {
   let el = DOM.el(`#${what}`)
   let details = DOM.el(`#details`)
-  vars.max_on = !vars.max_on
-  vars.max_id = what
+  App.max_on = !App.max_on
+  App.max_id = what
 
-  if (vars.max_on) {
-    resize_max()
+  if (App.max_on) {
+    App.resize_max()
     DOM.hide(details)
     el.classList.add(`max`)
   }
@@ -892,40 +694,40 @@ function toggle_max(what) {
   }
 }
 
-function resize_max() {
-  let el = DOM.el(`#${vars.max_id}`)
+App.resize_max = () => {
+  let el = DOM.el(`#${App.max_id}`)
   let w_width = window.innerWidth
   let w_height = window.innerHeight
   let v_rect = el.getBoundingClientRect()
   let v_width = w_width - v_rect.left - 20
   let v_height = w_height - v_rect.top - 20
-  set_css_var(`max_width`, `${v_width}px`)
-  set_css_var(`max_height`, `${v_height}px`)
+  App.set_css_var(`max_width`, `${v_width}px`)
+  App.set_css_var(`max_height`, `${v_height}px`)
 }
 
-function add_icon_events() {
+App.add_icon_events = () => {
   let input = DOM.el(`#icons_input`)
   let container = DOM.el(`#icons`)
 
   DOM.ev(input, `input`, () => {
-    filter_icons()
+    App.filter_icons()
   })
 
   DOM.ev(input, `keydown`, (e) => {
     if (e.key === `Escape`) {
-      esc_icons()
+      App.esc_icons()
       e.preventDefault()
     }
     else if (e.key === `Enter`) {
-      enter_icons()
+      App.enter_icons()
       e.preventDefault()
     }
     else if (e.key === `ArrowUp`) {
-      up_icons()
+      App.up_icons()
       e.preventDefault()
     }
     else if (e.key === `ArrowDown`) {
-      down_icons()
+      App.down_icons()
       e.preventDefault()
     }
   })
@@ -933,18 +735,18 @@ function add_icon_events() {
   DOM.ev(container, `click`, (e) => {
     if (e.target.closest(`.icon_item`)) {
       let item = e.target.closest(`.icon_item`)
-      vars.selected_icon = item.dataset.icon
-      enter_icons()
+      App.selected_icon = item.dataset.icon
+      App.enter_icons()
     }
   })
 }
 
-async function fill_icons() {
+App.fill_icons = async () => {
   let container = DOM.el(`#icons`)
   let response = await fetch(`/get_icons`)
 
   if (!response.ok) {
-    print_error(response.status)
+    App.print_error(response.status)
     return
   }
 
@@ -965,44 +767,44 @@ async function fill_icons() {
   }
 }
 
-function expand_modal_image() {
-  if (vars.image_expanded) {
+App.expand_modal_image = () => {
+  if (App.image_expanded) {
     return
   }
 
   let c = DOM.el(`#modal_image_container`)
   c.classList.add(`expanded`)
-  vars.image_expanded = true
+  App.image_expanded = true
 }
 
-function reset_modal_image() {
-  if (!vars.image_expanded) {
+App.reset_modal_image = () => {
+  if (!App.image_expanded) {
     return
   }
 
   let c = DOM.el(`#modal_image_container`)
   c.classList.remove(`expanded`)
-  vars.image_expanded = false
+  App.image_expanded = false
 }
 
-function fill_reactions() {
-  for (let reaction of vars.reactions) {
-    add_reaction(reaction)
+App.fill_reactions = () => {
+  for (let reaction of App.reactions) {
+    App.add_reaction(reaction)
   }
 }
 
-function delete_reaction(id) {
+App.delete_reaction = (id) => {
   let confirm_args = {
     message: `Delete this reaction ?`,
     callback_yes: () => {
-      do_delete_reaction(id)
+      App.do_delete_reaction(id)
     },
   }
 
-  confirmbox(confirm_args)
+  App.confirmbox(confirm_args)
 }
 
-async function do_delete_reaction(id) {
+App.do_delete_reaction = async (id) => {
   let response = await fetch(`/delete_reaction`, {
     method: `POST`,
     headers: {
@@ -1012,14 +814,14 @@ async function do_delete_reaction(id) {
   })
 
   if (response.ok) {
-    remove_reaction(id)
+    App.remove_reaction(id)
   }
   else {
-    print_error(response.status)
+    App.print_error(response.status)
   }
 }
 
-function remove_reaction(id) {
+App.remove_reaction = (id) => {
   let reactions = DOM.el(`#reactions`)
   let item = reactions.querySelector(`[data-id="${id}"]`)
 
@@ -1034,7 +836,7 @@ function remove_reaction(id) {
   }
 }
 
-function on_image_load() {
+App.on_image_load = () => {
   let img = DOM.el(`#image`)
 
   if (img) {
@@ -1045,8 +847,8 @@ function on_image_load() {
   }
 }
 
-function toggle_reverse() {
-  vars.reversed = !vars.reversed
+App.toggle_reverse = () => {
+  App.reversed = !App.reversed
   let container = DOM.el(`#reactions`)
   let children = Array.from(container.children)
   children.reverse()
@@ -1056,20 +858,20 @@ function toggle_reverse() {
   }
 }
 
-function toggle_wrap() {
-  vars.ace_wrap = !vars.ace_wrap
+App.toggle_wrap = () => {
+  App.ace_wrap = !App.ace_wrap
 
-  vars.editor.setOptions({
-    wrap: vars.ace_wrap,
+  App.editor.setOptions({
+    wrap: App.ace_wrap,
   })
 }
 
-function guess_mode() {
+App.guess_mode = () => {
   let modelist = ace.require(`ace/ext/modelist`)
   let modes = modelist.modes
 
   for (let mode of modes) {
-    if (vars.mtype.includes(mode.name)) {
+    if (App.mtype.includes(mode.name)) {
       return mode.mode
     }
   }
@@ -1077,26 +879,242 @@ function guess_mode() {
   return `ace/mode/text`
 }
 
-function start_editor() {
-  if (!vars.sample) {
+App.start_editor = () => {
+  if (!App.sample) {
     return
   }
 
   ace.config.set(`basePath`, `/static/ace`)
-  vars.editor = ace.edit(`editor`)
-  vars.editor.setTheme(`ace/theme/tomorrow_night_eighties`)
-  let mode = guess_mode(vars.sample)
-  vars.editor.session.setMode(mode)
-  vars.editor.session.setValue(vars.sample, -1)
-  vars.editor.setReadOnly(true)
-  vars.editor.setShowPrintMargin(false)
+  App.editor = ace.edit(`editor`)
+  App.editor.setTheme(`ace/theme/tomorrow_night_eighties`)
+  let mode = guess_mode(App.sample)
+  App.editor.session.setMode(mode)
+  App.editor.session.setValue(App.sample, -1)
+  App.editor.setReadOnly(true)
+  App.editor.setShowPrintMargin(false)
 
-  vars.editor.setOptions({
-    wrap: vars.ace_wrap,
+  App.editor.setOptions({
+    wrap: App.ace_wrap,
     highlightGutterLine: false,
   })
 }
 
-function edit_post() {
-  vars.msg_editpost_opts.show()
+App.edit_post = () => {
+  App.msg_editpost_opts.show()
+}
+
+App.keyboard_events = () => {
+  DOM.ev(document, `keydown`, (e) => {
+    if (e.key === `ArrowUp`) {
+      if (e.ctrlKey && e.shiftKey) {
+        edit_post()
+      }
+    }
+    else if (e.key === `ArrowDown`) {
+      if (e.ctrlKey && !e.shiftKey) {
+        if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
+          react_prompt()
+        }
+      }
+    }
+  })
+}
+
+App.start_embed = () => {
+  if (App.mtype.startsWith(`text`)) {
+    if (App.mtype === `text/markdown`) {
+      let view = DOM.el(`#markdown`)
+      let sample = view.textContent.trim()
+      App.original_markdown = sample
+
+      try {
+        let html = marked.parse(
+          sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
+        )
+
+        DOM.el(`#markdown`).innerHTML = html
+      }
+      catch (e) {
+        App.print_error(e)
+      }
+    }
+    else {
+      App.start_editor()
+    }
+  }
+  else if (App.mtype.startsWith(`application`)) {
+    if (App.mtype.includes(`flash`)) {
+      App.start_flash()
+    }
+  }
+
+  let image = DOM.el(`#image`)
+
+  if (image) {
+    DOM.ev(image, `click`, () => {
+      App.show_modal_image()
+    })
+  }
+
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    video.muted = true
+    video.play()
+    video.muted = false
+  }
+
+  let max_video = DOM.el(`#max_video`)
+
+  if (max_video) {
+    DOM.ev(max_video, `click`, () => {
+      App.toggle_max(`video`)
+    })
+  }
+
+  let max_editor = DOM.el(`#max_editor`)
+
+  if (max_editor) {
+    DOM.ev(max_editor, `click`, () => {
+      App.toggle_max(`editor`)
+    })
+  }
+
+  let max_markdown = DOM.el(`#max_markdown`)
+
+  if (max_markdown) {
+    DOM.ev(max_markdown, `click`, () => {
+      App.toggle_max(`markdown`)
+    })
+  }
+
+  let max_flash = DOM.el(`#max_flash`)
+
+  if (max_flash) {
+    DOM.ev(max_flash, `click`, () => {
+      App.toggle_max(`flash`)
+    })
+  }
+
+  let copy_all = DOM.el(`#copy_all_text`)
+
+  if (copy_all) {
+    DOM.ev(copy_all, `click`, () => {
+      App.copy_all_text()
+    })
+  }
+
+  let select_all = DOM.el(`#select_all_text`)
+
+  if (select_all) {
+    DOM.ev(select_all, `click`, () => {
+      App.select_all_text()
+    })
+  }
+
+  let toggle_wrap_btn = DOM.el(`#toggle_wrap`)
+
+  if (toggle_wrap_btn) {
+    DOM.ev(toggle_wrap_btn, `click`, () => {
+      App.toggle_wrap()
+    })
+  }
+
+  if (App.image_embed) {
+    App.msg_image = Msg.factory({
+      class: `modal_image`,
+      disable_content_padding: true,
+      before_show: () => {
+        App.reset_modal_image()
+      },
+    })
+
+    let t = DOM.el(`#template_image`)
+    App.msg_image.set(t.innerHTML)
+    let img = DOM.el(`#modal_image`)
+
+    DOM.ev(img, `click`, () => {
+      App.hide_modal_image()
+    })
+
+    DOM.ev(img, `wheel`, () => {
+      App.expand_modal_image()
+    })
+  }
+}
+
+App.setup_reactions = () => {
+  let reacts = DOM.el(`#reactions`)
+
+  if (reacts) {
+    DOM.ev(reacts, `click`, (e) => {
+      let el = e.target.closest(`.reaction_item`)
+      App.active_item = el
+
+      if (e.target.classList.contains(`reaction_uname`)) {
+        App.user_opts_user_id = el.dataset.user_id
+        App.msg_user_opts.show()
+      }
+      else if (e.target.classList.contains(`reaction_edit`)) {
+        App.msg_reaction_opts.show()
+      }
+    })
+
+    DOM.ev(reacts, `auxclick`, (e) => {
+      if (e.button !== 1) {
+        return
+      }
+
+      let el = e.target.closest(`.reaction_item`)
+      App.active_item = el
+
+      if (e.target.classList.contains(`reaction_uname`)) {
+        let user_id = el.dataset.user_id
+        window.location = `/list/posts?user_id=${user_id}`
+      }
+      else if (e.target.classList.contains(`reaction_edit`)) {
+        App.active_item.dataset.id
+        App.delete_reaction(el.dataset.id)
+      }
+    })
+  }
+
+  let react_btn = DOM.el(`#react_btn`)
+
+  if (react_btn) {
+    DOM.ev(react_btn, `click`, () => {
+      App.react_prompt()
+    })
+  }
+
+  let reverse_btn = DOM.el(`#reverse_btn`)
+
+  if (reverse_btn) {
+    DOM.ev(reverse_btn, `click`, () => {
+      App.toggle_reverse()
+    })
+  }
+
+  App.fill_reactions()
+}
+
+App.setup_refresh = () => {
+  let delay = 30
+
+  setInterval(function() {
+    App.update_date()
+  }, 1000 * delay)
+
+  App.update_date()
+
+  if (App.post_refresh_times > 0) {
+    App.refresh_interval = setInterval(() => {
+      App.refresh()
+      App.refresh_count += 1
+
+      if (App.refresh_count >= App.post_refresh_times) {
+        clearInterval(App.refresh_interval)
+      }
+    }, App.post_refresh_interval * 1000)
+  }
 }

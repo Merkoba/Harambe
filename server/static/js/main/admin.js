@@ -2,14 +2,6 @@ window.onload = () => {
   vars.selected_items = []
   vars.last_checkbox = null
 
-  DOM.ev(document, `keyup`, (e) => {
-    if (!filter_focused() && !Msg.msg.any_open()){
-      if (e.key === `Escape`) {
-        show_menu()
-      }
-    }
-  })
-
   DOM.ev(document, `keydown`, (e) => {
     if (filter_focused()) {
       if (e.key === `Enter`) {
