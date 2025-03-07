@@ -53,6 +53,6 @@ class Tooltip {
   }
 }
 
-Tooltip.debouncer = create_debouncer((e, tip) => {
+Tooltip.debouncer = App.create_debouncer((e, tip) => {
   tip.show(e)
 }, Tooltip.delay)

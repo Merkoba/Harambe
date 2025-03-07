@@ -7,81 +7,84 @@
         <script src="/static/js/libs/dom.js"></script>
         <script src="/static/js/libs/msg.js"></script>
         <script src="/static/js/libs/dateformat.js"></script>
+
+        <script>
+            const App = {}
+            App.mode = {{mode | default(0) | tojson | safe}}
+            App.is_user = {{is_user | default(0) | tojson}}
+            App.is_admin = {{is_admin | default(0) | tojson}}
+            App.user_id = {{user_id | default(0)}}
+            App.username = {{username | default(0) | tojson | safe}}
+            App.user_name = {{user_name | default(0) | tojson | safe}}
+            App.links = {{links | default(0) | tojson}}
+            App.page = {{page | default(0)}}
+            App.page_size = {{page_size | default(0) | tojson | safe}}
+            App.def_page_size = {{def_page_size | default(0) | tojson}}
+            App.sort = {{sort | default(0) | tojson | safe}}
+            App.next_page = {{next_page | default(0) | tojson}}
+            App.used_user_id = {{used_user_id | default(0)}}
+            App.max_size = {{max_size | default(0)}}
+            App.max_title_length = {{max_title_length | default(0)}}
+            App.banner = {{banner | default(0) | tojson | safe}}
+            App.max_name_length = {{max_name_length | default(0)}}
+            App.max_password_length = {{max_password_length | default(0)}}
+            App.max_upload_files = {{max_upload_files | default(0)}}
+
+            {% if post %}
+            App.post_id = {{post.id | default(0)}}
+            App.name = {{post.name | default(0) | tojson | safe}}
+            App.full = {{post.full | default(0) | tojson | safe}}
+            App.date = {{post.date | default(0)}}
+            App.title = {{post.title | default(0) | tojson | safe}}
+            App.original = {{post.original | default(0) | tojson | safe}}
+            App.original_full = {{post.original_full | default(0) | tojson | safe}}
+            App.mtype = {{post.mtype | default(0) | tojson | safe}}
+            App.image_embed = {{post.image_embed | default(0) | tojson}}
+            App.reactions = {{post.reactions | default(0) | tojson}}
+            App.sample = {{post.sample | default(0) | tojson | safe}}
+            App.uploader = {{post.uploader | default(0) | tojson | safe}}
+            {% endif %}
+
+            App.file_path = {{file_path | default(0) | tojson | safe}}
+            App.can_react = {{can_react | default(0) | tojson}}
+            App.text_reaction_length = {{text_reaction_length | default(0)}}
+            App.post_refresh_interval = {{post_refresh_interval | default(0)}}
+            App.post_refresh_times = {{post_refresh_times | default(0)}}
+            App.max_post_name_length = {{max_post_name_length | default(0) | tojson}}
+            App.max_reaction_name_length = {{max_reaction_name_length | default(0) | tojson}}
+        </script>
+
         <script src="/static/js/main/common.js"></script>
         <script src="/static/js/main/tooltips.js"></script>
         <script src="/static/js/main/promptext.js"></script>
         <script src="/static/js/main/confirmbox.js"></script>
         <script src="/static/js/main/popmsg.js"></script>
 
+        <script>
+            window.onload = function() {
+                App.setup_keyboard()
+            }
+        </script>
+
         <style>
             :root {
-                --font_family: {{font_family}};
-                --background_color: rgb({{background_color}});
-                --accent_color: rgb({{accent_color}});
-                --font_color: rgb({{font_color}});
-                --text_color: rgb({{text_color}});
-                --link_color: rgb({{link_color}});
-                --frame_color: rgba({{text_color}}, 0.5);
-                --alt_color: rgb({{alt_color}});
-                --highlight_color: rgba({{text_color}}, 0.2);
-                --modal_background: rgba({{background_color}}, 0.8);
-                --contrast_background: rgba({{text_color}}, 0.1);
-                --font_size: {{font_size}}px;
-                --admin_font_size: {{admin_font_size}}px;
+                --font_family: {{font_family | default(0)}};
+                --background_color: rgb({{background_color | default(0)}});
+                --accent_color: rgb({{accent_color | default(0)}});
+                --font_color: rgb({{font_color | default(0)}});
+                --text_color: rgb({{text_color | default(0)}});
+                --link_color: rgb({{link_color | default(0)}});
+                --frame_color: rgba({{text_color | default(0)}}, 0.5);
+                --alt_color: rgb({{alt_color | default(0)}});
+                --highlight_color: rgba({{text_color | default(0)}}, 0.2);
+                --modal_background: rgba({{background_color | default(0)}}, 0.8);
+                --contrast_background: rgba({{text_color | default(0)}}, 0.1);
+                --font_size: {{font_size | default(0)}}px;
+                --admin_font_size: {{admin_font_size | default(0)}}px;
             }
         </style>
 
         <link rel="stylesheet" href="/static/css/common.css">
-
-        <script>
-            const App = {}
-
-            App.mode = {{mode | tojson | safe or 0}}
-
-            App.is_user = {{is_user | tojson or 0}}
-            App.is_admin = {{is_admin | tojson or 0}}
-            App.user_id = {{user_id or 0}}
-            App.username = {{username | tojson | safe or 0}}
-            App.user_name = {{user_name | tojson | safe or 0}}
-            App.links = {{links | tojson or 0}}
-
-            App.page = {{page or 0}}
-            App.page_size = {{page_size | tojson | safe or 0}}
-            App.def_page_size = {{def_page_size | tojson or 0}}
-            App.sort = {{sort | tojson | safe or 0}}
-            App.next_page = {{next_page | tojson or 0}}
-            App.used_user_id = {{used_user_id or 0}}
-
-            App.max_size = {{max_size or 0}}
-            App.max_title_length = {{max_title_length or 0}}
-            App.banner = {{banner | tojson | safe or 0}}
-            App.max_name_length = {{max_name_length or 0}}
-            App.max_password_length = {{max_password_length or 0}}
-            App.max_upload_files = {{max_upload_files or 0}}
-
-            App.post_id = {{post.id or 0}}
-            App.name = {{post.name | tojson | safe or 0}}
-            App.full = {{post.full | tojson | safe or 0}}
-            App.date = {{post.date or 0}}
-            App.title = {{post.title | tojson | safe or 0}}
-            App.original = {{post.original | tojson | safe or 0}}
-            App.original_full = {{post.original_full | tojson | safe or 0}}
-            App.mtype = {{post.mtype | tojson | safe or 0}}
-            App.file_path = {{file_path | tojson | safe or 0}}
-            App.can_react = {{can_react | tojson or 0}}
-            App.text_reaction_length = {{text_reaction_length or 0}}
-            App.post_refresh_interval = {{post_refresh_interval or 0}}
-            App.post_refresh_times = {{post_refresh_times or 0}}
-            App.image_embed = {{post.image_embed | tojson or 0}}
-            App.max_post_name_length = {{max_post_name_length | tojson or 0}}
-            App.max_reaction_name_length = {{max_reaction_name_length | tojson or 0}}
-            App.reactions = {{post.reactions | tojson or 0}}
-            App.sample = {{post.sample | tojson | safe or 0}}
-            App.uploader = {{post.uploader | tojson | safe or 0}}
-
-            App.setup_keyboard()
-        </script>
-
         {% block head %}{% endblock %}
     </head>
 
@@ -170,7 +173,7 @@
         <template id="template_you_opts">
             <div class="dialog_container">
                 <div class="rowitem">
-                    <div id="user_name" title="{{username}}">{{user_name[:12] | trim or "Nameless"}}</div>
+                    <div id="user_name" title="{{username | default(0)}}">{{user_name[:12] | default("") | trim or "Nameless"}}</div>
                 </div>
 
                 <div id="you_opts_posts" class="aero_button">Posts</div>

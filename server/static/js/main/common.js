@@ -52,21 +52,21 @@ App.setup_keyboard = () => {
         else {
           e.preventDefault()
           let show_return = App.mode !== `index`
-          setup_explore_opts(show_return, true)
+          App.setup_explore_opts(show_return, true)
         }
       }
     }
     else if (e.key === `ArrowRight`) {
       if (e.ctrlKey && !e.shiftKey) {
-        next_post()
+        App.next_post()
       }
       else if (e.ctrlKey && e.shiftKey) {
-        random_post()
+        App.random_post()
       }
     }
     else if (e.key === `ArrowUp`) {
       if (e.ctrlKey && !e.shiftKey) {
-        fresh_post()
+        App.fresh_post()
       }
     }
   })
@@ -150,43 +150,43 @@ App.capitalize = (s) => {
 App.setup_explore_opts = (show_return = true, show = false) => {
   let name = `explore`
 
-  make_opts(name, () => {
+  App.make_opts(name, () => {
     if (!show_return) {
       DOM.el(`#${name}_opts_return`).remove()
     }
 
-    bind_button(`${name}_opts_fresh`, () => {
+    App.bind_button(`${name}_opts_fresh`, () => {
       window.location = `/fresh`
     }, () => {
-      open_tab(`/fresh`)
+      App.open_tab(`/fresh`)
     })
 
-    bind_button(`${name}_opts_random`, () => {
+    App.bind_button(`${name}_opts_random`, () => {
       window.location = `/random`
     }, () => {
-      open_tab(`/random`)
+      App.open_tab(`/random`)
     })
 
-    bind_button(`${name}_opts_return`, () => {
+    App.bind_button(`${name}_opts_return`, () => {
       window.location = `/`
     }, () => {
-      open_tab(`/`)
+      App.open_tab(`/`)
     })
 
-    bind_button(`${name}_opts_you`, () => {
-      setup_you_opts(App.user_id, true)
+    App.bind_button(`${name}_opts_you`, () => {
+      App.setup_you_opts(App.user_id, true)
     })
 
-    bind_button(`${name}_opts_list`, () => {
-      setup_list_opts(true)
+    App.bind_button(`${name}_opts_list`, () => {
+      App.setup_list_opts(true)
     })
 
-    bind_button(`${name}_opts_admin`, () => {
-      setup_admin_opts(true)
+    App.bind_button(`${name}_opts_admin`, () => {
+      App.setup_admin_opts(true)
     })
 
-    bind_button(`${name}_opts_links`, () => {
-      setup_link_opts(true)
+    App.bind_button(`${name}_opts_links`, () => {
+      App.setup_link_opts(true)
     })
   }, show)
 }
@@ -194,24 +194,24 @@ App.setup_explore_opts = (show_return = true, show = false) => {
 App.setup_you_opts = (user_id, show = false) => {
   let name = `you`
 
-  make_opts(name, () => {
-    bind_button(`${name}_opts_posts`, () => {
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_posts`, () => {
       window.location = `/list/posts?user_id=${user_id}`
     })
 
-    bind_button(`${name}_opts_reactions`, () => {
+    App.bind_button(`${name}_opts_reactions`, () => {
       window.location = `/list/reactions?user_id=${user_id}`
     })
 
-    bind_button(`${name}_opts_edit_name`, () => {
-      edit_name()
+    App.bind_button(`${name}_opts_edit_name`, () => {
+      App.edit_name()
     })
 
-    bind_button(`${name}_opts_edit_password`, () => {
-      edit_password()
+    App.bind_button(`${name}_opts_edit_password`, () => {
+      App.edit_password()
     })
 
-    bind_button(`${name}_opts_logout`, () => {
+    App.bind_button(`${name}_opts_logout`, () => {
       let confirm_args = {
         message: `Visne profecto discedere ?`,
         callback_yes: () => {
@@ -219,7 +219,7 @@ App.setup_you_opts = (user_id, show = false) => {
         },
       }
 
-      confirmbox(confirm_args)
+      App.confirmbox(confirm_args)
     })
   }, show)
 }
@@ -227,8 +227,8 @@ App.setup_you_opts = (user_id, show = false) => {
 App.setup_user_opts = (show = false) => {
   let name = `user`
 
-  make_opts(name, () => {
-    bind_button(`${name}_opts_posts`, () => {
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_posts`, () => {
       let user_id = App.user_opts_user_id
 
       if (App.mode.includes(`admin`)) {
@@ -241,14 +241,14 @@ App.setup_user_opts = (show = false) => {
       let user_id = App.user_opts_user_id
 
       if (App.mode.includes(`admin`)) {
-        open_tab(`/admin/posts?user_id=${user_id}`)
+        App.open_tab(`/admin/posts?user_id=${user_id}`)
       }
       else {
-        open_tab(`/list/posts?user_id=${user_id}`)
+        App.open_tab(`/list/posts?user_id=${user_id}`)
       }
     })
 
-    bind_button(`${name}_opts_reactions`, () => {
+    App.bind_button(`${name}_opts_reactions`, () => {
       let user_id = App.user_opts_user_id
 
       if (App.mode.includes(`admin`)) {
@@ -261,19 +261,19 @@ App.setup_user_opts = (show = false) => {
       let user_id = App.user_opts_user_id
 
       if (App.mode.includes(`admin`)) {
-        open_tab(`/admin/reactions?user_id=${user_id}`)
+        App.open_tab(`/admin/reactions?user_id=${user_id}`)
       }
       else {
-        open_tab(`/list/reactions?user_id=${user_id}`)
+        App.open_tab(`/list/reactions?user_id=${user_id}`)
       }
     })
 
-    bind_button(`${name}_opts_user`, () => {
+    App.bind_button(`${name}_opts_user`, () => {
       let user_id = App.user_opts_user_id
       window.location = `/edit_user/${user_id}`
     }, () => {
       let user_id = App.user_opts_user_id
-      open_tab(`/edit_user/${user_id}`)
+      App.open_tab(`/edit_user/${user_id}`)
     })
   }, show)
 }
@@ -293,15 +293,15 @@ App.confirmbox = (args = {}) => {
 App.setup_reaction_opts = (show = false) => {
   let name = `reaction`
 
-  make_opts(name, () => {
-    bind_button(`${name}_opts_edit`, () => {
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_edit`, () => {
       let id = App.active_item.dataset.id
-      react_prompt(id)
+      App.react_prompt(id)
     })
 
-    bind_button(`${name}_opts_delete`, () => {
+    App.bind_button(`${name}_opts_delete`, () => {
       let id = App.active_item.dataset.id
-      delete_reaction(id)
+      App.delete_reaction(id)
     })
   }, show)
 }
@@ -378,12 +378,12 @@ App.escape_regex = (s) => {
 
 App.create_debouncer = (func, delay) => {
   if (typeof func !== `function`) {
-    print_error(`Invalid debouncer function`)
+    App.print_error(`Invalid debouncer function`)
     return
   }
 
   if ((typeof delay !== `number`) || (delay < 1)) {
-    print_error(`Invalid debouncer delay`)
+    App.print_error(`Invalid debouncer delay`)
     return
   }
 
@@ -513,7 +513,7 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
       callback(what, value, vtype)
     }
     else {
-      mod_user(what, value, vtype)
+      App.mod_user(what, value, vtype)
     }
   }
 
@@ -534,7 +534,7 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
         password: vtype === `password`,
         callback: (value_2) => {
           if (value_1 !== value_2) {
-            popmsg(`Values don't match`)
+            App.popmsg(`Values don't match`)
             return
           }
 
@@ -542,16 +542,16 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
         },
       }
 
-      prompt_text(prompt_args_2)
+      App.prompt_text(prompt_args_2)
     },
   }
 
-  prompt_text(prompt_args)
+  App.prompt_text(prompt_args)
 }
 
 App.edit_name = () => {
-  user_mod_input(`name`, App.user_name, `string`, (what, value, vtype) => {
-    do_user_edit(what, value, vtype, `Name`, () => {
+  App.user_mod_input(`name`, App.user_name, `string`, (what, value, vtype) => {
+    App.do_user_edit(what, value, vtype, `Name`, () => {
       App.user_name = value
       DOM.el(`#user_name`).textContent = value
     })
@@ -559,8 +559,8 @@ App.edit_name = () => {
 }
 
 App.edit_password = () => {
-  user_mod_input(`password`, ``, `password`, (what, value, vtype) => {
-    do_user_edit(what, value, vtype, `Password`)
+  App.user_mod_input(`password`, ``, `password`, (what, value, vtype) => {
+    App.do_user_edit(what, value, vtype, `Password`)
   })
 }
 
@@ -576,31 +576,31 @@ App.do_user_edit = async (what, value, vtype, title, callback) => {
   })
 
   if (response.ok) {
-    popmsg(`${title} updated`, () => {
+    App.popmsg(`${title} updated`, () => {
       if (callback) {
         callback()
       }
     })
   }
   else {
-    print_error(response.status)
+    App.print_error(response.status)
   }
 }
 
 App.setup_list_opts = (show = false) => {
   let name = `list`
 
-  make_opts(name, () => {
-    bind_button(`${name}_opts_posts`, () => {
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_posts`, () => {
       window.location = `/list/posts`
     }, () => {
-      open_tab(`/list/posts`)
+      App.open_tab(`/list/posts`)
     })
 
-    bind_button(`${name}_opts_reactions`, () => {
+    App.bind_button(`${name}_opts_reactions`, () => {
       window.location = `/list/reactions`
     }, () => {
-      open_tab(`/list/reactions`)
+      App.open_tab(`/list/reactions`)
     })
   }, show)
 }
@@ -608,23 +608,23 @@ App.setup_list_opts = (show = false) => {
 App.setup_admin_opts = (show = false) => {
   let name = `admin`
 
-  make_opts(name, () => {
-    bind_button(`${name}_opts_posts`, () => {
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_posts`, () => {
       window.location = `/admin/posts`
     }, () => {
-      open_tab(`/admin/posts`)
+      App.open_tab(`/admin/posts`)
     })
 
-    bind_button(`${name}_opts_reactions`, () => {
+    App.bind_button(`${name}_opts_reactions`, () => {
       window.location = `/admin/reactions`
     }, () => {
-      open_tab(`/admin/reactions`)
+      App.open_tab(`/admin/reactions`)
     })
 
-    bind_button(`${name}_opts_users`, () => {
+    App.bind_button(`${name}_opts_users`, () => {
       window.location = `/admin/users`
     }, () => {
-      open_tab(`/admin/users`)
+      App.open_tab(`/admin/users`)
     })
   }, show)
 }
@@ -632,7 +632,7 @@ App.setup_admin_opts = (show = false) => {
 App.setup_link_opts = (show = false) => {
   let name = `link`
 
-  make_opts(name, () => {
+  App.make_opts(name, () => {
     let c = DOM.el(`#links_container`)
 
     for (let [i, link] of App.links.entries()) {
@@ -641,10 +641,10 @@ App.setup_link_opts = (show = false) => {
       item.title = link.url
       c.appendChild(item)
 
-      bind_button(`${name}_opts_${i}`, () => {
-        open_tab(link.url, link.target)
+      App.bind_button(`${name}_opts_${i}`, () => {
+        App.open_tab(link.url, link.target)
       }, () => {
-        open_tab(link.url)
+        App.open_tab(link.url)
       })
     }
   }, show)
@@ -734,20 +734,20 @@ App.encode_uri = (uri) => {
 App.setup_editpost_opts = (show = false) => {
   let name = `editpost`
 
-  make_opts(name, () => {
-    bind_button(`${name}_opts_title`, () => {
-      edit_title()
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_title`, () => {
+      App.edit_title()
     })
 
-    bind_button(`${name}_opts_delete`, () => {
+    App.bind_button(`${name}_opts_delete`, () => {
       let confirm_args = {
         message: `Delete this post ?`,
         callback_yes: () => {
-          delete_post()
+          App.delete_post()
         },
       }
 
-      confirmbox(confirm_args)
+      App.confirmbox(confirm_args)
     })
   }, show)
 }
