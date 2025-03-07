@@ -4,17 +4,6 @@
 <meta name="description" content="{{description}}">
 <title>{{main_title}}</title>
 <link rel="stylesheet" href="static/css/index.css">
-
-<script>
-    App.mode = `index`
-    App.max_size = {{max_size}}
-    App.max_title_length = {{max_title_length}}
-    App.banner = {{banner | tojson | safe}}
-    App.max_name_length = {{max_name_length}}
-    App.max_password_length = {{max_password_length}}
-    App.max_upload_files = {{max_upload_files}}
-</script>
-
 <script src="/static/js/main/index.js"></script>
 {% endblock %}
 

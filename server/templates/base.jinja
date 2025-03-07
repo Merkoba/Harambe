@@ -36,12 +36,48 @@
         <script>
             const App = {}
 
+            App.mode = {{mode | tojson | safe or 0}}
+
             App.is_user = {{is_user | tojson or 0}}
             App.is_admin = {{is_admin | tojson or 0}}
             App.user_id = {{user_id or 0}}
             App.username = {{username | tojson | safe or 0}}
             App.user_name = {{user_name | tojson | safe or 0}}
             App.links = {{links | tojson or 0}}
+
+            App.page = {{page or 0}}
+            App.page_size = {{page_size | tojson | safe or 0}}
+            App.def_page_size = {{def_page_size | tojson or 0}}
+            App.sort = {{sort | tojson | safe or 0}}
+            App.next_page = {{next_page | tojson or 0}}
+            App.used_user_id = {{used_user_id or 0}}
+
+            App.max_size = {{max_size or 0}}
+            App.max_title_length = {{max_title_length or 0}}
+            App.banner = {{banner | tojson | safe or 0}}
+            App.max_name_length = {{max_name_length or 0}}
+            App.max_password_length = {{max_password_length or 0}}
+            App.max_upload_files = {{max_upload_files or 0}}
+
+            App.post_id = {{post.id or 0}}
+            App.name = {{post.name | tojson | safe or 0}}
+            App.full = {{post.full | tojson | safe or 0}}
+            App.date = {{post.date or 0}}
+            App.title = {{post.title | tojson | safe or 0}}
+            App.original = {{post.original | tojson | safe or 0}}
+            App.original_full = {{post.original_full | tojson | safe or 0}}
+            App.mtype = {{post.mtype | tojson | safe or 0}}
+            App.file_path = {{file_path | tojson | safe or 0}}
+            App.can_react = {{can_react | tojson or 0}}
+            App.text_reaction_length = {{text_reaction_length or 0}}
+            App.post_refresh_interval = {{post_refresh_interval or 0}}
+            App.post_refresh_times = {{post_refresh_times or 0}}
+            App.image_embed = {{post.image_embed | tojson or 0}}
+            App.max_post_name_length = {{max_post_name_length | tojson or 0}}
+            App.max_reaction_name_length = {{max_reaction_name_length | tojson or 0}}
+            App.reactions = {{post.reactions | tojson or 0}}
+            App.sample = {{post.sample | tojson | safe or 0}}
+            App.uploader = {{post.uploader | tojson | safe or 0}}
 
             App.setup_keyboard()
         </script>

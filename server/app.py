@@ -233,6 +233,7 @@ def index() -> Any:
 
     return render_template(
         "index.jinja",
+        mode="index",
         max_size=max_size,
         max_size_str=max_size_str,
         show_max_size=config.show_max_size,
@@ -323,6 +324,7 @@ def post(name: str) -> Any:
 
     return render_template(
         "post.jinja",
+        mode="post",
         post=post,
         owned=owned,
         file_path=config.file_path,

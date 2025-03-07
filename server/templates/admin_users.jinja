@@ -3,17 +3,6 @@
 {% block head %}
 <title>{{title}}</title>
 <link rel="stylesheet" href="/static/css/admin.css">
-
-<script>
-    App.mode = {{mode | tojson | safe}}
-    App.page_size = {{page_size | tojson | safe}}
-    App.def_page_size = {{def_page_size | tojson}}
-    App.sort = {{sort | tojson | safe}}
-    App.page = {{page}}
-    App.next_page = {{next_page | tojson}}
-    App.used_user_id = {{used_user_id}}
-</script>
-
 <script src="/static/js/main/admin.js"></script>
 {% endblock %}
 

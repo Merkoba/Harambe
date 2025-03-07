@@ -4,30 +4,6 @@
 <meta name="description" content="{{description}}">
 <title>{{post.post_title}}</title>
 <link rel="stylesheet" href="/static/css/post.css">
-
-<script>
-    App.mode = `post`
-    App.post_id = {{post.id}}
-    App.name = {{post.name | tojson | safe}}
-    App.full = {{post.full | tojson | safe}}
-    App.date = {{post.date}}
-    App.title = {{post.title | tojson | safe}}
-    App.original = {{post.original | tojson | safe}}
-    App.original_full = {{post.original_full | tojson | safe}}
-    App.mtype = {{post.mtype | tojson | safe}}
-    App.file_path = {{file_path | tojson | safe}}
-    App.can_react = {{can_react | tojson}}
-    App.text_reaction_length = {{text_reaction_length}}
-    App.post_refresh_interval = {{post_refresh_interval}}
-    App.post_refresh_times = {{post_refresh_times}}
-    App.image_embed = {{post.image_embed | tojson}}
-    App.max_post_name_length = {{max_post_name_length | tojson}}
-    App.max_reaction_name_length = {{max_reaction_name_length | tojson}}
-    App.reactions = {{post.reactions | tojson}}
-    App.sample = {{post.sample | tojson | safe}}
-    App.uploader = {{post.uploader | tojson | safe}}
-</script>
-
 <script src="/static/ruffle/ruffle.js"></script>
 <script src="/static/ace/ace.js"></script>
 <script src="/static/ace/ext-modelist.js"></script>
