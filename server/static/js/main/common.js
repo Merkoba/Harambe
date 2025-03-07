@@ -659,7 +659,7 @@ App.setup_link_opts = (show = false, back = false) => {
 }
 
 App.make_opts = (name, setup, show = false, back = false) => {
-  let msg_name = `msg_${name}_opts`
+  let msg_name = `msg_${name}`
 
   if (App[msg_name]) {
     if (show) {
@@ -680,14 +680,14 @@ App.make_opts = (name, setup, show = false, back = false) => {
   App[msg_name].set(t.innerHTML)
   setup()
 
-  if (back && App.msg_menu_opts) {
+  if (back && App.msg_menu) {
     let c = DOM.el(`.dialog_container`, App[msg_name].content)
     let btn = DOM.create(`div`, `aero_button`, `${name}_opts_back`)
     btn.textContent = `Back`
     c.appendChild(btn)
 
     App.bind_button(`${name}_opts_back`, () => {
-      App.msg_menu_opts.show()
+      App.msg_show(`menu`)
     })
   }
 
@@ -698,7 +698,7 @@ App.make_opts = (name, setup, show = false, back = false) => {
 
 App.bind_button = (what, func, mfunc) => {
   let name = what.split(`_`)[0]
-  let msg_name = `msg_${name}_opts`
+  let msg_name = `msg_${name}`
   let el = DOM.el(`#${what}`)
 
   if (!el) {
@@ -786,4 +786,12 @@ App.fresh_post = () => {
 
 App.random_post = () => {
   window.location = `/random`
+}
+
+App.msg_show = (what) => {
+  let msg = App[`msg_${what}`]
+
+  if (msg) {
+    msg.show()
+  }
 }

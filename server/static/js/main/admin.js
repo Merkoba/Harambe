@@ -32,7 +32,7 @@ App.init = () => {
     }
     else if (e.target.classList.contains(`admin_user`)) {
       App.user_opts_user_id = item.dataset.user_id
-      App.msg_user_opts.show()
+      App.msg_show(`user`)
     }
     else if (e.target.classList.contains(`mtype`)) {
       let mtype = e.target.textContent
@@ -797,7 +797,7 @@ App.delete_all_reactions = async () => {
 }
 
 App.show_menu = () => {
-  App.msg_menu_opts.show()
+  App.msg_show(`menu`)
 }
 
 App.filter_focused = () => {
@@ -920,7 +920,7 @@ App.setup_edit = () => {
 
     DOM.ev(edit, `click`, () => {
       if (App.get_selected().length > 0) {
-        App.msg_user_edit.show()
+        App.msg_show(`user_edit`)
       }
       else {
         App.popmsg(`No users are selected`)
@@ -939,7 +939,7 @@ App.setup_edit = () => {
 
     DOM.ev(edit, `click`, () => {
       if (App.get_selected().length > 0) {
-        App.msg_post_edit.show()
+        App.msg_show(`post_edit`)
       }
       else {
         App.popmsg(`No posts are selected`)

@@ -80,7 +80,7 @@ App.init = () => {
   if (uploader) {
     DOM.ev(uploader, `click`, () => {
       App.user_opts_user_id = App.user_id
-      App.msg_user_opts.show()
+      App.msg_show(`user`)
     })
   }
 
@@ -90,7 +90,7 @@ App.init = () => {
     App.setup_menu_opts()
 
     DOM.ev(menu, `click`, () => {
-      App.msg_menu_opts.show()
+      App.msg_show(`menu`)
     })
   }
 
@@ -900,7 +900,7 @@ App.start_editor = () => {
 }
 
 App.edit_post = () => {
-  App.msg_editpost_opts.show()
+  App.msg_show(`editpost`)
 }
 
 App.keyboard_events = () => {
@@ -1053,10 +1053,10 @@ App.setup_reactions = () => {
 
       if (e.target.classList.contains(`reaction_uname`)) {
         App.user_opts_user_id = el.dataset.user_id
-        App.msg_user_opts.show()
+        App.msg_show(`user`)
       }
       else if (e.target.classList.contains(`reaction_edit`)) {
-        App.msg_reaction_opts.show()
+        App.msg_show(`reaction`)
       }
     })
 

@@ -66,7 +66,7 @@ App.init = () => {
     App.setup_menu_opts(false)
 
     DOM.ev(menu_btn, `click`, (e) => {
-      App.msg_menu_opts.show()
+      App.msg_show(`menu`)
     })
 
     DOM.ev(menu_btn, `auxclick`, (e) => {
