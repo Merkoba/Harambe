@@ -7,14 +7,14 @@ App.init = () => {
   App.last_checkbox = null
 
   DOM.ev(document, `keydown`, (e) => {
-    if (filter_focused()) {
+    if (App.filter_focused()) {
       if (e.key === `Enter`) {
-        do_search()
+        App.do_search()
       }
       else if (e.key === `Escape`) {
         if (filter.value) {
           filter.value = ``
-          do_filter()
+          App.do_filter()
         }
         else {
           filter.blur()
@@ -28,7 +28,7 @@ App.init = () => {
     App.active_item = item
 
     if (e.target.classList.contains(`select_checkbox`)) {
-      on_checkbox_click(e)
+      App.on_checkbox_click(e)
     }
     else if (e.target.classList.contains(`admin_user`)) {
       App.user_opts_user_id = item.dataset.user_id
@@ -36,7 +36,7 @@ App.init = () => {
     }
     else if (e.target.classList.contains(`mtype`)) {
       let mtype = e.target.textContent
-      do_search(mtype)
+      App.do_search(mtype)
     }
     else {
       let header = e.target.closest(`.header_text`)
@@ -45,7 +45,7 @@ App.init = () => {
         let sort = e.target.dataset.sort
 
         if (sort) {
-          do_sort(sort)
+          App.do_sort(sort)
         }
       }
     }
@@ -54,7 +54,7 @@ App.init = () => {
   let refresh = DOM.el(`#refresh`)
 
   if (refresh) {
-    let ms = mode_string()
+    let ms = App.mode_string()
 
     DOM.ev(refresh, `click`, () => {
       window.location = `/${ms}`
@@ -65,7 +65,7 @@ App.init = () => {
 
   if (del_sel) {
     DOM.ev(del_sel, `click`, () => {
-      delete_selected()
+      App.delete_selected()
     })
   }
 
@@ -78,59 +78,59 @@ App.init = () => {
 
     if (App.mode === `admin_users`) {
       DOM.ev(`#edit_reader_yes`, `click`, () => {
-        mod_user(`reader`, 1, `bool`)
+        App.mod_user(`reader`, 1, `bool`)
       })
 
       DOM.ev(`#edit_reader_no`, `click`, () => {
-        mod_user(`reader`, 0, `bool`)
+        App.mod_user(`reader`, 0, `bool`)
       })
 
       DOM.ev(`#edit_lister_yes`, `click`, () => {
-        mod_user(`lister`, 1, `bool`)
+        App.mod_user(`lister`, 1, `bool`)
       })
 
       DOM.ev(`#edit_lister_no`, `click`, () => {
-        mod_user(`lister`, 0, `bool`)
+        App.mod_user(`lister`, 0, `bool`)
       })
 
       DOM.ev(`#edit_reacter_yes`, `click`, () => {
-        mod_user(`reacter`, 1, `bool`)
+        App.mod_user(`reacter`, 1, `bool`)
       })
 
       DOM.ev(`#edit_reacter_no`, `click`, () => {
-        mod_user(`reacter`, 0, `bool`)
+        App.mod_user(`reacter`, 0, `bool`)
       })
 
       DOM.ev(`#edit_admin_yes`, `click`, () => {
-        mod_user(`admin`, 1, `bool`)
+        App.mod_user(`admin`, 1, `bool`)
       })
 
       DOM.ev(`#edit_admin_no`, `click`, () => {
-        mod_user(`admin`, 0, `bool`)
+        App.mod_user(`admin`, 0, `bool`)
       })
 
       DOM.ev(`#edit_rpm`, `click`, () => {
-        user_mod_input(`rpm`, `number`)
+        App.user_mod_input(`rpm`, `number`)
       })
 
       DOM.ev(`#edit_max_size`, `click`, () => {
-        user_mod_input(`max_size`, `number`)
+        App.user_mod_input(`max_size`, `number`)
       })
 
       DOM.ev(`#edit_mark`, `click`, () => {
-        user_mod_input(`mark`, `string`)
+        App.user_mod_input(`mark`, `string`)
       })
 
       DOM.ev(`#edit_name`, `click`, () => {
-        user_mod_input(`name`, `string`)
+        App.user_mod_input(`name`, `string`)
       })
 
       DOM.ev(`#edit_username`, `click`, () => {
-        user_mod_input(`username`, `string`)
+        App.user_mod_input(`username`, `string`)
       })
 
       DOM.ev(`#edit_password`, `click`, () => {
-        user_mod_input(`password`, `password`)
+        App.user_mod_input(`password`, `password`)
       })
     }
 
@@ -139,7 +139,7 @@ App.init = () => {
         App.msg_user_edit.show()
       }
       else {
-        popmsg(`No users are selected`)
+        App.popmsg(`No users are selected`)
       }
     })
   }
@@ -147,10 +147,10 @@ App.init = () => {
   let page_select = DOM.el(`#page_select`)
 
   if (page_select) {
-    fill_page_select(page_select)
+    App.fill_page_select(page_select)
 
     DOM.ev(page_select, `change`, () => {
-      on_page_select_change(page_select)
+      App.on_page_select_change(page_select)
     })
   }
 
@@ -158,7 +158,7 @@ App.init = () => {
 
   if (filter) {
     DOM.ev(filter, `input`, () => {
-      do_filter()
+      App.do_filter()
     })
 
     filter.focus()
@@ -168,7 +168,7 @@ App.init = () => {
 
   if (cb) {
     DOM.ev(cb, `click`, () => {
-      toggle_select()
+      App.toggle_select()
     })
   }
 
@@ -188,7 +188,7 @@ App.init = () => {
         return
       }
 
-      goto_page(App.page - 1)
+      App.goto_page(App.page - 1)
     })
   }
 
@@ -200,7 +200,7 @@ App.init = () => {
         return
       }
 
-      goto_page(App.page + 1)
+      App.goto_page(App.page + 1)
     })
   }
 
@@ -208,20 +208,20 @@ App.init = () => {
 
   if (del_all) {
     DOM.ev(del_all, `click`, () => {
-      delete_all()
+      App.delete_all()
     })
   }
 
   let explore_opts = DOM.el(`#template_explore_opts`)
 
   if (explore_opts) {
-    setup_explore_opts()
+    App.setup_explore_opts()
 
     let menu = DOM.el(`#menu`)
 
     if (menu) {
       DOM.ev(menu, `click`, (e) => {
-        show_menu()
+        App.show_menu()
       })
     }
   }
@@ -229,7 +229,7 @@ App.init = () => {
   let user_opts = DOM.el(`#template_user_opts`)
 
   if (user_opts) {
-    setup_user_opts()
+    App.setup_user_opts()
   }
 
   for (let el of DOM.els(`.reaction_value`)) {
@@ -246,7 +246,7 @@ App.init = () => {
 
   if (clear_filter_btn) {
     DOM.ev(clear_filter_btn, `click`, () => {
-      clear_filter()
+      App.clear_filter()
     })
   }
 }
@@ -334,7 +334,7 @@ App.delete_posts = () => {
   }
 
   size = Math.round(size * 100) / 100
-  let s = singplural(`post`, App.selected_items.length)
+  let s = App.singplural(`post`, App.selected_items.length)
 
   let confirm_args = {
     message: `Delete ${App.selected_items.length} ${s} (${size_string(size)}) ?`,
@@ -345,11 +345,11 @@ App.delete_posts = () => {
         posts.push(post.dataset.post_id)
       }
 
-      delete_selected_posts(posts)
+      App.delete_selected_posts(posts)
     },
   }
 
-  confirmbox(confirm_args)
+  App.confirmbox(confirm_args)
 }
 
 App.delete_selected_posts = async (ids) => {
@@ -363,14 +363,14 @@ App.delete_selected_posts = async (ids) => {
     })
 
     if (response.ok) {
-      remove_posts(ids)
+      App.remove_posts(ids)
     }
     else {
-      print_error(response.status)
+      App.print_error(response.status)
     }
   }
   catch (error) {
-    print_error(error)
+    App.print_error(error)
   }
 }
 
@@ -398,11 +398,11 @@ App.delete_all_posts = async () => {
       window.location = `/admin/posts`
     }
     else {
-      print_error(response.status)
+      App.print_error(response.status)
     }
   }
   catch (error) {
-    print_error(error)
+    App.print_error(error)
   }
 }
 
@@ -492,7 +492,7 @@ App.edit_post_title = (el) => {
     },
   }
 
-  prompt_text(prompt_args)
+  App.prompt_text(prompt_args)
 }
 
 App.toggle_select = () => {
@@ -505,7 +505,7 @@ App.toggle_select = () => {
     }
   }
 
-  unselect_all()
+  App.unselect_all()
 }
 
 App.get_selected = () => {
@@ -531,13 +531,13 @@ App.delete_selected = () => {
   App.selected_items = items
 
   if (App.mode === `admin_users`) {
-    delete_users()
+    App.delete_users()
   }
   else if (App.mode === `admin_posts`) {
-    delete_posts()
+    App.delete_posts()
   }
   else if (App.mode === `admin_reactions`) {
-    delete_reactions()
+    App.delete_reactions()
   }
 }
 
@@ -564,11 +564,11 @@ App.delete_users = () => {
         users.push(user.dataset.user_id)
       }
 
-      delete_selected_users(users)
+      App.delete_selected_users(users)
     },
   }
 
-  confirmbox(confirm_args)
+  App.confirmbox(confirm_args)
 }
 
 App.delete_selected_users = async (ids) => {
@@ -582,14 +582,14 @@ App.delete_selected_users = async (ids) => {
     })
 
     if (response.ok) {
-      remove_users(ids)
+      App.remove_users(ids)
     }
     else {
-      print_error(response.status)
+      App.print_error(response.status)
     }
   }
   catch (error) {
-    print_error(error)
+    App.print_error(error)
   }
 }
 
@@ -617,11 +617,11 @@ App.delete_normal_users = async () => {
       window.location = `/admin/users`
     }
     else {
-      print_error(response.status)
+      App.print_error(response.status)
     }
   }
   catch (error) {
-    print_error(error)
+    App.print_error(error)
   }
 }
 
@@ -637,14 +637,14 @@ App.sort_action = (what, desc = false) => {
 App.do_sort = (what) => {
   if ((what === App.sort) || (what === `${App.sort}_desc`)) {
     if (App.sort === `${what}_desc`) {
-      sort_action(what)
+      App.sort_action(what)
     }
     else {
-      sort_action(what, true)
+      App.sort_action(what, true)
     }
   }
   else {
-    sort_action(what)
+    App.sort_action(what)
   }
 }
 
@@ -655,8 +655,8 @@ App.mod_user = (what, value, vtype) => {
     return
   }
 
-  let s = singplural(`user`, items.length)
-  let w = capitalize(what)
+  let s = App.singplural(`user`, items.length)
+  let w = App.capitalize(what)
 
   let confirm_args = {
     message: `Modify ${items.length} ${s} (${w}) ?`,
@@ -666,7 +666,7 @@ App.mod_user = (what, value, vtype) => {
     },
   }
 
-  confirmbox(confirm_args)
+  App.confirmbox(confirm_args)
 }
 
 App.do_mod_user = async (items, what, value, vtype) => {
@@ -685,11 +685,11 @@ App.do_mod_user = async (items, what, value, vtype) => {
       window.location = `/admin/users`
     }
     else {
-      print_error(response.status)
+      App.print_error(response.status)
     }
   }
   catch (error) {
-    print_error(error)
+    App.print_error(error)
   }
 }
 
@@ -698,7 +698,7 @@ App.delete_all = () => {
     let confirm_args = {
       message: `Delete all non-admin users ?`,
       callback_yes: () => {
-        delete_normal_users()
+        App.delete_normal_users()
       },
     }
 
@@ -708,21 +708,21 @@ App.delete_all = () => {
     let confirm_args = {
       message: `Delete ALL posts ?`,
       callback_yes: () => {
-        delete_all_posts()
+        App.delete_all_posts()
       },
     }
 
-    confirmbox(confirm_args)
+    App.confirmbox(confirm_args)
   }
   else if (App.mode === `admin_reactions`) {
     let confirm_args = {
       message: `Delete ALL reactions ?`,
       callback_yes: () => {
-        delete_all_reactions()
+        App.delete_all_reactions()
       },
     }
 
-    confirmbox(confirm_args)
+    App.confirmbox(confirm_args)
   }
 }
 
@@ -796,7 +796,7 @@ App.delete_reactions = () => {
     size += parseFloat(reaction.dataset.size)
   }
 
-  let s = singplural(`reaction`, App.selected_items.length)
+  let s = App.singplural(`reaction`, App.selected_items.length)
 
   let confirm_args = {
     message: `Delete ${App.selected_items.length} ${s} ?`,
@@ -807,11 +807,11 @@ App.delete_reactions = () => {
         reactions.push(parseInt(reaction.dataset.id))
       }
 
-      delete_selected_reactions(reactions)
+      App.delete_selected_reactions(reactions)
     },
   }
 
-  confirmbox(confirm_args)
+  App.confirmbox(confirm_args)
 }
 
 App.delete_selected_reactions = async (ids) => {
@@ -825,14 +825,14 @@ App.delete_selected_reactions = async (ids) => {
     })
 
     if (response.ok) {
-      remove_reactions(ids)
+      App.remove_reactions(ids)
     }
     else {
-      print_error(response.status)
+      App.print_error(response.status)
     }
   }
   catch (error) {
-    print_error(error)
+    App.print_error(error)
   }
 }
 
@@ -860,11 +860,11 @@ App.delete_all_reactions = async () => {
       window.location = `/admin/reactions`
     }
     else {
-      print_error(response.status)
+      App.print_error(response.status)
     }
   }
   catch (error) {
-    print_error(error)
+    App.print_error(error)
   }
 }
 
@@ -915,9 +915,9 @@ App.on_checkbox_click = (e) => {
 App.set_filter = (value) => {
   let filter = DOM.el(`#filter`)
   filter.value = value
-  do_filter()
+  App.do_filter()
 }
 
 App.clear_filter = () => {
-  set_filter(``)
+  App.set_filter(``)
 }

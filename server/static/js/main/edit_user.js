@@ -1,4 +1,8 @@
 window.onload = () => {
+  App.init()
+}
+
+App.init = () => {
   let uname = DOM.el(`#username`)
 
   if (uname) {
@@ -12,11 +16,11 @@ window.onload = () => {
       let confirm_args = {
         message: `Delete ${App.username} ?`,
         callback_yes: () => {
-          delete_user()
+          App.delete_user()
         },
       }
 
-      confirmbox(confirm_args)
+      App.confirmbox(confirm_args)
     })
   }
 
@@ -36,7 +40,7 @@ window.onload = () => {
   })
 }
 
-async function delete_user() {
+App.delete_user = async () => {
   let username = App.username
 
   if (!username) {
@@ -53,13 +57,13 @@ async function delete_user() {
     })
 
     if (response.ok) {
-      popmsg(`Deleted`)
+      App.popmsg(`Deleted`)
     }
     else {
-      print_error(response.status)
+      App.print_error(response.status)
     }
   }
   catch (error) {
-    print_error(error)
+    App.print_error(error)
   }
 }
