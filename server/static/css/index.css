@@ -30,14 +30,13 @@ body, html {
     padding-bottom: 0.12rem;
     flex-grow: 1;
     flex-shrink: 1;
-    filter: brightness(88%);
-    border-color: #6b6b81;
+    border-color: var(--frame_color);
 }
 
 #buttons button:hover {
-    background-color: var(--accent_color);
     cursor: pointer;
-    filter: brightness(100%);
+    background-color: var(--accent_color);
+    border-color: var(--text_color);
 }
 
 input[type="text"] {
