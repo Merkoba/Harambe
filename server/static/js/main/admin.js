@@ -6,58 +6,14 @@ App.init = () => {
   App.selected_items = []
   App.last_checkbox = null
 
-  DOM.ev(document, `keydown`, (e) => {
-    if (App.filter_focused()) {
-      if (e.key === `Enter`) {
-        App.do_search()
-      }
-      else if (e.key === `Escape`) {
-        if (filter.value) {
-          filter.value = ``
-          App.do_filter()
-        }
-        else {
-          filter.blur()
-        }
-      }
-    }
-  })
+  App.key_events()
+  App.click_events()
 
-  DOM.ev(document, `click`, async (e) => {
-    let item = e.target.closest(`.item`)
-    App.active_item = item
+  let refresh_btn = DOM.el(`#refresh`)
 
-    if (e.target.classList.contains(`select_checkbox`)) {
-      App.on_checkbox_click(e)
-    }
-    else if (e.target.classList.contains(`admin_user`)) {
-      App.user_opts_user_id = item.dataset.user_id
-      App.msg_show(`user`)
-    }
-    else if (e.target.classList.contains(`mtype`)) {
-      let mtype = e.target.textContent
-      App.do_search(mtype)
-    }
-    else {
-      let header = e.target.closest(`.header_text`)
-
-      if (header) {
-        let sort = e.target.dataset.sort
-
-        if (sort) {
-          App.do_sort(sort)
-        }
-      }
-    }
-  })
-
-  let refresh = DOM.el(`#refresh`)
-
-  if (refresh) {
-    let ms = App.mode_string()
-
-    DOM.ev(refresh, `click`, () => {
-      window.location = `/${ms}`
+  if (refresh_btn) {
+    DOM.ev(refresh_btn, `click`, () => {
+      App.refresh()
     })
   }
 
@@ -107,29 +63,7 @@ App.init = () => {
     })
   }
 
-  let prev_page = DOM.el(`#prev_page`)
-
-  if (prev_page) {
-    DOM.ev(prev_page, `click`, () => {
-      if (App.page <= 1) {
-        return
-      }
-
-      App.goto_page(App.page - 1)
-    })
-  }
-
-  let next_page = DOM.el(`#next_page`)
-
-  if (next_page) {
-    DOM.ev(next_page, `click`, () => {
-      if (!App.next_page) {
-        return
-      }
-
-      App.goto_page(App.page + 1)
-    })
-  }
+  App.setup_pages()
 
   let del_all = DOM.el(`#delete_all`)
 
@@ -376,6 +310,7 @@ App.do_search = (query = ``) => {
   }
 
   if (!query) {
+    App.refresh()
     return
   }
 
@@ -848,6 +783,12 @@ App.set_filter = (value) => {
 
 App.clear_filter = () => {
   App.set_filter(``)
+  App.focus_filter()
+}
+
+App.focus_filter = () => {
+  let filter = DOM.el(`#filter`)
+  filter.focus()
 }
 
 App.setup_edit = () => {
@@ -946,4 +887,86 @@ App.setup_edit = () => {
       }
     })
   }
+}
+
+App.key_events = () => {
+  let filter = DOM.el(`#filter`)
+
+  DOM.ev(document, `keydown`, (e) => {
+    if (App.filter_focused()) {
+      if (e.key === `Enter`) {
+        App.do_search()
+      }
+      else if (e.key === `Escape`) {
+        if (filter.value) {
+          filter.value = ``
+          App.do_filter()
+        }
+        else {
+          filter.blur()
+        }
+      }
+    }
+  })
+}
+
+App.click_events = () => {
+  DOM.ev(document, `click`, async (e) => {
+    let item = e.target.closest(`.item`)
+    App.active_item = item
+
+    if (e.target.classList.contains(`select_checkbox`)) {
+      App.on_checkbox_click(e)
+    }
+    else if (e.target.classList.contains(`admin_user`)) {
+      App.user_opts_user_id = item.dataset.user_id
+      App.msg_show(`user`)
+    }
+    else if (e.target.classList.contains(`mtype`)) {
+      let mtype = e.target.textContent
+      App.do_search(mtype)
+    }
+    else {
+      let header = e.target.closest(`.header_text`)
+
+      if (header) {
+        let sort = e.target.dataset.sort
+
+        if (sort) {
+          App.do_sort(sort)
+        }
+      }
+    }
+  })
+}
+
+App.setup_pages = () => {
+  let prev_page = DOM.el(`#prev_page`)
+
+  if (prev_page) {
+    DOM.ev(prev_page, `click`, () => {
+      if (App.page <= 1) {
+        return
+      }
+
+      App.goto_page(App.page - 1)
+    })
+  }
+
+  let next_page = DOM.el(`#next_page`)
+
+  if (next_page) {
+    DOM.ev(next_page, `click`, () => {
+      if (!App.next_page) {
+        return
+      }
+
+      App.goto_page(App.page + 1)
+    })
+  }
+}
+
+App.refresh = () => {
+  let ms = App.mode_string()
+  window.location = `/${ms}`
 }
