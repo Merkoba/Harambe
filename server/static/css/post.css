@@ -155,6 +155,7 @@ a.link:hover,
 #modal_image_container.expanded #modal_image {
     width: 100%;
     height: auto;
+    min-height: 100%;
     max-width: 100%;
     max-height: unset;
 }
