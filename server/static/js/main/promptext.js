@@ -32,6 +32,7 @@ class Promptext {
     input.rows = 5
     input.id = `prompt_input`
     input.type = `text`
+    input.spellcheck = true
     input.placeholder = args.placeholder
     input.value = args.value
 
