@@ -24,7 +24,7 @@
     <video id="video" preload="none" class="hidden" controls poster="/static/img/cover.jpg"></video>
     {% endif %}
 
-    <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return validate()">
+    <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return App.validate()">
         {% if is_user and upload_enabled %}
 
         <div id="toprow">

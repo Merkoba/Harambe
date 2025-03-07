@@ -10,6 +10,7 @@
 
         <script>
             const App = {}
+
             App.mode = {{mode | default(0) | tojson | safe}}
             App.is_user = {{is_user | default(0) | tojson}}
             App.is_admin = {{is_admin | default(0) | tojson}}

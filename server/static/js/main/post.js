@@ -231,7 +231,7 @@ App.delete_post = async () => {
 }
 
 App.update_date = () => {
-  let [str, level] = timeago(App.date_ms)
+  let [str, level] = App.timeago(App.date_ms)
 
   if (level > 1) {
     DOM.el(`#ago`).textContent = str

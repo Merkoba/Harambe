@@ -35,7 +35,7 @@ App.init = () => {
     let files = e.dataTransfer.files
 
     if (files && (files.length > 0)) {
-      let file = get_empty_picker()
+      let file = App.get_empty_picker()
       let dataTransfer = new DataTransfer()
       dataTransfer.items.add(files[0])
       file.files = dataTransfer.files
@@ -149,12 +149,12 @@ App.validate = () => {
     return false
   }
 
-  if (num_active_files() === 0) {
+  if (App.num_active_files() === 0) {
     App.file_trigger()
     return false
   }
 
-  if (!check_total_size()) {
+  if (!App.check_total_size()) {
     return false
   }
 
@@ -177,7 +177,7 @@ App.reflect_file = (file) => {
     title.focus()
   }
 
-  if (!check_total_size()) {
+  if (!App.check_total_size()) {
     App.reset_file(file)
     App.popmsg(`That file is too big`)
     return false
@@ -189,7 +189,7 @@ App.reflect_file = (file) => {
 
   let the_file = file.files[0]
 
-  if (is_image(the_file)) {
+  if (App.is_image(the_file)) {
     let reader = new FileReader()
 
     reader.onload = (e) => {
@@ -201,7 +201,7 @@ App.reflect_file = (file) => {
     reader.readAsDataURL(the_file)
     App.media_picker = file
   }
-  else if (is_audio(the_file) || is_video(the_file)) {
+  else if (App.is_audio(the_file) || App.is_video(the_file)) {
     video.src = URL.createObjectURL(the_file)
     DOM.hide(image)
     DOM.show(video)
@@ -235,7 +235,7 @@ App.reset_video = () => {
 
 App.add_picker = (show = true) => {
   if (App.num_pickers > 0) {
-    let empty = get_empty_picker()
+    let empty = App.get_empty_picker()
 
     if (empty.files.length === 0) {
       empty.click()
@@ -264,7 +264,7 @@ App.add_picker = (show = true) => {
       return
     }
 
-    if (reflect_file(input)) {
+    if (App.reflect_file(input)) {
       App.add_picker(false)
     }
 
@@ -317,7 +317,7 @@ App.check_compress = () => {
 }
 
 App.file_trigger = () => {
-  let file = get_empty_picker()
+  let file = App.get_empty_picker()
 
   if (file) {
     file.click()
