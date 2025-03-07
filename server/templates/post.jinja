@@ -6,26 +6,26 @@
 <link rel="stylesheet" href="/static/css/post.css">
 
 <script>
-    vars.mode = `post`
-    vars.post_id = {{post.id}}
-    vars.name = {{post.name | tojson | safe}}
-    vars.full = {{post.full | tojson | safe}}
-    vars.date = {{post.date}}
-    vars.title = {{post.title | tojson | safe}}
-    vars.original = {{post.original | tojson | safe}}
-    vars.original_full = {{post.original_full | tojson | safe}}
-    vars.mtype = {{post.mtype | tojson | safe}}
-    vars.file_path = {{file_path | tojson | safe}}
-    vars.can_react = {{can_react | tojson}}
-    vars.text_reaction_length = {{text_reaction_length}}
-    vars.post_refresh_interval = {{post_refresh_interval}}
-    vars.post_refresh_times = {{post_refresh_times}}
-    vars.image_embed = {{post.image_embed | tojson}}
-    vars.max_post_name_length = {{max_post_name_length | tojson}}
-    vars.max_reaction_name_length = {{max_reaction_name_length | tojson}}
-    vars.reactions = {{post.reactions | tojson}}
-    vars.sample = {{post.sample | tojson | safe}}
-    vars.uploader = {{post.uploader | tojson | safe}}
+    App.mode = `post`
+    App.post_id = {{post.id}}
+    App.name = {{post.name | tojson | safe}}
+    App.full = {{post.full | tojson | safe}}
+    App.date = {{post.date}}
+    App.title = {{post.title | tojson | safe}}
+    App.original = {{post.original | tojson | safe}}
+    App.original_full = {{post.original_full | tojson | safe}}
+    App.mtype = {{post.mtype | tojson | safe}}
+    App.file_path = {{file_path | tojson | safe}}
+    App.can_react = {{can_react | tojson}}
+    App.text_reaction_length = {{text_reaction_length}}
+    App.post_refresh_interval = {{post_refresh_interval}}
+    App.post_refresh_times = {{post_refresh_times}}
+    App.image_embed = {{post.image_embed | tojson}}
+    App.max_post_name_length = {{max_post_name_length | tojson}}
+    App.max_reaction_name_length = {{max_reaction_name_length | tojson}}
+    App.reactions = {{post.reactions | tojson}}
+    App.sample = {{post.sample | tojson | safe}}
+    App.uploader = {{post.uploader | tojson | safe}}
 </script>
 
 <script src="/static/ruffle/ruffle.js"></script>

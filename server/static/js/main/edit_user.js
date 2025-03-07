@@ -10,7 +10,7 @@ window.onload = () => {
   if (del) {
     DOM.ev(del, `click`, () => {
       let confirm_args = {
-        message: `Delete ${vars.username} ?`,
+        message: `Delete ${App.username} ?`,
         callback_yes: () => {
           delete_user()
         },
@@ -37,7 +37,7 @@ window.onload = () => {
 }
 
 async function delete_user() {
-  let username = vars.username
+  let username = App.username
 
   if (!username) {
     return
