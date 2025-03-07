@@ -311,41 +311,41 @@ App.regex_u = (c, n) => {
 }
 
 App.regex_t = (c, n) => {
-  let u = regex_u(c, n)
+  let u = App.regex_u(c, n)
   return `(?:(?!${u}|\\s).)`
 }
 
 App.regex_t2 = (c, n) => {
-  let u = regex_u(c, n)
+  let u = App.regex_u(c, n)
   return `(?:(?!${u}).)`
 }
 
 App.char_regex_1 = (char, n = 1) => {
-  let c = escape_regex(char)
-  let u = regex_u(c, n)
-  let t = regex_t(c, n)
-  let t2 = regex_t2(c, n)
+  let c = App.escape_regex(char)
+  let u = App.regex_u(c, n)
+  let t = App.regex_t(c, n)
+  let t2 = App.regex_t2(c, n)
   let regex = `${u}(${t}${t2}*${t}|${t})${u}`
   return new RegExp(regex, `g`)
 }
 
 App.char_regex_2 = (char, n = 1) => {
-  let c = escape_regex(char)
-  let u = regex_u(c, n)
-  let t = regex_t(c, n)
+  let c = App.escape_regex(char)
+  let u = App.regex_u(c, n)
+  let t = App.regex_t(c, n)
   let regex = `(?:^|\\s)${u}(${t}.*?${t}|${t})${u}(?:$|\\s)`
   return new RegExp(regex, `g`)
 }
 
 App.char_regex_3 = (char, n = 1) => {
-  let c = escape_regex(char)
-  let u = regex_u(c, n)
-  let t2 = regex_t2(c, n)
+  let c = App.escape_regex(char)
+  let u = App.regex_u(c, n)
+  let t2 = App.regex_t2(c, n)
   let regex = `${u}(${t2}+)${u}`
   return new RegExp(regex, `g`)
 }
 
-to_bold = (text) => {
+App.to_bold = (text) => {
   return `<span class='md_highlight'>${text}</span>`
 }
 
@@ -363,12 +363,12 @@ App.parse_markdown = (text) => {
     }
   }
 
-  action(char_regex_3(`\``), to_bold)
-  action(char_regex_3(`"`), to_bold, true)
-  action(char_regex_1(`*`, 2), to_bold)
-  action(char_regex_1(`*`), to_bold)
-  action(char_regex_2(`_`, 2), to_bold)
-  action(char_regex_2(`_`), to_bold)
+  action(App.char_regex_3(`\``), App.to_bold)
+  action(App.char_regex_3(`"`), App.to_bold, true)
+  action(App.char_regex_1(`*`, 2), App.to_bold)
+  action(App.char_regex_1(`*`), App.to_bold)
+  action(App.char_regex_2(`_`, 2), App.to_bold)
+  action(App.char_regex_2(`_`), App.to_bold)
   return text
 }
 
@@ -448,7 +448,7 @@ App.text_html = (text, markdown = true) => {
 
   // Markdown
   if (markdown) {
-    text = parse_markdown(text)
+    text = App.parse_markdown(text)
   }
 
   // Internal posts

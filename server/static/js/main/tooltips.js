@@ -7,7 +7,7 @@ class Tooltip {
       generate: () => {},
     }
 
-    fill_def_args(def_args, args)
+    App.fill_def_args(def_args, args)
     this.args = args
     this.tip = null
 

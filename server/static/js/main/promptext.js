@@ -11,7 +11,7 @@ class Promptext {
       password: false,
     }
 
-    fill_def_args(def_args, args)
+    App.fill_def_args(def_args, args)
 
     let msg = Msg.factory({
       persistent: false,

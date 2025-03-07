@@ -24,7 +24,7 @@ App.init = () => {
     App.setup_editpost_opts()
 
     DOM.ev(edit, `click`, () => {
-      edit_post()
+      App.edit_post()
     })
   }
 
@@ -108,7 +108,7 @@ App.timeago = (date) => {
     result = `just now`
     level = 1
   }
-  else if (diff < HOUR) {
+  else if (diff < App.HOUR) {
     let n = parseFloat((diff / App.MINUTE).toFixed(places))
 
     if (n === 1) {
@@ -203,7 +203,7 @@ App.edit_title = () => {
         DOM.el(`#title`).textContent = title || App.original
       }
       else {
-        print_error(response.status)
+        App.print_error(response.status)
       }
     },
   }
@@ -394,7 +394,7 @@ App.down_icons = () => {
 App.add_reaction = (reaction) => {
   let reactions = DOM.el(`#reactions`)
   DOM.show(reactions)
-  reactions.appendChild(make_reaction(reaction))
+  reactions.appendChild(App.make_reaction(reaction))
   App.check_reactions()
 }
 
@@ -415,7 +415,7 @@ App.make_reaction = (reaction) => {
   let r = reaction
   let vitem
   vitem = DOM.create(`div`, `reaction_content`)
-  vitem.innerHTML = text_html(r.value)
+  vitem.innerHTML = App.text_html(r.value)
 
   if (!vitem) {
     return
@@ -471,14 +471,14 @@ App.get_reaction = (id) => {
 
 App.react_prompt = (id) => {
   if (!App.can_react) {
-    react_alert()
+    App.react_alert()
     return
   }
 
   let value
 
   if (id) {
-    let r = get_reaction(id)
+    let r = App.get_reaction(id)
     value = r.dataset.value
   }
   else {
@@ -495,12 +495,12 @@ App.react_prompt = (id) => {
       }
 
       let n = App.text_reaction_length
-      text = remove_multiple_empty_lines(text)
-      text = replace_urls(text)
+      text = App.remove_multiple_empty_lines(text)
+      text = App.replace_urls(text)
       text = Array.from(text).slice(0, n).join(``).trim()
 
-      if (contains_url(text)) {
-        popmsg(`URLs are not allowed`, () => {
+      if (App.contains_url(text)) {
+        App.popmsg(`URLs are not allowed`, () => {
           if (Promptext.instance && Promptext.instance.msg.is_open()) {
             Promptext.instance.focus()
           }
@@ -583,7 +583,7 @@ App.edit_reaction = async (id, text) => {
 }
 
 App.modify_reaction = (reaction) => {
-  let item = get_reaction(reaction.id)
+  let item = App.get_reaction(reaction.id)
 
   if (!item) {
     return
@@ -751,7 +751,7 @@ App.fill_icons = async () => {
   }
 
   let json = await response.json()
-  let icons = shuffle_array(json.icons)
+  let icons = App.shuffle_array(json.icons)
 
   for (let icon of icons) {
     let item = DOM.create(`div`, `icon_item`)
@@ -907,13 +907,13 @@ App.keyboard_events = () => {
   DOM.ev(document, `keydown`, (e) => {
     if (e.key === `ArrowUp`) {
       if (e.ctrlKey && e.shiftKey) {
-        edit_post()
+        App.edit_post()
       }
     }
     else if (e.key === `ArrowDown`) {
       if (e.ctrlKey && !e.shiftKey) {
         if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
-          react_prompt()
+          App.react_prompt()
         }
       }
     }
