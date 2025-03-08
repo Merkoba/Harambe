@@ -92,7 +92,6 @@ a.link:hover,
     height: auto;
     max-height: 30rem;
     cursor: pointer;
-    margin-top: 0.45rem;
 }
 
 #image:hover {
@@ -358,6 +357,10 @@ a.link:hover,
     font-size: 1rem;
     max-height: 100%;
     padding: 0.5rem;
+}
+
+#flash_container {
+    margin-top: 0.45rem;
 }
 
 #flash.max {
