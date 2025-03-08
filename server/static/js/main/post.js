@@ -163,23 +163,16 @@ App.update_date = () => {
   DOM.el(`#date_2`).textContent = date_2
 }
 
-App.start_flash = () => {
-  let script = document.createElement(`script`)
-  script.src = `/static/ruffle/ruffle.js`
-
-  script.onload = () => {
-    App.print_info(`Flash is dead, long live Flash!`)
-    let ruffle = window.RufflePlayer.newest()
-    let player = ruffle.createPlayer()
-    player.id = `flash`
-    player.style.width = `800px`
-    player.style.height = `600px`
-    let container = DOM.el(`#flash_container`)
-    container.appendChild(player)
-    player.ruffle().load(`/${App.file_path}/${App.name}`)
-  }
-
-  document.head.appendChild(script)
+App.start_flash = async () => {
+  await App.load_script(`/static/ruffle/ruffle.js`)
+  let ruffle = window.RufflePlayer.newest()
+  let player = ruffle.createPlayer()
+  player.id = `flash`
+  player.style.width = `800px`
+  player.style.height = `600px`
+  let container = DOM.el(`#flash_container`)
+  container.appendChild(player)
+  player.ruffle().load(`/${App.file_path}/${App.name}`)
 }
 
 App.react_alert = () => {
@@ -807,9 +800,31 @@ App.guess_mode = () => {
   return `ace/mode/text`
 }
 
-App.start_editor = () => {
+App.load_script = (src) => {
+  App.print_info(`Loading script: ${src}`)
+
+  return new Promise((resolve, reject) => {
+    let script = document.createElement(`script`)
+    script.src = src
+    script.onload = resolve
+    script.onerror = reject
+    document.head.appendChild(script)
+  })
+}
+
+App.start_editor = async () => {
   if (!App.sample) {
     return
+  }
+
+  let scripts = [
+    `/static/ace/ace.js`,
+    `/static/ace/ext-modelist.js`,
+    `/static/ace/theme-tomorrow_night_eighties.js`,
+  ]
+
+  for (let src of scripts) {
+    await App.load_script(src)
   }
 
   ace.config.set(`basePath`, `/static/ace`)
@@ -851,20 +866,7 @@ App.keyboard_events = () => {
 App.start_embed = () => {
   if (App.mtype.startsWith(`text`)) {
     if (App.mtype === `text/markdown`) {
-      let view = DOM.el(`#markdown`)
-      let sample = view.textContent.trim()
-      App.original_markdown = sample
-
-      try {
-        let html = marked.parse(
-          sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
-        )
-
-        DOM.el(`#markdown`).innerHTML = html
-      }
-      catch (e) {
-        App.print_error(e)
-      }
+      App.start_markdown()
     }
     else {
       App.start_editor()
@@ -1045,5 +1047,23 @@ App.setup_refresh = () => {
         clearInterval(App.refresh_interval)
       }
     }, App.post_refresh_interval * 1000)
+  }
+}
+
+App.start_markdown = async () => {
+  await App.load_script(`/static/js/libs/marked.js`)
+  let view = DOM.el(`#markdown`)
+  let sample = view.textContent.trim()
+  App.original_markdown = sample
+
+  try {
+    let html = marked.parse(
+      sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
+    )
+
+    DOM.el(`#markdown`).innerHTML = html
+  }
+  catch (e) {
+    App.print_error(e)
   }
 }
