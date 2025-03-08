@@ -807,7 +807,7 @@ App.show_loading = (close = true) => {
 
   App.msg_loading = Msg.factory({
     preset: `popup`,
-    position: `bottomright`,
+    position: `top`,
     class: `black`,
   })
 
