@@ -818,7 +818,7 @@ App.show_loading = (close = true) => {
 App.location = (where) => {
   setTimeout(() => {
     App.show_loading()
-  }, 1000)
+  }, 800)
 
   window.location = where
 }
