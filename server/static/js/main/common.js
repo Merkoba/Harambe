@@ -1,4 +1,5 @@
-App.MINUTE = 60000
+App.SECOND = 1000
+App.MINUTE = App.SECOND * 60
 App.HOUR = App.MINUTE * 60
 App.DAY = App.HOUR * 24
 App.MONTH = App.DAY * 30
