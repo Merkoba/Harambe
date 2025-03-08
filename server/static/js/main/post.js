@@ -886,13 +886,6 @@ App.start_embed = () => {
     })
   }
 
-  let video = DOM.el(`#video`)
-
-  if (video) {
-    video.muted = true
-    video.play()
-  }
-
   let max_video = DOM.el(`#max_video`)
 
   if (max_video) {
