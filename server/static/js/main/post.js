@@ -164,14 +164,22 @@ App.update_date = () => {
 }
 
 App.start_flash = () => {
-  let ruffle = window.RufflePlayer.newest()
-  let player = ruffle.createPlayer()
-  player.id = `flash`
-  player.style.width = `800px`
-  player.style.height = `600px`
-  let container = DOM.el(`#flash_container`)
-  container.appendChild(player)
-  player.ruffle().load(`/${App.file_path}/${App.name}`)
+  let script = document.createElement(`script`)
+  script.src = `/static/ruffle/ruffle.js`
+
+  script.onload = () => {
+    App.print_info(`Flash is dead, long live Flash!`)
+    let ruffle = window.RufflePlayer.newest()
+    let player = ruffle.createPlayer()
+    player.id = `flash`
+    player.style.width = `800px`
+    player.style.height = `600px`
+    let container = DOM.el(`#flash_container`)
+    container.appendChild(player)
+    player.ruffle().load(`/${App.file_path}/${App.name}`)
+  }
+
+  document.head.appendChild(script)
 }
 
 App.react_alert = () => {
