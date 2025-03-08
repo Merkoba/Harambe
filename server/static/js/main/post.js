@@ -1,9 +1,3 @@
-App.MINUTE = 60000
-App.HOUR = App.MINUTE * 60
-App.DAY = App.HOUR * 24
-App.MONTH = App.DAY * 30
-App.YEAR = App.DAY * 365
-
 window.onload = function() {
   App.init()
 }
@@ -96,80 +90,6 @@ App.init = () => {
 
   App.setup_reactions()
   App.keyboard_events()
-}
-
-App.timeago = (date) => {
-  let level = 0
-  let diff = Date.now() - date
-  let places = 1
-  let result
-
-  if (diff < App.MINUTE) {
-    result = `just now`
-    level = 1
-  }
-  else if (diff < App.HOUR) {
-    let n = parseFloat((diff / App.MINUTE).toFixed(places))
-
-    if (n === 1) {
-      result = `${n} min ago`
-    }
-    else {
-      result = `${n} mins ago`
-    }
-
-    level = 2
-  }
-  else if ((diff >= App.HOUR) && (diff < App.DAY)) {
-    let n = parseFloat(diff / App.HOUR).toFixed(places)
-
-    if (n === 1) {
-      result = `${n} hr ago`
-    }
-    else {
-      result = `${n} hrs ago`
-    }
-
-    level = 3
-  }
-  else if ((diff >= App.DAY) && (diff < App.MONTH)) {
-    let n = parseFloat(diff / App.DAY).toFixed(places)
-
-    if (n === 1) {
-      result = `${n} day ago`
-    }
-    else {
-      result = `${n} days ago`
-    }
-
-    level = 4
-  }
-  else if ((diff >= App.MONTH) && (diff < App.YEAR)) {
-    let n = parseFloat(diff / App.MONTH).toFixed(places)
-
-    if (n === 1) {
-      result = `${n} month ago`
-    }
-    else {
-      result = `${n} months ago`
-    }
-
-    level = 5
-  }
-  else if (diff >= App.YEAR) {
-    let n = parseFloat(diff / App.YEAR).toFixed(places)
-
-    if (n === 1) {
-      result = `${n} year ago`
-    }
-    else {
-      result = `${n} years ago`
-    }
-
-    level = 6
-  }
-
-  return [result, level]
 }
 
 App.edit_title = () => {
