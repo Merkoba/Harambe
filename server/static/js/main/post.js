@@ -891,7 +891,6 @@ App.start_embed = () => {
   if (video) {
     video.muted = true
     video.play()
-    video.muted = false
   }
 
   let max_video = DOM.el(`#max_video`)
