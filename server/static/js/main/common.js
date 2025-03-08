@@ -810,6 +810,7 @@ App.show_loading = (close = true) => {
 
   if (App.msg_loading) {
     App.msg_loading.show()
+    return
   }
 
   App.msg_loading = Msg.factory({
