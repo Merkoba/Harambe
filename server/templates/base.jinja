@@ -43,7 +43,7 @@
             App.mtype = {{post.mtype | default(0) | tojson | safe}}
             App.image_embed = {{post.image_embed | default(0) | tojson}}
             App.reactions = {{post.reactions | default(0) | tojson}}
-            App.sample = {{post.sample | default(0) | tojson | safe}}
+            App.text = {{post.text | default(0) | tojson | safe}}
             App.uploader = {{post.uploader | default(0) | tojson | safe}}
             {% endif %}
 

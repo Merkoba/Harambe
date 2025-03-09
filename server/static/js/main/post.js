@@ -813,7 +813,7 @@ App.load_script = (src) => {
 }
 
 App.start_editor = async () => {
-  if (!App.sample) {
+  if (!App.text) {
     return
   }
 
@@ -830,9 +830,9 @@ App.start_editor = async () => {
   ace.config.set(`basePath`, `/static/ace`)
   App.editor = ace.edit(`editor`)
   App.editor.setTheme(`ace/theme/tomorrow_night_eighties`)
-  let mode = App.guess_mode(App.sample)
+  let mode = App.guess_mode(App.text)
   App.editor.session.setMode(mode)
-  App.editor.session.setValue(App.sample, -1)
+  App.editor.session.setValue(App.text, -1)
   App.editor.setReadOnly(true)
   App.editor.setShowPrintMargin(false)
 
@@ -1045,12 +1045,12 @@ App.setup_refresh = () => {
 App.start_markdown = async () => {
   await App.load_script(`/static/js/libs/marked.js`)
   let view = DOM.el(`#markdown`)
-  let sample = view.textContent.trim()
-  App.original_markdown = sample
+  let text = view.textContent.trim()
+  App.original_markdown = text
 
   try {
     let html = marked.parse(
-      sample.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
+      text.replace(/[\u200B-\u200F\uFEFF]/g, ``).trim(),
     )
 
     DOM.el(`#markdown`).innerHTML = html

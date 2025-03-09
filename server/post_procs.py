@@ -54,6 +54,7 @@ class Post:
     zip_embed: bool
     last_reaction: str
     file_hash: str
+    text: str
 
 
 def get_full_name(dbpost: DbPost) -> str:
@@ -123,14 +124,25 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         mtype.startswith("application/") and ("flash" in mtype) and embed_size("flash")
     )
 
-    text_embed = mtype.startswith("text/") and embed_size("text")
+    text_embed = False
+    markdown_embed = False
 
-    markdown_embed = (
-        mtype.startswith("text/") and ("markdown" in mtype) and embed_size("markdown")
-    )
+    if mtype.startswith("text/"):
+        text_embed = embed_size("text")
+        markdown_embed = ("markdown" in mtype) and embed_size("markdown")
 
     zip_embed = mtype.startswith("application/") and ("zip" in mtype)
     file_hash = post.file_hash
+    text = ""
+
+    if all_data and (text_embed or markdown_embed or zip_embed):
+        try:
+            txt_file = utils.samples_dir() / Path(f"{name}.txt")
+
+            if txt_file.exists() and txt_file.is_file():
+                text = txt_file.open("r").read()
+        except:
+            text = ""
 
     return Post(
         post.id,
@@ -169,6 +181,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         zip_embed,
         last_reaction,
         file_hash,
+        text,
     )
 
 
