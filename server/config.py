@@ -75,6 +75,10 @@ class Config:
         # It can be outside the project folder
         self.files_dir: str = "files"
 
+        # The location for video thumbnail files
+        # It can be outside the project folder
+        self.thumbs_dir: str = "thumbs"
+
         # Default max size for users
         # You can admin them per case later
         # Low value in case public reigster is on
@@ -310,6 +314,7 @@ class Config:
 
             set_value(c, "app_key")
             set_value(c, "files_dir")
+            set_value(c, "thumbs_dir")
             set_value(c, "max_size_user")
             set_value(c, "redis_port")
             set_value(c, "uppercase_names")

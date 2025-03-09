@@ -388,7 +388,7 @@ def random_post() -> Any:
     return over()
 
 
-# FILE
+# FILES
 
 
 @app.route(f"/{config.file_path}/<path:name>", methods=["GET"])  # type: ignore
@@ -414,8 +414,26 @@ def get_file(name: str, original: str | None = None) -> Any:
     if not post:
         return over()
 
-    fd = utils.files_dir()
-    return send_file(fd / post.full, download_name=original, max_age=config.max_age)
+    rootdir = utils.files_dir()
+    return send_file(
+        rootdir / post.full, download_name=original, max_age=config.max_age
+    )
+
+
+@app.route("/thumb/<path:name>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def get_thumb(name: str, original: str | None = None) -> Any:
+    if not config.allow_hotlinks:
+        referrer = request.referrer
+        host = request.host_url
+
+        if (not referrer) or (not referrer.startswith(host)):
+            abort(403)
+
+    rootdir = utils.thumbs_dir()
+    file = f"{name}.jpg"
+    return send_file(rootdir / file, max_age=config.max_age)
 
 
 # ADMIN

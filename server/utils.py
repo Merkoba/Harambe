@@ -98,6 +98,10 @@ def files_dir() -> Path:
     return Path(config.files_dir)
 
 
+def thumbs_dir() -> Path:
+    return Path(config.thumbs_dir)
+
+
 def log(s: str) -> None:
     print(s)  # noqa
 

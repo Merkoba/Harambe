@@ -803,31 +803,7 @@ App.msg_show = (what) => {
   }
 }
 
-App.show_loading = (close = true) => {
-  if (close) {
-    App.close_all_modals()
-  }
-
-  if (App.msg_loading) {
-    App.msg_loading.show()
-    return
-  }
-
-  App.msg_loading = Msg.factory({
-    preset: `popup`,
-    position: `bottom`,
-    class: `black`,
-  })
-
-  App.msg_loading.set(`⏳ Cursus Viarum`)
-  App.msg_loading.show()
-}
-
 App.location = (where) => {
-  setTimeout(() => {
-    App.show_loading()
-  }, App.SECOND)
-
   window.location = where
 }
 

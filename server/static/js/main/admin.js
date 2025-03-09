@@ -424,7 +424,7 @@ App.delete_users = () => {
       let users = []
 
       for (let user of App.selected_items) {
-        users.push(user.dataset.user_id)
+        users.push(parseInt(user.dataset.user_id))
       }
 
       App.delete_selected_users(users)
@@ -836,27 +836,27 @@ App.setup_edit = () => {
     })
 
     DOM.ev(`#edit_rpm`, `click`, () => {
-      App.user_mod_input(`rpm`, `number`)
+      App.user_mod_input(`rpm`, ``, `number`)
     })
 
     DOM.ev(`#edit_max_size`, `click`, () => {
-      App.user_mod_input(`max_size`, `number`)
+      App.user_mod_input(`max_size`, ``, `number`)
     })
 
     DOM.ev(`#edit_mark`, `click`, () => {
-      App.user_mod_input(`mark`, `string`)
+      App.user_mod_input(`mark`, ``, `string`)
     })
 
     DOM.ev(`#edit_name`, `click`, () => {
-      App.user_mod_input(`name`, `string`)
+      App.user_mod_input(`name`, ``, `string`)
     })
 
     DOM.ev(`#edit_username`, `click`, () => {
-      App.user_mod_input(`username`, `string`)
+      App.user_mod_input(`username`, ``, `string`)
     })
 
     DOM.ev(`#edit_password`, `click`, () => {
-      App.user_mod_input(`password`, `password`)
+      App.user_mod_input(`password`, ``, `password`)
     })
 
     DOM.ev(edit, `click`, () => {

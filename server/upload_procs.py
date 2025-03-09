@@ -4,6 +4,7 @@ from __future__ import annotations
 import zipfile
 import hashlib
 import mimetypes
+import subprocess
 from typing import Any
 from pathlib import Path
 from io import BytesIO
@@ -174,6 +175,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     if mtype.startswith("text"):
         sample = content[: config.sample_size].decode("utf-8", errors="ignore").strip()
+    elif mtype.startswith("video"):
+        get_thumbnail(path)
 
     database.add_post(
         user_id=user.id,
@@ -212,3 +215,53 @@ def api_upload(request: Request) -> tuple[bool, str]:
         return error("Invalid username or password")
 
     return upload(request, user, "cli")
+
+
+def get_thumbnail(path: Path) -> None:
+    thumb_name = f"{path.stem}.jpg"
+    thumb_path = utils.thumbs_dir() / Path(thumb_name)
+
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe",
+                "-v",
+                "error",
+                "-show_entries",
+                "format=duration",
+                "-of",
+                "default=noprint_wrappers=1:nokey=1",
+                path,
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        duration = float(result.stdout.strip())
+        middle_point = duration / 2
+        time_str = str(middle_point)
+
+        subprocess.run(
+            [
+                "ffmpeg",
+                "-y",
+                "-ss",
+                time_str,
+                "-i",
+                str(path),
+                "-vframes",
+                "1",
+                "-vf",
+                "scale=1600:1200:force_original_aspect_ratio=decrease,pad=1600:1200:(1600-iw)/2:(1200-ih)/2:color=black",
+                "-q:v",
+                "2",  # JPEG quality (2-31, lower is better quality)
+                "-an",
+                "-threads",
+                "0",
+                thumb_path,
+            ],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        utils.error(e)

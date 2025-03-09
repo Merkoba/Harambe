@@ -30,14 +30,16 @@ body, html {
     padding-bottom: 0.12rem;
     flex-grow: 1;
     flex-shrink: 1;
-    border-color: var(--frame_color);
+    border-color: transparent;
     border-width: 1px;
+    border-style: solid;
 }
 
 #buttons button:hover {
     cursor: pointer;
     background-color: var(--accent_color);
     filter: brightness(0.95);
+    border-color: var(--button_border);
 }
 
 input[type="text"] {

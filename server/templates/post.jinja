@@ -119,7 +119,7 @@
 
     {% if post.video_embed or post.audio_embed %}
     <div class="embed">
-        <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none" poster="/static/img/cover.jpg"></video>
+        <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none" poster="/thumb/{{post.name}}"></video>
     </div>
     {% endif %}
 

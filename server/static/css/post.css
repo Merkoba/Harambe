@@ -104,6 +104,7 @@ a.link:hover,
     height: auto;
     background-color: black;
     margin-top: 0.45rem;
+    max-height: 35rem;
 }
 
 #video.max {
