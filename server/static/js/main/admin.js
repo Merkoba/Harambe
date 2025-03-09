@@ -111,6 +111,8 @@ App.init = () => {
       App.clear_filter()
     })
   }
+
+  App.setup_thumbnail()
 }
 
 App.goto_page = (page) => {
@@ -986,6 +988,18 @@ App.refresh = () => {
   App.location(`/${ms}`)
 }
 
+App.setup_thumbnail = () => {
+  let thumb = DOM.el(`#thumbnail`)
+
+  if (thumb) {
+    DOM.ev(thumb, `load`, () => {
+      if (App.thumbnail_active) {
+        DOM.show(`#thumbnail_container`)
+      }
+    })
+  }
+}
+
 App.show_thumbnail = (name) => {
   if (App.thumbnail_active) {
     return
@@ -997,9 +1011,8 @@ App.show_thumbnail = (name) => {
     return
   }
 
-  thumb.src = `/thumb/${name}`
-  DOM.show(`#thumbnail_container`)
   App.thumbnail_active = true
+  thumb.src = `/thumb/${name}`
 }
 
 App.hide_thumbnail = () => {
@@ -1007,6 +1020,9 @@ App.hide_thumbnail = () => {
     return
   }
 
-  DOM.hide(`#thumbnail_container`)
+  let thumb = DOM.el(`#thumbnail`)
+  thumb.src = ``
+
   App.thumbnail_active = false
+  DOM.hide(`#thumbnail_container`)
 }
