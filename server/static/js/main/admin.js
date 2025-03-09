@@ -8,7 +8,7 @@ App.init = () => {
   App.thumbnail_active = false
 
   App.key_events()
-  App.click_events()
+  App.pointer_events()
 
   let refresh_btn = DOM.el(`#refresh`)
 
@@ -911,25 +911,9 @@ App.key_events = () => {
       }
     }
   })
-
-  DOM.ev(`#items`, `mouseover`, (e) => {
-    if (e.target.classList.contains(`post_name`)) {
-      let item = e.target.closest(`.item`)
-      let post = item.dataset.post
-      let mtype = item.dataset.mtype
-
-      if ([`image/`, `video/`].some(x => mtype.startsWith(x))) {
-        App.show_thumbnail(post)
-      }
-    }
-  })
-
-  DOM.ev(`#items`, `mouseout`, (e) => {
-    App.hide_thumbnail()
-  })
 }
 
-App.click_events = () => {
+App.pointer_events = () => {
   DOM.ev(document, `click`, async (e) => {
     let item = e.target.closest(`.item`)
     App.active_item = item
@@ -945,6 +929,9 @@ App.click_events = () => {
       let mtype = e.target.textContent
       App.do_search(mtype)
     }
+    else if (e.target.classList.contains(`sample`)) {
+      App.show_sample(item)
+    }
     else {
       let header = e.target.closest(`.header_text`)
 
@@ -955,6 +942,19 @@ App.click_events = () => {
           App.do_sort(sort)
         }
       }
+    }
+  })
+
+  DOM.ev(`#items`, `mouseout`, (e) => {
+    App.hide_thumbnail()
+    App.hide_text()
+    App.stop_audio()
+  })
+
+  DOM.ev(`#items`, `wheel`, (e) => {
+    if (e.target.classList.contains(`sample`)) {
+      let direction = e.deltaY > 0 ? `down` : `up`
+      App.scroll_text(direction)
     }
   })
 }
@@ -1027,4 +1027,84 @@ App.hide_thumbnail = () => {
 
   App.thumbnail_active = false
   DOM.hide(`#thumbnail_container`)
+}
+
+App.play_audio = (name) => {
+  let audio = DOM.el(`#audio`)
+
+  if (!audio) {
+    return
+  }
+
+  audio.pause()
+  audio.src = `/sample/${name}.mp3`
+  audio.currentTime = 0
+  audio.play()
+}
+
+App.stop_audio = () => {
+  let audio = DOM.el(`#audio`)
+
+  if (audio) {
+    audio.pause()
+  }
+}
+
+App.show_text = async (name) => {
+  let file = `/sample/${name}.txt`
+
+  try {
+    let response = await fetch(file)
+
+    if (response.ok) {
+      let text = await response.text()
+      let text_el = DOM.el(`#text`)
+
+      if (text_el) {
+        text_el.textContent = text
+      }
+
+      DOM.show(`#text_container`)
+    }
+    else {
+      App.print_error(response.status)
+    }
+  }
+  catch (error) {
+    App.print_error(error)
+  }
+}
+
+App.hide_text = () => {
+  DOM.hide(`#text_container`)
+}
+
+App.show_sample = (item) => {
+  let name = item.dataset.post
+  let mtype = item.dataset.mtype
+
+  if ([`image/`, `video/`].some(x => mtype.startsWith(x))) {
+    App.show_thumbnail(name)
+  }
+  else if ([`audio/`].some(x => mtype.startsWith(x))) {
+    App.play_audio(name)
+  }
+  else if ([`text/`].some(x => mtype.startsWith(x))) {
+    App.show_text(name)
+  }
+}
+
+App.scroll_text = (direction) => {
+  let text = DOM.el(`#text_container`)
+
+  if (!text) {
+    return
+  }
+
+  if (direction === `up`) {
+    text.scrollTop -= 20
+  }
+  else {
+    text.scrollTop += 20
+  }
 }

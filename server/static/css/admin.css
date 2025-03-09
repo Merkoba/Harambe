@@ -147,3 +147,36 @@ select {
     height: 100%;
     object-fit: contain;
 }
+
+.sample {
+    cursor: pointer;
+    display: inline;
+    user-select: none;
+}
+
+.sample:hover {
+    opacity: 0.7;
+}
+
+#text_container {
+    background-color: black;
+    width: 600px;
+    height: 450px;
+    max-height: 100%;
+    overflow: auto;
+    max-width: 60%;
+    position: fixed;
+    z-index: 999;
+    right: 0;
+    top: 0;
+}
+
+#text {
+    position: relative;
+    width: 100%;
+    color: rgb(39, 255, 100);
+    font-family: monospace;
+    font-size: 1rem;
+    white-space: pre-wrap;
+    padding: 0.35rem;
+}

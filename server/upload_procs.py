@@ -310,7 +310,7 @@ def get_image_sample(path: Path) -> None:
 def get_audio_sample(path: Path) -> None:
     sample_name = f"{path.stem}.jpg"
     sample_path = utils.samples_dir() / Path(sample_name)
-    sample_name = f"{path.stem}_sample.mp3"
+    sample_name = f"{path.stem}.mp3"
     sample_path = utils.samples_dir() / Path(sample_name)
 
     try:

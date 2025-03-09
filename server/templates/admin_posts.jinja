@@ -21,6 +21,12 @@
     <img id="thumbnail">
 </div>
 
+<div id="text_container" class="hidden">
+    <div id="text"></div>
+</div>
+
+<audio id="audio"></audio>
+
 <div id="top" class="nowrap">
     <div id="menu" class="action_button" title="Ctrl+M">Menu</div>
     <div class="sep">|</div>
@@ -69,6 +75,10 @@
             {% if mode == "admin_posts" %}
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
             {% endif %}
+
+            <div id="name" class="table_cell small" title="Show the sample of the item">
+                <div class="header_text" data-sort="name">Play</div>
+            </div>
 
             <div id="name" class="table_cell" title="The name or id of the post">
                 <div class="header_text" data-sort="name">Name</div>
@@ -128,6 +138,11 @@
                 <input class="select_checkbox" type="checkbox">
             </div>
             {% endif %}
+
+            <!-- Sample -->
+            <div class="table_cell small">
+                <div class="sample">🔊</div>
+            </div>
 
             <!-- Name -->
             <div class="table_cell">
