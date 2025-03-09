@@ -116,7 +116,7 @@
         </div>
 
         {% for item in items %}
-        <div class="table_row item" data-name="{{item.name}}"
+        <div class="table_row item" data-post="{{item.name}}"
         data-ext="{{item.ext}}" data-size="{{item.size}}" data-user_id="{{item.user_id}}"
         data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-post_id="{{item.id}}"
         data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}"
@@ -131,7 +131,7 @@
 
             <!-- Name -->
             <div class="table_cell">
-                <a href="/post/{{item.name}}" title="{{item.show}}" class="post_name" data-name="{{item.name}}">{{item.show}}</a>
+                <a href="/post/{{item.name}}" title="{{item.show}}" class="post_name">{{item.show}}</a>
             </div>
 
             <!-- Type -->

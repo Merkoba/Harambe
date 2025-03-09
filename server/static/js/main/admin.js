@@ -603,7 +603,7 @@ App.do_filter = () => {
   let value = clean(filter.value.toLowerCase())
 
   for (let item of items) {
-    let name = item.dataset.name
+    let post = item.dataset.post
     let ago = item.dataset.ago
     let date = item.dataset.date
     let size = item.dataset.size_str
@@ -629,7 +629,7 @@ App.do_filter = () => {
     let show = item.dataset.show
 
     let opts = [
-      name, ago, date, size, title, original, uploader, views,
+      post, ago, date, size, title, original, uploader, views,
       listed, mtype, uname, ext, username, rpm, max_size, mark, show,
       reg_date, last_date, admin, list, value_, num_posts, num_reactions,
     ]
@@ -914,10 +914,12 @@ App.key_events = () => {
 
   DOM.ev(`#items`, `mouseover`, (e) => {
     if (e.target.classList.contains(`post_name`)) {
-      let name = e.target.dataset.name
+      let item = e.target.closest(`.item`)
+      let post = item.dataset.post
+      let mtype = item.dataset.mtype
 
-      if (name) {
-        App.show_thumbnail(name)
+      if (mtype.startsWith(`video/`)) {
+        App.show_thumbnail(post)
       }
     }
   })
