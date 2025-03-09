@@ -169,6 +169,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "font_size": config.font_size,
         "admin_font_size": config.admin_font_size,
         "links": config.links,
+        "file_path": config.file_path,
     }
 
 
@@ -327,7 +328,6 @@ def post(name: str) -> Any:
         mode="post",
         post=post,
         owned=owned,
-        file_path=config.file_path,
         description=config.description_post,
         reactions_enabled=config.reactions_enabled,
         text_reaction_length=config.text_reaction_length,

@@ -90,6 +90,7 @@ a.link:hover,
 #image {
     max-width: 60%;
     height: auto;
+    margin-top: 0.45rem;
     max-height: 30rem;
     cursor: pointer;
 }
