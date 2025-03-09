@@ -283,6 +283,9 @@ class Config:
         # Show the compress checkbox in the web interface
         self.show_compress = True
 
+        # Generate and use thumbnails
+        self.thumbs_enabled = True
+
         # Width of thumbnails
         self.thumb_width = 1920
 
@@ -388,6 +391,7 @@ class Config:
             set_value(c, "allow_same_hash")
             set_value(c, "max_upload_files")
             set_value(c, "show_compress")
+            set_value(c, "thumbs_enabled")
             set_value(c, "thumb_width")
             set_value(c, "thumb_height")
             set_value(c, "thumb_color")

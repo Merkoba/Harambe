@@ -176,7 +176,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if mtype.startswith("text"):
         sample = content[: config.sample_size].decode("utf-8", errors="ignore").strip()
     elif mtype.startswith("video"):
-        get_thumbnail(path)
+        if config.thumbs_enabled:
+            get_thumbnail(path)
 
     database.add_post(
         user_id=user.id,

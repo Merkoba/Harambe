@@ -201,3 +201,13 @@ There are some global shortcuts:
 `Ctrl+Shift+Up`: Edit a post.
 
 `Ctrl+Down`: React to a post.
+
+## Thumbnails
+
+When a video is uploaded, 1 frame is exctrated as the the thumbnail.
+
+It it is a random frame near the middle.
+
+The width, height, and background of the thumbnails can be configured.
+
+This is used for the post in videos and for the lists.
