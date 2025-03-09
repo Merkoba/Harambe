@@ -295,6 +295,10 @@ class Config:
         # Background color for thumbnails
         self.thumb_color = "black"
 
+        # Compression quality for the jpg images
+        # 2-31, lower is better quality
+        self.thumb_quality = 6
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -395,6 +399,7 @@ class Config:
             set_value(c, "thumb_width")
             set_value(c, "thumb_height")
             set_value(c, "thumb_color")
+            set_value(c, "thumb_quality")
 
             # Users
 

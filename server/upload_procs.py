@@ -249,6 +249,7 @@ def get_video_thumbnail(path: Path) -> None:
         th = config.thumb_height
         tc = config.thumb_color = "black"
         scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
+        quality = str(config.thumb_quality)
 
         subprocess.run(
             [
@@ -263,7 +264,7 @@ def get_video_thumbnail(path: Path) -> None:
                 "-vf",
                 scale,
                 "-q:v",
-                "2",  # (2-31, lower is better quality)
+                quality,
                 "-an",
                 "-threads",
                 "0",
@@ -284,6 +285,7 @@ def get_image_thumbnail(path: Path) -> None:
         th = config.thumb_height
         tc = config.thumb_color or "black"
         scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
+        quality = str(config.thumb_quality)
 
         subprocess.run(
             [
@@ -294,7 +296,7 @@ def get_image_thumbnail(path: Path) -> None:
                 "-vf",
                 scale,
                 "-q:v",
-                "2",  # (2-31, lower is better quality)
+                quality,
                 "-threads",
                 "0",
                 thumb_path,
