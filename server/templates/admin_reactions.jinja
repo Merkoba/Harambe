@@ -7,6 +7,10 @@
 {% endblock %}
 
 {% block body %}
+<div id="thumbnail_container" class="hidden">
+    <img id="thumbnail">
+</div>
+
 <div id="top" class="nowrap">
     <div id="menu" class="action_button" title="Ctrl+M">Menu</div>
     <div class="sep">|</div>
@@ -87,7 +91,7 @@
 
             <!-- Post -->
             <div class="table_cell">
-                <a href="/post/{{item.pname}}" title="{{item.pshow}}">{{item.pshow}}</a>
+                <a href="/post/{{item.pname}}" title="{{item.pshow}}" data-name="{{item.pname}}" class="post_name">{{item.pshow}}</a>
             </div>
 
             <!-- Value -->

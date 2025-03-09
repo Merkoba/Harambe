@@ -129,3 +129,21 @@ select {
     justify-content: center;
     gap: 0.5rem;
 }
+
+#thumbnail_container {
+    background-color: black;
+    width: 600px;
+    height: 450px;
+    max-width: 60%;
+    position: fixed;
+    z-index: 999;
+    right: 0;
+    top: 0;
+}
+
+#thumbnail {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

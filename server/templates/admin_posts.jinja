@@ -17,6 +17,10 @@
     </div>
 </template>
 
+<div id="thumbnail_container" class="hidden">
+    <img id="thumbnail">
+</div>
+
 <div id="top" class="nowrap">
     <div id="menu" class="action_button" title="Ctrl+M">Menu</div>
     <div class="sep">|</div>
@@ -127,7 +131,7 @@
 
             <!-- Name -->
             <div class="table_cell">
-                <a href="/post/{{item.name}}" title="{{item.show}}">{{item.show}}</a>
+                <a href="/post/{{item.name}}" title="{{item.show}}" class="post_name" data-name="{{item.name}}">{{item.show}}</a>
             </div>
 
             <!-- Type -->

@@ -5,6 +5,7 @@ window.onload = () => {
 App.init = () => {
   App.selected_items = []
   App.last_checkbox = null
+  App.thumbnail_active = false
 
   App.key_events()
   App.click_events()
@@ -908,6 +909,20 @@ App.key_events = () => {
       }
     }
   })
+
+  DOM.ev(`#items`, `mouseover`, (e) => {
+    if (e.target.classList.contains(`post_name`)) {
+      let name = e.target.dataset.name
+
+      if (name) {
+        App.show_thumbnail(name)
+      }
+    }
+  })
+
+  DOM.ev(`#items`, `mouseout`, (e) => {
+    App.hide_thumbnail()
+  })
 }
 
 App.click_events = () => {
@@ -969,4 +984,29 @@ App.setup_pages = () => {
 App.refresh = () => {
   let ms = App.mode_string()
   App.location(`/${ms}`)
+}
+
+App.show_thumbnail = (name) => {
+  if (App.thumbnail_active) {
+    return
+  }
+
+  let thumb = DOM.el(`#thumbnail`)
+
+  if (!thumb) {
+    return
+  }
+
+  thumb.src = `/thumb/${name}`
+  DOM.show(`#thumbnail_container`)
+  App.thumbnail_active = true
+}
+
+App.hide_thumbnail = () => {
+  if (!App.thumbnail_active) {
+    return
+  }
+
+  DOM.hide(`#thumbnail_container`)
+  App.thumbnail_active = false
 }
