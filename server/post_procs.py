@@ -412,10 +412,11 @@ def do_delete_post(post: Post) -> None:
     database.delete_post(post.id)
     file_name = post.full
     try_delete_file(file_name)
+    try_delete_file(f"{post.name}.jpg", "thumb")
 
 
 # Be extra careful with this function!
-def try_delete_file(file_name: str) -> None:
+def try_delete_file(file_name: str, kind: str = "file") -> None:
     if not file_name:
         return
 
@@ -425,12 +426,17 @@ def try_delete_file(file_name: str) -> None:
     if not utils.valid_file_name(file_name):
         return
 
-    fd = utils.files_dir()
-
-    if not utils.check_dir(str(fd)):
+    if kind == "file":
+        rootdir = utils.files_dir()
+    elif kind == "thumb":
+        rootdir = utils.thumbs_dir()
+    else:
         return
 
-    path = fd / file_name
+    if not utils.check_dir(str(rootdir)):
+        return
+
+    path = rootdir / file_name
     file = Path(path)
 
     if file.exists() and file.is_file():
@@ -450,9 +456,10 @@ def delete_all_files() -> None:
     if not utils.check_dir(str(fd)):
         return
 
-    for root, _, filenames in os.walk(fd):
+    for _, _, filenames in os.walk(fd):
         for name in filenames:
             try_delete_file(name)
+            try_delete_file(f"{name}.jpg", "thumb")
 
 
 # Remove old files if limits are exceeded

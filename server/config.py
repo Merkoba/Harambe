@@ -283,6 +283,15 @@ class Config:
         # Show the compress checkbox in the web interface
         self.show_compress = True
 
+        # Width of thumbnails
+        self.thumb_width = 1920
+
+        # Height of thumbnails
+        self.thumb_height = 1080
+
+        # Background color for thumbnails
+        self.thumb_color = "black"
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -379,6 +388,9 @@ class Config:
             set_value(c, "allow_same_hash")
             set_value(c, "max_upload_files")
             set_value(c, "show_compress")
+            set_value(c, "thumb_width")
+            set_value(c, "thumb_height")
+            set_value(c, "thumb_color")
 
             # Users
 

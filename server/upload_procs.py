@@ -241,6 +241,10 @@ def get_thumbnail(path: Path) -> None:
         duration = float(result.stdout.strip())
         middle_point = duration / 2
         time_str = str(middle_point)
+        tw = config.thumb_width
+        th = config.thumb_height
+        tc = config.thumb_color = "black"
+        scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
 
         subprocess.run(
             [
@@ -253,9 +257,9 @@ def get_thumbnail(path: Path) -> None:
                 "-vframes",
                 "1",
                 "-vf",
-                "scale=1600:1200:force_original_aspect_ratio=decrease,pad=1600:1200:(1600-iw)/2:(1200-ih)/2:color=black",
+                scale,
                 "-q:v",
-                "2",  # JPEG quality (2-31, lower is better quality)
+                "2",  # (2-31, lower is better quality)
                 "-an",
                 "-threads",
                 "0",
