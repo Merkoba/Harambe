@@ -75,9 +75,9 @@ class Config:
         # It can be outside the project folder
         self.files_dir: str = "files"
 
-        # The location for video thumbnail files
+        # The location for video samplenail files
         # It can be outside the project folder
-        self.thumbs_dir: str = "thumbs"
+        self.samples_dir: str = "samples"
 
         # Default max size for users
         # You can admin them per case later
@@ -204,9 +204,6 @@ class Config:
         # Allow or block media hotlinking
         self.allow_hotlinks: bool = True
 
-        # Max content to read when text files are uploaded
-        self.sample_size: int = 100_000
-
         # Default requests per minute for uploads
         self.requests_per_minute = 12
 
@@ -283,21 +280,31 @@ class Config:
         # Show the compress checkbox in the web interface
         self.show_compress = True
 
-        # Generate and use thumbnails
-        self.thumbs_enabled = True
+        # Generate and use samples
+        self.samples_enabled = True
 
-        # Width of thumbnails
-        self.thumb_width = 1920
+        # Width of samples
+        self.sample_width = 1920
 
-        # Height of thumbnails
-        self.thumb_height = 1080
+        # Height of samples
+        self.sample_height = 1080
 
-        # Background color for thumbnails
-        self.thumb_color = "black"
+        # Background color for samples
+        self.sample_color = "black"
 
         # Compression quality for the jpg images
         # 2-31, lower is better quality
-        self.thumb_quality = 6
+        self.sample_quality_image = 6
+
+        # Compression quality for audio samples
+        # 0-9, lower is better quality
+        self.sample_quality_audio = 2
+
+        # Max number of bytes to save for text files
+        self.sample_text_bytes = 5_000
+
+        # Max chars for zip samples
+        self.sample_zip_chars = 1000
 
     # --- Methods ---
 
@@ -330,7 +337,7 @@ class Config:
 
             set_value(c, "app_key")
             set_value(c, "files_dir")
-            set_value(c, "thumbs_dir")
+            set_value(c, "samples_dir")
             set_value(c, "max_size_user")
             set_value(c, "redis_port")
             set_value(c, "uppercase_names")
@@ -370,7 +377,6 @@ class Config:
             set_value(c, "allow_edit")
             set_value(c, "max_title_length")
             set_value(c, "allow_hotlinks")
-            set_value(c, "sample_size")
             set_value(c, "requests_per_minute")
             set_value(c, "public_posts")
             set_value(c, "view_delay")
@@ -395,11 +401,14 @@ class Config:
             set_value(c, "allow_same_hash")
             set_value(c, "max_upload_files")
             set_value(c, "show_compress")
-            set_value(c, "thumbs_enabled")
-            set_value(c, "thumb_width")
-            set_value(c, "thumb_height")
-            set_value(c, "thumb_color")
-            set_value(c, "thumb_quality")
+            set_value(c, "samples_enabled")
+            set_value(c, "sample_width")
+            set_value(c, "sample_height")
+            set_value(c, "sample_color")
+            set_value(c, "sample_quality_image")
+            set_value(c, "sample_quality_audio")
+            set_value(c, "sample_text_bytes")
+            set_value(c, "sample_zip_chars")
 
             # Users
 

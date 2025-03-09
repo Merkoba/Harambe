@@ -1014,7 +1014,7 @@ App.show_thumbnail = (name) => {
   }
 
   App.thumbnail_active = true
-  thumb.src = `/thumb/${name}`
+  thumb.src = `/sample/${name}.jpg`
 }
 
 App.hide_thumbnail = () => {

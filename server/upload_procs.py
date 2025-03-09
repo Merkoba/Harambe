@@ -128,7 +128,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     post_name = get_name(user)
     compress = request.form.get("compress", "off") == "on"
-    sample = ""
 
     if len(files) > 1:
         compress = True
@@ -137,7 +136,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         try:
             content = make_zip(files)
             original = post_name
-            sample = "\n".join([Path(file.filename).name for file in files])
             ext = ".zip"
 
         except Exception as e:
@@ -173,14 +171,17 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     mtype, _ = mimetypes.guess_type(path)
     mtype = mtype or ""
 
-    if mtype.startswith("text"):
-        sample = content[: config.sample_size].decode("utf-8", errors="ignore").strip()
-    elif mtype.startswith("video"):
-        if config.thumbs_enabled:
-            get_video_thumbnail(path)
-    elif mtype.startswith("image"):
-        if config.thumbs_enabled:
-            get_image_thumbnail(path)
+    if config.samples_enabled:
+        if compress:
+            get_zip_sample(path, files)
+        elif mtype.startswith("text"):
+            get_text_sample(path)
+        elif mtype.startswith("image"):
+            get_image_sample(path)
+        elif mtype.startswith("video"):
+            get_video_sample(path)
+        elif mtype.startswith("audio"):
+            get_audio_sample(path)
 
     database.add_post(
         user_id=user.id,
@@ -190,7 +191,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         original=original,
         mtype=mtype,
         size=file_size,
-        sample=sample,
         file_hash=file_hash,
     )
 
@@ -221,9 +221,9 @@ def api_upload(request: Request) -> tuple[bool, str]:
     return upload(request, user, "cli")
 
 
-def get_video_thumbnail(path: Path) -> None:
-    thumb_name = f"{path.stem}.jpg"
-    thumb_path = utils.thumbs_dir() / Path(thumb_name)
+def get_video_sample(path: Path) -> None:
+    sample_name = f"{path.stem}.jpg"
+    sample_path = utils.samples_dir() / Path(sample_name)
 
     try:
         result = subprocess.run(
@@ -245,11 +245,11 @@ def get_video_thumbnail(path: Path) -> None:
         duration = float(result.stdout.strip())
         middle_point = duration / 2
         time_str = str(middle_point)
-        tw = config.thumb_width
-        th = config.thumb_height
-        tc = config.thumb_color = "black"
+        tw = config.sample_width
+        th = config.sample_height
+        tc = config.sample_color = "black"
         scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
-        quality = str(config.thumb_quality)
+        quality = str(config.sample_quality_image)
 
         subprocess.run(
             [
@@ -268,7 +268,7 @@ def get_video_thumbnail(path: Path) -> None:
                 "-an",
                 "-threads",
                 "0",
-                thumb_path,
+                sample_path,
             ],
             check=True,
         )
@@ -276,16 +276,16 @@ def get_video_thumbnail(path: Path) -> None:
         utils.error(e)
 
 
-def get_image_thumbnail(path: Path) -> None:
-    thumb_name = f"{path.stem}.jpg"
-    thumb_path = utils.thumbs_dir() / Path(thumb_name)
+def get_image_sample(path: Path) -> None:
+    sample_name = f"{path.stem}.jpg"
+    sample_path = utils.samples_dir() / Path(sample_name)
 
     try:
-        tw = config.thumb_width
-        th = config.thumb_height
-        tc = config.thumb_color or "black"
+        tw = config.sample_width
+        th = config.sample_height
+        tc = config.sample_color or "black"
         scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
-        quality = str(config.thumb_quality)
+        quality = str(config.sample_quality_image)
 
         subprocess.run(
             [
@@ -299,9 +299,77 @@ def get_image_thumbnail(path: Path) -> None:
                 quality,
                 "-threads",
                 "0",
-                thumb_path,
+                sample_path,
             ],
             check=True,
         )
     except subprocess.CalledProcessError as e:
         utils.error(e)
+
+
+def get_audio_sample(path: Path) -> None:
+    sample_name = f"{path.stem}.jpg"
+    sample_path = utils.samples_dir() / Path(sample_name)
+    sample_name = f"{path.stem}_sample.mp3"
+    sample_path = utils.samples_dir() / Path(sample_name)
+
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe",
+                "-v",
+                "error",
+                "-show_entries",
+                "format=duration",
+                "-of",
+                "default=noprint_wrappers=1:nokey=1",
+                path,
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        duration = float(result.stdout.strip())
+        sample_duration = min(10.0, duration)
+        quality = str(config.sample_quality_audio)
+
+        subprocess.run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(path),
+                "-t",
+                str(sample_duration),
+                "-acodec",
+                "libmp3lame",
+                "-q:a",
+                quality,
+                "-threads",
+                "0",
+                sample_path,
+            ],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        utils.error(e)
+
+
+def get_text_sample(path: Path) -> None:
+    sample_name = f"{path.stem}.txt"
+    sample_path = utils.samples_dir() / Path(sample_name)
+    max_bytes = config.sample_text_bytes
+
+    with path.open("r") as file:
+        sample_content = file.read(max_bytes).strip()
+
+    sample_path.write_text(sample_content)
+
+
+def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
+    sample = "\n".join([Path(file.filename).name for file in files])
+    sample = sample[: config.sample_zip_chars].strip()
+    sample_name = f"{path.stem}.txt"
+    sample_path = utils.samples_dir() / Path(sample_name)
+    sample_path.write_text(sample)

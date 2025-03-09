@@ -420,10 +420,10 @@ def get_file(name: str, original: str | None = None) -> Any:
     )
 
 
-@app.route("/thumb/<path:name>", methods=["GET"])  # type: ignore
+@app.route("/sample/<path:file>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-def get_thumb(name: str, original: str | None = None) -> Any:
+def get_sample(file: str) -> Any:
     if not config.allow_hotlinks:
         referrer = request.referrer
         host = request.host_url
@@ -431,8 +431,7 @@ def get_thumb(name: str, original: str | None = None) -> Any:
         if (not referrer) or (not referrer.startswith(host)):
             abort(403)
 
-    rootdir = utils.thumbs_dir()
-    file = f"{name}.jpg"
+    rootdir = utils.samples_dir()
     return send_file(rootdir / file, max_age=config.max_age)
 
 

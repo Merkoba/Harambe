@@ -37,7 +37,6 @@ class Post:
     username: str
     uploader: str
     mtype: str
-    sample: str
     show: str
     listed: bool
     listed_str: str
@@ -102,10 +101,8 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         last_reaction = ""
 
     if all_data:
-        sample = post.sample.strip()
         reactions = [react_procs.make_reaction(r, now) for r in post.reactions]
     else:
-        sample = ""
         reactions = []
 
     show = f"{name} {ext}".strip()
@@ -126,16 +123,13 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         mtype.startswith("application/") and ("flash" in mtype) and embed_size("flash")
     )
 
-    text_embed = bool(sample) and mtype.startswith("text/") and embed_size("text")
+    text_embed = mtype.startswith("text/") and embed_size("text")
 
     markdown_embed = (
-        bool(sample)
-        and mtype.startswith("text/")
-        and ("markdown" in mtype)
-        and embed_size("markdown")
+        mtype.startswith("text/") and ("markdown" in mtype) and embed_size("markdown")
     )
 
-    zip_embed = bool(sample) and mtype.startswith("application/") and ("zip" in mtype)
+    zip_embed = mtype.startswith("application/") and ("zip" in mtype)
     file_hash = post.file_hash
 
     return Post(
@@ -158,7 +152,6 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         username,
         uploader,
         mtype,
-        sample,
         show,
         listed,
         listed_str,
@@ -412,7 +405,7 @@ def do_delete_post(post: Post) -> None:
     database.delete_post(post.id)
     file_name = post.full
     try_delete_file(file_name)
-    try_delete_file(f"{post.name}.jpg", "thumb")
+    try_delete_file(f"{post.name}.jpg", "sample")
 
 
 # Be extra careful with this function!
@@ -428,8 +421,8 @@ def try_delete_file(file_name: str, kind: str = "file") -> None:
 
     if kind == "file":
         rootdir = utils.files_dir()
-    elif kind == "thumb":
-        rootdir = utils.thumbs_dir()
+    elif kind == "sample":
+        rootdir = utils.samples_dir()
     else:
         return
 
@@ -459,7 +452,7 @@ def delete_all_files() -> None:
     for _, _, filenames in os.walk(fd):
         for name in filenames:
             try_delete_file(name)
-            try_delete_file(f"{name}.jpg", "thumb")
+            try_delete_file(f"{name}.jpg", "sample")
 
 
 # Remove old files if limits are exceeded

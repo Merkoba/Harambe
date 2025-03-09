@@ -23,7 +23,6 @@ schemas = {
         "mtype": "text default ''",
         "view_date": "integer default 0",
         "size": "integer default 0",
-        "sample": "text default ''",
         "file_hash": "text default 'none'",
         # Foreign keys
         "user": "integer",
@@ -78,7 +77,6 @@ class Post:
     mtype: str
     view_date: int
     size: int
-    sample: str
     file_hash: str
     reactions: list[Reaction] = field(default_factory=list)
     username: str = ""
@@ -181,7 +179,6 @@ def add_post(
     original: str,
     mtype: str,
     size: int,
-    sample: str,
     file_hash: str,
 ) -> None:
     connection = get_conn()
@@ -199,12 +196,11 @@ def add_post(
         mtype,
         date,
         size,
-        sample,
         file_hash,
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, sample, file_hash) values ({placeholders})"
+    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, file_hash) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -223,7 +219,6 @@ def make_post(row: dict[str, Any]) -> Post:
         mtype=row.get("mtype") or "",
         view_date=int(row.get("view_date") or 0),
         size=int(row.get("size") or 0),
-        sample=row.get("sample") or "",
         file_hash=row.get("file_hash") or "none",
     )
 
