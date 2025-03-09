@@ -955,6 +955,8 @@ App.pointer_events = () => {
     if (e.target.classList.contains(`sample`)) {
       let direction = e.deltaY > 0 ? `down` : `up`
       App.scroll_text(direction)
+      e.stopPropagation()
+      e.preventDefault()
     }
   })
 }
