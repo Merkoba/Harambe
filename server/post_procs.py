@@ -402,7 +402,6 @@ def delete_post(post_id: int, user: User) -> tuple[str, int]:
     return utils.bad("Post not found")
 
 
-# Be extra careful with this function!
 def do_delete_post(post: Post) -> None:
     if not config.allow_delete:
         return
@@ -412,7 +411,11 @@ def do_delete_post(post: Post) -> None:
 
     database.delete_post(post.id)
     file_name = post.full
+    try_delete_file(file_name)
 
+
+# Be extra careful with this function!
+def try_delete_file(file_name: str) -> None:
     if not file_name:
         return
 
@@ -449,11 +452,7 @@ def delete_all_files() -> None:
 
     for root, _, filenames in os.walk(fd):
         for name in filenames:
-            if name.startswith("."):
-                continue
-
-            file_path = Path(root) / Path(name)
-            file_path.unlink()
+            try_delete_file(name)
 
 
 # Remove old files if limits are exceeded
