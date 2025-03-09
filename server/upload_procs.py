@@ -177,7 +177,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         sample = content[: config.sample_size].decode("utf-8", errors="ignore").strip()
     elif mtype.startswith("video"):
         if config.thumbs_enabled:
-            get_thumbnail(path)
+            get_video_thumbnail(path)
+    elif mtype.startswith("image"):
+        if config.thumbs_enabled:
+            get_image_thumbnail(path)
 
     database.add_post(
         user_id=user.id,
@@ -218,7 +221,7 @@ def api_upload(request: Request) -> tuple[bool, str]:
     return upload(request, user, "cli")
 
 
-def get_thumbnail(path: Path) -> None:
+def get_video_thumbnail(path: Path) -> None:
     thumb_name = f"{path.stem}.jpg"
     thumb_path = utils.thumbs_dir() / Path(thumb_name)
 
@@ -262,6 +265,36 @@ def get_thumbnail(path: Path) -> None:
                 "-q:v",
                 "2",  # (2-31, lower is better quality)
                 "-an",
+                "-threads",
+                "0",
+                thumb_path,
+            ],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        utils.error(e)
+
+
+def get_image_thumbnail(path: Path) -> None:
+    thumb_name = f"{path.stem}.jpg"
+    thumb_path = utils.thumbs_dir() / Path(thumb_name)
+
+    try:
+        tw = config.thumb_width
+        th = config.thumb_height
+        tc = config.thumb_color or "black"
+        scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
+
+        subprocess.run(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(path),
+                "-vf",
+                scale,
+                "-q:v",
+                "2",  # (2-31, lower is better quality)
                 "-threads",
                 "0",
                 thumb_path,

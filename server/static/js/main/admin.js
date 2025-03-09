@@ -918,11 +918,8 @@ App.key_events = () => {
       let post = item.dataset.post
       let mtype = item.dataset.mtype
 
-      if (mtype.startsWith(`video/`)) {
-        App.show_thumbnail(post, `thumb`)
-      }
-      else if (mtype.startsWith(`image/`)) {
-        App.show_thumbnail(post, `file`)
+      if ([`image/`, `video/`].some(x => mtype.startsWith(x))) {
+        App.show_thumbnail(post)
       }
     }
   })
@@ -1005,7 +1002,7 @@ App.setup_thumbnail = () => {
   }
 }
 
-App.show_thumbnail = (name, mode) => {
+App.show_thumbnail = (name) => {
   if (App.thumbnail_active) {
     return
   }
@@ -1017,14 +1014,7 @@ App.show_thumbnail = (name, mode) => {
   }
 
   App.thumbnail_active = true
-
-  if (mode === `thumb`) {
-    thumb.src = `/thumb/${name}`
-  }
-  else {
-    let fp = App.file_path
-    thumb.src = `/${fp}/${name}`
-  }
+  thumb.src = `/thumb/${name}`
 }
 
 App.hide_thumbnail = () => {
