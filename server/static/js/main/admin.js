@@ -1066,7 +1066,9 @@ App.show_text = async (name) => {
         text_el.textContent = text
       }
 
-      DOM.show(`#text_container`)
+      let c = DOM.el(`#text_container`)
+      DOM.show(c)
+      c.scrollTop = 0
     }
     else {
       App.print_error(response.status)
