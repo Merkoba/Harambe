@@ -11,6 +11,10 @@
     <img id="thumbnail">
 </div>
 
+<div id="text_container" class="hidden">
+    <div id="text"></div>
+</div>
+
 <audio id="audio"></audio>
 
 <div id="top" class="nowrap">
@@ -64,6 +68,10 @@
         <div class="table_row table_header">
             <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
 
+            <div id="name" class="table_cell small" title="Show the sample of the item">
+                <div class="header_text" data-sort="name">Play</div>
+            </div>
+
             <div id="post" class="table_cell" title="The post where it was posted">
                 <div class="header_text" data-sort="post">Post</div>
             </div>
@@ -90,6 +98,11 @@
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
+            </div>
+
+            <!-- Sample -->
+            <div class="table_cell small">
+                <div class="sample" title="Click to show the sample. Wheel can be used to scroll text">🔊</div>
             </div>
 
             <!-- Post -->

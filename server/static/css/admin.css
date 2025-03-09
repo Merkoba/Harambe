@@ -159,7 +159,7 @@ select {
 }
 
 #text_container {
-    background-color: black;
+    background-color: rgb(30, 30, 30);
     width: 600px;
     height: 450px;
     max-height: 100%;
