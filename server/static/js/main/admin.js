@@ -1159,10 +1159,12 @@ App.show_sample = async (item) => {
     }
     else {
       App.print_error(response.status)
+      App.hide_sample()
     }
   }
   catch (error) {
     App.print_error(error)
+    App.hide_sample()
   }
 }
 
