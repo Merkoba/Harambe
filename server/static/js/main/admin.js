@@ -1007,7 +1007,7 @@ App.setup_thumbnail = () => {
 }
 
 App.show_thumbnail = (path, title = ``) => {
-  if (App.thumbnail_active && (App.thumbnail_name === name)) {
+  if (App.thumbnail_active && (App.thumbnail_path === path)) {
     App.hide_thumbnail()
     return
   }
@@ -1030,7 +1030,7 @@ App.show_thumbnail = (path, title = ``) => {
   }
 
   App.thumbnail_active = true
-  App.thumbnail_name = name
+  App.thumbnail_path = path
   thumb.src = path
 }
 
@@ -1075,7 +1075,7 @@ App.stop_audio = () => {
 }
 
 App.show_text = async (path, title = ``) => {
-  if (App.text_active && (App.text_name === name)) {
+  if (App.text_active && (App.text_path === path)) {
     App.hide_text()
     return
   }
@@ -1104,7 +1104,7 @@ App.show_text = async (path, title = ``) => {
       let c = DOM.el(`#text_container`)
       DOM.show(c)
       App.text_active = true
-      App.text_name = name
+      App.text_path = path
       c.scrollTop = 0
     }
     else {
