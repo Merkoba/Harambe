@@ -1,9 +1,7 @@
-import sys
-import upload_procs
 import utils
-from pathlib import Path
 import post_procs
 import upload_procs
+from pathlib import Path
 
 sd = utils.samples_dir()
 samples = list(sd.glob("*"))
@@ -32,5 +30,5 @@ for post in post_procs.get_postlist():
             upload_procs.get_audio_sample(path)
         elif utils.is_text_file(path):
             upload_procs.get_text_sample(path)
-    except Exception as e:
-        print("error")
+    except Exception:
+        pass
