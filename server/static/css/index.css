@@ -40,6 +40,7 @@ body, html {
     background-color: var(--accent_color);
     filter: brightness(0.95);
     border-color: var(--button_border);
+    border-width: 1px;
 }
 
 input[type="text"] {
@@ -154,7 +155,7 @@ a.dialog_button:hover {
 }
 
 .picker:hover {
-    outline: 1px solid var(--frame_color);
+    outline: 1px solid var(--button_border);
 }
 
 .picker.unused {
