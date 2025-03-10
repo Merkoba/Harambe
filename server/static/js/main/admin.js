@@ -933,23 +933,19 @@ App.pointer_events = () => {
     else if (e.target.classList.contains(`sample`)) {
       App.show_sample(item)
     }
-    else {
-      let header = e.target.closest(`.header_text`)
+    else if (e.target.closest(`.header_text`)) {
+      let sort = e.target.dataset.sort
 
-      if (header) {
-        let sort = e.target.dataset.sort
-
-        if (sort) {
-          App.do_sort(sort)
-        }
+      if (sort) {
+        App.do_sort(sort)
       }
     }
-  })
-
-  DOM.ev(`#items`, `mouseout`, (e) => {
-    App.hide_thumbnail()
-    App.hide_text()
-    App.stop_audio()
+    else if (e.target.closest(`.sample_container`)) {
+      // Do nothing
+    }
+    else {
+      App.hide_sample()
+    }
   })
 
   DOM.ev(`#items`, `wheel`, (e) => {
@@ -1124,9 +1120,15 @@ App.scroll_text = (direction) => {
   }
 
   if (direction === `up`) {
-    text.scrollTop -= 20
+    text.scrollTop -= 25
   }
   else {
-    text.scrollTop += 20
+    text.scrollTop += 25
   }
+}
+
+App.hide_sample = () => {
+  App.hide_thumbnail()
+  App.stop_audio()
+  App.hide_text()
 }
