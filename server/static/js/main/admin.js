@@ -1006,7 +1006,7 @@ App.setup_thumbnail = () => {
   }
 }
 
-App.show_thumbnail = (name, title = ``) => {
+App.show_thumbnail = (path, title = ``) => {
   if (App.thumbnail_active && (App.thumbnail_name === name)) {
     App.hide_thumbnail()
     return
@@ -1031,7 +1031,7 @@ App.show_thumbnail = (name, title = ``) => {
 
   App.thumbnail_active = true
   App.thumbnail_name = name
-  thumb.src = `/sample/${name}.jpg`
+  thumb.src = path
 }
 
 App.hide_thumbnail = () => {
@@ -1046,7 +1046,7 @@ App.hide_thumbnail = () => {
   DOM.hide(`#thumbnail_container`)
 }
 
-App.play_audio = (name) => {
+App.play_audio = (path) => {
   let audio = DOM.el(`#audio`)
 
   if (!audio) {
@@ -1061,7 +1061,7 @@ App.play_audio = (name) => {
   }
 
   audio.pause()
-  audio.src = `/sample/${name}.mp3`
+  audio.src = path
   audio.currentTime = 0
   audio.play()
 }
@@ -1074,17 +1074,15 @@ App.stop_audio = () => {
   }
 }
 
-App.show_text = async (name, title = ``) => {
+App.show_text = async (path, title = ``) => {
   if (App.text_active && (App.text_name === name)) {
     App.hide_text()
     return
   }
 
   App.hide_thumbnail()
-  let file = `/sample/${name}.txt`
-
   try {
-    let response = await fetch(file)
+    let response = await fetch(path)
 
     if (response.ok) {
       let text = await response.text()
@@ -1123,24 +1121,37 @@ App.hide_text = () => {
   App.text_active = false
 }
 
-App.show_sample = (item) => {
+App.show_sample = async (item) => {
   let name = item.dataset.post
-  let mtype = item.dataset.mtype
-  let full = item.dataset.full
 
-  if ([`image/`, `video/`].some(x => mtype.startsWith(x))) {
-    App.show_thumbnail(name, full)
-  }
-  else if ([`audio/`].some(x => mtype.startsWith(x))) {
-    App.play_audio(name)
-  }
-  else if ([`text/`].some(x => mtype.startsWith(x))) {
-    App.show_text(name, full)
-  }
-  else if ([`application/`].some(x => mtype.startsWith(x))) {
-    if (mtype.includes(`zip`)) {
-      App.show_text(name, full)
+  try {
+    let response = await fetch(`/get_sample`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": `application/json`,
+      },
+      body: JSON.stringify({name}),
+    })
+
+    if (response.ok) {
+      let json = await response.json()
+
+      if (json.ext === `jpg`) {
+        App.show_thumbnail(json.path, item.dataset.title)
+      }
+      else if (json.ext === `mp3`) {
+        App.play_audio(json.path)
+      }
+      else if (json.ext === `txt`) {
+        App.show_text(json.path, item.dataset.title)
+      }
     }
+    else {
+      App.print_error(response.status)
+    }
+  }
+  catch (error) {
+    App.print_error(error)
   }
 }
 

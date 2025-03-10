@@ -5,9 +5,10 @@ from typing import Any, Never
 from functools import wraps
 from typing import Callable
 from datetime import timedelta
+from pathlib import Path
 
 # Libraries
-from flask import Flask, render_template, request, send_file  # type: ignore
+from flask import Flask, render_template, request, send_file, jsonify  # type: ignore
 from flask import redirect, url_for, session, abort  # pyright: ignore
 from flask_cors import CORS  # type: ignore
 from flask_limiter import Limiter  # type: ignore
@@ -423,10 +424,10 @@ def get_file(name: str, original: str | None = None) -> Any:
     )
 
 
-@app.route("/sample/<path:file>", methods=["GET"])  # type: ignore
+@app.route("/sample/<path:name>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-def get_sample(file: str) -> Any:
+def get_sample(name: str) -> Any:
     if not config.allow_hotlinks:
         referrer = request.referrer
         host = request.host_url
@@ -434,8 +435,37 @@ def get_sample(file: str) -> Any:
         if (not referrer) or (not referrer.startswith(host)):
             abort(403)
 
+    file = post_procs.get_sample(name)
+
+    if not file:
+        return over()
+
     rootdir = utils.samples_dir()
     return send_file(rootdir / file, max_age=config.max_age)
+
+
+@app.route("/get_sample", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def get_sample_2() -> Any:
+    data = request.get_json()
+    name = data.get("name", "")
+
+    if not name:
+        return error_json
+
+    file = post_procs.get_sample(name)
+
+    if not file:
+        return error_json
+
+    return jsonify(
+        {
+            "path": str(Path("/sample") / Path(file.stem)),
+            "name": file.stem,
+            "ext": file.suffix[1:],
+        }
+    )
 
 
 # ADMIN

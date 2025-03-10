@@ -592,3 +592,11 @@ def get_post_update(post_id: int) -> tuple[bool, dict[str, Any]]:
         }
 
     return False, {}
+
+
+def get_sample(name: str) -> Path | None:
+    for file in utils.samples_dir().iterdir():
+        if file.stem == name:
+            return file
+
+    return None
