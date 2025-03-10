@@ -150,6 +150,7 @@ select {
     padding: 0.29rem;
     font-family: monospace;
     text-align: center;
+    white-space: nowrap;
 }
 
 .sample {
