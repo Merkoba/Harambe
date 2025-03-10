@@ -130,10 +130,10 @@ select {
     gap: 0.5rem;
 }
 
-#thumbnail_container {
-    background-color: black;
-    width: 600px;
-    height: 450px;
+.sample_container {
+    background-color: rgb(30, 30, 30);
+    width: 800px;
+    height: 540px;
     max-width: 60%;
     position: fixed;
     z-index: 999;
@@ -156,19 +156,6 @@ select {
 
 .sample:hover {
     opacity: 0.7;
-}
-
-#text_container {
-    background-color: rgb(30, 30, 30);
-    width: 600px;
-    height: 450px;
-    max-height: 100%;
-    overflow: auto;
-    max-width: 60%;
-    position: fixed;
-    z-index: 999;
-    right: 0;
-    top: 0;
 }
 
 #text {

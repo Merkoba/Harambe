@@ -6,6 +6,7 @@ App.init = () => {
   App.selected_items = []
   App.last_checkbox = null
   App.thumbnail_active = false
+  App.text_active = false
 
   App.key_events()
   App.pointer_events()
@@ -1061,6 +1062,11 @@ App.stop_audio = () => {
 }
 
 App.show_text = async (name) => {
+  if (App.text_active) {
+    App.hide_text()
+    return
+  }
+
   let file = `/sample/${name}.txt`
 
   try {
@@ -1076,6 +1082,7 @@ App.show_text = async (name) => {
 
       let c = DOM.el(`#text_container`)
       DOM.show(c)
+      App.text_active = true
       c.scrollTop = 0
     }
     else {
@@ -1089,6 +1096,7 @@ App.show_text = async (name) => {
 
 App.hide_text = () => {
   DOM.hide(`#text_container`)
+  App.text_active = false
 }
 
 App.show_sample = (item) => {
