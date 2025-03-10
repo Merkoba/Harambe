@@ -171,18 +171,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     mtype, _ = mimetypes.guess_type(path)
     mtype = mtype or ""
 
-    if config.samples_enabled:
-        if compress:
-            get_zip_sample(path, files)
-        elif mtype.startswith("text"):
-            get_text_sample(path)
-        elif mtype.startswith("image"):
-            get_image_sample(path)
-        elif mtype.startswith("video"):
-            get_video_sample(path)
-        elif mtype.startswith("audio"):
-            get_audio_sample(path)
-
     database.add_post(
         user_id=user.id,
         name=post_name,
@@ -193,6 +181,21 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         size=file_size,
         file_hash=file_hash,
     )
+
+    if config.samples_enabled:
+        try:
+            if compress:
+                get_zip_sample(path, files)
+            elif mtype.startswith("text"):
+                get_text_sample(path)
+            elif mtype.startswith("image"):
+                get_image_sample(path)
+            elif mtype.startswith("video"):
+                get_video_sample(path)
+            elif mtype.startswith("audio"):
+                get_audio_sample(path)
+        except Exception as e:
+            utils.error(e)
 
     database.update_user_last_date(user.id)
     post_procs.check_storage()
@@ -225,86 +228,80 @@ def get_video_sample(path: Path) -> None:
     sample_name = f"{path.stem}.jpg"
     sample_path = utils.samples_dir() / Path(sample_name)
 
-    try:
-        result = subprocess.run(
-            [
-                "ffprobe",
-                "-v",
-                "error",
-                "-show_entries",
-                "format=duration",
-                "-of",
-                "default=noprint_wrappers=1:nokey=1",
-                path,
-            ],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
+    result = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            path,
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
 
-        duration = float(result.stdout.strip())
-        middle_point = duration / 2
-        time_str = str(middle_point)
-        tw = config.sample_width
-        th = config.sample_height
-        tc = config.sample_color = "black"
-        scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
-        quality = str(config.sample_quality_image)
+    duration = float(result.stdout.strip())
+    middle_point = duration / 2
+    time_str = str(middle_point)
+    tw = config.sample_width
+    th = config.sample_height
+    tc = config.sample_color = "black"
+    scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
+    quality = str(config.sample_quality_image)
 
-        subprocess.run(
-            [
-                "ffmpeg",
-                "-y",
-                "-ss",
-                time_str,
-                "-i",
-                str(path),
-                "-vframes",
-                "1",
-                "-vf",
-                scale,
-                "-q:v",
-                quality,
-                "-an",
-                "-threads",
-                "0",
-                sample_path,
-            ],
-            check=True,
-        )
-    except subprocess.CalledProcessError as e:
-        utils.error(e)
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-y",
+            "-ss",
+            time_str,
+            "-i",
+            str(path),
+            "-vframes",
+            "1",
+            "-vf",
+            scale,
+            "-q:v",
+            quality,
+            "-an",
+            "-threads",
+            "0",
+            sample_path,
+        ],
+        check=True,
+    )
 
 
 def get_image_sample(path: Path) -> None:
     sample_name = f"{path.stem}.jpg"
     sample_path = utils.samples_dir() / Path(sample_name)
 
-    try:
-        tw = config.sample_width
-        th = config.sample_height
-        tc = config.sample_color or "black"
-        scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
-        quality = str(config.sample_quality_image)
+    tw = config.sample_width
+    th = config.sample_height
+    tc = config.sample_color or "black"
+    scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
+    quality = str(config.sample_quality_image)
 
-        subprocess.run(
-            [
-                "ffmpeg",
-                "-y",
-                "-i",
-                str(path),
-                "-vf",
-                scale,
-                "-q:v",
-                quality,
-                "-threads",
-                "0",
-                sample_path,
-            ],
-            check=True,
-        )
-    except subprocess.CalledProcessError as e:
-        utils.error(e)
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(path),
+            "-vf",
+            scale,
+            "-q:v",
+            quality,
+            "-threads",
+            "0",
+            sample_path,
+        ],
+        check=True,
+    )
 
 
 def get_audio_sample(path: Path) -> None:
@@ -313,47 +310,44 @@ def get_audio_sample(path: Path) -> None:
     sample_name = f"{path.stem}.mp3"
     sample_path = utils.samples_dir() / Path(sample_name)
 
-    try:
-        result = subprocess.run(
-            [
-                "ffprobe",
-                "-v",
-                "error",
-                "-show_entries",
-                "format=duration",
-                "-of",
-                "default=noprint_wrappers=1:nokey=1",
-                path,
-            ],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
+    result = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            path,
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
 
-        duration = float(result.stdout.strip())
-        sample_duration = min(10.0, duration)
-        quality = str(config.sample_quality_audio)
+    duration = float(result.stdout.strip())
+    sample_duration = min(10.0, duration)
+    quality = str(config.sample_quality_audio)
 
-        subprocess.run(
-            [
-                "ffmpeg",
-                "-y",
-                "-i",
-                str(path),
-                "-t",
-                str(sample_duration),
-                "-acodec",
-                "libmp3lame",
-                "-q:a",
-                quality,
-                "-threads",
-                "0",
-                sample_path,
-            ],
-            check=True,
-        )
-    except subprocess.CalledProcessError as e:
-        utils.error(e)
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(path),
+            "-t",
+            str(sample_duration),
+            "-acodec",
+            "libmp3lame",
+            "-q:a",
+            quality,
+            "-threads",
+            "0",
+            sample_path,
+        ],
+        check=True,
+    )
 
 
 def get_text_sample(path: Path) -> None:
