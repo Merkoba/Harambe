@@ -1,58 +1,12 @@
-{% extends "base.jinja" %}
+{% extends "admin_base.jinja" %}
 
-{% block head %}
+{% block admin_head %}
 <title>{{title}}</title>
-<link rel="stylesheet" href="/static/css/admin.css">
-<script src="/static/js/main/admin.js"></script>
 {% endblock %}
 
 {% set show_marks = items | selectattr("mark") | list | length > 0 %}
 
-{% block body %}
-<template id="template_user_edit">
-    <div class="dialog_container">
-        <div>
-            <div id="edit_poster_yes" class="aero_button">Poster: Yes</div>
-            <div id="edit_poster_no" class="aero_button">Poster: No</div>
-        </div>
-
-        <div>
-            <div id="edit_reacter_yes" class="aero_button">Reacter: Yes</div>
-            <div id="edit_reacter_no" class="aero_button">Reacter: No</div>
-        </div>
-
-        <div>
-            <div id="edit_reader_yes" class="aero_button">Reader: Yes</div>
-            <div id="edit_reader_no" class="aero_button">Reader: No</div>
-        </div>
-
-        <div>
-            <div id="edit_lister_yes" class="aero_button">Lister: Yes</div>
-            <div id="edit_lister_no" class="aero_button">Lister: No</div>
-        </div>
-
-        <div>
-            <div id="edit_admin_yes" class="aero_button">Admin: Yes</div>
-            <div id="edit_admin_no" class="aero_button">Admin: No</div>
-        </div>
-
-        <div>
-            <div id="edit_rpm" class="aero_button">RPM</div>
-            <div id="edit_max_size" class="aero_button">Max Size</div>
-        </div>
-
-        <div>
-            <div id="edit_name" class="aero_button">Name</div>
-            <div id="edit_mark" class="aero_button">Mark</div>
-        </div>
-
-        <div>
-            <div id="edit_username" class="aero_button">Username</div>
-            <div id="edit_password" class="aero_button">Password</div>
-        </div>
-    </div>
-</template>
-
+{% block admin_body %}
 <div id="top" class="nowrap">
     <div id="menu" class="action_button" title="Ctrl+M">Menu</div>
     <div class="sep">|</div>

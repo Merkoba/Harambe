@@ -28,6 +28,7 @@ class Reaction:
     date_str: str
     pshow: str
     pmtype: str
+    ptitle: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -38,10 +39,24 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     value_sample = utils.space_string(reaction.value)[:140]
     date_str = utils.nice_date(reaction.date)
     username = reaction.username or "?"
-    pname = reaction.pname or "?"
-    uname = reaction.uname or "Anon"
-    pshow = f"{reaction.pname} {reaction.pext}".strip()
-    pmtype = reaction.pmtype or "?"
+
+    if reaction.parent:
+        pname = reaction.parent.name or "?"
+        pshow = f"{reaction.parent.name} {reaction.parent.ext}".strip()
+        pmtype = reaction.parent.mtype or "?"
+        ptitle = reaction.parent.title or "?"
+    else:
+        pname = "?"
+        pshow = "?"
+        pmtype = "?"
+        ptitle = "?"
+
+    if reaction.author:
+        uname = reaction.author.name or "Anon"
+        listed = reaction.author.lister
+    else:
+        uname = "Anon"
+        listed = False
 
     return Reaction(
         reaction.id,
@@ -51,13 +66,14 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         username,
         uname,
         reaction.value,
-        reaction.listed,
+        listed,
         reaction.date,
         ago,
         value_sample,
         date_str,
         pshow,
         pmtype,
+        ptitle,
     )
 
 

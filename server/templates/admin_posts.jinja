@@ -1,32 +1,10 @@
-{% extends "base.jinja" %}
+{% extends "admin_base.jinja" %}
 
-{% block head %}
+{% block admin_head %}
 <title>{{title}}</title>
-<link rel="stylesheet" href="/static/css/admin.css">
-<script src="/static/js/main/admin.js"></script>
 {% endblock %}
 
-{% block body %}
-<template id="template_post_edit">
-    <div class="dialog_container">
-        <div>
-            <div id="edit_title" class="aero_button">Edit Title</div>
-        </div>
-    </div>
-</template>
-
-<div id="thumbnail_container" class="sample_container hidden">
-    <div id="thumbnail_title" class="sample_title">Text</div>
-    <img id="thumbnail">
-</div>
-
-<div id="text_container" class="sample_container hidden">
-    <div id="text_title" class="sample_title">Text</div>
-    <div id="text"></div>
-</div>
-
-<audio id="audio"></audio>
-
+{% block admin_body %}
 <div id="top" class="nowrap">
     <div id="menu" class="action_button" title="Ctrl+M">Menu</div>
     <div class="sep">|</div>

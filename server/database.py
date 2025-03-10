@@ -92,12 +92,11 @@ class Reaction:
     user: int
     value: str
     date: int
-    pname: str | None = None
-    pext: str | None = None
-    pmtype: str | None = None
     username: str | None = None
     uname: str | None = None
     listed: bool = False
+    parent: Post | None = None
+    author: User | None = None
 
 
 @dataclass
@@ -608,26 +607,18 @@ def get_reactions(
                 rpost = rposts[0] if rposts else None
 
             if rpost:
-                reaction.pname = rpost.name
-                reaction.pext = rpost.ext
-                reaction.pmtype = rpost.mtype
+                reaction.parent = rpost
             else:
-                reaction.pname = ""
-                reaction.pext = ""
-                reaction.pmtype = ""
+                reaction.parent = None
 
             if not ruser:
                 rusers = get_users(user_id=reaction.user, oconn=connection)
                 ruser = rusers[0] if rusers else None
 
             if ruser:
-                reaction.username = ruser.username
-                reaction.uname = ruser.name
-                reaction.listed = ruser.lister
+                reaction.author = ruser
             else:
-                reaction.username = ""
-                reaction.uname = ""
-                reaction.listed = False
+                reaction.author = None
 
         reactions.append(reaction)
 

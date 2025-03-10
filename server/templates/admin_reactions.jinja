@@ -1,22 +1,10 @@
-{% extends "base.jinja" %}
+{% extends "admin_base.jinja" %}
 
-{% block head %}
+{% block admin_head %}
 <title>{{title}}</title>
-<link rel="stylesheet" href="/static/css/admin.css">
-<script src="/static/js/main/admin.js"></script>
 {% endblock %}
 
-{% block body %}
-<div id="thumbnail_container" class="sample_container hidden">
-    <img id="thumbnail">
-</div>
-
-<div id="text_container" class="sample_container hidden">
-    <div id="text"></div>
-</div>
-
-<audio id="audio"></audio>
-
+{% block admin_body %}
 <div id="top" class="nowrap">
     <div id="menu" class="action_button" title="Ctrl+M">Menu</div>
     <div class="sep">|</div>
@@ -94,7 +82,8 @@
         data-username="{{item.username}}" data-name="{{item.name}}" data-user_id="{{item.user_id}}"
         data-post="{{item.pname}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}"
         data-value="{{item.value}}" data-uname="{{item.uname}}"
-        data-mtype="{{item.pmtype}}" data-full="{{item.pshow}}">
+        data-mtype="{{item.pmtype}}" data-full="{{item.pshow}}"
+        data-title="{{item.ptitle}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
