@@ -412,6 +412,7 @@ class Config:
             set_value(c, "sample_quality_audio")
             set_value(c, "sample_text_bytes")
             set_value(c, "sample_zip_chars")
+            set_value(c, "session_days")
 
             # Users
 
