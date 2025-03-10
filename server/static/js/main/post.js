@@ -380,7 +380,7 @@ App.make_reaction = (reaction) => {
   item.dataset.date = r.date
 
   if ((r.user_id === App.user_id) || App.is_admin) {
-    DOM.show(DOM.el(`.reaction_edit`, item))
+    ago.classList.add(`button`)
   }
 
   return item
@@ -977,8 +977,10 @@ App.setup_reactions = () => {
         App.user_opts_user_id = el.dataset.user_id
         App.msg_show(`user`)
       }
-      else if (e.target.classList.contains(`reaction_edit`)) {
-        App.msg_show(`reaction`)
+      else if (e.target.classList.contains(`reaction_ago`)) {
+        if (e.target.classList.contains(`button`)) {
+          App.msg_show(`reaction`)
+        }
       }
     })
 

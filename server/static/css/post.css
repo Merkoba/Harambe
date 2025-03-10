@@ -291,7 +291,6 @@ a.link:hover,
     padding-left: var(--react_padding);
     display: flex;
     flex-direction: row;
-    gap: 0.15rem;
     align-items: flex-start;
     justify-content: flex-end;
     margin-left: auto;
