@@ -929,7 +929,7 @@ App.pointer_events = () => {
       let mtype = e.target.textContent
       App.do_search(mtype, false)
     }
-    else if (e.target.classList.contains(`sample`)) {
+    else if (e.target.closest(`.sample`)) {
       App.show_sample(item)
     }
     else if (e.target.closest(`.header_text`)) {
