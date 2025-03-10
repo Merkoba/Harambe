@@ -34,7 +34,7 @@
             </div>
             {% endif %}
 
-            {% if post.text_embed and not post.markdown_embed %}
+            {% if post.text and not post.markdown_embed %}
             <div class="rowitem nowrap">
                 <div id="max" data-max_type="editor" class="button" title="Maximize the editor">Max</div>
                 <div class="sep">|</div>
@@ -129,7 +129,7 @@
     </div>
     {% endif %}
 
-    {% if post.text_embed %}
+    {% if post.text %}
     <div class="embed">
         <div id="text_buttons" class="rowitem">
             <div id="copy_all_text" class="button">Copy All</div>

@@ -243,4 +243,44 @@ def decode(s: str) -> str:
     return str(urllib.parse.unquote(s))
 
 
+def is_text_file(path: Path) -> bool:
+    """Determine if a file is text by attempting to read it."""
+    # Read first chunk of the file (e.g., 8KB)
+    with path.open("rb") as f:
+        chunk = f.read(8192)
+
+    ok = False
+
+    # Check for NULL bytes and other control characters that suggest binary data
+    # NULL bytes are a strong indicator of binary content
+    if b"\x00" in chunk:
+        return False
+
+    # Try to decode as UTF-8
+    try:
+        chunk.decode("utf-8")
+        ok = True
+    except UnicodeDecodeError:
+        pass
+
+    if ok:
+        return True
+
+    # Try to decode with other common encodings
+    for encoding in ["latin-1", "iso-8859-1", "windows-1252"]:
+        if try_decode(chunk, encoding):
+            return True
+
+    return ok
+
+
+def try_decode(chunk: bytes, encoding: str) -> bool:
+    try:
+        chunk.decode(encoding)
+    except UnicodeDecodeError:
+        return False
+
+    return True
+
+
 ICONS = load_icons()

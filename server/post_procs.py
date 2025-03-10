@@ -49,7 +49,6 @@ class Post:
     video_embed: bool
     audio_embed: bool
     flash_embed: bool
-    text_embed: bool
     markdown_embed: bool
     zip_embed: bool
     last_reaction: str
@@ -147,27 +146,20 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         mtype.startswith("application/") and ("flash" in mtype) and embed_size("flash")
     )
 
-    text_embed = False
-    markdown_embed = False
-
     if mtype.startswith("text/"):
-        text_embed = True
         markdown_embed = ("markdown" in mtype) and embed_size("markdown")
-    elif mtype == "application/json":
-        text_embed = True
+    else:
+        markdown_embed = False
 
     zip_embed = mtype.startswith("application/") and ("zip" in mtype)
     file_hash = post.file_hash
     text = ""
 
-    if all_data and (text_embed or markdown_embed or zip_embed):
-        try:
-            txt_file = utils.samples_dir() / Path(f"{name}.txt")
+    if all_data:
+        text_file = Path(utils.samples_dir() / f"{name}.txt")
 
-            if txt_file.exists() and txt_file.is_file():
-                text = txt_file.open("r").read()
-        except:
-            text = ""
+        if text_file.exists():
+            text = text_file.open("r").read()
 
     return Post(
         post.id,
@@ -201,7 +193,6 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         video_embed,
         audio_embed,
         flash_embed,
-        text_embed,
         markdown_embed,
         zip_embed,
         last_reaction,
