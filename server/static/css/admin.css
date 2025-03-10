@@ -86,7 +86,7 @@ a:hover {
 
 .table_cell.small {
     flex: 0 0 auto;
-    width: 4rem;
+    width: 4.5rem;
 }
 
 input[type="checkbox"] {
