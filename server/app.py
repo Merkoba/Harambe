@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import Any, Never
 from functools import wraps
 from typing import Callable
+from datetime import timedelta
 
 # Libraries
 from flask import Flask, render_template, request, send_file  # type: ignore
@@ -30,6 +31,7 @@ database.check_db()
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.secret_key = config.app_key
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=config.session_days)
 
 # Enable all cross origin requests
 CORS(app)
@@ -148,6 +150,7 @@ def over() -> Any:
 
 def fill_session(user: User) -> None:
     session["user_id"] = user.id
+    session.permanent = True
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:

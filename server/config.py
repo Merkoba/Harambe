@@ -306,6 +306,9 @@ class Config:
         # Max chars for zip samples
         self.sample_zip_chars = 1000
 
+        # Lifetime of a user login session in days
+        self.session_days = 365 * 5
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
