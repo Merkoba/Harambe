@@ -1057,6 +1057,9 @@ App.play_audio = (path) => {
     return
   }
 
+  App.hide_thumbnail()
+  App.hide_text()
+
   // Check if audio is playing
   if (!audio.paused) {
     audio.pause()
