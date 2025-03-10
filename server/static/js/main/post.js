@@ -20,6 +20,13 @@ App.init = () => {
     DOM.ev(edit, `click`, () => {
       App.edit_post()
     })
+
+    DOM.ev(edit, `auxclick`, (e) => {
+      if (e.button === 1) {
+        e.preventDefault()
+        App.edit_post()
+      }
+    })
   }
 
   App.start_embed()
@@ -85,6 +92,13 @@ App.init = () => {
 
     DOM.ev(menu, `click`, () => {
       App.msg_show(`menu`)
+    })
+
+    DOM.ev(menu, `auxclick`, (e) => {
+      if (e.button === 1) {
+        e.preventDefault()
+        App.msg_show(`menu`)
+      }
     })
   }
 
@@ -886,35 +900,20 @@ App.start_embed = () => {
     })
   }
 
-  let max_video = DOM.el(`#max_video`)
+  let max = DOM.el(`#max`)
 
-  if (max_video) {
-    DOM.ev(max_video, `click`, () => {
-      App.toggle_max(`video`)
+  if (max) {
+    let type = max.dataset.max_type
+
+    DOM.ev(max, `click`, () => {
+      App.toggle_max(type)
     })
-  }
 
-  let max_editor = DOM.el(`#max_editor`)
-
-  if (max_editor) {
-    DOM.ev(max_editor, `click`, () => {
-      App.toggle_max(`editor`)
-    })
-  }
-
-  let max_markdown = DOM.el(`#max_markdown`)
-
-  if (max_markdown) {
-    DOM.ev(max_markdown, `click`, () => {
-      App.toggle_max(`markdown`)
-    })
-  }
-
-  let max_flash = DOM.el(`#max_flash`)
-
-  if (max_flash) {
-    DOM.ev(max_flash, `click`, () => {
-      App.toggle_max(`flash`)
+    DOM.ev(max, `auxclick`, (e) => {
+      if (e.button === 1) {
+        e.preventDefault()
+        App.toggle_max(type)
+      }
     })
   }
 
