@@ -1006,6 +1006,7 @@ App.setup_thumbnail = () => {
 
 App.show_thumbnail = (name) => {
   if (App.thumbnail_active) {
+    App.hide_thumbnail()
     return
   }
 
@@ -1035,6 +1036,13 @@ App.play_audio = (name) => {
   let audio = DOM.el(`#audio`)
 
   if (!audio) {
+    return
+  }
+
+  // Check if audio is playing
+  if (!audio.paused) {
+    audio.pause()
+    audio.currentTime = 0
     return
   }
 
