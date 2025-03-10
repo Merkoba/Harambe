@@ -23,11 +23,14 @@ for post in post_procs.get_postlist():
 
     path = utils.files_dir() / Path(post.name + "." + post.ext)
 
-    if post.mtype.startswith("image"):
-        upload_procs.get_image_sample(path)
-    elif post.mtype.startswith("video"):
-        upload_procs.get_video_sample(path)
-    elif post.mtype.startswith("audio"):
-        upload_procs.get_audio_sample(path)
-    elif utils.is_text_file(path):
-        upload_procs.get_text_sample(path)
+    try:
+        if post.mtype.startswith("image"):
+            upload_procs.get_image_sample(path)
+        elif post.mtype.startswith("video"):
+            upload_procs.get_video_sample(path)
+        elif post.mtype.startswith("audio"):
+            upload_procs.get_audio_sample(path)
+        elif utils.is_text_file(path):
+            upload_procs.get_text_sample(path)
+    except Exception as e:
+        print("error")
