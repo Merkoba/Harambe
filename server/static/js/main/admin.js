@@ -1081,6 +1081,7 @@ App.show_text = async (path, title = ``) => {
   }
 
   App.hide_thumbnail()
+
   try {
     let response = await fetch(path)
 
