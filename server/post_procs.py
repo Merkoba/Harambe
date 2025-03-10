@@ -69,7 +69,9 @@ class Post:
         return self.mtype.startswith("application/") and ("flash" in self.mtype)
 
     def is_text(self) -> bool:
-        return self.mtype.startswith("text/") and ("markdown" not in self.mtype)
+        return (self.mtype.startswith("text/") and ("markdown" not in self.mtype)) or (
+            self.mtype == "application/json"
+        )
 
     def is_markdown(self) -> bool:
         return self.mtype.startswith("text/") and ("markdown" in self.mtype)
@@ -149,8 +151,10 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     markdown_embed = False
 
     if mtype.startswith("text/"):
-        text_embed = embed_size("text")
+        text_embed = True
         markdown_embed = ("markdown" in mtype) and embed_size("markdown")
+    elif mtype == "application/json":
+        text_embed = True
 
     zip_embed = mtype.startswith("application/") and ("zip" in mtype)
     file_hash = post.file_hash
@@ -463,7 +467,11 @@ def do_delete_post(post: Post) -> None:
     database.delete_post(post.id)
     file_name = post.full
     try_delete_file(file_name)
-    try_delete_file(f"{post.name}.jpg", "sample")
+
+    for file in utils.samples_dir().iterdir():
+        if file.stem == post.name:
+            try_delete_file(file.name, "sample")
+            break
 
 
 # Be extra careful with this function!

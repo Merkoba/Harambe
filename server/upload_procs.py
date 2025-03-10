@@ -186,7 +186,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         try:
             if compress:
                 get_zip_sample(path, files)
-            elif mtype.startswith("text"):
+            elif mtype.startswith("text") or (mtype == "application/json"):
                 get_text_sample(path)
             elif mtype.startswith("image"):
                 get_image_sample(path)

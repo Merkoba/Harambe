@@ -878,13 +878,11 @@ App.keyboard_events = () => {
 }
 
 App.start_embed = () => {
-  if (App.mtype.startsWith(`text`)) {
-    if (App.mtype === `text/markdown`) {
-      App.start_markdown()
-    }
-    else {
-      App.start_editor()
-    }
+  if (App.mtype === `text/markdown`) {
+    App.start_markdown()
+  }
+  else if (App.text) {
+    App.start_editor()
   }
   else if (App.mtype.startsWith(`application`)) {
     if (App.mtype.includes(`flash`)) {
