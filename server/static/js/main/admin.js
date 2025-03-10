@@ -954,10 +954,12 @@ App.pointer_events = () => {
 
   DOM.ev(`#items`, `wheel`, (e) => {
     if (e.target.classList.contains(`sample`)) {
-      let direction = e.deltaY > 0 ? `down` : `up`
-      App.scroll_text(direction)
-      e.stopPropagation()
-      e.preventDefault()
+      if (App.text_active) {
+        let direction = e.deltaY > 0 ? `down` : `up`
+        App.scroll_text(direction)
+        e.stopPropagation()
+        e.preventDefault()
+      }
     }
   })
 }
