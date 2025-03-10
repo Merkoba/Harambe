@@ -458,6 +458,7 @@ def admin(what: str) -> Any:
     def_date = "register_date" if what == "users" else "date"
     sort = request.args.get("sort", def_date)
     user_id = int(request.args.get("user_id", 0))
+    media_type = request.args.get("media_type", None)
     page = int(request.args.get("page", 1))
     page_size = str(request.args.get("page_size", config.admin_page_size))
     post_items: list[Post] = []
@@ -471,6 +472,7 @@ def admin(what: str) -> Any:
             query=query,
             sort=sort,
             user_id=user_id,
+            media_type=media_type,
             admin=True,
         )
     elif what == "users":
@@ -525,6 +527,7 @@ def admin(what: str) -> Any:
         title=title,
         next_page=next_page,
         page_size=page_size,
+        media_type=media_type,
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
         used_user_id=user_id,
@@ -653,6 +656,7 @@ def show_list(what: str) -> Any:
 
     admin = user.admin
     user_id = int(request.args.get("user_id", 0))
+    media_type = request.args.get("media_type", None)
     history = user.id == user_id
 
     if not history:
@@ -683,6 +687,7 @@ def show_list(what: str) -> Any:
             query=query,
             user_id=user_id,
             only_listed=only_listed,
+            media_type=media_type,
             admin=False,
         )
     elif what == "reactions":
@@ -726,6 +731,7 @@ def show_list(what: str) -> Any:
         title=title,
         next_page=next_page,
         page_size=page_size,
+        media_type=media_type,
         def_page_size=def_page_size,
         max_title_length=config.max_title_length,
         used_user_id=user_id,

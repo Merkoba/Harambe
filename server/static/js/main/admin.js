@@ -39,6 +39,16 @@ App.init = () => {
     })
   }
 
+  let media_select = DOM.el(`#media_select`)
+
+  if (media_select) {
+    App.set_active_media_select()
+
+    DOM.ev(media_select, `change`, () => {
+      App.on_media_select_change(media_select)
+    })
+  }
+
   let filter = DOM.el(`#filter`)
 
   if (filter) {
@@ -1000,6 +1010,10 @@ App.setup_thumbnail = () => {
         DOM.show(`#thumbnail_container`)
       }
     })
+
+    DOM.ev(thumb, `error`, () => {
+      App.hide_thumbnail()
+    })
   }
 }
 
@@ -1160,4 +1174,20 @@ App.hide_sample = () => {
   App.hide_thumbnail()
   App.stop_audio()
   App.hide_text()
+}
+
+App.on_media_select_change = (page_select) => {
+  let value = page_select.value
+  let url = new URL(window.location.href)
+  url.searchParams.set(`media_type`, value)
+  window.location.href = url.href
+}
+
+App.set_active_media_select = () => {
+  let media_select = DOM.el(`#media_select`)
+
+  if (media_select) {
+    let value = App.media_type || `all`
+    media_select.value = value
+  }
 }

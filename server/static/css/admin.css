@@ -96,7 +96,7 @@ input[type="checkbox"] {
 }
 
 select {
-    font-size: 0.8rem;
+    font-size: 0.86rem;
 }
 
 #filter {
@@ -177,7 +177,7 @@ select {
 #text {
     position: relative;
     width: 100%;
-    color: rgb(199, 219, 221);
+    color: rgb(204, 226, 228);
     font-family: monospace;
     font-size: 1rem;
     white-space: pre-wrap;

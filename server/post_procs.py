@@ -56,6 +56,27 @@ class Post:
     file_hash: str
     text: str
 
+    def is_image(self) -> bool:
+        return self.mtype.startswith("image/")
+
+    def is_video(self) -> bool:
+        return self.mtype.startswith("video/")
+
+    def is_audio(self) -> bool:
+        return self.mtype.startswith("audio/")
+
+    def is_flash(self) -> bool:
+        return self.mtype.startswith("application/") and ("flash" in self.mtype)
+
+    def is_text(self) -> bool:
+        return self.mtype.startswith("text/") and ("markdown" not in self.mtype)
+
+    def is_markdown(self) -> bool:
+        return self.mtype.startswith("text/") and ("markdown" in self.mtype)
+
+    def is_zip(self) -> bool:
+        return self.mtype.startswith("application/") and ("zip" in self.mtype)
+
 
 def get_full_name(dbpost: DbPost) -> str:
     if dbpost.ext:
@@ -201,6 +222,7 @@ def get_posts(
     max_posts: int = 0,
     user_id: int | None = None,
     only_listed: bool = False,
+    media_type: str | None = None,
     admin: bool = False,
 ) -> tuple[list[Post], str, bool]:
     psize = 0
@@ -238,6 +260,29 @@ def get_posts(
 
         if not ok:
             continue
+
+        if media_type is not None:
+            if media_type == "image":
+                if not post.is_image():
+                    continue
+            elif media_type == "video":
+                if not post.is_video():
+                    continue
+            elif media_type == "audio":
+                if not post.is_audio():
+                    continue
+            elif media_type == "flash":
+                if not post.is_flash():
+                    continue
+            elif media_type == "text":
+                if not post.is_text():
+                    continue
+            elif media_type == "markdown":
+                if not post.is_markdown():
+                    continue
+            elif media_type == "zip":
+                if not post.is_zip():
+                    continue
 
         total_size += post.size
         posts.append(post)

@@ -62,11 +62,23 @@
     {% endif %}
 
     <div class="sep">|</div>
+
+    <select id="media_select" title="Select type of media">
+        <option value="all">All</option>
+        <option value="image">Image</option>
+        <option value="video">Video</option>
+        <option value="audio">Audio</option>
+        <option value="flash">Flash</option>
+        <option value="text">Text</option>
+        <option value="markdown">Markdown</option>
+        <option value="zip">Zip</option>
+    </select>
+
+    <div class="sep">|</div>
     <select id="page_select" title="Show this number of items per page"></select>
     <div class="sep">|</div>
     <input id="filter" type="text" placeholder="Filter" title="Press Enter to search">
-    <div class="sep">|</div>
-    <div id="clear_filter" class="action_button">Clear</div>
+    <div id="clear_filter" class="action_button">x</div>
 </div>
 
 <div id="items">
