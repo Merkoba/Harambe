@@ -6,8 +6,6 @@
 <script src="/static/js/main/admin.js"></script>
 {% endblock %}
 
-{% set show_reaction = items | selectattr("last_reaction") | list | length > 0 %}
-
 {% block body %}
 <template id="template_post_edit">
     <div class="dialog_container">
@@ -112,12 +110,6 @@
                 <div class="header_text" data-sort="reactions">Reacts</div>
             </div>
 
-            {% if show_reaction %}
-            <div id="last_reaction" class="table_cell" title="The last reaction to this post">
-                <div class="header_text" data-sort="last_reaction">Reaction</div>
-            </div>
-            {% endif %}
-
             {% if mode == "admin_posts" %}
             <div id="listed" class="table_cell small" title="The post appears in the list">
                 <div class="header_text" data-sort="listed">Listed</div>
@@ -178,12 +170,7 @@
             <div class="table_cell small" title="{{item.views}}">{{item.views}}</div>
 
             <!-- Reactions -->
-            <div class="table_cell small" title="{{item.num_reactions}}">{{item.num_reactions}}</div>
-
-            <!-- Last Reaction -->
-            {% if show_reaction %}
-            <div class="table_cell last_reaction reaction_text" title="{{item.last_reaction}}">{{item.last_reaction}}</div>
-            {% endif %}
+            <div class="table_cell small" title="{{item.last_reaction}}">{{item.num_reactions}}</div>
 
             {% if mode == "admin_posts" %}
             <!-- Listed -->
