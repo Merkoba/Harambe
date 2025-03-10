@@ -656,7 +656,6 @@ def show_list(what: str) -> Any:
 
     admin = user.admin
     user_id = int(request.args.get("user_id", 0))
-    media_type = request.args.get("media_type", None)
     history = user.id == user_id
 
     if not history:
@@ -674,6 +673,7 @@ def show_list(what: str) -> Any:
     page_size = str(request.args.get("page_size", config.list_page_size))
     sort = request.args.get("sort", "date")
     query = request.args.get("query", "")
+    media_type = request.args.get("media_type", None)
     only_listed = not history
     post_items: list[Post] = []
     reaction_items: list[Reaction] = []

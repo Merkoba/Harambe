@@ -299,16 +299,22 @@ App.size_string = (size) => {
   return `${size.toFixed(2)} gb`
 }
 
-App.do_search = (query = ``) => {
+App.do_search = (query = ``, use_media_type = true) => {
   if (!query) {
     query = DOM.el(`#filter`).value.trim()
   }
 
   let url = new URL(window.location.href)
-  let media_type = App.get_media_type()
 
-  if (media_type) {
-    url.searchParams.set(`media_type`, media_type)
+  if (use_media_type) {
+    let media_type = App.get_media_type()
+
+    if (media_type) {
+      url.searchParams.set(`media_type`, media_type)
+    }
+  }
+  else {
+    url.searchParams.delete(`media_type`)
   }
 
   let page_size = App.get_page_size()
@@ -921,7 +927,7 @@ App.pointer_events = () => {
     }
     else if (e.target.classList.contains(`mtype`)) {
       let mtype = e.target.textContent
-      App.do_search(mtype)
+      App.do_search(mtype, false)
     }
     else if (e.target.classList.contains(`sample`)) {
       App.show_sample(item)

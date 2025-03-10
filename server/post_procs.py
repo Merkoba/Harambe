@@ -240,6 +240,7 @@ def get_posts(
 
     posts = []
     total_size = 0
+    query = utils.decode(query)
     query = utils.clean_query(query)
 
     for post in get_postlist(user_id):

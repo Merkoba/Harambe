@@ -4,6 +4,7 @@ from __future__ import annotations
 import re
 import time
 import random
+import urllib.parse
 import unicodedata
 from datetime import datetime
 from pathlib import Path
@@ -236,6 +237,10 @@ def get_banner() -> str:
 
 def clean_filename(name: str) -> str:
     return re.sub(r"[^a-zA-Z0-9_-]", "", name)[:50].strip()
+
+
+def decode(s: str) -> str:
+    return str(urllib.parse.unquote(s))
 
 
 ICONS = load_icons()
