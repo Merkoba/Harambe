@@ -996,7 +996,8 @@ App.setup_thumbnail = () => {
   if (thumb) {
     DOM.ev(thumb, `load`, () => {
       if (App.thumbnail_active) {
-        DOM.show(`#thumbnail_container`)
+        DOM.hide(`#thumbnail_loading`)
+        DOM.show(`#thumbnail`)
       }
     })
 
@@ -1029,6 +1030,9 @@ App.show_thumbnail = (path, title = ``) => {
     DOM.hide(title_el)
   }
 
+  DOM.show(`#thumbnail_container`)
+  DOM.show(`#thumbnail_loading`)
+  DOM.hide(`#thumbnail`)
   App.thumbnail_active = true
   App.thumbnail_path = path
   thumb.src = path
@@ -1081,6 +1085,10 @@ App.show_text = async (path, title = ``) => {
   }
 
   App.hide_thumbnail()
+  let c = DOM.el(`#text_container`)
+  DOM.show(`#text_loading`)
+  DOM.hide(`#text`)
+  DOM.show(c)
 
   try {
     let response = await fetch(path)
@@ -1100,10 +1108,11 @@ App.show_text = async (path, title = ``) => {
         else {
           DOM.hide(title_el)
         }
+
+        DOM.hide(`#text_loading`)
+        DOM.show(`#text`)
       }
 
-      let c = DOM.el(`#text_container`)
-      DOM.show(c)
       App.text_active = true
       App.text_path = path
       c.scrollTop = 0
@@ -1136,15 +1145,16 @@ App.show_sample = async (item) => {
 
     if (response.ok) {
       let json = await response.json()
+      let title = item.dataset.title || item.dataset.full
 
       if (json.ext === `jpg`) {
-        App.show_thumbnail(json.path, item.dataset.title)
+        App.show_thumbnail(json.path, title)
       }
       else if (json.ext === `mp3`) {
         App.play_audio(json.path)
       }
       else if (json.ext === `txt`) {
-        App.show_text(json.path, item.dataset.title)
+        App.show_text(json.path, title)
       }
     }
     else {

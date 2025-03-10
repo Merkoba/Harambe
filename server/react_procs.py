@@ -7,6 +7,7 @@ from typing import Any
 # Modules
 import utils
 import database
+import post_procs
 from config import config
 from database import Reaction as DbReaction
 from user_procs import User
@@ -29,6 +30,7 @@ class Reaction:
     pshow: str
     pmtype: str
     ptitle: str
+    pfull: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -38,23 +40,26 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
     ago = utils.time_ago(reaction.date, now)
     value_sample = utils.space_string(reaction.value)[:140]
     date_str = utils.nice_date(reaction.date)
-    username = reaction.username or "?"
 
     if reaction.parent:
-        pname = reaction.parent.name or "?"
+        pname = reaction.parent.name
         pshow = f"{reaction.parent.name} {reaction.parent.ext}".strip()
-        pmtype = reaction.parent.mtype or "?"
-        ptitle = reaction.parent.title or "?"
+        pmtype = reaction.parent.mtype
+        ptitle = reaction.parent.title
+        pfull = post_procs.get_full_name(reaction.parent)
     else:
         pname = "?"
         pshow = "?"
         pmtype = "?"
         ptitle = "?"
+        pfull = "?"
 
     if reaction.author:
+        username = reaction.author.username
         uname = reaction.author.name or "Anon"
         listed = reaction.author.lister
     else:
+        username = "?"
         uname = "Anon"
         listed = False
 
@@ -74,6 +79,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         pshow,
         pmtype,
         ptitle,
+        pfull,
     )
 
 
