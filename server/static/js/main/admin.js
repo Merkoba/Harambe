@@ -35,7 +35,7 @@ App.init = () => {
     App.fill_page_select(page_select)
 
     DOM.ev(page_select, `change`, () => {
-      App.on_page_select_change(page_select)
+      App.on_page_select_change()
     })
   }
 
@@ -174,27 +174,8 @@ App.fill_page_select = (page_select) => {
   add_option(`All`, App.page_size === `all`)
 }
 
-App.on_page_select_change = (page_select) => {
-  let value = page_select.value
-  let psize
-
-  if (value === `-`) {
-    return
-  }
-
-  if (value === `All`) {
-    psize = `all`
-  }
-  else if (value === `Default`) {
-    psize = `default`
-  }
-  else {
-    psize = parseInt(value)
-  }
-
-  let url = new URL(window.location.href)
-  url.searchParams.set(`page_size`, psize)
-  window.location.href = url.href
+App.on_page_select_change = () => {
+  App.do_search()
 }
 
 App.delete_posts = () => {
@@ -323,19 +304,21 @@ App.do_search = (query = ``) => {
     query = DOM.el(`#filter`).value.trim()
   }
 
-  if (!query) {
-    App.refresh()
-    return
+  let url = new URL(window.location.href)
+  let media_type = DOM.el(`#media_select`)
+
+  if (media_type) {
+    url.searchParams.set(`media_type`, media_type.value)
   }
 
-  let ms = App.mode_string()
+  let page_size = DOM.el(`#page_select`)
 
-  if (query) {
-    App.location(`/${ms}?query=${App.encode_uri(query)}`)
+  if (page_size) {
+    url.searchParams.set(`page_size`, page_size.value)
   }
-  else {
-    App.location(`/${ms}`)
-  }
+
+  url.searchParams.set(`query`, App.encode_uri(query))
+  window.location.href = url.href
 }
 
 App.edit_post_title = (el) => {
@@ -1177,10 +1160,7 @@ App.hide_sample = () => {
 }
 
 App.on_media_select_change = (page_select) => {
-  let value = page_select.value
-  let url = new URL(window.location.href)
-  url.searchParams.set(`media_type`, value)
-  window.location.href = url.href
+  App.do_search()
 }
 
 App.set_active_media_select = () => {
