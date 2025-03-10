@@ -136,16 +136,20 @@ select {
     height: 540px;
     max-width: 60%;
     position: fixed;
+    display: flex;
+    flex-direction: column;
     z-index: 999;
     right: 0;
     top: 0;
 }
 
-#thumbnail {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+.sample_title {
+    background-color: rgb(84, 98, 100);
+    color: white;
+    font-size: 1rem;
+    padding: 0.29rem;
+    font-family: monospace;
+    text-align: center;
 }
 
 .sample {
@@ -158,6 +162,13 @@ select {
     opacity: 0.7;
 }
 
+#thumbnail {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 #text_container {
     max-height: 100%;
     overflow: auto;
@@ -166,7 +177,7 @@ select {
 #text {
     position: relative;
     width: 100%;
-    color: rgb(29, 255, 240);
+    color: rgb(199, 219, 221);
     font-family: monospace;
     font-size: 1rem;
     white-space: pre-wrap;

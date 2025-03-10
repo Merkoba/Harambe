@@ -627,11 +627,11 @@ App.do_filter = () => {
     let value_ = item.dataset.value
     let num_posts = item.dataset.num_posts
     let num_reactions = item.dataset.num_reactions
-    let show = item.dataset.show
+    let full = item.dataset.full
 
     let opts = [
       post, ago, date, size, title, original, uploader, views,
-      listed, mtype, uname, ext, username, rpm, max_size, mark, show,
+      listed, mtype, uname, ext, username, rpm, max_size, mark, full,
       reg_date, last_date, admin, list, value_, num_posts, num_reactions,
     ]
 
@@ -1003,19 +1003,31 @@ App.setup_thumbnail = () => {
   }
 }
 
-App.show_thumbnail = (name) => {
-  if (App.thumbnail_active) {
+App.show_thumbnail = (name, title = ``) => {
+  if (App.thumbnail_active && (App.thumbnail_name === name)) {
     App.hide_thumbnail()
     return
   }
 
+  App.hide_text()
   let thumb = DOM.el(`#thumbnail`)
 
   if (!thumb) {
     return
   }
 
+  let title_el = DOM.el(`#thumbnail_title`)
+
+  if (title) {
+    title_el.textContent = title
+    DOM.show(title_el)
+  }
+  else {
+    DOM.hide(title_el)
+  }
+
   App.thumbnail_active = true
+  App.thumbnail_name = name
   thumb.src = `/sample/${name}.jpg`
 }
 
@@ -1059,12 +1071,13 @@ App.stop_audio = () => {
   }
 }
 
-App.show_text = async (name) => {
-  if (App.text_active) {
+App.show_text = async (name, title = ``) => {
+  if (App.text_active && (App.text_name === name)) {
     App.hide_text()
     return
   }
 
+  App.hide_thumbnail()
   let file = `/sample/${name}.txt`
 
   try {
@@ -1076,11 +1089,21 @@ App.show_text = async (name) => {
 
       if (text_el) {
         text_el.textContent = text
+        let title_el = DOM.el(`#text_title`)
+
+        if (title) {
+          title_el.textContent = title
+          DOM.show(title_el)
+        }
+        else {
+          DOM.hide(title_el)
+        }
       }
 
       let c = DOM.el(`#text_container`)
       DOM.show(c)
       App.text_active = true
+      App.text_name = name
       c.scrollTop = 0
     }
     else {
@@ -1100,15 +1123,21 @@ App.hide_text = () => {
 App.show_sample = (item) => {
   let name = item.dataset.post
   let mtype = item.dataset.mtype
+  let full = item.dataset.full
 
   if ([`image/`, `video/`].some(x => mtype.startsWith(x))) {
-    App.show_thumbnail(name)
+    App.show_thumbnail(name, full)
   }
   else if ([`audio/`].some(x => mtype.startsWith(x))) {
     App.play_audio(name)
   }
   else if ([`text/`].some(x => mtype.startsWith(x))) {
-    App.show_text(name)
+    App.show_text(name, full)
+  }
+  else if ([`application/`].some(x => mtype.startsWith(x))) {
+    if (mtype.includes(`zip`)) {
+      App.show_text(name, full)
+    }
   }
 }
 
