@@ -305,16 +305,16 @@ App.do_search = (query = ``) => {
   }
 
   let url = new URL(window.location.href)
-  let media_type = DOM.el(`#media_select`)
+  let media_type = App.get_media_type()
 
   if (media_type) {
-    url.searchParams.set(`media_type`, media_type.value)
+    url.searchParams.set(`media_type`, media_type)
   }
 
-  let page_size = DOM.el(`#page_select`)
+  let page_size = App.get_page_size()
 
   if (page_size) {
-    url.searchParams.set(`page_size`, page_size.value)
+    url.searchParams.set(`page_size`, page_size)
   }
 
   url.searchParams.set(`query`, App.encode_uri(query))
@@ -1170,4 +1170,41 @@ App.set_active_media_select = () => {
     let value = App.media_type || `all`
     media_select.value = value
   }
+}
+
+App.get_page_size = () => {
+  let page_select = DOM.el(`#page_select`)
+
+  if (!page_select) {
+    return ``
+  }
+
+  let value = page_select.value
+  let psize
+
+  if (value === `-`) {
+    return
+  }
+
+  if (value === `All`) {
+    psize = `all`
+  }
+  else if (value === `Default`) {
+    psize = `default`
+  }
+  else {
+    psize = parseInt(value)
+  }
+
+  return psize
+}
+
+App.get_media_type = () => {
+  let select = DOM.el(`#media_select`)
+
+  if (!select) {
+    return ``
+  }
+
+  return select.value
 }
