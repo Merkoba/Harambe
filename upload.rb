@@ -51,7 +51,8 @@ abort("Error: FILE_PATH is not set") if file_path.nil? || file_path.empty?
 title = ""
 
 if prompt
-  title = `zenity --entry --title="Harambe Upload" --text="Enter a title:"`.chomp
+  filename = File.basename(file_path, ".*")
+  title = `zenity --entry --title="Harambe Upload" --text="Enter a title:" --entry-text="#{filename}"`.chomp
 
   if $?.exitstatus != 0
     puts "User cancelled the input."
