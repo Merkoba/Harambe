@@ -77,12 +77,14 @@
     <video id="audio" controls poster="/static/img/cover.jpg"></video>
 </div>
 
-<div id="top" class="nowrap">
-{% block admin_top %}{% endblock %}
-</div>
+<div id="container">
+    <div id="top" class="nowrap">
+    {% block admin_top %}{% endblock %}
+    </div>
 
-<div id="items">
-{% block admin_items %}{% endblock %}
+    <div id="items">
+    {% block admin_items %}{% endblock %}
+    </div>
 </div>
 
 {% endblock %}
