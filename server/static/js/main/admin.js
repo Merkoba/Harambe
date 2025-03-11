@@ -1165,9 +1165,9 @@ App.show_sample = async (item) => {
       return
     }
 
-    App.hide_sample()
-    App.show_no_sample()
     App.sample_name = name
+    App.hide_sample(false, false)
+    App.show_no_sample()
 
     if (response.ok) {
       let json = await response.json()
@@ -1208,14 +1208,17 @@ App.scroll_text = (direction) => {
   }
 }
 
-App.hide_sample = (clear_name = true) => {
+App.hide_sample = (clear_name = true, hide_no_sample = true) => {
   App.hide_thumbnail()
   App.hide_audio()
   App.hide_text()
-  App.hide_no_sample()
 
   if (clear_name) {
     App.sample_name = ``
+  }
+
+  if (hide_no_sample) {
+    App.hide_no_sample()
   }
 }
 
