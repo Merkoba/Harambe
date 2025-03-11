@@ -1171,7 +1171,7 @@ App.show_sample = async (item) => {
 
     if (response.ok) {
       let json = await response.json()
-      App.hide_sample(false)
+      App.hide_sample(false, false)
 
       if (json.ext === `jpg`) {
         App.show_thumbnail(json.path, title)
@@ -1182,6 +1182,8 @@ App.show_sample = async (item) => {
       else if (json.ext === `txt`) {
         App.show_text(json.path, title)
       }
+
+      App.hide_no_sample()
     }
     else {
       App.no_sample_text(`No Sample`)
