@@ -31,6 +31,7 @@ class Reaction:
     pmtype: str
     ptitle: str
     pfull: str
+    poriginal: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -46,6 +47,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         pshow = f"{reaction.parent.name} {reaction.parent.ext}".strip()
         pmtype = reaction.parent.mtype
         ptitle = reaction.parent.title
+        poriginal = reaction.parent.original
         pfull = post_procs.get_full_name(reaction.parent)
     else:
         pname = "?"
@@ -53,6 +55,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         pmtype = "?"
         ptitle = "?"
         pfull = "?"
+        poriginal = "?"
 
     if reaction.author:
         username = reaction.author.username
@@ -80,6 +83,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         pmtype,
         ptitle,
         pfull,
+        poriginal,
     )
 
 

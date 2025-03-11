@@ -82,7 +82,7 @@
     data-post="{{item.pname}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}"
     data-value="{{item.value}}" data-uname="{{item.uname}}"
     data-mtype="{{item.pmtype}}" data-full="{{item.pfull}}"
-    data-title="{{item.ptitle}}">
+    data-title="{{item.ptitle}}" data-original="{{item.poriginal}}">
         <!-- Checkbox -->
         <div class="table_cell checkbox" title="Select this item">
             <input class="select_checkbox" type="checkbox">
@@ -95,7 +95,11 @@
 
         <!-- Post -->
         <div class="table_cell">
-            <a href="/post/{{item.pname}}" title="{{item.pshow}}" data-name="{{item.pname}}" class="post_name">{{item.pshow}}</a>
+            <a href="/post/{{item.pname}}" title="{{item.ptitle or item.poriginal}}" class="post_name">{{item.ptitle or item.poriginal}}</a>
+        </div>
+
+        <!-- Title -->
+        <div class="table_cell">
         </div>
 
         <!-- Value -->
