@@ -1150,7 +1150,7 @@ App.show_sample = async (item, from = `normal`) => {
   let name = item.dataset.post
 
   if (App.sample_name === name) {
-    if (mode === `normal`) {
+    if (from === `normal`) {
       App.hide_sample()
     }
 
