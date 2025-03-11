@@ -909,6 +909,22 @@ App.key_events = () => {
         }
       }
     }
+    else if (App.sample_open()) {
+      if (e.key === `ArrowLeft`) {
+        App.prev_sample()
+      }
+      else if (e.key === `ArrowRight`) {
+        App.next_sample()
+      }
+    }
+    else {
+      if (e.key === `ArrowLeft`) {
+        App.prev_page()
+      }
+      else if (e.key === `ArrowRight`) {
+        App.next_page()
+      }
+    }
   })
 }
 
@@ -1284,4 +1300,22 @@ App.show_no_sample = (title) => {
 App.hide_no_sample = () => {
   DOM.el(`#no_sample_title`).textContent = ``
   DOM.hide(`#no_sample_container`)
+}
+
+App.sample_open = () => {
+  return App.sample_path
+}
+
+// You're awesome :)
+
+App.prev_page = () => {
+  if (App.page > 1) {
+    App.goto_page(App.page - 1)
+  }
+}
+
+App.next_page = () => {
+  if (App.next_page) {
+    App.goto_page(App.page + 1)
+  }
 }
