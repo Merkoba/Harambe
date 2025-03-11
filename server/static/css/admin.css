@@ -210,6 +210,7 @@ select {
     flex-shrink: 1;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
+    overflow: hidden;
 }
 
 .sample_title:hover {
