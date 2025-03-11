@@ -1142,6 +1142,7 @@ App.show_sample = async (item) => {
         return
       }
 
+      App.hide_sample()
       App.sample_path = json.path
 
       if (json.ext === `jpg`) {
