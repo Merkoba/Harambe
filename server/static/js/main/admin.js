@@ -1099,7 +1099,6 @@ App.show_text = async (path, title = ``) => {
         DOM.show(`#text`)
       }
 
-      App.text_path = path
       c.scrollTop = 0
     }
     else {
@@ -1376,6 +1375,7 @@ App.doc_click = (e) => {
     }
   }
   else {
+    console.log(44444444)
     App.hide_sample()
   }
 }
