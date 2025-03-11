@@ -591,15 +591,19 @@ App.delete_all = () => {
   }
 }
 
+App.filter_value = () => {
+  let filter = DOM.el(`#filter`)
+  return filter.value.trim()
+}
+
 App.do_filter = () => {
   function clean(s) {
     s = s.toLowerCase()
     return s.replace(/[\s:]/g, ``).trim()
   }
 
-  let filter = DOM.el(`#filter`)
   let items = DOM.els(`.item`)
-  let value = clean(filter.value.toLowerCase())
+  let value = clean(App.filter_value().toLowerCase())
 
   for (let item of items) {
     let post = item.dataset.post
@@ -908,6 +912,16 @@ App.key_events = () => {
           filter.blur()
         }
       }
+      else if (e.key === `ArrowLeft`) {
+        if (!App.filter_value()) {
+          App.prev_page()
+        }
+      }
+      else if (e.key === `ArrowRight`) {
+        if (!App.filter_value()) {
+          App.next_page()
+        }
+      }
     }
     else if (App.sample_open()) {
       if (e.key === `ArrowLeft`) {
@@ -916,14 +930,15 @@ App.key_events = () => {
       else if (e.key === `ArrowRight`) {
         App.next_sample()
       }
+      else if (e.key === `Escape`) {
+        App.hide_sample()
+      }
     }
-    else {
-      if (e.key === `ArrowLeft`) {
-        App.prev_page()
-      }
-      else if (e.key === `ArrowRight`) {
-        App.next_page()
-      }
+    else if (e.key === `ArrowLeft`) {
+      App.prev_page()
+    }
+    else if (e.key === `ArrowRight`) {
+      App.next_page()
     }
   })
 }
@@ -1305,8 +1320,6 @@ App.hide_no_sample = () => {
 App.sample_open = () => {
   return App.sample_path
 }
-
-// You're awesome :)
 
 App.prev_page = () => {
   if (App.page > 1) {
