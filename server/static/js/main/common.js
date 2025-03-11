@@ -807,7 +807,7 @@ App.location = (where) => {
   window.location = where
 }
 
-App.close_all_modals = () => {
+App.close_modals = () => {
   Msg.msg.close_all()
 }
 

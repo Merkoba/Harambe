@@ -195,6 +195,7 @@ App.react_alert = () => {
 
 App.react_icon = async (id) => {
   if (!App.can_react) {
+    App.close_modals()
     App.react_alert()
     return
   }
@@ -405,11 +406,6 @@ App.get_reaction = (id) => {
 }
 
 App.react_prompt = (id) => {
-  if (!App.can_react) {
-    App.react_alert()
-    return
-  }
-
   let value
 
   if (id) {
@@ -426,6 +422,11 @@ App.react_prompt = (id) => {
     value,
     callback: (text) => {
       if (!text) {
+        return
+      }
+
+      if (!App.can_react) {
+        App.react_alert()
         return
       }
 
