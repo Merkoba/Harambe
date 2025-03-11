@@ -946,12 +946,12 @@ App.key_events = () => {
 
 App.pointer_events = () => {
   DOM.ev(document, `click`, async (e) => {
-    App.doc_click(e)
+    App.doc_click(e, `click`)
   })
 
   DOM.ev(document, `auxclick`, async (e) => {
     if (e.button === 1) {
-      App.doc_click(e)
+      App.doc_click(e, `auxclick`)
     }
   })
 
@@ -1337,7 +1337,7 @@ App.no_sample_text = (text) => {
   DOM.el(`#no_sample_text`).textContent = text
 }
 
-App.doc_click = (e) => {
+App.doc_click = (e, mode) => {
   let item = e.target.closest(`.item`)
   App.active_item = item
 
@@ -1364,7 +1364,12 @@ App.doc_click = (e) => {
   }
   else if (e.target.closest(`.sample_container`)) {
     if (e.target.closest(`.sample_title`)) {
-      window.location = `/post/${App.sample_name}`
+      if (mode === `click`) {
+        window.location = `/post/${App.sample_name}`
+      }
+      else if (mode === `auxclick`) {
+        window.open(`/post/${App.sample_name}`, `_blank`)
+      }
     }
     else if (e.target.closest(`.sample_title_prev`)) {
       App.prev_sample()
