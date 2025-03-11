@@ -349,7 +349,7 @@ App.edit_post_title = (el) => {
 
       if (response.ok) {
         el.dataset.title = title
-        DOM.el(`.title`, el).innerText = title || o
+        DOM.el(`.post_name`, el).innerText = title || o
       }
       else {
         App.print_error(response.status)

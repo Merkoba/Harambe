@@ -207,6 +207,7 @@ select {
     white-space: nowrap;
     cursor: pointer;
     flex-grow: 1;
+    flex-shrink: 1;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
