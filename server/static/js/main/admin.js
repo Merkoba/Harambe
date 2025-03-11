@@ -1149,6 +1149,18 @@ App.hide_text = () => {
 App.show_sample = async (item, from = `normal`) => {
   let name = item.dataset.post
 
+  if (App.sample_name === name) {
+    if (mode === `normal`) {
+      App.hide_sample()
+    }
+
+    return
+  }
+
+  App.sample_name = name
+  App.hide_sample(false, false)
+  App.show_no_sample()
+
   try {
     let response = await fetch(`/get_sample`, {
       method: `POST`,
@@ -1159,18 +1171,6 @@ App.show_sample = async (item, from = `normal`) => {
     })
 
     let title = item.dataset.title || item.dataset.original || item.dataset.full
-
-    if (App.sample_name === name) {
-      if (mode === `normal`) {
-        App.hide_sample()
-      }
-
-      return
-    }
-
-    App.sample_name = name
-    App.hide_sample(false, false)
-    App.show_no_sample()
 
     if (response.ok) {
       let json = await response.json()
