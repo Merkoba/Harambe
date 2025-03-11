@@ -6,175 +6,173 @@
 
 {% set show_marks = items | selectattr("mark") | list | length > 0 %}
 
-{% block admin_body %}
-<div id="top" class="nowrap">
-    <div id="menu" class="action_button" title="Ctrl+M">Menu</div>
-    <div class="sep">|</div>
-    <div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
-    <div class="sep">|</div>
-    <div class="action_button" id="add" title="Add an item">Add</div>
-    <div class="sep">|</div>
-    <div class="action_button" id="edit" title="Some edit actions">Edit</div>
-    <div class="sep">|</div>
-    <div class="action_button" id="delete_selected" title="Delete selected items">Delete</div>
-    <div class="sep">|</div>
-    <div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del Normals</div>
-    <div class="sep">|</div>
-    <div title="Total storage stats of all items (on all pages)">Total: {{total}}</div>
-    <div class="sep">|</div>
-    <div title="This is the current page">Page {{page}}</div>
-    <div class="sep">|</div>
+{% block admin_top %}
+<div id="menu" class="action_button" title="Ctrl+M">Menu</div>
+<div class="sep">|</div>
+<div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
+<div class="sep">|</div>
+<div class="action_button" id="add" title="Add an item">Add</div>
+<div class="sep">|</div>
+<div class="action_button" id="edit" title="Some edit actions">Edit</div>
+<div class="sep">|</div>
+<div class="action_button" id="delete_selected" title="Delete selected items">Delete</div>
+<div class="sep">|</div>
+<div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del Normals</div>
+<div class="sep">|</div>
+<div title="Total storage stats of all items (on all pages)">Total: {{total}}</div>
+<div class="sep">|</div>
+<div title="This is the current page">Page {{page}}</div>
+<div class="sep">|</div>
 
-    {% if page > 1 %}
-    <div id="prev_page" class="action_button" title="Go to the previous page">Prev</div>
-    {% else %}
-    <div class="unselectable">Prev</div>
-    {% endif %}
+{% if page > 1 %}
+<div id="prev_page" class="action_button" title="Go to the previous page">Prev</div>
+{% else %}
+<div class="unselectable">Prev</div>
+{% endif %}
 
-    <div class="sep">|</div>
+<div class="sep">|</div>
 
-    {% if next_page %}
-    <div id="next_page" class="action_button" title="Go to the next page">Next</div>
-    {% else %}
-    <div class="unselectable">Next</div>
-    {% endif %}
+{% if next_page %}
+<div id="next_page" class="action_button" title="Go to the next page">Next</div>
+{% else %}
+<div class="unselectable">Next</div>
+{% endif %}
 
-    <div class="sep">|</div>
-    <select id="page_select" title="Show this number of items per page"></select>
-    <div class="sep">|</div>
-    <input id="filter" type="text" placeholder="Filter" title="Press Enter to search">
-    <div class="sep">|</div>
-    <div id="clear_filter" class="action_button">Clear</div>
-</div>
+<div class="sep">|</div>
+<select id="page_select" title="Show this number of items per page"></select>
+<div class="sep">|</div>
+<input id="filter" type="text" placeholder="Filter" title="Press Enter to search">
+<div class="sep">|</div>
+<div id="clear_filter" class="action_button">Clear</div>
+{% endblock %}
 
-<div id="items">
-    <div class="table">
-        <div class="table_row table_header">
-            <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
+{% block admin_items %}
+<div class="table">
+    <div class="table_row table_header">
+        <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
 
-            <div id="username" class="table_cell" title="The username of the user">
-                <div class="header_text" data-sort="username">User</div>
-            </div>
-
-            <div id="username" class="table_cell" title="The name of the user">
-                <div class="header_text" data-sort="name">Name</div>
-            </div>
-
-            <div id="limit" class="table_cell small" title="Requests per minute the user can make">
-                <div class="header_text" data-sort="rpm">RPM</div>
-            </div>
-
-            <div id="max" class="table_cell small" title="The max size in megabytes this user can upload at once">
-                <div class="header_text" data-sort="max_size">Max</div>
-            </div>
-
-            <div id="list" class="table_cell" title="This user is an admin and can use the admin pages">
-                <div class="header_text" data-sort="admin">Admin</div>
-            </div>
-
-            <div id="poster" class="table_cell" title="This user can make posts">
-                <div class="header_text" data-sort="poster">Poster</div>
-            </div>
-
-            <div id="reacter" class="table_cell" title="This user can react in posts">
-                <div class="header_text" data-sort="reacter">Reacter</div>
-            </div>
-
-            <div id="lister" class="table_cell" title="The posts of this user will appear in the list">
-                <div class="header_text" data-sort="lister">Lister</div>
-            </div>
-
-            <div id="list" class="table_cell" title="Can view the list of posts">
-                <div class="header_text" data-sort="reader">Reader</div>
-            </div>
-
-            <div id="num_posts" class="table_cell small" title="The number of posts this user has done">
-                <div class="header_text" data-sort="num_posts">Posts</div>
-            </div>
-
-            <div id="num_reactions" class="table_cell small" title="The number of reactions this user has done">
-                <div class="header_text" data-sort="num_reactions">Reactions</div>
-            </div>
-
-            {% if show_marks %}
-            <div id="mark" class="table_cell" title="A mark added to the end of file names to identify a certain kind of upload">
-                <div class="header_text" data-sort="mark">Mark</div>
-            </div>
-            {% endif %}
-
-            <div id="reg_date" class="table_cell" title="The date when the user was registered">
-                <div class="header_text" data-sort="register_date">RegDate</div>
-            </div>
-
-            <div id="last_date" class="table_cell" title="The date when the user made their latest post">
-                <div class="header_text" data-sort="last_date">LastDate</div>
-            </div>
+        <div id="username" class="table_cell" title="The username of the user">
+            <div class="header_text" data-sort="username">User</div>
         </div>
 
-        {% for item in items %}
-        <div class="table_row item"
-        data-user_id="{{item.id}}"
-        data-username="{{item.username}}"
-        data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}"
-        data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}"
-        data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}"
-        data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}"
-        data-lister="{{lister_str}}" data-reacter="{{reacter_str}}"
-        data-num_posts="{{item.num_posts}}" data-num_reactions="{{item.num_reactions}}">
-            <!-- Checkbox -->
-            <div class="table_cell checkbox" title="Select this item">
-                <input class="select_checkbox" type="checkbox">
-            </div>
-
-            <!-- Username -->
-            <div class="table_cell" title="{{item.username}}">
-                <div class="admin_user action_button">{{item.username}}</div>
-            </div>
-
-            <!-- Name -->
-            <div class="table_cell" title="{{item.name}}">
-                <div class="admin_user action_button">{{item.name}}</div>
-            </div>
-
-            <!-- RPM -->
-            <div class="table_cell small">{{item.rpm_fill}}</div>
-
-            <!-- Max Size -->
-            <div class="table_cell small">{{item.max_size_fill}}</div>
-
-            <!-- Admin -->
-            <div class="table_cell">{{item.admin_str}}</div>
-
-            <!-- Poster -->
-            <div class="table_cell">{{item.poster_str}}</div>
-
-            <!-- Reacter -->
-            <div class="table_cell">{{item.reacter_str}}</div>
-
-            <!-- Lister -->
-            <div class="table_cell">{{item.lister_str}}</div>
-
-            <!-- Reader -->
-            <div class="table_cell">{{item.reader_str}}</div>
-
-            <!-- Posts -->
-            <div class="table_cell small">{{item.num_posts}}</div>
-
-            <!-- Reactions -->
-            <div class="table_cell small">{{item.num_reactions}}</div>
-
-            <!-- Mark -->
-            {% if show_marks %}
-            <div class="table_cell">{{item.mark}}</div>
-            {% endif %}
-
-            <!-- Register Date -->
-            <div class="table_cell" title="{{item.register_date_str}}">{{item.register_date_str}}</div>
-
-            <!-- Last Date -->
-            <div class="table_cell" title="{{item.last_date_str}}">{{item.last_date_str}}</div>
+        <div id="username" class="table_cell" title="The name of the user">
+            <div class="header_text" data-sort="name">Name</div>
         </div>
-        {% endfor %}
+
+        <div id="limit" class="table_cell small" title="Requests per minute the user can make">
+            <div class="header_text" data-sort="rpm">RPM</div>
+        </div>
+
+        <div id="max" class="table_cell small" title="The max size in megabytes this user can upload at once">
+            <div class="header_text" data-sort="max_size">Max</div>
+        </div>
+
+        <div id="list" class="table_cell" title="This user is an admin and can use the admin pages">
+            <div class="header_text" data-sort="admin">Admin</div>
+        </div>
+
+        <div id="poster" class="table_cell" title="This user can make posts">
+            <div class="header_text" data-sort="poster">Poster</div>
+        </div>
+
+        <div id="reacter" class="table_cell" title="This user can react in posts">
+            <div class="header_text" data-sort="reacter">Reacter</div>
+        </div>
+
+        <div id="lister" class="table_cell" title="The posts of this user will appear in the list">
+            <div class="header_text" data-sort="lister">Lister</div>
+        </div>
+
+        <div id="list" class="table_cell" title="Can view the list of posts">
+            <div class="header_text" data-sort="reader">Reader</div>
+        </div>
+
+        <div id="num_posts" class="table_cell small" title="The number of posts this user has done">
+            <div class="header_text" data-sort="num_posts">Posts</div>
+        </div>
+
+        <div id="num_reactions" class="table_cell small" title="The number of reactions this user has done">
+            <div class="header_text" data-sort="num_reactions">Reactions</div>
+        </div>
+
+        {% if show_marks %}
+        <div id="mark" class="table_cell" title="A mark added to the end of file names to identify a certain kind of upload">
+            <div class="header_text" data-sort="mark">Mark</div>
+        </div>
+        {% endif %}
+
+        <div id="reg_date" class="table_cell" title="The date when the user was registered">
+            <div class="header_text" data-sort="register_date">RegDate</div>
+        </div>
+
+        <div id="last_date" class="table_cell" title="The date when the user made their latest post">
+            <div class="header_text" data-sort="last_date">LastDate</div>
+        </div>
     </div>
+
+    {% for item in items %}
+    <div class="table_row item"
+    data-user_id="{{item.id}}"
+    data-username="{{item.username}}"
+    data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}"
+    data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}"
+    data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}"
+    data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}"
+    data-lister="{{lister_str}}" data-reacter="{{reacter_str}}"
+    data-num_posts="{{item.num_posts}}" data-num_reactions="{{item.num_reactions}}">
+        <!-- Checkbox -->
+        <div class="table_cell checkbox" title="Select this item">
+            <input class="select_checkbox" type="checkbox">
+        </div>
+
+        <!-- Username -->
+        <div class="table_cell" title="{{item.username}}">
+            <div class="admin_user action_button">{{item.username}}</div>
+        </div>
+
+        <!-- Name -->
+        <div class="table_cell" title="{{item.name}}">
+            <div class="admin_user action_button">{{item.name}}</div>
+        </div>
+
+        <!-- RPM -->
+        <div class="table_cell small">{{item.rpm_fill}}</div>
+
+        <!-- Max Size -->
+        <div class="table_cell small">{{item.max_size_fill}}</div>
+
+        <!-- Admin -->
+        <div class="table_cell">{{item.admin_str}}</div>
+
+        <!-- Poster -->
+        <div class="table_cell">{{item.poster_str}}</div>
+
+        <!-- Reacter -->
+        <div class="table_cell">{{item.reacter_str}}</div>
+
+        <!-- Lister -->
+        <div class="table_cell">{{item.lister_str}}</div>
+
+        <!-- Reader -->
+        <div class="table_cell">{{item.reader_str}}</div>
+
+        <!-- Posts -->
+        <div class="table_cell small">{{item.num_posts}}</div>
+
+        <!-- Reactions -->
+        <div class="table_cell small">{{item.num_reactions}}</div>
+
+        <!-- Mark -->
+        {% if show_marks %}
+        <div class="table_cell">{{item.mark}}</div>
+        {% endif %}
+
+        <!-- Register Date -->
+        <div class="table_cell" title="{{item.register_date_str}}">{{item.register_date_str}}</div>
+
+        <!-- Last Date -->
+        <div class="table_cell" title="{{item.last_date_str}}">{{item.last_date_str}}</div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}
