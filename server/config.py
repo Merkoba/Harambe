@@ -120,9 +120,6 @@ class Config:
         # Accent color for the web interface
         self.accent_color: str = "127, 104, 164"
 
-        # Font color for the web interface
-        self.font_color: str = "255, 255, 255"
-
         # Text color for the web interface
         self.text_color: str = "255, 255, 255"
 
@@ -130,7 +127,7 @@ class Config:
         self.link_color: str = "222, 211, 239"
 
         # Alt color for some text elements
-        self.alt_color: str = "193 234 178"
+        self.alt_color: str = "193, 234, 178"
 
         # Font family for the web interface
         self.font_family: str = "sans-serif"
@@ -352,7 +349,6 @@ class Config:
             set_value(c, "rate_limit")
             set_value(c, "background_color")
             set_value(c, "accent_color")
-            set_value(c, "font_color")
             set_value(c, "text_color")
             set_value(c, "link_color")
             set_value(c, "alt_color")

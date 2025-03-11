@@ -1,5 +1,5 @@
 body, html {
-    color: var(--font_color);
+    color: var(--text_color);
     background-color: var(--background_color);
     margin-left: 20px;
     margin-top: 16px;
@@ -25,7 +25,7 @@ img {
 }
 
 img:hover {
-    outline: 2px solid var(--font_color);
+    outline: 2px solid var(--text_color);
 }
 
 .button {

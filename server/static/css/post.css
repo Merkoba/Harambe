@@ -4,7 +4,7 @@
 }
 
 body, html {
-    color: var(--font_color);
+    color: var(--text_color);
     background-color: var(--background_color);
     margin-left: 10px;
     margin-right: 10px;
@@ -162,7 +162,7 @@ a.link:hover,
 }
 
 #icons_container {
-    color: var(--font_color);
+    color: var(--text_color);
     background-color: var(--accent_color);
     border: 2px solid var(--frame_color);
     display: flex;

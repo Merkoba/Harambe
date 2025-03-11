@@ -4,7 +4,7 @@
 }
 
 body, html {
-    color: var(--font_color);
+    color: var(--text_color);
     background-color: var(--background_color);
     display: flex;
     flex-direction: column;
@@ -22,7 +22,7 @@ body, html {
 #buttons button {
     background-color: var(--accent_color);
     font-family: inherit;
-    color: var(--font_color);
+    color: var(--text_color);
     font-size: 1rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;

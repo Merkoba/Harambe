@@ -361,7 +361,7 @@ App.char_regex_3 = (char, n = 1) => {
 }
 
 App.to_bold = (text) => {
-  return `<span class='md_highlight'>${text}</span>`
+  return `<span class="md_highlight">${text}</span>`
 }
 
 App.parse_markdown = (text) => {

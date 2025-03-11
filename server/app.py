@@ -165,7 +165,6 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         or ((user.admin or user.reader) if user else False),
         "background_color": config.background_color,
         "accent_color": config.accent_color,
-        "font_color": config.font_color,
         "text_color": config.text_color,
         "link_color": config.link_color,
         "alt_color": config.alt_color,
