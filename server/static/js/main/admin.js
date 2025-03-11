@@ -1097,9 +1097,8 @@ App.show_text = async (path, title = ``) => {
 
         DOM.hide(`#text_loading`)
         DOM.show(`#text`)
+        text_el.scrollTop = 0
       }
-
-      c.scrollTop = 0
     }
     else {
       App.print_error(response.status)
@@ -1373,9 +1372,8 @@ App.doc_click = (e) => {
     else if (e.target.closest(`.sample_title_next`)) {
       App.next_sample()
     }
-  }
-  else {
-    console.log(44444444)
-    App.hide_sample()
+    else if (e.target.closest(`.sample_close`)) {
+      App.hide_sample()
+    }
   }
 }
