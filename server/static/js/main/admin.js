@@ -5,7 +5,7 @@ window.onload = () => {
 App.init = () => {
   App.selected_items = []
   App.last_checkbox = null
-  App.sample_path = ``
+  App.sample_name = ``
 
   App.key_events()
   App.pointer_events()
@@ -1159,18 +1159,19 @@ App.show_sample = async (item) => {
     })
 
     let title = item.dataset.title || item.dataset.original || item.dataset.full
+
+    if (App.sample_name === name) {
+      App.hide_sample()
+      return
+    }
+
+    App.hide_sample()
+    App.show_no_sample()
     App.sample_name = name
 
     if (response.ok) {
       let json = await response.json()
-
-      if (App.sample_path === json.path) {
-        App.hide_sample()
-        return
-      }
-
-      App.hide_sample()
-      App.sample_path = json.path
+      App.hide_sample(false)
 
       if (json.ext === `jpg`) {
         App.show_thumbnail(json.path, title)
@@ -1183,8 +1184,7 @@ App.show_sample = async (item) => {
       }
     }
     else {
-      App.hide_sample()
-      App.show_no_sample(title)
+      App.no_sample_text(`No Sample`)
     }
   }
   catch (error) {
@@ -1208,12 +1208,15 @@ App.scroll_text = (direction) => {
   }
 }
 
-App.hide_sample = () => {
+App.hide_sample = (clear_name = true) => {
   App.hide_thumbnail()
   App.hide_audio()
   App.hide_text()
   App.hide_no_sample()
-  App.sample_path = ``
+
+  if (clear_name) {
+    App.sample_name = ``
+  }
 }
 
 App.on_media_select_change = (page_select) => {
@@ -1307,8 +1310,8 @@ App.next_sample = () => {
   }
 }
 
-App.show_no_sample = (title) => {
-  DOM.el(`#no_sample_title`).textContent = title
+App.show_no_sample = () => {
+  App.no_sample_text(`Loading`)
   DOM.show(`#no_sample_container`)
 }
 
@@ -1318,7 +1321,7 @@ App.hide_no_sample = () => {
 }
 
 App.sample_open = () => {
-  return App.sample_path
+  return App.sample_name
 }
 
 App.prev_page = () => {
@@ -1331,4 +1334,8 @@ App.next_page = () => {
   if (App.next_page) {
     App.goto_page(App.page + 1)
   }
+}
+
+App.no_sample_text = (text) => {
+  DOM.el(`#no_sample_text`).textContent = text
 }
