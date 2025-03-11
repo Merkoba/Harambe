@@ -45,6 +45,7 @@
             App.reactions = {{post.reactions | default(0) | tojson}}
             App.text = {{post.text | default(0) | tojson | safe}}
             App.uploader = {{post.uploader | default(0) | tojson | safe}}
+            App.zip_embed = {{post.zip_embed | default(0) | tojson}}
             {% endif %}
 
             App.file_path = {{file_path | default(0) | tojson | safe}}

@@ -129,7 +129,7 @@
     </div>
     {% endif %}
 
-    {% if post.text %}
+    {% if post.text and (not post.zip_embed) %}
     <div class="embed">
         <div id="text_buttons" class="rowitem">
             <div id="copy_all_text" class="button">Copy All</div>

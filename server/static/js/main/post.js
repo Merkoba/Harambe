@@ -882,7 +882,9 @@ App.start_embed = () => {
     App.start_markdown()
   }
   else if (App.text) {
-    App.start_editor()
+    if (!App.zip_embed) {
+      App.start_editor()
+    }
   }
   else if (App.mtype.startsWith(`application`)) {
     if (App.mtype.includes(`flash`)) {
