@@ -1035,11 +1035,6 @@ App.hide_thumbnail = () => {
 }
 
 App.show_audio = (path, title) => {
-  if (!audio.paused) {
-    App.hide_audio()
-    return
-  }
-
   DOM.show(`#audio_loading`)
   DOM.hide(`#audio`)
 
@@ -1050,6 +1045,7 @@ App.show_audio = (path, title) => {
     DOM.hide(`#audio_title`)
   }
 
+  let audio = DOM.el(`#audio`)
   audio.pause()
   audio.src = path
   audio.currentTime = 0
