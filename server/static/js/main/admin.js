@@ -945,43 +945,12 @@ App.key_events = () => {
 
 App.pointer_events = () => {
   DOM.ev(document, `click`, async (e) => {
-    let item = e.target.closest(`.item`)
-    App.active_item = item
+    App.doc_click(e)
+  })
 
-    if (e.target.classList.contains(`select_checkbox`)) {
-      App.on_checkbox_click(e)
-    }
-    else if (e.target.classList.contains(`admin_user`)) {
-      App.user_opts_user_id = item.dataset.user_id
-      App.msg_show(`user`)
-    }
-    else if (e.target.classList.contains(`mtype`)) {
-      let mtype = e.target.textContent
-      App.do_search(mtype, false)
-    }
-    else if (e.target.closest(`.sample`)) {
-      App.show_sample(item)
-    }
-    else if (e.target.closest(`.header_text`)) {
-      let sort = e.target.dataset.sort
-
-      if (sort) {
-        App.do_sort(sort)
-      }
-    }
-    else if (e.target.closest(`.sample_container`)) {
-      if (e.target.closest(`.sample_title`)) {
-        window.location = `/post/${App.sample_name}`
-      }
-      else if (e.target.closest(`.sample_title_prev`)) {
-        App.prev_sample()
-      }
-      else if (e.target.closest(`.sample_title_next`)) {
-        App.next_sample()
-      }
-    }
-    else {
-      App.hide_sample()
+  DOM.ev(document, `auxclick`, async (e) => {
+    if (e.button === 1) {
+      App.doc_click(e)
     }
   })
 
@@ -1291,11 +1260,17 @@ App.setup_samples = () => {
 }
 
 App.prev_sample = () => {
-  for (let item of DOM.els(`.item`)) {
+  let items = DOM.els(`.item`)
+
+  for (let [i, item] of items.entries()) {
     let name = item.dataset.post
 
     if (name === App.sample_name) {
-      let prev = item.previousElementSibling
+      if (i === 0) {
+        return
+      }
+
+      let prev = items[i - 1]
 
       if (prev) {
         App.show_sample(prev, `prev`)
@@ -1306,11 +1281,17 @@ App.prev_sample = () => {
 }
 
 App.next_sample = () => {
-  for (let item of DOM.els(`.item`)) {
+  let items = DOM.els(`.item`)
+
+  for (let [i, item] of items.entries()) {
     let name = item.dataset.post
 
     if (name === App.sample_name) {
-      let next = item.nextElementSibling
+      if (i === items.length - 1) {
+        return
+      }
+
+      let next = items[i + 1]
 
       if (next) {
         App.show_sample(next, `next`)
@@ -1348,4 +1329,45 @@ App.next_page = () => {
 
 App.no_sample_text = (text) => {
   DOM.el(`#no_sample_text`).textContent = text
+}
+
+App.doc_click = (e) => {
+  let item = e.target.closest(`.item`)
+  App.active_item = item
+
+  if (e.target.classList.contains(`select_checkbox`)) {
+    App.on_checkbox_click(e)
+  }
+  else if (e.target.classList.contains(`admin_user`)) {
+    App.user_opts_user_id = item.dataset.user_id
+    App.msg_show(`user`)
+  }
+  else if (e.target.classList.contains(`mtype`)) {
+    let mtype = e.target.textContent
+    App.do_search(mtype, false)
+  }
+  else if (e.target.closest(`.sample`)) {
+    App.show_sample(item)
+  }
+  else if (e.target.closest(`.header_text`)) {
+    let sort = e.target.dataset.sort
+
+    if (sort) {
+      App.do_sort(sort)
+    }
+  }
+  else if (e.target.closest(`.sample_container`)) {
+    if (e.target.closest(`.sample_title`)) {
+      window.location = `/post/${App.sample_name}`
+    }
+    else if (e.target.closest(`.sample_title_prev`)) {
+      App.prev_sample()
+    }
+    else if (e.target.closest(`.sample_title_next`)) {
+      App.next_sample()
+    }
+  }
+  else {
+    App.hide_sample()
+  }
 }
