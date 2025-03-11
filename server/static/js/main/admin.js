@@ -1298,7 +1298,8 @@ App.prev_sample = () => {
       let prev = item.previousElementSibling
 
       if (prev) {
-        App.show_sample(prev)
+        App.show_sample(prev, `prev`)
+        return
       }
     }
   }
@@ -1312,7 +1313,8 @@ App.next_sample = () => {
       let next = item.nextElementSibling
 
       if (next) {
-        App.show_sample(next)
+        App.show_sample(next, `next`)
+        return
       }
     }
   }
