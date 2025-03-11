@@ -5,6 +5,7 @@ window.onload = () => {
 App.init = () => {
   App.selected_items = []
   App.last_checkbox = null
+  App.sample_loading = false
   App.sample_name = ``
 
   App.key_events()
@@ -1116,6 +1117,10 @@ App.hide_text = () => {
 }
 
 App.show_sample = async (item, from = `normal`) => {
+  if (App.sample_loading) {
+    return
+  }
+
   let name = item.dataset.post
 
   if (App.sample_name === name) {
@@ -1129,6 +1134,7 @@ App.show_sample = async (item, from = `normal`) => {
   App.sample_name = name
   App.hide_sample(false, false)
   App.show_no_sample()
+  App.sample_loading = true
 
   try {
     let response = await fetch(`/get_sample`, {
@@ -1139,6 +1145,7 @@ App.show_sample = async (item, from = `normal`) => {
       body: JSON.stringify({name}),
     })
 
+    App.sample_loading = false
     let title = item.dataset.title || item.dataset.original || item.dataset.full
 
     if (response.ok) {
@@ -1162,6 +1169,7 @@ App.show_sample = async (item, from = `normal`) => {
     }
   }
   catch (error) {
+    App.sample_loading = false
     App.print_error(error)
     App.hide_sample()
   }
