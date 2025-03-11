@@ -169,6 +169,12 @@ select {
     font-family: monospace;
     text-align: center;
     white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sample_title:hover {
+    text-decoration: underline;
 }
 
 .sample {

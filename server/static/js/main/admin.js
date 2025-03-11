@@ -949,7 +949,9 @@ App.pointer_events = () => {
       }
     }
     else if (e.target.closest(`.sample_container`)) {
-      // Do nothing
+      if (e.target.closest(`.sample_title`)) {
+        window.location = `/post/${App.sample_name}`
+      }
     }
     else {
       App.hide_sample()
@@ -1174,6 +1176,7 @@ App.show_sample = async (item) => {
     if (response.ok) {
       let json = await response.json()
       let title = item.dataset.title || item.dataset.original || item.dataset.full
+      App.sample_name = name
 
       if (json.ext === `jpg`) {
         App.show_thumbnail(json.path, title)
