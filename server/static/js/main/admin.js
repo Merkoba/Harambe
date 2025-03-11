@@ -5,8 +5,7 @@ window.onload = () => {
 App.init = () => {
   App.selected_items = []
   App.last_checkbox = null
-  App.thumbnail_active = false
-  App.text_active = false
+  App.sample_path = ``
 
   App.key_events()
   App.pointer_events()
@@ -123,16 +122,7 @@ App.init = () => {
     })
   }
 
-  let audio = DOM.el(`#audio`)
-
-  if (audio) {
-    DOM.ev(audio, `play`, () => {
-      DOM.hide(`#audio_loading`)
-      DOM.show(`#audio`)
-    })
-  }
-
-  App.setup_thumbnail()
+  App.setup_samples()
 }
 
 App.goto_page = (page) => {
@@ -952,6 +942,12 @@ App.pointer_events = () => {
       if (e.target.closest(`.sample_title`)) {
         window.location = `/post/${App.sample_name}`
       }
+      else if (e.target.closest(`.sample_title_prev`)) {
+        App.prev_sample()
+      }
+      else if (e.target.closest(`.sample_title_next`)) {
+        App.next_sample()
+      }
     }
     else {
       App.hide_sample()
@@ -960,12 +956,10 @@ App.pointer_events = () => {
 
   DOM.ev(`#items`, `wheel`, (e) => {
     if (e.target.classList.contains(`sample`)) {
-      if (App.text_active) {
-        let direction = e.deltaY > 0 ? `down` : `up`
-        App.scroll_text(direction)
-        e.stopPropagation()
-        e.preventDefault()
-      }
+      let direction = e.deltaY > 0 ? `down` : `up`
+      App.scroll_text(direction)
+      e.stopPropagation()
+      e.preventDefault()
     }
   })
 }
@@ -1004,33 +998,17 @@ App.refresh = () => {
 App.setup_thumbnail = () => {
   let thumb = DOM.el(`#thumbnail`)
 
-  if (thumb) {
-    DOM.ev(thumb, `load`, () => {
-      if (App.thumbnail_active) {
-        DOM.hide(`#thumbnail_loading`)
-        DOM.show(`#thumbnail`)
-      }
-    })
+  DOM.ev(thumb, `load`, () => {
+    DOM.hide(`#thumbnail_loading`)
+    DOM.show(`#thumbnail`)
+  })
 
-    DOM.ev(thumb, `error`, () => {
-      App.hide_thumbnail()
-    })
-  }
+  DOM.ev(thumb, `error`, () => {
+    App.hide_thumbnail()
+  })
 }
 
 App.show_thumbnail = (path, title = ``) => {
-  if (App.thumbnail_active && (App.thumbnail_path === path)) {
-    App.hide_thumbnail()
-    return
-  }
-
-  App.hide_sample()
-  let thumb = DOM.el(`#thumbnail`)
-
-  if (!thumb) {
-    return
-  }
-
   let title_el = DOM.el(`#thumbnail_title`)
 
   if (title) {
@@ -1041,36 +1019,22 @@ App.show_thumbnail = (path, title = ``) => {
     DOM.hide(title_el)
   }
 
+  let thumb = DOM.el(`#thumbnail`)
   DOM.show(`#thumbnail_container`)
   DOM.show(`#thumbnail_loading`)
-  DOM.hide(`#thumbnail`)
-  App.thumbnail_active = true
+  DOM.hide(thumb)
   App.thumbnail_path = path
   thumb.src = path
 }
 
 App.hide_thumbnail = () => {
-  if (!App.thumbnail_active) {
-    return
-  }
-
   let thumb = DOM.el(`#thumbnail`)
   thumb.src = ``
-
-  App.thumbnail_active = false
+  DOM.el(`#thumbnail_title`).textContent = ``
   DOM.hide(`#thumbnail_container`)
 }
 
 App.show_audio = (path, title) => {
-  let audio = DOM.el(`#audio`)
-
-  if (!audio) {
-    return
-  }
-
-  App.hide_sample()
-
-  // Check if audio is playing
   if (!audio.paused) {
     App.hide_audio()
     return
@@ -1097,6 +1061,7 @@ App.hide_audio = () => {
   let audio = DOM.el(`#audio`)
   audio.pause()
   audio.currentTime = 0
+  DOM.el(`#audio_title`).textContent = ``
   DOM.hide(`#audio_container`)
 }
 
@@ -1109,12 +1074,6 @@ App.stop_audio = () => {
 }
 
 App.show_text = async (path, title = ``) => {
-  if (App.text_active && (App.text_path === path)) {
-    App.hide_text()
-    return
-  }
-
-  App.hide_sample()
   let c = DOM.el(`#text_container`)
   DOM.show(`#text_loading`)
   DOM.hide(`#text`)
@@ -1143,7 +1102,6 @@ App.show_text = async (path, title = ``) => {
         DOM.show(`#text`)
       }
 
-      App.text_active = true
       App.text_path = path
       c.scrollTop = 0
     }
@@ -1157,8 +1115,8 @@ App.show_text = async (path, title = ``) => {
 }
 
 App.hide_text = () => {
+  DOM.el(`#text_title`).textContent = ``
   DOM.hide(`#text_container`)
-  App.text_active = false
 }
 
 App.show_sample = async (item) => {
@@ -1173,10 +1131,18 @@ App.show_sample = async (item) => {
       body: JSON.stringify({name}),
     })
 
+    let title = item.dataset.title || item.dataset.original || item.dataset.full
+    App.sample_name = name
+
     if (response.ok) {
       let json = await response.json()
-      let title = item.dataset.title || item.dataset.original || item.dataset.full
-      App.sample_name = name
+
+      if (App.sample_path === json.path) {
+        App.hide_sample()
+        return
+      }
+
+      App.sample_path = json.path
 
       if (json.ext === `jpg`) {
         App.show_thumbnail(json.path, title)
@@ -1189,8 +1155,8 @@ App.show_sample = async (item) => {
       }
     }
     else {
-      App.print_error(response.status)
       App.hide_sample()
+      App.show_no_sample(title)
     }
   }
   catch (error) {
@@ -1216,8 +1182,10 @@ App.scroll_text = (direction) => {
 
 App.hide_sample = () => {
   App.hide_thumbnail()
-  App.hide_text()
   App.hide_audio()
+  App.hide_text()
+  App.hide_no_sample()
+  App.sample_path = ``
 }
 
 App.on_media_select_change = (page_select) => {
@@ -1268,4 +1236,55 @@ App.get_media_type = () => {
   }
 
   return select.value
+}
+
+App.setup_samples = () => {
+  let audio = DOM.el(`#audio`)
+
+  if (audio) {
+    DOM.ev(audio, `play`, () => {
+      DOM.hide(`#audio_loading`)
+      DOM.show(`#audio`)
+    })
+  }
+
+  App.setup_thumbnail()
+}
+
+App.prev_sample = () => {
+  for (let item of DOM.els(`.item`)) {
+    let name = item.dataset.post
+
+    if (name === App.sample_name) {
+      let prev = item.previousElementSibling
+
+      if (prev) {
+        App.show_sample(prev)
+      }
+    }
+  }
+}
+
+App.next_sample = () => {
+  for (let item of DOM.els(`.item`)) {
+    let name = item.dataset.post
+
+    if (name === App.sample_name) {
+      let next = item.nextElementSibling
+
+      if (next) {
+        App.show_sample(next)
+      }
+    }
+  }
+}
+
+App.show_no_sample = (title) => {
+  DOM.el(`#no_sample_title`).textContent = title
+  DOM.show(`#no_sample_container`)
+}
+
+App.hide_no_sample = () => {
+  DOM.el(`#no_sample_title`).textContent = ``
+  DOM.hide(`#no_sample_container`)
 }
