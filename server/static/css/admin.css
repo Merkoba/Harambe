@@ -8,7 +8,7 @@ body, html {
     color: black;
     background-color: white;
     margin: 0;
-    padding 0;
+    padding: 0;
     width: 100%;
     height: 100%;
 }
@@ -166,7 +166,7 @@ select {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: rgb(84, 98, 100);
+    background-color: rgb(84 98 100);
     color: white;
 }
 
@@ -250,7 +250,7 @@ select {
 #text {
     position: relative;
     width: 100%;
-    color: rgb(204, 226, 228);
+    color: rgb(204 226 228);
     font-family: monospace;
     font-size: 1rem;
     white-space: pre-wrap;

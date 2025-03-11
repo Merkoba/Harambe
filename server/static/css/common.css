@@ -155,18 +155,15 @@ a.linkbutton:hover {
 
 .prompt_button:hover {
     background-color: rgb(133 116 161);
+    filter: brightness(1.1);
 }
 
 .prompt_button_2 {
-    background-color: rgb(74, 153, 162);
+    background-color: rgb(74 153 162);
 }
 
 .prompt_button_2:hover {
-    background-color: rgb(80, 169, 179);
-}
-
-.prompt_button:hover {
-    filter: brightness(1.1);
+    background-color: rgb(80 169 179);
 }
 
 .Msg-content {
@@ -232,7 +229,7 @@ a.linkbutton:hover {
 }
 
 .ace_marker-layer .ace_selection {
-    background: rgb(59, 84, 91) !important;
+    background: rgb(59 84 91) !important;
 }
 
 .ace_active-line {

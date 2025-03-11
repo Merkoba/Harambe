@@ -284,7 +284,6 @@ a.link:hover,
 }
 
 .reaction_right {
-    display: flex;
     flex-grow: 0;
     flex-shrink: 0;
     align-self: stretch;
