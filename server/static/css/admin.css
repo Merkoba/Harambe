@@ -195,3 +195,7 @@ select {
     white-space: pre-wrap;
     padding: 0.35rem;
 }
+
+#audio {
+    height: 100%;
+}

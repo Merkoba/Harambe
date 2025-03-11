@@ -71,6 +71,11 @@
     <div id="text"></div>
 </div>
 
-<audio id="audio"></audio>
+<div id="audio_container" class="sample_container hidden">
+    <div id="audio_title" class="sample_title">Text</div>
+    <div id="audio_loading" class="sample_loading">Loading</div>
+    <video id="audio" controls poster="/static/img/cover.jpg"></video>
+</div>
+
 {% block admin_body %}{% endblock %}
 {% endblock %}

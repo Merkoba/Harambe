@@ -123,6 +123,15 @@ App.init = () => {
     })
   }
 
+  let audio = DOM.el(`#audio`)
+
+  if (audio) {
+    DOM.ev(audio, `play`, () => {
+      DOM.hide(`#audio_loading`)
+      DOM.show(`#audio`)
+    })
+  }
+
   App.setup_thumbnail()
 }
 
@@ -1013,7 +1022,7 @@ App.show_thumbnail = (path, title = ``) => {
     return
   }
 
-  App.hide_text()
+  App.hide_sample()
   let thumb = DOM.el(`#thumbnail`)
 
   if (!thumb) {
@@ -1050,27 +1059,43 @@ App.hide_thumbnail = () => {
   DOM.hide(`#thumbnail_container`)
 }
 
-App.play_audio = (path) => {
+App.show_audio = (path, title) => {
   let audio = DOM.el(`#audio`)
 
   if (!audio) {
     return
   }
 
-  App.hide_thumbnail()
-  App.hide_text()
+  App.hide_sample()
 
   // Check if audio is playing
   if (!audio.paused) {
-    audio.pause()
-    audio.currentTime = 0
+    App.hide_audio()
     return
+  }
+
+  DOM.show(`#audio_loading`)
+  DOM.hide(`#audio`)
+
+  if (title) {
+    DOM.el(`#audio_title`).textContent = title
+  }
+  else {
+    DOM.hide(`#audio_title`)
   }
 
   audio.pause()
   audio.src = path
   audio.currentTime = 0
   audio.play()
+  DOM.show(`#audio_container`)
+}
+
+App.hide_audio = () => {
+  let audio = DOM.el(`#audio`)
+  audio.pause()
+  audio.currentTime = 0
+  DOM.hide(`#audio_container`)
 }
 
 App.stop_audio = () => {
@@ -1087,7 +1112,7 @@ App.show_text = async (path, title = ``) => {
     return
   }
 
-  App.hide_thumbnail()
+  App.hide_sample()
   let c = DOM.el(`#text_container`)
   DOM.show(`#text_loading`)
   DOM.hide(`#text`)
@@ -1148,13 +1173,13 @@ App.show_sample = async (item) => {
 
     if (response.ok) {
       let json = await response.json()
-      let title = item.dataset.title || item.dataset.full
+      let title = item.dataset.title || item.dataset.original || item.dataset.full
 
       if (json.ext === `jpg`) {
         App.show_thumbnail(json.path, title)
       }
       else if (json.ext === `mp3`) {
-        App.play_audio(json.path)
+        App.show_audio(json.path, title)
       }
       else if (json.ext === `txt`) {
         App.show_text(json.path, title)
@@ -1188,8 +1213,8 @@ App.scroll_text = (direction) => {
 
 App.hide_sample = () => {
   App.hide_thumbnail()
-  App.stop_audio()
   App.hide_text()
+  App.hide_audio()
 }
 
 App.on_media_select_change = (page_select) => {
