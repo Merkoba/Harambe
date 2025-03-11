@@ -1146,7 +1146,7 @@ App.hide_text = () => {
   DOM.hide(`#text_container`)
 }
 
-App.show_sample = async (item) => {
+App.show_sample = async (item, from = `normal`) => {
   let name = item.dataset.post
 
   try {
@@ -1161,7 +1161,10 @@ App.show_sample = async (item) => {
     let title = item.dataset.title || item.dataset.original || item.dataset.full
 
     if (App.sample_name === name) {
-      App.hide_sample()
+      if (mode === `normal`) {
+        App.hide_sample()
+      }
+
       return
     }
 
