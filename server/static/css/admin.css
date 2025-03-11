@@ -160,6 +160,8 @@ select {
     z-index: 999;
     right: 0;
     top: 0;
+    border-left: 5px solid #49d4ff;
+    border-bottom: 5px solid #49d4ff;
 }
 
 .sample_title_container {
