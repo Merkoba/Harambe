@@ -59,51 +59,16 @@
     </div>
 </template>
 
-<div id="thumbnail_container" class="sample_container hidden">
-    <div class="sample_title_container">
-        <div id="thumbnail_prev" class="sample_title_button sample_title_prev">⏪</div>
-        <div id="thumbnail_title" class="sample_title"></div>
-        <div id="thumbnail_next" class="sample_title_button sample_title_next">⏩</div>
+<div id="sample_container" class="hidden">
+    <div id="sample_title_container">
+        <div id="sample_prev" class="sample_title_button">⏪</div>
+        <div id="sample_title"></div>
+        <div id="sample_next" class="sample_title_button">⏩</div>
     </div>
 
-    <div id="thumbnail_loading" class="sample_loading">Loading</div>
-    <img id="thumbnail" class="sample_content">
-    <div class="sample_close">Close</div>
-</div>
-
-<div id="text_container" class="sample_container hidden">
-    <div class="sample_title_container">
-        <div id="text_prev" class="sample_title_button sample_title_prev">⏪</div>
-        <div id="text_title" class="sample_title"></div>
-        <div id="text_next" class="sample_title_button sample_title_next">⏩</div>
-    </div>
-
-    <div id="text_loading" class="sample_loading">Loading</div>
-    <div id="text" class="sample_content"></div>
-    <div class="sample_close">Close</div>
-</div>
-
-<div id="audio_container" class="sample_container hidden">
-    <div class="sample_title_container">
-        <div id="audio_prev" class="sample_title_button sample_title_prev">⏪</div>
-        <div id="audio_title" class="sample_title"></div>
-        <div id="audio_next" class="sample_title_button sample_title_next">⏩</div>
-    </div>
-
-    <div id="audio_loading" class="sample_loading">Loading</div>
-    <video id="audio" controls poster="/static/img/cover.jpg" class="sample_content"></video>
-    <div class="sample_close">Close</div>
-</div>
-
-<div id="no_sample_container" class="sample_container hidden">
-    <div class="sample_title_container">
-        <div id="no_sample_prev" class="sample_title_button sample_title_prev">⏪</div>
-        <div id="no_sample_title" class="sample_title"></div>
-        <div id="no_sample_next" class="sample_title_button sample_title_next">⏩</div>
-    </div>
-
-    <div id="no_sample_text" class="sample_loading sample_content"></div>
-    <div class="sample_close">Close</div>
+    <img id="sample_image" class="sample_content hidden">
+    <video id="sample_video" controls poster="/static/img/cover.jpg" class="sample_content hidden"></video>
+    <div id="sample_text" class="sample_content hidden"></div>
 </div>
 
 <div id="container">
