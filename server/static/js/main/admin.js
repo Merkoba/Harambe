@@ -1065,7 +1065,9 @@ App.show_sample = async (item, from = `normal`) => {
   }
 
   App.sample_name = name
+  let title = item.dataset.title || item.dataset.original || item.dataset.full
   App.hide_sample_media(`text`)
+  App.set_sample_title(title)
   DOM.show(`#sample_container`)
 
   try {
@@ -1076,8 +1078,6 @@ App.show_sample = async (item, from = `normal`) => {
       },
       body: JSON.stringify({name}),
     })
-
-    let title = item.dataset.title || item.dataset.original || item.dataset.full
 
     if (response.ok) {
       let json = await response.json()
