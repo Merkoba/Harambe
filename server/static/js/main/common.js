@@ -246,6 +246,7 @@ App.setup_user_opts = (show = false, back = false) => {
     App.bind_button(`${name}_opts_posts`, () => {
       if (!App.reader) {
         App.login_feedback()
+        return
       }
 
       let user_id = App.user_opts_user_id
