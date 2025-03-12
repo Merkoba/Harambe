@@ -1244,9 +1244,12 @@ App.hide_sample_media = (except = ``) => {
   DOM.hide(`#sample_image`)
 
   let video = DOM.el(`#sample_video`)
-  video.pause()
-  video.currentTime = 0
   DOM.hide(video)
+
+  if (except !== `video`) {
+    video.pause()
+    video.currentTime = 0
+  }
 
   let text = DOM.el(`#sample_text`)
   text.textContent = ``
