@@ -221,15 +221,10 @@ select {
     text-decoration: underline;
 }
 
-.sample_content {
+#sample_content {
     flex-grow: 1;
     flex-shrink: 1;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: monospace;
-
+    overflow: auto;
 }
 
 #sample_image {
@@ -241,9 +236,10 @@ select {
 
 #sample_text {
     font-size: 1rem;
+    font-family: monospace;
     white-space: pre-wrap;
-    overflow: auto;
-    margin: 1rem;
+    color: white;
+    padding: 0.8rem;
 }
 
 #sample_close {
