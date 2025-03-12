@@ -1212,6 +1212,10 @@ App.prev_sample = () => {
       let prev = items[i - 1]
 
       if (prev) {
+        if (prev.dataset.post === App.sample_name) {
+          continue
+        }
+
         App.show_sample(prev, `prev`)
         return
       }
@@ -1233,6 +1237,10 @@ App.next_sample = () => {
       let next = items[i + 1]
 
       if (next) {
+        if (next.dataset.post === App.sample_name) {
+          continue
+        }
+
         App.show_sample(next, `next`)
         return
       }
