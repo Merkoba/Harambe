@@ -1250,7 +1250,9 @@ App.next_sample = () => {
 
 App.hide_sample_media = (except = ``) => {
   if (except !== `image`) {
-    DOM.hide(`#sample_image`)
+    let img = `#sample_image`
+    img.src = ``
+    DOM.hide(img)
   }
 
   if (except !== `video`) {
