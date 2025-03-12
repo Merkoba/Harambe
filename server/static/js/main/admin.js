@@ -1034,13 +1034,14 @@ App.show_sample_video = (path, title) => {
 }
 
 App.show_sample_text = async (path, title = ``) => {
-  App.hide_sample_media(`text`)
+  App.hide_sample_media()
   App.set_sample_title(title)
 
   try {
     let response = await fetch(path)
 
     if (response.ok) {
+      App.hide_sample_media(`text`)
       let text = await response.text()
       DOM.el(`#sample_text`).textContent = text
     }
@@ -1066,7 +1067,7 @@ App.show_sample = async (item, from = `normal`) => {
 
   App.sample_name = name
   let title = item.dataset.title || item.dataset.original || item.dataset.full
-  App.hide_sample_media(`text`)
+  App.hide_sample_media()
   App.set_sample_title(title)
   DOM.show(`#sample_container`)
 
@@ -1259,7 +1260,11 @@ App.hide_sample_media = (except = ``) => {
   }
 
   if (except) {
+    DOM.hide(`#sample_loading`)
     DOM.show(`#sample_${except}`)
+  }
+  else {
+    DOM.show(`#sample_loading`)
   }
 }
 

@@ -224,6 +224,17 @@ select {
     height: 26rem;
 }
 
+#sample_loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 1.16rem;
+    font-family: monospace;
+    color: white;
+}
+
 #sample_image {
     width: 100%;
     height: 100%;
