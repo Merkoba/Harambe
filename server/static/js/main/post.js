@@ -17,15 +17,8 @@ App.init = () => {
   if (edit) {
     App.setup_editpost_opts()
 
-    DOM.ev(edit, `click`, () => {
+    DOM.evs(edit, [`click`, `auxclick`], () => {
       App.edit_post()
-    })
-
-    DOM.ev(edit, `auxclick`, (e) => {
-      if (e.button === 1) {
-        e.preventDefault()
-        App.edit_post()
-      }
     })
   }
 
@@ -79,7 +72,7 @@ App.init = () => {
   let uploader = DOM.el(`#uploader`)
 
   if (uploader) {
-    DOM.ev(uploader, `click`, () => {
+    DOM.evs(uploader, [`click`, `auxclick`], () => {
       App.user_opts_user_id = App.user_id
       App.msg_show(`user`)
     })
@@ -90,15 +83,8 @@ App.init = () => {
   if (menu) {
     App.setup_menu_opts()
 
-    DOM.ev(menu, `click`, () => {
+    DOM.evs(menu, [`click`, `auxclick`], () => {
       App.msg_show(`menu`)
-    })
-
-    DOM.ev(menu, `auxclick`, (e) => {
-      if (e.button === 1) {
-        e.preventDefault()
-        App.msg_show(`menu`)
-      }
     })
   }
 
@@ -902,15 +888,8 @@ App.start_embed = () => {
   if (max) {
     let type = max.dataset.max_type
 
-    DOM.ev(max, `click`, () => {
+    DOM.evs(max, [`click`, `auxclick`], () => {
       App.toggle_max(type)
-    })
-
-    DOM.ev(max, `auxclick`, (e) => {
-      if (e.button === 1) {
-        e.preventDefault()
-        App.toggle_max(type)
-      }
     })
   }
 
