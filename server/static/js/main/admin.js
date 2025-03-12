@@ -1178,6 +1178,10 @@ App.setup_sample = () => {
     window.location = `/post/${App.sample_name}`
   })
 
+  DOM.ev(`#sample_title`, `auxclick`, () => {
+    window.open(`/post/${App.sample_name}`, `_blank`)
+  })
+
   DOM.ev(`#sample_prev`, `click`, () => {
     App.prev_sample()
   })
