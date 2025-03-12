@@ -202,12 +202,16 @@ There are some global shortcuts:
 
 `Ctrl+Down`: React to a post.
 
-## Thumbnails
+## Samples
 
-When a video is uploaded, 1 frame is exctrated as the the thumbnail.
+When a video is uploaded, 1 frame is extracted as the the sample.
 
-It it is a random frame near the middle.
+If it's an image, a lite version is used as the sample.
 
-The width, height, and background of the thumbnails can be configured.
+If it's an audio file, a 10 second clip is created as the sample.
 
-This is used for the post in videos and for the lists.
+If it's a text file, a portion of the file is created as the sample.
+
+If it's a zip archive, a text file with its file names is created as the sample.
+
+There are various configurations for sample creation.
