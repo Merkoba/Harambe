@@ -1093,7 +1093,8 @@ App.show_sample = async (item, from = `normal`) => {
       }
     }
     else {
-      App.set_sample_title(`No Sample`)
+      App.hide_sample_media()
+      App.set_sample_title(`No Sample | ${title}`)
     }
   }
   catch (error) {
