@@ -220,7 +220,7 @@ There are various configurations for sample creation.
 
 ---
 
-When the sample icon is clicked, it shows a popup window in the top right.
+When a sample icon is clicked, it shows a popup window in the top right.
 
 It supports moving to prev or next samples using arrow buttons, or keyboard arrows.
 
