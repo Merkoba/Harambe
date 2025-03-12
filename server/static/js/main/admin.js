@@ -591,6 +591,10 @@ App.delete_all = () => {
   }
 }
 
+App.get_items = () => {
+  return DOM.els(`.item`, DOM.el(`#items`))
+}
+
 App.filter_value = () => {
   let filter = DOM.el(`#filter`)
   return filter.value.trim()
@@ -602,7 +606,7 @@ App.do_filter = () => {
     return s.replace(/[\s:]/g, ``).trim()
   }
 
-  let items = DOM.els(`.item`)
+  let items = App.get_items()
   let value = clean(App.filter_value().toLowerCase())
 
   for (let item of items) {
@@ -1201,7 +1205,7 @@ App.setup_sample = () => {
 }
 
 App.next_sample = (dir = `next`) => {
-  let items = DOM.els(`.item`)
+  let items = App.get_items()
 
   for (let [i, item] of items.entries()) {
     let name = item.dataset.post
