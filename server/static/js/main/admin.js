@@ -1241,19 +1241,22 @@ App.next_sample = () => {
 }
 
 App.hide_sample_media = (except = ``) => {
-  DOM.hide(`#sample_image`)
-
-  let video = DOM.el(`#sample_video`)
-  DOM.hide(video)
+  if (except !== `image`) {
+    DOM.hide(`#sample_image`)
+  }
 
   if (except !== `video`) {
+    let video = DOM.el(`#sample_video`)
+    DOM.hide(video)
     video.pause()
     video.currentTime = 0
   }
 
-  let text = DOM.el(`#sample_text`)
-  text.textContent = ``
-  DOM.hide(text)
+  if (except !== `text`) {
+    let text = DOM.el(`#sample_text`)
+    text.textContent = ``
+    DOM.hide(text)
+  }
 
   if (except) {
     DOM.show(`#sample_${except}`)
