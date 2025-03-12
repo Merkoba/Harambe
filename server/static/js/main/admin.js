@@ -925,10 +925,10 @@ App.key_events = () => {
     }
     else if (App.sample_open()) {
       if (e.key === `ArrowLeft`) {
-        App.prev_sample()
+        App.next_sample(`prev`)
       }
       else if (e.key === `ArrowRight`) {
-        App.next_sample()
+        App.next_sample(`next`)
       }
       else if (e.key === `Escape`) {
         App.close_sample()
@@ -1183,11 +1183,11 @@ App.setup_sample = () => {
   })
 
   DOM.ev(`#sample_prev`, `click`, () => {
-    App.prev_sample()
+    App.next_sample(`prev`)
   })
 
   DOM.ev(`#sample_next`, `click`, () => {
-    App.next_sample()
+    App.next_sample(`next`)
   })
 
   DOM.ev(`#sample_close`, `click`, () => {
@@ -1198,50 +1198,39 @@ App.setup_sample = () => {
   App.setup_sample_video()
 }
 
-App.prev_sample = () => {
+App.next_sample = (dir = `next`) => {
   let items = DOM.els(`.item`)
 
   for (let [i, item] of items.entries()) {
     let name = item.dataset.post
 
     if (name === App.sample_name) {
-      if (i === 0) {
-        return
-      }
-
-      let prev = items[i - 1]
-
-      if (prev) {
-        if (prev.dataset.post === App.sample_name) {
-          continue
+      if (dir === `prev`) {
+        if (i === 0) {
+          return
         }
-
-        App.show_sample(prev, `prev`)
-        return
       }
-    }
-  }
-}
-
-App.next_sample = () => {
-  let items = DOM.els(`.item`)
-
-  for (let [i, item] of items.entries()) {
-    let name = item.dataset.post
-
-    if (name === App.sample_name) {
-      if (i === items.length - 1) {
-        return
+      else if (dir === `next`) {
+        if (i === items.length - 1) {
+          return
+        }
       }
 
-      let next = items[i + 1]
+      let next
+
+      if (dir === `prev`) {
+        next = items.at(i - 1)
+      }
+      else if (dir === `next`) {
+        next = items.at(i + 1)
+      }
 
       if (next) {
         if (next.dataset.post === App.sample_name) {
           continue
         }
 
-        App.show_sample(next, `next`)
+        App.show_sample(next, dir)
         return
       }
     }
