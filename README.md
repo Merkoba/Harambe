@@ -204,6 +204,8 @@ There are some global shortcuts:
 
 ## Samples
 
+Samples are used to quickly check what a post is about in lists like `/list/posts`.
+
 When a video is uploaded, 1 frame is extracted as the the sample.
 
 If it's an image, a lite version is used as the sample.
@@ -215,3 +217,11 @@ If it's a text file, a portion of the file is created as the sample.
 If it's a zip archive, a text file with its file names is created as the sample.
 
 There are various configurations for sample creation.
+
+---
+
+When the sample icon is clicked, it shows a popup window in the top right.
+
+It supports moving to prev or next samples using arrow buttons, or keyboard arrows.
+
+It has a title with the file name, which when clicked opens the post.
