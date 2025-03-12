@@ -306,6 +306,15 @@ class Config:
         # Lifetime of a user login session in days
         self.session_days = 365 * 5
 
+        # Sample icon for admin pages
+        self.sample_icon = "🔊"
+
+        # Icon for prev sample button
+        self.prev_sample_icon = "⏪"
+
+        # Icon for next sample button
+        self.next_sample_icon = "⏩"
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -409,6 +418,9 @@ class Config:
             set_value(c, "sample_text_bytes")
             set_value(c, "sample_zip_chars")
             set_value(c, "session_days")
+            set_value(c, "sample_icon")
+            set_value(c, "prev_sample_icon")
+            set_value(c, "next_sample_icon")
 
             # Users
 

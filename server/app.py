@@ -176,6 +176,15 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
     }
 
 
+def common_list_configs(user: User | None = None) -> dict[str, Any]:
+    return {
+        "sample_icon": config.sample_icon,
+        "prev_sample_icon": config.prev_sample_icon,
+        "next_sample_icon": config.next_sample_icon,
+        "max_title_length": config.max_title_length,
+    }
+
+
 limiter = Limiter(
     get_remote_address,
     app=app,
@@ -558,9 +567,9 @@ def admin(what: str) -> Any:
         page_size=page_size,
         media_type=media_type,
         def_page_size=def_page_size,
-        max_title_length=config.max_title_length,
         used_user_id=user_id,
         sort=sort,
+        **common_list_configs(),
         **common_configs(user),
     )
 
@@ -762,10 +771,10 @@ def show_list(what: str) -> Any:
         page_size=page_size,
         media_type=media_type,
         def_page_size=def_page_size,
-        max_title_length=config.max_title_length,
         used_user_id=user_id,
         sort=sort,
         back="/",
+        **common_list_configs(),
         **common_configs(user),
     )
 
