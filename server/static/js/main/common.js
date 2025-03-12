@@ -58,8 +58,8 @@ App.setup_keyboard = () => {
         }
         else {
           e.preventDefault()
-          let show_return = App.mode !== `index`
-          App.setup_menu_opts(show_return, true)
+          let show_upload = App.mode !== `index`
+          App.setup_menu_opts(show_upload, true)
         }
       }
     }
@@ -162,12 +162,12 @@ App.capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-App.setup_menu_opts = (show_return = true, show = false) => {
+App.setup_menu_opts = (show_upload = true, show = false) => {
   let name = `menu`
 
   App.make_opts(name, () => {
-    if (!show_return) {
-      DOM.el(`#${name}_opts_return`).remove()
+    if (!show_upload) {
+      DOM.el(`#${name}_opts_upload`).remove()
     }
 
     App.bind_button(`${name}_opts_fresh`, () => {
@@ -182,26 +182,26 @@ App.setup_menu_opts = (show_return = true, show = false) => {
       App.open_tab(`/random`)
     })
 
-    App.bind_button(`${name}_opts_return`, () => {
-      App.location(`/`)
-    }, () => {
-      App.open_tab(`/`)
-    })
-
-    App.bind_button(`${name}_opts_you`, () => {
-      App.setup_you_opts(App.user_id, true, true)
-    })
-
     App.bind_button(`${name}_opts_list`, () => {
       App.setup_list_opts(true, true)
-    })
+    }, undefined, true)
 
     App.bind_button(`${name}_opts_admin`, () => {
       App.setup_admin_opts(true, true)
-    })
+    }, undefined, true)
 
     App.bind_button(`${name}_opts_links`, () => {
       App.setup_link_opts(true, true)
+    }, undefined, true)
+
+    App.bind_button(`${name}_opts_you`, () => {
+      App.setup_you_opts(App.user_id, true, true)
+    }, undefined, true)
+
+    App.bind_button(`${name}_opts_upload`, () => {
+      App.location(`/`)
+    }, () => {
+      App.open_tab(`/`)
     })
   }, show)
 }
@@ -733,7 +733,7 @@ App.make_opts = (name, setup, show = false, back = false) => {
   }
 }
 
-App.bind_button = (what, func, mfunc) => {
+App.bind_button = (what, func, mfunc, submenu = false) => {
   let name = what.split(`_`)[0]
   let msg_name = `msg_${name}`
   let el = DOM.el(`#${what}`)
@@ -745,7 +745,18 @@ App.bind_button = (what, func, mfunc) => {
   let c = DOM.el(`.dialog_container`, App[msg_name].content)
   let btns = DOM.els(`.aero_button`, c)
   let index = btns.indexOf(el)
-  el.textContent = `${index + 1}. ${el.textContent}`
+  let otext = el.textContent
+  el.textContent = ``
+
+  let text = DOM.create(`div`, `aero_text`)
+  text.textContent = `${index + 1}. ${otext}`
+  el.appendChild(text)
+
+  if (submenu) {
+    let sub = DOM.create(`div`, `aero_arrow`)
+    sub.textContent = `>`
+    el.appendChild(sub)
+  }
 
   if (func) {
     DOM.ev(el, `click`, (e) => {

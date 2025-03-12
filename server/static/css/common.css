@@ -202,6 +202,19 @@ a.linkbutton:hover {
     box-shadow: inset 0 1px 8px rgb(0 0 0 / 70%);
 }
 
+.aero_text {
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.aero_arrow {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
 #confirmbox_buttons {
     padding-top: 1rem;
     display: flex;
