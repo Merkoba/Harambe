@@ -244,6 +244,10 @@ App.setup_user_opts = (show = false, back = false) => {
 
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_posts`, () => {
+      if (!App.reader) {
+        App.login_feedback()
+      }
+
       let user_id = App.user_opts_user_id
 
       if (App.mode.includes(`admin`)) {
@@ -883,4 +887,8 @@ App.timeago = (date) => {
   }
 
   return [result, level]
+}
+
+App.login_feedback = () => {
+  App.popmsg(`You might have to login to do this`)
 }

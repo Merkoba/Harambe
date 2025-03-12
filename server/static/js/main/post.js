@@ -189,14 +189,10 @@ App.start_flash = async () => {
   player.ruffle().load(`/${App.file_path}/${App.name}`)
 }
 
-App.react_alert = () => {
-  App.popmsg(`You might have to login to react`)
-}
-
 App.react_icon = async (id) => {
   if (!App.can_react) {
     App.close_modals()
-    App.react_alert()
+    App.login_feedback()
     return
   }
 
@@ -426,7 +422,7 @@ App.react_prompt = (id) => {
       }
 
       if (!App.can_react) {
-        App.react_alert()
+        App.login_feedback()
         return
       }
 
