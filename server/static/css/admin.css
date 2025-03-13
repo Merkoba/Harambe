@@ -222,6 +222,7 @@ select {
 
 #sample_content {
     height: 25rem;
+    max-height: 66vh;
 }
 
 #sample_loading {
