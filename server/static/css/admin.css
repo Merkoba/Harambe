@@ -183,6 +183,11 @@ select {
     outline: none;
 }
 
+.sample_title_button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
 #sample_prev {
     justify-content: flex-start;
     padding-left: 0.35rem;

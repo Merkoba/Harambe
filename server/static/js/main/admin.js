@@ -1354,16 +1354,16 @@ App.check_sample_buttons = () => {
   let next = App.next_sample(`next`, true)
 
   if (prev) {
-    DOM.show(`#sample_prev`)
+    DOM.el(`#sample_prev`).classList.remove(`disabled`)
   }
   else {
-    DOM.hide(`#sample_prev`)
+    DOM.el(`#sample_prev`).classList.add(`disabled`)
   }
 
   if (next) {
-    DOM.show(`#sample_next`)
+    DOM.el(`#sample_next`).classList.remove(`disabled`)
   }
   else {
-    DOM.hide(`#sample_next`)
+    DOM.el(`#sample_next`).classList.add(`disabled`)
   }
 }
