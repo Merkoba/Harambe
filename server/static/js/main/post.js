@@ -37,22 +37,7 @@ App.init = () => {
     }
   })
 
-  let r_bottom = DOM.el(`#lobottomy`)
-
-  if (r_bottom) {
-    DOM.ev(r_bottom, `click`, () => {
-      window.scrollTo(0, document.body.scrollHeight)
-    })
-  }
-
-  let r_top = DOM.el(`#totopia`)
-
-  if (r_top) {
-    DOM.ev(r_top, `click`, () => {
-      window.scrollTo(0, 0)
-    })
-  }
-
+  App.setup_scrollers()
   App.setup_refresh()
 
   DOM.ev(window, `resize`, () => {
@@ -85,6 +70,14 @@ App.init = () => {
 
     DOM.evs(menu, [`click`, `auxclick`], () => {
       App.msg_show(`menu`)
+    })
+  }
+
+  let next_btn = DOM.el(`#next`)
+
+  if (next_btn) {
+    DOM.ev(next_btn, `click`, () => {
+      App.next_post()
     })
   }
 
@@ -1034,5 +1027,33 @@ App.start_markdown = async () => {
   }
   catch (e) {
     App.print_error(e)
+  }
+}
+
+App.next_post = () => {
+  if (!App.reader) {
+    App.login_feedback()
+    return
+  }
+
+  let href = `/next/${App.name}`
+  window.location = href
+}
+
+App.setup_scrollers = () => {
+  let r_bottom = DOM.el(`#lobottomy`)
+
+  if (r_bottom) {
+    DOM.ev(r_bottom, `click`, () => {
+      window.scrollTo(0, document.body.scrollHeight)
+    })
+  }
+
+  let r_top = DOM.el(`#totopia`)
+
+  if (r_top) {
+    DOM.ev(r_top, `click`, () => {
+      window.scrollTo(0, 0)
+    })
   }
 }
