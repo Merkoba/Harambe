@@ -220,7 +220,7 @@ class Config:
         self.reactions_enabled = True
 
         # Max length for text reactions
-        self.text_reaction_length = 2000
+        self.max_reaction_length = 2000
 
         # Max reactions a user can do
         self.max_user_reactions = 20
@@ -315,6 +315,9 @@ class Config:
         # Icon for next sample button
         self.next_sample_icon = "⏩"
 
+        # Max length for post marks
+        self.max_mark_length = 20
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -391,7 +394,7 @@ class Config:
             set_value(c, "description_index")
             set_value(c, "description_post")
             set_value(c, "reactions_enabled")
-            set_value(c, "text_reaction_length")
+            set_value(c, "max_reaction_length")
             set_value(c, "max_user_reactions")
             set_value(c, "post_reaction_limit")
             set_value(c, "post_refresh_interval")
@@ -421,6 +424,7 @@ class Config:
             set_value(c, "sample_icon")
             set_value(c, "prev_sample_icon")
             set_value(c, "next_sample_icon")
+            set_value(c, "max_mark_length")
 
             # Users
 

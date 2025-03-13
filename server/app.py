@@ -342,7 +342,7 @@ def post(name: str) -> Any:
         owned=owned,
         description=config.description_post,
         reactions_enabled=config.reactions_enabled,
-        text_reaction_length=config.text_reaction_length,
+        max_reaction_length=config.max_reaction_length,
         post_refresh_interval=config.post_refresh_interval,
         post_refresh_times=config.post_refresh_times,
         max_post_name_length=config.max_post_name_length,

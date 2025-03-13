@@ -325,6 +325,9 @@ def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:
         if value:
             if not value.isalnum():
                 return False, None
+
+            if len(value) > config.max_mark_length:
+                return False, None
     elif value:
         if vtype == "int":
             try:

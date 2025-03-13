@@ -400,7 +400,7 @@ App.react_prompt = (id) => {
 
   let prompt_args = {
     placeholder: `Write a text reaction`,
-    max: App.text_reaction_length,
+    max: App.max_reaction_length,
     value,
     callback: (text) => {
       if (!text) {
@@ -412,7 +412,7 @@ App.react_prompt = (id) => {
         return
       }
 
-      let n = App.text_reaction_length
+      let n = App.max_reaction_length
       text = App.remove_multiple_empty_lines(text)
       text = App.replace_urls(text)
       text = Array.from(text).slice(0, n).join(``).trim()

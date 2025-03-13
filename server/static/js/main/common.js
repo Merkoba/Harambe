@@ -560,7 +560,7 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
   let prompt_args = {
     value: o_value,
     placeholder: `Type the new ${what}`,
-    max: App.text_reaction_length,
+    max: App.max_reaction_length,
     password: vtype === `password`,
     callback: (value_1) => {
       if (!repeat) {
@@ -570,7 +570,7 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
 
       let prompt_args_2 = {
         placeholder: `Enter the value again`,
-        max: App.text_reaction_length,
+        max: App.max_reaction_length,
         password: vtype === `password`,
         callback: (value_2) => {
           if (value_1 !== value_2) {

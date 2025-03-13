@@ -312,10 +312,10 @@ def edit_reaction(reaction_id: int, text: str, user: User) -> tuple[str, int]:
 
 
 def check_reaction(text: str) -> bool:
-    if len(text) > max(config.text_reaction_length, 100):
+    if len(text) > max(config.max_reaction_length, 1):
         return False
 
     if utils.contains_url(text):
         return False
 
-    return utils.count_graphemes(text) <= config.text_reaction_length
+    return utils.count_graphemes(text) <= config.max_reaction_length
