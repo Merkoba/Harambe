@@ -191,7 +191,7 @@ select {
 #sample_prev {
     justify-content: flex-start;
     padding-left: 0.35rem;
-    padding-right: 0.45rem;
+    padding-right: 1rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
@@ -199,7 +199,7 @@ select {
 #sample_next {
     justify-content: flex-end;
     padding-right: 0.35rem;
-    padding-left: 0.45rem;
+    padding-left: 1rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
