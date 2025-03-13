@@ -1,5 +1,4 @@
 :root {
-    --border_color: #ddd;
     --sample_background: rgb(128, 104, 144);
     --sample_border: 5px solid #cbd5ea;
 }
@@ -67,17 +66,17 @@ a:hover {
 .table_row {
     display: flex;
     flex-direction: row;
-    border-bottom: 1px solid var(--border_color);
+    border-bottom: 1px solid var(--frame_color);
 }
 
 .table_header {
     font-weight: bold;
     background-color: var(--contrast_background);
-    border-top: 1px solid var(--border_color);
+    border-top: 1px solid var(--frame_color);
 }
 
 .table_cell:first-child {
-    border-left: 1px solid var(--border_color);
+    border-left: 1px solid var(--frame_color);
 }
 
 .table_cell {
@@ -89,7 +88,7 @@ a:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     box-sizing: border-box;
-    border-right: 1px solid var(--border_color);
+    border-right: 1px solid var(--frame_color);
 }
 
 .table_cell img {
