@@ -125,7 +125,7 @@ App.init = () => {
   App.setup_sample()
 }
 
-App.goto_page = (page) => {
+App.goto_page = (page, new_tab = false) => {
   let psize = App.page_size
   let url = new URL(window.location.href)
   url.searchParams.set(`page`, page)
@@ -135,7 +135,12 @@ App.goto_page = (page) => {
     url.searchParams.set(`user_id`, App.used_user_id)
   }
 
-  window.location.href = url.href
+  if (new_tab) {
+    App.open_tab(url.href)
+  }
+  else {
+    App.location(url.href)
+  }
 }
 
 App.fill_page_select = (page_select) => {
@@ -298,7 +303,7 @@ App.size_string = (size) => {
   return `${size.toFixed(2)} gb`
 }
 
-App.do_search = (query = ``, use_media_type = true) => {
+App.do_search = (query = ``, use_media_type = true, new_tab = false) => {
   if (!query) {
     query = DOM.el(`#filter`).value.trim()
   }
@@ -323,7 +328,13 @@ App.do_search = (query = ``, use_media_type = true) => {
   }
 
   url.searchParams.set(`query`, App.encode_uri(query))
-  window.location.href = url.href
+
+  if (new_tab) {
+    App.open_tab(url.href)
+  }
+  else {
+    App.location(url.href)
+  }
 }
 
 App.edit_post_title = (el) => {
@@ -973,11 +984,11 @@ App.setup_pages = () => {
 
   if (prev_page) {
     DOM.ev(prev_page, `click`, () => {
-      if (App.page <= 1) {
-        return
-      }
+      App.prev_page()
+    })
 
-      App.goto_page(App.page - 1)
+    DOM.ev(prev_page, `auxclick`, () => {
+      App.prev_page(true)
     })
   }
 
@@ -985,11 +996,11 @@ App.setup_pages = () => {
 
   if (next_page) {
     DOM.ev(next_page, `click`, () => {
-      if (!App.next_page) {
-        return
-      }
+      App.next_page()
+    })
 
-      App.goto_page(App.page + 1)
+    DOM.ev(next_page, `auxclick`, () => {
+      App.next_page(true)
     })
   }
 }
@@ -1304,15 +1315,15 @@ App.sample_open = () => {
   return App.sample_name
 }
 
-App.prev_page = () => {
+App.prev_page = (open_tab = false) => {
   if (App.page > 1) {
-    App.goto_page(App.page - 1)
+    App.goto_page(App.page - 1, open_tab)
   }
 }
 
-App.next_page = () => {
+App.next_page = (open_tab = false) => {
   if (App.next_page) {
-    App.goto_page(App.page + 1)
+    App.goto_page(App.page + 1, open_tab)
   }
 }
 
@@ -1329,7 +1340,7 @@ App.doc_click = (e, mode) => {
   }
   else if (e.target.classList.contains(`mtype`)) {
     let mtype = e.target.textContent
-    App.do_search(mtype, false)
+    App.do_search(mtype, false, mode === `auxclick`)
   }
   else if (e.target.closest(`.sample`)) {
     App.show_sample(item)
