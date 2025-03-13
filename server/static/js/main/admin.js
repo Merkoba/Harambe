@@ -16,6 +16,10 @@ App.init = () => {
     DOM.ev(refresh_btn, `click`, () => {
       App.refresh()
     })
+
+    DOM.ev(refresh_btn, `auxclick`, () => {
+      App.refresh(true)
+    })
   }
 
   let del_sel = DOM.el(`#delete_selected`)
@@ -92,7 +96,7 @@ App.init = () => {
     let menu = DOM.el(`#menu`)
 
     if (menu) {
-      DOM.ev(menu, `click`, (e) => {
+      DOM.evs(menu, [`click`, `auxclick`], (e) => {
         App.show_menu()
       })
     }
@@ -1005,9 +1009,16 @@ App.setup_pages = () => {
   }
 }
 
-App.refresh = () => {
+App.refresh = (new_tab = false) => {
   let ms = App.mode_string()
-  App.location(`/${ms}`)
+  let url = `/${ms}`
+
+  if (new_tab) {
+    App.open_tab(url)
+  }
+  else {
+    App.location(url)
+  }
 }
 
 App.setup_sample_image = () => {
