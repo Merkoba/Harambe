@@ -139,12 +139,7 @@ App.goto_page = (page, new_tab = false) => {
     url.searchParams.set(`user_id`, App.used_user_id)
   }
 
-  if (new_tab) {
-    App.open_tab(url.href)
-  }
-  else {
-    App.location(url.href)
-  }
+  App.goto_url(url.href, new_tab)
 }
 
 App.fill_page_select = (page_select) => {
@@ -332,13 +327,7 @@ App.do_search = (query = ``, use_media_type = true, new_tab = false) => {
   }
 
   url.searchParams.set(`query`, App.encode_uri(query))
-
-  if (new_tab) {
-    App.open_tab(url.href)
-  }
-  else {
-    App.location(url.href)
-  }
+  App.goto_url(url.href, new_tab)
 }
 
 App.edit_post_title = (el) => {
@@ -1012,13 +1001,7 @@ App.setup_pages = () => {
 App.refresh = (new_tab = false) => {
   let ms = App.mode_string()
   let url = `/${ms}`
-
-  if (new_tab) {
-    App.open_tab(url)
-  }
-  else {
-    App.location(url)
-  }
+  App.goto_url(url, new_tab)
 }
 
 App.setup_sample_image = () => {

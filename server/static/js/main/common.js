@@ -785,10 +785,6 @@ App.bind_button = (what, func, mfunc, submenu = ``) => {
   })
 }
 
-App.open_tab = (url, target = `_blank`) => {
-  window.open(url, target)
-}
-
 App.encode_uri = (uri) => {
   return encodeURIComponent(uri)
 }
@@ -824,12 +820,7 @@ App.next_post = (blank = false) => {
     url = `/random`
   }
 
-  if (blank) {
-    App.open_tab(url)
-  }
-  else {
-    App.location(url)
-  }
+  App.goto_url(url, blank)
 }
 
 App.fresh_post = () => {
@@ -848,8 +839,21 @@ App.msg_show = (what) => {
   }
 }
 
+App.open_tab = (url, target = `_blank`) => {
+  window.open(url, target)
+}
+
 App.location = (where) => {
   window.location = where
+}
+
+App.goto_url = (url, new_tab = false) => {
+  if (new_tab) {
+    App.open_tab(url)
+  }
+  else {
+    App.location(url)
+  }
 }
 
 App.close_modals = () => {
