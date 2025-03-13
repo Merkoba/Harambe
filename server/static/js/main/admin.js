@@ -1009,6 +1009,10 @@ App.setup_sample_image = () => {
   DOM.ev(img, `error`, () => {
     DOM.hide(img)
   })
+
+  DOM.ev(img, `dblclick`, () => {
+    App.open_sample()
+  })
 }
 
 App.setup_sample_video = () => {
@@ -1020,6 +1024,10 @@ App.setup_sample_video = () => {
 
   DOM.ev(video, `error`, () => {
     DOM.hide(video)
+  })
+
+  DOM.ev(video, `dblclick`, () => {
+    App.open_sample()
   })
 }
 
@@ -1207,10 +1215,6 @@ App.setup_sample = () => {
 
   DOM.ev(`#sample_close`, `click`, () => {
     App.close_sample()
-  })
-
-  DOM.ev(`#sample_content`, `dblclick`, () => {
-    App.open_sample()
   })
 
   App.setup_sample_image()

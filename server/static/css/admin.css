@@ -1,6 +1,6 @@
 :root {
     --border_color: #ddd;
-    --sample_background: rgb(68, 114, 126);
+    --sample_background: rgb(128, 104, 144);
     --sample_border: 5px solid #cbd5ea;
 }
 
@@ -221,7 +221,7 @@ select {
 }
 
 #sample_content {
-    height: 24rem;
+    height: 25rem;
 }
 
 #sample_loading {
