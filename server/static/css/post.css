@@ -49,24 +49,6 @@ a:hover {
     text-decoration: underline;
 }
 
-a.button:link, a.button:visited {
-    text-decoration: none;
-}
-
-a.button:hover {
-    text-decoration: underline;
-}
-
-.button {
-    color: var(--link_color);
-    cursor: pointer;
-    user-select: none;
-}
-
-.button:hover {
-    text-decoration: underline;
-}
-
 .icon_btn {
     color: var(--link_color);
     cursor: pointer;

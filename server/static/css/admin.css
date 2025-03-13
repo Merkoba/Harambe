@@ -1,14 +1,14 @@
 :root {
     --border_color: #ddd;
-    --sample_background: rgb(84 98 100);
-    --sample_border: 6px solid #6fe3bd;
+    --sample_background: rgb(68, 114, 126);
+    --sample_border: 5px solid #cbd5ea;
 }
 
 body, html {
     font-size: var(--admin_font_size);
     font-family: sans-serif;
-    color: black;
-    background-color: white;
+    background-color: var(--background_color);
+    color: var(--text_color);
     margin: 0;
     padding: 0;
     width: 100%;
@@ -28,7 +28,6 @@ body, html {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
-    color: black;
     padding-left: 0.055rem;
     flex-grow: 0;
     flex-shrink: 0;
@@ -48,7 +47,7 @@ body, html {
 }
 
 .item:hover {
-    background-color: #f4f4f4;
+    background-color: var(--contrast_background);
 }
 
 a:link, a:visited {
@@ -73,7 +72,7 @@ a:hover {
 
 .table_header {
     font-weight: bold;
-    background-color: #f2f2f2;
+    background-color: var(--contrast_background);
     border-top: 1px solid var(--border_color);
 }
 
@@ -122,6 +121,7 @@ select {
 #filter {
     width: 6rem;
     font-size: 0.86rem;
+    outline: none;
 }
 
 .underline {

@@ -37,18 +37,6 @@ body, html {
     text-decoration: underline;
 }
 
-.action_button {
-    font-size: 1rem;
-    color: var(--color_1);
-    cursor: pointer;
-    user-select: none;
-    display: inline-block;
-}
-
-.action_button:hover {
-    text-decoration: underline;
-}
-
 a.linkbutton:link, a.linkbutton:visited {
     text-decoration: none;
     color: var(--color_1);
@@ -247,4 +235,22 @@ a.linkbutton:hover {
 
 .ace_active-line {
     background: transparent !important;
+}
+
+a.button:link, a.button:visited {
+    text-decoration: none;
+}
+
+a.button:hover {
+    text-decoration: underline;
+}
+
+.button {
+    color: var(--link_color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.button:hover {
+    text-decoration: underline;
 }

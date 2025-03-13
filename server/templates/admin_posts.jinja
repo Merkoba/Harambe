@@ -5,17 +5,17 @@
 {% endblock %}
 
 {% block admin_top %}
-<div id="menu" class="action_button" title="Ctrl+M">Menu</div>
+<div id="menu" class="button" title="Ctrl+M">Menu</div>
 <div class="sep">|</div>
-<div class="action_button" id="refresh" title="Refresh this page">Refresh</div>
+<div class="button" id="refresh" title="Refresh this page">Refresh</div>
 <div class="sep">|</div>
 
 {% if mode == "admin_posts" %}
-<div class="action_button" id="edit" title="Some edit actions">Edit</div>
+<div class="button" id="edit" title="Some edit actions">Edit</div>
 <div class="sep">|</div>
-<div class="action_button" id="delete_selected" title="Delete selected item">Delete</div>
+<div class="button" id="delete_selected" title="Delete selected item">Delete</div>
 <div class="sep">|</div>
-<div class="action_button" id="delete_all" title="Delete all items (from all pages)">Del All</div>
+<div class="button" id="delete_all" title="Delete all items (from all pages)">Del All</div>
 <div class="sep">|</div>
 {% endif %}
 
@@ -25,7 +25,7 @@
 <div class="sep">|</div>
 
 {% if page > 1 %}
-<div id="prev_page" class="action_button" title="Go to the previous page">Prev</div>
+<div id="prev_page" class="button" title="Go to the previous page">Prev</div>
 {% else %}
 <div class="unselectable">Prev</div>
 {% endif %}
@@ -33,7 +33,7 @@
 <div class="sep">|</div>
 
 {% if next_page %}
-<div id="next_page" class="action_button" title="Go to the next page">Next</div>
+<div id="next_page" class="button" title="Go to the next page">Next</div>
 {% else %}
 <div class="unselectable">Next</div>
 {% endif %}
@@ -55,7 +55,7 @@
 <select id="page_select" title="Show this number of items per page"></select>
 <div class="sep">|</div>
 <input id="filter" type="text" placeholder="Filter" title="Press Enter to search">
-<div id="clear_filter" class="action_button">x</div>
+<div id="clear_filter" class="button">x</div>
 {% endblock %}
 
 {% block admin_items %}
@@ -125,12 +125,12 @@
 
         <!-- Title -->
         <div class="table_cell">
-            <a href="/post/{{item.name}}" title="{{item.title or item.original}}" class="post_name">{{item.title or item.original}}</a>
+            <a href="/post/{{item.name}}" title="{{item.title or item.original}}" class="button post_name">{{item.title or item.original}}</a>
         </div>
 
         <!-- Type -->
         <div class="table_cell" title="{{item.mtype}}">
-            <div class="action_button mtype">{{item.mtype_str}}</div>
+            <div class="button mtype">{{item.mtype_str}}</div>
         </div>
 
         <!-- Size -->
@@ -139,11 +139,11 @@
         <!-- User -->
         {% if mode == "admin_posts" %}
         <div class="table_cell" title="{{item.uploader_str}}">
-            <div class="uploader admin_user action_button">{{item.username}}</div>
+            <div class="uploader admin_user button">{{item.username}}</div>
         </div>
         {% else %}
         <div class="table_cell">
-            <div class="uploader admin_user action_button">{{item.uploader_str}}</div>
+            <div class="uploader admin_user button">{{item.uploader_str}}</div>
         </div>
         {% endif %}
 
