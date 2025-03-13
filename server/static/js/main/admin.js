@@ -1009,6 +1009,10 @@ App.setup_sample_image = () => {
   DOM.ev(img, `error`, () => {
     DOM.hide(img)
   })
+
+  DOM.ev(img, `dblclick`, () => {
+    App.open_sample()
+  })
 }
 
 App.setup_sample_video = () => {
@@ -1179,13 +1183,22 @@ App.get_media_type = () => {
   return select.value
 }
 
+App.open_sample = (blank = false) => {
+  if (blank) {
+    window.open(`/post/${App.sample_name}`, `_blank`)
+  }
+  else {
+    window.location = `/post/${App.sample_name}`
+  }
+}
+
 App.setup_sample = () => {
   DOM.ev(`#sample_title`, `click`, () => {
-    window.location = `/post/${App.sample_name}`
+    App.open_sample()
   })
 
   DOM.ev(`#sample_title`, `auxclick`, () => {
-    window.open(`/post/${App.sample_name}`, `_blank`)
+    App.open_sample(true)
   })
 
   DOM.ev(`#sample_prev`, `click`, () => {
