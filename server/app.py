@@ -810,6 +810,8 @@ def edit_user(user_id: int = 0) -> Any:
     else:
         mode = "add"
 
+    admin = get_user()
+
     def show_edit(message: str = "") -> Any:
         user = user_procs.get_user(user_id)
 
@@ -829,16 +831,14 @@ def edit_user(user_id: int = 0) -> Any:
             user=user or {},
             title=title,
             mode=mode,
-            **common_configs(user),
+            **common_configs(admin),
         )
 
-    user = get_user()
-
-    if not user:
+    if not admin:
         return redirect(url_for("admin", what="users"))
 
     if request.method == "POST":
-        ok, msg, _ = user_procs.edit_user(mode, request, user, user_id)
+        ok, msg, _ = user_procs.edit_user(mode, request, admin, user_id)
 
         if ok:
             if mode == "add":
