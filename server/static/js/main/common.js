@@ -184,25 +184,25 @@ App.setup_menu_opts = (show_upload = true, show = false) => {
 
     App.bind_button(`${name}_opts_list`, () => {
       App.setup_list_opts(true, true)
-    }, undefined, true)
+    }, undefined, `>`)
 
     App.bind_button(`${name}_opts_admin`, () => {
       App.setup_admin_opts(true, true)
-    }, undefined, true)
+    }, undefined, `>`)
 
     App.bind_button(`${name}_opts_links`, () => {
       App.setup_link_opts(true, true)
-    }, undefined, true)
+    }, undefined, `>`)
 
     App.bind_button(`${name}_opts_you`, () => {
       App.setup_you_opts(App.user_id, true, true)
-    }, undefined, true)
+    }, undefined, `>`)
 
     App.bind_button(`${name}_opts_upload`, () => {
       App.location(`/`)
     }, () => {
       App.open_tab(`/`)
-    })
+    }, `🦍`)
   }, show)
 }
 
@@ -725,7 +725,7 @@ App.make_opts = (name, setup, show = false, back = false) => {
 
     App.bind_button(`${name}_opts_back`, () => {
       App.msg_show(`menu`)
-    })
+    }, undefined, `<`)
   }
 
   if (show) {
@@ -733,7 +733,7 @@ App.make_opts = (name, setup, show = false, back = false) => {
   }
 }
 
-App.bind_button = (what, func, mfunc, submenu = false) => {
+App.bind_button = (what, func, mfunc, submenu = ``) => {
   let name = what.split(`_`)[0]
   let msg_name = `msg_${name}`
   let el = DOM.el(`#${what}`)
@@ -754,7 +754,7 @@ App.bind_button = (what, func, mfunc, submenu = false) => {
 
   if (submenu) {
     let sub = DOM.create(`div`, `aero_arrow`)
-    sub.textContent = `>`
+    sub.textContent = submenu
     el.appendChild(sub)
   }
 
