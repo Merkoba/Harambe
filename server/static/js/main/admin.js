@@ -1082,6 +1082,7 @@ App.show_sample = async (item, from = `normal`) => {
   App.hide_sample_media()
   App.set_sample_title(title)
   DOM.show(`#sample_container`)
+  App.check_sample_buttons()
 
   try {
     let response = await fetch(`/get_sample`, {
@@ -1221,7 +1222,7 @@ App.setup_sample = () => {
   App.setup_sample_video()
 }
 
-App.next_sample = (dir = `next`) => {
+App.next_sample = (dir = `next`, just_check = false) => {
   let items = App.get_items()
 
   for (let [i, item] of items.entries()) {
@@ -1230,12 +1231,12 @@ App.next_sample = (dir = `next`) => {
     if (name === App.sample_name) {
       if (dir === `prev`) {
         if (i === 0) {
-          return
+          return false
         }
       }
       else if (dir === `next`) {
         if (i === items.length - 1) {
-          return
+          return false
         }
       }
 
@@ -1253,11 +1254,16 @@ App.next_sample = (dir = `next`) => {
           continue
         }
 
-        App.show_sample(next, dir)
-        return
+        if (!just_check) {
+          App.show_sample(next, dir)
+        }
+
+        return true
       }
     }
   }
+
+  return false
 }
 
 App.hide_sample_media = (except = ``) => {
@@ -1340,5 +1346,24 @@ App.doc_click = (e, mode) => {
   }
   else {
     App.close_sample()
+  }
+}
+
+App.check_sample_buttons = () => {
+  let prev = App.next_sample(`prev`, true)
+  let next = App.next_sample(`next`, true)
+
+  if (prev) {
+    DOM.show(`#sample_prev`)
+  }
+  else {
+    DOM.hide(`#sample_prev`)
+  }
+
+  if (next) {
+    DOM.show(`#sample_next`)
+  }
+  else {
+    DOM.hide(`#sample_next`)
   }
 }
