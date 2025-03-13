@@ -1190,10 +1190,10 @@ App.get_media_type = () => {
 
 App.open_sample = (blank = false) => {
   if (blank) {
-    window.open(`/post/${App.sample_name}`, `_blank`)
+    App.open_tab(`/post/${App.sample_name}`)
   }
   else {
-    window.location = `/post/${App.sample_name}`
+    App.location(`/post/${App.sample_name}`)
   }
 }
 

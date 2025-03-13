@@ -814,12 +814,21 @@ App.setup_editpost_opts = (show = false) => {
   }, show)
 }
 
-App.next_post = () => {
+App.next_post = (blank = false) => {
+  let url
+
   if (App.name) {
-    App.location(`/next/${App.name}`)
+    url = `/next/${App.name}`
   }
   else {
-    App.location(`/random`)
+    url = `/random`
+  }
+
+  if (blank) {
+    App.open_tab(url)
+  }
+  else {
+    App.location(url)
   }
 }
 

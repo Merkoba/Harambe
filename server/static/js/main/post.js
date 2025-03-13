@@ -1039,22 +1039,6 @@ App.start_markdown = async () => {
   }
 }
 
-App.next_post = (blank = false) => {
-  if (!App.reader) {
-    App.login_feedback()
-    return
-  }
-
-  let href = `/next/${App.name}`
-
-  if (blank) {
-    window.open(href, `_blank`)
-  }
-  else {
-    window.location = href
-  }
-}
-
 App.setup_scrollers = () => {
   let r_bottom = DOM.el(`#lobottomy`)
 
