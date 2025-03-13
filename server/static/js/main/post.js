@@ -79,6 +79,10 @@ App.init = () => {
     DOM.ev(next_btn, `click`, () => {
       App.next_post()
     })
+
+    DOM.ev(next_btn, `auxclick`, () => {
+      App.next_post(true)
+    })
   }
 
   App.setup_reactions()
@@ -1035,14 +1039,20 @@ App.start_markdown = async () => {
   }
 }
 
-App.next_post = () => {
+App.next_post = (blank = false) => {
   if (!App.reader) {
     App.login_feedback()
     return
   }
 
   let href = `/next/${App.name}`
-  window.location = href
+
+  if (blank) {
+    window.open(href, `_blank`)
+  }
+  else {
+    window.location = href
+  }
 }
 
 App.setup_scrollers = () => {
