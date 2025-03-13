@@ -1318,4 +1318,10 @@ App.doc_click = (e, mode) => {
       App.do_sort(sort)
     }
   }
+  else if (e.target.closest(`#sample_container`)) {
+    // Do nothing
+  }
+  else {
+    App.close_sample()
+  }
 }
