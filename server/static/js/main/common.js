@@ -937,3 +937,11 @@ App.timeago = (date) => {
 App.login_feedback = () => {
   App.popmsg(`You might have to login to do this`)
 }
+
+App.to_top = () => {
+  window.scrollTo(0, 0)
+}
+
+App.to_bottom = () => {
+  window.scrollTo(0, document.body.scrollHeight)
+}

@@ -468,7 +468,7 @@ App.send_reaction = async (text) => {
     let json = await response.json()
     App.add_reaction(json.reaction)
     App.check_reactions()
-    window.scrollTo(0, document.body.scrollHeight)
+    App.to_bottom()
   }
   else {
     App.print_error(response.status)
@@ -1044,7 +1044,7 @@ App.setup_scrollers = () => {
 
   if (r_bottom) {
     DOM.ev(r_bottom, `click`, () => {
-      window.scrollTo(0, document.body.scrollHeight)
+      App.to_bottom()
     })
   }
 
@@ -1052,7 +1052,7 @@ App.setup_scrollers = () => {
 
   if (r_top) {
     DOM.ev(r_top, `click`, () => {
-      window.scrollTo(0, 0)
+      App.to_top()
     })
   }
 }
