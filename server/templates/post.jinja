@@ -37,7 +37,7 @@
                 <div id="max" data-max_type="video" class="button" title="Maximize the video">Max</div>
                 <div class="sep">|</div>
             </div>
-            {% elif post.text and (not post.markdown_embed) %}
+            {% elif post.text and (not post.markdown_embed) and (not post.zip_embed) %}
             <div class="rowitem nowrap">
                 <div id="max" data-max_type="editor" class="button" title="Maximize the editor">Max</div>
                 <div class="sep">|</div>
