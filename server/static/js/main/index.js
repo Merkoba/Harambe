@@ -1,6 +1,6 @@
-window.onload = () => {
+DOM.ev(document, `DOMContentLoaded`, () => {
   App.init()
-}
+})
 
 App.init = () => {
   let image = DOM.el(`#image`)

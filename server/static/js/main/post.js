@@ -1,6 +1,6 @@
-window.onload = function() {
+DOM.ev(document, `DOMContentLoaded`, () => {
   App.init()
-}
+})
 
 App.init = () => {
   App.date_ms = App.date * 1000
@@ -589,6 +589,11 @@ App.get_text_value = () => {
 }
 
 App.toggle_max = (what) => {
+  if (what === `image`) {
+    App.toggle_modal_image()
+    return
+  }
+
   let el = DOM.el(`#${what}`)
   let details = DOM.el(`#details`)
   App.max_on = !App.max_on

@@ -75,6 +75,7 @@ a.link:hover,
     margin-top: 0.45rem;
     max-height: 30rem;
     cursor: pointer;
+    object-fit: contain;
 }
 
 #image:hover {
