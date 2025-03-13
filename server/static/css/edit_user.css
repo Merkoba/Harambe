@@ -104,3 +104,9 @@ a:hover {
 .button:hover {
     text-decoration: underline;
 }
+
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}

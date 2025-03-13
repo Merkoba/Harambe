@@ -11,32 +11,32 @@
     <div id="title">{{title}}</div>
 
     <form id="form" action="/edit_user/{{user.id}}" method="post">
-        <div>
+        <div class="row">
             <div>Username</div>
             <input type="text" id="username" name="username" value="{{user.username}}" placeholder="Text">
         </div>
 
-        <div>
+        <div class="row">
             <div>Name</div>
             <input type="text" id="name" name="name" value="{{user.name}}" placeholder="Text">
         </div>
 
-        <div>
+        <div class="row">
             <div>Max Requests Per Minute</div>
             <input type="text" id="rpm" name="rpm" value="{% if user and (user.rpm > 0) %}{{user.rpm}}{% endif %}" placeholder="Number">
         </div>
 
-        <div>
+        <div class="row">
             <div>Max File Size</div>
             <input type="text" id="max_size" name="max_size" value="{% if user and (user.max_size > 0) %}{{user.max_size}}{% endif %}" placeholder="Number">
         </div>
 
-        <div>
+        <div class="row">
             <div>Mark On Files</div>
             <input type="text" id="mark" name="mark" value="{{user.mark}}" placeholder="Text">
         </div>
 
-        <div>
+        <div class="row">
             <div>Password</div>
             <input type="password" id="password" name="password" value="" placeholder="Text">
         </div>
