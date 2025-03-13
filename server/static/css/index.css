@@ -122,6 +122,7 @@ a.dialog_button:hover {
     object-fit: contain;
     outline: 5px solid transparent;
     transition: outline-color 0.55s;
+    max-width: 90vw;
 }
 
 #image:hover {

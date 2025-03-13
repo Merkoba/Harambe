@@ -40,6 +40,7 @@ App.init = () => {
       dataTransfer.items.add(files[0])
       file.files = dataTransfer.files
       App.reflect_file(file)
+      App.add_picker()
     }
   })
 
