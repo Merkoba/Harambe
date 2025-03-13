@@ -817,7 +817,7 @@ def edit_user(user_id: int = 0) -> Any:
             return redirect(url_for("admin", what="users"))
 
         if user and (mode == "edit"):
-            title = f"Edit: {user.username}"
+            title = "Edit User"
         else:
             title = "Add User"
 
@@ -829,7 +829,7 @@ def edit_user(user_id: int = 0) -> Any:
             user=user or {},
             title=title,
             mode=mode,
-            **common_configs(),
+            **common_configs(user),
         )
 
     user = get_user()
@@ -838,11 +838,11 @@ def edit_user(user_id: int = 0) -> Any:
         return redirect(url_for("admin", what="users"))
 
     if request.method == "POST":
-        ok, msg, uid = user_procs.edit_user(mode, request, user, user_id)
+        ok, msg, _ = user_procs.edit_user(mode, request, user, user_id)
 
         if ok:
             if mode == "add":
-                return redirect(url_for("edit_user", user_id=uid))
+                return redirect(url_for("admin", what="users"))
 
             return show_edit("Updated")
 

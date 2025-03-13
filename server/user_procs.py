@@ -369,18 +369,7 @@ def edit_user(
             return error("User not found")
 
     args = {}
-
-    if mode == "add":
-        args["username"] = request.form.get("username").lower()
-
-        if database.username_exists(args["username"]):
-            return error("Username already exists")
-    elif mode == "edit":
-        if user:
-            args["username"] = user.username
-        else:
-            return error("User not found")
-
+    args["username"] = request.form.get("username")
     args["password"] = request.form.get("password")
     args["name"] = request.form.get("name")
     args["rpm"] = request.form.get("rpm")
@@ -418,14 +407,16 @@ def edit_user(
     if request.form.get("max_size") is None:
         args["max_size"] = 0
 
+    if mode == "add":
+        if database.username_exists(args["username"]):
+            return error("Username already exists")
+    elif mode == "edit":
+        if not user:
+            return error("User not found")
+
     n_args = {}
 
     for key in args:
-        if mode == "edit":
-            if key in ["username"]:
-                n_args[key] = args[key]
-                continue
-
         ok, value = check_value(user, key, args[key])
 
         if not ok:

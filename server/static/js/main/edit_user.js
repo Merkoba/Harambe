@@ -38,6 +38,14 @@ App.init = () => {
       }
     }
   })
+
+  let menu = DOM.el(`#menu`)
+
+  if (menu) {
+    DOM.ev(menu, `click`, () => {
+      App.setup_menu_opts(true)
+    })
+  }
 }
 
 App.delete_user = async () => {
