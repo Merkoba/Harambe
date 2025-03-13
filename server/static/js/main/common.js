@@ -58,8 +58,7 @@ App.setup_keyboard = () => {
         }
         else {
           e.preventDefault()
-          let show_upload = App.mode !== `index`
-          App.setup_menu_opts(show_upload, true)
+          App.setup_menu_opts(true)
         }
       }
     }
@@ -162,25 +161,27 @@ App.capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-App.setup_menu_opts = (show_upload = true, show = false) => {
+App.setup_menu_opts = (show = false) => {
   let name = `menu`
 
   App.make_opts(name, () => {
-    if (!show_upload) {
-      DOM.el(`#${name}_opts_upload`).remove()
-    }
-
     App.bind_button(`${name}_opts_fresh`, () => {
       App.location(`/fresh`)
     }, () => {
       App.open_tab(`/fresh`)
-    })
+    }, `🐟`)
 
     App.bind_button(`${name}_opts_random`, () => {
       App.location(`/random`)
     }, () => {
       App.open_tab(`/random`)
-    })
+    }, `🎲`)
+
+    App.bind_button(`${name}_opts_upload`, () => {
+      App.location(`/`)
+    }, () => {
+      App.open_tab(`/`)
+    }, `🦍`)
 
     App.bind_button(`${name}_opts_list`, () => {
       App.setup_list_opts(true, true)
@@ -197,12 +198,6 @@ App.setup_menu_opts = (show_upload = true, show = false) => {
     App.bind_button(`${name}_opts_you`, () => {
       App.setup_you_opts(App.user_id, true, true)
     }, undefined, `>`)
-
-    App.bind_button(`${name}_opts_upload`, () => {
-      App.location(`/`)
-    }, () => {
-      App.open_tab(`/`)
-    }, `🦍`)
   }, show)
 }
 

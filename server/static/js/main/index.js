@@ -63,7 +63,7 @@ App.init = () => {
   let menu_btn = DOM.el(`#menu_btn`)
 
   if (menu_btn) {
-    App.setup_menu_opts(false)
+    App.setup_menu_opts()
 
     DOM.ev(menu_btn, `click`, (e) => {
       App.msg_show(`menu`)
