@@ -132,7 +132,7 @@
 
         <!-- Name -->
         <div class="table_cell" title="{{item.name}}">
-            <div class="admin_user button">{{item.name}}</div>
+            <div class="admin_user button">{{item.name or "-"}}</div>
         </div>
 
         <!-- RPM -->
@@ -164,7 +164,7 @@
 
         <!-- Mark -->
         {% if show_marks %}
-        <div class="table_cell">{{item.mark}}</div>
+        <div class="table_cell">{{item.mark or "-"}}</div>
         {% endif %}
 
         <!-- Register Date -->
