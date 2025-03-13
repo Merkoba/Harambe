@@ -459,9 +459,12 @@ def do_delete_post(post: Post) -> None:
     database.delete_post(post.id)
     file_name = post.full
     try_delete_file(file_name)
+    delete_sample(post.name)
 
+
+def delete_sample(name: str) -> None:
     for file in utils.samples_dir().iterdir():
-        if file.stem == post.name:
+        if file.stem == name:
             try_delete_file(file.name, "sample")
             break
 
@@ -510,7 +513,15 @@ def delete_all_files() -> None:
     for _, _, filenames in os.walk(fd):
         for name in filenames:
             try_delete_file(name)
-            try_delete_file(f"{name}.jpg", "sample")
+
+    sd = utils.samples_dir()
+
+    if not utils.check_dir(str(sd)):
+        return
+
+    for _, _, filenames in os.walk(sd):
+        for name in filenames:
+            try_delete_file(name, "sample")
 
 
 # Remove old files if limits are exceeded
