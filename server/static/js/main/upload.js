@@ -4,7 +4,6 @@ DOM.ev(document, `DOMContentLoaded`, () => {
 
 App.init = () => {
   let image = DOM.el(`#image`)
-  App.num_pickers = 0
   App.clicked = false
 
   if (image) {
@@ -215,8 +214,14 @@ App.reset_video = () => {
   DOM.hide(video)
 }
 
+App.num_pickers = () => {
+  return DOM.els(`.picker`).length
+}
+
 App.add_picker = (show = false) => {
-  if (App.num_pickers > 0) {
+  let num_pickers = App.num_pickers()
+
+  if (num_pickers > 0) {
     let empty = App.get_empty_picker()
 
     if (empty.files.length === 0) {
@@ -225,9 +230,7 @@ App.add_picker = (show = false) => {
     }
   }
 
-  App.num_pickers += 1
-
-  if (App.num_pickers > App.max_upload_files) {
+  if (num_pickers >= App.max_upload_files) {
     return
   }
 
@@ -235,7 +238,7 @@ App.add_picker = (show = false) => {
   let el = DOM.create(`div`, `picker`)
   el.innerHTML = t.innerHTML
   let input = DOM.el(`input`, el)
-  input.id = `file_${App.num_pickers}`
+  input.id = `file_${num_pickers}`
   input.name = `file`
 
   DOM.ev(el, `change`, (e) => {
@@ -337,7 +340,6 @@ App.remove_picker = (picker) => {
 
   App.reset_file_media(picker)
   picker.remove()
-  App.num_pickers -= 1
   App.on_picker_change()
 }
 
