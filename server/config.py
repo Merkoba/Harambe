@@ -211,7 +211,7 @@ class Config:
         self.view_delay: int = 1
 
         # Content of the description meta tag in the index
-        self.description_index: str = "Ask Harambe for your file to be uploaded"
+        self.description_upload: str = "Ask Harambe for your file to be uploaded"
 
         # Content of the description meta tag in posts
         self.description_post: str = "File kindly uploaded by Harambe"
@@ -391,7 +391,7 @@ class Config:
             set_value(c, "requests_per_minute")
             set_value(c, "public_posts")
             set_value(c, "view_delay")
-            set_value(c, "description_index")
+            set_value(c, "description_upload")
             set_value(c, "description_post")
             set_value(c, "reactions_enabled")
             set_value(c, "max_reaction_length")

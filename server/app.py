@@ -112,7 +112,7 @@ def reader_required(f: Any) -> Any:
         user = get_user()
 
         if not list_visible(user):
-            return redirect(url_for("index"))
+            return def_url()
 
         return f(*args, **kwargs)
 
@@ -152,6 +152,10 @@ def over() -> Any:
 def fill_session(user: User) -> None:
     session["user_id"] = user.id
     session.permanent = True
+
+
+def def_url() -> Any:
+    return redirect(url_for("show_upload"))
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
@@ -203,7 +207,7 @@ text_mtype = "text/plain"
 
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-def index() -> Any:
+def show_upload() -> Any:
     user = get_user()
 
     if request.method == "POST":
@@ -245,8 +249,8 @@ def index() -> Any:
     banner = utils.get_banner()
 
     return render_template(
-        "index.jinja",
-        mode="index",
+        "upload.jinja",
+        mode="upload",
         max_size=max_size,
         max_size_str=max_size_str,
         show_max_size=config.show_max_size,
@@ -257,7 +261,7 @@ def index() -> Any:
         allow_titles=config.allow_titles,
         show_list=show_list,
         show_admin=user and user.admin,
-        description=config.description_index,
+        description=config.description_upload,
         upload_enabled=config.web_uploads_enabled,
         max_name_length=config.max_user_name_length,
         max_password_length=config.max_user_password_length,
@@ -294,7 +298,7 @@ def message() -> Any:
         ok = False
 
     if not ok:
-        return redirect(url_for("index"))
+        return def_url()
 
     return render_template(
         "message.jinja",
@@ -485,7 +489,7 @@ def get_sample_2() -> Any:
 @admin_required
 def admin(what: str) -> Any:
     if what not in ["posts", "users", "reactions"]:
-        return redirect(url_for("index"))
+        return def_url()
 
     user = get_user()
 
@@ -640,7 +644,7 @@ def login() -> Any:
 
         if ok and user:
             fill_session(user)
-            return redirect(url_for("index"))
+            return def_url()
 
     return render_template(
         "login.jinja",
@@ -663,7 +667,7 @@ def register() -> Any:
 
         if ok and user:
             fill_session(user)
-            return redirect(url_for("index"))
+            return def_url()
 
     return render_template(
         "register.jinja",
@@ -677,7 +681,7 @@ def register() -> Any:
 @payload_check()
 def logout() -> Any:
     session.clear()
-    return redirect(url_for("index"))
+    return def_url()
 
 
 # LIST
@@ -698,14 +702,14 @@ def show_list(what: str) -> Any:
 
     if not history:
         if not config.list_enabled and (not admin):
-            return redirect(url_for("index"))
+            return def_url()
 
         if config.list_private and (not admin):
             if not logged_in():
                 return redirect(url_for("login"))
 
             if not user.reader:
-                return redirect(url_for("index"))
+                return def_url()
 
     page = int(request.args.get("page", 1))
     page_size = str(request.args.get("page_size", config.list_page_size))
