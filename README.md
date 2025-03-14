@@ -233,3 +233,7 @@ If an image and an audio file are uploaded, they will be turned into a video.
 The video being a single still image, and the full audio.
 
 This is a quick way to create nice music videos.
+
+To be able to do this, users must have the `mage` permission.
+
+This is false by default.
