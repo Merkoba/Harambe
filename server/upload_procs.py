@@ -187,7 +187,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     file_hash, existing = check_hash(content)
 
-    if existing:
+    if existing and (privacy == "public"):
         if mode == "normal":
             return True, existing
 
