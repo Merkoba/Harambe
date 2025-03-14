@@ -564,7 +564,7 @@ App.toggle_modal_image = () => {
 }
 
 App.copy_all_text = () => {
-  App.copy_to_clipboard(App.get_text_value())
+  App.copy_to_clipboard(App.text || ``)
 }
 
 App.select_all_text = () => {
@@ -577,18 +577,6 @@ App.select_all_text = () => {
 
   if (markdown) {
     App.select_all(markdown)
-  }
-}
-
-App.get_text_value = () => {
-  if (App.editor) {
-    return App.editor.getValue()
-  }
-
-  let markdown = DOM.el(`#mardkwon`)
-
-  if (markdown) {
-    return App.original_markdown
   }
 }
 
