@@ -283,4 +283,12 @@ def try_decode(chunk: bytes, encoding: str) -> bool:
     return True
 
 
+def audio_exts() -> list[str]:
+    return ["mp3", "wav", "ogg", "flac", "m4a", "aac"]
+
+
+def image_exts() -> list[str]:
+    return ["jpg", "jpeg", "png", "gif", "bmp", "webp"]
+
+
 ICONS = load_icons()

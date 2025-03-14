@@ -6,6 +6,7 @@ import hashlib
 import mimetypes
 import subprocess
 import tempfile
+import time
 from typing import Any
 from pathlib import Path
 from io import BytesIO
@@ -151,7 +152,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             return error("Failed to compress files")
     elif audio_image:
         try:
+            start = time.time()
             audioimg = make_audio_image(files)
+            end = time.time()
+            utils.q(f"Audio image took {end - start} seconds")
 
             if not audioimg:
                 return error("Failed to make audio image")
@@ -395,8 +399,8 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
 
 
 def is_audio_image(files: list[FileStorage]) -> bool:
-    imgs = ["jpg", "jpeg", "png"]
-    audio = ["mp3", "ogg", "wav"]
+    imgs = utils.image_exts()
+    audio = utils.audio_exts()
 
     if len(files) != 2:
         return False
@@ -411,9 +415,9 @@ def make_audio_image(files: list[FileStorage]) -> bytes | None:
     audio_file = None
 
     for file in files:
-        if Path(file.filename).suffix[1:].lower() in ["jpg", "jpeg", "png"]:
+        if Path(file.filename).suffix[1:].lower() in utils.image_exts():
             img_file = file
-        elif Path(file.filename).suffix[1:].lower() in ["mp3", "ogg", "wav"]:
+        elif Path(file.filename).suffix[1:].lower() in utils.audio_exts():
             audio_file = file
 
     if not img_file or not audio_file:
@@ -449,7 +453,7 @@ def make_audio_image(files: list[FileStorage]) -> bytes | None:
                 "-c:v",
                 "libx264",
                 "-preset",
-                "ultrafast",
+                "medium",  # Use a slower preset for better CPU utilization
                 "-tune",
                 "stillimage",
                 "-crf",
@@ -463,10 +467,6 @@ def make_audio_image(files: list[FileStorage]) -> bytes | None:
                 "-vf",
                 f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
                 "-shortest",
-                "-r",
-                "1",
-                "-g",
-                "1",
                 "-threads",
                 "0",
                 "-y",
