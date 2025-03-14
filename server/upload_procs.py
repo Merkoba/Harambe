@@ -157,7 +157,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             start = time.time()
             audioimg = make_audio_image(files)
             end = time.time()
-            utils.q(f"Audio image took {end - start} seconds")
+            d = round(end - start, 2)
+            utils.q(f"Audio image took {d} seconds")
 
             if not audioimg:
                 return error("Failed to make audio image")
