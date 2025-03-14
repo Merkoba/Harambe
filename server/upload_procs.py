@@ -146,7 +146,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if compress:
         try:
             content = make_zip(files)
-            original = post_name
+            original = ""
             ext = ".zip"
 
         except Exception as e:
@@ -163,7 +163,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                 return error("Failed to make audio image")
 
             content = audioimg
-            original = post_name
+            original = ""
             ext = ".mp4"
 
             if not content:

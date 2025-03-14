@@ -86,11 +86,13 @@ def get_full_name(dbpost: DbPost) -> str:
     return dbpost.name
 
 
-def get_original_name(dbpost: DbPost) -> str:
-    if dbpost.ext:
-        return f"{dbpost.original}.{dbpost.ext}"
+def get_original_name(original: str, dbpost: DbPost) -> str:
+    full = utils.clean_filename(original)
 
-    return dbpost.original
+    if dbpost.ext:
+        full = f"{full}.{dbpost.ext}"
+
+    return full
 
 
 def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
@@ -105,8 +107,8 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     uploader = post.uploader
     mtype = post.mtype
     listed = post.listed
-    original = post.original
-    original_full = get_original_name(post)
+    original = post.original or post.title[:20].strip() or post.name
+    original_full = get_original_name(original, post)
     ago = utils.time_ago(date, now)
     date_1 = utils.nice_date(date, "date")
     date_2 = utils.nice_date(date, "time")
