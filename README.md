@@ -225,3 +225,11 @@ When a sample icon is clicked, it shows a popup window in the top right.
 It supports moving to prev or next samples using arrow buttons, or keyboard arrows.
 
 It has a title with the file name, which when clicked opens the post.
+
+## Audio Images
+
+If an image and an audio file are uploaded, they will be turned into a video.
+
+The video being a single still image, and the full audio.
+
+This is a quick way to create nice music videos.
