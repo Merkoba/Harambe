@@ -331,29 +331,29 @@ App.do_search = (query = ``, use_media_type = true, new_tab = false) => {
 }
 
 App.edit_post_title = (el) => {
+  let items = App.get_selected()
+
+  if (items.length === 0) {
+    return
+  }
+
+  let ids = items.map(x => x.dataset.post_id)
   App.msg_post_edit.close()
-  let t = el.dataset.title
-  let o = el.dataset.original
-  let current = t || o
 
   let prompt_args = {
     placeholder: `Enter new title`,
-    value: current,
     max: App.max_title_length,
     callback: async (title) => {
-      let post_id = el.dataset.post_id
-
       let response = await fetch(`/edit_title`, {
         method: `POST`,
         headers: {
           "Content-Type": `application/json`,
         },
-        body: JSON.stringify({post_id, title}),
+        body: JSON.stringify({ids, title}),
       })
 
       if (response.ok) {
-        el.dataset.title = title
-        DOM.el(`.post_name`, el).innerText = title || o
+        App.refresh()
       }
       else {
         App.print_error(response.status)
@@ -551,7 +551,7 @@ App.do_mod_user = async (items, what, value, vtype) => {
     })
 
     if (response.ok) {
-      App.location(`/admin/users`)
+      App.refresh()
     }
     else {
       App.print_error(response.status)
@@ -888,8 +888,7 @@ App.setup_edit = () => {
     App.msg_post_edit.set(t.innerHTML)
 
     DOM.ev(DOM.el(`#edit_title`), `click`, () => {
-      let item = App.get_selected()[0]
-      App.edit_post_title(item)
+      App.edit_post_title()
     })
 
     DOM.ev(edit, `click`, () => {

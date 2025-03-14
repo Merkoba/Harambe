@@ -558,9 +558,9 @@ def check_storage() -> None:
             do_delete_post(post)
 
 
-def edit_post_title(post_id: int, title: str, user: User) -> tuple[str, int]:
-    if not post_id:
-        return utils.bad("Missing values")
+def edit_post_title(ids: list[int], title: str, user: User) -> tuple[str, int]:
+    if not ids:
+        return utils.bad("Missing ids")
 
     if len(title) > config.max_title_length:
         return utils.bad("Title is too long")
@@ -569,15 +569,18 @@ def edit_post_title(post_id: int, title: str, user: User) -> tuple[str, int]:
         if not config.allow_edit:
             return utils.bad("Editing is disabled")
 
-        post = get_post(post_id)
+        for post_id in ids:
+            post = get_post(post_id)
 
-        if not post:
-            return utils.bad("Post not found")
+            if not post:
+                return utils.bad("Post not found")
 
-        if post.username != user.username:
-            return utils.bad("You are not the uploader")
+            if post.username != user.username:
+                return utils.bad("You are not the uploader")
 
-    database.edit_post_title(post_id, title)
+    for post_id in ids:
+        database.edit_post_title(post_id, title)
+
     return utils.ok("Title updated")
 
 

@@ -351,6 +351,7 @@ def post(name: str) -> Any:
         post_refresh_times=config.post_refresh_times,
         max_post_name_length=config.max_post_name_length,
         max_reaction_name_length=config.max_reaction_name_length,
+        max_title_length=config.max_title_length,
         can_react=can_react,
         show_list=show_list,
         **common_configs(user),
@@ -620,14 +621,18 @@ def delete_post() -> Any:
 @login_required
 def edit_title() -> Any:
     data = request.get_json()
-    post_id = data.get("post_id", None)
+    ids = data.get("ids", None)
+
+    if not ids:
+        return error_json
+
     title = data.get("title", None)
     user = get_user()
 
     if not user:
         return error_json
 
-    return post_procs.edit_post_title(post_id, title, user=user)
+    return post_procs.edit_post_title(ids, title, user=user)
 
 
 # AUTH
