@@ -61,20 +61,21 @@ schemas = {
 
 indexes = {
     "posts": [
-        "CREATE INDEX idx_posts_id ON posts(id);",
-        "CREATE INDEX idx_posts_name ON posts(name);",
-        "CREATE INDEX idx_posts_user ON posts(user);",
-        "CREATE INDEX idx_posts_date ON posts(date);",
-        "CREATE INDEX idx_posts_file_hash ON posts(file_hash);",
+        "CREATE INDEX IF NOT EXISTS idx_posts_id ON posts(id);",
+        "CREATE INDEX IF NOT EXISTS idx_posts_name ON posts(name);",
+        "CREATE INDEX IF NOT EXISTS idx_posts_user ON posts(user);",
+        "CREATE INDEX IF NOT EXISTS idx_posts_date ON posts(date);",
+        "CREATE INDEX IF NOT EXISTS idx_posts_file_hash ON posts(file_hash);",
     ],
     "reactions": [
-        "CREATE INDEX idx_reactions_id ON reactions(id);",
-        "CREATE INDEX idx_reactions_post ON reactions(post);",
-        "CREATE INDEX idx_reactions_user ON reactions(user);",
+        "CREATE INDEX IF NOT EXISTS idx_reactions_id ON reactions(id);",
+        "CREATE INDEX IF NOT EXISTS idx_reactions_post ON reactions(post);",
+        "CREATE INDEX IF NOT EXISTS idx_reactions_user ON reactions(user);",
+        "CREATE INDEX IF NOT EXISTS idx_reactions_date ON reactions(date);",
     ],
     "users": [
-        "CREATE INDEX idx_users_id ON users(id);",
-        "CREATE INDEX idx_users_username ON users(username);",
+        "CREATE INDEX IF NOT EXISTS idx_users_id ON users(id);",
+        "CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);",
     ],
 }
 
