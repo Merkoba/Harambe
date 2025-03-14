@@ -195,6 +195,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             elif utils.is_text_file(path):
                 get_text_sample(path)
         except Exception as e:
+            get_text_sample(path)
             utils.error(e)
 
     database.update_user_last_date(user.id)

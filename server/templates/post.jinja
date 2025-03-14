@@ -27,31 +27,35 @@
             <div class="sep">|</div>
             {% endif %}
 
-            {% if post.image_embed %}
-            <div class="rowitem nowrap">
-                <div id="max" data-max_type="image" class="button" title="Maximize the image">Max</div>
-                <div class="sep">|</div>
-            </div>
-            {% elif post.video_embed %}
-            <div class="rowitem nowrap">
-                <div id="max" data-max_type="video" class="button" title="Maximize the video">Max</div>
-                <div class="sep">|</div>
-            </div>
-            {% elif post.text and (not post.markdown_embed) and (not post.zip_embed) %}
-            <div class="rowitem nowrap">
-                <div id="max" data-max_type="editor" class="button" title="Maximize the editor">Max</div>
-                <div class="sep">|</div>
-            </div>
-            {% elif post.markdown_embed %}
-            <div class="rowitem nowrap">
-                <div id="max" data-max_type="markdown" class="button" title="Maximize the markdown">Max</div>
-                <div class="sep">|</div>
-            </div>
-            {% elif post.flash_embed %}
-            <div class="rowitem nowrap">
-                <div id="max" data-max_type="flash" class="button" title="Maximize the flash player">Max</div>
-                <div class="sep">|</div>
-            </div>
+            {% if post.text %}
+                {% if (not post.markdown_embed) and (not post.zip_embed) %}
+                <div class="rowitem nowrap">
+                    <div id="max" data-max_type="editor" class="button" title="Maximize the editor">Max</div>
+                    <div class="sep">|</div>
+                </div>
+                {% elif post.markdown_embed %}
+                <div class="rowitem nowrap">
+                    <div id="max" data-max_type="markdown" class="button" title="Maximize the markdown">Max</div>
+                    <div class="sep">|</div>
+                </div>
+                {% endif %}
+            {% else %}
+                {% if post.image_embed %}
+                <div class="rowitem nowrap">
+                    <div id="max" data-max_type="image" class="button" title="Maximize the image">Max</div>
+                    <div class="sep">|</div>
+                </div>
+                {% elif post.video_embed %}
+                <div class="rowitem nowrap">
+                    <div id="max" data-max_type="video" class="button" title="Maximize the video">Max</div>
+                    <div class="sep">|</div>
+                </div>
+                {% elif post.flash_embed and (not post.text) %}
+                <div class="rowitem nowrap">
+                    <div id="max" data-max_type="flash" class="button" title="Maximize the flash player">Max</div>
+                    <div class="sep">|</div>
+                </div>
+                {% endif %}
             {% endif %}
         </div>
 
@@ -110,53 +114,51 @@
         </div>
     </div>
 
-    {% if post.image_embed %}
-    <div class="embed">
-        <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}" onload="App.on_image_load()">
-    </div>
-    {% endif %}
+    {% if post.text %}
+        {% if not post.zip_embed %}
+        <div class="embed">
+            <div id="text_buttons" class="rowitem">
+                <div id="copy_all_text" class="button">Copy All</div>
+                <div class="sep">|</div>
+                <div id="select_all_text"class="button">Select All</div>
 
-    {% if post.video_embed or post.audio_embed %}
-    <div class="embed">
-        <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none"
-        {% if post.video_embed %}
-        poster="/sample/{{post.name}}">
-        {% else %}
-        poster="/static/img/cover.jpg">
-        {% endif %}
-        </video>
-    </div>
-    {% endif %}
+                {% if not post.markdown_embed %}
+                <div class="sep">|</div>
+                <div id="toggle_wrap"class="button">Toggle Wrap</div>
+                {% endif %}
+            </div>
 
-    {% if post.text and (not post.zip_embed) %}
-    <div class="embed">
-        <div id="text_buttons" class="rowitem">
-            <div id="copy_all_text" class="button">Copy All</div>
-            <div class="sep">|</div>
-            <div id="select_all_text"class="button">Select All</div>
-
-            {% if not post.markdown_embed %}
-            <div class="sep">|</div>
-            <div id="toggle_wrap"class="button">Toggle Wrap</div>
+            {% if post.markdown_embed %}
+            <div id="markdown_container">
+                <div id="markdown">{{post.text}}</div>
+            </div>
+            {% else %}
+            <div id="editor"></div>
             {% endif %}
         </div>
-
-        {% if post.markdown_embed %}
-        <div id="markdown_container">
-            <div id="markdown">{{post.text}}</div>
-        </div>
-        {% else %}
-        <div id="editor"></div>
+        {% elif post.zip_embed %}
+        <hr><div id="zip_sample">{{post.text}}</div>
         {% endif %}
-    </div>
-    {% endif %}
+    {% else %}
+    {% if post.image_embed %}
+        <div class="embed">
+            <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}" onload="App.on_image_load()">
+        </div>
+        {% endif %}
 
-    {% if post.flash_embed %}
-    <div id="flash_container" class="embed"></div>
-    {% endif %}
-
-    {% if post.zip_embed %}
-    <hr><div id="zip_sample">{{post.text}}</div>
+        {% if post.video_embed or post.audio_embed %}
+        <div class="embed">
+            <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none"
+            {% if post.video_embed %}
+            poster="/sample/{{post.name}}">
+            {% else %}
+            poster="/static/img/cover.jpg">
+            {% endif %}
+            </video>
+        </div>
+        {% elif post.flash_embed %}
+        <div id="flash_container" class="embed"></div>
+        {% endif %}
     {% endif %}
 
     {% if reactions_enabled %}
