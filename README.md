@@ -226,7 +226,7 @@ It supports moving to prev or next samples using arrow buttons, or keyboard arro
 
 It has a title with the file name, which when clicked opens the post.
 
-## Audio Images
+## Audiomage
 
 If an image and an audio file are uploaded, they will be turned into a video.
 

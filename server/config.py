@@ -318,25 +318,25 @@ class Config:
         # Max length for post marks
         self.max_mark_length = 20
 
-        # Bitrate for audio image mp3 audio
-        self.audio_image_audio_bitrate = 320
+        # Bitrate for audiomagic mp3 audio
+        self.audiomagic_audio_bitrate = 320
 
-        # Width for audio audio image
-        self.audio_image_width = 1280
+        # Width for audio audiomagic
+        self.audiomagic_width = 1280
 
-        # Height for audio audio image
-        self.audio_image_height = 720
+        # Height for audio audiomagic
+        self.audiomagic_height = 720
 
-        # Quality for audio image video
+        # Quality for audiomagic video
         # Lower quality, faster encoding
         # Higher = lower quality
-        self.audio_image_video_quality = 28
+        self.audiomagic_video_quality = 28
 
-        # Background color for audio image
-        self.audio_image_color = "black"
+        # Background color for audiomagic
+        self.audiomagic_color = "black"
 
-        # Enable or disable audio image
-        self.audio_image_enabled = True
+        # Enable or disable audiomagic
+        self.audiomagic_enabled = True
 
     # --- Methods ---
 
@@ -445,12 +445,12 @@ class Config:
             set_value(c, "prev_sample_icon")
             set_value(c, "next_sample_icon")
             set_value(c, "max_mark_length")
-            set_value(c, "audio_image_audio_bitrate")
-            set_value(c, "audio_image_width")
-            set_value(c, "audio_image_height")
-            set_value(c, "audio_image_video_quality")
-            set_value(c, "audio_image_color")
-            set_value(c, "audio_image_enabled")
+            set_value(c, "audiomagic_audio_bitrate")
+            set_value(c, "audiomagic_width")
+            set_value(c, "audiomagic_height")
+            set_value(c, "audiomagic_video_quality")
+            set_value(c, "audiomagic_color")
+            set_value(c, "audiomagic_enabled")
 
             # Users
 

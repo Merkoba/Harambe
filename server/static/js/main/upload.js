@@ -282,25 +282,6 @@ App.add_picker = (show = false) => {
   }
 }
 
-App.check_compress = () => {
-  let checkbox = DOM.el(`#compress`)
-
-  if (!checkbox) {
-    return
-  }
-
-  if (App.num_active_files() > 1) {
-    checkbox.checked = true
-    checkbox.disabled = true
-    DOM.el(`#zip`).classList.add(`inactive`)
-  }
-  else {
-    checkbox.checked = false
-    checkbox.disabled = false
-    DOM.el(`#zip`).classList.remove(`inactive`)
-  }
-}
-
 App.file_trigger = () => {
   let file = App.get_empty_picker()
 
@@ -357,7 +338,6 @@ App.check_required_file = () => {
 }
 
 App.on_picker_change = () => {
-  App.check_compress()
   App.check_required_file()
   App.check_files_used()
 }
@@ -371,8 +351,12 @@ App.reset_file_media = (picker) => {
 }
 
 App.num_active_files = () => {
+  return App.get_active_files().length
+}
+
+App.get_active_files = () => {
   let files = DOM.els(`.picker_file`)
-  let active = 0
+  let active = []
 
   for (let file of files) {
     let file_length = file.files.length
@@ -393,7 +377,7 @@ App.num_active_files = () => {
       continue
     }
 
-    active += 1
+    active.push(file)
   }
 
   return active
@@ -465,14 +449,6 @@ App.check_total_size = () => {
 }
 
 App.setup_pickers = () => {
-  let add_picker_btn = DOM.el(`#add_picker_btn`)
-
-  if (add_picker_btn) {
-    DOM.ev(add_picker_btn, `click`, (e) => {
-      App.add_picker(true)
-    })
-  }
-
   let remove_picker_btn = DOM.el(`#remove_picker_btn`)
 
   if (remove_picker_btn) {

@@ -267,6 +267,7 @@ def show_upload() -> Any:
         max_password_length=config.max_user_password_length,
         max_upload_files=config.max_upload_files,
         show_compress=config.show_compress,
+        show_audiomagic=user and user.mage,
         banner=banner,
         **common_configs(user),
     )

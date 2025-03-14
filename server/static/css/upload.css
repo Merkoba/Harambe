@@ -65,7 +65,7 @@ input[type="file"] {
     justify-content: center;
     margin-top: 0.6rem;
     margin-bottom: 2rem;
-    width: 24rem;
+    width: 26rem;
 }
 
 #form {
@@ -160,7 +160,7 @@ a.dialog_button:hover {
 }
 
 .picker.unused {
-    opacity: 0.77;
+    opacity: 0.8;
 }
 
 #bottom {
@@ -219,44 +219,30 @@ a.dialog_button:hover {
     flex-direction: row;
     user-select: none;
     gap: 0.5rem;
+    height: 1.5rem;
 }
 
-#zip {
+select {
+    font-size: 0.8rem;
+}
+
+select {
+
+}
+
+.topbutton {
+    height: 100%;
+    background-color: var(--accent_color);
+    color: var(--text_color);
+    border: 1px solid var(--frame_color);
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin: 0;
+    padding: 0;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
-    user-select: none;
-    cursor: pointer;
-    gap: 0.5rem;
-}
-
-#zip:hover {
-    text-decoration: underline;
-}
-
-#zip.inactive {
-    cursor: default;
-}
-
-#zip.inactive:hover {
-    text-decoration: none;
-}
-
-input[type="checkbox"] {
-    width: 0.88rem;
-    height: 0.88rem;
-    cursor: pointer;
-}
-
-input[type="checkbox"]:hover {
-    outline: 1px solid var(--frame_color);
-}
-
-.inactive input[type="checkbox"]:hover {
-    outline: none;
-}
-
-.inactive input[type="checkbox"] {
-    cursor: default
+    box-sizing: border-box;
 }

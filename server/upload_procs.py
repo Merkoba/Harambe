@@ -129,17 +129,18 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Upload is too big")
 
     post_name = get_name(user)
-    compress = request.form.get("compress", "off") == "on"
-    audio_image = False
+    audiomagic = False
+    privacy = request.form.get("privacy", "listed")
 
     if len(files) > 1:
         if (
             (len(files) == 2)
             and user.mage
-            and config.audio_image_enabled
-            and is_audio_image(files)
+            and request.form.get("mode") == "audiomagic"
+            and config.audiomagic_enabled
+            and is_audiomagic(files)
         ):
-            audio_image = True
+            audiomagic = True
         else:
             compress = True
 
@@ -152,26 +153,26 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         except Exception as e:
             utils.error(e)
             return error("Failed to compress files")
-    elif audio_image:
+    elif audiomagic:
         try:
             start = time.time()
-            audioimg = make_audio_image(files)
+            result = make_audiomagic(files)
             end = time.time()
             d = round(end - start, 2)
             utils.q(f"Audio image took {d} seconds")
 
-            if not audioimg:
-                return error("Failed to make audio image")
+            if not result:
+                return error("Failed to make audiomagic")
 
-            content = audioimg
+            content = result
             original = ""
             ext = ".mp4"
 
             if not content:
-                return error("Failed to make audio image")
+                return error("Failed to make audiomagic")
         except Exception as e:
             utils.error(e)
-            return error("Failed to make audio image")
+            return error("Failed to make audiomagic")
     else:
         file = files[0]
         content = file.read()
@@ -401,7 +402,7 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
     sample_path.write_text(sample)
 
 
-def is_audio_image(files: list[FileStorage]) -> bool:
+def is_audiomagic(files: list[FileStorage]) -> bool:
     imgs = utils.image_exts()
     audio = utils.audio_exts()
 
@@ -413,7 +414,7 @@ def is_audio_image(files: list[FileStorage]) -> bool:
     return (f1 in imgs and f2 in audio) or (f2 in imgs and f1 in audio)
 
 
-def make_audio_image(files: list[FileStorage]) -> bytes | None:
+def make_audiomagic(files: list[FileStorage]) -> bytes | None:
     img_file = None
     audio_file = None
 
@@ -439,10 +440,10 @@ def make_audio_image(files: list[FileStorage]) -> bytes | None:
 
         audio_temp.write(audio_content)
         audio_temp.flush()
-        w = config.audio_image_width
-        h = config.audio_image_height
-        crf = config.audio_image_video_quality
-        bg = config.audio_image_color or "black"
+        w = config.audiomagic_width
+        h = config.audiomagic_height
+        crf = config.audiomagic_video_quality
+        bg = config.audiomagic_color or "black"
 
         process = subprocess.Popen(
             [
@@ -466,7 +467,7 @@ def make_audio_image(files: list[FileStorage]) -> bytes | None:
                 "-c:a",
                 "libmp3lame",
                 "-b:a",
-                f"{config.audio_image_audio_bitrate}k",
+                f"{config.audiomagic_audio_bitrate}k",
                 "-vf",
                 f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
                 "-shortest",

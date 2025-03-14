@@ -24,6 +24,7 @@ schemas = {
         "view_date": "integer default 0",
         "size": "integer default 0",
         "file_hash": "text default 'none'",
+        "privacy": "text default 'public'",
         # Foreign keys
         "user": "integer",
         # On Delete
@@ -100,6 +101,7 @@ class Post:
     view_date: int
     size: int
     file_hash: str
+    privacy: str
     reactions: list[Reaction] = field(default_factory=list)
     username: str = ""
     uploader: str = ""
@@ -202,6 +204,7 @@ def add_post(
     mtype: str,
     size: int,
     file_hash: str,
+    privacy: str,
 ) -> None:
     connection = get_conn()
     conn, c = connection.tuple()
@@ -219,10 +222,11 @@ def add_post(
         date,
         size,
         file_hash,
+        privacy,
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, file_hash) values ({placeholders})"
+    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, file_hash, privacy) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -242,6 +246,7 @@ def make_post(row: dict[str, Any]) -> Post:
         view_date=int(row.get("view_date") or 0),
         size=int(row.get("size") or 0),
         file_hash=row.get("file_hash") or "none",
+        privacy=row.get("privacy") or "none",
     )
 
 
@@ -286,7 +291,7 @@ def get_posts(
             if user:
                 post.username = user.username
                 post.uploader = user.name
-                post.listed = user.lister
+                post.listed = (post.privacy == "public") and user.lister
             else:
                 post.username = ""
                 post.uploader = ""
