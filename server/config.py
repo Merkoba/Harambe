@@ -335,6 +335,9 @@ class Config:
         # Background color for audio image
         self.audio_image_color = "black"
 
+        # Enable or disable audio image
+        self.audio_image_enabled = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -447,6 +450,7 @@ class Config:
             set_value(c, "audio_image_height")
             set_value(c, "audio_image_video_quality")
             set_value(c, "audio_image_color")
+            set_value(c, "audio_image_enabled")
 
             # Users
 
