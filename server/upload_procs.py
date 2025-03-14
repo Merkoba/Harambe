@@ -453,7 +453,7 @@ def make_audio_image(files: list[FileStorage]) -> bytes | None:
                 "-c:v",
                 "libx264",
                 "-preset",
-                "medium",  # Use a slower preset for better CPU utilization
+                "medium",
                 "-tune",
                 "stillimage",
                 "-crf",
