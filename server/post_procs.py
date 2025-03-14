@@ -87,7 +87,7 @@ def get_full_name(dbpost: DbPost) -> str:
 
 
 def get_original_name(original: str, dbpost: DbPost) -> str:
-    full = utils.clean_filename(original)
+    full = utils.clean_filename(original).lower()
 
     if dbpost.ext:
         full = f"{full}.{dbpost.ext}"
