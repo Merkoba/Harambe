@@ -841,6 +841,14 @@ App.setup_edit = () => {
       App.mod_user(`reacter`, 0, `bool`)
     })
 
+    DOM.ev(`#edit_mage_yes`, `click`, () => {
+      App.mod_user(`mage`, 1, `bool`)
+    })
+
+    DOM.ev(`#edit_mage_no`, `click`, () => {
+      App.mod_user(`mage`, 0, `bool`)
+    })
+
     DOM.ev(`#edit_admin_yes`, `click`, () => {
       App.mod_user(`admin`, 1, `bool`)
     })

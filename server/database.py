@@ -55,6 +55,7 @@ schemas = {
         "lister": "integer default 1",
         "poster": "integer default 1",
         "reacter": "integer default 1",
+        "mage": "integer default 0",
     },
 }
 
@@ -136,6 +137,7 @@ class User:
     lister: bool
     poster: bool
     reacter: bool
+    mage: bool
     num_posts: int | None = None
     num_reactions: int | None = None
 
@@ -383,6 +385,7 @@ def add_user(
     lister: bool = True,
     poster: bool = True,
     reacter: bool = True,
+    mage: bool = True,
     user_id: int | None = None,
 ) -> int | None:
     if (not username) or (not password):
@@ -404,6 +407,7 @@ def add_user(
         lister,
         poster,
         reacter,
+        mage,
     ]
 
     columns = [
@@ -418,6 +422,7 @@ def add_user(
         "lister",
         "poster",
         "reacter",
+        "mage",
     ]
 
     if mode == "add":
@@ -456,6 +461,7 @@ def make_user(row: dict[str, Any]) -> User:
         lister=bool(row.get("lister")),
         poster=bool(row.get("poster")),
         reacter=bool(row.get("reacter")),
+        mage=bool(row.get("mage")),
     )
 
 

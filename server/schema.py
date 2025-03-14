@@ -38,9 +38,9 @@ def make_database() -> None:
     for table in tables:
         add_columns(table)
 
-    for _, index_commands in database.indexes.values():
-        for command in index_commands:
-            c.execute(command)
+    for cmds in database.indexes.values():
+        for cmd in cmds:
+            c.execute(cmd)
 
     conn.commit()
     conn.close()

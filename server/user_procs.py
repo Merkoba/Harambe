@@ -59,8 +59,10 @@ class User:
     lister_str: str
     poster: bool
     reacter: bool
+    mage: bool
     poster_str: str
     reacter_str: str
+    mage_str: str
     num_posts: int
     num_reactions: int
 
@@ -82,6 +84,7 @@ user_types = {
     "reactions": "int",
     "poster": "bool",
     "reacter": "bool",
+    "mage": "bool",
 }
 
 
@@ -98,6 +101,7 @@ def make_user(user: DbUser) -> User:
     lister_str = "L: Yes" if user.lister else "R: No"
     poster_str = "P: Yes" if user.poster else "P: No"
     reacter_str = "R: Yes" if user.reacter else "R: No"
+    mage_str = "M: Yes" if user.mage else "M: No"
     num_posts = user.num_posts if user.num_posts else 0
     num_reactions = user.num_reactions if user.num_reactions else 0
 
@@ -123,8 +127,10 @@ def make_user(user: DbUser) -> User:
         lister_str,
         user.poster,
         user.reacter,
+        user.mage,
         poster_str,
         reacter_str,
+        mage_str,
         num_posts,
         num_reactions,
     )

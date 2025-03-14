@@ -133,11 +133,13 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     audio_image = False
 
     if len(files) > 1:
-        if (len(files) == 2) and config.audio_image_enabled:
-            if is_audio_image(files):
-                audio_image = True
-            else:
-                compress = True
+        if (
+            (len(files) == 2)
+            and user.mage
+            and config.audio_image_enabled
+            and is_audio_image(files)
+        ):
+            audio_image = True
         else:
             compress = True
 
