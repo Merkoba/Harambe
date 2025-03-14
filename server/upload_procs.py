@@ -130,13 +130,19 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     post_name = get_name(user)
     audiomagic = False
-    privacy = request.form.get("privacy", "listed")
+    privacy = request.form.get("privacy", "public")
+
+    if privacy not in ["public", "private"]:
+        return error("Invalid privacy setting")
+
+    mode = request.form.get("mode", "normal")
+    compress = mode == "zip"
 
     if len(files) > 1:
         if (
             (len(files) == 2)
             and user.mage
-            and request.form.get("mode") == "audiomagic"
+            and mode == "audiomagic"
             and config.audiomagic_enabled
             and is_audiomagic(files)
         ):
@@ -212,6 +218,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         mtype=mtype,
         size=file_size,
         file_hash=file_hash,
+        privacy=privacy,
     )
 
     if config.samples_enabled:
