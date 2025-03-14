@@ -17,7 +17,7 @@
 <div class="sep">|</div>
 {% endif %}
 
-{% if mode == "reactions_admin" %}
+{% if mode == "admin_reactions" %}
 <div class="button" id="delete_selected" title="Delete selected items">Delete</div>
 <div class="sep">|</div>
 <div class="button" id="delete_all" title="Delete all items (from all pages)">Del All</div>
@@ -101,10 +101,10 @@
         <!-- Value -->
         <div class="table_cell reaction_value reaction_text" title="{{item.value_sample}}">{{item.value_sample}}</div>
 
-        {% if mode == "reactions_admin" %}
         <!-- Username -->
-        <div class="table_cell" title="{{item.uname}}">
-            <div class="admin_user button">{{item.username}}</div>
+        {% if mode == "admin_reactions" %}
+        <div class="table_cell" title="{{item.username}}">
+            <div class="admin_user button">{{item.uname}}</div>
         </div>
         {% else %}
         <div class="table_cell" title="{{item.uname}}">

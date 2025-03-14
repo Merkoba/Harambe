@@ -138,11 +138,11 @@
 
         <!-- User -->
         {% if mode == "admin_posts" %}
-        <div class="table_cell" title="{{item.uploader_str}}">
-            <div class="uploader admin_user button">{{item.username}}</div>
+        <div class="table_cell" title="{{item.username}}">
+            <div class="uploader admin_user button">{{item.uploader_str}}</div>
         </div>
         {% else %}
-        <div class="table_cell">
+        <div class="table_cell" title="{{item.uploader_str}}">
             <div class="uploader admin_user button">{{item.uploader_str}}</div>
         </div>
         {% endif %}
