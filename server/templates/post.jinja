@@ -136,11 +136,11 @@
             <div id="editor"></div>
             {% endif %}
         </div>
-        {% elif post.zip_embed %}
+        {% else %}
         <hr><div id="zip_sample">{{post.text}}</div>
         {% endif %}
     {% else %}
-    {% if post.image_embed %}
+        {% if post.image_embed %}
         <div class="embed">
             <img id="image" src="/{{file_path}}/{{post.name}}/{{post.original_full}}" onload="App.on_image_load()">
         </div>
