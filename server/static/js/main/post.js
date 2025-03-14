@@ -105,14 +105,14 @@ App.edit_title = () => {
         return
       }
 
-      let post_id = App.post_id
+      let ids = [App.post_id]
 
       let response = await fetch(`/edit_title`, {
         method: `POST`,
         headers: {
           "Content-Type": `application/json`,
         },
-        body: JSON.stringify({post_id, title}),
+        body: JSON.stringify({ids, title}),
       })
 
       if (response.ok) {
