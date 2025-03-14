@@ -281,10 +281,10 @@ class Config:
         self.samples_enabled = True
 
         # Width of samples
-        self.sample_width = 1920
+        self.sample_width = 1280
 
         # Height of samples
-        self.sample_height = 1080
+        self.sample_height = 720
 
         # Background color for samples
         self.sample_color = "black"
@@ -317,6 +317,23 @@ class Config:
 
         # Max length for post marks
         self.max_mark_length = 20
+
+        # Bitrate for audio image mp3 audio
+        self.audio_image_audio_bitrate = 320
+
+        # Width for audio audio image
+        self.audio_image_width = 1280
+
+        # Height for audio audio image
+        self.audio_image_height = 720
+
+        # Quality for audio image video
+        # Lower quality, faster encoding
+        # Higher = lower quality
+        self.audio_image_video_quality = 28
+
+        # Background color for audio image
+        self.audio_image_color = "black"
 
     # --- Methods ---
 
@@ -425,6 +442,11 @@ class Config:
             set_value(c, "prev_sample_icon")
             set_value(c, "next_sample_icon")
             set_value(c, "max_mark_length")
+            set_value(c, "audio_image_audio_bitrate")
+            set_value(c, "audio_image_width")
+            set_value(c, "audio_image_height")
+            set_value(c, "audio_image_video_quality")
+            set_value(c, "audio_image_color")
 
             # Users
 

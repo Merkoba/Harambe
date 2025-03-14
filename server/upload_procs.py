@@ -5,6 +5,7 @@ import zipfile
 import hashlib
 import mimetypes
 import subprocess
+import tempfile
 from typing import Any
 from pathlib import Path
 from io import BytesIO
@@ -128,9 +129,16 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     post_name = get_name(user)
     compress = request.form.get("compress", "off") == "on"
+    audio_image = False
 
     if len(files) > 1:
-        compress = True
+        if len(files) == 2:
+            if is_audio_image(files):
+                audio_image = True
+            else:
+                compress = True
+        else:
+            compress = True
 
     if compress:
         try:
@@ -141,6 +149,22 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         except Exception as e:
             utils.error(e)
             return error("Failed to compress files")
+    elif audio_image:
+        try:
+            audioimg = make_audio_image(files)
+
+            if not audioimg:
+                return error("Failed to make audio image")
+
+            content = audioimg
+            original = post_name
+            ext = ".mp4"
+
+            if not content:
+                return error("Failed to make audio image")
+        except Exception as e:
+            utils.error(e)
+            return error("Failed to make audio image")
     else:
         file = files[0]
         content = file.read()
@@ -368,3 +392,94 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
     sample_name = f"{path.stem}.txt"
     sample_path = utils.samples_dir() / Path(sample_name)
     sample_path.write_text(sample)
+
+
+def is_audio_image(files: list[FileStorage]) -> bool:
+    imgs = ["jpg", "jpeg", "png"]
+    audio = ["mp3", "ogg", "wav"]
+
+    if len(files) != 2:
+        return False
+
+    f1 = Path(files[0].filename).suffix[1:].lower()
+    f2 = Path(files[1].filename).suffix[1:].lower()
+    return (f1 in imgs and f2 in audio) or (f2 in imgs and f1 in audio)
+
+
+def make_audio_image(files: list[FileStorage]) -> bytes | None:
+    img_file = None
+    audio_file = None
+
+    for file in files:
+        if Path(file.filename).suffix[1:].lower() in ["jpg", "jpeg", "png"]:
+            img_file = file
+        elif Path(file.filename).suffix[1:].lower() in ["mp3", "ogg", "wav"]:
+            audio_file = file
+
+    if not img_file or not audio_file:
+        return None
+
+    img_content = img_file.read()
+    audio_content = audio_file.read()
+
+    with (
+        tempfile.NamedTemporaryFile(suffix=".jpg") as img_temp,
+        tempfile.NamedTemporaryFile(suffix=".mp3") as audio_temp,
+        tempfile.NamedTemporaryFile(suffix=".mp4") as output_temp,
+    ):
+        img_temp.write(img_content)
+        img_temp.flush()
+
+        audio_temp.write(audio_content)
+        audio_temp.flush()
+        w = config.audio_image_width
+        h = config.audio_image_height
+        crf = config.audio_image_video_quality
+        bg = config.audio_image_color or "black"
+
+        process = subprocess.Popen(
+            [
+                "ffmpeg",
+                "-loop",
+                "1",
+                "-i",
+                img_temp.name,
+                "-i",
+                audio_temp.name,
+                "-c:v",
+                "libx264",
+                "-preset",
+                "ultrafast",
+                "-tune",
+                "stillimage",
+                "-crf",
+                f"{crf}",
+                "-pix_fmt",
+                "yuv420p",
+                "-c:a",
+                "libmp3lame",
+                "-b:a",
+                f"{config.audio_image_audio_bitrate}k",
+                "-vf",
+                f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
+                "-shortest",
+                "-r",
+                "1",
+                "-g",
+                "1",
+                "-threads",
+                "0",
+                "-y",
+                output_temp.name,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        _, _ = process.communicate()
+
+        if process.returncode != 0:
+            return None
+
+        output_temp.seek(0)
+        return output_temp.read()
