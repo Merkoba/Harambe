@@ -16,6 +16,7 @@ class Promptext {
     let msg = Msg.factory({
       persistent: false,
       disable_content_padding: true,
+      clear_editables: true,
     })
 
     let c = DOM.create(`div`)
