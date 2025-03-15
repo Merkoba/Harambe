@@ -244,7 +244,7 @@ Convert big images into jpg.
 
 Triggers when a single big non `jpg` is going to be uploaded.
 
-## Audiomagic
+## Audio Magic
 
 Convert big audio into mp3.
 
