@@ -109,6 +109,8 @@ If `lister` is true, the users's post get to be listed.
 
 If `reacter` is true, the users can react to posts.
 
+If `mage` is true, the user can perform magic actions.
+
 `mark` is a string that is appended to urls on uploads from that user.
 
 For example: `site.com/01jkxsxp4k_wlk` instead of `site.com/01jkxsxp4k`.
@@ -160,6 +162,8 @@ This is located in `server/database.sqlite3`.
 
 To create and update the database run `schema.py`.
 
+---
+
 ## Script
 
 There is [this script](upload.rb) which you can use to upload if you are a user.
@@ -172,6 +176,8 @@ Optional flag `--zip` makes a zip file on the server.
 
 Optional flag `--private` will make an unlisted post.
 
+---
+
 ## Zip Archives
 
 Multiple files can be uploaded at the same time.
@@ -181,6 +187,8 @@ When multiple files are uploaded, a zip archive is created as the file.
 As each post contains only one file.
 
 The web interface makes it easy to pick multiple files quickly.
+
+---
 
 ## Menus and Keyboard
 
@@ -204,6 +212,8 @@ There are some global shortcuts:
 
 `Ctrl+Down`: React to a post.
 
+---
+
 ## Samples
 
 Samples are used to quickly check what a post is about in lists like `/list/posts`.
@@ -220,13 +230,13 @@ If it's a zip archive, a text file with its file names is created as the sample.
 
 There are various configurations for sample creation.
 
----
-
 When a sample icon is clicked, it shows a popup window in the top right.
 
 It supports moving to prev or next samples using arrow buttons, or keyboard arrows.
 
 It has a title with the file name, which when clicked opens the post.
+
+---
 
 ## Magic
 
@@ -236,7 +246,7 @@ To use these, a user must have the `mage` permission.
 
 On the web interface, if the file combination matches, the user is asked if they want to apply the magic action, which is basically `ffmpeg` and it can take a long time to complete, unless you have a nice `gpu` support on it.
 
-These spells are:
+The current spells are:
 
 ## Image Magic
 
