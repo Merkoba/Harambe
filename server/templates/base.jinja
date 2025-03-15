@@ -61,6 +61,10 @@
             App.media_type = {{media_type | default(0) | tojson | safe}}
             App.image_magic_min_size = {{image_magic_min_size | default(0)}}
             App.audio_magic_min_size = {{audio_magic_min_size | default(0)}}
+            App.magic_enabled = {{audio_magic_min_size | default(0) | tojson}}
+            App.image_magic_enabled = {{image_magic_enabled | default(0) | tojson}}
+            App.audio_magic_enabled = {{audio_magic_enabled | default(0) | tojson}}
+            App.audio_image_magic_enabled = {{audio_image_magic_enabled | default(0) | tojson}}
         </script>
 
         <script src="/static/js/main/common.js"></script>

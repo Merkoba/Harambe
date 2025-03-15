@@ -269,6 +269,11 @@ def show_upload() -> Any:
         max_upload_files=config.max_upload_files,
         image_magic_min_size=config.image_magic_min_size,
         audio_magic_min_size=config.audio_magic_min_size,
+        magic_enabled=config.magic_enabled,
+        image_magic_enabled=config.image_magic_enabled,
+        audio_magic_enabled=config.audio_magic_enabled,
+        audio_image_magic_enabled=config.audio_image_magic_enabled,
+        show_privacy_select=config.show_privacy_select,
         banner=banner,
         **common_configs(user),
     )

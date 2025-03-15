@@ -475,7 +475,59 @@ App.setup_pickers = () => {
   }
 }
 
+App.check_image_magic = () => {
+  if (!App.image_magic_enabled) {
+    return false
+  }
+
+  let checkbox = DOM.el(`#image_magic`)
+
+  if (!checkbox) {
+    return
+  }
+
+  let files = App.get_active_files()
+  let valid = false
+
+  if (files.length === 1) {
+    let file = files[0].files[0]
+    if (App.is_image(file) && App.is_lossless_image(file)) {
+      valid = true
+    }
+  }
+
+  return valid
+}
+
+App.check_audio_magic = () => {
+  if (!App.audio_magic_enabled) {
+    return false
+  }
+
+  let checkbox = DOM.el(`#audio_image_magic`)
+
+  if (!checkbox) {
+    return
+  }
+
+  let files = App.get_active_files()
+  let valid = false
+
+  if (files.length === 1) {
+    let file = files[0].files[0]
+    if (App.is_audio(file) && App.is_lossless_audio(file)) {
+      valid = true
+    }
+  }
+
+  return valid
+}
+
 App.check_audio_image_magic = () => {
+  if (!App.audio_image_magic_enabled) {
+    return false
+  }
+
   let checkbox = DOM.el(`#audio_image_magic`)
 
   if (!checkbox) {
@@ -500,67 +552,23 @@ App.check_audio_image_magic = () => {
   return valid
 }
 
-App.check_audio_magic = () => {
-  let checkbox = DOM.el(`#audio_image_magic`)
-
-  if (!checkbox) {
-    return
-  }
-
-  let files = App.get_active_files()
-  let valid = false
-
-  if (files.length === 1) {
-    let file = files[0].files[0]
-    if (App.is_audio(file) && App.is_lossless_audio(file)) {
-      valid = true
-    }
-  }
-
-  return valid
-}
-
-App.check_image_magic = () => {
-  let files = App.get_active_files()
-
-  if (files.length === 1) {
-    let file = files[0].files[0]
-
-    if (file) {
-      return (file.size >= App.image_magic_min_size) && App.is_lossless_image(file)
-    }
-  }
-
-  return false
-}
-
-App.check_audio_magic = () => {
-  let files = App.get_active_files()
-
-  if (files.length === 1) {
-    let file = files[0].files[0]
-
-    if (file) {
-      return (file.size >= App.audio_magic_min_size) && App.is_lossless_audio(file)
-    }
-  }
-
-  return false
-}
-
 App.check_magic = () => {
-  let audio_image_magic = DOM.el(`#audio_image_magic`)
+  if (!App.magic_enabled) {
+    return true
+  }
 
-  if (App.is_mage && App.check_audio_image_magic()) {
+  let image_magic = DOM.el(`#image_magic`)
+
+  if (App.is_mage && App.check_image_magic()) {
     let confirm_args = {
-      message: `Do you want to do audio image magic ?\n
-      This means the image and audio will be converted to an mp4 video.`,
+      message: `Do you want to do image magic ?\n
+      This means the image will be converted to a small jpg.`,
       callback_yes: () => {
-        audio_image_magic.checked = true
+        image_magic.checked = true
         App.submit_form()
       },
       callback_no: () => {
-        audio_image_magic.checked = false
+        image_magic.checked = false
         App.submit_form()
       },
     }
@@ -589,18 +597,18 @@ App.check_magic = () => {
     return false
   }
 
-  let image_magic = DOM.el(`#image_magic`)
+  let audio_image_magic = DOM.el(`#audio_image_magic`)
 
-  if (App.is_mage && App.check_image_magic()) {
+  if (App.is_mage && App.check_audio_image_magic()) {
     let confirm_args = {
-      message: `Do you want to do image magic ?\n
-      This means the image will be converted to a small jpg.`,
+      message: `Do you want to do audio image magic ?\n
+      This means the image and audio will be converted to an mp4 video.`,
       callback_yes: () => {
-        image_magic.checked = true
+        audio_image_magic.checked = true
         App.submit_form()
       },
       callback_no: () => {
-        image_magic.checked = false
+        audio_image_magic.checked = false
         App.submit_form()
       },
     }

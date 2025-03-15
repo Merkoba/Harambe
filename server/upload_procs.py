@@ -144,14 +144,16 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     audio_image_magic = False
 
     if len(files) == 1:
-        if get_bool(request, "image_magic") and config.image_magic_enabled:
-            image_magic = True
-        elif get_bool(request, "audio_magic") and config.audio_magic_enabled:
-            audio_magic = True
+        if config.magic_enabled:
+            if get_bool(request, "image_magic") and config.image_magic_enabled:
+                image_magic = True
+            elif get_bool(request, "audio_magic") and config.audio_magic_enabled:
+                audio_magic = True
     elif len(files) > 1:
         if (
             (len(files) == 2)
             and user.mage
+            and config.magic_enabled
             and get_bool(request, "audio_image_magic")
             and config.audio_image_magic_enabled
             and is_audio_image_magic(files)

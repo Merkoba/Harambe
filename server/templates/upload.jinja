@@ -31,10 +31,12 @@
         <input type="checkbox" id="audio_image_magic" name="audio_image_magic" hidden>
 
         <div id="toprow">
+            {% if show_privacy_select %}
             <select id="privacy" name="privacy" class="topbutton">
                 <option value="public">Public</option>
                 <option value="private">Private</option>
             </select>
+            {% endif %}
 
             {% if max_upload_files > 1 %}
                 <div id="add_picker_btn" class="topbutton">Add</div>
@@ -50,11 +52,11 @@
         {% endif %}
 
         <div id="buttons">
+            <button type="button" id="menu_btn" title="Ctrl+M">🧭&nbsp;&nbsp;Menu</button>
+
             {% if is_user and upload_enabled %}
             <button id="submit_btn" type="button" title="Upload the file">🔼&nbsp;&nbsp;Upload</button>
             {% endif %}
-
-            <button type="button" id="menu_btn" title="Ctrl+M">🧭&nbsp;&nbsp;Menu</button>
 
             {% if not is_user %}
             <button type="button" id="login_btn" title="Login to your user account">Login</button>

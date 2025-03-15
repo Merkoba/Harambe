@@ -315,6 +315,26 @@ class Config:
         # Max length for post marks
         self.max_mark_length = 20
 
+        # Image quality for image magic
+        # 1-31, where 1 is best
+        self.image_magic_quality = 8
+
+        # Minimum file size to apply image magic
+        self.image_magic_min_size = 1_000000
+
+        # Enable or disable image magic
+        self.image_magic_enabled = True
+
+        # Quality for audio magic mp3
+        # 0 is the highest VBR quality
+        self.audio_magic_quality = 0
+
+        # Enable or disable audio magic
+        self.audio_magic_enabled = True
+
+        # Minimum file size to apply audio magic
+        self.audio_magic_min_size = 3_000000
+
         # Quality for audio image magic mp3
         # 0 is the highest VBR quality
         self.audio_image_magic_audio_quality = 0
@@ -336,25 +356,11 @@ class Config:
         # Enable or disable audio_image magic
         self.audio_image_magic_enabled = True
 
-        # Image quality for image magic
-        # 1-31, where 1 is best
-        self.image_magic_quality = 8
+        # Enable all kinds of magic
+        self.magic_enabled = True
 
-        # Minimum file size to apply image magic
-        self.image_magic_min_size = 1_000000
-
-        # Enable or disable image magic
-        self.image_magic_enabled = True
-
-        # Quality for audio magic mp3
-        # 0 is the highest VBR quality
-        self.audio_magic_quality = 0
-
-        # Enable or disable audio magic
-        self.audio_magic_enabled = True
-
-        # Minimum file size to apply audio magic
-        self.audio_magic_min_size = 3_000000
+        # Show privacy options in the web interface
+        self.show_privacy_select = True
 
     # --- Methods ---
 
@@ -474,6 +480,8 @@ class Config:
             set_value(c, "audio_magic_quality")
             set_value(c, "audio_magic_enabled")
             set_value(c, "audio_magic_min_size")
+            set_value(c, "magic_enabled")
+            set_value(c, "show_privacy_select")
 
             # Users
 
