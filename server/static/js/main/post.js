@@ -15,7 +15,7 @@ App.init = () => {
   let edit = DOM.el(`#edit`)
 
   if (edit) {
-    App.setup_editpost_opts()
+    App.setup_edit_post_opts()
 
     DOM.evs(edit, [`click`, `auxclick`], () => {
       App.edit_post()
@@ -830,7 +830,7 @@ App.start_editor = async () => {
 }
 
 App.edit_post = () => {
-  App.msg_show(`editpost`)
+  App.msg_show(`edit_post`)
 }
 
 App.keyboard_events = () => {
@@ -1045,39 +1045,27 @@ App.setup_scrollers = () => {
   }
 }
 
-App.edit_privacy = () => {
-  let message, privacy
-
-  if (App.privacy === `public`) {
-    message = `Make this post private ?`
-    privacy = `private`
-  }
-  else {
-    message = `Make this post public ?`
-    privacy = `public`
-  }
-
+App.edit_privacy = async (privacy) => {
   let ids = [App.post_id]
 
-  let confirm_args = {
-    message,
-    callback_yes: async () => {
-      let response = await fetch(`/edit_privacy`, {
-        method: `POST`,
-        headers: {
-          "Content-Type": `application/json`,
-        },
-        body: JSON.stringify({ids, privacy}),
-      })
-
-      if (response.ok) {
-        App.privacy = privacy
-      }
-      else {
-        App.print_error(response.status)
-      }
+  let response = await fetch(`/edit_privacy`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
     },
-  }
+    body: JSON.stringify({ids, privacy}),
+  })
 
-  App.confirmbox(confirm_args)
+  if (response.ok) {
+    App.privacy = privacy
+    App.update_privacy()
+  }
+  else {
+    App.print_error(response.status)
+  }
+}
+
+App.update_privacy = () => {
+  let privacy = DOM.el(`#privacy`)
+  privacy.textContent = App.capitalize(App.privacy)
 }

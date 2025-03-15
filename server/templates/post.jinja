@@ -111,6 +111,14 @@
                 <div class="title">Views:</div>
                 <div id="views">{{post.views}}</div>
             </div>
+
+            <div class="sep">|</div>
+
+            {% if post.privacy == "public" %}
+            <div id="privacy">Public</div>
+            {% elif post.privacy == "private" %}
+            <div id="privacy">Private</div>
+            {% endif %}
         </div>
     </div>
 

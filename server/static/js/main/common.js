@@ -746,7 +746,7 @@ App.make_opts = (name, setup, show = false, back = false) => {
 }
 
 App.bind_button = (what, func, mfunc, submenu = ``) => {
-  let name = what.split(`_`)[0]
+  let name = what.match(/^(.*?)_opts/)[1]
   let msg_name = `msg_${name}`
   let el = DOM.el(`#${what}`)
 
@@ -806,8 +806,8 @@ App.encode_uri = (uri) => {
   return encodeURIComponent(uri)
 }
 
-App.setup_editpost_opts = (show = false) => {
-  let name = `editpost`
+App.setup_edit_post_opts = (show = false) => {
+  let name = `edit_post`
 
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_title`, () => {
@@ -815,7 +815,7 @@ App.setup_editpost_opts = (show = false) => {
     })
 
     App.bind_button(`${name}_opts_privacy`, () => {
-      App.edit_privacy()
+      App.setup_edit_privacy_opts(true)
     })
 
     App.bind_button(`${name}_opts_delete`, () => {
@@ -827,6 +827,20 @@ App.setup_editpost_opts = (show = false) => {
       }
 
       App.confirmbox(confirm_args)
+    })
+  }, show)
+}
+
+App.setup_edit_privacy_opts = (show = false) => {
+  let name = `edit_privacy`
+
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_private`, () => {
+      App.edit_privacy(`private`)
+    })
+
+    App.bind_button(`${name}_opts_public`, () => {
+      App.edit_privacy(`public`)
     })
   }, show)
 }
