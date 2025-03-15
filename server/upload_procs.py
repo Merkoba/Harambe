@@ -139,21 +139,24 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Invalid privacy setting")
 
     compress = False
-    imagemagic = False
-    audiomagic = False
+    image_magic = False
+    audio_magic = False
+    audio_image_magic = False
 
     if len(files) == 1:
-        if get_bool(request, "imagemagic") and config.imagemagic_enabled:
-            imagemagic = True
+        if get_bool(request, "image_magic") and config.image_magic_enabled:
+            image_magic = True
+        elif get_bool(request, "audio_magic") and config.audio_magic_enabled:
+            audio_magic = True
     elif len(files) > 1:
         if (
             (len(files) == 2)
             and user.mage
-            and get_bool(request, "audiomagic")
-            and config.audiomagic_enabled
-            and is_audiomagic(files)
+            and get_bool(request, "audio_image_magic")
+            and config.audio_image_magic_enabled
+            and is_audio_image_magic(files)
         ):
-            audiomagic = True
+            audio_image_magic = True
         else:
             compress = True
 
@@ -166,46 +169,66 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         except Exception as e:
             utils.error(e)
             return error("Failed to compress files")
-    elif imagemagic:
+    elif image_magic:
         try:
             start = time.time()
-            result = make_imagemagic(files[0])
+            result = make_image_magic(files[0])
             end = time.time()
             d = round(end - start, 2)
-            utils.q(f"Imagemagic took {d} seconds")
+            utils.q(f"Image magic took {d} seconds")
 
             if not result:
-                return error("Failed to make imagemagic")
+                return error("Failed to make image magic")
 
             content = result
             original = ""
             ext = ".jpg"
 
             if not content:
-                return error("Failed to make imagemagic")
+                return error("Failed to make image magic")
         except Exception as e:
             utils.error(e)
-            return error("Failed to make imagemagic")
-    elif audiomagic:
+            return error("Failed to make image magic")
+    elif audio_magic:
         try:
             start = time.time()
-            result = make_audiomagic(files)
+            result = make_audio_magic(files[0])
             end = time.time()
             d = round(end - start, 2)
-            utils.q(f"Audiomagic took {d} seconds")
+            utils.q(f"Audio magic took {d} seconds")
 
             if not result:
-                return error("Failed to make audiomagic")
+                return error("Failed to make auido magic")
+
+            content = result
+            original = ""
+            ext = ".mp3"
+
+            if not content:
+                return error("Failed to make audio magic")
+        except Exception as e:
+            utils.error(e)
+            return error("Failed to make audio magic")
+    elif audio_image_magic:
+        try:
+            start = time.time()
+            result = make_audio_image_magic(files)
+            end = time.time()
+            d = round(end - start, 2)
+            utils.q(f"Audio image magic took {d} seconds")
+
+            if not result:
+                return error("Failed to make audio image magic")
 
             content = result
             original = ""
             ext = ".mp4"
 
             if not content:
-                return error("Failed to make audiomagic")
+                return error("Failed to make audio image magic")
         except Exception as e:
             utils.error(e)
-            return error("Failed to make audiomagic")
+            return error("Failed to make audio image magic")
     else:
         file = files[0]
         content = file.read()
@@ -436,7 +459,7 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
     sample_path.write_text(sample)
 
 
-def is_audiomagic(files: list[FileStorage]) -> bool:
+def is_audio_image_magic(files: list[FileStorage]) -> bool:
     imgs = utils.image_exts()
     audio = utils.audio_exts()
 
@@ -448,7 +471,7 @@ def is_audiomagic(files: list[FileStorage]) -> bool:
     return (f1 in imgs and f2 in audio) or (f2 in imgs and f1 in audio)
 
 
-def make_audiomagic(files: list[FileStorage]) -> bytes | None:
+def make_audio_image_magic(files: list[FileStorage]) -> bytes | None:
     img_file = None
     audio_file = None
 
@@ -474,10 +497,11 @@ def make_audiomagic(files: list[FileStorage]) -> bytes | None:
 
         audio_temp.write(audio_content)
         audio_temp.flush()
-        w = config.audiomagic_width
-        h = config.audiomagic_height
-        crf = config.audiomagic_video_quality
-        bg = config.audiomagic_color or "black"
+        w = config.audio_image_magic_width
+        h = config.audio_image_magic_height
+        crf = config.audio_image_magic_video_quality
+        bg = config.audio_image_magic_color or "black"
+        aq = str(config.audio_image_magic_audio_quality)
 
         process = subprocess.Popen(
             [
@@ -500,8 +524,8 @@ def make_audiomagic(files: list[FileStorage]) -> bytes | None:
                 "yuv420p",
                 "-c:a",
                 "libmp3lame",
-                "-b:a",
-                f"{config.audiomagic_audio_bitrate}k",
+                "-q:a",
+                aq,
                 "-vf",
                 f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
                 "-shortest",
@@ -523,7 +547,7 @@ def make_audiomagic(files: list[FileStorage]) -> bytes | None:
         return output_temp.read()
 
 
-def make_imagemagic(file: FileStorage) -> bytes | None:
+def make_image_magic(file: FileStorage) -> bytes | None:
     content = file.read()
 
     with (
@@ -532,7 +556,7 @@ def make_imagemagic(file: FileStorage) -> bytes | None:
     ):
         img_temp.write(content)
         img_temp.flush()
-        quality = str(config.imagemagic_quality) or "6"
+        quality = str(config.image_magic_quality) or "6"
 
         process = subprocess.Popen(
             [
@@ -541,6 +565,44 @@ def make_imagemagic(file: FileStorage) -> bytes | None:
                 img_temp.name,
                 "-qscale:v",
                 quality,
+                "-y",
+                output_temp.name,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        _, _ = process.communicate()
+
+        if process.returncode != 0:
+            return None
+
+        output_temp.seek(0)
+        return output_temp.read()
+
+
+def make_audio_magic(file: FileStorage) -> bytes | None:
+    content = file.read()
+
+    with (
+        tempfile.NamedTemporaryFile(suffix=".audio") as audio_temp,
+        tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp,
+    ):
+        audio_temp.write(content)
+        audio_temp.flush()
+        aq = str(config.audio_magic_quality)
+
+        process = subprocess.Popen(
+            [
+                "ffmpeg",
+                "-i",
+                audio_temp.name,
+                "-codec:a",
+                "libmp3lame",
+                "-q:a",
+                aq,
+                "-threads",
+                "0",
                 "-y",
                 output_temp.name,
             ],

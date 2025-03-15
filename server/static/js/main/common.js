@@ -120,7 +120,19 @@ App.is_image = (file) => {
 }
 
 App.is_lossless_image = (file) => {
-  let formats = new Set([`image/png`, `image/tiff`, `image/webp`, `image/bmp`])
+  let formats = new Set([
+    `image/png`, `image/tiff`, `image/webp`, `image/bmp`,
+  ])
+
+  return formats.has(file.type)
+}
+
+App.is_lossless_audio = (file) => {
+  let formats = new Set([
+    `audio/wav`, `audio/flac`, `audio/alac`,
+    `audio/ape`, `audio/pcm`, `audio/aiff`, `audio/aif`,
+  ])
+
   return formats.has(file.type)
 }
 

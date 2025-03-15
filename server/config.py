@@ -318,35 +318,46 @@ class Config:
         # Max length for post marks
         self.max_mark_length = 20
 
-        # Bitrate for audiomagic mp3 audio
-        self.audiomagic_audio_bitrate = 320
+        # Quality for audio image magic mp3
+        # 0 is the highest VBR quality
+        self.audio_image_magic_audio_quality = 0
 
-        # Width for audio audiomagic
-        self.audiomagic_width = 1280
+        # Width for audio audio image magic
+        self.audio_image_magic_width = 1280
 
-        # Height for audio audiomagic
-        self.audiomagic_height = 720
+        # Height for audio audio image magic
+        self.audio_image_magic_height = 720
 
-        # Quality for audiomagic video
+        # Quality for audio image magic video
         # Lower quality, faster encoding
         # Higher = lower quality
-        self.audiomagic_video_quality = 28
+        self.audio_image_magic_video_quality = 28
 
-        # Background color for audiomagic
-        self.audiomagic_color = "black"
+        # Background color for audio image_magic
+        self.audio_image_magic_color = "black"
 
-        # Enable or disable audiomagic
-        self.audiomagic_enabled = True
+        # Enable or disable audio_image magic
+        self.audio_image_magic_enabled = True
 
-        # Image quality for imagemagic
+        # Image quality for image magic
         # 1-31, where 1 is best
-        self.imagemagic_quality = 8
+        self.image_magic_quality = 8
 
-        # Minimum file size to apply imagemagic
-        self.imagemagic_min_size = 1_000000
+        # Minimum file size to apply image magic
+        self.image_magic_min_size = 1_000000
 
-        # Enable or disable imagemagic
-        self.imagemagic_enabled = True
+        # Enable or disable image magic
+        self.image_magic_enabled = True
+
+        # Quality for audio magic mp3
+        # 0 is the highest VBR quality
+        self.audio_magic_quality = 0
+
+        # Enable or disable audio magic
+        self.audio_magic_enabled = True
+
+        # Minimum file size to apply audio magic
+        self.audio_magic_min_size = 3_000000
 
     # --- Methods ---
 
@@ -455,15 +466,18 @@ class Config:
             set_value(c, "prev_sample_icon")
             set_value(c, "next_sample_icon")
             set_value(c, "max_mark_length")
-            set_value(c, "audiomagic_audio_bitrate")
-            set_value(c, "audiomagic_width")
-            set_value(c, "audiomagic_height")
-            set_value(c, "audiomagic_video_quality")
-            set_value(c, "audiomagic_color")
-            set_value(c, "audiomagic_enabled")
-            set_value(c, "imagemagic_quality")
-            set_value(c, "imagemagic_min_size")
-            set_value(c, "imagemagic_enabled")
+            set_value(c, "audio_image_magic_audio_quality")
+            set_value(c, "audio_image_magic_width")
+            set_value(c, "audio_image_magic_height")
+            set_value(c, "audio_image_magic_video_quality")
+            set_value(c, "audio_image_magic_color")
+            set_value(c, "audio_image_magic_enabled")
+            set_value(c, "image_magic_quality")
+            set_value(c, "image_magic_min_size")
+            set_value(c, "image_magic_enabled")
+            set_value(c, "audio_magic_quality")
+            set_value(c, "audio_magic_enabled")
+            set_value(c, "audio_magic_min_size")
 
             # Users
 
