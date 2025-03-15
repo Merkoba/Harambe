@@ -268,6 +268,11 @@ def sort_users(users: list[User], sort: str) -> None:
     elif sort == "mark_desc":
         users.sort(key=lambda x: x.mark, reverse=False)
 
+    elif sort == "mage":
+        users.sort(key=lambda x: x.mage, reverse=True)
+    elif sort == "mage_desc":
+        users.sort(key=lambda x: x.mage, reverse=False)
+
 
 def get_user(user_id: int | None = None, username: str | None = None) -> User | None:
     if (not user_id) and (not username):

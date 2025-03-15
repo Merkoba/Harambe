@@ -633,16 +633,18 @@ App.do_filter = () => {
     let reg_date = item.dataset.reg_date
     let last_date = item.dataset.last_date
     let admin = item.dataset.admin
-    let list = item.dataset.reader
+    let lister = item.dataset.lister
+    let reader = item.dataset.reader
+    let mage = item.dataset.mage
     let value_ = item.dataset.value
     let num_posts = item.dataset.num_posts
     let num_reactions = item.dataset.num_reactions
     let full = item.dataset.full
 
     let opts = [
-      post, ago, date, size, title, original, uploader, views,
-      listed, mtype, uname, ext, username, rpm, max_size, mark, full,
-      reg_date, last_date, admin, list, value_, num_posts, num_reactions,
+      post, ago, date, size, title, original, uploader, views, mage,
+      listed, mtype, uname, ext, username, rpm, max_size, mark, full, lister,
+      reg_date, last_date, admin, reader, value_, num_posts, num_reactions,
     ]
 
     opts = opts.filter(x => x)
