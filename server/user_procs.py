@@ -599,7 +599,12 @@ def register(request: Request) -> tuple[bool, str, User | None]:
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
     password_2 = request.form.get("password_2", "")
+    code = request.form.get("code", "")
     name = request.form.get("name", "").strip()
+
+    if config.register_code:
+        if code != config.register_code:
+            return False, "Invalid code", None
 
     if (not username) or (not password) or (not password_2) or (not name):
         return False, "Missing details", None

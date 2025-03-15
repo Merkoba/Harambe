@@ -17,6 +17,11 @@
         <input type="password" id="password" name="password" placeholder="Password (1)">
         <input type="password" id="password_2" name="password_2" placeholder="Password (2)">
         <input type="text" id="name" name="name" placeholder="Public Name">
+
+        {% if register_code %}
+        <input type="text" id="code" name="code" placeholder="Code">
+        {% endif %}
+
         <input type="submit" id="register" value="Register">
     </form>
 </div>

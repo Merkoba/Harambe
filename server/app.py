@@ -704,6 +704,7 @@ def register() -> Any:
     return render_template(
         "register.jinja",
         message=message,
+        register_code=config.register_code,
         **common_configs(),
     )
 

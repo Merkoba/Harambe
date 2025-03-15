@@ -368,6 +368,10 @@ class Config:
         # New users get the 'mage' permission by default
         self.default_mage = False
 
+        # A code needed for registration
+        # If empty string, no code is needed
+        self.register_code = ""
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -490,6 +494,7 @@ class Config:
             set_value(c, "show_privacy_select")
             set_value(c, "album_magic_quality")
             set_value(c, "default_mage")
+            set_value(c, "register_code")
 
             # Users
 
