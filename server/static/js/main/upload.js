@@ -152,6 +152,10 @@ App.validate = () => {
         audiomagic.checked = true
         App.submit_form()
       },
+      callback_no: () => {
+        audiomagic.checked = false
+        App.submit_form()
+      },
     }
 
     App.confirmbox(confirm_args)
