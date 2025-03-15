@@ -214,7 +214,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     elif album_magic:
         try:
             start = time.time()
-            result = make_album_magic(files)
+            result, rext = make_album_magic(files)
             end = time.time()
             d = round(end - start, 2)
             utils.q(f"Album magic took {d} seconds")
@@ -224,33 +224,13 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
             content = result
             original = ""
-            ext = ".mp3"
+            ext = f".{rext}"
 
             if not content:
                 return error("Failed to album magic")
         except Exception as e:
             utils.error(e)
             return error("Failed to album magic")
-    elif album_magic:
-        try:
-            start = time.time()
-            result = make_album_magic(files)
-            end = time.time()
-            d = round(end - start, 2)
-            utils.q(f"Album magic took {d} seconds")
-
-            if not result:
-                return error("Failed to make album magic")
-
-            content = result
-            original = ""
-            ext = ".mp4"
-
-            if not content:
-                return error("Failed to make album magic")
-        except Exception as e:
-            utils.error(e)
-            return error("Failed to make album magic")
     else:
         file = files[0]
         content = file.read()
@@ -577,7 +557,7 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
         return output_temp.read()
 
 
-def make_album_magic(files: list[FileStorage]) -> bytes | None:
+def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None, str]:
     temp_files = []
     image_file = None
 
@@ -606,7 +586,7 @@ def make_album_magic(files: list[FileStorage]) -> bytes | None:
                 temp_files.append(temp.name)
 
         if not temp_files:
-            return None
+            return None, ""
 
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".txt", encoding="utf-8"
@@ -666,10 +646,10 @@ def make_album_magic(files: list[FileStorage]) -> bytes | None:
                     _, _ = process.communicate()
 
                     if process.returncode != 0:
-                        return None
+                        return None, ""
 
                     output_temp.seek(0)
-                    return output_temp.read()
+                    return output_temp.read(), "mp4"
             else:
                 with tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp:
                     process = subprocess.Popen(
@@ -697,10 +677,10 @@ def make_album_magic(files: list[FileStorage]) -> bytes | None:
                     _, _ = process.communicate()
 
                     if process.returncode != 0:
-                        return None
+                        return None, ""
 
                     output_temp.seek(0)
-                    return output_temp.read()
+                    return output_temp.read(), "mp3"
     finally:
         for temp_file in temp_files:
             Path(temp_file).unlink(missing_ok=True)
