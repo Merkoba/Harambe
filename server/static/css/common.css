@@ -84,6 +84,14 @@ a.linkbutton:hover {
     justify-content: center;
 }
 
+.dialog_col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
 .nowrap {
     white-space: nowrap;
 }

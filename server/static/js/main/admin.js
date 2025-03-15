@@ -364,6 +364,40 @@ App.edit_post_title = (el) => {
   App.prompt_text(prompt_args)
 }
 
+App.edit_post_privacy = (privacy) => {
+  let items = App.get_selected()
+
+  if (items.length === 0) {
+    return
+  }
+
+  let ids = items.map(x => x.dataset.post_id)
+  App.msg_post_edit.close()
+  let message = `Make selected posts ${privacy}?`
+
+  let confirm_args = {
+    message,
+    callback_yes: async () => {
+      let response = await fetch(`/edit_privacy`, {
+        method: `POST`,
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        body: JSON.stringify({ids, privacy}),
+      })
+
+      if (response.ok) {
+        App.refresh()
+      }
+      else {
+        App.print_error(response.status)
+      }
+    },
+  }
+
+  App.confirmbox(confirm_args)
+}
+
 App.toggle_select = () => {
   let checkboxes = DOM.els(`.select_checkbox`)
 
@@ -899,6 +933,14 @@ App.setup_edit = () => {
 
     DOM.ev(DOM.el(`#edit_title`), `click`, () => {
       App.edit_post_title()
+    })
+
+    DOM.ev(DOM.el(`#make_private`), `click`, () => {
+      App.edit_post_privacy(`private`)
+    })
+
+    DOM.ev(DOM.el(`#make_public`), `click`, () => {
+      App.edit_post_privacy(`public`)
     })
 
     DOM.ev(edit, `click`, () => {
