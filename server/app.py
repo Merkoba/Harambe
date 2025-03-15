@@ -272,7 +272,7 @@ def show_upload() -> Any:
         magic_enabled=config.magic_enabled,
         image_magic_enabled=config.image_magic_enabled,
         audio_magic_enabled=config.audio_magic_enabled,
-        audio_image_magic_enabled=config.audio_image_magic_enabled,
+        album_magic_enabled=config.album_magic_enabled,
         show_privacy_select=config.show_privacy_select,
         banner=banner,
         **common_configs(user),

@@ -156,7 +156,7 @@
 
         {% if post.video_embed or post.audio_embed %}
         <div class="embed">
-            <video id="video" src="/{{file_path}}/{{post.name}}" controls preload="none"
+            <video id="video" src="/{{file_path}}/{{post.name}}/{{post.original_full}}" controls preload="none"
             {% if post.video_embed %}
             poster="/sample/{{post.name}}">
             {% else %}

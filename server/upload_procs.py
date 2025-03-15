@@ -141,7 +141,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     zip_archive = False
     image_magic = False
     audio_magic = False
-    audio_image_magic = False
     album_magic = False
 
     if len(files) == 1:
@@ -155,12 +154,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             (len(files) == 2)
             and user.mage
             and config.magic_enabled
-            and get_bool(request, "audio_image_magic")
-            and config.audio_image_magic_enabled
-            and is_audio_image_magic(files)
+            and get_bool(request, "album_magic")
+            and config.album_magic_enabled
+            and is_album_magic(files)
         ):
-            audio_image_magic = True
-        elif get_bool(request, "album_magic") and user.mage and is_album_magic(files):
             album_magic = True
         else:
             zip_archive = True
@@ -234,26 +231,26 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         except Exception as e:
             utils.error(e)
             return error("Failed to album magic")
-    elif audio_image_magic:
+    elif album_magic:
         try:
             start = time.time()
-            result = make_audio_image_magic(files)
+            result = make_album_magic(files)
             end = time.time()
             d = round(end - start, 2)
-            utils.q(f"Audio image magic took {d} seconds")
+            utils.q(f"Album magic took {d} seconds")
 
             if not result:
-                return error("Failed to make audio image magic")
+                return error("Failed to make album magic")
 
             content = result
             original = ""
             ext = ".mp4"
 
             if not content:
-                return error("Failed to make audio image magic")
+                return error("Failed to make album magic")
         except Exception as e:
             utils.error(e)
-            return error("Failed to make audio image magic")
+            return error("Failed to make album magic")
     else:
         file = files[0]
         content = file.read()
@@ -484,98 +481,28 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
     sample_path.write_text(sample)
 
 
-def is_audio_image_magic(files: list[FileStorage]) -> bool:
-    imgs = utils.image_exts()
-    audio = utils.audio_exts()
-
-    if len(files) != 2:
-        return False
-
-    f1 = Path(files[0].filename).suffix[1:].lower()
-    f2 = Path(files[1].filename).suffix[1:].lower()
-    return (f1 in imgs and f2 in audio) or (f2 in imgs and f1 in audio)
-
-
 def is_album_magic(files: list[FileStorage]) -> bool:
-    return all(
-        Path(file.filename).suffix[1:].lower() in utils.audio_exts() for file in files
-    )
-
-
-def make_audio_image_magic(files: list[FileStorage]) -> bytes | None:
-    img_file = None
-    audio_file = None
+    img_count = 0
+    audio_count = 0
 
     for file in files:
         if Path(file.filename).suffix[1:].lower() in utils.image_exts():
-            img_file = file
+            img_count += 1
         elif Path(file.filename).suffix[1:].lower() in utils.audio_exts():
-            audio_file = file
+            audio_count += 1
+        else:
+            return False
 
-    if not img_file or not audio_file:
-        return None
+    if img_count > 1:
+        return False
 
-    img_content = img_file.read()
-    audio_content = audio_file.read()
+    if img_count == 1:
+        return audio_count >= 1
 
-    with (
-        tempfile.NamedTemporaryFile(suffix=".jpg") as img_temp,
-        tempfile.NamedTemporaryFile(suffix=".mp3") as audio_temp,
-        tempfile.NamedTemporaryFile(suffix=".mp4") as output_temp,
-    ):
-        img_temp.write(img_content)
-        img_temp.flush()
+    if img_count == 0:
+        return audio_count > 1
 
-        audio_temp.write(audio_content)
-        audio_temp.flush()
-        w = config.audio_image_magic_width
-        h = config.audio_image_magic_height
-        crf = config.audio_image_magic_video_quality
-        bg = config.audio_image_magic_color or "black"
-        aq = str(config.audio_image_magic_audio_quality)
-
-        process = subprocess.Popen(
-            [
-                "ffmpeg",
-                "-loop",
-                "1",
-                "-i",
-                img_temp.name,
-                "-i",
-                audio_temp.name,
-                "-c:v",
-                "libx264",
-                "-preset",
-                "medium",
-                "-tune",
-                "stillimage",
-                "-crf",
-                f"{crf}",
-                "-pix_fmt",
-                "yuv420p",
-                "-c:a",
-                "libmp3lame",
-                "-q:a",
-                aq,
-                "-vf",
-                f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
-                "-shortest",
-                "-threads",
-                "0",
-                "-y",
-                output_temp.name,
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-
-        _, _ = process.communicate()
-
-        if process.returncode != 0:
-            return None
-
-        output_temp.seek(0)
-        return output_temp.read()
+    return False
 
 
 def make_image_magic(file: FileStorage) -> bytes | None:
@@ -628,7 +555,7 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
                 "ffmpeg",
                 "-i",
                 audio_temp.name,
-                "-codec:a",
+                "-c:a",
                 "libmp3lame",
                 "-q:a",
                 aq,
@@ -652,56 +579,130 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
 
 def make_album_magic(files: list[FileStorage]) -> bytes | None:
     temp_files = []
+    image_file = None
 
     try:
         for file in files:
-            temp = tempfile.NamedTemporaryFile(suffix=".audio", delete=False)
-            temp.write(file.read())
-            temp.close()
-            file.seek(0)
-            temp_files.append(temp.name)
+            extension = Path(file.filename).suffix[1:].lower()
+            if extension in utils.image_exts():
+                image_temp = tempfile.NamedTemporaryFile(
+                    suffix=f".{extension}", delete=False
+                )
 
-        with (
-            tempfile.NamedTemporaryFile(
-                mode="w", suffix=".txt", encoding="utf-8"
-            ) as list_file,
-            tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp,
-        ):
+                image_temp.write(file.read())
+                image_temp.close()
+                file.seek(0)
+                image_file = image_temp.name
+                break
+
+        for file in files:
+            extension = Path(file.filename).suffix[1:].lower()
+
+            if extension in utils.audio_exts():
+                temp = tempfile.NamedTemporaryFile(suffix=".audio", delete=False)
+                temp.write(file.read())
+                temp.close()
+                file.seek(0)
+                temp_files.append(temp.name)
+
+        if not temp_files:
+            return None
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".txt", encoding="utf-8"
+        ) as list_file:
             for temp_file in temp_files:
                 list_file.write(f"file '{temp_file}'\n")
 
             list_file.flush()
             aq = str(config.audio_magic_quality)
 
-            process = subprocess.Popen(
-                [
-                    "ffmpeg",
-                    "-f",
-                    "concat",
-                    "-safe",
-                    "0",
-                    "-i",
-                    list_file.name,
-                    "-codec:a",
-                    "libmp3lame",
-                    "-q:a",
-                    aq,
-                    "-threads",
-                    "0",
-                    "-y",
-                    output_temp.name,
-                ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
+            if image_file:
+                with tempfile.NamedTemporaryFile(suffix=".mp4") as output_temp:
+                    w = getattr(config, "album_magic_width", 640)
+                    h = getattr(config, "album_magic_height", 480)
+                    crf = getattr(config, "album_magic_video_quality", 23)
+                    bg = getattr(config, "album_magic_color", "black")
 
-            _, _ = process.communicate()
+                    process = subprocess.Popen(
+                        [
+                            "ffmpeg",
+                            "-f",
+                            "concat",
+                            "-safe",
+                            "0",
+                            "-i",
+                            list_file.name,
+                            "-loop",
+                            "1",
+                            "-i",
+                            image_file,
+                            "-c:v",
+                            "libx264",
+                            "-preset",
+                            "medium",
+                            "-tune",
+                            "stillimage",
+                            "-crf",
+                            f"{crf}",
+                            "-c:a",
+                            "libmp3lame",
+                            "-q:a",
+                            aq,
+                            "-pix_fmt",
+                            "yuv420p",
+                            "-vf",
+                            f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
+                            "-shortest",
+                            "-threads",
+                            "0",
+                            "-y",
+                            output_temp.name,
+                        ],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
 
-            if process.returncode != 0:
-                return None
+                    _, _ = process.communicate()
 
-            output_temp.seek(0)
-            return output_temp.read()
+                    if process.returncode != 0:
+                        return None
+
+                    output_temp.seek(0)
+                    return output_temp.read()
+            else:
+                with tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp:
+                    process = subprocess.Popen(
+                        [
+                            "ffmpeg",
+                            "-f",
+                            "concat",
+                            "-safe",
+                            "0",
+                            "-i",
+                            list_file.name,
+                            "-c:a",
+                            "libmp3lame",
+                            "-q:a",
+                            aq,
+                            "-threads",
+                            "0",
+                            "-y",
+                            output_temp.name,
+                        ],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
+
+                    _, _ = process.communicate()
+
+                    if process.returncode != 0:
+                        return None
+
+                    output_temp.seek(0)
+                    return output_temp.read()
     finally:
         for temp_file in temp_files:
             Path(temp_file).unlink(missing_ok=True)
+        if image_file:
+            Path(image_file).unlink(missing_ok=True)

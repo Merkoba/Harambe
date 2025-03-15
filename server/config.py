@@ -335,26 +335,26 @@ class Config:
         # Minimum file size to apply audio magic
         self.audio_magic_min_size = 3_000000
 
-        # Quality for audio image magic mp3
+        # Quality for album magic mp3
         # 0 is the highest VBR quality
-        self.audio_image_magic_audio_quality = 0
+        self.album_magic_audio_quality = 0
 
-        # Width for audio audio image magic
-        self.audio_image_magic_width = 1280
+        # Width for audio album magic
+        self.album_magic_width = 1280
 
-        # Height for audio audio image magic
-        self.audio_image_magic_height = 720
+        # Height for audio album magic
+        self.album_magic_height = 720
 
-        # Quality for audio image magic video
+        # Quality for album magic video
         # Lower quality, faster encoding
         # Higher = lower quality
-        self.audio_image_magic_video_quality = 28
+        self.album_magic_video_quality = 28
 
-        # Background color for audio image_magic
-        self.audio_image_magic_color = "black"
+        # Background color for album_magic
+        self.album_magic_color = "black"
 
-        # Enable or disable audio_image magic
-        self.audio_image_magic_enabled = True
+        # Enable or disable album magic
+        self.album_magic_enabled = True
 
         # Enable all kinds of magic
         self.magic_enabled = True
@@ -471,12 +471,12 @@ class Config:
             set_value(c, "prev_sample_icon")
             set_value(c, "next_sample_icon")
             set_value(c, "max_mark_length")
-            set_value(c, "audio_image_magic_audio_quality")
-            set_value(c, "audio_image_magic_width")
-            set_value(c, "audio_image_magic_height")
-            set_value(c, "audio_image_magic_video_quality")
-            set_value(c, "audio_image_magic_color")
-            set_value(c, "audio_image_magic_enabled")
+            set_value(c, "album_magic_audio_quality")
+            set_value(c, "album_magic_width")
+            set_value(c, "album_magic_height")
+            set_value(c, "album_magic_video_quality")
+            set_value(c, "album_magic_color")
+            set_value(c, "album_magic_enabled")
             set_value(c, "image_magic_quality")
             set_value(c, "image_magic_min_size")
             set_value(c, "image_magic_enabled")

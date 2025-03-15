@@ -506,7 +506,7 @@ App.check_audio_magic = () => {
     return false
   }
 
-  let checkbox = DOM.el(`#audio_image_magic`)
+  let checkbox = DOM.el(`#audio_magic`)
 
   if (!checkbox) {
     return
@@ -525,57 +525,47 @@ App.check_audio_magic = () => {
   return valid
 }
 
-App.check_audio_image_magic = () => {
-  if (!App.audio_image_magic_enabled) {
+App.check_album_magic = () => {
+  if (!App.album_magic_enabled) {
     return false
   }
 
-  let checkbox = DOM.el(`#audio_image_magic`)
+  let checkbox = DOM.el(`#album_magic`)
 
   if (!checkbox) {
     return
   }
 
   let files = App.get_active_files()
-  let valid = false
-
-  if (files.length === 2) {
-    let file_1 = files[0].files[0]
-    let file_2 = files[1].files[0]
-
-    if (file_1 && file_2) {
-      if (files.length === 2) {
-        valid = (App.is_image(file_1) && App.is_audio(file_2)) ||
-        (App.is_image(file_2) && App.is_audio(file_1))
-      }
-    }
-  }
-
-  return valid
-}
-
-App.album_magic_join = () => {
-  if (!App.audio_image_magic_enabled) {
-    return false
-  }
-
-  let checkbox = DOM.el(`#audio_image_magic`)
-
-  if (!checkbox) {
-    return
-  }
-
-  let files = App.get_active_files()
-  let valid = true
+  let image_count = 0
+  let audio_count = 0
 
   for (let file of files) {
-    if (!App.is_audio(file.files[0])) {
-      valid = false
-      break
+    const current = file.files[0]
+
+    if (App.is_image(current)) {
+      image_count++
+    }
+    else if (App.is_audio(current)) {
+      audio_count++
+    }
+    else {
+      return false
     }
   }
 
-  return valid
+  if (image_count > 1) {
+    return false
+  }
+
+  if (image_count === 1) {
+    return audio_count >= 1
+  }
+  else if (image_count === 0) {
+    return audio_count > 1
+  }
+
+  return false
 }
 
 App.check_magic = () => {
@@ -630,30 +620,9 @@ App.check_magic = () => {
     return false
   }
 
-  let audio_image_magic = DOM.el(`#audio_image_magic`)
-
-  if (App.is_mage && App.check_audio_image_magic()) {
-    let confirm_args = {
-      message: `Do you want to do audio image magic&nbsp;?\n
-      This means the image and audio will joined into an mp4 video.`,
-      callback_yes: () => {
-        audio_image_magic.checked = true
-        App.submit_form()
-      },
-      callback_no: () => {
-        audio_image_magic.checked = false
-        App.submit_form()
-      },
-      ...labels,
-    }
-
-    App.confirmbox(confirm_args)
-    return false
-  }
-
   let album_magic = DOM.el(`#album_magic`)
 
-  if (App.is_mage && App.album_magic_join()) {
+  if (App.is_mage && App.check_album_magic()) {
     let confirm_args = {
       message: `Do you want to do album magic&nbsp;?\n
       This means all audio tracks will be joined into one.`,
