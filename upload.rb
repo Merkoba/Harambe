@@ -11,9 +11,15 @@ url = "https://someurl.com"
 username = "someusername"
 password = "somepassword"
 endpoint = "apiupload"
-file_path = nil
-compress = "off"
+
+# Arguments
 prompt = false
+zip = "off"
+privacy = "public"
+file_path = nil
+image_magic = "off"
+audio_magic = "off"
+audio_image_magic = "off"
 
 # Parse command-line options
 OptionParser.new do |opts|
