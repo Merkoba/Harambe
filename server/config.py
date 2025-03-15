@@ -340,10 +340,10 @@ class Config:
         self.album_magic_audio_quality = 0
 
         # Width for audio album magic
-        self.album_magic_width = 1280
+        self.album_magic_width = 1920
 
         # Height for audio album magic
-        self.album_magic_height = 720
+        self.album_magic_height = 1080
 
         # Quality for album magic video
         # Lower quality, faster encoding
