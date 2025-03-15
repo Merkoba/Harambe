@@ -625,7 +625,7 @@ App.check_magic = () => {
   if (App.is_mage && App.check_album_magic()) {
     let confirm_args = {
       message: `Do you want to do album magic&nbsp;?\n
-      This means all audio tracks will be joined into one.`,
+      This means the image and audio tracks will be joined into one.`,
       callback_yes: () => {
         album_magic.checked = true
         App.submit_form()
