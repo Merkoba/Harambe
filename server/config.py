@@ -266,16 +266,13 @@ class Config:
 
         # The compression level for zip files
         # 1 is the fastest, 9 is the strongest
-        self.compression_level = 9
+        self.zip_level = 9
 
         # Allow files with the same hash
         self.allow_same_hash = False
 
         # Max number of files to be uploaded at the same time
         self.max_upload_files = 10
-
-        # Show the compress checkbox in the web interface
-        self.show_compress = True
 
         # Generate and use samples
         self.samples_enabled = True
@@ -449,10 +446,9 @@ class Config:
             set_value(c, "register_enabled")
             set_value(c, "max_post_name_length")
             set_value(c, "max_reaction_name_length")
-            set_value(c, "compression_level")
+            set_value(c, "zip_level")
             set_value(c, "allow_same_hash")
             set_value(c, "max_upload_files")
-            set_value(c, "show_compress")
             set_value(c, "samples_enabled")
             set_value(c, "sample_width")
             set_value(c, "sample_height")

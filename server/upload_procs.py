@@ -44,7 +44,7 @@ def get_name(user: User) -> str:
 
 def make_zip(files: list[FileStorage]) -> bytes:
     buffer = BytesIO()
-    clevel = config.compression_level
+    clevel = config.zip_level
     fixed_time = (1980, 1, 1, 0, 0, 0)
 
     with zipfile.ZipFile(
@@ -138,7 +138,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if privacy not in ["public", "private"]:
         return error("Invalid privacy setting")
 
-    compress = False
+    zip_archive = False
     image_magic = False
     audio_magic = False
     audio_image_magic = False
@@ -158,9 +158,9 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         ):
             audio_image_magic = True
         else:
-            compress = True
+            zip_archive = True
 
-    if compress:
+    if zip_archive:
         try:
             content = make_zip(files)
             original = ""
@@ -168,7 +168,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
         except Exception as e:
             utils.error(e)
-            return error("Failed to compress files")
+            return error("Failed to zip files")
     elif image_magic:
         try:
             start = time.time()
@@ -273,7 +273,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     if config.samples_enabled:
         try:
-            if compress:
+            if zip_archive:
                 get_zip_sample(path, files)
             elif mtype.startswith("image"):
                 get_image_sample(path)
