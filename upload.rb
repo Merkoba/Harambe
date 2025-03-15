@@ -23,6 +23,10 @@ OptionParser.new do |opts|
     compress = "on"
   end
 
+  opts.on("--private", "Make the post private") do
+    privacy = "private"
+  end
+
   opts.on("--prompt", "Prompt for title") do
     prompt = true
   end
@@ -71,7 +75,8 @@ form_data = [
   ["title", title],
   ["username", username],
   ["password", password],
-  ["compress", compress]
+  ["compress", compress],
+  ["privacy", privacy],
 ]
 
 request.set_form form_data, "multipart/form-data"
