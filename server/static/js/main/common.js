@@ -814,6 +814,10 @@ App.setup_editpost_opts = (show = false) => {
       App.edit_title()
     })
 
+    App.bind_button(`${name}_opts_privacy`, () => {
+      App.edit_privacy()
+    })
+
     App.bind_button(`${name}_opts_delete`, () => {
       let confirm_args = {
         message: `Delete this post ?`,

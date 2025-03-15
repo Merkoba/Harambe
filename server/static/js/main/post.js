@@ -1044,3 +1044,40 @@ App.setup_scrollers = () => {
     })
   }
 }
+
+App.edit_privacy = () => {
+  let message, privacy
+
+  if (App.privacy === `public`) {
+    message = `Make this post private ?`
+    privacy = `private`
+  }
+  else {
+    message = `Make this post public ?`
+    privacy = `public`
+  }
+
+  let ids = [App.post_id]
+
+  let confirm_args = {
+    message,
+    callback_yes: async () => {
+      let response = await fetch(`/edit_privacy`, {
+        method: `POST`,
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        body: JSON.stringify({ids, privacy}),
+      })
+
+      if (response.ok) {
+        App.privacy = privacy
+      }
+      else {
+        App.print_error(response.status)
+      }
+    },
+  }
+
+  App.confirmbox(confirm_args)
+}

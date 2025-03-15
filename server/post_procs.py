@@ -54,6 +54,7 @@ class Post:
     last_reaction: str
     file_hash: str
     text: str
+    privacy: str
 
     def is_image(self) -> bool:
         return self.mtype.startswith("image/")
@@ -119,6 +120,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     uploader_str = uploader or "Anon"
     mtype_str = mtype or ext or "?"
     num_reactions = post.num_reactions
+    privacy = post.privacy
 
     if post.reactions:
         last_reaction = post.reactions[-1].value
@@ -200,6 +202,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         last_reaction,
         file_hash,
         text,
+        privacy,
     )
 
 
@@ -567,23 +570,29 @@ def edit_post_title(ids: list[int], title: str, user: User) -> tuple[str, int]:
     if len(title) > config.max_title_length:
         return utils.bad("Title is too long")
 
-    if not user.admin:
-        if not config.allow_edit:
-            return utils.bad("Editing is disabled")
-
-        for post_id in ids:
-            post = get_post(post_id)
-
-            if not post:
-                return utils.bad("Post not found")
-
-            if post.username != user.username:
-                return utils.bad("You are not the uploader")
+    if not can_edit_post(ids, user):
+        return utils.bad("You can't edit this")
 
     for post_id in ids:
         database.edit_post_title(post_id, title)
 
     return utils.ok("Title updated")
+
+
+def edit_post_privacy(ids: list[int], privacy: str, user: User) -> tuple[str, int]:
+    if not ids:
+        return utils.bad("Missing ids")
+
+    if privacy not in ["public", "private"]:
+        return utils.bad("Invalid privacy setting")
+
+    if not can_edit_post(ids, user):
+        return utils.bad("You can't edit this")
+
+    for post_id in ids:
+        database.edit_post_privacy(post_id, privacy)
+
+    return utils.ok("Privacy updated")
 
 
 def get_latest_post() -> Post | None:
@@ -616,3 +625,22 @@ def get_sample(name: str) -> Path | None:
             return file
 
     return None
+
+
+def can_edit_post(ids: list[int], user: User) -> bool:
+    if user.admin:
+        return True
+
+    if not config.allow_edit:
+        return False
+
+    for post_id in ids:
+        post = get_post(post_id)
+
+        if not post:
+            return False
+
+        if post.username != user.username:
+            return False
+
+    return True

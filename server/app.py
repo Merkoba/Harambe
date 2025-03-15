@@ -637,6 +637,26 @@ def edit_title() -> Any:
     return post_procs.edit_post_title(ids, title, user=user)
 
 
+@app.route("/edit_privacy", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@login_required
+def edit_privacy() -> Any:
+    data = request.get_json()
+    ids = data.get("ids", None)
+
+    if not ids:
+        return error_json
+
+    title = data.get("privacy", None)
+    user = get_user()
+
+    if not user:
+        return error_json
+
+    return post_procs.edit_post_privacy(ids, title, user=user)
+
+
 # AUTH
 
 

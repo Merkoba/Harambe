@@ -48,6 +48,7 @@
             App.text = {{post.text | default(0) | tojson | safe}}
             App.uploader = {{post.uploader | default(0) | tojson | safe}}
             App.zip_embed = {{post.zip_embed | default(0) | tojson}}
+            App.privacy = {{post.privacy | default(0) | tojson}}
             {% endif %}
 
             App.file_path = {{file_path | default(0) | tojson | safe}}
@@ -124,6 +125,7 @@
         <template id="template_editpost_opts">
             <div class="dialog_container">
                 <div id="editpost_opts_title" class="aero_button">Edit Title</div>
+                <div id="editpost_opts_privacy" class="aero_button">Edit Privacy</div>
                 <div id="editpost_opts_delete" class="aero_button">Delete Post</div>
             </div>
         </template>

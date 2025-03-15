@@ -351,6 +351,14 @@ def edit_post_title(post_id: int, title: str) -> None:
     conn.close()
 
 
+def edit_post_privacy(post_id: int, privacy: str) -> None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    c.execute("update posts set privacy = ? where id = ?", (privacy, post_id))
+    conn.commit()
+    conn.close()
+
+
 def get_next_post(current: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
