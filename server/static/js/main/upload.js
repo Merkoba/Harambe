@@ -139,73 +139,9 @@ App.validate = () => {
   }
 
   App.clicked = true
-  let audio_image_magic = DOM.el(`#audio_image_magic`)
 
-  if (App.is_mage && App.check_audio_image_magic()) {
-    if (audio_image_magic.checked) {
-      return true
-    }
-
-    let confirm_args = {
-      message: `Do you want to do audio image magic ?`,
-      callback_yes: () => {
-        audio_image_magic.checked = true
-        App.submit_form()
-      },
-      callback_no: () => {
-        audio_image_magic.checked = false
-        App.submit_form()
-      },
-    }
-
-    App.confirmbox(confirm_args)
-    return false
-  }
-
-  let audio_magic = DOM.el(`#audio_magic`)
-
-  if (App.is_mage && App.check_audio_magic()) {
-    if (audio_magic.checked) {
-      return true
-    }
-
-    let confirm_args = {
-      message: `Do you want to do audio magic ?`,
-      callback_yes: () => {
-        audio_magic.checked = true
-        App.submit_form()
-      },
-      callback_no: () => {
-        audio_magic.checked = false
-        App.submit_form()
-      },
-    }
-
-    App.confirmbox(confirm_args)
-    return false
-  }
-
-  let image_magic = DOM.el(`#image_magic`)
-
-  if (App.is_mage && App.check_image_magic()) {
-    if (image_magic.checked) {
-      return true
-    }
-
-    let confirm_args = {
-      message: `Do you want to do image magic ?`,
-      callback_yes: () => {
-        image_magic.checked = true
-        App.submit_form()
-      },
-      callback_no: () => {
-        image_magic.checked = false
-        App.submit_form()
-      },
-    }
-
-    App.confirmbox(confirm_args)
-    return false
+  if (App.is_mage) {
+    return App.check_magic()
   }
 
   return true
@@ -610,4 +546,65 @@ App.check_audio_magic = () => {
   }
 
   return false
+}
+
+App.check_magic = () => {
+  let audio_image_magic = DOM.el(`#audio_image_magic`)
+
+  if (App.is_mage && App.check_audio_image_magic()) {
+    let confirm_args = {
+      message: `Do you want to do audio image magic ?`,
+      callback_yes: () => {
+        audio_image_magic.checked = true
+        App.submit_form()
+      },
+      callback_no: () => {
+        audio_image_magic.checked = false
+        App.submit_form()
+      },
+    }
+
+    App.confirmbox(confirm_args)
+    return false
+  }
+
+  let audio_magic = DOM.el(`#audio_magic`)
+
+  if (App.is_mage && App.check_audio_magic()) {
+    let confirm_args = {
+      message: `Do you want to do audio magic ?`,
+      callback_yes: () => {
+        audio_magic.checked = true
+        App.submit_form()
+      },
+      callback_no: () => {
+        audio_magic.checked = false
+        App.submit_form()
+      },
+    }
+
+    App.confirmbox(confirm_args)
+    return false
+  }
+
+  let image_magic = DOM.el(`#image_magic`)
+
+  if (App.is_mage && App.check_image_magic()) {
+    let confirm_args = {
+      message: `Do you want to do image magic ?`,
+      callback_yes: () => {
+        image_magic.checked = true
+        App.submit_form()
+      },
+      callback_no: () => {
+        image_magic.checked = false
+        App.submit_form()
+      },
+    }
+
+    App.confirmbox(confirm_args)
+    return false
+  }
+
+  return true
 }
