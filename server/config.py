@@ -362,6 +362,9 @@ class Config:
         # Show privacy options in the web interface
         self.show_privacy_select = True
 
+        # Quality of album magic quality
+        self.album_magic_quality = 0
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -482,6 +485,7 @@ class Config:
             set_value(c, "audio_magic_min_size")
             set_value(c, "magic_enabled")
             set_value(c, "show_privacy_select")
+            set_value(c, "album_magic_quality")
 
             # Users
 

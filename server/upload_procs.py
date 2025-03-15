@@ -142,6 +142,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     image_magic = False
     audio_magic = False
     audio_image_magic = False
+    album_magic = False
 
     if len(files) == 1:
         if config.magic_enabled:
@@ -159,6 +160,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             and is_audio_image_magic(files)
         ):
             audio_image_magic = True
+        elif get_bool(request, "album_magic") and user.mage and is_album_magic(files):
+            album_magic = True
         else:
             zip_archive = True
 
@@ -200,7 +203,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             utils.q(f"Audio magic took {d} seconds")
 
             if not result:
-                return error("Failed to make auido magic")
+                return error("Failed to make audio magic")
 
             content = result
             original = ""
@@ -211,6 +214,26 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         except Exception as e:
             utils.error(e)
             return error("Failed to make audio magic")
+    elif album_magic:
+        try:
+            start = time.time()
+            result = make_album_magic(files)
+            end = time.time()
+            d = round(end - start, 2)
+            utils.q(f"Album magic took {d} seconds")
+
+            if not result:
+                return error("Failed to make album magic")
+
+            content = result
+            original = ""
+            ext = ".mp3"
+
+            if not content:
+                return error("Failed to album magic")
+        except Exception as e:
+            utils.error(e)
+            return error("Failed to album magic")
     elif audio_image_magic:
         try:
             start = time.time()
@@ -473,6 +496,12 @@ def is_audio_image_magic(files: list[FileStorage]) -> bool:
     return (f1 in imgs and f2 in audio) or (f2 in imgs and f1 in audio)
 
 
+def is_album_magic(files: list[FileStorage]) -> bool:
+    return all(
+        Path(file.filename).suffix[1:].lower() in utils.audio_exts() for file in files
+    )
+
+
 def make_audio_image_magic(files: list[FileStorage]) -> bytes | None:
     img_file = None
     audio_file = None
@@ -619,3 +648,60 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
 
         output_temp.seek(0)
         return output_temp.read()
+
+
+def make_album_magic(files: list[FileStorage]) -> bytes | None:
+    temp_files = []
+
+    try:
+        for file in files:
+            temp = tempfile.NamedTemporaryFile(suffix=".audio", delete=False)
+            temp.write(file.read())
+            temp.close()
+            file.seek(0)
+            temp_files.append(temp.name)
+
+        with (
+            tempfile.NamedTemporaryFile(
+                mode="w", suffix=".txt", encoding="utf-8"
+            ) as list_file,
+            tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp,
+        ):
+            for temp_file in temp_files:
+                list_file.write(f"file '{temp_file}'\n")
+
+            list_file.flush()
+            aq = str(config.audio_magic_quality)
+
+            process = subprocess.Popen(
+                [
+                    "ffmpeg",
+                    "-f",
+                    "concat",
+                    "-safe",
+                    "0",
+                    "-i",
+                    list_file.name,
+                    "-codec:a",
+                    "libmp3lame",
+                    "-q:a",
+                    aq,
+                    "-threads",
+                    "0",
+                    "-y",
+                    output_temp.name,
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+
+            _, _ = process.communicate()
+
+            if process.returncode != 0:
+                return None
+
+            output_temp.seek(0)
+            return output_temp.read()
+    finally:
+        for temp_file in temp_files:
+            Path(temp_file).unlink(missing_ok=True)

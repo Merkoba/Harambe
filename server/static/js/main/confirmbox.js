@@ -21,7 +21,7 @@ class Confirmbox {
     c.id = `confirmbox_container`
     let m = DOM.create(`div`)
     m.id = `confirmbox_message`
-    m.textContent = args.message
+    m.innerHTML = args.message
     let btns = DOM.create(`div`, `dialog_container`)
     btns.id = `confirmbox_buttons`
     let n = DOM.create(`div`, `aero_button`)

@@ -240,10 +240,18 @@ To be able to do this, users must have the `mage` permission.
 
 This is false by default.
 
-## Imagemagic
+## Image Magic
 
 When a lossless format like png is uploaded and it is more than 1mb in size,
 
 the user is prompted if they want to do imagemagic.
 
 This will turn it into a slightly compressed jpg image.
+
+## Audiomagic
+
+Compress audio to v0 mp3.
+
+## Album Magic
+
+Join audio files into an mp3.
