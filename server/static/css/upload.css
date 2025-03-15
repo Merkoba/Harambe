@@ -212,6 +212,10 @@ a.dialog_button:hover {
     cursor: pointer;
 }
 
+select {
+    font-size: 0.8rem;
+}
+
 #toprow {
     display: flex;
     align-items: center;
@@ -220,14 +224,7 @@ a.dialog_button:hover {
     user-select: none;
     gap: 0.5rem;
     height: 1.5rem;
-}
-
-select {
-    font-size: 0.8rem;
-}
-
-select {
-
+    width: 100%;
 }
 
 .topbutton {
@@ -245,4 +242,10 @@ select {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.topbutton:hover {
+    filter: brightness(0.95);
 }

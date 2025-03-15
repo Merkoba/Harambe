@@ -80,6 +80,10 @@ def check_hash(content: bytes) -> tuple[str, str]:
     return file_hash, ""
 
 
+def get_bool(request: Request, key: str) -> bool:
+    return str(request.form.get(key, "off")) == "on"
+
+
 def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if not user:
         return error("No user")
@@ -129,20 +133,19 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Upload is too big")
 
     post_name = get_name(user)
-    audiomagic = False
     privacy = request.form.get("privacy", "public")
 
     if privacy not in ["public", "private"]:
         return error("Invalid privacy setting")
 
-    makemode = request.form.get("makemode", "normal")
-    compress = makemode == "zip"
+    compress = False
+    audiomagic = False
 
     if len(files) > 1:
         if (
             (len(files) == 2)
             and user.mage
-            and makemode == "audiomagic"
+            and get_bool(request, "audiomagic")
             and config.audiomagic_enabled
             and is_audiomagic(files)
         ):

@@ -109,18 +109,6 @@ App.init = () => {
     })
   }
 
-  let zip = DOM.el(`#zip`)
-
-  if (zip) {
-    DOM.ev(zip, `click`, (e) => {
-      if (e.target.id === `compress`) {
-        return
-      }
-
-      DOM.el(`#compress`).click()
-    })
-  }
-
   App.setup_pickers()
 }
 
@@ -147,7 +135,30 @@ App.validate = () => {
   }
 
   App.clicked = true
+  let audiomagic = DOM.el(`#audiomagic`)
+
+  if (App.check_audiomagic()) {
+    if (audiomagic.checked) {
+      return true
+    }
+
+    let confirm_args = {
+      message: `Do you want to do audiomagic ?`,
+      callback_yes: () => {
+        audiomagic.checked = true
+        App.submit_form()
+      },
+    }
+
+    App.confirmbox(confirm_args)
+    return false
+  }
+
   return true
+}
+
+App.submit_form = () => {
+  DOM.el(`#form`).submit()
 }
 
 App.reflect_file = (file) => {
@@ -449,6 +460,14 @@ App.check_total_size = () => {
 }
 
 App.setup_pickers = () => {
+  let add_picker_btn = DOM.el(`#add_picker_btn`)
+
+  if (add_picker_btn) {
+    DOM.ev(add_picker_btn, `click`, (e) => {
+      App.add_picker(true)
+    })
+  }
+
   let remove_picker_btn = DOM.el(`#remove_picker_btn`)
 
   if (remove_picker_btn) {
@@ -464,4 +483,29 @@ App.setup_pickers = () => {
   if (App.is_user && App.upload_enabled) {
     App.add_picker()
   }
+}
+
+App.check_audiomagic = () => {
+  let checkbox = DOM.el(`#audiomagic`)
+
+  if (!checkbox) {
+    return
+  }
+
+  let files = App.get_active_files()
+  let valid = false
+
+  if (files.length === 2) {
+    let file_1 = files[0].files[0]
+    let file_2 = files[1].files[0]
+
+    if (file_1 && file_2) {
+      if (files.length === 2) {
+        valid = (App.is_image(file_1) && App.is_audio(file_2)) ||
+        (App.is_image(file_2) && App.is_audio(file_1))
+      }
+    }
+  }
+
+  return valid
 }
