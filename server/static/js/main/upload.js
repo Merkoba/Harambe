@@ -6,6 +6,10 @@ App.init = () => {
   let image = DOM.el(`#image`)
   App.clicked = false
 
+  window.addEventListener(`pageshow`, (e) => {
+    App.clicked = false
+  })
+
   if (image) {
     DOM.ev(image, `click`, (e) => {
       if (!App.is_user) {
