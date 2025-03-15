@@ -145,12 +145,12 @@ App.validate = () => {
     return App.check_magic()
   }
 
-  App.flash(`Upload in progress`)
+  App.uploading()
   return true
 }
 
 App.submit_form = () => {
-  App.flash(`Upload in progress`)
+  App.uploading()
   DOM.el(`#form`).submit()
 }
 
@@ -643,4 +643,9 @@ App.check_magic = () => {
   }
 
   return true
+}
+
+App.uploading = () => {
+  App.flash(`Upload in progress`)
+  document.title = window.title += ` | Uploading`
 }
