@@ -240,13 +240,13 @@ These spells are:
 
 ## Image Magic
 
-Convert big images into jpg.
+Convert big images into `jpg`.
 
 Triggers when a single big non `jpg` is going to be uploaded.
 
 ## Audio Magic
 
-Convert big audio into mp3.
+Convert big audio into `mp3`.
 
 Triggers when a single non `mp3` is going to be uploaded.
 
@@ -255,3 +255,5 @@ Triggers when a single non `mp3` is going to be uploaded.
 Join an image with one or more audio files.
 
 Triggered when a single image and 1 or more audio files are going to be uploaded.
+
+It creates an `mp4` video.
