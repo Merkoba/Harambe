@@ -157,6 +157,7 @@ a.dialog_button:hover {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
 }
 
 .picker:hover {
@@ -175,14 +176,15 @@ a.dialog_button:hover {
     min-width: 0;
 }
 
-.picker_title {
+.picker_button {
     background-color: var(--frame_color);
     flex-shrink: 0;
     flex-grow: 0;
-    margin-left: 0.25rem;
+    outline: none;
+    user-select: none;
 }
 
-.picker_title:hover {
+.picker_button:hover {
     filter: brightness(1.1);
     outline: 1px solid var(--text_color);
 }

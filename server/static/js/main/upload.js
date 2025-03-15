@@ -260,7 +260,7 @@ App.add_picker = (show = false) => {
       e.preventDefault()
       App.reset_file(input)
     }
-    else if ((e.target !== input) && (e.target !== title)) {
+    else if ((e.target !== input) && !e.target.classList.contains(`picker_button`)) {
       input.click()
     }
   })
@@ -272,12 +272,24 @@ App.add_picker = (show = false) => {
     }
   })
 
+  let clear = DOM.el(`.picker_clear`, el)
+
+  DOM.ev(clear, `click`, (e) => {
+    App.reset_file(input)
+  })
+
   let title = DOM.el(`.picker_title`, el)
 
   DOM.ev(title, `click`, (e) => {
     if (input.files.length > 0) {
       App.set_title(input.files[0].name || ``)
     }
+  })
+
+  let remove = DOM.el(`.picker_remove`, el)
+
+  DOM.ev(remove, `click`, (e) => {
+    App.remove_picker(el)
   })
 
   let c = DOM.el(`#pickers`)
