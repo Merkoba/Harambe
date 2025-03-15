@@ -141,6 +141,7 @@ App.validate = () => {
   App.clicked = true
 
   if (App.is_mage) {
+    App.clicked = false
     return App.check_magic()
   }
 

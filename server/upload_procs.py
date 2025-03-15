@@ -151,8 +151,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                 audio_magic = True
     elif len(files) > 1:
         if (
-            (len(files) == 2)
-            and user.mage
+            user.mage
             and config.magic_enabled
             and get_bool(request, "album_magic")
             and config.album_magic_enabled
@@ -471,7 +470,11 @@ def is_album_magic(files: list[FileStorage]) -> bool:
         elif Path(file.filename).suffix[1:].lower() in utils.audio_exts():
             audio_count += 1
         else:
+            utils.q(file.filename)
             return False
+
+    utils.q(img_count)
+    utils.q(audio_count)
 
     if img_count > 1:
         return False
