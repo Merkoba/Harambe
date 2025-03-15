@@ -55,6 +55,7 @@ class Post:
     file_hash: str
     text: str
     privacy: str
+    privacy_str: str
 
     def is_image(self) -> bool:
         return self.mtype.startswith("image/")
@@ -121,6 +122,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     mtype_str = mtype or ext or "?"
     num_reactions = post.num_reactions
     privacy = post.privacy
+    privacy_str = "P: Yes" if privacy == "public" else "P: No"
 
     if post.reactions:
         last_reaction = post.reactions[-1].value
@@ -203,6 +205,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         file_hash,
         text,
         privacy,
+        privacy_str,
     )
 
 
@@ -257,6 +260,7 @@ def get_posts(
             or query in utils.clean_query(post.uploader_str)
             or query in utils.clean_query(post.ago)
             or query in utils.clean_query(post.listed_str)
+            or query in utils.clean_query(post.privacy_str)
         )
 
         if not ok:

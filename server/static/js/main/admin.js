@@ -674,11 +674,13 @@ App.do_filter = () => {
     let num_posts = item.dataset.num_posts
     let num_reactions = item.dataset.num_reactions
     let full = item.dataset.full
+    let privacy = item.dataset.privacy
 
     let opts = [
       post, ago, date, size, title, original, uploader, views, mage,
       listed, mtype, uname, ext, username, rpm, max_size, mark, full, lister,
       reg_date, last_date, admin, reader, value_, num_posts, num_reactions,
+      privacy,
     ]
 
     opts = opts.filter(x => x)
