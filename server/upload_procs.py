@@ -139,9 +139,13 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Invalid privacy setting")
 
     compress = False
+    imagemagic = False
     audiomagic = False
 
-    if len(files) > 1:
+    if len(files) == 1:
+        if get_bool(request, "imagemagic"):
+            imagemagic = True
+    elif len(files) > 1:
         if (
             (len(files) == 2)
             and user.mage
@@ -162,13 +166,33 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         except Exception as e:
             utils.error(e)
             return error("Failed to compress files")
+    elif imagemagic:
+        try:
+            start = time.time()
+            result = make_imagemagic(files[0])
+            end = time.time()
+            d = round(end - start, 2)
+            utils.q(f"imagemagic took {d} seconds")
+
+            if not result:
+                return error("Failed to make imagemagic")
+
+            content = result
+            original = ""
+            ext = ".jpg"
+
+            if not content:
+                return error("Failed to make imagemagic")
+        except Exception as e:
+            utils.error(e)
+            return error("Failed to make imagemagic")
     elif audiomagic:
         try:
             start = time.time()
             result = make_audiomagic(files)
             end = time.time()
             d = round(end - start, 2)
-            utils.q(f"Audio image took {d} seconds")
+            utils.q(f"audiomagic took {d} seconds")
 
             if not result:
                 return error("Failed to make audiomagic")
@@ -483,6 +507,40 @@ def make_audiomagic(files: list[FileStorage]) -> bytes | None:
                 "-shortest",
                 "-threads",
                 "0",
+                "-y",
+                output_temp.name,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        _, _ = process.communicate()
+
+        if process.returncode != 0:
+            return None
+
+        output_temp.seek(0)
+        return output_temp.read()
+
+
+def make_imagemagic(file: FileStorage) -> bytes | None:
+    content = file.read()
+
+    with (
+        tempfile.NamedTemporaryFile(suffix=".jpg") as img_temp,
+        tempfile.NamedTemporaryFile(suffix=".jpg") as output_temp,
+    ):
+        img_temp.write(content)
+        img_temp.flush()
+        quality = str(config.imagemagic_quality) or "75"
+
+        process = subprocess.Popen(
+            [
+                "ffmpeg",
+                "-i",
+                img_temp.name,
+                "-q:v",
+                quality,
                 "-y",
                 output_temp.name,
             ],

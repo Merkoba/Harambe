@@ -119,6 +119,11 @@ App.is_image = (file) => {
   return file.type.match(`image/*`)
 }
 
+App.is_lossless_image = (file) => {
+  let formats = new Set([`image/png`, `image/tiff`, `image/webp`, `image/bmp`])
+  return formats.has(file.type)
+}
+
 App.is_audio = (file) => {
   return file.type.match(`audio/*`)
 }

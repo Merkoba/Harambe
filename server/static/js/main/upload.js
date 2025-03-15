@@ -162,6 +162,29 @@ App.validate = () => {
     return false
   }
 
+  let imagemagic = DOM.el(`#imagemagic`)
+
+  if (App.is_mage && App.check_imagemagic()) {
+    if (imagemagic.checked) {
+      return true
+    }
+
+    let confirm_args = {
+      message: `Do you want to do imagemagic ?`,
+      callback_yes: () => {
+        imagemagic.checked = true
+        App.submit_form()
+      },
+      callback_no: () => {
+        imagemagic.checked = false
+        App.submit_form()
+      },
+    }
+
+    App.confirmbox(confirm_args)
+    return false
+  }
+
   return true
 }
 
@@ -516,4 +539,18 @@ App.check_audiomagic = () => {
   }
 
   return valid
+}
+
+App.check_imagemagic = () => {
+  let files = App.get_active_files()
+
+  if (files.length === 1) {
+    let file = files[0].files[0]
+
+    if (file) {
+      return (file.size >= App.imagemagic_min_size) && App.is_lossless_image(file)
+    }
+  }
+
+  return false
 }

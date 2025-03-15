@@ -338,6 +338,12 @@ class Config:
         # Enable or disable audiomagic
         self.audiomagic_enabled = True
 
+        # Image quality for imagemagic
+        self.imagemagic_quality = 77
+
+        # Minimum file size to apply imagemagic
+        self.imagemagic_min_size = 1_000000
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -451,6 +457,8 @@ class Config:
             set_value(c, "audiomagic_video_quality")
             set_value(c, "audiomagic_color")
             set_value(c, "audiomagic_enabled")
+            set_value(c, "imagemagic_quality")
+            set_value(c, "imagemagic_min_size")
 
             # Users
 
