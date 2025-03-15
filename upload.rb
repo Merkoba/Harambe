@@ -19,16 +19,28 @@ prompt = false
 OptionParser.new do |opts|
   opts.banner = "Usage: upload.rb [options] <file_path>"
 
-  opts.on("--compress", "Compress the file into a zip") do
-    compress = "on"
+  opts.on("--prompt", "Prompt for the title") do
+    prompt = true
+  end
+
+  opts.on("--zip", "Compress the file into a zip") do
+    zip = "on"
   end
 
   opts.on("--private", "Make the post private") do
     privacy = "private"
   end
 
-  opts.on("--prompt", "Prompt for title") do
-    prompt = true
+  opts.on("--image-magic", "Do image magic") do
+    image_magic = "on"
+  end
+
+  opts.on("--audio-magic", "Do audio magic") do
+    audio_magic = "on"
+  end
+
+  opts.on("--audio-image-magic", "Do audio magic") do
+    audio_image_magic = "on"
   end
 
   opts.on("-h", "--help", "Prints this help") do
@@ -75,8 +87,11 @@ form_data = [
   ["title", title],
   ["username", username],
   ["password", password],
-  ["compress", compress],
+  ["zip", zip],
   ["privacy", privacy],
+  ["image_magic", image_magic],
+  ["audio_magic", audio_magic],
+  ["audio_image_magic", audio_image_magic],
 ]
 
 request.set_form form_data, "multipart/form-data"
