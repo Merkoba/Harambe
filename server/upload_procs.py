@@ -161,6 +161,9 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         else:
             zip_archive = True
 
+    if image_magic or audio_magic or album_magic:
+        zip_archive = False
+
     if zip_archive:
         try:
             content = make_zip(files)
@@ -470,11 +473,7 @@ def is_album_magic(files: list[FileStorage]) -> bool:
         elif Path(file.filename).suffix[1:].lower() in utils.audio_exts():
             audio_count += 1
         else:
-            utils.q(file.filename)
             return False
-
-    utils.q(img_count)
-    utils.q(audio_count)
 
     if img_count > 1:
         return False
@@ -591,6 +590,31 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
         if not temp_files:
             return None, ""
 
+        total_duration = 0.0
+
+        for temp_file in temp_files:
+            result = subprocess.run(
+                [
+                    "ffprobe",
+                    "-v",
+                    "error",
+                    "-show_entries",
+                    "format=duration",
+                    "-of",
+                    "default=noprint_wrappers=1:nokey=1",
+                    temp_file,
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+
+            duration = float(result.stdout.strip())
+            total_duration += duration
+
+        if not total_duration:
+            return None, ""
+
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".txt", encoding="utf-8"
         ) as list_file:
@@ -636,7 +660,8 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                             "yuv420p",
                             "-vf",
                             f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
-                            "-shortest",
+                            "-t",
+                            str(total_duration),
                             "-threads",
                             "0",
                             "-y",

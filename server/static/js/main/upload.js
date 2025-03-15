@@ -265,7 +265,7 @@ App.add_picker = (show = false) => {
       e.preventDefault()
       App.reset_file(input)
     }
-    else if (e.target !== input) {
+    else if ((e.target !== input) && (e.target !== title)) {
       input.click()
     }
   })
@@ -274,6 +274,14 @@ App.add_picker = (show = false) => {
     if (e.button === 1) {
       e.preventDefault()
       App.remove_picker(el)
+    }
+  })
+
+  let title = DOM.el(`.picker_title`, el)
+
+  DOM.ev(title, `click`, (e) => {
+    if (input.files.length > 0) {
+      App.set_title(input.files[0].name || ``)
     }
   })
 
@@ -648,4 +656,12 @@ App.check_magic = () => {
 App.uploading = () => {
   App.flash(`Upload in progress`)
   document.title = document.title + ` | Uploading`
+}
+
+App.set_title = (title) => {
+  let input = DOM.el(`#title`)
+
+  if (input) {
+    input.value = title.trim()
+  }
 }
