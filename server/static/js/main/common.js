@@ -980,3 +980,14 @@ App.to_top = () => {
 App.to_bottom = () => {
   window.scrollTo(0, document.body.scrollHeight)
 }
+
+App.flash = (text) => {
+  let msg = Msg.factory({
+    closeable: false,
+    window_x: `none`,
+    class: `blue`,
+  })
+
+  msg.set(text)
+  msg.show()
+}

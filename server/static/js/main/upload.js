@@ -144,6 +144,7 @@ App.validate = () => {
     return App.check_magic()
   }
 
+  App.flash(`Upload in progress`)
   return true
 }
 
