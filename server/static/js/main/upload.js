@@ -149,6 +149,7 @@ App.validate = () => {
 }
 
 App.submit_form = () => {
+  App.flash(`Upload in progress`)
   DOM.el(`#form`).submit()
 }
 
@@ -603,7 +604,7 @@ App.check_magic = () => {
   if (App.is_mage && App.check_audio_image_magic()) {
     let confirm_args = {
       message: `Do you want to do audio image magic ?\n
-      This means the image and audio will be converted to an mp4 video.`,
+      This means the image and audio will joined into an mp4 video.`,
       callback_yes: () => {
         audio_image_magic.checked = true
         App.submit_form()
