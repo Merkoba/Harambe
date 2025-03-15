@@ -228,30 +228,30 @@ It supports moving to prev or next samples using arrow buttons, or keyboard arro
 
 It has a title with the file name, which when clicked opens the post.
 
-## Audiomage
+## Magic
 
-If an image and an audio file are uploaded, they will be turned into a video.
+Harambe knows some magic spells that convert or create files.
 
-The video being a single still image, and the full audio.
+To use these, a user must have the `mage` permission.
 
-This is a quick way to create nice music videos.
+On the web interface, if the file combination matches, the user is asked if they want to apply the magic action, which is basically `ffmpeg` and it can take a long time to complete, unless you have a nice `gpu` support on it.
 
-To be able to do this, users must have the `mage` permission.
-
-This is false by default.
+These spells are:
 
 ## Image Magic
 
-When a lossless format like png is uploaded and it is more than 1mb in size,
+Convert big images into jpg.
 
-the user is prompted if they want to do imagemagic.
-
-This will turn it into a slightly compressed jpg image.
+Triggers when a single big non `jpg` is going to be uploaded.
 
 ## Audiomagic
 
-Compress audio to v0 mp3.
+Convert big audio into mp3.
+
+Triggers when a single non `mp3` is going to be uploaded.
 
 ## Album Magic
 
-Join audio files into an mp3.
+Join an image with one or more audio files.
+
+Triggered when a single image and 1 or more audio files are going to be uploaded.
