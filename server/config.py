@@ -365,6 +365,9 @@ class Config:
         # Quality of album magic quality
         self.album_magic_quality = 0
 
+        # New users get the 'mage' permission by default
+        self.default_mage = False
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -486,6 +489,7 @@ class Config:
             set_value(c, "magic_enabled")
             set_value(c, "show_privacy_select")
             set_value(c, "album_magic_quality")
+            set_value(c, "default_mage")
 
             # Users
 

@@ -625,7 +625,10 @@ def register(request: Request) -> tuple[bool, str, User | None]:
     if database.username_exists(username):
         return False, "User already exists", None
 
-    user_id = database.add_user("add", username=username, password=password, name=name)
+    user_id = database.add_user(
+        "add", username=username, password=password, name=name, mage=config.default_mage
+    )
+
     user = get_user(user_id)
 
     if not user:
