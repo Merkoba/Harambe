@@ -141,7 +141,7 @@ App.validate = () => {
   App.clicked = true
   let audiomagic = DOM.el(`#audiomagic`)
 
-  if (App.check_audiomagic()) {
+  if (App.is_mage && App.check_audiomagic()) {
     if (audiomagic.checked) {
       return true
     }

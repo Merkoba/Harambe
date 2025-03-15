@@ -239,7 +239,7 @@ App.setup_user_opts = (show = false, back = false) => {
 
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_posts`, () => {
-      if (!App.reader) {
+      if (!App.is_reader) {
         App.login_feedback()
         return
       }
@@ -253,7 +253,7 @@ App.setup_user_opts = (show = false, back = false) => {
         App.location(`/list/posts?user_id=${user_id}`)
       }
     }, () => {
-      if (!App.reader) {
+      if (!App.is_reader) {
         App.login_feedback()
         return
       }
@@ -269,7 +269,7 @@ App.setup_user_opts = (show = false, back = false) => {
     })
 
     App.bind_button(`${name}_opts_reactions`, () => {
-      if (!App.reader) {
+      if (!App.is_reader) {
         App.login_feedback()
         return
       }
@@ -283,7 +283,7 @@ App.setup_user_opts = (show = false, back = false) => {
         App.location(`/list/reactions?user_id=${user_id}`)
       }
     }, () => {
-      if (!App.reader) {
+      if (!App.is_reader) {
         App.login_feedback()
         return
       }
@@ -299,7 +299,7 @@ App.setup_user_opts = (show = false, back = false) => {
     })
 
     App.bind_button(`${name}_opts_user`, () => {
-      if (!App.reader) {
+      if (!App.is_reader) {
         App.login_feedback()
         return
       }
@@ -307,7 +307,7 @@ App.setup_user_opts = (show = false, back = false) => {
       let user_id = App.user_opts_user_id
       App.location(`/edit_user/${user_id}`)
     }, () => {
-      if (!App.reader) {
+      if (!App.is_reader) {
         App.login_feedback()
         return
       }

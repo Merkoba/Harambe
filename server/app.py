@@ -161,12 +161,13 @@ def def_url() -> Any:
 def common_configs(user: User | None = None) -> dict[str, Any]:
     return {
         "is_user": bool(user),
-        "is_admin": user.admin if user else False,
+        "is_admin": user and user.admin,
+        "is_mage": user and user.mage,
+        "is_reader": (not config.list_private)
+        or ((user.admin or user.reader) if user else False),
         "user_id": user.id if user else 0,
         "username": user.username if user else "",
         "user_name": user.name if user else "",
-        "reader": (not config.list_private)
-        or ((user.admin or user.reader) if user else False),
         "background_color": config.background_color,
         "accent_color": config.accent_color,
         "text_color": config.text_color,
@@ -267,7 +268,6 @@ def show_upload() -> Any:
         max_password_length=config.max_user_password_length,
         max_upload_files=config.max_upload_files,
         show_compress=config.show_compress,
-        show_audiomagic=user and user.mage,
         banner=banner,
         **common_configs(user),
     )
