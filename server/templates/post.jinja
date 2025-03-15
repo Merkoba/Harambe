@@ -45,7 +45,7 @@
                     <div id="max" data-max_type="image" class="button" title="Maximize the image">Max</div>
                     <div class="sep">|</div>
                 </div>
-                {% elif post.video_embed %}
+                {% elif post.video_embed or post.audio_embed %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="video" class="button" title="Maximize the video">Max</div>
                     <div class="sep">|</div>
