@@ -339,10 +339,14 @@ class Config:
         self.audiomagic_enabled = True
 
         # Image quality for imagemagic
-        self.imagemagic_quality = 77
+        # 1-31, where 1 is best
+        self.imagemagic_quality = 8
 
         # Minimum file size to apply imagemagic
         self.imagemagic_min_size = 1_000000
+
+        # Enable or disable imagemagic
+        self.imagemagic_enabled = True
 
     # --- Methods ---
 
@@ -459,6 +463,7 @@ class Config:
             set_value(c, "audiomagic_enabled")
             set_value(c, "imagemagic_quality")
             set_value(c, "imagemagic_min_size")
+            set_value(c, "imagemagic_enabled")
 
             # Users
 

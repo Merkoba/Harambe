@@ -143,7 +143,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     audiomagic = False
 
     if len(files) == 1:
-        if get_bool(request, "imagemagic"):
+        if get_bool(request, "imagemagic") and config.imagemagic_enabled:
             imagemagic = True
     elif len(files) > 1:
         if (
@@ -532,14 +532,14 @@ def make_imagemagic(file: FileStorage) -> bytes | None:
     ):
         img_temp.write(content)
         img_temp.flush()
-        quality = str(config.imagemagic_quality) or "75"
+        quality = str(config.imagemagic_quality) or "6"
 
         process = subprocess.Popen(
             [
                 "ffmpeg",
                 "-i",
                 img_temp.name,
-                "-q:v",
+                "-qscale:v",
                 quality,
                 "-y",
                 output_temp.name,
