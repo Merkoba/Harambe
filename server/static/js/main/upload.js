@@ -647,5 +647,5 @@ App.check_magic = () => {
 
 App.uploading = () => {
   App.flash(`Upload in progress`)
-  document.title = window.title += ` | Uploading`
+  document.title = document.title + ` | Uploading`
 }
