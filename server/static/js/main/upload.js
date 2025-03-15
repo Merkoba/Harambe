@@ -584,7 +584,7 @@ App.check_magic = () => {
   if (App.is_mage && App.check_image_magic()) {
     let confirm_args = {
       message: `Do you want to do image magic&nbsp;?\n
-      This means the image will be converted to a small jpg.`,
+      This means the image will be converted to a jpg.`,
       callback_yes: () => {
         image_magic.checked = true
         App.submit_form()
@@ -605,7 +605,7 @@ App.check_magic = () => {
   if (App.is_mage && App.check_audio_magic()) {
     let confirm_args = {
       message: `Do you want to do audio magic&nbsp;?\n
-      This means the audio will be converted to a small mp3.`,
+      This means the audio will be converted to an mp3.`,
       callback_yes: () => {
         audio_magic.checked = true
         App.submit_form()
