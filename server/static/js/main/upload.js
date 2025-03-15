@@ -50,11 +50,6 @@ App.init = () => {
   let video = DOM.el(`#video`)
 
   if (video) {
-    DOM.ev(video, `loadeddata`, () => {
-      video.muted = true
-      video.play()
-    })
-
     DOM.ev(video, `auxclick`, (e) => {
       App.reset_file()
     })
