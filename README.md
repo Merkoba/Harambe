@@ -176,6 +176,12 @@ Optional flag `--zip` makes a zip file on the server.
 
 Optional flag `--private` will make an unlisted post.
 
+Optional flag `--image-magic` to perform image magic if possible.
+
+Optional flag `--audio-magic` to perform audio magic if possible.
+
+Optional flag `--album-magic` to perform album magic if possible.
+
 ---
 
 ## Zip Archives
