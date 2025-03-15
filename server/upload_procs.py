@@ -172,7 +172,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             result = make_imagemagic(files[0])
             end = time.time()
             d = round(end - start, 2)
-            utils.q(f"imagemagic took {d} seconds")
+            utils.q(f"Imagemagic took {d} seconds")
 
             if not result:
                 return error("Failed to make imagemagic")
@@ -192,7 +192,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             result = make_audiomagic(files)
             end = time.time()
             d = round(end - start, 2)
-            utils.q(f"audiomagic took {d} seconds")
+            utils.q(f"Audiomagic took {d} seconds")
 
             if not result:
                 return error("Failed to make audiomagic")

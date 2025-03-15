@@ -239,3 +239,11 @@ This is a quick way to create nice music videos.
 To be able to do this, users must have the `mage` permission.
 
 This is false by default.
+
+## Imagemagic
+
+When a lossless format like png is uploaded and it is more than 1mb in size,
+
+the user is prompted if they want to do imagemagic.
+
+This will turn it into a slightly compressed jpg image.
