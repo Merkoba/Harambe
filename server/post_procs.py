@@ -210,10 +210,14 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
 
 def get_postlist(
-    user_id: int | None = None, full_reactions: bool = False
+    user_id: int | None = None, full_reactions: bool = False, only_public: bool = False
 ) -> list[Post]:
     now = utils.now()
-    posts = database.get_posts(user_id=user_id, full_reactions=full_reactions)
+
+    posts = database.get_posts(
+        user_id=user_id, full_reactions=full_reactions, only_public=only_public
+    )
+
     return [make_post(post, now) for post in posts]
 
 
@@ -242,7 +246,7 @@ def get_posts(
     query = utils.decode(query)
     query = utils.clean_query(query)
 
-    for post in get_postlist(user_id):
+    for post in get_postlist(user_id, only_public=only_listed):
         if only_listed:
             if not post.listed:
                 continue

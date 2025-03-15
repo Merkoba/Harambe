@@ -257,22 +257,27 @@ def get_posts(
     file_hash: str | None = None,
     extra: bool = True,
     full_reactions: bool = False,
+    only_public: bool = False,
     oconn: Connection | None = None,
 ) -> list[Post]:
     connection = get_conn(oconn)
     conn, c = connection.tuple()
+    pub = " and privacy = 'public'" if only_public else ""
 
     if post_id:
-        c.execute("select * from posts where id = ?", (post_id,))
+        c.execute(f"select * from posts where id = ?{pub}", (post_id,))
         rows = [c.fetchone()]
     elif name:
-        c.execute("select * from posts where name = ?", (name,))
+        c.execute(f"select * from posts where name = ?{pub}", (name,))
         rows = [c.fetchone()]
     elif user_id:
-        c.execute("select * from posts where user = ?", (user_id,))
+        c.execute(f"select * from posts where user = ?{pub}", (user_id,))
         rows = c.fetchall()
     elif file_hash:
-        c.execute("select * from posts where file_hash = ?", (file_hash,))
+        c.execute(f"select * from posts where file_hash = ?{pub}", (file_hash,))
+        rows = c.fetchall()
+    elif only_public:
+        c.execute("select * from posts where privacy = 'public'")
         rows = c.fetchall()
     else:
         c.execute("select * from posts")
@@ -362,7 +367,7 @@ def edit_post_privacy(post_id: int, privacy: str) -> None:
 def get_next_post(current: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    c.execute("select * from posts where name = ?", (current,))
+    c.execute("select * from posts where name = ? and privacy = 'public'", (current,))
     row = c.fetchone()
 
     if not row:
@@ -738,7 +743,7 @@ def get_post_count(user_id: int | None = None, oconn: Connection | None = None) 
 def get_latest_post() -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    c.execute("select * from posts order by date desc limit 1")
+    c.execute("select * from posts where privacy = 'public' order by date desc limit 1")
     row = c.fetchone()
     conn.close()
 
