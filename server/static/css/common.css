@@ -211,6 +211,11 @@ a.linkbutton:hover {
     flex-shrink: 0;
 }
 
+#confirmbox_message {
+    white-space: pre-wrap;
+    max-width: 20rem;
+}
+
 #confirmbox_buttons {
     padding-top: 1rem;
     display: flex;

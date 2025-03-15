@@ -553,7 +553,8 @@ App.check_magic = () => {
 
   if (App.is_mage && App.check_audio_image_magic()) {
     let confirm_args = {
-      message: `Do you want to do audio image magic ?`,
+      message: `Do you want to do audio image magic ?\n
+      This means the image and audio will be converted to an mp4 video.`,
       callback_yes: () => {
         audio_image_magic.checked = true
         App.submit_form()
@@ -572,7 +573,8 @@ App.check_magic = () => {
 
   if (App.is_mage && App.check_audio_magic()) {
     let confirm_args = {
-      message: `Do you want to do audio magic ?`,
+      message: `Do you want to do audio magic ?\n
+      This means the audio will be converted to a small mp3.`,
       callback_yes: () => {
         audio_magic.checked = true
         App.submit_form()
@@ -591,7 +593,8 @@ App.check_magic = () => {
 
   if (App.is_mage && App.check_image_magic()) {
     let confirm_args = {
-      message: `Do you want to do image magic ?`,
+      message: `Do you want to do image magic ?\n
+      This means the image will be converted to a small jpg.`,
       callback_yes: () => {
         image_magic.checked = true
         App.submit_form()
