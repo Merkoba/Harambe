@@ -143,6 +143,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     audio_magic = False
     video_magic = False
     album_magic = False
+    gif_magic = False
 
     if len(files) == 1:
         if config.magic_enabled:
@@ -157,10 +158,16 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             user.mage
             and config.magic_enabled
             and get_bool(request, "album_magic")
-            and config.album_magic_enabled
             and is_album_magic(files)
         ):
             album_magic = True
+        elif (
+            user.mage
+            and config.magic_enabled
+            and get_bool(request, "gif_magic")
+            and is_gif_magic(files)
+        ):
+            gif_magic = True
         else:
             zip_archive = True
 
@@ -499,6 +506,9 @@ def is_video_magic(file: FileStorage) -> bool:
 
 
 def is_album_magic(files: list[FileStorage]) -> bool:
+    if not config.album_magic_enabled:
+        return False
+
     img_count = 0
     audio_count = 0
 
@@ -520,6 +530,21 @@ def is_album_magic(files: list[FileStorage]) -> bool:
         return audio_count > 1
 
     return False
+
+
+def is_gif_magic(files: list[FileStorage]) -> bool:
+    if not config.gif_magic_enabled:
+        return False
+
+    img_count = 0
+
+    for file in files:
+        if file.content_type.startswith("image/"):
+            img_count += 1
+        else:
+            return False
+
+    return img_count >= 2
 
 
 def make_image_magic(file: FileStorage) -> bytes | None:

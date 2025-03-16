@@ -70,6 +70,7 @@ a.link:hover,
 }
 
 #image {
+    min-width: 28rem;
     max-width: 60%;
     height: auto;
     margin-top: 0.45rem;

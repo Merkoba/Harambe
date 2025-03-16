@@ -374,6 +374,9 @@ class Config:
         # Enable or disable album magic
         self.album_magic_enabled = True
 
+        # Enable or disable gif magic
+        self.gif_magic_enabled = True
+
         # Enable all kinds of magic
         self.magic_enabled = True
 
@@ -502,6 +505,7 @@ class Config:
             set_value(c, "album_magic_video_quality")
             set_value(c, "album_magic_color")
             set_value(c, "album_magic_enabled")
+            set_value(c, "gif_magic_enabled")
             set_value(c, "image_magic_quality")
             set_value(c, "image_magic_min_size")
             set_value(c, "image_magic_enabled")

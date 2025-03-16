@@ -535,11 +535,10 @@ App.check_album_magic = () => {
     return
   }
 
-  let files = App.get_active_files()
   let image_count = 0
   let audio_count = 0
 
-  for (let file of files) {
+  for (let file of App.get_active_files()) {
     let current = file.files[0]
 
     if (App.is_image(current)) {
@@ -567,6 +566,33 @@ App.check_album_magic = () => {
   return false
 }
 
+App.check_gif_magic = () => {
+  if (!App.gif_magic_enabled) {
+    return false
+  }
+
+  let checkbox = DOM.el(`#gif_magic`)
+
+  if (!checkbox) {
+    return
+  }
+
+  let image_count = 0
+
+  for (let file of App.get_active_files()) {
+    let current = file.files[0]
+
+    if (App.is_image(current)) {
+      image_count++
+    }
+    else {
+      return false
+    }
+  }
+
+  return image_count >= 2
+}
+
 App.check_magic = () => {
   if (!App.magic_enabled || !App.is_mage) {
     return true
@@ -578,6 +604,9 @@ App.check_magic = () => {
 
     if (what === `album`) {
       ok = App.check_album_magic()
+    }
+    else if (what === `gif`) {
+      ok = App.check_gif_magic()
     }
     else {
       ok = App.check_media_magic(what)
