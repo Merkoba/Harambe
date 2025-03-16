@@ -438,11 +438,11 @@ App.check_files_used = () => {
 
   let c = DOM.el(`#pickers`)
 
-  if (files.length === 1) {
-    c.classList.add(`single`)
+  if ((files.length === 1) && (files[0].files.length === 0)) {
+    c.classList.add(`empty`)
   }
   else {
-    c.classList.remove(`single`)
+    c.classList.remove(`empty`)
   }
 }
 

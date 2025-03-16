@@ -186,13 +186,13 @@ a.dialog_button:hover {
 }
 
 .unused .picker_button_2,
-#pickers.single .picker_remove
+#pickers.empty .picker_remove
 {
     filter: grayscale(1);
 }
 
 .unused .picker_button_2:hover,
-#pickers.single .picker_remove:hover
+#pickers.empty .picker_remove:hover
 {
     filter: unset;
     outline: unset;
