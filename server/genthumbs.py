@@ -1,6 +1,6 @@
 import utils
 import post_procs
-import upload_procs
+import sample_procs
 from pathlib import Path
 
 sd = utils.samples_dir()
@@ -23,12 +23,12 @@ for post in post_procs.get_postlist():
 
     try:
         if post.mtype.startswith("image"):
-            upload_procs.get_image_sample(path)
+            sample_procs.get_image_sample(path)
         elif post.mtype.startswith("video"):
-            upload_procs.get_video_sample(path)
+            sample_procs.get_video_sample(path)
         elif post.mtype.startswith("audio"):
-            upload_procs.get_audio_sample(path)
+            sample_procs.get_audio_sample(path)
         elif utils.is_text_file(path):
-            upload_procs.get_text_sample(path)
+            sample_procs.get_text_sample(path)
     except Exception:
         pass

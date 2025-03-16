@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-# Libraries
+# Standard
 import subprocess
 import tempfile
 from pathlib import Path
+
+# Libraries
 from werkzeug.datastructures import FileStorage  # type: ignore
 
 # Modules
 from config import config
-import utils
-
 
 
 def is_image_magic(file: FileStorage) -> bool:
@@ -342,7 +342,10 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
 
     try:
         for file in files:
-            temp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
+            temp = tempfile.NamedTemporaryFile(
+                suffix=".jpg", delete=False, encoding="utf-8"
+            )
+
             temp.write(file.read())
             temp.close()
             file.seek(0)
@@ -351,9 +354,13 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
         if not temp_files:
             return None
 
-        list_file = tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False)
+        list_file = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".txt", delete=False, encoding="utf-8"
+        )
+
         list_file_path = list_file.name
-        frame_duration = getattr(config, "gif_magic_frame_duration", 0.2)  # seconds per frame
+
+        frame_duration = getattr(config, "gif_magic_frame_duration", 0.2)
 
         for temp_file in temp_files:
             list_file.write(f"file '{temp_file}'\n")
@@ -368,14 +375,20 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
 
             cmd = [
                 "ffmpeg",
-                "-f", "concat",
-                "-safe", "0",
-                "-i", list_file_path,
-                "-vf", f"scale={width}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse,format=rgba,pad=iw:ih:(ow-iw)/2:(oh-ih)/2:color={bg_color}@1",
-                "-loop", "0",
-                "-threads", "0",
+                "-f",
+                "concat",
+                "-safe",
+                "0",
+                "-i",
+                list_file_path,
+                "-vf",
+                f"scale={width}:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse,format=rgba,pad=iw:ih:(ow-iw)/2:(oh-ih)/2:color={bg_color}@1",
+                "-loop",
+                "0",
+                "-threads",
+                "0",
                 "-y",
-                output_temp.name
+                output_temp.name,
             ]
 
             process = subprocess.Popen(

@@ -4,7 +4,6 @@ from __future__ import annotations
 import zipfile
 import hashlib
 import mimetypes
-import subprocess
 import time
 from typing import Any
 from pathlib import Path
@@ -18,11 +17,11 @@ from werkzeug.datastructures import FileStorage  # type: ignore
 # Modules
 import utils
 import database
-from config import config
+import magic
 import post_procs
 import user_procs
-import magic
-import samples
+import sample_procs
+from config import config
 from user_procs import User
 
 
@@ -298,22 +297,20 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if config.samples_enabled:
         try:
             if zip_archive:
-                samples.get_zip_sample(path, files)
+                sample_procs.get_zip_sample(path, files)
             elif mtype.startswith("image"):
-                samples.get_image_sample(path)
+                sample_procs.get_image_sample(path)
             elif mtype.startswith("video"):
-                samples.get_video_sample(path)
+                sample_procs.get_video_sample(path)
             elif mtype.startswith("audio"):
-                samples.get_audio_sample(path)
+                sample_procs.get_audio_sample(path)
             elif utils.is_text_file(path):
-                samples.get_text_sample(path)
+                sample_procs.get_text_sample(path)
         except Exception:
             try:
-                samples.get_text_sample(path)
+                sample_procs.get_text_sample(path)
             except Exception:
                 pass
-
-            utils.error("Failed to create sample")
 
     database.update_user_last_date(user.id)
     post_procs.check_storage()
