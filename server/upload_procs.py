@@ -141,14 +141,17 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     zip_archive = False
     image_magic = False
     audio_magic = False
+    video_magic = False
     album_magic = False
 
     if len(files) == 1:
         if config.magic_enabled:
-            if get_bool(request, "image_magic") and config.image_magic_enabled:
+            if get_bool(request, "image_magic") and is_image_magic(files[0]):
                 image_magic = True
-            elif get_bool(request, "audio_magic") and config.audio_magic_enabled:
+            elif get_bool(request, "audio_magic") and is_audio_magic(files[0]):
                 audio_magic = True
+            elif get_bool(request, "video_magic") and is_video_magic(files[0]):
+                video_magic = True
     elif len(files) > 1:
         if (
             user.mage
@@ -161,7 +164,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         else:
             zip_archive = True
 
-    if image_magic or audio_magic or album_magic:
+    if image_magic or audio_magic or video_magic or album_magic:
         zip_archive = False
 
     if zip_archive:
@@ -213,6 +216,26 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         except Exception as e:
             utils.error(e)
             return error("Failed to make audio magic")
+    elif video_magic:
+        try:
+            start = time.time()
+            result = make_video_magic(files[0])
+            end = time.time()
+            d = round(end - start, 2)
+            utils.q(f"Video magic took {d} seconds")
+
+            if not result:
+                return error("Failed to make video magic")
+
+            content = result
+            original = ""
+            ext = ".mp4"
+
+            if not content:
+                return error("Failed to make video magic")
+        except Exception as e:
+            utils.error(e)
+            return error("Failed to make video magic")
     elif album_magic:
         try:
             start = time.time()
@@ -463,14 +486,26 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
     sample_path.write_text(sample)
 
 
+def is_image_magic(file: FileStorage) -> bool:
+    return config.image_magic_enabled and file.content_type.startswith("image/")
+
+
+def is_audio_magic(file: FileStorage) -> bool:
+    return config.audio_magic_enabled and file.content_type.startswith("audio/")
+
+
+def is_video_magic(file: FileStorage) -> bool:
+    return config.video_magic_enabled and file.content_type.startswith("video/")
+
+
 def is_album_magic(files: list[FileStorage]) -> bool:
     img_count = 0
     audio_count = 0
 
     for file in files:
-        if Path(file.filename).suffix[1:].lower() in utils.image_exts():
+        if file.content_type.startswith("image/"):
             img_count += 1
-        elif Path(file.filename).suffix[1:].lower() in utils.audio_exts():
+        elif file.content_type.startswith("audio/"):
             audio_count += 1
         else:
             return False
@@ -559,18 +594,61 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
         return output_temp.read()
 
 
+def make_video_magic(file: FileStorage) -> bytes | None:
+    content = file.read()
+
+    with (
+        tempfile.NamedTemporaryFile(suffix=".video") as video_temp,
+        tempfile.NamedTemporaryFile(suffix=".mp4") as output_temp,
+    ):
+        video_temp.write(content)
+        video_temp.flush()
+        crf = str(config.video_magic_quality) or "28"
+        aq = str(config.video_magic_audio_quality) or "0"
+
+        process = subprocess.Popen(
+            [
+                "ffmpeg",
+                "-i",
+                video_temp.name,
+                "-c:v",
+                "libx264",
+                "-preset",
+                "medium",
+                "-crf",
+                crf,
+                "-c:a",
+                "libmp3lame",
+                "-q:a",
+                aq,
+                "-movflags",
+                "+faststart",
+                "-threads",
+                "0",
+                "-y",
+                output_temp.name,
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
+        _, _ = process.communicate()
+
+        if process.returncode != 0:
+            return None
+
+        output_temp.seek(0)
+        return output_temp.read()
+
+
 def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None, str]:
     temp_files = []
     image_file = None
 
     try:
         for file in files:
-            extension = Path(file.filename).suffix[1:].lower()
-            if extension in utils.image_exts():
-                image_temp = tempfile.NamedTemporaryFile(
-                    suffix=f".{extension}", delete=False
-                )
-
+            if file.content_type.startswith("image/"):
+                image_temp = tempfile.NamedTemporaryFile(suffix=".image", delete=False)
                 image_temp.write(file.read())
                 image_temp.close()
                 file.seek(0)
@@ -578,9 +656,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                 break
 
         for file in files:
-            extension = Path(file.filename).suffix[1:].lower()
-
-            if extension in utils.audio_exts():
+            if file.content_type.startswith("audio/"):
                 temp = tempfile.NamedTemporaryFile(suffix=".audio", delete=False)
                 temp.write(file.read())
                 temp.close()
@@ -626,10 +702,10 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
 
             if image_file:
                 with tempfile.NamedTemporaryFile(suffix=".mp4") as output_temp:
-                    w = getattr(config, "album_magic_width", 640)
-                    h = getattr(config, "album_magic_height", 480)
-                    crf = getattr(config, "album_magic_video_quality", 23)
-                    bg = getattr(config, "album_magic_color", "black")
+                    w = str(config.album_magic_width) or "640"
+                    h = str(config.album_magic_height) or "480"
+                    crf = str(config.album_magic_video_quality) or "28"
+                    bg = str(config.album_magic_color) or "black"
 
                     process = subprocess.Popen(
                         [

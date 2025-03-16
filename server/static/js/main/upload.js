@@ -168,7 +168,6 @@ App.reflect_file = (file) => {
   let the_file = file.files[0]
   let image = DOM.el(`#image`)
   let video = DOM.el(`#video`)
-  z = the_file
 
   if (App.is_image(the_file)) {
     let reader = new FileReader()

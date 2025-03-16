@@ -342,6 +342,10 @@ class Config:
         # Higher = lower quality
         self.video_magic_quality = 28
 
+        # Quality for video magic audio
+        # 0 is the highest VBR quality
+        self.video_magic_audio_quality = 0
+
         # Enable or disable video magic
         self.video_magic_enabled = True
 
@@ -505,6 +509,7 @@ class Config:
             set_value(c, "audio_magic_enabled")
             set_value(c, "audio_magic_min_size")
             set_value(c, "video_magic_quality")
+            set_value(c, "video_magic_audio_quality")
             set_value(c, "video_magic_enabled")
             set_value(c, "video_magic_min_size")
             set_value(c, "magic_enabled")
