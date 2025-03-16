@@ -309,9 +309,10 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                         stderr=subprocess.PIPE,
                     )
 
-                    _, _ = process.communicate()
+                    _, stderr = process.communicate()
 
                     if process.returncode != 0:
+                        utils.error(f"FFmpeg error 1: {stderr.decode()}")
                         return None, ""
 
                     output_temp.seek(0)
@@ -340,9 +341,10 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                         stderr=subprocess.PIPE,
                     )
 
-                    _, _ = process.communicate()
+                    _, stderr = process.communicate()
 
                     if process.returncode != 0:
+                        utils.error(f"FFmpeg error 2: {stderr.decode()}")
                         return None, ""
 
                     output_temp.seek(0)
@@ -390,7 +392,12 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                     str(output_path),
                 ]
 
-                process = subprocess.run(pre_cmd, capture_output=True, check=True)
+                process = subprocess.Popen(
+                    pre_cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+                _, _ = process.communicate()
 
                 if process.returncode != 0:
                     return None
@@ -410,7 +417,12 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                 str(palette_file),
             ]
 
-            process = subprocess.run(palette_cmd, capture_output=True, check=True)
+            process = subprocess.Popen(
+                palette_cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            _, _ = process.communicate()
 
             if process.returncode != 0:
                 return None
@@ -433,7 +445,12 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                 output_temp.name,
             ]
 
-            process = subprocess.run(cmd, capture_output=True, check=True)
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            _, _ = process.communicate()
 
             if process.returncode != 0:
                 return None

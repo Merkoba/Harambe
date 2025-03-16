@@ -107,7 +107,7 @@ def log(s: str) -> None:
     print(s)  # noqa
 
 
-def error(e: Exception) -> None:
+def error(e: Exception | str) -> None:
     q(e)
 
 
