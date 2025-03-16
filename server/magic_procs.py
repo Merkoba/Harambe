@@ -340,10 +340,12 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
         fps = str(config.gif_magic_fps or "2")
 
         # Step 1: Save and scale all input images
+        scaled_files = []
         for i, file in enumerate(files):
             # Save original image
             input_path = Path(temp_dir) / f"image_{i:03d}{Path(file.filename).suffix}"
             output_path = Path(temp_dir) / f"scaled_{i:03d}.png"
+            scaled_files.append(str(output_path))
 
             with input_path.open("wb") as f:
                 f.write(file.read())
@@ -362,19 +364,21 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                 ],
             )
 
-        # Step 2: Generate optimized color palette
+        if not scaled_files:
+            return None
+
+        # Step 2: Generate optimized color palette from all frames
         palette_path = Path(temp_dir) / "palette.png"
 
+        # Use pattern matching for input files instead of concat demuxer
         utils.run_cmd(
             [
                 "ffmpeg",
                 "-y",
                 "-framerate",
                 fps,
-                "-pattern_type",
-                "glob",
                 "-i",
-                str(Path(temp_dir) / "scaled_*.png"),
+                str(Path(temp_dir) / "scaled_%03d.png"),
                 "-vf",
                 "palettegen=stats_mode=diff",
                 str(palette_path),
@@ -389,10 +393,8 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                     "-y",
                     "-framerate",
                     fps,
-                    "-pattern_type",
-                    "glob",
                     "-i",
-                    str(Path(temp_dir) / "scaled_*.png"),
+                    str(Path(temp_dir) / "scaled_%03d.png"),
                     "-i",
                     str(palette_path),
                     "-filter_complex",
@@ -406,6 +408,9 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
             output_file.seek(0)
             return output_file.read()
 
+    except Exception as e:
+        utils.error(f"Error creating GIF: {e}")
+        return None
     finally:
         if temp_dir:
             shutil.rmtree(temp_dir, ignore_errors=True)
