@@ -435,6 +435,15 @@ App.check_files_used = () => {
       file.parentElement.classList.remove(`unused`)
     }
   }
+
+  let c = DOM.el(`#pickers`)
+
+  if (files.length === 1) {
+    c.classList.add(`single`)
+  }
+  else {
+    c.classList.remove(`single`)
+  }
 }
 
 App.remove_all_pickers = () => {
