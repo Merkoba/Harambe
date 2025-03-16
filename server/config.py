@@ -405,6 +405,10 @@ class Config:
         # If empty string, no code is needed
         self.register_code = ""
 
+        # Used to fill 'original' from title when empty
+        # Used in post_procs.py
+        self.original_title_length = 30
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
@@ -537,6 +541,7 @@ class Config:
             set_value(c, "album_magic_quality")
             set_value(c, "default_mage")
             set_value(c, "register_code")
+            set_value(c, "original_title_length")
 
             # Users
 

@@ -15,6 +15,14 @@ from config import config
 import utils
 
 
+def run_cmd(command: list[str]) -> subprocess.CompletedProcess[str]:
+    try:
+        return subprocess.run(command, check=True, capture_output=True, text=True)
+    except subprocess.CalledProcessError as e:
+        utils.error(f"Error: {e.stderr.strip()}")
+        raise
+
+
 def is_image_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "image_magic"):
         return False
@@ -98,7 +106,7 @@ def make_image_magic(file: FileStorage) -> bytes | None:
         img_temp.flush()
         quality = str(config.image_magic_quality) or "6"
 
-        process = subprocess.Popen(
+        run_cmd(
             [
                 "ffmpeg",
                 "-i",
@@ -108,14 +116,7 @@ def make_image_magic(file: FileStorage) -> bytes | None:
                 "-y",
                 output_temp.name,
             ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
         )
-
-        _, _ = process.communicate()
-
-        if process.returncode != 0:
-            return None
 
         output_temp.seek(0)
         return output_temp.read()
@@ -132,7 +133,7 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
         audio_temp.flush()
         aq = str(config.audio_magic_quality)
 
-        process = subprocess.Popen(
+        run_cmd(
             [
                 "ffmpeg",
                 "-i",
@@ -146,14 +147,7 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
                 "-y",
                 output_temp.name,
             ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
         )
-
-        _, _ = process.communicate()
-
-        if process.returncode != 0:
-            return None
 
         output_temp.seek(0)
         return output_temp.read()
@@ -171,7 +165,7 @@ def make_video_magic(file: FileStorage) -> bytes | None:
         crf = str(config.video_magic_quality) or "28"
         aq = str(config.video_magic_audio_quality) or "0"
 
-        process = subprocess.Popen(
+        run_cmd(
             [
                 "ffmpeg",
                 "-i",
@@ -193,14 +187,7 @@ def make_video_magic(file: FileStorage) -> bytes | None:
                 "-y",
                 output_temp.name,
             ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
         )
-
-        _, _ = process.communicate()
-
-        if process.returncode != 0:
-            return None
 
         output_temp.seek(0)
         return output_temp.read()
@@ -234,7 +221,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
         total_duration = 0.0
 
         for temp_file in temp_files:
-            result = subprocess.run(
+            result = run_cmd(
                 [
                     "ffprobe",
                     "-v",
@@ -245,9 +232,6 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                     "default=noprint_wrappers=1:nokey=1",
                     temp_file,
                 ],
-                capture_output=True,
-                text=True,
-                check=True,
             )
 
             duration = float(result.stdout.strip())
@@ -272,7 +256,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                     crf = str(config.album_magic_video_quality) or "28"
                     bg = str(config.album_magic_color) or "black"
 
-                    process = subprocess.Popen(
+                    run_cmd(
                         [
                             "ffmpeg",
                             "-f",
@@ -308,21 +292,13 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                             "-y",
                             output_temp.name,
                         ],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
                     )
-
-                    _, stderr = process.communicate()
-
-                    if process.returncode != 0:
-                        utils.error(f"FFmpeg error 1: {stderr.decode()}")
-                        return None, ""
 
                     output_temp.seek(0)
                     return output_temp.read(), "mp4"
             else:
                 with tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp:
-                    process = subprocess.Popen(
+                    run_cmd(
                         [
                             "ffmpeg",
                             "-f",
@@ -340,15 +316,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                             "-y",
                             output_temp.name,
                         ],
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE,
                     )
-
-                    _, stderr = process.communicate()
-
-                    if process.returncode != 0:
-                        utils.error(f"FFmpeg error 2: {stderr.decode()}")
-                        return None, ""
 
                     output_temp.seek(0)
                     return output_temp.read(), "mp3"
@@ -385,7 +353,7 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
             file.seek(0)  # Reset file pointer
 
             # Scale and pad image while preserving aspect ratio
-            result = subprocess.run(
+            run_cmd(
                 [
                     "ffmpeg",
                     "-y",
@@ -395,16 +363,12 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                     f"scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=black",
                     str(output_path),
                 ],
-                check=True,
-                capture_output=True,
             )
-
-            if result.returncode != 0:
-                return None
 
         # Step 2: Generate optimized color palette
         palette_path = Path(temp_dir) / "palette.png"
-        result = subprocess.run(
+
+        run_cmd(
             [
                 "ffmpeg",
                 "-y",
@@ -418,16 +382,11 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                 "palettegen=stats_mode=diff",
                 str(palette_path),
             ],
-            check=True,
-            capture_output=True,
         )
-
-        if result.returncode != 0:
-            return None
 
         # Step 3: Create final GIF using the optimized palette
         with tempfile.NamedTemporaryFile(suffix=".gif") as output_file:
-            result = subprocess.run(
+            run_cmd(
                 [
                     "ffmpeg",
                     "-y",
@@ -445,12 +404,7 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                     "0",
                     output_file.name,
                 ],
-                check=True,
-                capture_output=True,
             )
-
-            if result.returncode != 0:
-                return None
 
             output_file.seek(0)
             return output_file.read()
