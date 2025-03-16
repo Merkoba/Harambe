@@ -115,25 +115,32 @@ App.select_all = (el) => {
   selection.addRange(range)
 }
 
-App.is_image = (file) => {
-  return file.type.match(`image/*`)
-}
-
 App.is_lossless_image = (file) => {
-  let formats = new Set([
-    `image/png`, `image/tiff`, `image/webp`, `image/bmp`,
-  ])
+  let allowed = [
+    `image/jpeg`,
+  ]
 
-  return formats.has(file.type)
+  return App.is_image(file) && !allowed.includes(file.type)
 }
 
 App.is_lossless_audio = (file) => {
-  let formats = new Set([
-    `audio/wav`, `audio/flac`, `audio/alac`,
-    `audio/ape`, `audio/pcm`, `audio/aiff`, `audio/aif`,
-  ])
+  let allowed = [
+    `audio/mpeg`,
+  ]
 
-  return formats.has(file.type)
+  return App.is_audio(file) && !allowed.includes(file.type)
+}
+
+App.is_lossless_video = (file) => {
+  let allowed = [
+    `video/mp4`,
+  ]
+
+  return App.is_video(file) && !allowed.includes(file.type)
+}
+
+App.is_image = (file) => {
+  return file.type.match(`image/*`)
 }
 
 App.is_audio = (file) => {

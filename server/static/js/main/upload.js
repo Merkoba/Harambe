@@ -168,6 +168,7 @@ App.reflect_file = (file) => {
   let the_file = file.files[0]
   let image = DOM.el(`#image`)
   let video = DOM.el(`#video`)
+  z = the_file
 
   if (App.is_image(the_file)) {
     let reader = new FileReader()
@@ -486,52 +487,33 @@ App.setup_pickers = () => {
   }
 }
 
-App.check_image_magic = () => {
-  if (!App.image_magic_enabled) {
+App.check_media_magic = (what) => {
+  if (!App[`${what}_magic_enabled`]) {
     return false
   }
 
-  let checkbox = DOM.el(`#image_magic`)
+  let checkbox = DOM.el(`#${what}_magic`)
 
   if (!checkbox) {
     return
   }
 
   let files = App.get_active_files()
-  let valid = false
 
-  if (files.length === 1) {
-    let file = files[0].files[0]
-    if (App.is_image(file) && App.is_lossless_image(file)) {
-      valid = true
-    }
-  }
-
-  return valid
-}
-
-App.check_audio_magic = () => {
-  if (!App.audio_magic_enabled) {
+  if (files.length !== 1) {
     return false
   }
 
-  let checkbox = DOM.el(`#audio_magic`)
+  let file = files[0].files[0]
+  let min_size = App[`${what}_magic_min_size`]
 
-  if (!checkbox) {
-    return
-  }
-
-  let files = App.get_active_files()
-  let valid = false
-
-  if (files.length === 1) {
-    let file = files[0].files[0]
-    if (App.is_audio(file) && App.is_lossless_audio(file)) {
-      valid = true
+  if (min_size > 0) {
+    if (file.size > min_size) {
+      return false
     }
   }
 
-  return valid
+  return App[`is_lossless_${what}`](file)
 }
 
 App.check_album_magic = () => {
@@ -550,7 +532,7 @@ App.check_album_magic = () => {
   let audio_count = 0
 
   for (let file of files) {
-    const current = file.files[0]
+    let current = file.files[0]
 
     if (App.is_image(current)) {
       image_count++
@@ -578,75 +560,63 @@ App.check_album_magic = () => {
 }
 
 App.check_magic = () => {
-  if (!App.magic_enabled) {
+  if (!App.magic_enabled || !App.is_mage) {
     return true
   }
 
-  let labels = {
-    yes: `Do that`,
-    no: `Just Upload`,
-  }
+  function check_media(what, msg) {
+    let cb = DOM.el(`#${what}_magic`)
+    let ok = false
 
-  let image_magic = DOM.el(`#image_magic`)
+    if (what === `album`) {
+      ok = App.check_album_magic()
+    }
+    else {
+      ok = App.check_media_magic(what)
+    }
 
-  if (App.is_mage && App.check_image_magic()) {
+    if (!ok) {
+      return false
+    }
+
     let confirm_args = {
-      message: `Do you want to do image magic&nbsp;?\n
-      This means the image will be converted to a jpg.`,
+      message: `Do you want to do ${what} magic&nbsp;?\n
+      ${msg}.`,
       callback_yes: () => {
-        image_magic.checked = true
+        cb.checked = true
         App.submit_form()
       },
       callback_no: () => {
-        image_magic.checked = false
+        cb.checked = false
         App.submit_form()
       },
-      ...labels,
+      labels: {
+        yes: `Do that`,
+        no: `Just Upload`,
+      },
     }
 
     App.confirmbox(confirm_args)
+    return true
+  }
+
+  if (check_media(`image`,
+    `This means the image will be converted to a jpg`)) {
     return false
   }
 
-  let audio_magic = DOM.el(`#audio_magic`)
-
-  if (App.is_mage && App.check_audio_magic()) {
-    let confirm_args = {
-      message: `Do you want to do audio magic&nbsp;?\n
-      This means the audio will be converted to an mp3.`,
-      callback_yes: () => {
-        audio_magic.checked = true
-        App.submit_form()
-      },
-      callback_no: () => {
-        audio_magic.checked = false
-        App.submit_form()
-      },
-      ...labels,
-    }
-
-    App.confirmbox(confirm_args)
+  if (check_media(`audio`,
+    `This means the audio will be converted to an mp3`)) {
     return false
   }
 
-  let album_magic = DOM.el(`#album_magic`)
+  if (check_media(`video`,
+    `This means the video will be converted to an mp4`)) {
+    return false
+  }
 
-  if (App.is_mage && App.check_album_magic()) {
-    let confirm_args = {
-      message: `Do you want to do album magic&nbsp;?\n
-      This means the image and audio tracks will be joined into one.`,
-      callback_yes: () => {
-        album_magic.checked = true
-        App.submit_form()
-      },
-      callback_no: () => {
-        album_magic.checked = false
-        App.submit_form()
-      },
-      ...labels,
-    }
-
-    App.confirmbox(confirm_args)
+  if (check_media(`album`,
+    `This means the image and audio tracks will be joined into an mp4`)) {
     return false
   }
 

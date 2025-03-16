@@ -320,7 +320,8 @@ class Config:
         self.image_magic_quality = 8
 
         # Minimum file size to apply image magic
-        self.image_magic_min_size = 1_000000
+        # If 0 it will apply to any file size
+        self.image_magic_min_size = 0
 
         # Enable or disable image magic
         self.image_magic_enabled = True
@@ -333,7 +334,20 @@ class Config:
         self.audio_magic_enabled = True
 
         # Minimum file size to apply audio magic
-        self.audio_magic_min_size = 3_000000
+        # If 0 it will apply to any file size
+        self.audio_magic_min_size = 0
+
+        # Quality for video magic mp3
+        # Lower quality, faster encoding
+        # Higher = lower quality
+        self.video_magic_quality = 28
+
+        # Enable or disable video magic
+        self.video_magic_enabled = True
+
+        # Minimum file size to apply video magic
+        # If 0 it will apply to any file size
+        self.video_magic_min_size = 0
 
         # Quality for album magic mp3
         # 0 is the highest VBR quality
@@ -490,6 +504,9 @@ class Config:
             set_value(c, "audio_magic_quality")
             set_value(c, "audio_magic_enabled")
             set_value(c, "audio_magic_min_size")
+            set_value(c, "video_magic_quality")
+            set_value(c, "video_magic_enabled")
+            set_value(c, "video_magic_min_size")
             set_value(c, "magic_enabled")
             set_value(c, "show_privacy_select")
             set_value(c, "album_magic_quality")
