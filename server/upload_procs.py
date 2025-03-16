@@ -103,7 +103,7 @@ def do_magic(what: str, files: list[FileStorage]) -> tuple[bytes, str] | None:
 
         end = time.time()
         d = round(end - start, 2)
-        utils.q(f"{what} magic took {d} seconds")
+        utils.log(f"{what} magic took {d} seconds")
     except Exception as e:
         utils.error(e)
         return None

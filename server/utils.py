@@ -105,7 +105,7 @@ def samples_dir() -> Path:
 
 
 def log(s: str) -> None:
-    print(s)  # noqa
+    q(s)
 
 
 def error(e: Exception | str) -> None:

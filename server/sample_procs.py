@@ -1,5 +1,7 @@
 # Standard
 from pathlib import Path
+from typing import Callable
+from subprocess import CompletedProcess
 
 # Libraries
 from werkzeug.datastructures import FileStorage  # type: ignore
@@ -44,7 +46,7 @@ def get_video_sample(path: Path) -> None:
     quality = str(config.sample_quality_image)
 
     # Try multiple strategies to extract a frame, starting with the most likely to succeed
-    methods = [
+    methods: list[Callable[[], CompletedProcess[str]]] = [
         # Standard approach with timestamp
         lambda: utils.run_cmd(
             [
@@ -132,17 +134,17 @@ def get_video_sample(path: Path) -> None:
                 "1",
                 str(sample_path),
             ]
-        )
+        ),
     ]
 
     for method in methods:
         try:
             method()
-            # Check if file was actually created
-            if sample_path.exists() and sample_path.stat().st_size > 0:
-                return  # Success!
         except Exception:
             continue
+        # Check if file was actually created
+        if sample_path.exists() and sample_path.stat().st_size > 0:
+            return  # Success!
 
 
 def get_image_sample(path: Path) -> None:
