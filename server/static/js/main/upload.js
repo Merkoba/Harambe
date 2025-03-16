@@ -582,7 +582,7 @@ App.check_gif_magic = () => {
   for (let file of App.get_active_files()) {
     let current = file.files[0]
 
-    if (App.is_image(current)) {
+    if (App.is_image(current, false)) {
       image_count++
     }
     else {

@@ -139,8 +139,16 @@ App.is_lossless_video = (file) => {
   return App.is_video(file) && !allowed.includes(file.type)
 }
 
-App.is_image = (file) => {
-  return file.type.match(`image/*`)
+App.is_image = (file, include_gif = true) => {
+  let ok = file.type.match(`image/*`)
+
+  if (ok) {
+    if (!include_gif) {
+      return !file.type.match(`image/gif`)
+    }
+  }
+
+  return ok
 }
 
 App.is_audio = (file) => {

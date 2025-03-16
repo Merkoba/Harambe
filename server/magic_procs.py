@@ -77,6 +77,9 @@ def is_gif_magic(request: Request, files: list[FileStorage]) -> bool:
 
     for file in files:
         if file.content_type.startswith("image/"):
+            if file.content_type == "image/gif":
+                continue
+
             img_count += 1
         else:
             return False
@@ -357,32 +360,33 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
 
 
 def make_gif_magic(files: list[FileStorage]) -> bytes | None:
+    """Create an optimized GIF from multiple uploaded image files."""
+    if not files:
+        return None
+
     temp_dir = None
 
     try:
         temp_dir = tempfile.mkdtemp()
 
-        if not files:
-            return None
+        # Get configuration parameters with defaults
+        width = str(config.gif_magic_width or "640")
+        height = str(config.gif_magic_height or "480")
+        fps = str(config.gif_magic_fps or "2")
 
+        # Step 1: Save and scale all input images
         for i, file in enumerate(files):
-            temp_path = Path(temp_dir) / f"image_{i:03d}.png"
+            # Save original image
+            input_path = Path(temp_dir) / f"image_{i:03d}{Path(file.filename).suffix}"
+            output_path = Path(temp_dir) / f"scaled_{i:03d}.png"
 
-            with temp_path.open("wb") as f:
+            with input_path.open("wb") as f:
                 f.write(file.read())
+            file.seek(0)  # Reset file pointer
 
-            file.seek(0)
-
-        width = str(config.gif_magic_width) or "640"
-        height = str(config.gif_magic_height) or "480"
-        fps = str(config.gif_magic_fps) or "2"
-
-        with tempfile.NamedTemporaryFile(suffix=".gif") as output_temp:
-            for i in range(len(files)):
-                input_path = Path(temp_dir) / f"image_{i:03d}.png"
-                output_path = Path(temp_dir) / f"scaled_{i:03d}.png"
-
-                pre_cmd = [
+            # Scale and pad image while preserving aspect ratio
+            result = subprocess.run(
+                [
                     "ffmpeg",
                     "-y",
                     "-i",
@@ -390,20 +394,18 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                     "-vf",
                     f"scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=black",
                     str(output_path),
-                ]
+                ],
+                check=True,
+                capture_output=True,
+            )
 
-                process = subprocess.Popen(
-                    pre_cmd,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                )
-                _, _ = process.communicate()
+            if result.returncode != 0:
+                return None
 
-                if process.returncode != 0:
-                    return None
-
-            palette_file = Path(temp_dir) / "palette.png"
-            palette_cmd = [
+        # Step 2: Generate optimized color palette
+        palette_path = Path(temp_dir) / "palette.png"
+        result = subprocess.run(
+            [
                 "ffmpeg",
                 "-y",
                 "-framerate",
@@ -411,52 +413,48 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
                 "-pattern_type",
                 "glob",
                 "-i",
-                f"{temp_dir}/scaled_*.png",
+                str(Path(temp_dir) / "scaled_*.png"),
                 "-vf",
                 "palettegen=stats_mode=diff",
-                str(palette_file),
-            ]
+                str(palette_path),
+            ],
+            check=True,
+            capture_output=True,
+        )
 
-            process = subprocess.Popen(
-                palette_cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+        if result.returncode != 0:
+            return None
+
+        # Step 3: Create final GIF using the optimized palette
+        with tempfile.NamedTemporaryFile(suffix=".gif") as output_file:
+            result = subprocess.run(
+                [
+                    "ffmpeg",
+                    "-y",
+                    "-framerate",
+                    fps,
+                    "-pattern_type",
+                    "glob",
+                    "-i",
+                    str(Path(temp_dir) / "scaled_*.png"),
+                    "-i",
+                    str(palette_path),
+                    "-filter_complex",
+                    "paletteuse=dither=bayer:bayer_scale=5",
+                    "-loop",
+                    "0",
+                    output_file.name,
+                ],
+                check=True,
+                capture_output=True,
             )
-            _, _ = process.communicate()
 
-            if process.returncode != 0:
+            if result.returncode != 0:
                 return None
 
-            cmd = [
-                "ffmpeg",
-                "-y",
-                "-framerate",
-                fps,
-                "-pattern_type",
-                "glob",
-                "-i",
-                f"{temp_dir}/scaled_*.png",
-                "-i",
-                str(palette_file),
-                "-filter_complex",
-                "paletteuse=dither=bayer:bayer_scale=5",
-                "-loop",
-                "0",
-                output_temp.name,
-            ]
+            output_file.seek(0)
+            return output_file.read()
 
-            process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            _, _ = process.communicate()
-
-            if process.returncode != 0:
-                return None
-
-            output_temp.seek(0)
-            return output_temp.read()
     finally:
         if temp_dir:
             shutil.rmtree(temp_dir, ignore_errors=True)
