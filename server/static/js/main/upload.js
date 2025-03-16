@@ -200,6 +200,7 @@ App.reset_file = (file) => {
   App.reset_image()
   App.reset_video()
   DOM.show(`#image`)
+  App.check_files_used()
 }
 
 App.reset_image = () => {
@@ -425,14 +426,6 @@ App.remove_duplicate_files = () => {
 
 App.check_files_used = () => {
   let files = DOM.els(`.picker_file`)
-
-  if (files.length < 2) {
-    for (let file of files) {
-      file.parentElement.classList.remove(`unused`)
-    }
-
-    return
-  }
 
   for (let file of files) {
     if (file.files.length === 0) {

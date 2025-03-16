@@ -189,6 +189,19 @@ a.dialog_button:hover {
     outline: 1px solid var(--text_color);
 }
 
+.unused .picker_button_2 {
+    filter: grayscale(1);
+}
+
+.unused .picker_button_2 {
+    filter: grayscale(1);
+}
+
+.unused .picker_button_2:hover {
+    filter: unset;
+    outline: unset;
+}
+
 #bottom {
     position: relative;
     display: flex;
