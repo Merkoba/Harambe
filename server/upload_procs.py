@@ -302,9 +302,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                 sample_procs.get_text_sample(path)
         except Exception:
             try:
+                utils.error("Failed to get sample #1")
                 sample_procs.get_text_sample(path)
             except Exception:
-                pass
+                utils.error("Failed to get sample #2")
 
     database.update_user_last_date(user.id)
     post_procs.check_storage()

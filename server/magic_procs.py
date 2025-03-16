@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 # Standard
-import subprocess
 import tempfile
 import shutil
 from pathlib import Path
@@ -13,14 +12,6 @@ from werkzeug.datastructures import FileStorage  # type: ignore
 # Modules
 from config import config
 import utils
-
-
-def run_cmd(command: list[str]) -> subprocess.CompletedProcess[str]:
-    try:
-        return subprocess.run(command, check=True, capture_output=True, text=True)
-    except subprocess.CalledProcessError as e:
-        utils.error(f"Error: {e.stderr.strip()}")
-        raise
 
 
 def is_image_magic(request: Request, file: FileStorage) -> bool:
@@ -106,7 +97,7 @@ def make_image_magic(file: FileStorage) -> bytes | None:
         img_temp.flush()
         quality = str(config.image_magic_quality) or "6"
 
-        run_cmd(
+        utils.run_cmd(
             [
                 "ffmpeg",
                 "-i",
@@ -133,7 +124,7 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
         audio_temp.flush()
         aq = str(config.audio_magic_quality)
 
-        run_cmd(
+        utils.run_cmd(
             [
                 "ffmpeg",
                 "-i",
@@ -165,7 +156,7 @@ def make_video_magic(file: FileStorage) -> bytes | None:
         crf = str(config.video_magic_quality) or "28"
         aq = str(config.video_magic_audio_quality) or "0"
 
-        run_cmd(
+        utils.run_cmd(
             [
                 "ffmpeg",
                 "-i",
@@ -221,7 +212,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
         total_duration = 0.0
 
         for temp_file in temp_files:
-            result = run_cmd(
+            result = utils.run_cmd(
                 [
                     "ffprobe",
                     "-v",
@@ -256,7 +247,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                     crf = str(config.album_magic_video_quality) or "28"
                     bg = str(config.album_magic_color) or "black"
 
-                    run_cmd(
+                    utils.run_cmd(
                         [
                             "ffmpeg",
                             "-f",
@@ -298,7 +289,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                     return output_temp.read(), "mp4"
             else:
                 with tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp:
-                    run_cmd(
+                    utils.run_cmd(
                         [
                             "ffmpeg",
                             "-f",
@@ -353,7 +344,7 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
             file.seek(0)  # Reset file pointer
 
             # Scale and pad image while preserving aspect ratio
-            run_cmd(
+            utils.run_cmd(
                 [
                     "ffmpeg",
                     "-y",
@@ -368,7 +359,7 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
         # Step 2: Generate optimized color palette
         palette_path = Path(temp_dir) / "palette.png"
 
-        run_cmd(
+        utils.run_cmd(
             [
                 "ffmpeg",
                 "-y",
@@ -386,7 +377,7 @@ def make_gif_magic(files: list[FileStorage]) -> bytes | None:
 
         # Step 3: Create final GIF using the optimized palette
         with tempfile.NamedTemporaryFile(suffix=".gif") as output_file:
-            run_cmd(
+            utils.run_cmd(
                 [
                     "ffmpeg",
                     "-y",

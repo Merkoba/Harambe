@@ -6,6 +6,7 @@ import time
 import random
 import urllib.parse
 import unicodedata
+import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -285,6 +286,14 @@ def try_decode(chunk: bytes, encoding: str) -> bool:
 
 def get_checkbox(request: Request, key: str) -> bool:
     return str(request.form.get(key, "off")) == "on"
+
+
+def run_cmd(command: list[str]) -> subprocess.CompletedProcess[str]:
+    try:
+        return subprocess.run(command, check=True, capture_output=True, text=True)
+    except subprocess.CalledProcessError as e:
+        error(f"Error: {e.stderr.strip()}")
+        raise
 
 
 ICONS = load_icons()

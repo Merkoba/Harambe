@@ -1,5 +1,4 @@
 # Standard
-import subprocess
 from pathlib import Path
 
 # Libraries
@@ -14,52 +13,136 @@ def get_video_sample(path: Path) -> None:
     sample_name = f"{path.stem}.jpg"
     sample_path = utils.samples_dir() / Path(sample_name)
 
-    result = subprocess.run(
-        [
-            "ffprobe",
-            "-v",
-            "error",
-            "-show_entries",
-            "format=duration",
-            "-of",
-            "default=noprint_wrappers=1:nokey=1",
-            path,
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
-    )
+    # Ensure the samples directory exists
+    utils.samples_dir().mkdir(parents=True, exist_ok=True)
 
-    duration = float(result.stdout.strip())
-    middle_point = duration / 2
-    time_str = str(middle_point)
+    try:
+        result = utils.run_cmd(
+            [
+                "ffprobe",
+                "-v",
+                "error",
+                "-show_entries",
+                "format=duration",
+                "-of",
+                "default=noprint_wrappers=1:nokey=1",
+                str(path),
+            ],
+        )
+
+        duration = float(result.stdout.strip())
+        # For very short videos or single-frame videos, use the first frame
+        time_str = "0" if duration < 0.1 else str(duration / 2)
+    except Exception:
+        # If duration can't be determined, default to the first frame
+        time_str = "0"
+
     tw = config.sample_width
     th = config.sample_height
-    tc = config.sample_color = "black"
+    tc = config.sample_color or "black"
     scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
     quality = str(config.sample_quality_image)
 
-    subprocess.run(
-        [
-            "ffmpeg",
-            "-y",
-            "-ss",
-            time_str,
-            "-i",
-            str(path),
-            "-vframes",
-            "1",
-            "-vf",
-            scale,
-            "-q:v",
-            quality,
-            "-an",
-            "-threads",
-            "0",
-            sample_path,
-        ],
-        check=True,
-    )
+    # Try multiple strategies to extract a frame, starting with the most likely to succeed
+    methods = [
+        # Standard approach with timestamp
+        lambda: utils.run_cmd(
+            [
+                "ffmpeg",
+                "-y",
+                "-ss",
+                time_str,
+                "-i",
+                str(path),
+                "-vframes",
+                "1",
+                "-vf",
+                scale,
+                "-q:v",
+                quality,
+                "-an",
+                "-threads",
+                "0",
+                str(sample_path),
+            ]
+        ),
+        # First frame without timestamp
+        lambda: utils.run_cmd(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(path),
+                "-vframes",
+                "1",
+                "-vf",
+                scale,
+                "-q:v",
+                quality,
+                "-an",
+                "-threads",
+                "0",
+                str(sample_path),
+            ]
+        ),
+        # Simplest approach - first frame with minimal options
+        lambda: utils.run_cmd(
+            [
+                "ffmpeg",
+                "-y",
+                "-ss",
+                "0",
+                "-i",
+                str(path),
+                "-vframes",
+                "1",
+                "-f",
+                "image2",
+                str(sample_path),
+            ]
+        ),
+        # More robust approach for problematic videos
+        lambda: utils.run_cmd(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(path),
+                "-vf",
+                f"thumbnail,{scale}",
+                "-q:v",
+                quality,
+                "-frames:v",
+                "1",
+                "-threads",
+                "0",
+                str(sample_path),
+            ]
+        ),
+        # Ultimate fallback - create a color image
+        lambda: utils.run_cmd(
+            [
+                "ffmpeg",
+                "-y",
+                "-f",
+                "lavfi",
+                "-i",
+                f"color=c={tc}:s={tw}x{th}",
+                "-frames:v",
+                "1",
+                str(sample_path),
+            ]
+        )
+    ]
+
+    for method in methods:
+        try:
+            method()
+            # Check if file was actually created
+            if sample_path.exists() and sample_path.stat().st_size > 0:
+                return  # Success!
+        except Exception:
+            continue
 
 
 def get_image_sample(path: Path) -> None:
@@ -72,7 +155,7 @@ def get_image_sample(path: Path) -> None:
     scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
     quality = str(config.sample_quality_image)
 
-    subprocess.run(
+    utils.run_cmd(
         [
             "ffmpeg",
             "-y",
@@ -84,9 +167,8 @@ def get_image_sample(path: Path) -> None:
             quality,
             "-threads",
             "0",
-            sample_path,
+            str(sample_path),
         ],
-        check=True,
     )
 
 
@@ -96,7 +178,7 @@ def get_audio_sample(path: Path) -> None:
     sample_name = f"{path.stem}.mp3"
     sample_path = utils.samples_dir() / Path(sample_name)
 
-    result = subprocess.run(
+    result = utils.run_cmd(
         [
             "ffprobe",
             "-v",
@@ -105,18 +187,15 @@ def get_audio_sample(path: Path) -> None:
             "format=duration",
             "-of",
             "default=noprint_wrappers=1:nokey=1",
-            path,
+            str(path),
         ],
-        capture_output=True,
-        text=True,
-        check=True,
     )
 
     duration = float(result.stdout.strip())
     sample_duration = min(10.0, duration)
     quality = str(config.sample_quality_audio)
 
-    subprocess.run(
+    utils.run_cmd(
         [
             "ffmpeg",
             "-y",
@@ -130,9 +209,8 @@ def get_audio_sample(path: Path) -> None:
             quality,
             "-threads",
             "0",
-            sample_path,
+            str(sample_path),
         ],
-        check=True,
     )
 
 
