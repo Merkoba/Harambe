@@ -17,9 +17,9 @@ from werkzeug.datastructures import FileStorage  # type: ignore
 # Modules
 import utils
 import database
-import magic
 import post_procs
 import user_procs
+import magic_procs
 import sample_procs
 from config import config
 from user_procs import User
@@ -80,27 +80,23 @@ def check_hash(content: bytes) -> tuple[str, str]:
     return file_hash, ""
 
 
-def get_bool(request: Request, key: str) -> bool:
-    return str(request.form.get(key, "off")) == "on"
-
-
 def do_magic(what: str, files: list[FileStorage]) -> tuple[bytes, str] | None:
     try:
         start = time.time()
 
         if what == "image":
-            result = magic.make_image_magic(files[0])
+            result = magic_procs.make_image_magic(files[0])
             ext = "jpg"
         elif what == "audio":
-            result = magic.make_audio_magic(files[0])
+            result = magic_procs.make_audio_magic(files[0])
             ext = "mp3"
         elif what == "video":
-            result = magic.make_video_magic(files[0])
+            result = magic_procs.make_video_magic(files[0])
             ext = "mp4"
         elif what == "album":
-            result, ext = magic.make_album_magic(files)
+            result, ext = magic_procs.make_album_magic(files)
         elif what == "gif":
-            result = magic.make_gif_magic(files)
+            result = magic_procs.make_gif_magic(files)
             ext = "gif"
         else:
             return None
@@ -182,25 +178,23 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     if len(files) == 1:
         if config.magic_enabled:
-            if get_bool(request, "image_magic") and magic.is_image_magic(files[0]):
+            if magic_procs.is_image_magic(request, files[0]):
                 image_magic = True
-            elif get_bool(request, "audio_magic") and magic.is_audio_magic(files[0]):
+            elif magic_procs.is_audio_magic(request, files[0]):
                 audio_magic = True
-            elif get_bool(request, "video_magic") and magic.is_video_magic(files[0]):
+            elif magic_procs.is_video_magic(request, files[0]):
                 video_magic = True
     elif len(files) > 1:
         if (
             user.mage
             and config.magic_enabled
-            and get_bool(request, "album_magic")
-            and magic.is_album_magic(files)
+            and magic_procs.is_album_magic(request, files)
         ):
             album_magic = True
         elif (
             user.mage
             and config.magic_enabled
-            and get_bool(request, "gif_magic")
-            and magic.is_gif_magic(files)
+            and magic_procs.is_gif_magic(request, files)
         ):
             gif_magic = True
         else:

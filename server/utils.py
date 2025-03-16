@@ -12,7 +12,7 @@ from typing import Any
 
 # Libraries
 import q as qlib  # type: ignore
-from flask import jsonify  # type: ignore
+from flask import jsonify, Request  # type: ignore
 
 # Modules
 from config import config
@@ -281,6 +281,10 @@ def try_decode(chunk: bytes, encoding: str) -> bool:
         return False
 
     return True
+
+
+def get_checkbox(request: Request, key: str) -> bool:
+    return str(request.form.get(key, "off")) == "on"
 
 
 ICONS = load_icons()

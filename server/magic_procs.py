@@ -6,25 +6,39 @@ import tempfile
 from pathlib import Path
 
 # Libraries
+from flask import Request  # type: ignore
 from werkzeug.datastructures import FileStorage  # type: ignore
 
 # Modules
 from config import config
+import utils
 
 
-def is_image_magic(file: FileStorage) -> bool:
+def is_image_magic(request: Request, file: FileStorage) -> bool:
+    if not utils.get_checkbox(request, "image_magic"):
+        return False
+
     return config.image_magic_enabled and file.content_type.startswith("image/")
 
 
-def is_audio_magic(file: FileStorage) -> bool:
+def is_audio_magic(request: Request, file: FileStorage) -> bool:
+    if not utils.get_checkbox(request, "audio_magic"):
+        return False
+
     return config.audio_magic_enabled and file.content_type.startswith("audio/")
 
 
-def is_video_magic(file: FileStorage) -> bool:
+def is_video_magic(request: Request, file: FileStorage) -> bool:
+    if not utils.get_checkbox(request, "video_magic"):
+        return False
+
     return config.video_magic_enabled and file.content_type.startswith("video/")
 
 
-def is_album_magic(files: list[FileStorage]) -> bool:
+def is_album_magic(request: Request, files: list[FileStorage]) -> bool:
+    if not utils.get_checkbox(request, "album_magic"):
+        return False
+
     if not config.album_magic_enabled:
         return False
 
@@ -51,7 +65,10 @@ def is_album_magic(files: list[FileStorage]) -> bool:
     return False
 
 
-def is_gif_magic(files: list[FileStorage]) -> bool:
+def is_gif_magic(request: Request, files: list[FileStorage]) -> bool:
+    if not utils.get_checkbox(request, "gif_magic"):
+        return False
+
     if not config.gif_magic_enabled:
         return False
 
