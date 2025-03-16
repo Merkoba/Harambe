@@ -657,6 +657,11 @@ App.check_magic = () => {
     return false
   }
 
+  if (check_media(`gif`,
+    `This means the images will be joined into a gif`)) {
+    return false
+  }
+
   return true
 }
 

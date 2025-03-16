@@ -377,6 +377,18 @@ class Config:
         # Enable or disable gif magic
         self.gif_magic_enabled = True
 
+        # Width for gif magic
+        self.gif_magic_width = 640
+
+        # Height for gif magic
+        self.gif_magic_height = 480
+
+        # Frames per second for gif magic
+        self.gif_magic_fps = 2
+
+        # Background color for gif magic
+        self.gif_magic_color = "black"
+
         # Enable all kinds of magic
         self.magic_enabled = True
 
@@ -506,6 +518,10 @@ class Config:
             set_value(c, "album_magic_color")
             set_value(c, "album_magic_enabled")
             set_value(c, "gif_magic_enabled")
+            set_value(c, "gif_magic_width")
+            set_value(c, "gif_magic_height")
+            set_value(c, "gif_magic_fps")
+            set_value(c, "gif_magic_color")
             set_value(c, "image_magic_quality")
             set_value(c, "image_magic_min_size")
             set_value(c, "image_magic_enabled")
