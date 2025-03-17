@@ -260,7 +260,7 @@ The current spells are:
 
 Convert big images into `jpg`.
 
-Triggers when a single big non `jpg` is going to be uploaded.
+Triggers when a single big non [`jpg`, `gif`] image is going to be uploaded.
 
 ## Audio Magic
 
@@ -280,4 +280,4 @@ It creates an `mp4` video.
 
 Join multiple images into a `gif`.
 
-Triggered when multiple non-gif images are going to be uploaded.
+Triggered when multiple non [`gif`] images are going to be uploaded.
