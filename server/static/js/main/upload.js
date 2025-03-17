@@ -70,7 +70,7 @@ App.init = () => {
 
     DOM.ev(menu_btn, `auxclick`, (e) => {
       if (e.button === 1) {
-        App.location(`/fresh`)
+        App.msg_show(`menu`)
       }
     })
   }
