@@ -258,21 +258,27 @@ The current spells are:
 
 ## Image Magic
 
-Convert big images into `jpg`.
+Convert images to `jpg`.
 
-Triggers when a single big non [`jpg`, `gif`] image is going to be uploaded.
+Triggers when a single image is going to be uploaded.
+
+Ignores `jpg` and `gif`.
 
 ## Audio Magic
 
-Convert big audio into `mp3`.
+Convert audio to `mp3`.
 
-Triggers when a single non `mp3` is going to be uploaded.
+Triggers when a single audio is going to be uploaded.
+
+Ignored `mp3`.
 
 ## Album Magic
 
 Join an image with one or more audio files.
 
-Triggered when a single image and 1 or more audio files are going to be uploaded.
+Triggers when a single image and 1 or more audio files are going to be uploaded.
+
+Also triggers when multiple audio files are uploaded, without an image.
 
 It creates an `mp4` video.
 
@@ -280,4 +286,6 @@ It creates an `mp4` video.
 
 Join multiple images into a `gif`.
 
-Triggered when multiple non [`gif`] images are going to be uploaded.
+Triggers when multiple images are going to be uploaded.
+
+Ignores `gif`.
