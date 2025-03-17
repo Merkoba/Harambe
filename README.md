@@ -275,3 +275,9 @@ Join an image with one or more audio files.
 Triggered when a single image and 1 or more audio files are going to be uploaded.
 
 It creates an `mp4` video.
+
+## Gif Magic
+
+Join multiple images into a `gif`.
+
+Triggered when multiple non-gif images are going to be uploaded.
