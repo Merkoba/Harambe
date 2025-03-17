@@ -258,7 +258,7 @@ select {
     flex-direction: row;
     user-select: none;
     gap: 0.5rem;
-    height: 1.5rem;
+    height: 1.6rem;
     width: 100%;
 }
 
@@ -266,7 +266,9 @@ select {
     height: 100%;
     background-color: var(--accent_color);
     color: var(--text_color);
-    border: 1px solid var(--frame_color);
+    border-style: solid;
+    border-width: 1px;
+    border-color: transparent;
     cursor: pointer;
     font-size: 0.8rem;
     margin: 0;
@@ -283,4 +285,5 @@ select {
 
 .topbutton:hover {
     filter: brightness(0.95);
+    border-color: var(--button_border);
 }

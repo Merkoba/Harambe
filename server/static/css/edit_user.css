@@ -35,12 +35,6 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
-.row {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-}
-
 #links {
     margin-top: 1rem;
     display: flex;
@@ -92,7 +86,7 @@ a:hover {
 }
 
 #title {
-    border-bottom: 1px solid rgb(29, 91, 29);
+    border-bottom: 1px solid rgb(29 91 29);
     display: inline-block;
 }
 

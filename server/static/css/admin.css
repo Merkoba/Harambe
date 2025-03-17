@@ -1,5 +1,5 @@
 :root {
-    --sample_background: rgb(128, 104, 144);
+    --sample_background: rgb(128 104 144);
     --sample_border: 5px solid #cbd5ea;
 }
 
@@ -47,14 +47,6 @@ body, html {
 
 .item:hover {
     background-color: var(--contrast_background);
-}
-
-a:link, a:visited {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
 }
 
 .table {
