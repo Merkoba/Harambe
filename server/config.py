@@ -27,18 +27,6 @@ class FileChangeHandler(FileSystemEventHandler):  # type: ignore
 
 
 @dataclass
-class User:
-    username: str
-    password: str
-    name: str
-    admin: bool
-    limit: int
-    max: int
-    list: bool
-    mark: str
-
-
-@dataclass
 class Link:
     name: str
     url: str
@@ -55,10 +43,6 @@ class Config:
             self.reference = None
 
         self.path: Path = Path("config.toml")
-
-        # Users who can make posts
-        # Dict object: name, limit, id (optional)
-        self.users: list[User] = []
 
         # List of links to show in the index page
         # Dict object: name, url, target (optional)
@@ -417,13 +401,6 @@ class Config:
     def get_post_name_length(self) -> int:
         return max(min(self.post_name_length, 26), 10)
 
-    def get_user(self, username: str) -> User | None:
-        for user in self.users:
-            if user.username == username:
-                return user
-
-        return None
-
     def read(self) -> None:
         def defvalue(name: str) -> Any:
             return copy.deepcopy(getattr(self.reference, name))
@@ -438,132 +415,20 @@ class Config:
                 utils.error(e)
                 return
 
-            set_value(c, "app_key")
-            set_value(c, "files_dir")
-            set_value(c, "samples_dir")
-            set_value(c, "max_size_user")
-            set_value(c, "redis_port")
-            set_value(c, "uppercase_names")
-            set_value(c, "max_posts")
-            set_value(c, "max_storage")
-            set_value(c, "show_image")
-            set_value(c, "admin_page_size")
-            set_value(c, "post_name_length")
-            set_value(c, "rate_limit")
-            set_value(c, "background_color")
-            set_value(c, "accent_color")
-            set_value(c, "text_color")
-            set_value(c, "link_color")
-            set_value(c, "alt_color")
-            set_value(c, "font_family")
-            set_value(c, "max_age")
-            set_value(c, "show_max_size")
-            set_value(c, "list_enabled")
-            set_value(c, "list_private")
-            set_value(c, "list_page_size")
-            set_value(c, "list_max_posts")
-            set_value(c, "allow_delete")
-            set_value(c, "main_title")
-            set_value(c, "image_tooltip")
-            set_value(c, "file_path")
-            set_value(c, "allow_titles")
-            set_value(c, "web_uploads_enabled")
-            set_value(c, "api_upload_enabled")
-            set_value(c, "api_upload_endpoint")
-            set_value(c, "embed_max_size_image")
-            set_value(c, "embed_max_size_video")
-            set_value(c, "embed_max_size_audio")
-            set_value(c, "embed_max_size_flash")
-            set_value(c, "embed_max_size_text")
-            set_value(c, "embed_max_size_markdown")
-            set_value(c, "allow_edit")
-            set_value(c, "max_title_length")
-            set_value(c, "allow_hotlinks")
-            set_value(c, "requests_per_minute")
-            set_value(c, "public_posts")
-            set_value(c, "view_delay")
-            set_value(c, "description_upload")
-            set_value(c, "description_post")
-            set_value(c, "reactions_enabled")
-            set_value(c, "max_reaction_length")
-            set_value(c, "max_user_reactions")
-            set_value(c, "post_reaction_limit")
-            set_value(c, "post_refresh_interval")
-            set_value(c, "post_refresh_times")
-            set_value(c, "allow_name_edit")
-            set_value(c, "allow_password_edit")
-            set_value(c, "font_size")
-            set_value(c, "max_user_username_length")
-            set_value(c, "max_user_password_length")
-            set_value(c, "max_user_name_length")
-            set_value(c, "register_enabled")
-            set_value(c, "max_post_name_length")
-            set_value(c, "max_reaction_name_length")
-            set_value(c, "zip_level")
-            set_value(c, "allow_same_hash")
-            set_value(c, "max_upload_files")
-            set_value(c, "samples_enabled")
-            set_value(c, "sample_width")
-            set_value(c, "sample_height")
-            set_value(c, "sample_color")
-            set_value(c, "sample_quality_image")
-            set_value(c, "sample_quality_audio")
-            set_value(c, "sample_text_bytes")
-            set_value(c, "sample_zip_chars")
-            set_value(c, "session_days")
-            set_value(c, "sample_icon")
-            set_value(c, "prev_sample_icon")
-            set_value(c, "next_sample_icon")
-            set_value(c, "max_mark_length")
-            set_value(c, "album_magic_audio_quality")
-            set_value(c, "album_magic_width")
-            set_value(c, "album_magic_height")
-            set_value(c, "album_magic_video_quality")
-            set_value(c, "album_magic_color")
-            set_value(c, "album_magic_enabled")
-            set_value(c, "gif_magic_enabled")
-            set_value(c, "gif_magic_width")
-            set_value(c, "gif_magic_height")
-            set_value(c, "gif_magic_fps")
-            set_value(c, "gif_magic_color")
-            set_value(c, "image_magic_quality")
-            set_value(c, "image_magic_min_size")
-            set_value(c, "image_magic_enabled")
-            set_value(c, "audio_magic_quality")
-            set_value(c, "audio_magic_enabled")
-            set_value(c, "audio_magic_min_size")
-            set_value(c, "video_magic_quality")
-            set_value(c, "video_magic_audio_quality")
-            set_value(c, "video_magic_enabled")
-            set_value(c, "video_magic_min_size")
-            set_value(c, "magic_enabled")
-            set_value(c, "show_privacy_select")
-            set_value(c, "album_magic_quality")
-            set_value(c, "default_mage")
-            set_value(c, "register_code")
-            set_value(c, "original_title_length")
+            # Get all instance attributes that don't start with underscore and aren't methods/properties
+            config_attrs = [
+                attr
+                for attr in dir(self)
+                if not attr.startswith("_")
+                and not callable(getattr(self, attr))
+                and attr not in ("links", "reference", "path")
+            ]
 
-            # Users
-
-            users: list[dict[str, Any]] = c.get("users", [])
-
-            if users:
-                self.users = [
-                    User(
-                        user.get("username", ""),
-                        user.get("password", ""),
-                        user.get("name", ""),
-                        user.get("admin", False),
-                        user.get("limit", 12),
-                        user.get("max", 0),
-                        user.get("list", False),
-                        user.get("mark", ""),
-                    )
-                    for user in users
-                ]
+            # Automatically set values for all config attributes
+            for attr in config_attrs:
+                set_value(c, attr)
 
             # Links
-
             links: list[dict[str, str]] = c.get("links", [])
 
             if links:
