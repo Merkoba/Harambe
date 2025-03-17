@@ -589,9 +589,11 @@ App.user_mod_input = (what, o_value, vtype, callback) => {
     }
   }
 
+  let name = what.split(`_`).join(` `)
+
   let prompt_args = {
     value: o_value,
-    placeholder: `Type the new ${what}`,
+    placeholder: `Type the new ${name}`,
     max: App.max_reaction_length,
     password: vtype === `password`,
     callback: (value_1) => {
