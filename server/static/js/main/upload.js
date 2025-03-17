@@ -623,7 +623,7 @@ App.check_magic = () => {
     }
 
     let confirm_args = {
-      message: `Do you want to do ${what} magic&nbsp;?\n
+      message: `Do you want to do <b>${what} magic</b>&nbsp;?\n
       ${msg}`,
       callback_yes: () => {
         cb.checked = true
