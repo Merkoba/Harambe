@@ -47,11 +47,6 @@ class Promptext {
     buttons.id = `prompt_buttons`
     c.appendChild(buttons)
 
-    let button = DOM.create(`div`, `prompt_button`)
-    button.id = `prompt_submit`
-    button.textContent = `Submit`
-    buttons.appendChild(button)
-
     for (let btn of args.buttons) {
       let el = DOM.create(`div`, `prompt_button prompt_button_2`)
       el.textContent = btn.text
@@ -62,6 +57,11 @@ class Promptext {
 
       buttons.appendChild(el)
     }
+
+    let button = DOM.create(`div`, `prompt_button`)
+    button.id = `prompt_submit`
+    button.textContent = `Submit`
+    buttons.appendChild(button)
 
     msg.set(c)
 
