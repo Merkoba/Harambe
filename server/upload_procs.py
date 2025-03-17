@@ -172,7 +172,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if privacy not in ["public", "private"]:
         return error("Invalid privacy setting")
 
-    original = ""
+    original = utils.clean_filename(Path(files[0].filename).stem)
+
     zip_archive = False
     image_magic = False
     audio_magic = False
@@ -274,7 +275,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     else:
         file = files[0]
         content = file.read()
-        original = utils.clean_filename(Path(file.filename).stem)
         ext = Path(file.filename).suffix
 
     file_hash, existing = check_hash(content)

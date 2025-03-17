@@ -254,7 +254,7 @@ App.add_picker = (show = false) => {
 
   DOM.ev(title, `click`, (e) => {
     if (input.files.length > 0) {
-      App.set_title(input.files[0].name || ``)
+      App.set_title(App.get_file_title(input.files[0]))
     }
   })
 
@@ -716,4 +716,9 @@ App.check_file_media = (file) => {
     reader.readAsDataURL(the_file)
     App.media_picker = file
   }
+}
+
+App.get_file_title = (file) => {
+  let split = file.name.split(`.`)
+  return split.slice(0, -1).join(`.`)
 }
