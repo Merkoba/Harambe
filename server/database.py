@@ -367,7 +367,7 @@ def edit_post_privacy(post_id: int, privacy: str) -> None:
 def get_next_post(current: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    c.execute("select * from posts where name = ? and privacy = 'public'", (current,))
+    c.execute("select * from posts where name = ?", (current,))
     row = c.fetchone()
 
     if not row:
@@ -377,7 +377,7 @@ def get_next_post(current: str) -> Post | None:
     post = make_post(dict(row))
 
     c.execute(
-        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? order by p.date desc limit 1",
+        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? and privacy = 'public' order by p.date desc limit 1",
         (post.date,),
     )
 
