@@ -213,7 +213,7 @@ a.linkbutton:hover {
 
 #confirmbox_message {
     white-space: pre-wrap;
-    max-width: 20rem;
+    max-width: 36rem;
 }
 
 #confirmbox_buttons {

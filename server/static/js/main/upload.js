@@ -618,7 +618,7 @@ App.check_magic = () => {
 
     let confirm_args = {
       message: `Do you want to do ${what} magic&nbsp;?\n
-      ${msg}.`,
+      ${msg}`,
       callback_yes: () => {
         cb.checked = true
         App.submit_form()
