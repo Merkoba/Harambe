@@ -162,33 +162,7 @@ App.reflect_file = (file) => {
     return false
   }
 
-  App.reset_image()
-  App.reset_video()
-
-  let the_file = file.files[0]
-  let image = DOM.el(`#image`)
-  let video = DOM.el(`#video`)
-
-  if (App.is_image(the_file)) {
-    let reader = new FileReader()
-
-    reader.onload = (e) => {
-      image.src = e.target.result
-    }
-
-    DOM.hide(video)
-    DOM.show(image)
-    reader.readAsDataURL(the_file)
-    App.media_picker = file
-  }
-  else if (App.is_audio(the_file) || App.is_video(the_file)) {
-    video.src = URL.createObjectURL(the_file)
-    DOM.hide(image)
-    DOM.show(video)
-    video.load()
-    App.media_picker = file
-  }
-
+  App.check_file_media(file)
   return true
 }
 
@@ -284,6 +258,14 @@ App.add_picker = (show = false) => {
   DOM.ev(title, `click`, (e) => {
     if (input.files.length > 0) {
       App.set_title(input.files[0].name || ``)
+    }
+  })
+
+  let view = DOM.el(`.picker_view`, el)
+
+  DOM.ev(view, `click`, (e) => {
+    if (input.files.length > 0) {
+      App.check_file_media(input)
     }
   })
 
@@ -707,5 +689,36 @@ App.set_title = (title) => {
 
   if (input) {
     input.value = title.trim()
+  }
+}
+
+App.check_file_media = (file) => {
+  let the_file = file.files[0]
+  let image = DOM.el(`#image`)
+  let video = DOM.el(`#video`)
+
+  if (App.is_image(the_file)) {
+    let reader = new FileReader()
+
+    reader.onload = (e) => {
+      image.src = e.target.result
+      DOM.show(image)
+    }
+
+    App.reset_video()
+    reader.readAsDataURL(the_file)
+    App.media_picker = file
+  }
+  else if (App.is_audio(the_file) || App.is_video(the_file)) {
+    let reader = new FileReader()
+
+    reader.onload = (e) => {
+      video.src = URL.createObjectURL(the_file)
+      DOM.show(video)
+    }
+
+    DOM.hide(image)
+    reader.readAsDataURL(the_file)
+    App.media_picker = file
   }
 }

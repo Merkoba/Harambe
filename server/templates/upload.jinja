@@ -11,6 +11,7 @@
 <template id="template_picker">
     <input type="file" class="picker_file" max-file-size="{{max_size_str}}mb">
     <div class="picker_title picker_button picker_button_2" title="Use the name of this file as the title">✍🏻</div>
+    <div class="picker_view picker_button picker_button_2"  title="View the media of this item if possible">☝🏻</div>
     <div class="picker_clear picker_button picker_button_2" title="Clear this picker">🖐🏼</div>
 
     {% if max_upload_files > 1 %}
@@ -32,12 +33,12 @@
 
     <form id="form" action="/" method="post" enctype="multipart/form-data" onsubmit="return App.validate();">
         {% if is_user and upload_enabled %}
-        <input type="checkbox" id="image_magic" name="image_magic" hidden>
-        <input type="checkbox" id="audio_magic" name="audio_magic" hidden>
-        <input type="checkbox" id="video_magic" name="video_magic" hidden>
-        <input type="checkbox" id="album_magic" name="album_magic" hidden>
+        <input type="checkbox" id="image_magic"  name="image_magic" hidden>
+        <input type="checkbox" id="audio_magic"  name="audio_magic" hidden>
+        <input type="checkbox" id="video_magic"  name="video_magic" hidden>
+        <input type="checkbox" id="album_magic"  name="album_magic" hidden>
         <input type="checkbox" id="visual_magic" name="album_magic" hidden>
-        <input type="checkbox" id="gif_magic"   name="gif_magic" hidden>
+        <input type="checkbox" id="gif_magic"    name="gif_magic"   hidden>
 
         <div id="toprow">
             {% if show_privacy_select %}
