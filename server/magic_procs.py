@@ -325,92 +325,50 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
 
 
 def make_gif_magic(files: list[FileStorage]) -> bytes | None:
-    """Create an optimized GIF from multiple uploaded image files."""
-    if not files:
-        return None
-
-    temp_dir = None
+    temp_dir = tempfile.mkdtemp()
 
     try:
-        temp_dir = tempfile.mkdtemp()
-
-        # Get configuration parameters with defaults
-        width = str(config.gif_magic_width or "640")
-        height = str(config.gif_magic_height or "480")
-        fps = str(config.gif_magic_fps or "2")
-
-        # Step 1: Save and scale all input images
-        scaled_files = []
         for i, file in enumerate(files):
-            # Save original image
-            input_path = Path(temp_dir) / f"image_{i:03d}{Path(file.filename).suffix}"
-            output_path = Path(temp_dir) / f"scaled_{i:03d}.png"
-            scaled_files.append(str(output_path))
+            content = file.read()
+            file.seek(0)
 
+            input_path = Path(temp_dir) / f"input_{i}.tmp"
+            output_path = Path(temp_dir) / f"frame_{i:04d}.png"
+
+            # Write content to temp file
             with input_path.open("wb") as f:
-                f.write(file.read())
-            file.seek(0)  # Reset file pointer
+                f.write(content)
 
-            # Scale and pad image while preserving aspect ratio
-            utils.run_cmd(
-                [
-                    "ffmpeg",
-                    "-y",
-                    "-i",
-                    str(input_path),
-                    "-vf",
-                    f"scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=black",
-                    str(output_path),
-                ],
-            )
+            # Convert to PNG
+            utils.run_cmd(["ffmpeg", "-i", str(input_path), "-y", str(output_path)])
 
-        if not scaled_files:
-            return None
+            # Clean up temporary input file
+            input_path.unlink()
 
-        # Step 2: Generate optimized color palette from all frames
-        palette_path = Path(temp_dir) / "palette.png"
+        # Create GIF from PNG files
+        gif_path = Path(temp_dir) / "output.gif"
+        w = str(config.gif_magic_width or "640")
+        h = str(config.gif_magic_height or "480")
+        fps = str(config.gif_magic_fps) or "2"
+        bg = str(config.gif_magic_color) or "black"
 
-        # Use pattern matching for input files instead of concat demuxer
         utils.run_cmd(
             [
                 "ffmpeg",
-                "-y",
                 "-framerate",
                 fps,
                 "-i",
-                str(Path(temp_dir) / "scaled_%03d.png"),
+                str(Path(temp_dir) / "frame_%04d.png"),
                 "-vf",
-                "palettegen=stats_mode=diff",
-                str(palette_path),
-            ],
+                f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
+                "-y",
+                str(gif_path),
+            ]
         )
 
-        # Step 3: Create final GIF using the optimized palette
-        with tempfile.NamedTemporaryFile(suffix=".gif") as output_file:
-            utils.run_cmd(
-                [
-                    "ffmpeg",
-                    "-y",
-                    "-framerate",
-                    fps,
-                    "-i",
-                    str(Path(temp_dir) / "scaled_%03d.png"),
-                    "-i",
-                    str(palette_path),
-                    "-filter_complex",
-                    "paletteuse=dither=bayer:bayer_scale=5",
-                    "-loop",
-                    "0",
-                    output_file.name,
-                ],
-            )
-
-            output_file.seek(0)
-            return output_file.read()
-
-    except Exception as e:
-        utils.error(f"Error creating GIF: {e}")
-        return None
+        # Read the GIF content
+        with gif_path.open("rb") as gif_file:
+            return gif_file.read()
     finally:
-        if temp_dir:
-            shutil.rmtree(temp_dir, ignore_errors=True)
+        # Clean up temporary directory
+        shutil.rmtree(temp_dir)
