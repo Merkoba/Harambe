@@ -633,10 +633,8 @@ App.check_magic = () => {
         cb.checked = false
         App.submit_form()
       },
-      labels: {
-        yes: `Do that`,
-        no: `Just Upload`,
-      },
+      yes: `Do that`,
+      no: `Just Upload`,
     }
 
     App.confirmbox(confirm_args)
