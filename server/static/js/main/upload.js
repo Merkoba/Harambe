@@ -521,6 +521,10 @@ App.check_media_magic = (what) => {
     }
   }
 
+  if (!App[`is_${what}`](file, false)) {
+    return false
+  }
+
   return App[`is_lossless_${what}`](file)
 }
 
