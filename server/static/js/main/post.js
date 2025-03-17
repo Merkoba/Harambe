@@ -11,7 +11,7 @@ App.init = () => {
   App.max_id = ``
   App.image_expanded = false
   App.reversed = false
-  App.ace_wrap = false
+  App.ace_wrap = true
   let edit = DOM.el(`#edit`)
 
   if (edit) {
