@@ -539,6 +539,33 @@ App.check_album_magic = () => {
     return
   }
 
+  let audio_count = 0
+
+  for (let file of App.get_active_files()) {
+    let current = file.files[0]
+
+    if (App.is_audio(current)) {
+      audio_count++
+    }
+    else {
+      return false
+    }
+  }
+
+  return audio_count > 1
+}
+
+App.check_visual_magic = () => {
+  if (!App.visual_magic_enabled) {
+    return false
+  }
+
+  let checkbox = DOM.el(`#visual_magic`)
+
+  if (!checkbox) {
+    return
+  }
+
   let image_count = 0
   let audio_count = 0
 
@@ -556,18 +583,11 @@ App.check_album_magic = () => {
     }
   }
 
-  if (image_count > 1) {
+  if (image_count !== 1) {
     return false
   }
 
-  if (image_count === 1) {
-    return audio_count >= 1
-  }
-  else if (image_count === 0) {
-    return audio_count > 1
-  }
-
-  return false
+  return audio_count >= 1
 }
 
 App.check_gif_magic = () => {
@@ -608,6 +628,9 @@ App.check_magic = () => {
 
     if (what === `album`) {
       ok = App.check_album_magic()
+    }
+    else if (what === `visual`) {
+      ok = App.check_visual_magic()
     }
     else if (what === `gif`) {
       ok = App.check_gif_magic()
@@ -657,6 +680,11 @@ App.check_magic = () => {
   }
 
   if (check_media(`album`,
+    `This means the audio tracks will be joined into an mp3`)) {
+    return false
+  }
+
+  if (check_media(`visual`,
     `This means the image and audio tracks will be joined into an mp4`)) {
     return false
   }

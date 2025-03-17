@@ -272,15 +272,25 @@ Triggers when a single audio is going to be uploaded.
 
 Ignores `mp3`.
 
+## Video Magic
+
+Convert video to `mp4`.
+
+Triggers when a single video is going to be uploaded.
+
+Ignores `mp4`.
+
 ## Album Magic
 
-Join an image with one or more audio files.
+Join multiple audio files into an `mp3`.
 
-Triggers when a single image and 1 or more audio files are going to be uploaded.
+Triggers when multiple audio files are going to be uploaded.
 
-Also triggers when multiple audio files are uploaded, without an image.
+## Visual Magic
 
-It creates an `mp4` video.
+Join an image and one or more audio files into an `mp4`.
+
+Triggers when an image and one or more audio files are going to be uploaded.
 
 ## Gif Magic
 

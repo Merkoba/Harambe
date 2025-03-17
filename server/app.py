@@ -272,6 +272,7 @@ def show_upload() -> Any:
         audio_magic_enabled=config.audio_magic_enabled,
         video_magic_enabled=config.video_magic_enabled,
         album_magic_enabled=config.album_magic_enabled,
+        visual_magic_enabled=config.visual_magic_enabled,
         gif_magic_enabled=config.gif_magic_enabled,
         image_magic_min_size=config.image_magic_min_size,
         audio_magic_min_size=config.audio_magic_min_size,

@@ -339,24 +339,31 @@ class Config:
 
         # Quality for album magic mp3
         # 0 is the highest VBR quality
-        self.album_magic_audio_quality = 0
+        self.album_magic_quality = 0
+
+        # Enable or disable album magic
+        self.album_magic_enabled = True
+
+        # Quality for album magic mp3
+        # 0 is the highest VBR quality
+        self.visual_magic_audio_quality = 0
 
         # Width for audio album magic
-        self.album_magic_width = 1920
+        self.visual_magic_width = 1920
 
         # Height for audio album magic
-        self.album_magic_height = 1080
+        self.visual_magic_height = 1080
 
         # Quality for album magic video
         # Lower quality, faster encoding
         # Higher = lower quality
-        self.album_magic_video_quality = 28
+        self.visual_magic_video_quality = 28
 
-        # Background color for album_magic
-        self.album_magic_color = "black"
+        # Background color for visual magic
+        self.visual_magic_color = "black"
 
         # Enable or disable album magic
-        self.album_magic_enabled = True
+        self.visual_magic_enabled = True
 
         # Enable or disable gif magic
         self.gif_magic_enabled = True

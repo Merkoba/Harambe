@@ -85,18 +85,22 @@ def do_magic(what: str, files: list[FileStorage]) -> tuple[bytes, str] | None:
         start = time.time()
 
         if what == "image":
-            result = magic_procs.make_image_magic(files[0])
+            result = magic_procs.do_image_magic(files[0])
             ext = "jpg"
         elif what == "audio":
-            result = magic_procs.make_audio_magic(files[0])
+            result = magic_procs.do_audio_magic(files[0])
             ext = "mp3"
         elif what == "video":
-            result = magic_procs.make_video_magic(files[0])
+            result = magic_procs.do_video_magic(files[0])
             ext = "mp4"
         elif what == "album":
-            result, ext = magic_procs.make_album_magic(files)
+            result = magic_procs.do_album_magic(files)
+            ext = "mp3"
+        elif what == "visual":
+            result = magic_procs.do_visual_magic(files)
+            ext = "mp4"
         elif what == "gif":
-            result = magic_procs.make_gif_magic(files)
+            result = magic_procs.do_gif_magic(files)
             ext = "gif"
         else:
             return None
@@ -174,6 +178,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     audio_magic = False
     video_magic = False
     album_magic = False
+    visual_magic = False
     gif_magic = False
 
     if len(files) == 1:
@@ -194,13 +199,26 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         elif (
             user.mage
             and config.magic_enabled
+            and magic_procs.is_visual_magic(request, files)
+        ):
+            visual_magic = True
+        elif (
+            user.mage
+            and config.magic_enabled
             and magic_procs.is_gif_magic(request, files)
         ):
             gif_magic = True
         else:
             zip_archive = True
 
-    if image_magic or audio_magic or video_magic or album_magic or gif_magic:
+    if (
+        image_magic
+        or audio_magic
+        or video_magic
+        or album_magic
+        or visual_magic
+        or gif_magic
+    ):
         zip_archive = False
 
     if zip_archive:
@@ -237,6 +255,13 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
         if not result:
             return error("Failed to do album magic")
+
+        content, ext = result
+    elif visual_magic:
+        result = do_magic("visual", files)
+
+        if not result:
+            return error("Failed to do visual magic")
 
         content, ext = result
     elif gif_magic:

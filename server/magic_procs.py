@@ -42,6 +42,24 @@ def is_album_magic(request: Request, files: list[FileStorage]) -> bool:
     if not config.album_magic_enabled:
         return False
 
+    audio_count = 0
+
+    for file in files:
+        if file.content_type.startswith("audio/"):
+            audio_count += 1
+        else:
+            return False
+
+    return audio_count > 1
+
+
+def is_visual_magic(request: Request, files: list[FileStorage]) -> bool:
+    if not utils.get_checkbox(request, "album_magic"):
+        return False
+
+    if not config.visual_magic_enabled:
+        return False
+
     img_count = 0
     audio_count = 0
 
@@ -53,16 +71,10 @@ def is_album_magic(request: Request, files: list[FileStorage]) -> bool:
         else:
             return False
 
-    if img_count > 1:
+    if img_count != 1:
         return False
 
-    if img_count == 1:
-        return audio_count >= 1
-
-    if img_count == 0:
-        return audio_count > 1
-
-    return False
+    return audio_count >= 1
 
 
 def is_gif_magic(request: Request, files: list[FileStorage]) -> bool:
@@ -86,7 +98,7 @@ def is_gif_magic(request: Request, files: list[FileStorage]) -> bool:
     return img_count >= 2
 
 
-def make_image_magic(file: FileStorage) -> bytes | None:
+def do_image_magic(file: FileStorage) -> bytes | None:
     content = file.read()
 
     with (
@@ -113,7 +125,7 @@ def make_image_magic(file: FileStorage) -> bytes | None:
         return output_temp.read()
 
 
-def make_audio_magic(file: FileStorage) -> bytes | None:
+def do_audio_magic(file: FileStorage) -> bytes | None:
     content = file.read()
 
     with (
@@ -144,7 +156,7 @@ def make_audio_magic(file: FileStorage) -> bytes | None:
         return output_temp.read()
 
 
-def make_video_magic(file: FileStorage) -> bytes | None:
+def do_video_magic(file: FileStorage) -> bytes | None:
     content = file.read()
 
     with (
@@ -184,7 +196,58 @@ def make_video_magic(file: FileStorage) -> bytes | None:
         return output_temp.read()
 
 
-def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None, str]:
+def do_album_magic(files: list[FileStorage]) -> bytes | None:
+    temp_files = []
+
+    try:
+        for file in files:
+            temp = tempfile.NamedTemporaryFile(suffix=".audio", delete=False)
+            temp.write(file.read())
+            temp.close()
+            file.seek(0)
+            temp_files.append(temp.name)
+
+        if not temp_files:
+            return None
+
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".txt", encoding="utf-8"
+        ) as list_file:
+            for temp_file in temp_files:
+                list_file.write(f"file '{temp_file}'\n")
+
+            list_file.flush()
+            aq = str(config.audio_magic_quality)
+
+            with tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp:
+                utils.run_cmd(
+                    [
+                        "ffmpeg",
+                        "-f",
+                        "concat",
+                        "-safe",
+                        "0",
+                        "-i",
+                        list_file.name,
+                        "-c:a",
+                        "libmp3lame",
+                        "-q:a",
+                        aq,
+                        "-threads",
+                        "0",
+                        "-y",
+                        output_temp.name,
+                    ],
+                )
+
+                output_temp.seek(0)
+                return output_temp.read()
+    finally:
+        for temp_file in temp_files:
+            Path(temp_file).unlink(missing_ok=True)
+
+
+def do_visual_magic(files: list[FileStorage]) -> bytes | None:
     temp_files = []
     image_file = None
 
@@ -206,8 +269,8 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                 file.seek(0)
                 temp_files.append(temp.name)
 
-        if not temp_files:
-            return None, ""
+        if (not image_file) or (not temp_files):
+            return None
 
         total_duration = 0.0
 
@@ -229,7 +292,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
             total_duration += duration
 
         if not total_duration:
-            return None, ""
+            return None
 
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".txt", encoding="utf-8"
@@ -238,85 +301,60 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
                 list_file.write(f"file '{temp_file}'\n")
 
             list_file.flush()
-            aq = str(config.audio_magic_quality)
 
-            if image_file:
-                with tempfile.NamedTemporaryFile(suffix=".mp4") as output_temp:
-                    w = str(config.album_magic_width) or "640"
-                    h = str(config.album_magic_height) or "480"
-                    crf = str(config.album_magic_video_quality) or "28"
-                    bg = str(config.album_magic_color) or "black"
+            with tempfile.NamedTemporaryFile(suffix=".mp4") as output_temp:
+                w = str(config.visual_magic_width) or "640"
+                h = str(config.visual_magic_height) or "480"
+                crf = str(config.visual_magic_video_quality) or "28"
+                bg = str(config.visual_magic_color) or "black"
+                aq = str(config.visual_magic_audio_quality) or "0"
 
-                    utils.run_cmd(
-                        [
-                            "ffmpeg",
-                            "-f",
-                            "concat",
-                            "-safe",
-                            "0",
-                            "-i",
-                            list_file.name,
-                            "-loop",
-                            "1",
-                            "-i",
-                            image_file,
-                            "-map",
-                            "0:a",
-                            "-map",
-                            "1:v",
-                            "-c:v",
-                            "libx264",
-                            "-c:v",
-                            "libx264",
-                            "-preset",
-                            "medium",
-                            "-tune",
-                            "stillimage",
-                            "-crf",
-                            f"{crf}",
-                            "-c:a",
-                            "libmp3lame",
-                            "-q:a",
-                            aq,
-                            "-pix_fmt",
-                            "yuv420p",
-                            "-vf",
-                            f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
-                            "-t",
-                            str(total_duration),
-                            "-threads",
-                            "0",
-                            "-y",
-                            output_temp.name,
-                        ],
-                    )
+                utils.run_cmd(
+                    [
+                        "ffmpeg",
+                        "-f",
+                        "concat",
+                        "-safe",
+                        "0",
+                        "-i",
+                        list_file.name,
+                        "-loop",
+                        "1",
+                        "-i",
+                        image_file,
+                        "-map",
+                        "0:a",
+                        "-map",
+                        "1:v",
+                        "-c:v",
+                        "libx264",
+                        "-c:v",
+                        "libx264",
+                        "-preset",
+                        "medium",
+                        "-tune",
+                        "stillimage",
+                        "-crf",
+                        f"{crf}",
+                        "-c:a",
+                        "libmp3lame",
+                        "-q:a",
+                        aq,
+                        "-pix_fmt",
+                        "yuv420p",
+                        "-vf",
+                        f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color={bg}",
+                        "-t",
+                        str(total_duration),
+                        "-threads",
+                        "0",
+                        "-y",
+                        output_temp.name,
+                    ],
+                )
 
-                    output_temp.seek(0)
-                    return output_temp.read(), "mp4"
-            else:
-                with tempfile.NamedTemporaryFile(suffix=".mp3") as output_temp:
-                    utils.run_cmd(
-                        [
-                            "ffmpeg",
-                            "-f",
-                            "concat",
-                            "-safe",
-                            "0",
-                            "-i",
-                            list_file.name,
-                            "-c:a",
-                            "libmp3lame",
-                            "-q:a",
-                            aq,
-                            "-threads",
-                            "0",
-                            "-y",
-                            output_temp.name,
-                        ],
-                    )
-
-                    output_temp.seek(0)
-                    return output_temp.read(), "mp3"
+                output_temp.seek(0)
+                return output_temp.read()
     finally:
         for temp_file in temp_files:
             Path(temp_file).unlink(missing_ok=True)
@@ -324,7 +362,7 @@ def make_album_magic(files: list[FileStorage]) -> tuple[bytes, str] | tuple[None
             Path(image_file).unlink(missing_ok=True)
 
 
-def make_gif_magic(files: list[FileStorage]) -> bytes | None:
+def do_gif_magic(files: list[FileStorage]) -> bytes | None:
     temp_dir = tempfile.mkdtemp()
 
     try:
