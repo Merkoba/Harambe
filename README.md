@@ -270,7 +270,7 @@ Convert audio to `mp3`.
 
 Triggers when a single audio is going to be uploaded.
 
-Ignored `mp3`.
+Ignores `mp3`.
 
 ## Album Magic
 
