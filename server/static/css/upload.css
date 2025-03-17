@@ -151,17 +151,12 @@ a.dialog_button:hover {
     background-color: var(--accent_color);
     padding: var(--padding_1);
     box-sizing: border-box;
-    cursor: pointer;
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
-}
-
-.picker:hover {
-    outline: 1px solid var(--button_border);
 }
 
 .picker_file {
@@ -178,6 +173,7 @@ a.dialog_button:hover {
     flex-grow: 0;
     outline: none;
     user-select: none;
+    cursor: pointer;
 }
 
 .picker_button:hover {

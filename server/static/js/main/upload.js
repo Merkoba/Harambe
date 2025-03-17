@@ -235,9 +235,6 @@ App.add_picker = (show = false) => {
       e.preventDefault()
       App.reset_file(input)
     }
-    else if ((e.target !== input) && !e.target.classList.contains(`picker_button`)) {
-      input.click()
-    }
   })
 
   DOM.ev(el, `auxclick`, (e) => {
