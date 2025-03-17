@@ -252,6 +252,8 @@ To use these, a user must have the `mage` permission.
 
 On the web interface, if the file combination matches, the user is asked if they want to apply the magic action, which is basically `ffmpeg` and it can take a long time to complete, unless you have nice `gpu` support for it.
 
+![](magic.png)
+
 The current spells are:
 
 ## Image Magic
