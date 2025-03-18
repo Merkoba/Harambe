@@ -159,7 +159,10 @@ a.linkbutton:hover {
 
 .prompt_button_2 {
     background-color: rgb(74 153 162);
-    min-width: 5.6rem;
+    flex-grow: 0;
+    flex-shrink: 1;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .prompt_button_2:hover {
