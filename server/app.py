@@ -178,6 +178,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "admin_font_size": config.admin_font_size,
         "links": config.links,
         "file_path": config.file_path,
+        "list_private": config.list_private,
     }
 
 

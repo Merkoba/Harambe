@@ -33,6 +33,7 @@
             App.max_password_length = {{max_password_length | default(0)}}
             App.max_upload_files = {{max_upload_files | default(0)}}
             App.upload_enabled = {{upload_enabled | default(0) | tojson}}
+            App.list_private = {{list_private | default(0) | tojson}}
 
             {% if post %}
             App.post_id = {{post.id | default(0)}}
@@ -109,14 +110,16 @@
     <body>
         <template id="template_menu_opts">
             <div class="dialog_container">
-                {% if is_reader %}
+                {% if is_reader or (not list_private) %}
                 <div id="menu_opts_fresh" class="aero_button" title="Ctrl+ArrowUp">Fresh</div>
                 <div id="menu_opts_random" class="aero_button" title="Ctrl+ArrowDown">Random</div>
                 {% endif %}
 
-                <div id="menu_opts_upload" class="aero_button">Upload</div>
-
                 {% if is_user %}
+                <div id="menu_opts_upload" class="aero_button">Upload</div>
+                {% endif %}
+
+                {% if is_reader or (not list_private) %}
                 <div id="menu_opts_list" class="aero_button">List</div>
                 {% endif %}
 
@@ -128,6 +131,9 @@
 
                 {% if is_user %}
                 <div id="menu_opts_you" class="aero_button">You</div>
+                {% else %}
+                <div id="menu_opts_login" class="aero_button">Login</div>
+                <div id="menu_opts_register" class="aero_button">Register</div>
                 {% endif %}
             </div>
         </template>

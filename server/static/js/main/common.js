@@ -230,6 +230,18 @@ App.setup_menu_opts = (show = false) => {
     App.bind_button(`${name}_opts_you`, () => {
       App.setup_you_opts(App.user_id, true, true)
     }, undefined, `>`)
+
+    App.bind_button(`${name}_opts_login`, () => {
+      App.location(`/login`)
+    }, () => {
+      App.open_tab(`/login`)
+    })
+
+    App.bind_button(`${name}_opts_register`, () => {
+      App.location(`/register`)
+    }, () => {
+      App.open_tab(`/register`)
+    })
   }, show)
 }
 
