@@ -316,55 +316,55 @@ def get_posts(
 
 
 def sort_posts(posts: list[Post], sort: str) -> None:
-    if sort == "date":
+    if sort == "date_asc":
         posts.sort(key=lambda x: x.date, reverse=True)
     elif sort == "date_desc":
         posts.sort(key=lambda x: x.date, reverse=False)
 
-    elif sort == "size":
-        posts.sort(key=lambda x: x.size, reverse=True)
-    elif sort == "size_desc":
+    elif sort == "size_asc":
         posts.sort(key=lambda x: x.size, reverse=False)
+    elif sort == "size_desc":
+        posts.sort(key=lambda x: x.size, reverse=True)
 
-    elif sort == "views":
-        posts.sort(key=lambda x: x.views, reverse=True)
-    elif sort == "views_desc":
+    elif sort == "views_asc":
         posts.sort(key=lambda x: x.views, reverse=False)
+    elif sort == "views_desc":
+        posts.sort(key=lambda x: x.views, reverse=True)
 
-    elif sort == "reactions":
-        posts.sort(key=lambda x: x.num_reactions, reverse=True)
-    elif sort == "reactions_desc":
+    elif sort == "reactions_asc":
         posts.sort(key=lambda x: x.num_reactions, reverse=False)
+    elif sort == "reactions_desc":
+        posts.sort(key=lambda x: x.num_reactions, reverse=True)
 
-    elif sort == "title":
-        posts.sort(key=lambda x: x.title, reverse=True)
-    elif sort == "title_desc":
+    elif sort == "title_asc":
         posts.sort(key=lambda x: x.title, reverse=False)
+    elif sort == "title_desc":
+        posts.sort(key=lambda x: x.title, reverse=True)
 
-    elif sort == "name":
-        posts.sort(key=lambda x: x.name, reverse=True)
-    elif sort == "name_desc":
+    elif sort == "name_asc":
         posts.sort(key=lambda x: x.name, reverse=False)
+    elif sort == "name_desc":
+        posts.sort(key=lambda x: x.name, reverse=True)
 
-    elif sort == "listed":
-        posts.sort(key=lambda x: x.listed, reverse=True)
-    elif sort == "listed_desc":
+    elif sort == "listed_asc":
         posts.sort(key=lambda x: x.listed, reverse=False)
+    elif sort == "listed_desc":
+        posts.sort(key=lambda x: x.listed, reverse=True)
 
-    elif sort == "uploader":
-        posts.sort(key=lambda x: x.uploader, reverse=True)
-    elif sort == "uploader_desc":
+    elif sort == "uploader_asc":
         posts.sort(key=lambda x: x.uploader, reverse=False)
+    elif sort == "uploader_desc":
+        posts.sort(key=lambda x: x.uploader, reverse=True)
 
-    elif sort == "mtype":
-        posts.sort(key=lambda x: x.mtype, reverse=True)
-    elif sort == "mtype_desc":
+    elif sort == "mtype_asc":
         posts.sort(key=lambda x: x.mtype, reverse=False)
+    elif sort == "mtype_desc":
+        posts.sort(key=lambda x: x.mtype, reverse=True)
 
-    elif sort == "last_reaction":
-        posts.sort(key=lambda x: x.last_reaction, reverse=True)
-    elif sort == "last_reaction_desc":
+    elif sort == "last_reaction_asc":
         posts.sort(key=lambda x: x.last_reaction, reverse=False)
+    elif sort == "last_reaction_desc":
+        posts.sort(key=lambda x: x.last_reaction, reverse=True)
 
 
 def get_post(

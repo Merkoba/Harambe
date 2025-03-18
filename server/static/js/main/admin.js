@@ -532,23 +532,29 @@ App.sort_action = (what, desc = false) => {
   if (desc) {
     what = what + `_desc`
   }
+  else {
+    what = what + `_asc`
+  }
 
   let ms = App.mode_string()
   App.location(`/${ms}?sort=${what}`)
 }
 
 App.do_sort = (what) => {
-  if ((what === App.sort) || (what === `${App.sort}_desc`)) {
-    if (App.sort === `${what}_desc`) {
-      App.sort_action(what)
-    }
-    else {
-      App.sort_action(what, true)
-    }
-  }
-  else {
-    App.sort_action(what)
-  }
+  App.sort_what = what
+  App.setup_sort_opts(true)
+
+  // if ((what === App.sort) || (what === `${App.sort}_desc`)) {
+  //   if (App.sort === `${what}_desc`) {
+  //     App.sort_action(what)
+  //   }
+  //   else {
+  //     App.sort_action(what, true)
+  //   }
+  // }
+  // else {
+  //   App.sort_action(what)
+  // }
 }
 
 App.mod_user = (what, value, vtype) => {

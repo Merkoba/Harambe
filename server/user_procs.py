@@ -198,80 +198,80 @@ def get_users(
 
 
 def sort_users(users: list[User], sort: str) -> None:
-    if sort == "register_date":
-        users.sort(key=lambda x: x.register_date, reverse=True)
-    elif sort == "register_date_desc":
+    if sort == "register_date_asc":
         users.sort(key=lambda x: x.register_date, reverse=False)
+    elif sort == "register_date_desc":
+        users.sort(key=lambda x: x.register_date, reverse=True)
 
-    elif sort == "last_date":
-        users.sort(key=lambda x: x.last_date, reverse=True)
-    elif sort == "last_date_desc":
+    elif sort == "last_date_asc":
         users.sort(key=lambda x: x.last_date, reverse=False)
+    elif sort == "last_date_desc":
+        users.sort(key=lambda x: x.last_date, reverse=True)
 
-    elif sort == "username":
-        users.sort(key=lambda x: x.username, reverse=True)
-    elif sort == "username_desc":
+    elif sort == "username_asc":
         users.sort(key=lambda x: x.username, reverse=False)
+    elif sort == "username_desc":
+        users.sort(key=lambda x: x.username, reverse=True)
 
-    elif sort == "name":
-        users.sort(key=lambda x: x.name, reverse=True)
-    elif sort == "name_desc":
+    elif sort == "name_asc":
         users.sort(key=lambda x: x.name, reverse=False)
+    elif sort == "name_desc":
+        users.sort(key=lambda x: x.name, reverse=True)
 
-    elif sort == "rpm":
-        users.sort(key=lambda x: x.rpm, reverse=True)
-    elif sort == "rpm_desc":
+    elif sort == "rpm_asc":
         users.sort(key=lambda x: x.rpm, reverse=False)
+    elif sort == "rpm_desc":
+        users.sort(key=lambda x: x.rpm, reverse=True)
 
-    elif sort == "max_size":
-        users.sort(key=lambda x: x.max_size, reverse=True)
-    elif sort == "max_size_desc":
+    elif sort == "max_size_asc":
         users.sort(key=lambda x: x.max_size, reverse=False)
+    elif sort == "max_size_desc":
+        users.sort(key=lambda x: x.max_size, reverse=True)
 
-    elif sort == "admin":
-        users.sort(key=lambda x: x.admin, reverse=True)
-    elif sort == "admin_desc":
+    elif sort == "admin_asc":
         users.sort(key=lambda x: x.admin, reverse=False)
+    elif sort == "admin_desc":
+        users.sort(key=lambda x: x.admin, reverse=True)
 
-    elif sort == "reader":
-        users.sort(key=lambda x: x.reader, reverse=True)
-    elif sort == "reader_desc":
+    elif sort == "reader_asc":
         users.sort(key=lambda x: x.reader, reverse=False)
+    elif sort == "reader_desc":
+        users.sort(key=lambda x: x.reader, reverse=True)
 
-    elif sort == "lister":
-        users.sort(key=lambda x: x.lister, reverse=True)
-    elif sort == "lister_desc":
+    elif sort == "lister_asc":
         users.sort(key=lambda x: x.lister, reverse=False)
+    elif sort == "lister_desc":
+        users.sort(key=lambda x: x.lister, reverse=True)
 
-    elif sort == "poster":
-        users.sort(key=lambda x: x.poster, reverse=True)
-    elif sort == "poster_desc":
+    elif sort == "poster_asc":
         users.sort(key=lambda x: x.poster, reverse=False)
+    elif sort == "poster_desc":
+        users.sort(key=lambda x: x.poster, reverse=True)
 
-    elif sort == "reacter":
-        users.sort(key=lambda x: x.reacter, reverse=True)
-    elif sort == "reacter_desc":
+    elif sort == "reacter_asc":
         users.sort(key=lambda x: x.reacter, reverse=False)
+    elif sort == "reacter_desc":
+        users.sort(key=lambda x: x.reacter, reverse=True)
 
-    elif sort == "num_posts":
-        users.sort(key=lambda x: x.num_posts, reverse=True)
-    elif sort == "num_posts_desc":
+    elif sort == "num_posts_asc":
         users.sort(key=lambda x: x.num_posts, reverse=False)
+    elif sort == "num_posts_desc":
+        users.sort(key=lambda x: x.num_posts, reverse=True)
 
-    elif sort == "num_reactions":
-        users.sort(key=lambda x: x.num_reactions, reverse=True)
-    elif sort == "num_reactions_desc":
+    elif sort == "num_reactions_asc":
         users.sort(key=lambda x: x.num_reactions, reverse=False)
+    elif sort == "num_reactions_desc":
+        users.sort(key=lambda x: x.num_reactions, reverse=True)
 
-    elif sort == "mark":
-        users.sort(key=lambda x: x.mark, reverse=True)
-    elif sort == "mark_desc":
+    elif sort == "mark_asc":
         users.sort(key=lambda x: x.mark, reverse=False)
+    elif sort == "mark_desc":
+        users.sort(key=lambda x: x.mark, reverse=True)
 
-    elif sort == "mage":
-        users.sort(key=lambda x: x.mage, reverse=True)
-    elif sort == "mage_desc":
+    elif sort == "mage_asc":
         users.sort(key=lambda x: x.mage, reverse=False)
+    elif sort == "mage_desc":
+        users.sort(key=lambda x: x.mage, reverse=True)
 
 
 def get_user(user_id: int | None = None, username: str | None = None) -> User | None:

@@ -278,6 +278,22 @@ App.setup_you_opts = (user_id, show = false, back = false) => {
   }, show, back)
 }
 
+App.setup_sort_opts = (show = false, back = false) => {
+  let name = `sort`
+
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_desc`, () => {
+      let what = App.sort_what
+      App.sort_action(what, true)
+    })
+
+    App.bind_button(`${name}_opts_asc`, () => {
+      let what = App.sort_what
+      App.sort_action(what)
+    })
+  }, show, back)
+}
+
 App.setup_user_opts = (show = false, back = false) => {
   let name = `user`
 
