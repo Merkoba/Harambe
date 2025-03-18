@@ -106,10 +106,6 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
-select {
-    font-size: 0.86rem;
-}
-
 #filter {
     width: 6rem;
     font-size: 0.86rem;
@@ -298,4 +294,12 @@ a:hover {
 
 .table_cell > div {
     display: inline-block;
+}
+
+select {
+    background-color: var(--contrast_background);
+    border: 1px solid var(--frame_color);
+    color: var(--text_color);
+    cursor: pointer;
+    font-size: 0.86rem;
 }
