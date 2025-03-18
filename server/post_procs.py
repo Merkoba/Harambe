@@ -226,7 +226,7 @@ def get_posts(
     page: int = 1,
     page_size: str = "default",
     query: str = "",
-    sort: str = "date",
+    sort: str = "date_asc",
     max_posts: int = 0,
     user_id: int | None = None,
     only_listed: bool = False,

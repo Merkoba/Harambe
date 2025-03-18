@@ -510,7 +510,7 @@ def admin(what: str) -> Any:
         return over()
 
     query = request.args.get("query", "")
-    def_date = "register_date" if what == "users" else "date"
+    def_date = "register_date_desc" if what == "users" else "date_asc"
     sort = request.args.get("sort", def_date)
     user_id = int(request.args.get("user_id", 0))
     media_type = request.args.get("media_type", None)
@@ -751,7 +751,7 @@ def show_list(what: str) -> Any:
 
     page = int(request.args.get("page", 1))
     page_size = str(request.args.get("page_size", config.list_page_size))
-    sort = request.args.get("sort", "date")
+    sort = request.args.get("sort", "date_asc")
     query = request.args.get("query", "")
     media_type = request.args.get("media_type", None)
     only_listed = not history

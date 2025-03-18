@@ -142,7 +142,7 @@ def get_reactions(
     page: int = 1,
     page_size: str = "default",
     query: str = "",
-    sort: str = "date",
+    sort: str = "date_asc",
     admin: bool = False,
     user_id: int | None = None,
     max_reactions: int = 0,

@@ -145,7 +145,7 @@ def get_users(
     page: int = 1,
     page_size: str = "default",
     query: str = "",
-    sort: str = "register_date",
+    sort: str = "register_date_desc",
     admin: bool = False,
     user_id: int | None = None,
 ) -> tuple[list[User], str, bool]:
