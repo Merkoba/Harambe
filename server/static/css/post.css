@@ -234,6 +234,7 @@ a.link:hover,
     align-self: stretch;
     padding-right: var(--react_padding);
     cursor: pointer;
+    user-select: none;
 }
 
 .reaction_uname:hover {
