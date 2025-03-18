@@ -298,7 +298,7 @@ def get_posts(
         posts.append(post)
 
     total_size_str = utils.get_size(total_size)
-    total_str = f"{total_size_str} ({len(posts)} Posts)"
+    total_str = f"{total_size_str} ({len(posts)})"
     sort_posts(posts, sort)
 
     if max_posts > 0:
