@@ -139,14 +139,17 @@ a.linkbutton:hover {
 .prompt_button {
     font-size: 1em;
     padding: 0.32em;
-    flex-grow: 1;
-    flex-shrink: 1;
     user-select: none;
     outline: none;
     box-sizing: border-box;
     color: white;
     background-color: rgb(127 104 164);
     cursor: pointer;
+}
+
+#prompt_submit {
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 .prompt_button:hover {
@@ -156,6 +159,7 @@ a.linkbutton:hover {
 
 .prompt_button_2 {
     background-color: rgb(74 153 162);
+    min-width: 5.6rem;
 }
 
 .prompt_button_2:hover {
