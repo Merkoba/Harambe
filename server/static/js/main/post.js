@@ -140,7 +140,8 @@ App.delete_post = async () => {
   })
 
   if (response.ok) {
-    DOM.el(`#title`).textContent = `DELETED 👻`
+    let icon = App.icon(`deleted`)
+    DOM.el(`#title`).textContent = `DELETED ${icon}`
   }
   else {
     App.print_error(response.status)

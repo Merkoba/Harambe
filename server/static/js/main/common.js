@@ -201,19 +201,19 @@ App.setup_menu_opts = (show = false) => {
       App.location(`/fresh`)
     }, () => {
       App.open_tab(`/fresh`)
-    }, `🐟`)
+    }, App.icon(`fresh`))
 
     App.bind_button(`${name}_opts_random`, () => {
       App.location(`/random`)
     }, () => {
       App.open_tab(`/random`)
-    }, `🎲`)
+    }, App.icon(`random`))
 
     App.bind_button(`${name}_opts_upload`, () => {
       App.location(`/`)
     }, () => {
       App.open_tab(`/`)
-    }, `🦍`)
+    }, App.icon(`upload`))
 
     App.bind_button(`${name}_opts_list`, () => {
       App.setup_list_opts(true, name)
@@ -251,11 +251,11 @@ App.setup_you_opts = (user_id, show = false, parent = ``) => {
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_posts`, () => {
       App.location(`/list/posts?user_id=${user_id}`)
-    }, undefined, `😎`)
+    }, undefined, App.icon(`posts`))
 
     App.bind_button(`${name}_opts_reactions`, () => {
       App.location(`/list/reactions?user_id=${user_id}`)
-    }, undefined, `🫠`)
+    }, undefined, App.icon(`reactions`))
 
     App.bind_button(`${name}_opts_edit_name`, () => {
       App.edit_name()
@@ -326,7 +326,7 @@ App.setup_user_opts = (show = false, parent = ``) => {
       else {
         App.open_tab(`/list/posts?user_id=${user_id}`)
       }
-    }, `😎`)
+    }, App.icon(`posts`))
 
     App.bind_button(`${name}_opts_reactions`, () => {
       if (!App.is_reader) {
@@ -356,7 +356,7 @@ App.setup_user_opts = (show = false, parent = ``) => {
       else {
         App.open_tab(`/list/reactions?user_id=${user_id}`)
       }
-    }, `🫠`)
+    }, App.icon(`reactions`))
 
     App.bind_button(`${name}_opts_user`, () => {
       if (!App.is_reader) {
@@ -374,7 +374,7 @@ App.setup_user_opts = (show = false, parent = ``) => {
 
       let user_id = App.user_opts_user_id
       App.open_tab(`/edit_user/${user_id}`)
-    }, `📝`)
+    }, App.icon(`edit_user`))
   }, show, parent)
 }
 
@@ -697,13 +697,13 @@ App.setup_list_opts = (show = false, parent = ``) => {
       App.location(`/list/posts`)
     }, () => {
       App.open_tab(`/list/posts`)
-    }, `😎`)
+    }, App.icon(`posts`))
 
     App.bind_button(`${name}_opts_reactions`, () => {
       App.location(`/list/reactions`)
     }, () => {
       App.open_tab(`/list/reactions`)
-    }, `🫠`)
+    }, App.icon(`reactions`))
   }, show, parent)
 }
 
@@ -715,19 +715,19 @@ App.setup_admin_opts = (show = false, parent = ``) => {
       App.location(`/admin/posts`)
     }, () => {
       App.open_tab(`/admin/posts`)
-    }, `😎`)
+    }, App.icon(`posts`))
 
     App.bind_button(`${name}_opts_reactions`, () => {
       App.location(`/admin/reactions`)
     }, () => {
       App.open_tab(`/admin/reactions`)
-    }, `🫠`)
+    }, App.icon(`reactions`))
 
     App.bind_button(`${name}_opts_users`, () => {
       App.location(`/admin/users`)
     }, () => {
       App.open_tab(`/admin/users`)
-    }, `🤪`)
+    }, App.icon(`users`))
   }, show, parent)
 }
 
@@ -857,7 +857,7 @@ App.setup_edit_post_opts = (show = false) => {
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_title`, () => {
       App.edit_title()
-    }, undefined, `✍🏻`)
+    }, undefined, App.icon(`edit_title`))
 
     App.bind_button(`${name}_opts_privacy`, () => {
       App.setup_edit_privacy_opts(true, name)
@@ -872,7 +872,7 @@ App.setup_edit_post_opts = (show = false) => {
       }
 
       App.confirmbox(confirm_args)
-    }, undefined, `💣`)
+    }, undefined, App.icon(`delete`))
   }, show)
 }
 
@@ -882,11 +882,11 @@ App.setup_edit_privacy_opts = (show = false, parent = ``) => {
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_public`, () => {
       App.edit_privacy(`public`)
-    }, undefined, `🌎`)
+    }, undefined, App.icon(`public`))
 
     App.bind_button(`${name}_opts_private`, () => {
       App.edit_privacy(`private`)
-    }, undefined, `🔒`)
+    }, undefined, App.icon(`private`))
   }, show, parent)
 }
 
@@ -1035,4 +1035,8 @@ App.flash = (text) => {
 
   msg.set(text)
   msg.show()
+}
+
+App.icon = (what) => {
+  return App[`icon_for_${what}`]
 }

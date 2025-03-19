@@ -404,6 +404,42 @@ class Config:
         # Show menu icons
         self.show_menu_icons = True
 
+        # Icon for posts
+        self.icon_for_posts = "😎"
+
+        # Icon for reactions
+        self.icon_for_reactions = "🫠"
+
+        # Icon for users
+        self.icon_for_users = "🤪"
+
+        # Icon for public posts
+        self.icon_for_public = "🌎"
+
+        # Icon for private posts
+        self.icon_for_private = "🔒"
+
+        # Icon for edit user
+        self.icon_for_edit_user = "📝"
+
+        # Icon for fresh posts
+        self.icon_for_fresh = "🐟"
+
+        # Icon for random
+        self.icon_for_random = "🎲"
+
+        # Icon for upload
+        self.icon_for_upload = "🦍"
+
+        # Icon for edit title
+        self.icon_for_edit_title = "📝"
+
+        # Icon for delete
+        self.icon_for_delete = "💣"
+
+        # Icon for deleted
+        self.icon_for_deleted = "👻"
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
