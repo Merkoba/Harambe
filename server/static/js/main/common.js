@@ -374,7 +374,7 @@ App.setup_user_opts = (show = false, parent = ``) => {
 
       let user_id = App.user_opts_user_id
       App.open_tab(`/edit_user/${user_id}`)
-    }, `👾`)
+    }, `📝`)
   }, show, parent)
 }
 
@@ -727,7 +727,7 @@ App.setup_admin_opts = (show = false, parent = ``) => {
       App.location(`/admin/users`)
     }, () => {
       App.open_tab(`/admin/users`)
-    }, `👾`)
+    }, `🤪`)
   }, show, parent)
 }
 
