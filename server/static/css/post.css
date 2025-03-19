@@ -74,7 +74,7 @@ a.link:hover,
     max-width: 60%;
     height: auto;
     margin-top: 0.45rem;
-    max-height: 30rem;
+    max-height: 36rem;
     cursor: pointer;
     object-fit: contain;
 }
@@ -89,7 +89,7 @@ a.link:hover,
     height: auto;
     background-color: black;
     margin-top: 0.45rem;
-    max-height: 35rem;
+    max-height: 36rem;
 }
 
 #video.max {
