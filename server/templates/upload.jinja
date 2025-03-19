@@ -42,20 +42,20 @@
 
         <div id="toprow">
             {% if show_privacy_select %}
-            <select id="privacy" name="privacy" class="topbutton">
+            <select id="privacy" name="privacy" class="topbutton" title="Make it a public or private post">
                 <option value="public">Public</option>
                 <option value="private">Private</option>
             </select>
             {% endif %}
 
-            <div id="zip_container" class="checkbox_container topbutton">
+            <div id="zip_container" class="checkbox_container topbutton" title="Make a zip archive">
                 <div>Zip</div>
                 <input type="checkbox" id="zip" name="zip">
             </div>
 
             {% if max_upload_files > 1 %}
-            <div id="add_picker_btn" class="topbutton">Add</div>
-            <div id="remove_picker_btn" class="topbutton">Remove</div>
+            <div id="add_picker_btn" class="topbutton" title="Add another file">Add</div>
+            <div id="remove_picker_btn" class="topbutton" title="Remove the last file">Remove</div>
             {% endif %}
         </div>
 
@@ -70,7 +70,7 @@
             <button type="button" id="menu_btn" title="Ctrl+M">🧭&nbsp;&nbsp;Menu</button>
 
             {% if is_user and upload_enabled %}
-            <button id="submit_btn" type="button" title="Upload the file">🔼&nbsp;&nbsp;Upload</button>
+            <button id="submit_btn" type="button" title="Upload the file(s)">🔼&nbsp;&nbsp;Upload</button>
             {% endif %}
 
             {% if not is_user %}
