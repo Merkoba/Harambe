@@ -880,13 +880,13 @@ App.setup_edit_privacy_opts = (show = false, parent = ``) => {
   let name = `edit_privacy`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_private`, () => {
-      App.edit_privacy(`private`)
-    })
-
     App.bind_button(`${name}_opts_public`, () => {
       App.edit_privacy(`public`)
-    })
+    }, undefined, `🌎`)
+
+    App.bind_button(`${name}_opts_private`, () => {
+      App.edit_privacy(`private`)
+    }, undefined, `🔒`)
   }, show, parent)
 }
 
