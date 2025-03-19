@@ -14,6 +14,44 @@ from config import config
 import utils
 
 
+def do_magic(what: str, files: list[FileStorage]) -> tuple[bytes, str] | None:
+    try:
+        start = time.time()
+
+        if what == "image":
+            result = magic_procs.do_image_magic(files[0])
+            ext = "jpg"
+        elif what == "audio":
+            result = magic_procs.do_audio_magic(files[0])
+            ext = "mp3"
+        elif what == "video":
+            result = magic_procs.do_video_magic(files[0])
+            ext = "mp4"
+        elif what == "album":
+            result = magic_procs.do_album_magic(files)
+            ext = "mp3"
+        elif what == "visual":
+            result = magic_procs.do_visual_magic(files)
+            ext = "mp4"
+        elif what == "gif":
+            result = magic_procs.do_gif_magic(files)
+            ext = "gif"
+        else:
+            return None
+
+        end = time.time()
+        d = round(end - start, 2)
+        utils.log(f"{what} magic took {d} seconds")
+    except Exception as e:
+        utils.error(e)
+        return None
+
+    if not result:
+        return None
+
+    return result, f".{ext}"
+
+
 def is_image_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "image_magic"):
         return False

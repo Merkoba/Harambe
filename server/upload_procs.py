@@ -80,44 +80,6 @@ def check_hash(content: bytes) -> tuple[str, str]:
     return file_hash, ""
 
 
-def do_magic(what: str, files: list[FileStorage]) -> tuple[bytes, str] | None:
-    try:
-        start = time.time()
-
-        if what == "image":
-            result = magic_procs.do_image_magic(files[0])
-            ext = "jpg"
-        elif what == "audio":
-            result = magic_procs.do_audio_magic(files[0])
-            ext = "mp3"
-        elif what == "video":
-            result = magic_procs.do_video_magic(files[0])
-            ext = "mp4"
-        elif what == "album":
-            result = magic_procs.do_album_magic(files)
-            ext = "mp3"
-        elif what == "visual":
-            result = magic_procs.do_visual_magic(files)
-            ext = "mp4"
-        elif what == "gif":
-            result = magic_procs.do_gif_magic(files)
-            ext = "gif"
-        else:
-            return None
-
-        end = time.time()
-        d = round(end - start, 2)
-        utils.log(f"{what} magic took {d} seconds")
-    except Exception as e:
-        utils.error(e)
-        return None
-
-    if not result:
-        return None
-
-    return result, f".{ext}"
-
-
 def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if not user:
         return error("No user")
@@ -173,8 +135,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Invalid privacy setting")
 
     original = utils.clean_filename(Path(files[0].filename).stem)
+    zip_archive = utils.get_checkbox(request, "zip")
 
-    zip_archive = False
     image_magic = False
     audio_magic = False
     video_magic = False
@@ -231,42 +193,42 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             utils.error(e)
             return error("Failed to zip files")
     elif image_magic:
-        result = do_magic("image", files)
+        result = magic_procs.do_magic("image", files)
 
         if not result:
             return error("Failed to do image magic")
 
         content, ext = result
     elif audio_magic:
-        result = do_magic("audio", files)
+        result = magic_procs.do_magic("audio", files)
 
         if not result:
             return error("Failed to do audio magic")
 
         content, ext = result
     elif video_magic:
-        result = do_magic("video", files)
+        result = magic_procs.do_magic("video", files)
 
         if not result:
             return error("Failed to do video magic")
 
         content, ext = result
     elif album_magic:
-        result = do_magic("album", files)
+        result = magic_procs.do_magic("album", files)
 
         if not result:
             return error("Failed to do album magic")
 
         content, ext = result
     elif visual_magic:
-        result = do_magic("visual", files)
+        result = magic_procs.do_magic("visual", files)
 
         if not result:
             return error("Failed to do visual magic")
 
         content, ext = result
     elif gif_magic:
-        result = do_magic("gif", files)
+        result = magic_procs.do_magic("gif", files)
 
         if not result:
             return error("Failed to do gif magic")
@@ -314,23 +276,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     )
 
     if config.samples_enabled:
-        try:
-            if zip_archive:
-                sample_procs.get_zip_sample(path, files)
-            elif mtype.startswith("image"):
-                sample_procs.get_image_sample(path)
-            elif mtype.startswith("video"):
-                sample_procs.get_video_sample(path)
-            elif mtype.startswith("audio"):
-                sample_procs.get_audio_sample(path)
-            elif utils.is_text_file(path):
-                sample_procs.get_text_sample(path)
-        except Exception:
-            try:
-                utils.error("Failed to get sample #1")
-                sample_procs.get_text_sample(path)
-            except Exception:
-                utils.error("Failed to get sample #2")
+        sample_procs.make_sample(path, files, mtype, zip_archive)
 
     database.update_user_last_date(user.id)
     post_procs.check_storage()

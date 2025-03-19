@@ -19,7 +19,9 @@ privacy = "public"
 file_path = nil
 image_magic = "off"
 audio_magic = "off"
+video_magic = "off"
 album_magic = "off"
+gif_magic = "off"
 
 # Parse command-line options
 OptionParser.new do |opts|
@@ -45,8 +47,16 @@ OptionParser.new do |opts|
     audio_magic = "on"
   end
 
+  opts.on("--video-magic", "Do video magic") do
+    video_magic = "on"
+  end
+
   opts.on("--album-magic", "Do album magic") do
     album_magic = "on"
+  end
+
+  opts.on("--gif-magic", "Do gif magic") do
+    gif_magic = "on"
   end
 
   opts.on("-h", "--help", "Prints this help") do
@@ -97,7 +107,9 @@ form_data = [
   ["privacy", privacy],
   ["image_magic", image_magic],
   ["audio_magic", audio_magic],
+  ["video_magic", video_magic],
   ["album_magic", album_magic],
+  ["gif_magic", gif_magic],
 ]
 
 request.set_form form_data, "multipart/form-data"

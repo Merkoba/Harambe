@@ -3,111 +3,19 @@ DOM.ev(document, `DOMContentLoaded`, () => {
 })
 
 App.init = () => {
-  let image = DOM.el(`#image`)
   App.clicked = false
 
   window.addEventListener(`pageshow`, (e) => {
     App.clicked = false
   })
 
-  if (image) {
-    DOM.ev(image, `click`, (e) => {
-      if (!App.is_user) {
-        App.popmsg(`Login or register first`)
-        return
-      }
-
-      App.file_trigger()
-    })
-
-    DOM.ev(image, `auxclick`, (e) => {
-      App.reset_file()
-    })
-
-    DOM.ev(image, `error`, (e) => {
-      App.reset_file()
-    })
-  }
-
-  DOM.ev(document, `dragover`, (e) => {
-    e.preventDefault()
-  })
-
-  DOM.ev(document, `drop`, (e) => {
-    e.preventDefault()
-    let files = e.dataTransfer.files
-
-    if (files && (files.length > 0)) {
-      let file = App.get_empty_picker()
-      let dataTransfer = new DataTransfer()
-      dataTransfer.items.add(files[0])
-      file.files = dataTransfer.files
-      App.reflect_file(file)
-      App.add_picker()
-    }
-  })
-
-  let video = DOM.el(`#video`)
-
-  if (video) {
-    DOM.ev(video, `auxclick`, (e) => {
-      App.reset_file()
-    })
-
-    DOM.ev(video, `error`, (e) => {
-      App.reset_file()
-    })
-  }
-
-  let menu_btn = DOM.el(`#menu_btn`)
-
-  if (menu_btn) {
-    App.setup_menu_opts()
-
-    DOM.ev(menu_btn, `click`, (e) => {
-      App.msg_show(`menu`)
-    })
-
-    DOM.ev(menu_btn, `auxclick`, (e) => {
-      if (e.button === 1) {
-        App.msg_show(`menu`)
-      }
-    })
-  }
-
-  let login_btn = DOM.el(`#login_btn`)
-
-  if (login_btn) {
-    DOM.ev(login_btn, `click`, (e) => {
-      App.location(`/login`)
-    })
-  }
-
-  let register_btn = DOM.el(`#register_btn`)
-
-  if (register_btn) {
-    DOM.ev(register_btn, `click`, (e) => {
-      App.location(`/register`)
-    })
-  }
-
-  let submit_btn = DOM.el(`#submit_btn`)
-
-  if (submit_btn) {
-    DOM.ev(submit_btn, `click`, (e) => {
-      if (App.validate()) {
-        let form = DOM.el(`#form`)
-        form.submit()
-      }
-    })
-
-    DOM.ev(submit_btn, `auxclick`, (e) => {
-      if (e.button === 1) {
-        App.remove_picker()
-      }
-    })
-  }
-
+  App.setup_dragdrop()
+  App.setup_image()
+  App.setup_video()
+  App.setup_menu()
+  App.setup_non_user()
+  App.setup_submit()
+  App.setup_zip()
   App.setup_pickers()
 }
 
@@ -721,4 +629,128 @@ App.check_file_media = (file) => {
 App.get_file_title = (file) => {
   let split = file.name.split(`.`)
   return split.slice(0, -1).join(`.`)
+}
+
+App.setup_zip = () => {
+  let zip = DOM.el(`#zip_container`)
+
+  DOM.ev(zip, `click`, (e) => {
+    if (e.target.id === `zip`) {
+      return
+    }
+
+    DOM.el(`#zip`).click()
+  })
+}
+
+App.setup_submit = () => {
+  let submit_btn = DOM.el(`#submit_btn`)
+
+  if (submit_btn) {
+    DOM.ev(submit_btn, `click`, (e) => {
+      if (App.validate()) {
+        let form = DOM.el(`#form`)
+        form.submit()
+      }
+    })
+
+    DOM.ev(submit_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.remove_picker()
+      }
+    })
+  }
+}
+
+App.setup_non_user = () => {
+  let login_btn = DOM.el(`#login_btn`)
+
+  if (login_btn) {
+    DOM.ev(login_btn, `click`, (e) => {
+      App.location(`/login`)
+    })
+  }
+
+  let register_btn = DOM.el(`#register_btn`)
+
+  if (register_btn) {
+    DOM.ev(register_btn, `click`, (e) => {
+      App.location(`/register`)
+    })
+  }
+}
+
+App.setup_menu = () => {
+  let menu_btn = DOM.el(`#menu_btn`)
+
+  if (menu_btn) {
+    App.setup_menu_opts()
+
+    DOM.ev(menu_btn, `click`, (e) => {
+      App.msg_show(`menu`)
+    })
+
+    DOM.ev(menu_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.msg_show(`menu`)
+      }
+    })
+  }
+}
+
+App.setup_image = () => {
+  let image = DOM.el(`#image`)
+
+  if (image) {
+    DOM.ev(image, `click`, (e) => {
+      if (!App.is_user) {
+        App.popmsg(`Login or register first`)
+        return
+      }
+
+      App.file_trigger()
+    })
+
+    DOM.ev(image, `auxclick`, (e) => {
+      App.reset_file()
+    })
+
+    DOM.ev(image, `error`, (e) => {
+      App.reset_file()
+    })
+  }
+}
+
+App.setup_video = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    DOM.ev(video, `auxclick`, (e) => {
+      App.reset_file()
+    })
+
+    DOM.ev(video, `error`, (e) => {
+      App.reset_file()
+    })
+  }
+}
+
+App.setup_dragdrop = () => {
+  DOM.ev(document, `dragover`, (e) => {
+    e.preventDefault()
+  })
+
+  DOM.ev(document, `drop`, (e) => {
+    e.preventDefault()
+    let files = e.dataTransfer.files
+
+    if (files && (files.length > 0)) {
+      let file = App.get_empty_picker()
+      let dataTransfer = new DataTransfer()
+      dataTransfer.items.add(files[0])
+      file.files = dataTransfer.files
+      App.reflect_file(file)
+      App.add_picker()
+    }
+  })
 }
