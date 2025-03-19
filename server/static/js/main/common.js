@@ -747,7 +747,7 @@ App.setup_link_opts = (show = false, parent = ``) => {
         App.open_tab(link.url, link.target)
       }, () => {
         App.open_tab(link.url)
-      })
+      }, link.icon)
     }
   }, show, parent)
 }

@@ -30,6 +30,7 @@ class FileChangeHandler(FileSystemEventHandler):  # type: ignore
 class Link:
     name: str
     url: str
+    icon: str = ""
     target: str = "_self"
 
 
@@ -47,8 +48,8 @@ class Config:
         # List of links to show in the index page
         # Dict object: name, url, target (optional)
         self.links: list[Link] = [
-            Link("About", "/static/demo/about.html"),
-            Link("Memorial", "/static/demo/memorial.html"),
+            Link("About", "/static/demo/about.html", "🛟"),
+            Link("Memorial", "/static/demo/memorial.html", "🦍"),
         ]
 
         # Secret key for security
