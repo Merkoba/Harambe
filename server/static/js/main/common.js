@@ -259,11 +259,11 @@ App.setup_you_opts = (user_id, show = false, parent = ``) => {
 
     App.bind_button(`${name}_opts_edit_name`, () => {
       App.edit_name()
-    })
+    }, undefined, App.icon(`edit`))
 
     App.bind_button(`${name}_opts_edit_password`, () => {
       App.edit_password()
-    })
+    }, undefined, App.icon(`edit`))
 
     App.bind_button(`${name}_opts_logout`, () => {
       let confirm_args = {
@@ -274,7 +274,7 @@ App.setup_you_opts = (user_id, show = false, parent = ``) => {
       }
 
       App.confirmbox(confirm_args)
-    })
+    }, undefined, App.icon(`logout`))
   }, show, parent)
 }
 
@@ -857,7 +857,7 @@ App.setup_edit_post_opts = (show = false) => {
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_title`, () => {
       App.edit_title()
-    }, undefined, App.icon(`edit_title`))
+    }, undefined, App.icon(`edit`))
 
     App.bind_button(`${name}_opts_privacy`, () => {
       App.setup_edit_privacy_opts(true, name)

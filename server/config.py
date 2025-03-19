@@ -431,14 +431,17 @@ class Config:
         # Icon for upload
         self.icon_for_upload = "🦍"
 
-        # Icon for edit title
-        self.icon_for_edit_title = "📝"
+        # Icon for edit
+        self.icon_for_edit = "📝"
 
         # Icon for delete
         self.icon_for_delete = "💣"
 
         # Icon for deleted
         self.icon_for_deleted = "👻"
+
+        # Icon for logout
+        self.icon_for_logout = "🪂"
 
     # --- Methods ---
 
