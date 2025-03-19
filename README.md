@@ -180,7 +180,11 @@ Optional flag `--image-magic` to perform image magic if possible.
 
 Optional flag `--audio-magic` to perform audio magic if possible.
 
+Optional flag `--video-magic` to perform video magic if possible.
+
 Optional flag `--album-magic` to perform album magic if possible.
+
+Optional flag `--gif-magic` to perform gif magic if possible.
 
 ---
 
