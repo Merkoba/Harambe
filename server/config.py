@@ -400,6 +400,9 @@ class Config:
         # Used in post_procs.py
         self.original_title_length = 30
 
+        # Show menu icons
+        self.show_menu_icons = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

@@ -179,6 +179,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "links": config.links,
         "file_path": config.file_path,
         "list_private": config.list_private,
+        "show_menu_icons": config.show_menu_icons,
     }
 
 

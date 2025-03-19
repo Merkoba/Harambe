@@ -251,11 +251,11 @@ App.setup_you_opts = (user_id, show = false, parent = ``) => {
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_posts`, () => {
       App.location(`/list/posts?user_id=${user_id}`)
-    })
+    }, undefined, `😎`)
 
     App.bind_button(`${name}_opts_reactions`, () => {
       App.location(`/list/reactions?user_id=${user_id}`)
-    })
+    }, undefined, `🫠`)
 
     App.bind_button(`${name}_opts_edit_name`, () => {
       App.edit_name()
@@ -326,7 +326,7 @@ App.setup_user_opts = (show = false, parent = ``) => {
       else {
         App.open_tab(`/list/posts?user_id=${user_id}`)
       }
-    })
+    }, `😎`)
 
     App.bind_button(`${name}_opts_reactions`, () => {
       if (!App.is_reader) {
@@ -356,7 +356,7 @@ App.setup_user_opts = (show = false, parent = ``) => {
       else {
         App.open_tab(`/list/reactions?user_id=${user_id}`)
       }
-    })
+    }, `🫠`)
 
     App.bind_button(`${name}_opts_user`, () => {
       if (!App.is_reader) {
@@ -374,7 +374,7 @@ App.setup_user_opts = (show = false, parent = ``) => {
 
       let user_id = App.user_opts_user_id
       App.open_tab(`/edit_user/${user_id}`)
-    })
+    }, `👾`)
   }, show, parent)
 }
 
@@ -697,13 +697,13 @@ App.setup_list_opts = (show = false, parent = ``) => {
       App.location(`/list/posts`)
     }, () => {
       App.open_tab(`/list/posts`)
-    })
+    }, `😎`)
 
     App.bind_button(`${name}_opts_reactions`, () => {
       App.location(`/list/reactions`)
     }, () => {
       App.open_tab(`/list/reactions`)
-    })
+    }, `🫠`)
   }, show, parent)
 }
 
@@ -715,19 +715,19 @@ App.setup_admin_opts = (show = false, parent = ``) => {
       App.location(`/admin/posts`)
     }, () => {
       App.open_tab(`/admin/posts`)
-    })
+    }, `😎`)
 
     App.bind_button(`${name}_opts_reactions`, () => {
       App.location(`/admin/reactions`)
     }, () => {
       App.open_tab(`/admin/reactions`)
-    })
+    }, `🫠`)
 
     App.bind_button(`${name}_opts_users`, () => {
       App.location(`/admin/users`)
     }, () => {
       App.open_tab(`/admin/users`)
-    })
+    }, `👾`)
   }, show, parent)
 }
 
@@ -809,7 +809,7 @@ App.bind_button = (what, func, mfunc, submenu = ``) => {
   text.textContent = `${index + 1}. ${otext}`
   el.appendChild(text)
 
-  if (submenu) {
+  if (submenu && App.show_menu_icons) {
     let sub = DOM.create(`div`, `aero_arrow`)
     sub.textContent = submenu
     el.appendChild(sub)

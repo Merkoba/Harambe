@@ -34,6 +34,7 @@
             App.max_upload_files = {{max_upload_files | default(0)}}
             App.upload_enabled = {{upload_enabled | default(0) | tojson}}
             App.list_private = {{list_private | default(0) | tojson}}
+            App.show_menu_icons = {{show_menu_icons | default(0) | tojson}}
 
             {% if post %}
             App.post_id = {{post.id | default(0)}}
