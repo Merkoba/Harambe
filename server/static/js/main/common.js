@@ -374,7 +374,7 @@ App.setup_user_opts = (show = false, parent = ``) => {
 
       let user_id = App.user_opts_user_id
       App.open_tab(`/edit_user/${user_id}`)
-    }, App.icon(`edit_user`))
+    }, App.icon(`edit`))
   }, show, parent)
 }
 

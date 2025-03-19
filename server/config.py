@@ -419,9 +419,6 @@ class Config:
         # Icon for private posts
         self.icon_for_private = "🔒"
 
-        # Icon for edit user
-        self.icon_for_edit_user = "📝"
-
         # Icon for fresh posts
         self.icon_for_fresh = "🐟"
 

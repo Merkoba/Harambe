@@ -182,7 +182,6 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "icon_for_upload": config.icon_for_upload,
         "icon_for_fresh": config.icon_for_fresh,
         "icon_for_random": config.icon_for_random,
-        "icon_for_edit_user": config.icon_for_edit_user,
         "icon_for_public": config.icon_for_public,
         "icon_for_private": config.icon_for_private,
         "icon_for_edit": config.icon_for_edit,
