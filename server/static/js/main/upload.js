@@ -6,6 +6,7 @@ App.init = () => {
   App.clicked = false
 
   window.addEventListener(`pageshow`, (e) => {
+    App.close_modals()
     App.clicked = false
   })
 
@@ -506,6 +507,10 @@ App.check_gif_magic = () => {
 
 App.check_magic = () => {
   if (!App.magic_enabled || !App.is_mage) {
+    return true
+  }
+
+  if (DOM.el(`#zip`).checked) {
     return true
   }
 

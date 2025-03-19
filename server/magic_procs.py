@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 # Standard
+import time
 import tempfile
 import shutil
 from pathlib import Path
@@ -19,22 +20,22 @@ def do_magic(what: str, files: list[FileStorage]) -> tuple[bytes, str] | None:
         start = time.time()
 
         if what == "image":
-            result = magic_procs.do_image_magic(files[0])
+            result = do_image_magic(files[0])
             ext = "jpg"
         elif what == "audio":
-            result = magic_procs.do_audio_magic(files[0])
+            result = do_audio_magic(files[0])
             ext = "mp3"
         elif what == "video":
-            result = magic_procs.do_video_magic(files[0])
+            result = do_video_magic(files[0])
             ext = "mp4"
         elif what == "album":
-            result = magic_procs.do_album_magic(files)
+            result = do_album_magic(files)
             ext = "mp3"
         elif what == "visual":
-            result = magic_procs.do_visual_magic(files)
+            result = do_visual_magic(files)
             ext = "mp4"
         elif what == "gif":
-            result = magic_procs.do_gif_magic(files)
+            result = do_gif_magic(files)
             ext = "gif"
         else:
             return None

@@ -16,19 +16,19 @@ def make_sample(
 ) -> None:
     try:
         if zip_archive:
-            sample_procs.get_zip_sample(path, files)
+            get_zip_sample(path, files)
         elif mtype.startswith("image"):
-            sample_procs.get_image_sample(path)
+            get_image_sample(path)
         elif mtype.startswith("video"):
-            sample_procs.get_video_sample(path)
+            get_video_sample(path)
         elif mtype.startswith("audio"):
-            sample_procs.get_audio_sample(path)
+            get_audio_sample(path)
         elif utils.is_text_file(path):
-            sample_procs.get_text_sample(path)
+            get_text_sample(path)
     except Exception:
         try:
             utils.error("Failed to get sample #1")
-            sample_procs.get_text_sample(path)
+            get_text_sample(path)
         except Exception:
             utils.error("Failed to get sample #2")
 
