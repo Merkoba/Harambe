@@ -196,10 +196,6 @@ App.capitalize = (s) => {
 App.setup_menu_opts = (show = false) => {
   let name = `menu`
 
-  function show_this() {
-    App.setup_menu_opts(true)
-  }
-
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_fresh`, () => {
       App.location(`/fresh`)
@@ -220,27 +216,19 @@ App.setup_menu_opts = (show = false) => {
     }, `🦍`)
 
     App.bind_button(`${name}_opts_list`, () => {
-      App.setup_list_opts(true, () => {
-        show_this()
-      })
+      App.setup_list_opts(true, name)
     }, undefined, `>`)
 
     App.bind_button(`${name}_opts_admin`, () => {
-      App.setup_admin_opts(true, () => {
-        show_this()
-      })
+      App.setup_admin_opts(true, name)
     }, undefined, `>`)
 
     App.bind_button(`${name}_opts_links`, () => {
-      App.setup_link_opts(true, () => {
-        show_this()
-      })
+      App.setup_link_opts(true, name)
     }, undefined, `>`)
 
     App.bind_button(`${name}_opts_you`, () => {
-      App.setup_you_opts(App.user_id, true, () => {
-        show_this()
-      })
+      App.setup_you_opts(App.user_id, true, name)
     }, undefined, `>`)
 
     App.bind_button(`${name}_opts_login`, () => {
@@ -257,7 +245,7 @@ App.setup_menu_opts = (show = false) => {
   }, show)
 }
 
-App.setup_you_opts = (user_id, show = false, back = undefined) => {
+App.setup_you_opts = (user_id, show = false, parent = ``) => {
   let name = `you`
 
   App.make_opts(name, () => {
@@ -287,7 +275,7 @@ App.setup_you_opts = (user_id, show = false, back = undefined) => {
 
       App.confirmbox(confirm_args)
     })
-  }, show, back)
+  }, show, parent)
 }
 
 App.setup_sort_opts = (show = false) => {
@@ -306,7 +294,7 @@ App.setup_sort_opts = (show = false) => {
   }, show)
 }
 
-App.setup_user_opts = (show = false, back = undefined) => {
+App.setup_user_opts = (show = false, parent = ``) => {
   let name = `user`
 
   App.make_opts(name, () => {
@@ -387,7 +375,7 @@ App.setup_user_opts = (show = false, back = undefined) => {
       let user_id = App.user_opts_user_id
       App.open_tab(`/edit_user/${user_id}`)
     })
-  }, show, back)
+  }, show, parent)
 }
 
 App.fill_def_args = (def, args) => {
@@ -701,7 +689,7 @@ App.do_user_edit = async (what, value, vtype, title, callback) => {
   }
 }
 
-App.setup_list_opts = (show = false, back = undefined) => {
+App.setup_list_opts = (show = false, parent = ``) => {
   let name = `list`
 
   App.make_opts(name, () => {
@@ -716,10 +704,10 @@ App.setup_list_opts = (show = false, back = undefined) => {
     }, () => {
       App.open_tab(`/list/reactions`)
     })
-  }, show, back)
+  }, show, parent)
 }
 
-App.setup_admin_opts = (show = false, back = undefined) => {
+App.setup_admin_opts = (show = false, parent = ``) => {
   let name = `admin`
 
   App.make_opts(name, () => {
@@ -740,10 +728,10 @@ App.setup_admin_opts = (show = false, back = undefined) => {
     }, () => {
       App.open_tab(`/admin/users`)
     })
-  }, show, back)
+  }, show, parent)
 }
 
-App.setup_link_opts = (show = false, back = undefined) => {
+App.setup_link_opts = (show = false, parent = ``) => {
   let name = `link`
 
   App.make_opts(name, () => {
@@ -761,10 +749,10 @@ App.setup_link_opts = (show = false, back = undefined) => {
         App.open_tab(link.url)
       })
     }
-  }, show, back)
+  }, show, parent)
 }
 
-App.make_opts = (name, setup, show = false, back = undefined) => {
+App.make_opts = (name, setup, show = false, parent = ``) => {
   let msg_name = `msg_${name}`
 
   if (App[msg_name]) {
@@ -786,14 +774,14 @@ App.make_opts = (name, setup, show = false, back = undefined) => {
   App[msg_name].set(t.innerHTML)
   setup()
 
-  if (back) {
+  if (parent) {
     let c = DOM.el(`.dialog_container`, App[msg_name].content)
     let btn = DOM.create(`div`, `aero_button`, `${name}_opts_back`)
     btn.textContent = `Back`
     c.appendChild(btn)
 
     App.bind_button(`${name}_opts_back`, () => {
-      back()
+      App[`setup_${parent}_opts`](true)
     }, undefined, `<`)
   }
 
@@ -866,20 +854,14 @@ App.encode_uri = (uri) => {
 App.setup_edit_post_opts = (show = false) => {
   let name = `edit_post`
 
-  function show_this() {
-    App.setup_edit_post_opts(true)
-  }
-
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_title`, () => {
       App.edit_title()
-    })
+    }, undefined, `✍🏻`)
 
     App.bind_button(`${name}_opts_privacy`, () => {
-      App.setup_edit_privacy_opts(true, () => {
-        show_this()
-      })
-    })
+      App.setup_edit_privacy_opts(true, name)
+    }, undefined, `>`)
 
     App.bind_button(`${name}_opts_delete`, () => {
       let confirm_args = {
@@ -890,11 +872,11 @@ App.setup_edit_post_opts = (show = false) => {
       }
 
       App.confirmbox(confirm_args)
-    })
+    }, undefined, `💣`)
   }, show)
 }
 
-App.setup_edit_privacy_opts = (show = false, back = undefined) => {
+App.setup_edit_privacy_opts = (show = false, parent = ``) => {
   let name = `edit_privacy`
 
   App.make_opts(name, () => {
@@ -905,7 +887,7 @@ App.setup_edit_privacy_opts = (show = false, back = undefined) => {
     App.bind_button(`${name}_opts_public`, () => {
       App.edit_privacy(`public`)
     })
-  }, show, back)
+  }, show, parent)
 }
 
 App.next_post = (blank = false) => {
