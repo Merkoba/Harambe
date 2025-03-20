@@ -243,10 +243,6 @@ a.dialog_button:hover {
     cursor: pointer;
 }
 
-select {
-    font-size: 0.8rem;
-}
-
 #toprow {
     display: flex;
     align-items: center;
@@ -266,7 +262,6 @@ select {
     border-width: 1px;
     border-color: transparent;
     cursor: pointer;
-    font-size: 0.8rem;
     margin: 0;
     padding: 0;
     padding-left: 0.25rem;
@@ -277,6 +272,7 @@ select {
     box-sizing: border-box;
     flex-grow: 1;
     flex-shrink: 1;
+    font-size: 0.9rem;
 }
 
 .topbutton:hover {
