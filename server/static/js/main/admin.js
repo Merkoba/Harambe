@@ -593,20 +593,19 @@ App.do_mod_user = async (items, what, value, vtype) => {
 
 App.delete_all = () => {
   if (App.mode === `admin_users`) {
-    let confirm_args = {
-      message: `Delete all non-admin users ?`,
-      callback_yes: () => {
-        App.delete_normal_users()
-      },
-    }
-
-    App.confirmbox(confirm_args)
+    App.delete_all_items(`users`, () => {
+      App.delete_normal_users()
+    })
   }
   else if (App.mode === `admin_posts`) {
-    App.delete_all_items(`posts`)
+    App.delete_all_items(`posts`, () => {
+      App.delete_all_posts()
+    })
   }
   else if (App.mode === `admin_reactions`) {
-    App.delete_all_items(`reactions`)
+    App.delete_all_items(`reactions`, () => {
+      App.delete_all_reactions()
+    })
   }
 }
 
@@ -1337,13 +1336,6 @@ App.focus_table = () => {
   DOM.el(`#items`).focus()
 }
 
-App.delete_all_items = (what) => {
-  if (App.get_items().length === 0) {
-    App.popmsg(`No items to delete`)
-    return
-  }
-
-  App.double_confirm(`Delete ALL ${what} ?`, () => {
-    App[`delete_all_${what}`]()
-  })
+App.delete_all_items = (what, func) => {
+  App.double_confirm(`Delete ALL ${what} ?`, func)
 }
