@@ -21,7 +21,11 @@ App.startup = () => {
 
 App.setup_keyboard = () => {
   DOM.ev(document, `keydown`, (e) => {
-    let n = parseInt(e.key)
+    let n = 0
+
+    if (e.code.startsWith(`Digit`)) {
+      n = parseInt(e.code.replace(`Digit`, ``), 10)
+    }
 
     if (e.key === `Enter`) {
       if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
@@ -60,7 +64,13 @@ App.setup_keyboard = () => {
 
           if (n <= buttons.length) {
             e.preventDefault()
-            buttons[n - 1].click()
+
+            if (e.shiftKey) {
+              App.auxclick(buttons[n - 1])
+            }
+            else {
+              buttons[n - 1].click()
+            }
           }
         }
       }
@@ -1087,4 +1097,14 @@ App.storage_value = (what, fallback) => {
   }
 
   return value
+}
+
+App.auxclick = (el) => {
+  let event = new MouseEvent(`auxclick`, {
+    bubbles: true,
+    cancelable: true,
+    button: 1,
+  })
+
+  el.dispatchEvent(event)
 }
