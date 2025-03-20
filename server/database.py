@@ -103,10 +103,8 @@ class Post:
     file_hash: str
     privacy: str
     reactions: list[Reaction] = field(default_factory=list)
-    username: str = ""
-    uploader: str = ""
     num_reactions: int = 0
-    listed: bool = False
+    author: User | None = None
 
 
 @dataclass
@@ -116,9 +114,6 @@ class Reaction:
     user: int
     value: str
     date: int
-    username: str | None = None
-    uname: str | None = None
-    listed: bool = False
     parent: Post | None = None
     author: User | None = None
 
@@ -294,13 +289,9 @@ def get_posts(
             user = users[0] if users else None
 
             if user:
-                post.username = user.username
-                post.uploader = user.name
-                post.listed = (post.privacy == "public") and user.lister
+                post.author = user
             else:
-                post.username = ""
-                post.uploader = ""
-                post.listed = False
+                post.author = None
 
             if full_reactions:
                 reactions = get_reactions(post_id=post.id, post=post, oconn=connection)

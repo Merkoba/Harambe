@@ -105,10 +105,11 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     date = post.date
     size = post.size
     views = post.views
-    username = post.username
-    uploader = post.uploader
     mtype = post.mtype
-    listed = post.listed
+    username = post.author.username if post.author else "Anon"
+    uploader = post.author.name if post.author else "Anon"
+    lister = post.author.lister if post.author else False
+    listed = (post.privacy == "public") and lister
     otl = config.original_title_length
     original = post.original or post.title[:otl].strip() or post.name
     original_full = get_original_name(original, post)
@@ -117,13 +118,15 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     date_2 = utils.nice_date(date, "time")
     date_3 = utils.nice_date(date)
     size_str = utils.get_size(size)
-    listed_str = "L: Yes" if listed else "L: No"
+    listed_str = "Yes" if listed else "No"
     post_title = title or original or name
     uploader_str = uploader or "Anon"
     mtype_str = mtype or ext or "?"
     num_reactions = post.num_reactions
     privacy = post.privacy
-    privacy_str = "P: Yes" if privacy == "public" else "P: No"
+    privacy_str = "Public" if privacy == "public" else "Private"
+    lister_str = "Lister" if lister else "Not Lister"
+    privacy_str += f" | {lister_str}"
 
     if post.reactions:
         last_reaction = post.reactions[-1].value
