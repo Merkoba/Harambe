@@ -382,30 +382,15 @@ def get_post(
         return None
 
     posts = database.get_posts(
-        post_id=post_id, name=name, full_reactions=full_reactions
+        post_id=post_id, name=name, full_reactions=full_reactions, increase=increase
     )
 
     post = posts[0] if posts else None
 
     if post:
-        now = utils.now()
-
-        if increase:
-            diff = now - post.view_date
-
-            if diff > config.view_delay:
-                increase_post_views(post.id)
-
-        return make_post(post, now, full)
+        return make_post(post, utils.now(), full)
 
     return None
-
-
-def increase_post_views(post_id: int | None) -> None:
-    if not post_id:
-        return
-
-    database.increase_post_views(post_id)
 
 
 def get_next_post(name: str) -> Post | None:

@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 
 # Modules
 import utils
+from config import config
 
 
 schemas = {
@@ -252,6 +253,7 @@ def get_posts(
     file_hash: str | None = None,
     extra: bool = True,
     full_reactions: bool = False,
+    increase: bool = False,
     only_public: bool = False,
     oconn: Connection | None = None,
 ) -> list[Post]:
@@ -280,6 +282,7 @@ def get_posts(
 
     posts = []
     rows = [row for row in rows if row]
+    now = utils.now()
 
     for row in rows:
         post = make_post(dict(row))
@@ -310,6 +313,12 @@ def get_posts(
                 else:
                     post.reactions = []
 
+        if increase:
+            diff = now - post.view_date
+
+            if diff > config.view_delay:
+                increase_post_views(post.id, oconn=connection)
+
         posts.append(post)
 
     if not oconn:
@@ -326,8 +335,8 @@ def delete_post(post_id: int) -> None:
     conn.close()
 
 
-def increase_post_views(post_id: int) -> None:
-    connection = get_conn()
+def increase_post_views(post_id: int, oconn: Connection | None = None) -> None:
+    connection = get_conn(oconn)
     conn, c = connection.tuple()
 
     c.execute(
@@ -336,7 +345,9 @@ def increase_post_views(post_id: int) -> None:
     )
 
     conn.commit()
-    conn.close()
+
+    if not oconn:
+        conn.close()
 
 
 def edit_post_title(post_id: int, title: str) -> None:
