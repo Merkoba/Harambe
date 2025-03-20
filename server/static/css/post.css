@@ -238,7 +238,7 @@ a.link:hover,
 }
 
 .reaction_uname:hover {
-    text-decoration: underline;
+    filter: brightness(0.8);
 }
 
 .reaction_value {
