@@ -51,10 +51,6 @@
     <div class="table_row table_header">
         <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
 
-        <div id="username" class="table_cell" title="The username of the user">
-            <div class="header_text" data-sort="username">User</div>
-        </div>
-
         <div id="username" class="table_cell" title="The name of the user">
             <div class="header_text" data-sort="name">Name</div>
         </div>
@@ -129,13 +125,8 @@
             <input class="select_checkbox" type="checkbox">
         </div>
 
-        <!-- Username -->
-        <div class="table_cell" title="{{item.username}}">
-            <div class="admin_user button">{{item.username}}</div>
-        </div>
-
         <!-- Name -->
-        <div class="table_cell" title="{{item.name}}">
+        <div class="table_cell" title="{{item.username}}">
             <div class="admin_user button">{{item.name or "-"}}</div>
         </div>
 
