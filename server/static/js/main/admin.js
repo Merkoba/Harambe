@@ -994,20 +994,28 @@ App.key_events = () => {
     }
     else if (App.sample_open()) {
       if (e.key === `ArrowLeft`) {
-        App.next_sample(`prev`)
+        if (!e.ctrlKey && !e.shiftKey) {
+          App.next_sample(`prev`)
+        }
       }
       else if (e.key === `ArrowRight`) {
-        App.next_sample(`next`)
+        if (!e.ctrlKey && !e.shiftKey) {
+          App.next_sample(`next`)
+        }
       }
       else if (e.key === `Escape`) {
         App.close_sample()
       }
     }
     else if (e.key === `ArrowLeft`) {
-      App.prev_page()
+      if (!e.ctrlKey && !e.shiftKey) {
+        App.prev_page()
+      }
     }
     else if (e.key === `ArrowRight`) {
-      App.next_page()
+      if (!e.ctrlKey && !e.shiftKey) {
+        App.next_page()
+      }
     }
   })
 }
