@@ -539,18 +539,6 @@ App.sort_action = (what, desc = false) => {
 App.do_sort = (what) => {
   App.sort_what = what
   App.setup_sort_opts(true)
-
-  // if ((what === App.sort) || (what === `${App.sort}_desc`)) {
-  //   if (App.sort === `${what}_desc`) {
-  //     App.sort_action(what)
-  //   }
-  //   else {
-  //     App.sort_action(what, true)
-  //   }
-  // }
-  // else {
-  //   App.sort_action(what)
-  // }
 }
 
 App.mod_user = (what, value, vtype) => {
@@ -933,21 +921,7 @@ App.setup_edit = () => {
     })
   }
   else if (App.mode === `admin_posts`) {
-    App.msg_post_edit = Msg.factory()
-    let t = DOM.el(`#template_post_edit`)
-    App.msg_post_edit.set(t.innerHTML)
-
-    DOM.ev(DOM.el(`#edit_title`), `click`, () => {
-      App.edit_post_title()
-    })
-
-    DOM.ev(DOM.el(`#make_private`), `click`, () => {
-      App.edit_post_privacy(`private`)
-    })
-
-    DOM.ev(DOM.el(`#make_public`), `click`, () => {
-      App.edit_post_privacy(`public`)
-    })
+    App.setup_post_edit_opts()
 
     DOM.ev(edit, `click`, () => {
       if (App.get_selected().length > 0) {

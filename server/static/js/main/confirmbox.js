@@ -24,26 +24,27 @@ class Confirmbox {
     m.innerHTML = args.message
     let btns = DOM.create(`div`, `dialog_container`)
     btns.id = `confirmbox_buttons`
-    let n = DOM.create(`div`, `aero_button`)
-    n.textContent = `1. ${args.no}`
-    let y = DOM.create(`div`, `aero_button`)
-    y.textContent = `2. ${args.yes}`
+    let n = DOM.create(`div`, `aero_button`, `confirmbox_opts_no`)
+    n.textContent = args.no
+    let y = DOM.create(`div`, `aero_button`, `confirmbox_opts_yes`)
+    y.textContent = args.yes
+
     c.appendChild(m)
     btns.appendChild(n)
     btns.appendChild(y)
     c.appendChild(btns)
+
     msg.set(c)
+    App.msg_confirmbox = msg
 
-    DOM.ev(y, `click`, (e) => {
-      this.action()
-    })
-
-    DOM.ev(n, `click`, (e) => {
+    App.bind_button(`confirmbox_opts_no`, () => {
       if (args.callback_no) {
         args.callback_no()
       }
+    })
 
-      msg.close()
+    App.bind_button(`confirmbox_opts_yes`, () => {
+      this.action()
     })
 
     this.args = args

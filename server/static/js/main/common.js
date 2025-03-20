@@ -1112,3 +1112,21 @@ App.auxclick = (el) => {
 App.no_mod = (e) => {
   return !e.ctrlKey && !e.shiftKey
 }
+
+App.setup_post_edit_opts = (show = false) => {
+  let name = `post_edit`
+
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_title`, () => {
+      App.edit_post_title()
+    }, undefined, App.icon(`edit`))
+
+    App.bind_button(`${name}_opts_public`, () => {
+      App.edit_post_privacy(`public`)
+    }, undefined, App.icon(`public`))
+
+    App.bind_button(`${name}_opts_private`, () => {
+      App.edit_post_privacy(`private`)
+    }, undefined, App.icon(`private`))
+  }, show)
+}
