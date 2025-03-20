@@ -114,6 +114,7 @@ def add_reaction(post_id: int, text: str, user: User) -> tuple[str, int]:
     reaction = get_reaction(reaction_id)
 
     if reaction:
+        database.update_user_last_date(user.id)
         return utils.ok(data={"reaction": reaction})
 
     return utils.bad("Reaction failed")

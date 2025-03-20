@@ -65,6 +65,8 @@ class User:
     mage_str: str
     num_posts: int
     num_reactions: int
+    regdate_ago: str
+    lastdate_ago: str
 
 
 user_types = {
@@ -91,7 +93,7 @@ user_types = {
 user_data: dict[str, UserData] = {}
 
 
-def make_user(user: DbUser) -> User:
+def make_user(user: DbUser, now: int) -> User:
     reg_date_str = utils.nice_date(user.register_date)
     last_date_str = utils.nice_date(user.last_date)
     admin_str = "A: Yes" if user.admin else "A: No"
@@ -104,6 +106,8 @@ def make_user(user: DbUser) -> User:
     mage_str = "M: Yes" if user.mage else "M: No"
     num_posts = user.num_posts if user.num_posts else 0
     num_reactions = user.num_reactions if user.num_reactions else 0
+    regdate_ago = utils.time_ago(user.register_date, now)
+    lastdate_ago = utils.time_ago(user.last_date, now)
 
     return User(
         user.id,
@@ -133,12 +137,15 @@ def make_user(user: DbUser) -> User:
         mage_str,
         num_posts,
         num_reactions,
+        regdate_ago,
+        lastdate_ago,
     )
 
 
 def get_userlist(user_id: int | None = None) -> list[User]:
+    now = utils.now()
     users = database.get_users(user_id=user_id)
-    return [make_user(user) for user in users]
+    return [make_user(user, now) for user in users]
 
 
 def get_users(
@@ -284,7 +291,7 @@ def get_user(user_id: int | None = None, username: str | None = None) -> User | 
     if not user:
         return None
 
-    return make_user(user)
+    return make_user(user, utils.now())
 
 
 def check_value(user: User | None, what: str, value: Any) -> tuple[bool, Any]:

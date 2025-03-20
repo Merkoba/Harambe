@@ -92,8 +92,26 @@ def time_ago(start_time: int, end_time: int) -> str:
         return f"{months:.1f} {word} ago"
 
     years = months / 12
-    word = singular_or_plural(years, "year", "years")
-    return f"{years:.1f} {word} ago"
+
+    if years < 10:
+        word = singular_or_plural(years, "year", "years")
+        return f"{years:.1f} {word} ago"
+
+    decades = years / 10
+
+    if decades < 10:
+        word = singular_or_plural(decades, "decade", "decades")
+        return f"{decades:.1f} {word} ago"
+
+    centuries = decades / 10
+
+    if centuries < 10:
+        word = singular_or_plural(centuries, "century", "centuries")
+        return f"{centuries:.1f} {word} ago"
+
+    millennia = centuries / 10
+    word = singular_or_plural(millennia, "millennium", "millennia")
+    return f"{millennia:.1f} {word} ago"
 
 
 def files_dir() -> Path:

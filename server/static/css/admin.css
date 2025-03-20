@@ -96,8 +96,9 @@ body, html {
 }
 
 .table_cell.small {
-    flex: 0 0 auto;
-    width: 4.5rem;
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-width: 4.5rem;
 }
 
 input[type="checkbox"] {

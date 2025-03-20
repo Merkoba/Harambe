@@ -92,7 +92,7 @@
         </div>
 
         <div id="num_reactions" class="table_cell small" title="The number of reactions this user has done">
-            <div class="header_text" data-sort="num_reactions">Reactions</div>
+            <div class="header_text" data-sort="num_reactions">Reacts</div>
         </div>
 
         {% if show_marks %}
@@ -166,10 +166,10 @@
         {% endif %}
 
         <!-- Register Date -->
-        <div class="table_cell" title="{{item.register_date_str}}">{{item.register_date_str}}</div>
+        <div class="table_cell" title="{{item.register_date_str}}">{{item.regdate_ago}}</div>
 
         <!-- Last Date -->
-        <div class="table_cell" title="{{item.last_date_str}}">{{item.last_date_str}}</div>
+        <div class="table_cell" title="{{item.last_date_str}}">{{item.lastdate_ago}}</div>
     </div>
     {% endfor %}
 </div>
