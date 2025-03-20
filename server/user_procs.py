@@ -194,7 +194,7 @@ def get_users(
         users.append(user)
 
     total_str = f"{len(users)}"
-    sort_users(users, sort)
+    utils.do_sort(users, sort, ["register_date", "last_date"])
 
     if psize > 0:
         start_index = (page - 1) * psize
@@ -205,10 +205,6 @@ def get_users(
         has_next_page = False
 
     return users, total_str, has_next_page
-
-
-def sort_users(users: list[User], sort: str) -> None:
-    utils.do_sort(users, sort, ["register_date", "last_date"])
 
 
 def get_user(user_id: int | None = None, username: str | None = None) -> User | None:

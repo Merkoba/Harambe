@@ -184,7 +184,7 @@ def get_reactions(
         reactions.append(reaction)
 
     total_str = f"{len(reactions)}"
-    sort_reactions(reactions, sort)
+    utils.do_sort(reactions, sort, ["date"])
 
     if max_reactions > 0:
         reactions = reactions[:max_reactions]
@@ -198,10 +198,6 @@ def get_reactions(
         has_next_page = False
 
     return reactions, total_str, has_next_page
-
-
-def sort_reactions(reactions: list[Reaction], sort: str) -> None:
-    utils.do_sort(reactions, sort, ["date"])
 
 
 def delete_reactions(ids: list[int]) -> tuple[str, int]:

@@ -303,7 +303,7 @@ def get_posts(
 
     total_size_str = utils.get_size(total_size)
     total_str = f"{total_size_str} ({len(posts)})"
-    sort_posts(posts, sort)
+    utils.do_sort(posts, sort, ["date"])
 
     if max_posts > 0:
         posts = posts[:max_posts]
@@ -317,10 +317,6 @@ def get_posts(
         has_next_page = False
 
     return posts, total_str, has_next_page
-
-
-def sort_posts(posts: list[Post], sort: str) -> None:
-    utils.do_sort(posts, sort, ["date"])
 
 
 def get_post(
