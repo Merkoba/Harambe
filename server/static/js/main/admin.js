@@ -979,12 +979,16 @@ App.key_events = () => {
       }
       else if (e.key === `ArrowLeft`) {
         if (!App.filter_value()) {
-          App.prev_page()
+          if (!e.ctrlKey && !e.shiftKey) {
+            App.prev_page()
+          }
         }
       }
       else if (e.key === `ArrowRight`) {
         if (!App.filter_value()) {
-          App.next_page()
+          if (!e.ctrlKey && !e.shiftKey) {
+            App.next_page()
+          }
         }
       }
     }
