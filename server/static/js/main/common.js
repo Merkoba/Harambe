@@ -1108,3 +1108,7 @@ App.auxclick = (el) => {
 
   el.dispatchEvent(event)
 }
+
+App.no_mod = (e) => {
+  return !e.ctrlKey && !e.shiftKey
+}

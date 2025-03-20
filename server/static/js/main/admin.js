@@ -965,27 +965,31 @@ App.key_events = () => {
 
   DOM.ev(document, `keydown`, (e) => {
     if (e.key === `Enter`) {
-      if (App.filter_focused()) {
-        App.do_search()
+      if (App.no_mod(e)) {
+        if (App.filter_focused()) {
+          App.do_search()
+        }
       }
     }
     else if (e.key === `Escape`) {
-      if (App.sample_open()) {
-        App.close_sample()
-      }
-      else if (filter.value) {
-        filter.value = ``
-        App.do_filter()
-      }
-      else {
-        filter.blur()
+      if (App.no_mod(e)) {
+        if (App.sample_open()) {
+          App.close_sample()
+        }
+        else if (filter.value) {
+          filter.value = ``
+          App.do_filter()
+        }
+        else {
+          filter.blur()
+        }
       }
     }
   })
 
   DOM.ev(document, `keyup`, (e) => {
     if (e.key === `ArrowLeft`) {
-      if (!e.ctrlKey && !e.shiftKey) {
+      if (App.no_mod(e)) {
         if (App.sample_open()) {
           App.next_sample(`prev`)
         }
@@ -995,7 +999,7 @@ App.key_events = () => {
       }
     }
     else if (e.key === `ArrowRight`) {
-      if (!e.ctrlKey && !e.shiftKey) {
+      if (App.no_mod(e)) {
         if (App.sample_open()) {
           App.next_sample(`next`)
         }
