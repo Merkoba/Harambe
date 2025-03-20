@@ -174,7 +174,13 @@ App.print_error = (msg) => {
 }
 
 App.contains_url = (text) => {
-  return text.match(/(https?:\/\/|www\.)\S+/gi)
+  let tlds = [
+    `com`, `org`, `net`, `io`, `me`,
+    `tv`, `gov`, `edu`, `info`, `co`,
+  ]
+
+  return text.match(/(https?:\/\/|www\.)\S+/gi) ||
+  text.match(new RegExp(`\\b\\w+\\.(${tlds.join(`|`)})\\b`, `gi`))
 }
 
 App.prompt_text = (args = {}) => {

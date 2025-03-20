@@ -19,6 +19,20 @@ from flask import jsonify, Request  # type: ignore
 from config import config
 
 
+TLDS = [
+    "com",
+    "org",
+    "net",
+    "io",
+    "me",
+    "tv",
+    "gov",
+    "edu",
+    "info",
+    "co",
+]
+
+
 def now() -> int:
     return int(time.time())
 
@@ -221,8 +235,12 @@ def ok(message: str = "", data: dict[str, Any] | None = None) -> tuple[str, int]
     return jsonify({"status": "ok", "message": message, **data}), 200
 
 
-def contains_url(text: str) -> list[str]:
-    return re.findall(r"(https?://|www\.)\S+", text, re.IGNORECASE)
+def contains_url(text: str) -> bool:
+    if bool(re.search(r"(https?://|www\.)\S+", text, re.IGNORECASE)):
+        return True
+
+    pattern = r"\b\w+\.(" + "|".join(TLDS) + r")\b"
+    return bool(re.search(pattern, text, re.IGNORECASE))
 
 
 def remove_multiple_lines(text: str) -> str:
