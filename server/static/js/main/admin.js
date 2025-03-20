@@ -964,57 +964,44 @@ App.key_events = () => {
   let filter = DOM.el(`#filter`)
 
   DOM.ev(document, `keydown`, (e) => {
-    if (App.filter_focused()) {
-      if (e.key === `Enter`) {
+    if (e.key === `Enter`) {
+      if (App.filter_focused()) {
         App.do_search()
       }
-      else if (e.key === `Escape`) {
-        if (filter.value) {
-          filter.value = ``
-          App.do_filter()
-        }
-        else {
-          filter.blur()
-        }
-      }
-      else if (e.key === `ArrowLeft`) {
-        if (!App.filter_value()) {
-          if (!e.ctrlKey && !e.shiftKey) {
-            App.prev_page()
-          }
-        }
-      }
-      else if (e.key === `ArrowRight`) {
-        if (!App.filter_value()) {
-          if (!e.ctrlKey && !e.shiftKey) {
-            App.next_page()
-          }
-        }
-      }
     }
-    else if (App.sample_open()) {
-      if (e.key === `ArrowLeft`) {
-        if (!e.ctrlKey && !e.shiftKey) {
-          App.next_sample(`prev`)
-        }
-      }
-      else if (e.key === `ArrowRight`) {
-        if (!e.ctrlKey && !e.shiftKey) {
-          App.next_sample(`next`)
-        }
-      }
-      else if (e.key === `Escape`) {
+    else if (e.key === `Escape`) {
+      if (App.sample_open()) {
         App.close_sample()
       }
+      else if (filter.value) {
+        filter.value = ``
+        App.do_filter()
+      }
+      else {
+        filter.blur()
+      }
     }
-    else if (e.key === `ArrowLeft`) {
+  })
+
+  DOM.ev(document, `keyup`, (e) => {
+    if (e.key === `ArrowLeft`) {
       if (!e.ctrlKey && !e.shiftKey) {
-        App.prev_page()
+        if (App.sample_open()) {
+          App.next_sample(`prev`)
+        }
+        else if (!App.filter_value()) {
+          App.prev_page()
+        }
       }
     }
     else if (e.key === `ArrowRight`) {
       if (!e.ctrlKey && !e.shiftKey) {
-        App.next_page()
+        if (App.sample_open()) {
+          App.next_sample(`next`)
+        }
+        else if (!App.filter_value()) {
+          App.next_page()
+        }
       }
     }
   })
