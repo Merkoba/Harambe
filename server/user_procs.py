@@ -166,6 +166,7 @@ def get_users(
         psize = int(page_size)
 
     users = []
+    query = utils.decode(query)
     query = utils.clean_query(query)
 
     for user in get_userlist(user_id):
@@ -176,6 +177,8 @@ def get_users(
             or query in utils.clean_query(user.max_size_fill)
             or query in utils.clean_query(user.register_date_str)
             or query in utils.clean_query(user.last_date_str)
+            or query in utils.clean_query(user.regdate_ago)
+            or query in utils.clean_query(user.lastdate_ago)
             or query in utils.clean_query(user.admin_str)
             or query in utils.clean_query(user.reacter_str)
             or query in utils.clean_query(user.mark)

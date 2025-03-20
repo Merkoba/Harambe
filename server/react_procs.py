@@ -159,6 +159,7 @@ def get_reactions(
         psize = int(page_size)
 
     reactions = []
+    query = utils.decode(query)
     query = utils.clean_query(query)
 
     for reaction in get_reactionlist(user_id):
