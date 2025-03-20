@@ -179,6 +179,7 @@ App.on_page_select_change = () => {
 
 App.delete_posts = () => {
   if (App.selected_items.length === 0) {
+    App.popmsg(`No items selected`)
     return
   }
 
@@ -330,6 +331,7 @@ App.edit_post_title = (el) => {
   let items = App.get_selected()
 
   if (items.length === 0) {
+    App.popmsg(`No items selected`)
     return
   }
 
@@ -364,6 +366,7 @@ App.edit_post_privacy = (privacy) => {
   let items = App.get_selected()
 
   if (items.length === 0) {
+    App.popmsg(`No items selected`)
     return
   }
 
@@ -424,6 +427,7 @@ App.delete_selected = () => {
   let items = App.get_selected()
 
   if (items.length === 0) {
+    App.popmsg(`No items selected`)
     return
   }
 
@@ -442,6 +446,7 @@ App.delete_selected = () => {
 
 App.delete_users = () => {
   if (App.selected_items.length === 0) {
+    App.popmsg(`No items selected`)
     return
   }
 
@@ -598,24 +603,10 @@ App.delete_all = () => {
     App.confirmbox(confirm_args)
   }
   else if (App.mode === `admin_posts`) {
-    let confirm_args = {
-      message: `Delete ALL posts ?`,
-      callback_yes: () => {
-        App.delete_all_posts()
-      },
-    }
-
-    App.confirmbox(confirm_args)
+    App.delete_all_items(`posts`)
   }
   else if (App.mode === `admin_reactions`) {
-    let confirm_args = {
-      message: `Delete ALL reactions ?`,
-      callback_yes: () => {
-        App.delete_all_reactions()
-      },
-    }
-
-    App.confirmbox(confirm_args)
+    App.delete_all_items(`reactions`)
   }
 }
 
@@ -694,6 +685,7 @@ App.mode_string = () => {
 
 App.delete_reactions = () => {
   if (App.selected_items.length === 0) {
+    App.popmsg(`No items selected`)
     return
   }
 
@@ -1343,4 +1335,35 @@ App.check_sample_buttons = () => {
 
 App.focus_table = () => {
   DOM.el(`#items`).focus()
+}
+
+App.delete_all_items = (what, confirmed = false) => {
+  if (App.get_items().length === 0) {
+    App.popmsg(`No items to delete`)
+    return
+  }
+
+  let yes
+
+  if (confirmed) {
+    yes = `Yes!`
+  }
+  else {
+    yes = `Yes`
+  }
+
+  let confirm_args = {
+    message: `Delete ALL ${what} ?`,
+    callback_yes: () => {
+      if (confirmed) {
+        App[`delete_all_${what}`]()
+      }
+      else {
+        App.delete_all_items(what, true)
+      }
+    },
+    yes,
+  }
+
+  App.confirmbox(confirm_args)
 }
