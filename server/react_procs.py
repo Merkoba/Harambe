@@ -201,17 +201,7 @@ def get_reactions(
 
 
 def sort_reactions(reactions: list[Reaction], sort: str) -> None:
-    if utils.do_sort(reactions, sort, "date", False):
-        return
-
-    if utils.do_sort(reactions, sort, "user", True):
-        return
-
-    if utils.do_sort(reactions, sort, "pname", False):
-        return
-
-    if utils.do_sort(reactions, sort, "value", True):
-        return
+    utils.do_sort(reactions, sort, ["date"])
 
 
 def delete_reactions(ids: list[int]) -> tuple[str, int]:

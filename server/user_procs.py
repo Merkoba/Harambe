@@ -208,50 +208,7 @@ def get_users(
 
 
 def sort_users(users: list[User], sort: str) -> None:
-    if utils.do_sort(users, sort, "register_date", False):
-        return
-
-    if utils.do_sort(users, sort, "last_date", False):
-        return
-
-    if utils.do_sort(users, sort, "username", True):
-        return
-
-    if utils.do_sort(users, sort, "name", True):
-        return
-
-    if utils.do_sort(users, sort, "rpm", True):
-        return
-
-    if utils.do_sort(users, sort, "max_size", True):
-        return
-
-    if utils.do_sort(users, sort, "admin", True):
-        return
-
-    if utils.do_sort(users, sort, "reader", True):
-        return
-
-    if utils.do_sort(users, sort, "lister", True):
-        return
-
-    if utils.do_sort(users, sort, "poster", True):
-        return
-
-    if utils.do_sort(users, sort, "reacter", True):
-        return
-
-    if utils.do_sort(users, sort, "num_posts", True):
-        return
-
-    if utils.do_sort(users, sort, "num_reactions", True):
-        return
-
-    if utils.do_sort(users, sort, "mark", True):
-        return
-
-    if utils.do_sort(users, sort, "mage", True):
-        return
+    utils.do_sort(users, sort, ["register_date", "last_date"])
 
 
 def get_user(user_id: int | None = None, username: str | None = None) -> User | None:

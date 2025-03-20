@@ -337,17 +337,16 @@ def run_cmd(command: list[str]) -> subprocess.CompletedProcess[str]:
         raise
 
 
-def do_sort(items: Items, sort: str, what: str, desc: bool = False) -> bool:
-    if sort.startswith(f"{what}_"):
-        if desc:
-            reverse = sort.endswith("_desc")
-        else:
-            reverse = sort.endswith("_asc")
+def do_sort(items: Items, sort: str, different: list[str]) -> None:
+    split = sort.split("_")
+    key = "_".join(split[0:-1])
+    order = split[-1]
+    reverse = key in different
 
-        items.sort(key=lambda x: getattr(x, what), reverse=reverse)
-        return True
+    if order == "desc":
+        reverse = not reverse
 
-    return False
+    items.sort(key=lambda x: getattr(x, key), reverse=reverse)
 
 
 ICONS = load_icons()

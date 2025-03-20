@@ -320,35 +320,7 @@ def get_posts(
 
 
 def sort_posts(posts: list[Post], sort: str) -> None:
-    if utils.do_sort(posts, sort, "date", False):
-        return
-
-    if utils.do_sort(posts, sort, "size", True):
-        return
-
-    if utils.do_sort(posts, sort, "views", True):
-        return
-
-    if utils.do_sort(posts, sort, "num_reactions", True):
-        return
-
-    if utils.do_sort(posts, sort, "title", True):
-        return
-
-    if utils.do_sort(posts, sort, "name", True):
-        return
-
-    if utils.do_sort(posts, sort, "listed", True):
-        return
-
-    if utils.do_sort(posts, sort, "uploader", True):
-        return
-
-    if utils.do_sort(posts, sort, "mtype", True):
-        return
-
-    if utils.do_sort(posts, sort, "last_reaction", True):
-        return
+    utils.do_sort(posts, sort, ["date"])
 
 
 def get_post(
