@@ -403,12 +403,12 @@ App.setup_reaction_opts = (show = false) => {
     App.bind_button(`${name}_opts_edit`, () => {
       let id = App.active_item.dataset.id
       App.react_prompt(id)
-    })
+    }, undefined, App.icon(`edit`))
 
     App.bind_button(`${name}_opts_delete`, () => {
       let id = App.active_item.dataset.id
       App.delete_reaction(id)
-    })
+    }, undefined, App.icon(`delete`))
   }, show)
 }
 
