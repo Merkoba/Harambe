@@ -1337,33 +1337,13 @@ App.focus_table = () => {
   DOM.el(`#items`).focus()
 }
 
-App.delete_all_items = (what, confirmed = false) => {
+App.delete_all_items = (what) => {
   if (App.get_items().length === 0) {
     App.popmsg(`No items to delete`)
     return
   }
 
-  let yes
-
-  if (confirmed) {
-    yes = `Yes!`
-  }
-  else {
-    yes = `Yes`
-  }
-
-  let confirm_args = {
-    message: `Delete ALL ${what} ?`,
-    callback_yes: () => {
-      if (confirmed) {
-        App[`delete_all_${what}`]()
-      }
-      else {
-        App.delete_all_items(what, true)
-      }
-    },
-    yes,
-  }
-
-  App.confirmbox(confirm_args)
+  App.double_confirm(`Delete ALL ${what} ?`, () => {
+    App[`delete_all_${what}`]()
+  })
 }

@@ -1220,3 +1220,29 @@ App.setup_user_edit_opts = (show = false) => {
     })
   }, show)
 }
+
+App.double_confirm = (message, func, confirmed = false) => {
+  let yes
+
+  if (confirmed) {
+    yes = `Yes!`
+  }
+  else {
+    yes = `Yes`
+  }
+
+  let confirm_args = {
+    yes,
+    message,
+    callback_yes: () => {
+      if (confirmed) {
+        func()
+      }
+      else {
+        App.double_confirm(message, func, true)
+      }
+    },
+  }
+
+  App.confirmbox(confirm_args)
+}
