@@ -207,7 +207,7 @@ def sort_reactions(reactions: list[Reaction], sort: str) -> None:
     if utils.do_sort(reactions, sort, "user", True):
         return
 
-    if utils.do_sort(reactions, sort, "post", False):
+    if utils.do_sort(reactions, sort, "pname", False):
         return
 
     if utils.do_sort(reactions, sort, "value", True):

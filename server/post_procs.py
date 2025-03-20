@@ -329,7 +329,7 @@ def sort_posts(posts: list[Post], sort: str) -> None:
     if utils.do_sort(posts, sort, "views", True):
         return
 
-    if utils.do_sort(posts, sort, "reactions", True):
+    if utils.do_sort(posts, sort, "num_reactions", True):
         return
 
     if utils.do_sort(posts, sort, "title", True):
