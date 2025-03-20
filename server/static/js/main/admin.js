@@ -981,7 +981,7 @@ App.key_events = () => {
           App.do_filter()
         }
         else {
-          filter.blur()
+          App.focus_table()
         }
       }
     }
@@ -1431,4 +1431,8 @@ App.check_sample_buttons = () => {
   else {
     DOM.el(`#sample_next`).classList.add(`disabled`)
   }
+}
+
+App.focus_table = () => {
+  DOM.el(`#items`).focus()
 }
