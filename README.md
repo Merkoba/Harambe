@@ -210,17 +210,17 @@ For example 1 will trigger the first button.
 
 There are some global shortcuts:
 
-`Ctrl+m`: Show the main menu.
+`Ctrl + M`: Show the main menu.
 
-`Ctrl+Up`: Go to the fresh post.
+`Ctrl + Up`: Go to the fresh post.
 
-`Ctrl+Right`: Go to the next post.
+`Ctrl + Right`: Go to the next post.
 
-`Ctrl+Shift+Right`: Go to a random post.
+`Ctrl + Shift + Right`: Go to a random post.
 
-`Ctrl+Shift+Up`: Edit a post.
+`Ctrl + Shift + Up`: Edit a post.
 
-`Ctrl+Down`: React to a post.
+`Ctrl + Down`: React to a post.
 
 ---
 
