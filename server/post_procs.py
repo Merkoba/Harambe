@@ -132,6 +132,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
 
     if all_data:
         reactions = [react_procs.make_reaction(r, now) for r in post.reactions]
+        reactions.sort(key=lambda x: x.date, reverse=False)
     else:
         reactions = []
 

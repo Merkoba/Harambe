@@ -1,7 +1,3 @@
-DOM.ev(document, `DOMContentLoaded`, () => {
-  App.init()
-})
-
 App.init = () => {
   App.selected_items = []
   App.last_checkbox = null

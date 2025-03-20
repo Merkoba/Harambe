@@ -1,9 +1,23 @@
+App.ls_storage = `storage_v1`
+
 App.SECOND = 1000
 App.MINUTE = App.SECOND * 60
 App.HOUR = App.MINUTE * 60
 App.DAY = App.HOUR * 24
 App.MONTH = App.DAY * 30
 App.YEAR = App.DAY * 365
+
+App.startup = () => {
+  App.get_storage()
+  App.setup_keyboard()
+  App.setup_mouse()
+
+  DOM.ev(document, `DOMContentLoaded`, () => {
+    if (App.init) {
+      App.init()
+    }
+  })
+}
 
 App.setup_keyboard = () => {
   DOM.ev(document, `keydown`, (e) => {
@@ -1045,4 +1059,22 @@ App.flash = (text) => {
 
 App.icon = (what) => {
   return App[`icon_for_${what}`]
+}
+
+App.get_storage = () => {
+  let storage = localStorage.getItem(App.ls_storage)
+  let obj
+
+  if (storage) {
+    obj = JSON.parse(storage)
+  }
+  else {
+    obj = {}
+  }
+
+  App.storage = obj
+}
+
+App.save_storage = () => {
+  localStorage.setItem(App.ls_storage, JSON.stringify(App.storage))
 }

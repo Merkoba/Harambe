@@ -1,7 +1,3 @@
-DOM.ev(document, `DOMContentLoaded`, () => {
-  App.init()
-})
-
 App.init = () => {
   App.date_ms = App.date * 1000
   App.icons_loaded = false
@@ -10,7 +6,7 @@ App.init = () => {
   App.max_on = false
   App.max_id = ``
   App.image_expanded = false
-  App.reversed = false
+  App.reversed = App.storage.reversed_reactions || false
   App.ace_wrap = true
   let edit = DOM.el(`#edit`)
 
@@ -53,7 +49,6 @@ App.init = () => {
   }
 
   App.setup_reaction_opts()
-
   let uploader = DOM.el(`#uploader`)
 
   if (uploader) {
@@ -307,11 +302,14 @@ App.down_icons = () => {
   }
 }
 
-App.add_reaction = (reaction) => {
+App.add_reaction = (reaction, check = true) => {
   let reactions = DOM.el(`#reactions`)
   DOM.show(reactions)
   reactions.appendChild(App.make_reaction(reaction))
-  App.check_reactions()
+
+  if (check) {
+    App.check_reactions()
+  }
 }
 
 App.check_reactions = () => {
@@ -468,7 +466,6 @@ App.send_reaction = async (text) => {
   if (response.ok) {
     let json = await response.json()
     App.add_reaction(json.reaction)
-    App.check_reactions()
     App.to_bottom()
   }
   else {
@@ -532,18 +529,8 @@ App.refresh = async () => {
 
 App.apply_update = (update) => {
   if (update.reactions && update.reactions.length) {
-    let c = DOM.el(`#reactions`)
-    c.innerHTML = ``
-
-    if (App.reversed) {
-      update.reactions.reverse()
-    }
-
-    for (let reaction of update.reactions) {
-      App.add_reaction(reaction)
-    }
-
-    App.check_reactions()
+    App.reactions = update.reactions
+    App.fill_reactions()
   }
 
   App.title = update.title
@@ -697,9 +684,20 @@ App.reset_modal_image = () => {
 }
 
 App.fill_reactions = () => {
-  for (let reaction of App.reactions) {
-    App.add_reaction(reaction)
+  let reactions = App.reactions.slice(0)
+
+  if (App.reversed) {
+    reactions.reverse()
   }
+
+  let c = DOM.el(`#reactions`)
+  c.innerHTML = ``
+
+  for (let reaction of reactions) {
+    App.add_reaction(reaction, false)
+  }
+
+  App.check_reactions()
 }
 
 App.delete_reaction = (id) => {
@@ -758,13 +756,9 @@ App.on_image_load = () => {
 
 App.toggle_reverse = () => {
   App.reversed = !App.reversed
-  let container = DOM.el(`#reactions`)
-  let children = Array.from(container.children)
-  children.reverse()
-
-  for (let child of children) {
-    container.appendChild(child)
-  }
+  App.storage.reversed_reactions = App.reversed
+  App.save_storage()
+  App.fill_reactions()
 }
 
 App.toggle_wrap = () => {
