@@ -831,12 +831,28 @@ App.bind_button = (what, func, mfunc, submenu = ``) => {
 
   let c = DOM.el(`.dialog_container`, App[msg_name].content)
   let btns = DOM.els(`.aero_button`, c)
+  let numbers
+
+  if (btns.length > 9) {
+    numbers = false
+  }
+  else {
+    numbers = true
+  }
+
   let index = btns.indexOf(el)
   let otext = el.textContent
   el.textContent = ``
 
   let text = DOM.create(`div`, `aero_text`)
-  text.textContent = `${index + 1}. ${otext}`
+
+  if (numbers) {
+    text.textContent = `${index + 1}. ${otext}`
+  }
+  else {
+    text.textContent = otext
+  }
+
   el.appendChild(text)
 
   if (submenu && App.show_menu_icons) {
@@ -1128,5 +1144,79 @@ App.setup_post_edit_opts = (show = false) => {
     App.bind_button(`${name}_opts_private`, () => {
       App.edit_post_privacy(`private`)
     }, undefined, App.icon(`private`))
+  }, show)
+}
+
+App.setup_user_edit_opts = (show = false) => {
+  let name = `user_edit`
+
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_poster_no`, () => {
+      App.user_mod_input(`poster`, 0, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_reader_no`, () => {
+      App.user_mod_input(`reader`, 0, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_reader_yes`, () => {
+      App.user_mod_input(`reader`, 1, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_lister_no`, () => {
+      App.user_mod_input(`lister`, 0, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_lister_yes`, () => {
+      App.user_mod_input(`lister`, 1, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_reacter_no`, () => {
+      App.user_mod_input(`reacter`, 0, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_reacter_yes`, () => {
+      App.user_mod_input(`reacter`, 1, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_mage_no`, () => {
+      App.user_mod_input(`mage`, 0, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_mage_yes`, () => {
+      App.user_mod_input(`mage`, 1, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_admin_no`, () => {
+      App.user_mod_input(`admin`, 0, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_admin_yes`, () => {
+      App.user_mod_input(`admin`, 1, `bool`)
+    })
+
+    App.bind_button(`${name}_opts_rpm`, () => {
+      App.user_mod_input(`rpm`, ``, `number`)
+    })
+
+    App.bind_button(`${name}_opts_max_size`, () => {
+      App.user_mod_input(`max_size`, ``, `number`)
+    })
+
+    App.bind_button(`${name}_opts_mark`, () => {
+      App.user_mod_input(`mark`, ``, `string`)
+    })
+
+    App.bind_button(`${name}_opts_name`, () => {
+      App.user_mod_input(`name`, ``, `string`)
+    })
+
+    App.bind_button(`${name}_opts_username`, () => {
+      App.user_mod_input(`username`, ``, `string`)
+    })
+
+    App.bind_button(`${name}_opts_password`, () => {
+      App.user_mod_input(`password`, ``, `password`)
+    })
   }, show)
 }

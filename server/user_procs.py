@@ -577,6 +577,9 @@ def mod_user(
         return utils.bad("Invalid value")
 
     if what == "username":
+        if len(ids) != 1:
+            return utils.bad("Only one user can be changed at a time")
+
         if database.username_exists(checked_value):
             return utils.bad("Username already exists")
 

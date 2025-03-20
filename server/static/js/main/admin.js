@@ -843,73 +843,7 @@ App.setup_edit = () => {
   }
 
   if (App.mode === `admin_users`) {
-    App.msg_user_edit = Msg.factory()
-    let t = DOM.el(`#template_user_edit`)
-    App.msg_user_edit.set(t.innerHTML)
-
-    DOM.ev(`#edit_reader_yes`, `click`, () => {
-      App.mod_user(`reader`, 1, `bool`)
-    })
-
-    DOM.ev(`#edit_reader_no`, `click`, () => {
-      App.mod_user(`reader`, 0, `bool`)
-    })
-
-    DOM.ev(`#edit_lister_yes`, `click`, () => {
-      App.mod_user(`lister`, 1, `bool`)
-    })
-
-    DOM.ev(`#edit_lister_no`, `click`, () => {
-      App.mod_user(`lister`, 0, `bool`)
-    })
-
-    DOM.ev(`#edit_reacter_yes`, `click`, () => {
-      App.mod_user(`reacter`, 1, `bool`)
-    })
-
-    DOM.ev(`#edit_reacter_no`, `click`, () => {
-      App.mod_user(`reacter`, 0, `bool`)
-    })
-
-    DOM.ev(`#edit_mage_yes`, `click`, () => {
-      App.mod_user(`mage`, 1, `bool`)
-    })
-
-    DOM.ev(`#edit_mage_no`, `click`, () => {
-      App.mod_user(`mage`, 0, `bool`)
-    })
-
-    DOM.ev(`#edit_admin_yes`, `click`, () => {
-      App.mod_user(`admin`, 1, `bool`)
-    })
-
-    DOM.ev(`#edit_admin_no`, `click`, () => {
-      App.mod_user(`admin`, 0, `bool`)
-    })
-
-    DOM.ev(`#edit_rpm`, `click`, () => {
-      App.user_mod_input(`rpm`, ``, `number`)
-    })
-
-    DOM.ev(`#edit_max_size`, `click`, () => {
-      App.user_mod_input(`max_size`, ``, `number`)
-    })
-
-    DOM.ev(`#edit_mark`, `click`, () => {
-      App.user_mod_input(`mark`, ``, `string`)
-    })
-
-    DOM.ev(`#edit_name`, `click`, () => {
-      App.user_mod_input(`name`, ``, `string`)
-    })
-
-    DOM.ev(`#edit_username`, `click`, () => {
-      App.user_mod_input(`username`, ``, `string`)
-    })
-
-    DOM.ev(`#edit_password`, `click`, () => {
-      App.user_mod_input(`password`, ``, `password`)
-    })
+    App.setup_user_edit_opts()
 
     DOM.ev(edit, `click`, () => {
       if (App.get_selected().length > 0) {
