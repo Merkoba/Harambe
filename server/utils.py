@@ -17,6 +17,11 @@ from flask import jsonify, Request  # type: ignore
 
 # Modules
 from config import config
+from post_procs import Post
+from react_procs import Reaction
+from user_procs import User
+
+Items = list[Post] | list[Reaction] | list[User]
 
 
 TLDS = [
@@ -330,6 +335,19 @@ def run_cmd(command: list[str]) -> subprocess.CompletedProcess[str]:
     except subprocess.CalledProcessError as e:
         error(f"Error: {e.stderr.strip()}")
         raise
+
+
+def do_sort(items: Items, sort: str, what: str, desc: bool = False) -> bool:
+    if sort.startswith(f"{what}_"):
+        if desc:
+            reverse = sort.endswith("_desc")
+        else:
+            reverse = sort.endswith("_asc")
+
+        items.sort(key=lambda x: getattr(x, what), reverse=reverse)
+        return True
+
+    return False
 
 
 ICONS = load_icons()

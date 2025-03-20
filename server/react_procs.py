@@ -201,25 +201,17 @@ def get_reactions(
 
 
 def sort_reactions(reactions: list[Reaction], sort: str) -> None:
-    if sort == "date_asc":
-        reactions.sort(key=lambda x: x.date, reverse=True)
-    elif sort == "date_desc":
-        reactions.sort(key=lambda x: x.date, reverse=False)
+    if utils.do_sort(reactions, sort, "date", False):
+        return
 
-    if sort == "user_asc":
-        reactions.sort(key=lambda x: x.uname, reverse=False)
-    elif sort == "user_desc":
-        reactions.sort(key=lambda x: x.uname, reverse=True)
+    if utils.do_sort(reactions, sort, "user", True):
+        return
 
-    if sort == "post_asc":
-        reactions.sort(key=lambda x: x.pname, reverse=True)
-    elif sort == "post_desc":
-        reactions.sort(key=lambda x: x.pname, reverse=False)
+    if utils.do_sort(reactions, sort, "post", False):
+        return
 
-    if sort == "value_asc":
-        reactions.sort(key=lambda x: x.value, reverse=False)
-    elif sort == "value_desc":
-        reactions.sort(key=lambda x: x.value, reverse=True)
+    if utils.do_sort(reactions, sort, "value", True):
+        return
 
 
 def delete_reactions(ids: list[int]) -> tuple[str, int]:

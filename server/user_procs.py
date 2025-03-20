@@ -208,80 +208,50 @@ def get_users(
 
 
 def sort_users(users: list[User], sort: str) -> None:
-    if sort == "register_date_asc":
-        users.sort(key=lambda x: x.register_date, reverse=False)
-    elif sort == "register_date_desc":
-        users.sort(key=lambda x: x.register_date, reverse=True)
+    if utils.do_sort(users, sort, "register_date", False):
+        return
 
-    elif sort == "last_date_asc":
-        users.sort(key=lambda x: x.last_date, reverse=False)
-    elif sort == "last_date_desc":
-        users.sort(key=lambda x: x.last_date, reverse=True)
+    if utils.do_sort(users, sort, "last_date", False):
+        return
 
-    elif sort == "username_asc":
-        users.sort(key=lambda x: x.username, reverse=False)
-    elif sort == "username_desc":
-        users.sort(key=lambda x: x.username, reverse=True)
+    if utils.do_sort(users, sort, "username", True):
+        return
 
-    elif sort == "name_asc":
-        users.sort(key=lambda x: x.name, reverse=False)
-    elif sort == "name_desc":
-        users.sort(key=lambda x: x.name, reverse=True)
+    if utils.do_sort(users, sort, "name", True):
+        return
 
-    elif sort == "rpm_asc":
-        users.sort(key=lambda x: x.rpm, reverse=False)
-    elif sort == "rpm_desc":
-        users.sort(key=lambda x: x.rpm, reverse=True)
+    if utils.do_sort(users, sort, "rpm", True):
+        return
 
-    elif sort == "max_size_asc":
-        users.sort(key=lambda x: x.max_size, reverse=False)
-    elif sort == "max_size_desc":
-        users.sort(key=lambda x: x.max_size, reverse=True)
+    if utils.do_sort(users, sort, "max_size", True):
+        return
 
-    elif sort == "admin_asc":
-        users.sort(key=lambda x: x.admin, reverse=False)
-    elif sort == "admin_desc":
-        users.sort(key=lambda x: x.admin, reverse=True)
+    if utils.do_sort(users, sort, "admin", True):
+        return
 
-    elif sort == "reader_asc":
-        users.sort(key=lambda x: x.reader, reverse=False)
-    elif sort == "reader_desc":
-        users.sort(key=lambda x: x.reader, reverse=True)
+    if utils.do_sort(users, sort, "reader", True):
+        return
 
-    elif sort == "lister_asc":
-        users.sort(key=lambda x: x.lister, reverse=False)
-    elif sort == "lister_desc":
-        users.sort(key=lambda x: x.lister, reverse=True)
+    if utils.do_sort(users, sort, "lister", True):
+        return
 
-    elif sort == "poster_asc":
-        users.sort(key=lambda x: x.poster, reverse=False)
-    elif sort == "poster_desc":
-        users.sort(key=lambda x: x.poster, reverse=True)
+    if utils.do_sort(users, sort, "poster", True):
+        return
 
-    elif sort == "reacter_asc":
-        users.sort(key=lambda x: x.reacter, reverse=False)
-    elif sort == "reacter_desc":
-        users.sort(key=lambda x: x.reacter, reverse=True)
+    if utils.do_sort(users, sort, "reacter", True):
+        return
 
-    elif sort == "num_posts_asc":
-        users.sort(key=lambda x: x.num_posts, reverse=False)
-    elif sort == "num_posts_desc":
-        users.sort(key=lambda x: x.num_posts, reverse=True)
+    if utils.do_sort(users, sort, "num_posts", True):
+        return
 
-    elif sort == "num_reactions_asc":
-        users.sort(key=lambda x: x.num_reactions, reverse=False)
-    elif sort == "num_reactions_desc":
-        users.sort(key=lambda x: x.num_reactions, reverse=True)
+    if utils.do_sort(users, sort, "num_reactions", True):
+        return
 
-    elif sort == "mark_asc":
-        users.sort(key=lambda x: x.mark, reverse=False)
-    elif sort == "mark_desc":
-        users.sort(key=lambda x: x.mark, reverse=True)
+    if utils.do_sort(users, sort, "mark", True):
+        return
 
-    elif sort == "mage_asc":
-        users.sort(key=lambda x: x.mage, reverse=False)
-    elif sort == "mage_desc":
-        users.sort(key=lambda x: x.mage, reverse=True)
+    if utils.do_sort(users, sort, "mage", True):
+        return
 
 
 def get_user(user_id: int | None = None, username: str | None = None) -> User | None:
