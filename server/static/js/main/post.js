@@ -6,8 +6,8 @@ App.init = () => {
   App.max_on = false
   App.max_id = ``
   App.image_expanded = false
-  App.reversed = App.storage.reversed_reactions || false
-  App.ace_wrap = true
+  App.reversed = App.storage_value(`reversed_reactions`, false)
+  App.ace_wrap = App.storage_value(`wrapped_editor`, true)
   let edit = DOM.el(`#edit`)
 
   if (edit) {
@@ -767,6 +767,9 @@ App.toggle_wrap = () => {
   App.editor.setOptions({
     wrap: App.ace_wrap,
   })
+
+  App.storage.wrapped_editor = App.ace_wrap
+  App.save_storage()
 }
 
 App.guess_mode = () => {
