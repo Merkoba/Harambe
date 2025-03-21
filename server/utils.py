@@ -376,17 +376,26 @@ def get_captcha() -> tuple[str, str, str]:
     question = f"What is {a} * {b} * {c}"
     key = f"captcha_{n}"
     div = random_string(random_int(6, 16))
-    redis_save(key, {"answer": answer, "time": n})
+    redis_save(key, {"answer": answer, "time": n}, config.max_captcha_time)
     return question, key, div
 
 
-def redis_save(key: str, value: dict[str, Any]) -> None:
-    redis_client.set(key, json.dumps(value))
+def redis_save(key: str, value: dict[str, Any], expire: int | None = None) -> None:
+    s = json.dumps(value)
+
+    if expire:
+        redis_client.set(key, s, ex=expire)
+    else:
+        redis_client.set(key, s)
 
 
 def redis_get(key: str) -> dict[str, Any]:
     value = redis_client.get(key)
     return json.loads(value) if value else {}
+
+
+def redis_delete(key: str) -> None:
+    redis_client.delete(key)
 
 
 ICONS = load_icons()

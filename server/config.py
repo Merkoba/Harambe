@@ -443,6 +443,9 @@ class Config:
         # Max captcha time
         self.max_captcha_time = 180
 
+        # Enable captcha for registration
+        self.captcha_enabled = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

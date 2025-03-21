@@ -13,12 +13,15 @@
     {% endif %}
 
     <form id="form" action="/register" method="post">
+        {% if captcha %}
         <div id="{{captcha_div}}" style="background-color: white; padding: 0.35rem;">{{captcha}}</div>
         <input type="hidden" name="captcha_key" value="{{captcha_key}}">
-        <input type="text" id="solution" name="solution" placeholder="Solution">
-        <input type="text" id="username" name="username" placeholder="Username">
-        <input type="password" id="password" name="password" placeholder="Password (1)">
-        <input type="password" id="password_2" name="password_2" placeholder="Password (2)">
+        <input type="text" id="solution" name="solution" placeholder="Solution" required>
+        {% endif %}
+
+        <input type="text" id="username" name="username" placeholder="Username" required>
+        <input type="password" id="password" name="password" placeholder="Password (1)" required>
+        <input type="password" id="password_2" name="password_2" placeholder="Password (2)" required>
         <input type="text" id="name" name="name" placeholder="Public Name">
 
         {% if register_code %}
