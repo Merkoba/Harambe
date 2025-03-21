@@ -26,8 +26,6 @@ from user_procs import User
 
 
 Items = list[Post] | list[Reaction] | list[User]
-
-
 redis_client = redis.Redis()
 
 
