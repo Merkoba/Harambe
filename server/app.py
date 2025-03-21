@@ -159,6 +159,10 @@ def def_url() -> Any:
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
+    colors = {
+        key: getattr(config, key) for key in dir(config) if key.endswith("_color")
+    }
+
     magics = {
         key: getattr(config, key)
         for key in dir(config)
@@ -166,7 +170,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
     }
 
     icons = {
-        key: getattr(config, key) for key in dir(config) if key.startswith("icon_for")
+        key: getattr(config, key) for key in dir(config) if key.startswith("icon_for_")
     }
 
     return {
@@ -178,11 +182,6 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "user_id": user.id if user else 0,
         "username": user.username if user else "",
         "user_name": user.name if user else "",
-        "background_color": config.background_color,
-        "accent_color": config.accent_color,
-        "text_color": config.text_color,
-        "link_color": config.link_color,
-        "alt_color": config.alt_color,
         "font_family": config.font_family,
         "font_size": config.font_size,
         "admin_font_size": config.admin_font_size,
@@ -190,6 +189,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "file_path": config.file_path,
         "list_private": config.list_private,
         "show_menu_icons": config.show_menu_icons,
+        "colors": colors,
         "magics": magics,
         "icons": icons,
     }

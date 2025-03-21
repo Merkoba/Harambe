@@ -88,18 +88,19 @@
         <style>
             :root {
                 --font_family: {{font_family | default(0)}};
-                --background_color: rgb({{background_color | default(0)}});
-                --accent_color: rgb({{accent_color | default(0)}});
-                --text_color: rgb({{text_color | default(0)}});
-                --link_color: rgb({{link_color | default(0)}});
-                --frame_color: rgba({{text_color | default(0)}}, 0.5);
-                --button_border: rgba({{text_color | default(0)}}, 0.25);
-                --alt_color: rgb({{alt_color | default(0)}});
-                --highlight_color: rgba({{text_color | default(0)}}, 0.2);
-                --modal_background: rgba({{background_color | default(0)}}, 0.8);
-                --contrast_background: rgba({{text_color | default(0)}}, 0.1);
                 --font_size: {{font_size | default(0)}}px;
                 --admin_font_size: {{admin_font_size | default(0)}}px;
+
+                --background_color: rgb({{colors.background_color | default(0)}});
+                --accent_color: rgb({{colors.accent_color | default(0)}});
+                --text_color: rgb({{colors.text_color | default(0)}});
+                --link_color: rgb({{colors.link_color | default(0)}});
+                --frame_color: rgba({{colors.text_color | default(0)}}, 0.5);
+                --button_border: rgba({{colors.text_color | default(0)}}, 0.25);
+                --alt_color: rgb({{colors.alt_color | default(0)}});
+                --highlight_color: rgba({{colors.text_color | default(0)}}, 0.2);
+                --modal_background: rgba({{colors.background_color | default(0)}}, 0.8);
+                --contrast_background: rgba({{colors.text_color | default(0)}}, 0.1);
             }
         </style>
 
