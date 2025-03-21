@@ -440,6 +440,12 @@ class Config:
         # Icon for logout
         self.icon_for_logout = "🪂"
 
+        # Icon for asc
+        self.icon_for_asc = "📈"
+
+        # Icon for desc
+        self.icon_for_desc = "📉"
+
         # Max captcha time
         self.max_captcha_time = 180
 

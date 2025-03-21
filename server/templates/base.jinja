@@ -74,18 +74,9 @@
             App.audio_magic_min_size = {{audio_magic_min_size | default(0)}}
             App.video_magic_min_size = {{video_magic_min_size | default(0)}}
 
-            App.icon_for_posts = {{icon_for_posts | default(0) | tojson | safe}}
-            App.icon_for_reactions = {{icon_for_reactions | default(0) | tojson | safe}}
-            App.icon_for_users = {{icon_for_users | default(0) | tojson | safe}}
-            App.icon_for_upload = {{icon_for_upload | default(0) | tojson | safe}}
-            App.icon_for_public = {{icon_for_public | default(0) | tojson | safe}}
-            App.icon_for_private = {{icon_for_private | default(0) | tojson | safe}}
-            App.icon_for_edit = {{icon_for_edit | default(0) | tojson | safe}}
-            App.icon_for_delete = {{icon_for_delete | default(0) | tojson | safe}}
-            App.icon_for_deleted = {{icon_for_deleted | default(0) | tojson | safe}}
-            App.icon_for_fresh = {{icon_for_fresh | default(0) | tojson | safe}}
-            App.icon_for_random = {{icon_for_random | default(0) | tojson | safe}}
-            App.icon_for_logout = {{icon_for_logout | default(0) | tojson | safe}}
+            {% for key, value in icons.items() %}
+            App.{{key}} = {{value | default(0) | tojson | safe}}
+            {% endfor %}
         </script>
 
         <script src="/static/js/main/common.js"></script>

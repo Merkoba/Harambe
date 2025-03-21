@@ -159,6 +159,10 @@ def def_url() -> Any:
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
+    icons = {
+        key: getattr(config, key) for key in dir(config) if key.startswith("icon_for")
+    }
+
     return {
         "is_user": bool(user),
         "is_admin": user and user.admin,
@@ -176,22 +180,11 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "font_family": config.font_family,
         "font_size": config.font_size,
         "admin_font_size": config.admin_font_size,
-        "icon_for_posts": config.icon_for_posts,
-        "icon_for_reactions": config.icon_for_reactions,
-        "icon_for_users": config.icon_for_users,
-        "icon_for_upload": config.icon_for_upload,
-        "icon_for_fresh": config.icon_for_fresh,
-        "icon_for_random": config.icon_for_random,
-        "icon_for_public": config.icon_for_public,
-        "icon_for_private": config.icon_for_private,
-        "icon_for_edit": config.icon_for_edit,
-        "icon_for_delete": config.icon_for_delete,
-        "icon_for_deleted": config.icon_for_delete,
-        "icon_for_logout": config.icon_for_logout,
         "links": config.links,
         "file_path": config.file_path,
         "list_private": config.list_private,
         "show_menu_icons": config.show_menu_icons,
+        "icons": icons,
     }
 
 

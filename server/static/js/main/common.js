@@ -312,15 +312,15 @@ App.setup_sort_opts = (show = false) => {
   let name = `sort`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_desc`, () => {
-      let what = App.sort_what
-      App.sort_action(what, true)
-    })
-
     App.bind_button(`${name}_opts_asc`, () => {
       let what = App.sort_what
       App.sort_action(what)
-    })
+    }, undefined, App.icon(`asc`))
+
+    App.bind_button(`${name}_opts_desc`, () => {
+      let what = App.sort_what
+      App.sort_action(what, true)
+    }, undefined, App.icon(`desc`))
   }, show)
 }
 
