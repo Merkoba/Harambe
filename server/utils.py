@@ -24,9 +24,12 @@ from post_procs import Post
 from react_procs import Reaction
 from user_procs import User
 
+
 Items = list[Post] | list[Reaction] | list[User]
 
+
 redis_client = redis.Redis()
+
 
 TLDS = [
     "com",

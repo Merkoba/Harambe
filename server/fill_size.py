@@ -13,6 +13,7 @@ from config import config
 path = config.files_dir
 all_files = Path(path).glob("*")
 
+
 for file in all_files:
     if file.is_file():
         size = file.stat().st_size

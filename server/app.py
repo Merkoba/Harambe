@@ -26,13 +26,16 @@ from post_procs import Post
 from user_procs import User
 from react_procs import Reaction
 
+
 # Possible exit here
 database.check_db()
+
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.secret_key = config.app_key
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=config.session_days)
+
 
 # Enable all cross origin requests
 CORS(app)
@@ -211,6 +214,7 @@ limiter = Limiter(
     storage_uri=f"redis://localhost:{config.redis_port}",
     strategy="fixed-window",
 )
+
 
 error_json: tuple[dict[Never, Never], int] = {}, 400
 invalid = "Error: Invalid request"
