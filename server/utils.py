@@ -373,7 +373,7 @@ def get_captcha() -> tuple[str, str, str]:
 
     n = now()
     answer = a * b * c
-    question = f"What is {a} * {b} * {c} ?"
+    question = f"What is {a} * {b} * {c}"
     key = f"captcha_{n}"
     div = random_string(random_int(6, 16))
     redis_save(key, {"answer": answer, "time": n})
