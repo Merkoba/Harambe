@@ -28,7 +28,6 @@ Items = list[Post] | list[Reaction] | list[User]
 
 redis_client = redis.Redis()
 
-
 TLDS = [
     "com",
     "org",
