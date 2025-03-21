@@ -83,16 +83,15 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if not user:
         return error("No user")
 
+    u_ok, u_msg = user_procs.check_user_limit(user)
+
+    if not u_ok:
+        return error(u_msg)
+
     title = request.form.get("title", "")
 
     if len(title) > config.max_title_length:
         return error("Title is too long")
-
-    if mode == "cli":
-        u_ok, u_msg = user_procs.check_user_limit(user)
-
-        if not u_ok:
-            return error(u_msg)
 
     files = []
     seen_files = set()
