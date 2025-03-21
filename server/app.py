@@ -523,7 +523,7 @@ def admin(what: str) -> Any:
         return over()
 
     query = request.args.get("query", "")
-    def_date = "register_date_desc" if what == "users" else "date_asc"
+    def_date = "register_date_asc" if what == "users" else "date_asc"
     sort = request.args.get("sort", def_date)
     user_id = int(request.args.get("user_id", 0))
     media_type = request.args.get("media_type", None)
