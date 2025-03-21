@@ -4,8 +4,6 @@
 <title>{{title}}</title>
 {% endblock %}
 
-{% set show_marks = items | selectattr("mark") | list | length > 0 %}
-
 {% block admin_top %}
 <div id="menu" class="button" title="Ctrl+M">Menu</div>
 <div class="sep">|</div>
@@ -95,12 +93,6 @@
             <div class="header_text" data-sort="num_reactions">Reacts</div>
         </div>
 
-        {% if show_marks %}
-        <div id="mark" class="table_cell" title="A mark added to the end of file names to identify a certain kind of upload">
-            <div class="header_text" data-sort="mark">Mark</div>
-        </div>
-        {% endif %}
-
         <div id="reg_date" class="table_cell" title="The date when the user was registered">
             <div class="header_text" data-sort="register_date">RegDate</div>
         </div>
@@ -127,7 +119,11 @@
         </div>
 
         <!-- Name -->
+        {% if item.mark %}
+        <div class="table_cell" title="{{item.username}} | {{item.mark}}">
+        {% else %}
         <div class="table_cell" title="{{item.username}}">
+        {% endif%}
             <div class="admin_user button">{{item.name or "-"}}</div>
         </div>
 
@@ -160,11 +156,6 @@
 
         <!-- Reactions -->
         <div class="table_cell small">{{item.num_reactions}}</div>
-
-        <!-- Mark -->
-        {% if show_marks %}
-        <div class="table_cell">{{item.mark or "-"}}</div>
-        {% endif %}
 
         <!-- Register Date -->
         <div class="table_cell" title="{{item.register_date_str}}">{{item.regdate_ago}}</div>

@@ -108,13 +108,14 @@ def make_user(user: DbUser, now: int) -> User:
     num_reactions = user.num_reactions if user.num_reactions else 0
     regdate_ago = utils.time_ago(user.register_date, now)
     lastdate_ago = utils.time_ago(user.last_date, now)
+    name = user.name or "Anon"
 
     return User(
         user.id,
         user.username,
         user.password,
         user.admin,
-        user.name,
+        name,
         user.rpm,
         user.max_size,
         rpm_fill,
