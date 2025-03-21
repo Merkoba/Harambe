@@ -61,18 +61,14 @@
             App.max_post_name_length = {{max_post_name_length | default(0) | tojson}}
             App.max_reaction_name_length = {{max_reaction_name_length | default(0) | tojson}}
             App.media_type = {{media_type | default(0) | tojson | safe}}
-            App.magic_enabled = {{magic_enabled | default(0) | tojson}}
-
-            App.image_magic_enabled = {{image_magic_enabled | default(0) | tojson}}
-            App.audio_magic_enabled = {{audio_magic_enabled | default(0) | tojson}}
-            App.video_magic_enabled = {{video_magic_enabled | default(0) | tojson}}
-            App.album_magic_enabled = {{album_magic_enabled | default(0) | tojson}}
-            App.visual_magic_enabled = {{visual_magic_enabled | default(0) | tojson}}
-            App.gif_magic_enabled =   {{gif_magic_enabled | default(0) | tojson}}
 
             App.image_magic_min_size = {{image_magic_min_size | default(0)}}
             App.audio_magic_min_size = {{audio_magic_min_size | default(0)}}
             App.video_magic_min_size = {{video_magic_min_size | default(0)}}
+
+            {% for key, value in magics.items() %}
+            App.{{key}} = {{value | default(0) | tojson}}
+            {% endfor %}
 
             {% for key, value in icons.items() %}
             App.{{key}} = {{value | default(0) | tojson | safe}}

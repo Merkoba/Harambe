@@ -159,6 +159,12 @@ def def_url() -> Any:
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
+    magics = {
+        key: getattr(config, key)
+        for key in dir(config)
+        if key.endswith("magic_enabled")
+    }
+
     icons = {
         key: getattr(config, key) for key in dir(config) if key.startswith("icon_for")
     }
@@ -184,6 +190,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "file_path": config.file_path,
         "list_private": config.list_private,
         "show_menu_icons": config.show_menu_icons,
+        "magics": magics,
         "icons": icons,
     }
 
