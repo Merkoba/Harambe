@@ -3,6 +3,8 @@ from __future__ import annotations
 # Standard
 import re
 import time
+import json
+import string
 import random
 import urllib.parse
 import unicodedata
@@ -12,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 # Libraries
+import redis  # type: ignore
 import q as qlib  # type: ignore
 from flask import jsonify, Request  # type: ignore
 
@@ -22,6 +25,8 @@ from react_procs import Reaction
 from user_procs import User
 
 Items = list[Post] | list[Reaction] | list[User]
+
+redis_client = redis.Redis()
 
 
 TLDS = [
@@ -43,7 +48,7 @@ def now() -> int:
 
 
 def numstring(n: int) -> str:
-    return "".join([str(random.randint(0, 9)) for _ in range(n)])
+    return "".join([str(random_int(0, 9)) for _ in range(n)])
 
 
 def file_name(name: str, max: int) -> str:
@@ -347,6 +352,41 @@ def do_sort(items: Items, sort: str, different: list[str]) -> None:
         reverse = not reverse
 
     items.sort(key=lambda x: getattr(x, key), reverse=reverse)
+
+
+def random_int(min: int, max: int) -> int:
+    return random.randint(min, max)
+
+
+def random_letter() -> str:
+    return random.choice(string.ascii_lowercase)
+
+
+def random_string(n: int) -> str:
+    return "".join(random_letter() for _ in range(n))
+
+
+def get_captcha() -> tuple[str, str, str]:
+    a = random_int(11, 99)
+    b = random_int(11, 99)
+    c = random_int(11, 99)
+
+    n = now()
+    answer = a * b * c
+    question = f"What is {a} * {b} * {c} ?"
+    key = f"captcha_{n}"
+    div = random_string(random_int(6, 16))
+    redis_save(key, {"answer": answer, "time": n})
+    return question, key, div
+
+
+def redis_save(key: str, value: dict[str, Any]) -> None:
+    redis_client.set(key, json.dumps(value))
+
+
+def redis_get(key: str) -> dict[str, Any]:
+    value = redis_client.get(key)
+    return json.loads(value) if value else {}
 
 
 ICONS = load_icons()

@@ -1,5 +1,5 @@
 App.init = () => {
-  let username = document.getElementById(`username`)
+  let username = DOM.el(`#username`)
 
   if (username) {
     username.focus()

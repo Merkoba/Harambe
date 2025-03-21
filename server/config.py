@@ -440,6 +440,9 @@ class Config:
         # Icon for logout
         self.icon_for_logout = "🪂"
 
+        # Max captcha time
+        self.max_captcha_time = 180
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

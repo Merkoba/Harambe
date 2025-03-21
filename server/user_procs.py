@@ -537,10 +537,38 @@ def register(request: Request) -> tuple[bool, str, User | None]:
     password_2 = request.form.get("password_2", "")
     code = request.form.get("code", "")
     name = request.form.get("name", "").strip()
+    solution = request.form.get("solution", "")
+    captcha_key = request.form.get("captcha_key", "")
+
+    if not solution:
+        return False, "Missing solution", None
+
+    if not captcha_key:
+        return False, "Missing captcha key", None
 
     if config.register_code:
         if code != config.register_code:
             return False, "Invalid code", None
+
+    captcha_value = utils.redis_get(captcha_key)
+
+    if not captcha_value:
+        return False, "Invalid captcha", None
+
+    captcha_answer = captcha_value.get("answer", 0)
+    captcha_time = captcha_value.get("time", 0)
+    utils.q(solution, captcha_answer)
+
+    if (not captcha_answer) or (not captcha_time):
+        return False, "Invalid captcha", None
+
+    now = utils.now()
+
+    if (now - captcha_time) > config.max_captcha_time:
+        return False, "Captcha expired", None
+
+    if int(solution) != captcha_answer:
+        return False, "Invalid solution", None
 
     if (not username) or (not password) or (not password_2) or (not name):
         return False, "Missing details", None

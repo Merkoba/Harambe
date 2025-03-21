@@ -3,7 +3,7 @@
 {% block head %}
 <title>Register</title>
 <link rel="stylesheet" href="static/css/login.css">
-<script src="/static/js/main/login.js"></script>
+<script src="/static/js/main/register.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -13,6 +13,9 @@
     {% endif %}
 
     <form id="form" action="/register" method="post">
+        <div id="{{captcha_div}}" style="background-color: white; padding: 0.35rem;">{{captcha}}</div>
+        <input type="hidden" name="captcha_key" value="{{captcha_key}}">
+        <input type="text" id="solution" name="solution" placeholder="Solution">
         <input type="text" id="username" name="username" placeholder="Username">
         <input type="password" id="password" name="password" placeholder="Password (1)">
         <input type="password" id="password_2" name="password_2" placeholder="Password (2)">

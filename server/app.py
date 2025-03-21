@@ -719,10 +719,15 @@ def register() -> Any:
             fill_session(user)
             return def_url()
 
+    captcha, captcha_key, captcha_div = utils.get_captcha()
+
     return render_template(
         "register.jinja",
         message=message,
         register_code=config.register_code,
+        captcha=captcha,
+        captcha_key=captcha_key,
+        captcha_div=captcha_div,
         **common_configs(),
     )
 
