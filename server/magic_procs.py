@@ -57,21 +57,21 @@ def is_image_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "image_magic"):
         return False
 
-    return config.image_magic_enabled and file.content_type.startswith("image/")
+    return config.image_magic_enabled and utils.is_image_file(file)
 
 
 def is_audio_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "audio_magic"):
         return False
 
-    return config.audio_magic_enabled and file.content_type.startswith("audio/")
+    return config.audio_magic_enabled and utils.is_audio_file(file)
 
 
 def is_video_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "video_magic"):
         return False
 
-    return config.video_magic_enabled and file.content_type.startswith("video/")
+    return config.video_magic_enabled and utils.is_video_file(file)
 
 
 def is_album_magic(request: Request, files: list[FileStorage]) -> bool:
@@ -84,7 +84,7 @@ def is_album_magic(request: Request, files: list[FileStorage]) -> bool:
     audio_count = 0
 
     for file in files:
-        if file.content_type.startswith("audio/"):
+        if utils.is_audio_file(file):
             audio_count += 1
         else:
             return False
@@ -103,9 +103,9 @@ def is_visual_magic(request: Request, files: list[FileStorage]) -> bool:
     audio_count = 0
 
     for file in files:
-        if file.content_type.startswith("image/"):
+        if utils.is_image_file(file):
             img_count += 1
-        elif file.content_type.startswith("audio/"):
+        elif utils.is_audio_file(file):
             audio_count += 1
         else:
             return False
@@ -126,8 +126,8 @@ def is_gif_magic(request: Request, files: list[FileStorage]) -> bool:
     img_count = 0
 
     for file in files:
-        if file.content_type.startswith("image/"):
-            if file.content_type == "image/gif":
+        if utils.is_image_file(file):
+            if utils.is_gif_file(file):
                 continue
 
             img_count += 1
@@ -292,7 +292,7 @@ def do_visual_magic(files: list[FileStorage]) -> bytes | None:
 
     try:
         for file in files:
-            if file.content_type.startswith("image/"):
+            if utils.is_image_file(file):
                 image_temp = tempfile.NamedTemporaryFile(suffix=".image", delete=False)
                 image_temp.write(file.read())
                 image_temp.close()
@@ -301,7 +301,7 @@ def do_visual_magic(files: list[FileStorage]) -> bytes | None:
                 break
 
         for file in files:
-            if file.content_type.startswith("audio/"):
+            if utils.is_audio_file(file):
                 temp = tempfile.NamedTemporaryFile(suffix=".audio", delete=False)
                 temp.write(file.read())
                 temp.close()

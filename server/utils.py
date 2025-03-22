@@ -9,6 +9,7 @@ import random
 import urllib.parse
 import unicodedata
 import subprocess
+import mimetypes
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,7 @@ from typing import Any
 import redis  # type: ignore
 import q as qlib  # type: ignore
 from flask import jsonify, Request  # type: ignore
+from werkzeug.datastructures import FileStorage  # type: ignore
 
 # Modules
 from config import config
@@ -398,4 +400,25 @@ def redis_delete(key: str) -> None:
     redis_client.delete(key)
 
 
-ICONS = load_icons()
+def get_content_type(file: FileStorage) -> str:
+    return file.content_type or mimetypes.guess_type(file.filename)[0] or ""
+
+
+def is_image_file(file: FileStorage) -> bool:
+    content_type = get_content_type(file)
+    return content_type.startswith("image/")
+
+
+def is_audio_file(file: FileStorage) -> bool:
+    content_type = get_content_type(file)
+    return content_type.startswith("audio/")
+
+
+def is_video_file(file: FileStorage) -> bool:
+    content_type = get_content_type(file)
+    return content_type.startswith("video/")
+
+
+def is_gif_file(file: FileStorage) -> bool:
+    content_type = get_content_type(file)
+    return content_type == "image/gif"

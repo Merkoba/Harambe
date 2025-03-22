@@ -31,6 +31,7 @@ from react_procs import Reaction
 database.check_db()
 
 
+ICONS = utils.load_icons()
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.secret_key = config.app_key
@@ -990,7 +991,7 @@ def mod_user() -> Any:
 @payload_check()
 @login_required
 def get_icons() -> Any:
-    return {"icons": utils.ICONS}
+    return {"icons": ICONS}
 
 
 # REACTIONS
