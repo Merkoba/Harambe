@@ -5,7 +5,7 @@ import sys
 from werkzeug.security import generate_password_hash as hashpass  # type: ignore
 
 # Modules
-import utils
+import utils  # type: ignore # noqa: F401  # needed for circular dependencies
 import database
 
 
