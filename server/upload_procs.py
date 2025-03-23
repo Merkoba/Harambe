@@ -93,16 +93,26 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if len(title) > config.max_title_length:
         return error("Title is too long")
 
+    files = []
+    seen_files = set()
     text = request.form.get("text", "").strip()
 
     if text:
         if len(text) > config.max_text_length:
             return error("Text is too long")
 
-        title = f"{title} - {text}".strip()
+        # Create a text file from text
+        text_io = BytesIO(text.encode("utf-8"))
 
-    files = []
-    seen_files = set()
+        text_file = FileStorage(
+            stream=text_io,
+            filename="text.txt",
+            name="file",
+            content_type="text/plain",
+        )
+
+        files.append(text_file)
+        seen_files.add("text.txt")
 
     for file in request.files.getlist("file"):
         if file and file.filename:
