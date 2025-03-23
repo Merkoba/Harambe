@@ -1152,47 +1152,47 @@ App.setup_user_edit_opts = (show = false) => {
 
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_poster_no`, () => {
-      App.user_mod_input(`poster`, 0, `bool`)
+      App.mod_user(`poster`, 0, `bool`)
     })
 
     App.bind_button(`${name}_opts_reader_no`, () => {
-      App.user_mod_input(`reader`, 0, `bool`)
+      App.mod_user(`reader`, 0, `bool`)
     })
 
     App.bind_button(`${name}_opts_reader_yes`, () => {
-      App.user_mod_input(`reader`, 1, `bool`)
+      App.mod_user(`reader`, 1, `bool`)
     })
 
     App.bind_button(`${name}_opts_lister_no`, () => {
-      App.user_mod_input(`lister`, 0, `bool`)
+      App.mod_user(`lister`, 0, `bool`)
     })
 
     App.bind_button(`${name}_opts_lister_yes`, () => {
-      App.user_mod_input(`lister`, 1, `bool`)
+      App.mod_user(`lister`, 1, `bool`)
     })
 
     App.bind_button(`${name}_opts_reacter_no`, () => {
-      App.user_mod_input(`reacter`, 0, `bool`)
+      App.mod_user(`reacter`, 0, `bool`)
     })
 
     App.bind_button(`${name}_opts_reacter_yes`, () => {
-      App.user_mod_input(`reacter`, 1, `bool`)
+      App.mod_user(`reacter`, 1, `bool`)
     })
 
     App.bind_button(`${name}_opts_mage_no`, () => {
-      App.user_mod_input(`mage`, 0, `bool`)
+      App.mod_user(`mage`, 0, `bool`)
     })
 
     App.bind_button(`${name}_opts_mage_yes`, () => {
-      App.user_mod_input(`mage`, 1, `bool`)
+      App.mod_user(`mage`, 1, `bool`)
     })
 
     App.bind_button(`${name}_opts_admin_no`, () => {
-      App.user_mod_input(`admin`, 0, `bool`)
+      App.mod_user(`admin`, 0, `bool`)
     })
 
     App.bind_button(`${name}_opts_admin_yes`, () => {
-      App.user_mod_input(`admin`, 1, `bool`)
+      App.mod_user(`admin`, 1, `bool`)
     })
 
     App.bind_button(`${name}_opts_rpm`, () => {
