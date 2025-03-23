@@ -421,3 +421,11 @@ def is_video_file(file: FileStorage) -> bool:
 def is_gif_file(file: FileStorage) -> bool:
     content_type = get_content_type(file)
     return content_type == "image/gif"
+
+
+def fix_filename(name: str) -> str:
+    split = name.split(".")
+    stem = ".".join(split[:-1]).strip()
+    ext = split[-1].lower().strip()
+    new_name = f"{stem}.{ext}"
+    return clean_filename(new_name)

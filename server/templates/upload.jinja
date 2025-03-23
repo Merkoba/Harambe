@@ -67,7 +67,10 @@
         {% endif %}
 
         {% if show_textarea %}
-        <textarea id="text" name="text" placeholder="Paste Text (Optional)"></textarea>
+        <div id="text_container">
+            <input type="text" placeholder="File Name + Extension" id="text_filename" name="text_filename">
+            <textarea id="text" name="text" placeholder="Pastebin"></textarea>
+        </div>
         {% endif %}
 
         <div id="buttons">

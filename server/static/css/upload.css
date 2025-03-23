@@ -228,7 +228,7 @@ a.dialog_button:hover {
     margin-bottom: 0.8rem;
 }
 
-#title {
+input[type=text] {
     font-size: 1rem;
     width: 100%;
     box-sizing: border-box;
@@ -289,6 +289,16 @@ a.dialog_button:hover {
 
 input[type="checkbox"] {
     cursor: pointer;
+}
+
+#text_container {
+    outline: 1px solid var(--text_color);
+    padding: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 #text {

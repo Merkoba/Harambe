@@ -103,16 +103,18 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
         # Create a text file from text
         text_io = BytesIO(text.encode("utf-8"))
+        filename = request.form.get("text_filename", "paste.txt").strip()
+        filename = utils.fix_filename(filename)
 
         text_file = FileStorage(
             stream=text_io,
-            filename="text.txt",
+            filename=filename,
             name="file",
             content_type="text/plain",
         )
 
         files.append(text_file)
-        seen_files.add("text.txt")
+        seen_files.add(filename)
 
     for file in request.files.getlist("file"):
         if file and file.filename:
