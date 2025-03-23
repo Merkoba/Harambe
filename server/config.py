@@ -452,11 +452,11 @@ class Config:
         # Enable captcha for registration
         self.captcha_enabled = True
 
-        # Show the textarea to upload text
-        self.show_textarea = True
+        # Enable the pastebin feature
+        self.pastebin_enabled = True
 
         # Max length for text uploads
-        self.max_text_length = 10_000
+        self.max_pastebin_length = 10_000
 
     # --- Methods ---
 

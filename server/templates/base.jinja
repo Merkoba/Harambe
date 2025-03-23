@@ -35,7 +35,7 @@
             App.upload_enabled = {{upload_enabled | default(0) | tojson}}
             App.list_private = {{list_private | default(0) | tojson}}
             App.show_menu_icons = {{show_menu_icons | default(0) | tojson}}
-            App.max_text_length = {{max_text_length | default(0)}}
+            App.max_pastebin_length = {{max_pastebin_length | default(0)}}
 
             {% if post %}
             App.post_id = {{post.id | default(0)}}

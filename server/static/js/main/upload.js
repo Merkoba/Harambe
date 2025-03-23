@@ -767,5 +767,5 @@ App.setup_dragdrop = () => {
 }
 
 App.get_text = () => {
-  return DOM.el(`#text`).value.trim()
+  return DOM.el(`#pastebin`).value.trim()
 }

@@ -66,10 +66,11 @@
         <input id="title" type="text" name="title" placeholder="Enter a Title (Optional)" spellcheck="true">
         {% endif %}
 
-        {% if show_textarea %}
-        <div id="text_container">
-            <input type="text" placeholder="File Name + Extension" id="text_filename" name="text_filename">
-            <textarea id="text" name="text" placeholder="Pastebin"></textarea>
+        {% if pastebin_enabled %}
+        <div id="pastebin_container">
+            <div>Pastebin</div>
+            <input type="text" placeholder="File Name + Extension" id="pastebin_filename" name="pastebin_filename">
+            <textarea id="pastebin" name="pastebin" placeholder="Text or Code"></textarea>
         </div>
         {% endif %}
 

@@ -95,26 +95,32 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     files = []
     seen_files = set()
-    text = request.form.get("text", "")
 
-    if text:
-        if len(text) > config.max_text_length:
-            return error("Text is too long")
+    if config.pastebin_enabled:
+        text = request.form.get("pastebin", "")
 
-        # Create a text file from text
-        text_io = BytesIO(text.encode("utf-8"))
-        filename = request.form.get("text_filename", "paste.txt").strip()
-        filename = utils.fix_filename(filename)
+        if text:
+            if len(text) > config.max_pastebin_length:
+                return error("Text is too long")
 
-        text_file = FileStorage(
-            stream=text_io,
-            filename=filename,
-            name="file",
-            content_type="text/plain",
-        )
+            # Create a text file from text
+            text_io = BytesIO(text.encode("utf-8"))
+            filename = request.form.get("pastebin_filename").strip()
 
-        files.append(text_file)
-        seen_files.add(filename)
+            if not filename:
+                filename = "paste.txt"
+
+            filename = utils.fix_filename(filename)
+
+            text_file = FileStorage(
+                stream=text_io,
+                filename=filename,
+                name="file",
+                content_type="text/plain",
+            )
+
+            files.append(text_file)
+            seen_files.add(filename)
 
     for file in request.files.getlist("file"):
         if file and file.filename:
