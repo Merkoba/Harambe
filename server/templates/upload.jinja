@@ -63,12 +63,12 @@
         {% endif %}
 
         {% if allow_titles and is_user and upload_enabled %}
-        <input id="title" type="text" name="title" placeholder="Enter a Title (Optional)" spellcheck="true">
+        <input id="title" type="text" name="title" placeholder="Post Title" spellcheck="true">
         {% endif %}
 
         {% if pastebin_enabled %}
         <div id="pastebin_container">
-            <div>Pastebin</div>
+            <div title="This will create a text file (Optional)">Pastebin</div>
             <input type="text" placeholder="File Name + Extension" id="pastebin_filename" name="pastebin_filename">
             <textarea id="pastebin" name="pastebin" placeholder="Text or Code"></textarea>
         </div>
