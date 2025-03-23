@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+# gem install mime-types
+
+require "mime/types"
 require "optparse"
 require "net/http"
 require "uri"
@@ -97,9 +100,10 @@ puts "Uploading: #{file_path}"
 # Make the POST request and capture the response
 uri = URI("#{url}/#{endpoint}")
 request = Net::HTTP::Post.new(uri)
+mime_type = MIME::Types.type_for(file_path).first.to_s
 
 form_data = [
-  ["file", File.open(file_path)],
+  ["file", File.open(file_path), {filename: File.basename(file_path), content_type: mime_type}],
   ["title", title],
   ["username", username],
   ["password", password],

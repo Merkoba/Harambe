@@ -5,6 +5,7 @@ import sys
 from werkzeug.security import generate_password_hash as hashpass  # type: ignore
 
 # Modules
+import utils
 import database
 
 
