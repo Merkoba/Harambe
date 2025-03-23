@@ -14,6 +14,7 @@ App.init = () => {
   App.setup_submit()
   App.setup_zip()
   App.setup_pickers()
+  App.setup_keys()
 }
 
 App.validate = () => {
@@ -59,7 +60,11 @@ App.validate = () => {
   return true
 }
 
-App.submit_form = () => {
+App.submit_form = (check = true) => {
+  if (check && !App.validate()) {
+    return
+  }
+
   App.uploading()
   DOM.el(`#form`).submit()
 }
@@ -546,11 +551,11 @@ App.check_magic = () => {
       ${msg}`,
       callback_yes: () => {
         cb.checked = true
-        App.submit_form()
+        App.submit_form(false)
       },
       callback_no: () => {
         cb.checked = false
-        App.submit_form()
+        App.submit_form(false)
       },
       yes: `Do that`,
       no: `Just Upload`,
@@ -659,10 +664,7 @@ App.setup_submit = () => {
 
   if (submit_btn) {
     DOM.ev(submit_btn, `click`, (e) => {
-      if (App.validate()) {
-        let form = DOM.el(`#form`)
-        form.submit()
-      }
+      App.submit_form()
     })
 
     DOM.ev(submit_btn, `auxclick`, (e) => {
@@ -768,4 +770,19 @@ App.setup_dragdrop = () => {
 
 App.get_text = () => {
   return DOM.el(`#pastebin`).value.trim()
+}
+
+App.setup_keys = () => {
+  DOM.ev(document, `keydown`, (e) => {
+    if (e.key === `Enter`) {
+      if ([`title`, `pastebin_filename`].includes(e.target.id)) {
+        App.submit_form()
+      }
+      else if ([`pastebin`].includes(e.target.id)) {
+        if (e.ctrlKey || e.shiftKey) {
+          App.submit_form()
+        }
+      }
+    }
+  })
 }
