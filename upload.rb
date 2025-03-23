@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-# gem install mime-types
-
 require "mime/types"
 require "optparse"
 require "net/http"
@@ -25,6 +23,8 @@ audio_magic = "off"
 video_magic = "off"
 album_magic = "off"
 gif_magic = "off"
+pastebin = ""
+pastebin_filename = ""
 
 # Parse command-line options
 OptionParser.new do |opts|
@@ -62,6 +62,14 @@ OptionParser.new do |opts|
     gif_magic = "on"
   end
 
+  opts.on("--pastebin TEXT", "Create a text file") do |t|
+    pastebin = t
+  end
+
+  opts.on("--pastebin-filename TEXT", "Filename of the text file") do |t|
+    pastebin_filename = t
+  end
+
   opts.on("-h", "--help", "Prints this help") do
     puts opts
     exit
@@ -70,17 +78,22 @@ end.parse!(into: {})
 
 file_path = ARGV[0]
 
-# Remove "file://" prefix if present
-file_path = file_path.sub(/^file:\/\//, "") if file_path
+if file_path
+  # Remove "file://" prefix if present
+  file_path = file_path.sub(/^file:\/\//, "") if file_path
 
-# Convert to absolute path
-file_path = File.absolute_path(file_path) if file_path
+  # Convert to absolute path
+  file_path = File.absolute_path(file_path) if file_path
+end
 
 # Check required parameters
 abort("Error: URL is not set") if url.nil? || url.empty?
 abort("Error: USERNAME is not set") if username.nil? || username.empty?
 abort("Error: PASSWORD is not set") if password.nil? || password.empty?
-abort("Error: FILE_PATH is not set") if file_path.nil? || file_path.empty?
+
+if file_path.nil? && pastebin.empty?
+  abort("Error: Content is not set")
+end
 
 # Prompt to get the title
 title = ""
@@ -101,9 +114,20 @@ puts "Uploading: #{file_path}"
 uri = URI("#{url}/#{endpoint}")
 request = Net::HTTP::Post.new(uri)
 mime_type = MIME::Types.type_for(file_path).first.to_s
+form_data = []
 
-form_data = [
-  ["file", File.open(file_path), {filename: File.basename(file_path), content_type: mime_type}],
+if file_path && !file_path.empty?
+  form_data << [
+    "file",
+    File.open(file_path),
+    {
+      filename: File.basename(file_path),
+      content_type: mime_type,
+    }
+  ]
+end
+
+form_data += [
   ["title", title],
   ["username", username],
   ["password", password],
@@ -114,6 +138,8 @@ form_data = [
   ["video_magic", video_magic],
   ["album_magic", album_magic],
   ["gif_magic", gif_magic],
+  ["pastebin", pastebin],
+  ["pastebin_filename", pastebin_filename],
 ]
 
 request.set_form form_data, "multipart/form-data"

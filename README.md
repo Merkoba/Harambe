@@ -4,7 +4,7 @@ This is a simple file uploader that is configurable and has an admin page.
 
 It's made entirely in python using flask.
 
-It supports embedding media (images, videos, text/code/markdown, flash).
+It supports embedding media (images, video, audio, text/code/markdown, flash, zips).
 
 ---
 
@@ -314,3 +314,5 @@ There is a widget in the web interface to create a text file.
 User can specify filename with extension which aids on syntax highlighting.
 
 There's a textarea to paste text quicky.
+
+The uploader script accepts `--pastebin some text` and `--pastebin-filename file.py`
