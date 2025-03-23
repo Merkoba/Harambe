@@ -219,7 +219,6 @@ def count_graphemes(s: str) -> int:
 
     while i < len(s):
         char = s[i]
-
         combining = unicodedata.combining(char)
 
         if combining == 0:
@@ -228,7 +227,7 @@ def count_graphemes(s: str) -> int:
         else:
             i += 1
 
-            while i < len(s) and unicodedata.combining(s[i]) > 0:
+            while (i < len(s)) and (unicodedata.combining(s[i]) > 0):
                 i += 1
 
     return count
