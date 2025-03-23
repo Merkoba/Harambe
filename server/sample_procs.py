@@ -244,7 +244,7 @@ def get_text_sample(path: Path) -> None:
     max_bytes = config.sample_text_bytes
 
     with path.open("r") as file:
-        sample_content = file.read(max_bytes).strip()
+        sample_content = file.read(max_bytes)
 
     sample_path.write_text(sample_content)
 

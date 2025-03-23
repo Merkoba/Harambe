@@ -95,7 +95,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     files = []
     seen_files = set()
-    text = request.form.get("text", "").strip()
+    text = request.form.get("text", "")
 
     if text:
         if len(text) > config.max_text_length:
