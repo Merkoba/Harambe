@@ -214,16 +214,16 @@ def q(*args: Any) -> None:
 
 
 def count_graphemes(s: str) -> int:
-    grapheme_count = 0
-
+    count = 0
     i = 0
+
     while i < len(s):
         char = s[i]
 
-        combining_class = unicodedata.combining(char)
+        combining = unicodedata.combining(char)
 
-        if combining_class == 0:
-            grapheme_count += 1
+        if combining == 0:
+            count += 1
             i += 1
         else:
             i += 1
@@ -231,7 +231,7 @@ def count_graphemes(s: str) -> int:
             while i < len(s) and unicodedata.combining(s[i]) > 0:
                 i += 1
 
-    return grapheme_count
+    return count
 
 
 def clean_query(s: Any) -> str:
