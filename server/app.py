@@ -297,6 +297,8 @@ def show_upload() -> Any:
         audio_magic_min_size=config.audio_magic_min_size,
         video_magic_min_size=config.video_magic_min_size,
         show_privacy_select=config.show_privacy_select,
+        show_textarea=config.show_textarea,
+        max_text_length=config.max_text_length,
         banner=banner,
         **common_configs(user),
     )

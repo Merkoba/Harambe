@@ -21,13 +21,23 @@ App.validate = () => {
     return false
   }
 
+  let text = App.get_text()
+
   if (App.num_active_files() === 0) {
-    App.file_trigger()
-    return false
+    if (!text) {
+      App.file_trigger()
+      return false
+    }
   }
 
   if (!App.check_total_size()) {
     return false
+  }
+
+  if (text) {
+    if (text.length > App.max_text_length) {
+      return false
+    }
   }
 
   let title = DOM.el(`#title`)
@@ -754,4 +764,8 @@ App.setup_dragdrop = () => {
       App.add_picker()
     }
   })
+}
+
+App.get_text = () => {
+  return DOM.el(`#text`).value.trim()
 }

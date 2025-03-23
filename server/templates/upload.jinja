@@ -66,6 +66,10 @@
         <input id="title" type="text" name="title" placeholder="Enter a Title (Optional)" spellcheck="true">
         {% endif %}
 
+        {% if show_textarea %}
+        <textarea id="text" name="text" placeholder="Paste Text (Optional)"></textarea>
+        {% endif %}
+
         <div id="buttons">
             <button type="button" id="menu_btn" title="Ctrl + M">🧭&nbsp;&nbsp;Menu</button>
 

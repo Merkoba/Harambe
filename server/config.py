@@ -452,6 +452,12 @@ class Config:
         # Enable captcha for registration
         self.captcha_enabled = True
 
+        # Show the textarea to upload text
+        self.show_textarea = True
+
+        # Max length for text uploads
+        self.max_text_length = 10_000
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

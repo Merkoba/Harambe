@@ -290,3 +290,10 @@ a.dialog_button:hover {
 input[type="checkbox"] {
     cursor: pointer;
 }
+
+#text {
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}

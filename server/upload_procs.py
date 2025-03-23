@@ -93,6 +93,14 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if len(title) > config.max_title_length:
         return error("Title is too long")
 
+    text = request.form.get("text", "").strip()
+
+    if text:
+        if len(text) > config.max_text_length:
+            return error("Text is too long")
+
+        title = f"{title} - {text}".strip()
+
     files = []
     seen_files = set()
 
