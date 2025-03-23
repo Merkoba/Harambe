@@ -303,3 +303,14 @@ Join multiple images into a `gif`.
 Triggers when multiple images are going to be uploaded.
 
 Ignores `gif`.
+
+
+---
+
+## Pastebin
+
+There is a widget in the web interface to create a text file.
+
+User can specify filename with extension which aids on syntax highlighting.
+
+There's a textarea to paste text quicky.
