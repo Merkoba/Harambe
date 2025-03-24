@@ -108,8 +108,12 @@ def make_url_file(
 
     make_file(url, "url.txt", files, seen_files)
 
-    if config.fetch_youtube:
+    if config.fetch_youtube and utils.is_youtube_url(url):
         return utils.get_youtube_info(url)
+
+    if config.fetch_url:
+        title = utils.get_url_title(url)
+        return title, None
 
     return None
 
@@ -160,9 +164,12 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         ans: tuple[str, bytes | None] | None = make_url_file(title, files, seen_files)
 
         if ans:
-            title = ans[0]
-            presample = ans[1]
-            presample_ext = "jpg"
+            if ans[0]:
+                title = ans[0]
+
+            if ans[1]:
+                presample = ans[1]
+                presample_ext = "jpg"
 
     if config.pastebin_enabled:
         make_text_files(request, files, seen_files)

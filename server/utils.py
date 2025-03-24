@@ -462,6 +462,10 @@ def get_youtube_id(url: str) -> list[Any] | None:
     return None
 
 
+def is_youtube_url(url: str) -> bool:
+    return is_url(url) and bool(get_youtube_id(url))
+
+
 def is_url(s: str) -> bool:
     if " " in s:
         return False
@@ -523,3 +527,18 @@ def get_youtube_info(url: str) -> tuple[str, bytes | None] | None:
         return None
 
     return None
+
+
+def get_url_title(url: str) -> str:
+    try:
+        response = requests.get(url, timeout=5)
+
+        if response.status_code == 200:
+            title = re.search(r"<title>(.*?)</title>", response.text, re.IGNORECASE)
+
+            if title:
+                return title.group(1).strip()
+    except Exception:
+        pass
+
+    return ""

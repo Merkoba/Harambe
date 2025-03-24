@@ -467,6 +467,9 @@ class Config:
         # Fetch title and thumbnail from YouTube
         self.fetch_youtube = True
 
+        # Fetch URL for title
+        self.fetch_url = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
