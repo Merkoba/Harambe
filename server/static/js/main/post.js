@@ -82,6 +82,7 @@ App.init = () => {
 
   App.setup_reactions()
   App.keyboard_events()
+  App.format_description()
 }
 
 App.edit_title = () => {
@@ -111,8 +112,50 @@ App.edit_title = () => {
       })
 
       if (response.ok) {
-        App.title = title
-        DOM.el(`#title`).textContent = title || App.original
+        let json = await response.json()
+        App.title = json.title
+        DOM.el(`#title`).textContent = App.title || App.original
+      }
+      else {
+        App.print_error(response.status)
+      }
+    },
+  }
+
+  App.prompt_text(prompt_args)
+}
+
+App.edit_description = () => {
+  let prompt_args = {
+    placeholder: `Edit Description`,
+    value: App.description || App.original,
+    max: App.max_description_length,
+    multi: true,
+    callback: async (description) => {
+      if (!description) {
+        return
+      }
+
+      description = description.trim()
+
+      if (description === App.description) {
+        return
+      }
+
+      let ids = [App.post_id]
+
+      let response = await fetch(`/edit_description`, {
+        method: `POST`,
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        body: JSON.stringify({ids, description}),
+      })
+
+      if (response.ok) {
+        let json = await response.json()
+        App.description = json.description
+        App.format_description()
       }
       else {
         App.print_error(response.status)
@@ -1098,4 +1141,14 @@ App.show_url = () => {
   let c = DOM.el(`#url_container`)
   let text = App.safe_html(App.text)
   c.innerHTML = `<a href="${text}">${text}</a>`
+}
+
+App.format_description = () => {
+  let description = DOM.el(`#description`)
+
+  if (description) {
+    let text = App.safe_html(App.description)
+    text = App.urlize(text)
+    description.innerHTML = text
+  }
 }

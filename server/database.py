@@ -363,6 +363,14 @@ def edit_post_title(post_id: int, title: str) -> None:
     conn.close()
 
 
+def edit_post_description(post_id: int, description: str) -> None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    c.execute("update posts set description = ? where id = ?", (description, post_id))
+    conn.commit()
+    conn.close()
+
+
 def edit_post_privacy(post_id: int, privacy: str) -> None:
     connection = get_conn()
     conn, c = connection.tuple()

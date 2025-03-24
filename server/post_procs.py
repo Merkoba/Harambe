@@ -545,7 +545,27 @@ def edit_post_title(ids: list[int], title: str, user: User) -> tuple[str, int]:
     for post_id in ids:
         database.edit_post_title(post_id, title)
 
-    return utils.ok("Title updated")
+    return utils.ok("Title updated", {"title": title})
+
+
+def edit_post_description(
+    ids: list[int], description: str, user: User
+) -> tuple[str, int]:
+    if not ids:
+        return utils.bad("Missing ids")
+
+    description = utils.clean_description(description)
+
+    if len(description) > config.max_description_length:
+        return utils.bad("Description is too long")
+
+    if not can_edit_post(ids, user):
+        return utils.bad("You can't edit this")
+
+    for post_id in ids:
+        database.edit_post_description(post_id, description)
+
+    return utils.ok("Description updated", {"description": description})
 
 
 def edit_post_privacy(ids: list[int], privacy: str, user: User) -> tuple[str, int]:

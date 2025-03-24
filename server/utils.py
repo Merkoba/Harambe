@@ -569,3 +569,7 @@ def get_url_info(url: str) -> tuple[str, str] | None:
         pass
 
     return None
+
+
+def clean_description(s: str) -> str:
+    return remove_multiple_lines(s)[: config.max_description_length].strip()

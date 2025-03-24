@@ -909,6 +909,10 @@ App.setup_edit_post_opts = (show = false) => {
       App.edit_title()
     }, undefined, App.icon(`edit`))
 
+    App.bind_button(`${name}_opts_description`, () => {
+      App.edit_description()
+    }, undefined, App.icon(`edit`))
+
     App.bind_button(`${name}_opts_privacy`, () => {
       App.setup_edit_privacy_opts(true, name)
     }, undefined, `>`)
@@ -1305,4 +1309,9 @@ App.is_a_url = (s) => {
   }
 
   return false
+}
+
+App.urlize = (text) => {
+  let re = /(\bhttps?:\/\/\S+)/gi
+  return text.replace(re, `<a href="$1">$1</a>`)
 }

@@ -386,6 +386,7 @@ def post(name: str) -> Any:
         max_post_name_length=config.max_post_name_length,
         max_reaction_name_length=config.max_reaction_name_length,
         max_title_length=config.max_title_length,
+        max_description_length=config.max_description_length,
         can_react=can_react,
         show_list=show_list,
         **common_configs(user),
@@ -660,13 +661,33 @@ def edit_title() -> Any:
     if not ids:
         return error_json
 
-    title = data.get("title", None)
+    title = data.get("title", "")
     user = get_user()
 
     if not user:
         return error_json
 
     return post_procs.edit_post_title(ids, title, user=user)
+
+
+@app.route("/edit_description", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@login_required
+def edit_description() -> Any:
+    data = request.get_json()
+    ids = data.get("ids", None)
+
+    if not ids:
+        return error_json
+
+    description = data.get("description", "")
+    user = get_user()
+
+    if not user:
+        return error_json
+
+    return post_procs.edit_post_description(ids, description, user=user)
 
 
 @app.route("/edit_privacy", methods=["POST"])  # type: ignore
