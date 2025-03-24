@@ -187,7 +187,7 @@ class Config:
         self.allow_hotlinks: bool = True
 
         # Default requests per minute for uploads
-        self.requests_per_minute = 12
+        self.requests_per_minute = 5
 
         # Allow non-users to view posts and files
         self.public_posts: bool = True
