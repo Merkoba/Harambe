@@ -820,8 +820,9 @@ App.start_editor = async () => {
   App.editor.session.setValue(App.text, -1)
   App.editor.setReadOnly(true)
   App.editor.setShowPrintMargin(false)
+  let num_lines = App.editor.session.getLength()
 
-  if (App.editor.session.getLength() <= 1) {
+  if (num_lines <= 1) {
     App.editor.renderer.setShowGutter(false)
   }
   else {
@@ -831,13 +832,8 @@ App.start_editor = async () => {
   App.editor.setOptions({
     wrap: App.ace_wrap,
     highlightGutterLine: false,
+    maxLines: 25,
   })
-
-  let line_height = App.editor.renderer.lineHeight
-  let num_lines = Math.min(App.editor.session.getLength(), 25)
-  let new_height = num_lines * line_height + App.editor.renderer.scrollBar.getWidth()
-  App.editor.container.style.height = new_height + `px`
-  App.editor.resize()
 }
 
 App.edit_post = () => {
