@@ -235,6 +235,16 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             return error("No file or description")
 
         make_empty_file(files, seen_files)
+        psample = ""
+
+        if title:
+            psample = title
+
+        if description:
+            psample += f"\n\n{description}"
+
+        presample = psample.encode("utf-8")
+        presample_ext = "txt"
 
     if (len(files) < 1) or (len(files) > config.max_upload_files):
         return error("Wrong file length")
