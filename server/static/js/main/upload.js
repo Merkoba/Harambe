@@ -23,10 +23,10 @@ App.validate = () => {
     return false
   }
 
-  let text = App.get_text()
+  let texts = App.get_texts()
 
   if (App.num_active_files() === 0) {
-    if (!text) {
+    if (!texts.length) {
       App.file_trigger()
       return false
     }
@@ -36,9 +36,11 @@ App.validate = () => {
     return false
   }
 
-  if (text) {
-    if (text.length > App.max_text_length) {
-      return false
+  if (texts.length) {
+    for (let text of texts) {
+      if (text.length > App.max_text_length) {
+        return false
+      }
     }
   }
 
@@ -769,8 +771,17 @@ App.setup_dragdrop = () => {
   })
 }
 
-App.get_text = () => {
-  return DOM.el(`#pastebin`).value.trim()
+App.get_texts = () => {
+  let texts = []
+  let pastebins = DOM.els(`.pastebin`)
+
+  for (let pastebin of pastebins) {
+    if (pastebin.value.trim()) {
+      texts.push(pastebin.value)
+    }
+  }
+
+  return texts
 }
 
 App.setup_keys = () => {
@@ -810,6 +821,7 @@ App.add_pastebin = () => {
   main.appendChild(c)
   DOM.show(main)
   App.to_bottom()
+  DOM.el(`.pastebin`, c).focus()
 }
 
 App.remove_pastebin = () => {

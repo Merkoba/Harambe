@@ -79,6 +79,37 @@ def check_hash(content: bytes) -> tuple[str, str]:
     return file_hash, ""
 
 
+def make_text_files(
+    request: Request, files: list[FileStorage], seen_files: set[str]
+) -> None:
+    pastebins = request.form.getlist("pastebin")
+
+    for index, text in enumerate(pastebins):
+        if len(text) > config.max_pastebin_length:
+            continue
+
+        text_io = BytesIO(text.encode("utf-8"))
+        filename = request.form.getlist("pastebin_filename")[index].strip()
+
+        if not filename:
+            if len(pastebins) == 1:
+                filename = "paste.txt"
+            else:
+                filename = f"paste_{index + 1}.txt"
+
+        filename = utils.fix_filename(filename)
+
+        text_file = FileStorage(
+            stream=text_io,
+            filename=filename,
+            name="file",
+            content_type="text/plain",
+        )
+
+        files.append(text_file)
+        seen_files.add(filename)
+
+
 def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if not user:
         return error("No user")
@@ -93,34 +124,11 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if len(title) > config.max_title_length:
         return error("Title is too long")
 
-    files = []
-    seen_files = set()
+    files: list[FileStorage] = []
+    seen_files: set[str] = set()
 
     if config.pastebin_enabled:
-        text = request.form.get("pastebin", "")
-
-        if text:
-            if len(text) > config.max_pastebin_length:
-                return error("Text is too long")
-
-            # Create a text file from text
-            text_io = BytesIO(text.encode("utf-8"))
-            filename = request.form.get("pastebin_filename").strip()
-
-            if not filename:
-                filename = "paste.txt"
-
-            filename = utils.fix_filename(filename)
-
-            text_file = FileStorage(
-                stream=text_io,
-                filename=filename,
-                name="file",
-                content_type="text/plain",
-            )
-
-            files.append(text_file)
-            seen_files.add(filename)
+        make_text_files(request, files, seen_files)
 
     for file in request.files.getlist("file"):
         if file and file.filename:
