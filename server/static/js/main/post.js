@@ -128,7 +128,7 @@ App.edit_title = () => {
 App.edit_description = () => {
   let prompt_args = {
     placeholder: `Edit Description`,
-    value: App.description || App.original,
+    value: App.description,
     max: App.max_description_length,
     multi: true,
     callback: async (description) => {
