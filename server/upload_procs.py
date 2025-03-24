@@ -178,6 +178,10 @@ def make_text_files(
         make_file(text, filename, files, seen_files)
 
 
+def clean_description(s: str) -> str:
+    return utils.remove_multiple_lines(s)[: config.max_captcha_time].strip()
+
+
 def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if not user:
         return error("No user")
@@ -192,7 +196,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     seen_files: set[str] = set()
     presample: bytes | None = None
     presample_ext = ""
-    description = request.form.get("description", "").strip()
+    description = clean_description(request.form.get("description", ""))
 
     if utils.is_url(title):
         ans: MadeURL | None = make_url_file(title, files, seen_files)
@@ -203,7 +207,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
             if ans[1]:
                 if not description:
-                    description = ans[1][: config.max_description_length].strip()
+                    description = clean_description(ans[1])
 
             if ans[2]:
                 presample = ans[2]

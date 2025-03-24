@@ -390,3 +390,7 @@ a.link:hover,
     max-width: 90%;
     height: calc(44rem * 0.564);
 }
+
+#description {
+    white-space: pre-wrap;
+}
