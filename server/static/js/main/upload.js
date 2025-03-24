@@ -55,7 +55,7 @@ App.validate = () => {
 
   if (texts.length) {
     for (let text of texts) {
-      if (text.length > App.max_text_length) {
+      if (text.length > App.max_pastebin_length) {
         return false
       }
     }
@@ -255,21 +255,7 @@ App.remove_picker = (picker) => {
   App.on_picker_change()
 }
 
-App.check_required_file = () => {
-  let files = DOM.els(`.picker_file`)
-
-  for (let [i, file] of files.entries()) {
-    if (i === 0) {
-      file.required = true
-    }
-    else {
-      file.required = false
-    }
-  }
-}
-
 App.on_picker_change = () => {
-  App.check_required_file()
   App.check_files_used()
 }
 
@@ -793,16 +779,30 @@ App.get_texts = () => {
   return texts
 }
 
-App.setup_keys = () => {
+App.setup_keys = (e) => {
+  function action_1() {
+    App.submit_form()
+  }
+
+  function action_2(e) {
+    if (e.ctrlKey || e.shiftKey) {
+      App.submit_form()
+    }
+  }
+
   DOM.ev(document, `keydown`, (e) => {
     if (e.key === `Enter`) {
-      if ([`title`, `pastebin_filename`].includes(e.target.id)) {
-        App.submit_form()
+      if ([`title`].includes(e.target.id)) {
+        action_1(e)
       }
-      else if ([`pastebin`, `description`].includes(e.target.id)) {
-        if (e.ctrlKey || e.shiftKey) {
-          App.submit_form()
-        }
+      else if ([`description`].includes(e.target.id)) {
+        action_2(e)
+      }
+      else if ([`pastebin_filename`].some(cls => e.target.classList.contains(cls))) {
+        action_1(e)
+      }
+      else if ([`pastebin`].some(cls => e.target.classList.contains(cls))) {
+        action_2(e)
       }
     }
   })

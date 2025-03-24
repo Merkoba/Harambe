@@ -456,7 +456,7 @@ class Config:
         self.pastebin_enabled = True
 
         # Max length for text uploads
-        self.max_pastebin_length = 10_000
+        self.max_pastebin_length = 100_000
 
         # Max url length when making url files
         self.max_url_length = 1_000

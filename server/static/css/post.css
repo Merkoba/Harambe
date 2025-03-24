@@ -388,7 +388,7 @@ a.link:hover,
 #youtube_iframe {
     width: 46rem;
     max-width: 90%;
-    height: calc(44rem * 0.564);
+    height: calc(44rem * 0.52);
 }
 
 #description {
