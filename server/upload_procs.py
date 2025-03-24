@@ -128,6 +128,10 @@ def make_url_file(
                 info += f"\n\n{ans_2[1]}"
 
         content = info.encode("utf-8")
+
+        if len(content) > config.sample_text_bytes:
+            content = content[: config.sample_text_bytes]
+
         return title, content, "txt"
 
     return None
