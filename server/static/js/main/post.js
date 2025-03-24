@@ -825,6 +825,13 @@ App.start_editor = async () => {
     wrap: App.ace_wrap,
     highlightGutterLine: false,
   })
+
+  let line_height = App.editor.renderer.lineHeight
+  let num_lines = Math.min(App.editor.session.getLength(), 25)
+  let new_height = num_lines * line_height + App.editor.renderer.scrollBar.getWidth()
+  new_height += 10
+  App.editor.container.style.height = new_height + `px`
+  App.editor.resize()
 }
 
 App.edit_post = () => {
