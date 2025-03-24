@@ -532,16 +532,39 @@ def get_youtube_info(url: str) -> tuple[str, bytes | None] | None:
     return None
 
 
-def get_url_title(url: str) -> str:
+def get_url_info(url: str) -> tuple[str, str] | None:
     try:
         response = requests.get(url, timeout=5)
 
         if response.status_code == 200:
-            title = re.search(r"<title>(.*?)</title>", response.text, re.IGNORECASE)
+            title = ""
+            description = ""
 
-            if title:
-                return title.group(1).strip()
+            title_match = re.search(
+                r"<title>(.*?)</title>", response.text, re.IGNORECASE
+            )
+
+            if title_match:
+                title = title_match.group(1).strip()
+
+            desc_match = re.search(
+                r'<meta\s+name=["\']description["\']\s+content=["\'](.*?)["\']\s*/?>',
+                response.text,
+                re.IGNORECASE,
+            )
+
+            if not desc_match:
+                desc_match = re.search(
+                    r'<meta\s+content=["\'](.*?)["\']\s+name=["\']description["\']\s*/?>',
+                    response.text,
+                    re.IGNORECASE,
+                )
+
+            if desc_match:
+                description = desc_match.group(1).strip()
+
+            return title, description
     except Exception:
         pass
 
-    return ""
+    return None

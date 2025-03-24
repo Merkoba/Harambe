@@ -99,7 +99,7 @@ def make_file(
 
 def make_url_file(
     url: str, files: list[FileStorage], seen_files: set[str]
-) -> tuple[str, bytes | None] | None:
+) -> tuple[str, bytes | None, str] | None:
     if not url:
         return None
 
@@ -109,11 +109,26 @@ def make_url_file(
     make_file(url, "url.txt", files, seen_files)
 
     if config.fetch_youtube and utils.is_youtube_url(url):
-        return utils.get_youtube_info(url)
+        ans_1 = utils.get_youtube_info(url)
 
-    if config.fetch_url:
-        title = utils.get_url_title(url)
-        return title, None
+        if ans_1:
+            title, content = ans_1
+            return title, content, "jpg"
+    elif config.fetch_url:
+        ans_2 = utils.get_url_info(url)
+        info = url
+        title = ""
+
+        if ans_2:
+            if ans_2[0]:
+                title = ans_2[0]
+                info += f"\n\n{ans_2[0]}"
+
+            if ans_2[1]:
+                info += f"\n\n{ans_2[1]}"
+
+        content = info.encode("utf-8")
+        return title, content, "txt"
 
     return None
 
@@ -158,7 +173,9 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     presample_ext = ""
 
     if utils.is_url(title):
-        ans: tuple[str, bytes | None] | None = make_url_file(title, files, seen_files)
+        ans: tuple[str, bytes | None, str] | None = make_url_file(
+            title, files, seen_files
+        )
 
         if ans:
             if ans[0]:
@@ -166,7 +183,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
             if ans[1]:
                 presample = ans[1]
-                presample_ext = "jpg"
+                presample_ext = ans[2]
 
     if len(title) > config.max_title_length:
         return error("Title is too long")
