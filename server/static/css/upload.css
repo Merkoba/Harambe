@@ -326,3 +326,8 @@ input[type="checkbox"] {
     border: 0;
     outline: none;
 }
+
+.pastebin_remove {
+    cursor: pointer;
+    user-select: none;
+}

@@ -819,12 +819,18 @@ App.add_pastebin = () => {
   c.innerHTML = t.innerHTML
   let main = DOM.el(`#pastebins`)
   main.appendChild(c)
+  let remove = DOM.el(`.pastebin_remove`, c)
+
+  DOM.ev(remove, `click`, (e) => {
+    App.remove_pastebin(c)
+  })
+
   DOM.show(main)
   App.to_bottom()
   DOM.el(`.pastebin`, c).focus()
 }
 
-App.remove_pastebin = () => {
+App.remove_pastebin = (c) => {
   let pastebins = DOM.els(`.pastebin_container`)
   let length = pastebins.length
 
@@ -832,7 +838,12 @@ App.remove_pastebin = () => {
     return
   }
 
-  pastebins.at(-1).remove()
+  if (c) {
+    c.remove()
+  }
+  else {
+    pastebins.at(-1).remove()
+  }
 
   if (length === 1) {
     DOM.hide(`#pastebins`)

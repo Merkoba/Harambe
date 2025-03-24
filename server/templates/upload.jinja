@@ -20,7 +20,11 @@
 </template>
 
 <template id="template_pastebin">
-    <div title="This will create a text file (Optional)">Create a Text File</div>
+    <div class="rowitem">
+        <div title="This will create a text file (Optional)">Create a Text File</div>
+        <div class="pastebin_remove" title="Remove">💣</div>
+    </div>
+
     <input type="text" placeholder="File Name + Extension" class="pastebin_filename" name="pastebin_filename">
     <textarea class="pastebin" name="pastebin" placeholder="Text or Code"></textarea>
 </template>
