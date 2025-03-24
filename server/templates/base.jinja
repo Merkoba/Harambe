@@ -36,6 +36,7 @@
             App.list_private = {{list_private | default(0) | tojson}}
             App.show_menu_icons = {{show_menu_icons | default(0) | tojson}}
             App.max_pastebin_length = {{max_pastebin_length | default(0)}}
+            App.max_description_length = {{max_description_length | default(0)}}
 
             {% if post %}
             App.post_id = {{post.id | default(0)}}

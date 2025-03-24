@@ -142,6 +142,18 @@ def make_url_file(
     return None
 
 
+def make_empty_file(files: list[FileStorage], seen_files: set[str]) -> None:
+    empty_file = FileStorage(
+        stream=BytesIO(b""),
+        filename="empty.txt",
+        name="file",
+        content_type="text/plain",
+    )
+
+    files.append(empty_file)
+    seen_files.add("empty.txt")
+
+
 def make_text_files(
     request: Request, files: list[FileStorage], seen_files: set[str]
 ) -> None:
@@ -213,6 +225,12 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             if filename and (filename not in seen_files):
                 seen_files.add(filename)
                 files.append(file)
+
+    if len(files) == 0:
+        if not description:
+            return error("No file or description")
+
+        make_empty_file(files, seen_files)
 
     if (len(files) < 1) or (len(files) > config.max_upload_files):
         return error("Wrong file length")
@@ -349,7 +367,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     file_hash, existing = check_hash(content)
 
-    if existing and (privacy == "public"):
+    if existing and (privacy == "public") and content:
         if mode == "normal":
             return True, existing
 

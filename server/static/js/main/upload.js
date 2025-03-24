@@ -32,14 +32,20 @@ App.validate = () => {
     }
   }
 
+  let description = DOM.el(`#description`)
+
+  if (description) {
+    if (description.value.length > App.max_description_length) {
+      return false
+    }
+  }
+
   let texts = App.get_texts()
 
   if (App.num_active_files() === 0) {
-    if (!App.is_a_url(title.value)) {
-      if (!texts.length) {
-        App.file_trigger()
-        return false
-      }
+    if (!App.is_a_url(title.value) && !description.value.trim() && !texts.length) {
+      App.file_trigger()
+      return false
     }
   }
 

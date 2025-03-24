@@ -300,6 +300,7 @@ def show_upload() -> Any:
         show_privacy_select=config.show_privacy_select,
         pastebin_enabled=config.pastebin_enabled,
         max_pastebin_length=config.max_pastebin_length,
+        max_description_length=config.max_description_length,
         banner=banner,
         **common_configs(user),
     )
