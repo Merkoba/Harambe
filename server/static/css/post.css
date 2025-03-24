@@ -86,12 +86,11 @@ a.link:hover,
 }
 
 #video {
-    width: 44rem;
+    width: 46rem;
     max-width: 90%;
     height: auto;
     background-color: black;
     margin-top: var(--media_margin);
-    max-height: 36rem;
 }
 
 #video.max {
@@ -387,7 +386,7 @@ a.link:hover,
 }
 
 #youtube_iframe {
-    width: 44rem;
+    width: 46rem;
     max-width: 90%;
     height: calc(44rem * 0.564);
 }
