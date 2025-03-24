@@ -85,6 +85,9 @@ def make_text_files(
     pastebins = request.form.getlist("pastebin")
 
     for index, text in enumerate(pastebins):
+        if not text:
+            continue
+
         if len(text) > config.max_pastebin_length:
             continue
 
