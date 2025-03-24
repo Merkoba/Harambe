@@ -308,10 +308,10 @@ Ignores `gif`.
 
 ## Pastebin
 
-There is a widget in the web interface to create a text file.
+There is a widget in the web interface to create text files.
 
 User can specify filename with extension which aids on syntax highlighting.
 
 There's a textarea to paste text quicky.
 
-The uploader script accepts `--pastebin some text` and `--pastebin-filename file.py`
+The uploader script accepts `--pastebin some text` and `--pastebin-filename file.py`.
