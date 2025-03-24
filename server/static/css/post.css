@@ -372,3 +372,7 @@ a.link:hover,
     align-items: flex-start;
     gap: 0.38rem;
 }
+
+.ace_cursor {
+    opacity: 0 !important;
+}

@@ -821,6 +821,13 @@ App.start_editor = async () => {
   App.editor.setReadOnly(true)
   App.editor.setShowPrintMargin(false)
 
+  if (App.editor.session.getLength() <= 1) {
+    App.editor.renderer.setShowGutter(false)
+  }
+  else {
+    App.editor.renderer.setShowGutter(true)
+  }
+
   App.editor.setOptions({
     wrap: App.ace_wrap,
     highlightGutterLine: false,
@@ -829,7 +836,6 @@ App.start_editor = async () => {
   let line_height = App.editor.renderer.lineHeight
   let num_lines = Math.min(App.editor.session.getLength(), 25)
   let new_height = num_lines * line_height + App.editor.renderer.scrollBar.getWidth()
-  new_height += 10
   App.editor.container.style.height = new_height + `px`
   App.editor.resize()
 }
