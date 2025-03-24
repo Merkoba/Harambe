@@ -261,7 +261,48 @@ def get_text_sample(path: Path) -> None:
 
 
 def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
-    sample = "\n".join([Path(file.filename).name for file in files])
+    lines = []
+
+    for file in files:
+        filename = Path(file.filename).name
+        line = filename
+
+        try:
+            size = 0
+
+            if hasattr(file, "content_length") and file.content_length is not None:
+                size = file.content_length
+
+            if (size == 0) and hasattr(file, "stream"):
+                try:
+                    current_pos = file.stream.tell()
+
+                    if hasattr(file.stream, "seekable") and file.stream.seekable():
+                        file.stream.seek(0, 2)
+                        size = file.stream.tell()
+                        file.stream.seek(current_pos)
+                except Exception:
+                    pass
+
+            if size > 0:
+                if size < 1024:
+                    size_str = f"{size} b"
+                elif size < 1024 * 1024:
+                    size_str = f"{size / 1024:.1f} kb"
+                elif size < 1024 * 1024 * 1024:
+                    size_str = f"{size / (1024 * 1024):.1f} mb"
+                elif size < 1024 * 1024 * 1024 * 1024:
+                    size_str = f"{size / (1024 * 1024 * 1024):.1f} gb"
+                else:
+                    size_str = f"{size / (1024 * 1024 * 1024 * 1024):.1f} tb"
+
+                line = f"{filename} | {size_str}"
+        except:
+            pass
+
+        lines.append(line)
+
+    sample = "\n".join(lines)
     sample = sample[: config.sample_zip_chars].strip()
     sample_name = f"{path.stem}.txt"
     sample_path = utils.samples_dir() / Path(sample_name)
