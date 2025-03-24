@@ -23,8 +23,8 @@ audio_magic = "off"
 video_magic = "off"
 album_magic = "off"
 gif_magic = "off"
-pastebin = ""
-pastebin_filename = ""
+pastebins = []
+pastebin_filenames = []
 
 # Parse command-line options
 OptionParser.new do |opts|
@@ -63,11 +63,11 @@ OptionParser.new do |opts|
   end
 
   opts.on("--pastebin TEXT", "Create a text file") do |t|
-    pastebin = t
+    pastebins << t
   end
 
   opts.on("--pastebin-filename TEXT", "Filename of the text file") do |t|
-    pastebin_filename = t
+    pastebin_filenames << t
   end
 
   opts.on("-h", "--help", "Prints this help") do
@@ -91,7 +91,7 @@ abort("Error: URL is not set") if url.nil? || url.empty?
 abort("Error: USERNAME is not set") if username.nil? || username.empty?
 abort("Error: PASSWORD is not set") if password.nil? || password.empty?
 
-if file_path.nil? && pastebin.empty?
+if file_path.nil? && pastebins.empty?
   abort("Error: Content is not set")
 end
 
@@ -127,6 +127,14 @@ if file_path && !file_path.empty?
   ]
 end
 
+pastebins.each_with_index do |pastebin, index|
+  form_data << ["pastebin", pastebin]
+
+  if pastebin_filenames[index] && !pastebin_filenames[index].empty?
+    form_data << ["pastebin_filename", pastebin_filenames[index]]
+  end
+end
+
 form_data += [
   ["title", title],
   ["username", username],
@@ -138,8 +146,6 @@ form_data += [
   ["video_magic", video_magic],
   ["album_magic", album_magic],
   ["gif_magic", gif_magic],
-  ["pastebin", pastebin],
-  ["pastebin_filename", pastebin_filename],
 ]
 
 request.set_form form_data, "multipart/form-data"
