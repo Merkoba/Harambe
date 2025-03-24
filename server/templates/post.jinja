@@ -176,6 +176,11 @@
         {% endif %}
     {% endif %}
 
+    {% if post.description %}
+    <hr>
+    <div>{{post.description}}</div>
+    {% endif %}
+
     {% if reactions_enabled %}
     <hr>
 

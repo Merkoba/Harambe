@@ -279,6 +279,7 @@ def show_upload() -> Any:
         image_tooltip=config.image_tooltip,
         max_title_length=config.max_title_length,
         allow_titles=config.allow_titles,
+        allow_descriptions=config.allow_descriptions,
         show_list=show_list,
         show_admin=user and user.admin,
         description=config.description_upload,

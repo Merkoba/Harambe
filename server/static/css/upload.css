@@ -337,3 +337,14 @@ input[type="checkbox"] {
     cursor: pointer;
     user-select: none;
 }
+
+#description {
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--contrast_background);
+    color: var(--text_color);
+    border: 0;
+    outline: none;
+    padding: 0.38rem;
+}

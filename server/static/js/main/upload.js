@@ -793,7 +793,7 @@ App.setup_keys = () => {
       if ([`title`, `pastebin_filename`].includes(e.target.id)) {
         App.submit_form()
       }
-      else if ([`pastebin`].includes(e.target.id)) {
+      else if ([`pastebin`, `description`].includes(e.target.id)) {
         if (e.ctrlKey || e.shiftKey) {
           App.submit_form()
         }

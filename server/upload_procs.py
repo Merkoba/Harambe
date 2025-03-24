@@ -192,6 +192,11 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if len(title) > config.max_title_length:
         return error("Title is too long")
 
+    description = request.form.get("description", "").strip()
+
+    if len(description) > config.max_description_length:
+        return error("Description is too long")
+
     if config.pastebin_enabled:
         make_text_files(request, files, seen_files)
 
@@ -370,6 +375,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         size=file_size,
         file_hash=file_hash,
         privacy=privacy,
+        description=description,
     )
 
     if config.samples_enabled:

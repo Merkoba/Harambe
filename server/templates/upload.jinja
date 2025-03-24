@@ -81,6 +81,10 @@
         <input id="title" type="text" name="title" placeholder="Post Title or URL" spellcheck="true">
         {% endif %}
 
+        {% if allow_descriptions and is_user and upload_enabled %}
+        <textarea id="description" name="description" placeholder="Description" spellcheck="true" rows="3"></textarea>
+        {% endif %}
+
         {% if pastebin_enabled %}
         <div id="pastebins" class="hidden"></div>
         {% endif %}

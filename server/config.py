@@ -470,6 +470,12 @@ class Config:
         # Fetch URL for title
         self.fetch_url = True
 
+        # Allow descriptions in the web interface
+        self.allow_descriptions = True
+
+        # Max length for descriptions
+        self.max_description_length = 10_000
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
