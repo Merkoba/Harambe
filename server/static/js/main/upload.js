@@ -864,10 +864,16 @@ App.remove_pastebin = (c) => {
 
 App.toggle_max_pastebin = (c) => {
   c.classList.toggle(`max`)
+  App.focus_pastebin(c)
 }
 
 App.clear_pastebin = (c) => {
   let pastebin = DOM.el(`.pastebin`, c)
   pastebin.value = ``
+  App.focus_pastebin(c)
+}
+
+App.focus_pastebin = (c) => {
+  let pastebin = DOM.el(`.pastebin`, c)
   pastebin.focus()
 }
