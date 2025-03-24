@@ -1144,6 +1144,11 @@ App.show_url = () => {
 }
 
 App.format_description = () => {
+  if (!App.description) {
+    DOM.hide(`#description_container`)
+    return
+  }
+
   let description = DOM.el(`#description`)
 
   if (description) {
