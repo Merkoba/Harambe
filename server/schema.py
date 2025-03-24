@@ -2,7 +2,7 @@
 import re
 
 # Modules
-import utils
+import utils  # type: ignore # noqa: F401  # needed for circular dependencies
 import database
 
 

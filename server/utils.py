@@ -482,7 +482,7 @@ def is_url(s: str) -> bool:
     return False
 
 
-def get_youtube_info(url: str) -> tuple[str, bytes | None] | None:
+def get_youtube_info(url: str) -> tuple[str, str, bytes | None] | None:
     if not config.youtube_key:
         return None
 
@@ -507,7 +507,8 @@ def get_youtube_info(url: str) -> tuple[str, bytes | None] | None:
 
             if data["items"]:
                 snippet = data["items"][0]["snippet"]
-                title = snippet["title"]
+                title = snippet.get("title", "")
+                description = snippet.get("description", "")
                 thumbnail: bytes | None = None
                 thumbnails = snippet["thumbnails"]
                 thumbnail_url = None
@@ -523,7 +524,7 @@ def get_youtube_info(url: str) -> tuple[str, bytes | None] | None:
                     if img_response.status_code == 200:
                         thumbnail = img_response.content
 
-                return title, thumbnail
+                return title, description, thumbnail
         else:
             return None
     except Exception:

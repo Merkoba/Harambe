@@ -24,6 +24,9 @@ from config import config
 from user_procs import User
 
 
+MadeURL = tuple[str, str, bytes | None, str]
+
+
 def error(s: str) -> tuple[bool, str]:
     return False, f"Error: {s}"
 
@@ -99,7 +102,7 @@ def make_file(
 
 def make_url_file(
     url: str, files: list[FileStorage], seen_files: set[str]
-) -> tuple[str, bytes | None, str] | None:
+) -> MadeURL | None:
     if not url:
         return None
 
@@ -112,12 +115,13 @@ def make_url_file(
         ans_1 = utils.get_youtube_info(url)
 
         if ans_1:
-            title, content = ans_1
-            return title, content, "jpg"
+            title, description, content = ans_1
+            return title, description, content, "jpg"
     elif config.fetch_url:
         ans_2 = utils.get_url_info(url)
         info = url
         title = ""
+        description = ""
 
         if ans_2:
             if ans_2[0]:
@@ -126,13 +130,14 @@ def make_url_file(
 
             if ans_2[1]:
                 info += f"\n\n{ans_2[1]}"
+                description = ans_2[1]
 
         content = info.encode("utf-8")
 
         if len(content) > config.sample_text_bytes:
             content = content[: config.sample_text_bytes]
 
-        return title, content, "txt"
+        return title, description, content, "txt"
 
     return None
 
@@ -175,24 +180,25 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     seen_files: set[str] = set()
     presample: bytes | None = None
     presample_ext = ""
+    description = request.form.get("description", "").strip()
 
     if utils.is_url(title):
-        ans: tuple[str, bytes | None, str] | None = make_url_file(
-            title, files, seen_files
-        )
+        ans: MadeURL | None = make_url_file(title, files, seen_files)
 
         if ans:
             if ans[0]:
                 title = ans[0][: config.max_title_length].strip()
 
             if ans[1]:
-                presample = ans[1]
-                presample_ext = ans[2]
+                if not description:
+                    description = ans[1][: config.max_description_length].strip()
+
+            if ans[2]:
+                presample = ans[2]
+                presample_ext = ans[3]
 
     if len(title) > config.max_title_length:
         return error("Title is too long")
-
-    description = request.form.get("description", "").strip()
 
     if len(description) > config.max_description_length:
         return error("Description is too long")
