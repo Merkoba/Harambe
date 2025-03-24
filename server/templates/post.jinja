@@ -68,6 +68,7 @@
 
     <!-- File -->
     <div id="details">
+        {% if (post.original_full != "empty.txt") and (post.size > 0) %}
         <div id="file" class="rowitem">
             <div class="rowitem nowrap">
                 <div class="title">File:</div>
@@ -87,6 +88,7 @@
                 <div id="resolution"></div>
             </div>
         </div>
+        {% endif %}
 
         <!-- Date -->
         <div class="rowitem">
