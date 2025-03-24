@@ -157,19 +157,19 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     presample: bytes | None = None
     presample_ext = ""
 
-    if len(title) > config.max_title_length:
-        return error("Title is too long")
-
     if utils.is_url(title):
         ans: tuple[str, bytes | None] | None = make_url_file(title, files, seen_files)
 
         if ans:
             if ans[0]:
-                title = ans[0]
+                title = ans[0][: config.max_title_length].strip()
 
             if ans[1]:
                 presample = ans[1]
                 presample_ext = "jpg"
+
+    if len(title) > config.max_title_length:
+        return error("Title is too long")
 
     if config.pastebin_enabled:
         make_text_files(request, files, seen_files)

@@ -470,6 +470,9 @@ def is_url(s: str) -> bool:
     if " " in s:
         return False
 
+    if len(s) > config.max_url_length:
+        return False
+
     if s.startswith(("http://", "https://")):
         if len(s) <= (s.find("://") + 3):
             return False
