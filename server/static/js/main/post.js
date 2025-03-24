@@ -821,13 +821,7 @@ App.start_editor = async () => {
   App.editor.setReadOnly(true)
   App.editor.setShowPrintMargin(false)
   let num_lines = App.editor.session.getLength()
-
-  if (num_lines <= 1) {
-    App.editor.renderer.setShowGutter(false)
-  }
-  else {
-    App.editor.renderer.setShowGutter(true)
-  }
+  App.editor.renderer.setShowGutter(num_lines >= 3)
 
   App.editor.setOptions({
     wrap: App.ace_wrap,

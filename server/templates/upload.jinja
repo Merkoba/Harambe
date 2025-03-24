@@ -21,12 +21,17 @@
 
 <template id="template_pastebin">
     <div class="rowitem">
-        <div title="This will create a text file (Optional)">Create a Text File</div>
-        <div class="pastebin_remove" title="Remove">💣</div>
+        <div title="This will create a text file (Optional)">Text File</div>
+        <div class="sep">|</div>
+        <div class="pastebin_max button" title="Maximize">Max</div>
+        <div class="sep">|</div>
+        <div class="pastebin_clear button" title="Clear the text">Clear</div>
+        <div class="sep">|</div>
+        <div class="pastebin_remove button" title="Remove this text">Remove</div>
     </div>
 
     <input type="text" placeholder="File Name + Extension" class="pastebin_filename" name="pastebin_filename">
-    <textarea class="pastebin" name="pastebin" placeholder="Text or Code"></textarea>
+    <textarea class="pastebin" name="pastebin"></textarea>
 </template>
 
 <div id="main">

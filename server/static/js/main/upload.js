@@ -819,10 +819,22 @@ App.add_pastebin = () => {
   c.innerHTML = t.innerHTML
   let main = DOM.el(`#pastebins`)
   main.appendChild(c)
+  let max = DOM.el(`.pastebin_max`, c)
+
+  DOM.ev(max, `click`, (e) => {
+    App.toggle_max_pastebin(c)
+  })
+
   let remove = DOM.el(`.pastebin_remove`, c)
 
   DOM.ev(remove, `click`, (e) => {
     App.remove_pastebin(c)
+  })
+
+  let clear = DOM.el(`.pastebin_clear`, c)
+
+  DOM.ev(clear, `click`, (e) => {
+    App.clear_pastebin(c)
   })
 
   DOM.show(main)
@@ -848,4 +860,14 @@ App.remove_pastebin = (c) => {
   if (length === 1) {
     DOM.hide(`#pastebins`)
   }
+}
+
+App.toggle_max_pastebin = (c) => {
+  c.classList.toggle(`max`)
+}
+
+App.clear_pastebin = (c) => {
+  let pastebin = DOM.el(`.pastebin`, c)
+  pastebin.value = ``
+  pastebin.focus()
 }
