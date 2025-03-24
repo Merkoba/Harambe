@@ -376,3 +376,7 @@ a.link:hover,
 .ace_cursor {
     opacity: 0 !important;
 }
+
+.ace_editor .ace_marker-layer .ace_bracket {
+    display: none;
+}
