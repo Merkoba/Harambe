@@ -331,6 +331,7 @@ input[type="checkbox"] {
     color: var(--text_color);
     border: 0;
     outline: none;
+    padding: 0.38rem;
 }
 
 .pastebin_remove {
