@@ -15,6 +15,7 @@ App.init = () => {
   App.setup_zip()
   App.setup_pickers()
   App.setup_keys()
+  App.setup_pastebin()
 }
 
 App.validate = () => {
@@ -785,4 +786,43 @@ App.setup_keys = () => {
       }
     }
   })
+}
+
+App.setup_pastebin = () => {
+  let menu_text = DOM.el(`#menu_text`)
+
+  if (menu_text) {
+    DOM.ev(menu_text, `click`, (e) => {
+      App.add_pastebin()
+    })
+
+    DOM.ev(menu_text, `auxclick`, (e) => {
+      App.remove_pastebin()
+    })
+  }
+}
+
+App.add_pastebin = () => {
+  let t = DOM.el(`#template_pastebin`)
+  let c = DOM.create(`div`, `pastebin_container`)
+  c.innerHTML = t.innerHTML
+  let main = DOM.el(`#pastebins`)
+  main.appendChild(c)
+  DOM.show(main)
+  App.to_bottom()
+}
+
+App.remove_pastebin = () => {
+  let pastebins = DOM.els(`.pastebin_container`)
+  let length = pastebins.length
+
+  if (!length) {
+    return
+  }
+
+  pastebins.at(-1).remove()
+
+  if (length === 1) {
+    DOM.hide(`#pastebins`)
+  }
 }

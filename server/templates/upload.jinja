@@ -19,6 +19,12 @@
     {% endif %}
 </template>
 
+<template id="template_pastebin">
+    <div title="This will create a text file (Optional)">Create a Text File</div>
+    <input type="text" placeholder="File Name + Extension" class="pastebin_filename" name="pastebin_filename">
+    <textarea class="pastebin" name="pastebin" placeholder="Text or Code"></textarea>
+</template>
+
 <div id="main">
     <div id="info">
         {% if is_user and show_max_size %}
@@ -67,15 +73,15 @@
         {% endif %}
 
         {% if pastebin_enabled %}
-        <div id="pastebin_container">
-            <div title="This will create a text file (Optional)">Create a Text File</div>
-            <input type="text" placeholder="File Name + Extension" id="pastebin_filename" name="pastebin_filename">
-            <textarea id="pastebin" name="pastebin" placeholder="Text or Code"></textarea>
-        </div>
+        <div id="pastebins" class="hidden"></div>
         {% endif %}
 
         <div id="buttons">
             <button type="button" id="menu_btn" title="Ctrl + M">🧭&nbsp;&nbsp;Menu</button>
+
+            {% if pastebin_enabled %}
+            <button type="button" id="menu_text" title="Create a text file">📝&nbsp;&nbsp;Text</button>
+            {% endif %}
 
             {% if is_user and upload_enabled %}
             <button id="submit_btn" type="button" title="Upload the file(s)">🔼&nbsp;&nbsp;Upload</button>
