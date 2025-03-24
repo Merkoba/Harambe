@@ -335,6 +335,10 @@ input[type="checkbox"] {
     padding: 0.38rem;
 }
 
+.pastebin::placeholder {
+    text-align: center;
+}
+
 .pastebin_remove {
     cursor: pointer;
     user-select: none;
@@ -349,4 +353,8 @@ input[type="checkbox"] {
     border: 0;
     outline: none;
     padding: 0.38rem;
+}
+
+#description::placeholder {
+    text-align: center;
 }
