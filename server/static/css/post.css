@@ -394,3 +394,7 @@ a.link:hover,
 #description {
     white-space: pre-wrap;
 }
+
+#description_container {
+    width: 100%;
+}

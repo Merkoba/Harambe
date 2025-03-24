@@ -178,10 +178,10 @@
         {% endif %}
     {% endif %}
 
-    {% if post.description %}
-    <hr>
-    <div id="description">{{post.description}}</div>
-    {% endif %}
+    <div id="description_container" class="colitem hidden">
+        <hr>
+        <div id="description"></div>
+    </div>
 
     {% if reactions_enabled %}
     <hr>

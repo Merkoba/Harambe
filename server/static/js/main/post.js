@@ -1151,4 +1151,6 @@ App.format_description = () => {
     text = App.urlize(text)
     description.innerHTML = text
   }
+
+  DOM.show(`#description_container`)
 }
