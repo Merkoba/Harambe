@@ -458,6 +458,15 @@ class Config:
         # Max length for text uploads
         self.max_pastebin_length = 10_000
 
+        # Max url length when making url files
+        self.max_url_length = 1_000
+
+        # Key for the YouTube API
+        self.youtube_key = ""
+
+        # Fetch title and thumbnail from YouTube
+        self.fetch_youtube = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

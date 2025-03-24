@@ -79,6 +79,41 @@ def check_hash(content: bytes) -> tuple[str, str]:
     return file_hash, ""
 
 
+def make_file(
+    text: str, filename: str, files: list[FileStorage], seen_files: set[str]
+) -> None:
+    text_io = BytesIO(text.encode("utf-8"))
+    mtype, _ = mimetypes.guess_type(filename)
+    mtype = mtype or "text/plain"
+
+    text_file = FileStorage(
+        stream=text_io,
+        filename=filename,
+        name="file",
+        content_type=mtype,
+    )
+
+    files.append(text_file)
+    seen_files.add(filename)
+
+
+def make_url_file(
+    url: str, files: list[FileStorage], seen_files: set[str]
+) -> tuple[str, bytes | None] | None:
+    if not url:
+        return None
+
+    if len(url) > config.max_url_length:
+        return None
+
+    make_file(url, "url.txt", files, seen_files)
+
+    if config.fetch_youtube:
+        return utils.get_youtube_info(url)
+
+    return None
+
+
 def make_text_files(
     request: Request, files: list[FileStorage], seen_files: set[str]
 ) -> None:
@@ -91,7 +126,6 @@ def make_text_files(
         if len(text) > config.max_pastebin_length:
             continue
 
-        text_io = BytesIO(text.encode("utf-8"))
         filename = request.form.getlist("pastebin_filename")[index].strip()
 
         if not filename:
@@ -101,16 +135,7 @@ def make_text_files(
                 filename = f"paste_{index + 1}.txt"
 
         filename = utils.fix_filename(filename)
-
-        text_file = FileStorage(
-            stream=text_io,
-            filename=filename,
-            name="file",
-            content_type="text/plain",
-        )
-
-        files.append(text_file)
-        seen_files.add(filename)
+        make_file(text, filename, files, seen_files)
 
 
 def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
@@ -123,12 +148,21 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error(u_msg)
 
     title = request.form.get("title", "")
+    files: list[FileStorage] = []
+    seen_files: set[str] = set()
+    presample: bytes | None = None
+    presample_ext = ""
 
     if len(title) > config.max_title_length:
         return error("Title is too long")
 
-    files: list[FileStorage] = []
-    seen_files: set[str] = set()
+    if utils.is_url(title):
+        ans: tuple[str, bytes | None] | None = make_url_file(title, files, seen_files)
+
+        if ans:
+            title = ans[0]
+            presample = ans[1]
+            presample_ext = "jpg"
 
     if config.pastebin_enabled:
         make_text_files(request, files, seen_files)
@@ -311,7 +345,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     )
 
     if config.samples_enabled:
-        sample_procs.make_sample(path, files, mtype, zip_archive)
+        if presample:
+            sample_procs.save_presample(path, presample, presample_ext)
+        else:
+            sample_procs.make_sample(path, files, mtype, zip_archive)
 
     database.update_user_last_date(user.id)
     post_procs.check_storage()

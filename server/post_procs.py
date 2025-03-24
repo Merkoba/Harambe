@@ -169,7 +169,11 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     text = ""
 
     if all_data:
-        text_file = Path(utils.samples_dir() / f"{name}.txt")
+        fname = f"{name}.txt"
+        text_file = Path(utils.files_dir() / fname)
+
+        if not text_file.exists():
+            text_file = Path(utils.samples_dir() / fname)
 
         if text_file.exists():
             text = text_file.open("r").read()
@@ -178,7 +182,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     is_url = False
 
     if text:
-        is_url = (" " not in post.name) and utils.is_url(text)
+        is_url = utils.is_url(text)
 
         if is_url:
             yt_info = utils.get_youtube_id(text)

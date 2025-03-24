@@ -11,9 +11,20 @@ import utils
 from config import config
 
 
+def sample_exists(path: Path) -> bool:
+    for sample in utils.samples_dir().iterdir():
+        if sample.stem == path.stem:
+            return True
+
+    return False
+
+
 def make_sample(
     path: Path, files: list[FileStorage], mtype: str, zip_archive: bool
 ) -> None:
+    if sample_exists(path):
+        return
+
     try:
         if zip_archive:
             get_zip_sample(path, files)
@@ -255,3 +266,9 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
     sample_name = f"{path.stem}.txt"
     sample_path = utils.samples_dir() / Path(sample_name)
     sample_path.write_text(sample)
+
+
+def save_presample(path: Path, presample: bytes, presample_ext: str) -> None:
+    sample_name = f"{path.stem}.{presample_ext}"
+    sample_path = utils.samples_dir() / Path(sample_name)
+    sample_path.write_bytes(presample)

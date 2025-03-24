@@ -10,6 +10,7 @@ import urllib.parse
 import unicodedata
 import subprocess
 import mimetypes
+import requests  # type: ignore
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -462,6 +463,9 @@ def get_youtube_id(url: str) -> list[Any] | None:
 
 
 def is_url(s: str) -> bool:
+    if " " in s:
+        return False
+
     if s.startswith(("http://", "https://")):
         if len(s) <= (s.find("://") + 3):
             return False
@@ -469,3 +473,53 @@ def is_url(s: str) -> bool:
         return not s.endswith(("]", "'", '"'))
 
     return False
+
+
+def get_youtube_info(url: str) -> tuple[str, bytes | None] | None:
+    if not config.youtube_key:
+        return None
+
+    yt_info = get_youtube_id(url)
+
+    if not yt_info:
+        return None
+
+    if yt_info[0] != "video":
+        return None
+
+    vid = yt_info[1]
+
+    try:
+        key = config.youtube_key
+        api_url = "https://www.googleapis.com/youtube/v3/videos"
+        api_url = f"{api_url}?id={vid}&key={key}&part=snippet"
+        response = requests.get(api_url, timeout=5)
+
+        if response.status_code == 200:
+            data = response.json()
+
+            if data["items"]:
+                snippet = data["items"][0]["snippet"]
+                title = snippet["title"]
+                thumbnail: bytes | None = None
+                thumbnails = snippet["thumbnails"]
+                thumbnail_url = None
+
+                for quality in ["maxres", "high", "medium", "default"]:
+                    if quality in thumbnails:
+                        thumbnail_url = thumbnails[quality]["url"]
+                        break
+
+                if thumbnail_url:
+                    img_response = requests.get(thumbnail_url, timeout=5)
+
+                    if img_response.status_code == 200:
+                        thumbnail = img_response.content
+
+                return title, thumbnail
+        else:
+            return None
+    except Exception:
+        return None
+
+    return None

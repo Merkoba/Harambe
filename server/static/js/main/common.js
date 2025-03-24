@@ -1282,6 +1282,10 @@ App.get_youtube_id = (url) => {
 }
 
 App.is_a_url = (s) => {
+  if (s.includes(` `)) {
+    return false
+  }
+
   if (s.startsWith(`http://`) || s.startsWith(`https://`)) {
     if (s.length <= (s.indexOf(`://`) + 3)) {
       return false

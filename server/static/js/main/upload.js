@@ -16,6 +16,7 @@ App.init = () => {
   App.setup_pickers()
   App.setup_keys()
   App.setup_pastebin()
+  App.focus_title()
 }
 
 App.validate = () => {
@@ -23,12 +24,22 @@ App.validate = () => {
     return false
   }
 
+  let title = DOM.el(`#title`)
+
+  if (title) {
+    if (title.value.length > App.max_title_length) {
+      return false
+    }
+  }
+
   let texts = App.get_texts()
 
   if (App.num_active_files() === 0) {
-    if (!texts.length) {
-      App.file_trigger()
-      return false
+    if (!App.is_a_url(title.value)) {
+      if (!texts.length) {
+        App.file_trigger()
+        return false
+      }
     }
   }
 
@@ -41,14 +52,6 @@ App.validate = () => {
       if (text.length > App.max_text_length) {
         return false
       }
-    }
-  }
-
-  let title = DOM.el(`#title`)
-
-  if (title) {
-    if (title.value.length > App.max_title_length) {
-      return false
     }
   }
 
@@ -876,4 +879,8 @@ App.clear_pastebin = (c) => {
 App.focus_pastebin = (c) => {
   let pastebin = DOM.el(`.pastebin`, c)
   pastebin.focus()
+}
+
+App.focus_title = () => {
+  DOM.el(`#title`).focus()
 }
