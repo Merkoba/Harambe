@@ -859,8 +859,13 @@ App.start_embed = () => {
     if (App.zip_embed) {
       //
     }
-    else if (App.youtube_id) {
-      App.start_youtube()
+    else if (App.is_url) {
+      if (App.youtube_id) {
+        App.start_youtube()
+      }
+      else {
+        App.show_url()
+      }
     }
     else {
       App.start_editor()
@@ -1087,4 +1092,10 @@ App.start_youtube = () => {
   let container = DOM.el(`#youtube_container`)
   container.appendChild(iframe)
   DOM.show(container)
+}
+
+App.show_url = () => {
+  let c = DOM.el(`#url_container`)
+  let text = App.safe_html(App.text)
+  c.innerHTML = `<a href="${text}">${text}</a>`
 }

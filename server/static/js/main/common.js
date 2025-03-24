@@ -571,10 +571,14 @@ App.replace_urls = (text) => {
   return text.replace(re, `/github/$1/$2`)
 }
 
+App.safe_html = (text) => {
+  text = text.replace(/</g, `&lt;`)
+  return text.replace(/>/g, `&gt;`)
+}
+
 App.text_html = (text, markdown = true) => {
   // Remove < and > to prevent XSS
-  text = text.replace(/</g, `&lt;`)
-  text = text.replace(/>/g, `&gt;`)
+  text = App.safe_html(text)
 
   // Markdown
   if (markdown) {
@@ -1277,7 +1281,7 @@ App.get_youtube_id = (url) => {
   }
 }
 
-App.is_url = (s) => {
+App.is_a_url = (s) => {
   if (s.startsWith(`http://`) || s.startsWith(`https://`)) {
     if (s.length <= (s.indexOf(`://`) + 3)) {
       return false

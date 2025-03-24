@@ -57,6 +57,7 @@ class Post:
     privacy: str
     privacy_str: str
     youtube_id: str
+    is_url: bool
 
     def is_image(self) -> bool:
         return self.mtype.startswith("image/")
@@ -174,9 +175,12 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
             text = text_file.open("r").read()
 
     youtube_id = ""
+    is_url = False
 
     if text:
-        if " " not in text:
+        is_url = (" " not in post.name) and utils.is_url(text)
+
+        if is_url:
             yt_info = utils.get_youtube_id(text)
 
             if yt_info and (yt_info[0] == "video"):
@@ -222,6 +226,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         privacy,
         privacy_str,
         youtube_id,
+        is_url,
     )
 
 

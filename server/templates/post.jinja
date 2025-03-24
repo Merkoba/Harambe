@@ -123,8 +123,13 @@
     </div>
 
     {% if post.text %}
-        {% if post.youtube_id %}
-        <div id="youtube_container"></div>
+        {% if post.is_url %}
+            {% if post.youtube_id %}
+            <div id="youtube_container"></div>
+            {% else %}
+            <hr>
+            <div id="url_container"></div>
+            {% endif %}
         {% elif not post.zip_embed %}
         <div class="embed">
             <div id="text_buttons" class="rowitem">
