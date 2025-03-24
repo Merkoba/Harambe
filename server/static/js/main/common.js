@@ -1246,3 +1246,55 @@ App.double_confirm = (message, func, confirmed = false) => {
 
   App.confirmbox(confirm_args)
 }
+
+App.get_youtube_id = (url) => {
+  let v_id = false
+  let list_id = false
+
+  let split = url.split(/(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/|\/live\/)/)
+  let id = undefined !== split[2] ? split[2].split(/[^0-9a-z_-]/i)[0] : split[0]
+
+  v_id = id.length === 11 ? id : false
+
+  let list_match = url.match(/(?:\?|&)(list=[0-9A-Za-z_-]+)/)
+  let index_match = url.match(/(?:\?|&)(index=[0-9]+)/)
+
+  if (list_match) {
+    list_id = list_match[1].replace(`list=`, ``)
+  }
+
+  if (list_id && !v_id) {
+    let index = 0
+
+    if (index_match) {
+      index = parseInt(index_match[1].replace(`index=`, ``)) - 1
+    }
+
+    return [`list`, [list_id, index]]
+  }
+  else if (v_id) {
+    return [`video`, v_id]
+  }
+}
+
+App.is_url = (s) => {
+  if (s.startsWith(`http://`) || s.startsWith(`https://`)) {
+    if (s.length <= (s.indexOf(`://`) + 3)) {
+      return false
+    }
+
+    if (s.endsWith(`]`)) {
+      return false
+    }
+    else if (s.endsWith(`"`)) {
+      return false
+    }
+    else if (s.endsWith(`'`)) {
+      return false
+    }
+
+    return true
+  }
+
+  return false
+}

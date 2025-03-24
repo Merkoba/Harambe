@@ -856,7 +856,13 @@ App.start_embed = () => {
     App.start_markdown()
   }
   else if (App.text) {
-    if (!App.zip_embed) {
+    if (App.zip_embed) {
+      //
+    }
+    else if (App.youtube_id) {
+      App.start_youtube()
+    }
+    else {
       App.start_editor()
     }
   }
@@ -1069,4 +1075,16 @@ App.edit_privacy = async (privacy) => {
 App.update_privacy = () => {
   let privacy = DOM.el(`#privacy`)
   privacy.textContent = App.capitalize(App.privacy)
+}
+
+App.start_youtube = () => {
+  let video_id = App.youtube_id
+  let iframe = DOM.create(`iframe`, ``, `youtube_iframe`)
+  iframe.src = `https://www.youtube.com/embed/${video_id}`
+  iframe.title = `YouTube video player`
+  iframe.allow = `accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share`
+  iframe.allowFullscreen = true
+  let container = DOM.el(`#youtube_container`)
+  container.appendChild(iframe)
+  DOM.show(container)
 }

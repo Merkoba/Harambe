@@ -428,3 +428,44 @@ def fix_filename(name: str) -> str:
     stem = clean_filename(".".join(split[:-1]))
     ext = split[-1].lower().strip()
     return f"{stem}.{ext}"
+
+
+def get_youtube_id(url: str) -> list[Any] | None:
+    split = re.split(r"(vi\/|v%3D|v=|\/v\/|youtu\.be\/|\/embed\/|\/live\/)", url)
+
+    if len(split) > 2:
+        id_part = re.split(r"[^0-9a-z_-]", split[2], flags=re.IGNORECASE)[0]
+    else:
+        id_part = split[0]
+
+    v_id = id_part if len(id_part) == 11 else ""
+    list_match = re.search(r"(?:\?|&)(list=[0-9A-Za-z_-]+)", url)
+    index_match = re.search(r"(?:\?|&)(index=[0-9]+)", url)
+
+    if list_match:
+        list_id = list_match.group(1).replace("list=", "")
+    else:
+        list_id = ""
+
+    if list_id and (not v_id):
+        index = 0
+
+        if index_match:
+            index = int(index_match.group(1).replace("index=", "")) - 1
+
+        return ["list", [list_id, index]]
+
+    if v_id:
+        return ["video", v_id]
+
+    return None
+
+
+def is_url(s: str) -> bool:
+    if s.startswith(("http://", "https://")):
+        if len(s) <= (s.find("://") + 3):
+            return False
+
+        return not s.endswith(("]", "'", '"'))
+
+    return False
