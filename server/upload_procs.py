@@ -195,6 +195,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     description = utils.clean_description(request.form.get("description", ""))
     privacy = request.form.get("privacy", "public")
     value = ""
+    mtype = ""
 
     if privacy not in ["public", "private"]:
         return error("Invalid privacy setting")
@@ -227,6 +228,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             if ans[2]:
                 presample = ans[2]
                 presample_ext = ans[3]
+
+            mtype = "mode/url"
     elif utils.contains_url(title):
         return error("Title contains a URL")
 
@@ -412,8 +415,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Failed to save file")
 
     file_size = path.stat().st_size
-    mtype, _ = mimetypes.guess_type(path)
-    mtype = mtype or ""
+
+    if not mtype:
+        mt, _ = mimetypes.guess_type(path)
+        mtype = mt or ""
 
     database.add_post(
         user_id=user.id,

@@ -296,6 +296,7 @@ def get_posts(
             "listed_str",
             "privacy_str",
             "description",
+            "value",
         ]
 
         if not utils.do_query(post, query, props):
