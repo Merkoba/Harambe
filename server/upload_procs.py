@@ -230,6 +230,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
                 presample_ext = ans[3]
 
             mtype = "mode/url"
+        else:
+            return error("Failed to fetch URL")
     elif utils.contains_url(title):
         return error("Title contains a URL")
 
