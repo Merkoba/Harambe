@@ -257,7 +257,7 @@ class Config:
         self.allow_same_hash = False
 
         # Max number of files to be uploaded at the same time
-        self.max_upload_files = 10
+        self.max_upload_files = 20
 
         # Generate and use samples
         self.samples_enabled = True
