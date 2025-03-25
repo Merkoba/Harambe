@@ -249,6 +249,11 @@ a.linkbutton:hover {
     user-select: none;
 }
 
+.strike {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
 .ace_marker-layer .ace_selection {
     background: rgb(59 84 91) !important;
 }
