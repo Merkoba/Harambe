@@ -193,7 +193,7 @@ App.delete_posts = () => {
   let s = App.singplural(`post`, App.selected_items.length)
 
   let confirm_args = {
-    message: `Delete ${App.selected_items.length} ${s} (${App.size_string(size)}) ?`,
+    message: `Delete ${App.selected_items.length} ${s} (${App.size_string(size)})`,
     callback_yes: () => {
       let posts = []
 
@@ -372,7 +372,7 @@ App.edit_post_privacy = (privacy) => {
 
   let ids = items.map(x => x.dataset.post_id)
   App.msg_post_edit.close()
-  let message = `Make selected posts ${privacy}?`
+  let message = `Make selected posts ${privacy}`
 
   let confirm_args = {
     message,
@@ -460,7 +460,7 @@ App.delete_users = () => {
   let s = App.singplural(`user`, App.selected_items.length)
 
   let confirm_args = {
-    message: `Delete ${App.selected_items.length} ${s} ?`,
+    message: `Delete ${App.selected_items.length} ${s}`,
     callback_yes: () => {
       let users = []
 
@@ -557,7 +557,7 @@ App.mod_user = (what, value, vtype) => {
   let w = App.capitalize(what)
 
   let confirm_args = {
-    message: `Modify ${items.length} ${s} (${w}) ?`,
+    message: `Modify ${items.length} ${s} (${w})`,
     callback_yes: () => {
       App.msg_user_edit.close()
       App.do_mod_user(items, what, value, vtype)
@@ -698,7 +698,7 @@ App.delete_reactions = () => {
   let s = App.singplural(`reaction`, App.selected_items.length)
 
   let confirm_args = {
-    message: `Delete ${App.selected_items.length} ${s} ?`,
+    message: `Delete ${App.selected_items.length} ${s}`,
     callback_yes: () => {
       let reactions = []
 

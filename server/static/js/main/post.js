@@ -745,7 +745,7 @@ App.fill_reactions = () => {
 
 App.delete_reaction = (id) => {
   let confirm_args = {
-    message: `Delete this reaction ?`,
+    message: `Delete this reaction`,
     callback_yes: () => {
       App.do_delete_reaction(id)
     },

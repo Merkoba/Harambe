@@ -297,7 +297,7 @@ App.setup_you_opts = (user_id, show = false, parent = ``) => {
 
     App.bind_button(`${name}_opts_logout`, () => {
       let confirm_args = {
-        message: `Visne profecto discedere ?`,
+        message: `Visne profecto discedere`,
         callback_yes: () => {
           App.location(`/logout`)
         },
@@ -919,7 +919,7 @@ App.setup_edit_post_opts = (show = false) => {
 
     App.bind_button(`${name}_opts_delete`, () => {
       let confirm_args = {
-        message: `Delete this post ?`,
+        message: `Delete this post`,
         callback_yes: () => {
           App.delete_post()
         },

@@ -6,6 +6,7 @@ class Confirmbox {
       message: `Are you sure ?`,
       yes: `Yes`,
       no: `No`,
+      question: true,
     }
 
     App.fill_def_args(def_args, args)
@@ -22,6 +23,11 @@ class Confirmbox {
     let m = DOM.create(`div`)
     m.id = `confirmbox_message`
     m.innerHTML = args.message
+
+    if (args.question) {
+      m.innerHTML += `&nbsp;?`
+    }
+
     let btns = DOM.create(`div`, `dialog_container`)
     btns.id = `confirmbox_buttons`
     let n = DOM.create(`div`, `aero_button`, `confirmbox_opts_no`)
