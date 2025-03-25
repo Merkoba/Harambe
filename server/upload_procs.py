@@ -194,13 +194,14 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     presample_ext = ""
     description = utils.clean_description(request.form.get("description", ""))
     privacy = request.form.get("privacy", "public")
+    value = ""
 
     if privacy not in ["public", "private"]:
         return error("Invalid privacy setting")
 
     if utils.is_url(title):
         if not config.allow_same_url:
-            eposts = database.get_posts(title=title)
+            eposts = database.get_posts(value=title)
             epost = eposts[0] if eposts else None
 
             if epost and (privacy == "public"):
@@ -214,6 +215,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         ans: MadeURL | None = make_url_file(title, files, seen_files)
 
         if ans:
+            value = title
+
             if ans[0]:
                 title = ans[0][: config.max_title_length].strip()
 
@@ -423,6 +426,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         file_hash=file_hash,
         privacy=privacy,
         description=description,
+        value=value,
     )
 
     if config.samples_enabled:

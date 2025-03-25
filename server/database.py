@@ -25,6 +25,7 @@ schemas = {
         "mtype": "text default ''",
         "view_date": "integer default 0",
         "size": "integer default 0",
+        "value": "text default ''",
         "file_hash": "text default 'none'",
         "privacy": "text default 'public'",
         # Foreign keys
@@ -105,6 +106,7 @@ class Post:
     file_hash: str
     privacy: str
     description: str
+    value: str
     reactions: list[Reaction] = field(default_factory=list)
     num_reactions: int = 0
     author: User | None = None
@@ -204,6 +206,7 @@ def add_post(
     file_hash: str,
     privacy: str,
     description: str,
+    value: str,
 ) -> None:
     connection = get_conn()
     conn, c = connection.tuple()
@@ -223,10 +226,11 @@ def add_post(
         file_hash,
         privacy,
         description,
+        value,
     ]
 
     placeholders = ", ".join(["?"] * len(values))
-    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, file_hash, privacy, description) values ({placeholders})"
+    query = f"insert into posts (user, name, ext, date, title, views, original, mtype, view_date, size, file_hash, privacy, description, value) values ({placeholders})"
     c.execute(query, values)
     conn.commit()
     conn.close()
@@ -248,6 +252,7 @@ def make_post(row: dict[str, Any]) -> Post:
         file_hash=row.get("file_hash") or "none",
         privacy=row.get("privacy") or "none",
         description=row.get("description") or "",
+        value=row.get("value") or "",
     )
 
 
@@ -257,6 +262,7 @@ def get_posts(
     user_id: int | None = None,
     file_hash: str | None = None,
     title: str | None = None,
+    value: str | None = None,
     extra: bool = True,
     full_reactions: bool = False,
     increase: bool = False,
@@ -281,6 +287,9 @@ def get_posts(
         rows = c.fetchall()
     elif title:
         c.execute(f"select * from posts where title = ?{pub}", (title,))
+        rows = c.fetchall()
+    elif value:
+        c.execute(f"select * from posts where value = ?{pub}", (value,))
         rows = c.fetchall()
     elif only_public:
         c.execute("select * from posts where privacy = 'public'")
