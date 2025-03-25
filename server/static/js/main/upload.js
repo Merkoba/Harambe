@@ -21,6 +21,7 @@ App.init = () => {
 
 App.validate = () => {
   if (App.clicked) {
+    App.print_info(`Validate: Clicked`)
     return false
   }
 
@@ -29,6 +30,7 @@ App.validate = () => {
 
   if (title) {
     if (title.value.length > App.max_title_length) {
+      App.popmsg(`Title is too long`)
       return false
     }
 
@@ -46,6 +48,7 @@ App.validate = () => {
 
   if (description) {
     if (description.value.length > App.max_description_length) {
+      App.popmsg(`Description is too long`)
       return false
     }
   }
@@ -55,17 +58,20 @@ App.validate = () => {
   if (App.num_active_files() === 0) {
     if (!title_is_url && !description.value.trim() && !texts.length) {
       App.file_trigger()
+      App.popmsg(`Upload something first`)
       return false
     }
   }
 
   if (!App.check_total_size()) {
+    App.popmsg(`Total size is too big`)
     return false
   }
 
   if (texts.length) {
     for (let text of texts) {
       if (text.length > App.max_pastebin_length) {
+        App.popmsg(`Text is too long`)
         return false
       }
     }
@@ -799,6 +805,12 @@ App.setup_keys = (e) => {
       App.submit_form()
     }
   }
+
+  DOM.ev(document.querySelector(`#form`), `keydown`, (e) => {
+    if (e.key === `Enter`) {
+      e.preventDefault()
+    }
+  })
 
   DOM.ev(document, `keydown`, (e) => {
     if (e.key === `Enter`) {
