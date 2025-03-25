@@ -226,10 +226,7 @@ class Config:
         self.allow_password_edit = True
 
         # Font size for all pages
-        self.font_size = 20
-
-        # Font size for the admin pages
-        self.admin_font_size = 18
+        self.font_size = 19
 
         # Max length for user username
         self.max_user_username_length = 240

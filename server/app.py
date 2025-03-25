@@ -188,7 +188,6 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "user_name": user.name if user else "",
         "font_family": config.font_family,
         "font_size": config.font_size,
-        "admin_font_size": config.admin_font_size,
         "links": config.links,
         "file_path": config.file_path,
         "list_private": config.list_private,

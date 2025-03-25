@@ -4,8 +4,6 @@
 }
 
 body, html {
-    font-size: var(--admin_font_size);
-    font-family: sans-serif;
     background-color: var(--background_color);
     color: var(--text_color);
     margin: 0;
