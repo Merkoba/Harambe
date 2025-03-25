@@ -334,6 +334,7 @@ input[type="checkbox"] {
     outline: none;
     padding: 0.38rem;
     min-width: 100%;
+    min-height: 3rem;
 }
 
 .pastebin::placeholder {
@@ -355,6 +356,7 @@ input[type="checkbox"] {
     outline: none;
     padding: 0.38rem;
     min-width: 100%;
+    min-height: 3rem;
 }
 
 #description::placeholder {
