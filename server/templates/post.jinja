@@ -68,7 +68,12 @@
 
     <!-- File -->
     <div id="details">
-        {% if (post.original_full != "empty.txt") or (post.size > 0) %}
+        {% if ((post.original_full == "empty.txt") and (post.size == 0)) or
+        ((post.original_full == "url.txt") and post.value) %}
+
+        {# Don't show the file because it's not relevant #}
+
+        {% else %}
         <div id="file" class="rowitem">
             <div class="rowitem nowrap">
                 <div class="title">File:</div>

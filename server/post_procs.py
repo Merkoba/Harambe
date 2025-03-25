@@ -59,6 +59,7 @@ class Post:
     youtube_id: str
     is_url: bool
     description: str
+    value: str
 
     def is_image(self) -> bool:
         return self.mtype.startswith("image/")
@@ -131,6 +132,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     lister_str = "Lister" if lister else "Not Lister"
     privacy_str += f" | {lister_str}"
     description = post.description
+    value = post.value
 
     if post.reactions:
         last_reaction = post.reactions[-1].value
@@ -234,6 +236,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         youtube_id,
         is_url,
         description,
+        value,
     )
 
 
