@@ -384,10 +384,17 @@ a.link:hover,
     margin-top: var(--media_margin);
 }
 
-#youtube_iframe {
+#youtube {
     width: 46rem;
     max-width: 90%;
-    height: calc(44rem * 0.52);
+    height: calc(46rem * (9 / 16));
+}
+
+#youtube.max {
+    width: var(--max_width);
+    max-width: var(--max_width);
+    height: calc(var(--max_width) * (9 / 16));
+    max-height: var(--max_height);
 }
 
 #description {

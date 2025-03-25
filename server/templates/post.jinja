@@ -28,7 +28,12 @@
             {% endif %}
 
             {% if post.text %}
-                {% if (not post.markdown_embed) and (not post.zip_embed) %}
+                {% if post.youtube_id %}
+                <div class="rowitem nowrap">
+                    <div id="max" data-max_type="youtube" class="button" title="Maximize the video">Max</div>
+                    <div class="sep">|</div>
+                </div>
+                {% elif (not post.markdown_embed) and (not post.zip_embed) %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="editor" class="button" title="Maximize the editor">Max</div>
                     <div class="sep">|</div>

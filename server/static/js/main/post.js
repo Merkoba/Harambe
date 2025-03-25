@@ -1127,7 +1127,7 @@ App.update_privacy = () => {
 
 App.start_youtube = () => {
   let video_id = App.youtube_id
-  let iframe = DOM.create(`iframe`, ``, `youtube_iframe`)
+  let iframe = DOM.create(`iframe`, ``, `youtube`)
   iframe.src = `https://www.youtube.com/embed/${video_id}`
   iframe.title = `YouTube video player`
   iframe.allow = `accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share`
