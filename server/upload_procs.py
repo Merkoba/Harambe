@@ -208,6 +208,8 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             if ans[2]:
                 presample = ans[2]
                 presample_ext = ans[3]
+    elif utils.contains_url(title):
+        return error("Title contains a URL")
 
     if len(title) > config.max_title_length:
         return error("Title is too long")

@@ -25,10 +25,20 @@ App.validate = () => {
   }
 
   let title = DOM.el(`#title`)
+  let title_is_url = false
 
   if (title) {
     if (title.value.length > App.max_title_length) {
       return false
+    }
+
+    title_is_url = App.is_a_url(title.value)
+
+    if (!title_is_url) {
+      if (App.contains_url(title.value)) {
+        App.popmsg(`Title cannot contain a url`)
+        return false
+      }
     }
   }
 
@@ -43,7 +53,7 @@ App.validate = () => {
   let texts = App.get_texts()
 
   if (App.num_active_files() === 0) {
-    if (!App.is_a_url(title.value) && !description.value.trim() && !texts.length) {
+    if (!title_is_url && !description.value.trim() && !texts.length) {
       App.file_trigger()
       return false
     }
