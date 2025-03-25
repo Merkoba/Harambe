@@ -333,6 +333,7 @@ input[type="checkbox"] {
     border: 0;
     outline: none;
     padding: 0.38rem;
+    min-width: 100%;
 }
 
 .pastebin::placeholder {
@@ -353,6 +354,7 @@ input[type="checkbox"] {
     border: 0;
     outline: none;
     padding: 0.38rem;
+    min-width: 100%;
 }
 
 #description::placeholder {

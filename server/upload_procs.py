@@ -193,8 +193,24 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     presample: bytes | None = None
     presample_ext = ""
     description = utils.clean_description(request.form.get("description", ""))
+    privacy = request.form.get("privacy", "public")
+
+    if privacy not in ["public", "private"]:
+        return error("Invalid privacy setting")
 
     if utils.is_url(title):
+        # If URL post with the same title, it will have the same metadata
+        # So just return an old post
+        existing = database.get_posts(title=title)
+
+        if existing and (privacy == "public"):
+            name = existing.name
+
+            if mode == "normal":
+                return True, name
+
+            return True, f"post/{name}"
+
         ans: MadeURL | None = make_url_file(title, files, seen_files)
 
         if ans:
@@ -267,11 +283,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Upload is too big")
 
     post_name = get_name(user)
-    privacy = request.form.get("privacy", "public")
-
-    if privacy not in ["public", "private"]:
-        return error("Invalid privacy setting")
-
     original = utils.clean_filename(Path(files[0].filename).stem)
     zip_archive = utils.get_checkbox(request, "zip")
 
