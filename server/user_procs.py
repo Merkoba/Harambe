@@ -171,25 +171,24 @@ def get_users(
     query = utils.clean_query(query)
 
     for user in get_userlist(user_id):
-        ok = (
-            not query
-            or query in utils.clean_query(user.username)
-            or query in utils.clean_query(user.name)
-            or query in utils.clean_query(user.max_size_fill)
-            or query in utils.clean_query(user.register_date_str)
-            or query in utils.clean_query(user.last_date_str)
-            or query in utils.clean_query(user.regdate_ago)
-            or query in utils.clean_query(user.lastdate_ago)
-            or query in utils.clean_query(user.admin_str)
-            or query in utils.clean_query(user.reacter_str)
-            or query in utils.clean_query(user.mark)
-            or query in utils.clean_query(user.rpm)
-            or query in utils.clean_query(user.reader_str)
-            or query in utils.clean_query(user.num_posts)
-            or query in utils.clean_query(user.num_reactions)
-        )
+        props = [
+            "username",
+            "name",
+            "max_size_fill",
+            "register_date_str",
+            "last_date_str",
+            "regdate_ago",
+            "lastdate_ago",
+            "admin_str",
+            "reacter_str",
+            "mark",
+            "rpm",
+            "reader_str",
+            "num_posts",
+            "num_reactions",
+        ]
 
-        if not ok:
+        if not utils.do_query(user, query, props):
             continue
 
         users.append(user)

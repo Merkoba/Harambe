@@ -282,23 +282,23 @@ def get_posts(
             if not post.listed:
                 continue
 
-        ok = (
-            not query
-            or (admin and (query in utils.clean_query(post.username)))
-            or query in utils.clean_query(post.full)
-            or query in utils.clean_query(post.original)
-            or query in utils.clean_query(post.title)
-            or query in utils.clean_query(post.uploader)
-            or query in utils.clean_query(post.date_3)
-            or query in utils.clean_query(post.size_str)
-            or query in utils.clean_query(post.mtype)
-            or query in utils.clean_query(post.uploader_str)
-            or query in utils.clean_query(post.ago)
-            or query in utils.clean_query(post.listed_str)
-            or query in utils.clean_query(post.privacy_str)
-        )
+        props = [
+            "username",
+            "full",
+            "original",
+            "title",
+            "uploader",
+            "date_3",
+            "size_str",
+            "mtype",
+            "uploader_str",
+            "ago",
+            "listed_str",
+            "privacy_str",
+            "description",
+        ]
 
-        if not ok:
+        if not utils.do_query(post, query, props):
             continue
 
         if media_type is not None:

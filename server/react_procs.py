@@ -167,18 +167,17 @@ def get_reactions(
             if not reaction.listed:
                 continue
 
-        ok = (
-            not query
-            or (admin and (query in utils.clean_query(reaction.username)))
-            or query in utils.clean_query(reaction.pname)
-            or query in utils.clean_query(reaction.uname)
-            or query in utils.clean_query(reaction.value)
-            or query in utils.clean_query(reaction.date_str)
-            or query in utils.clean_query(reaction.ago)
-            or query in utils.clean_query(reaction.pshow)
-        )
+        props = [
+            "username",
+            "pname",
+            "uname",
+            "value",
+            "date_str",
+            "ago",
+            "pshow",
+        ]
 
-        if not ok:
+        if not utils.do_query(reaction, query, props):
             continue
 
         reactions.append(reaction)

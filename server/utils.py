@@ -573,3 +573,14 @@ def get_url_info(url: str) -> tuple[str, str] | None:
 
 def clean_description(s: str) -> str:
     return remove_multiple_lines(s)[: config.max_description_length].strip()
+
+
+def do_query(obj: Post | Reaction | User, query: str, props: list[str]) -> bool:
+    if not query:
+        return True
+
+    for prop in props:
+        if query in clean_query(getattr(obj, prop)):
+            return True
+
+    return False
