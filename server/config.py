@@ -476,6 +476,9 @@ class Config:
         # Max length for descriptions
         self.max_description_length = 10_000
 
+        # Allow same URL posts
+        self.allow_same_url = False
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

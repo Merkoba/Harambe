@@ -199,17 +199,17 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Invalid privacy setting")
 
     if utils.is_url(title):
-        # If URL post with the same title, it will have the same metadata
-        # So just return an old post
-        existing = database.get_posts(title=title)
+        if not config.allow_same_url:
+            eposts = database.get_posts(title=title)
+            epost = eposts[0] if eposts else None
 
-        if existing and (privacy == "public"):
-            name = existing.name
+            if epost and (privacy == "public"):
+                name = epost.name
 
-            if mode == "normal":
-                return True, name
+                if mode == "normal":
+                    return True, name
 
-            return True, f"post/{name}"
+                return True, f"post/{name}"
 
         ans: MadeURL | None = make_url_file(title, files, seen_files)
 
