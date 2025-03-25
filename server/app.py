@@ -387,6 +387,7 @@ def post(name: str) -> Any:
         max_reaction_name_length=config.max_reaction_name_length,
         max_title_length=config.max_title_length,
         max_description_length=config.max_description_length,
+        dynamic_file_info=config.dynamic_file_info,
         can_react=can_react,
         show_list=show_list,
         **common_configs(user),

@@ -479,6 +479,9 @@ class Config:
         # Allow same URL posts
         self.allow_same_url = False
 
+        # Hide the file info in posts in some cases
+        self.dynamic_file_info = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

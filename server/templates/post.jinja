@@ -68,7 +68,8 @@
 
     <!-- File -->
     <div id="details">
-        {% if ((post.original_full == "empty.txt") and (post.size == 0)) or
+        {% if dynamic_file_info and
+        ((post.original_full == "empty.txt") and (post.size == 0)) or
         ((post.original_full == "url.txt") and post.value) %}
 
         {# Don't show the file because it's not relevant #}
