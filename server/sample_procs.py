@@ -29,7 +29,10 @@ def make_sample(
         if zip_archive:
             get_zip_sample(path, files)
         elif mtype.startswith("image"):
-            get_image_sample(path)
+            if mtype == "image/gif":
+                get_gif_sample(path)
+            else:
+                get_image_sample(path)
         elif mtype.startswith("video"):
             get_video_sample(path)
         elif mtype.startswith("audio"):
@@ -196,6 +199,35 @@ def get_image_sample(path: Path) -> None:
             "-y",
             "-i",
             str(path),
+            "-vf",
+            scale,
+            "-q:v",
+            quality,
+            "-threads",
+            "0",
+            str(sample_path),
+        ],
+    )
+
+
+def get_gif_sample(path: Path) -> None:
+    sample_name = f"{path.stem}.jpg"
+    sample_path = utils.samples_dir() / Path(sample_name)
+
+    tw = config.sample_width
+    th = config.sample_height
+    tc = config.sample_color or "black"
+    scale = f"scale={tw}:{th}:force_original_aspect_ratio=decrease,pad={tw}:{th}:({tw}-iw)/2:({th}-ih)/2:color={tc}"
+    quality = str(config.sample_quality_image)
+
+    utils.run_cmd(
+        [
+            "ffmpeg",
+            "-y",
+            "-i",
+            str(path),
+            "-vframes",
+            "1",
             "-vf",
             scale,
             "-q:v",
