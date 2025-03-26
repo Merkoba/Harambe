@@ -809,7 +809,9 @@ App.setup_keys = (e) => {
 
   DOM.ev(document.querySelector(`#form`), `keydown`, (e) => {
     if (e.key === `Enter`) {
-      e.preventDefault()
+      if (e.id === `form`) {
+        e.preventDefault()
+      }
     }
   })
 
