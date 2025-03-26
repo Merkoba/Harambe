@@ -1155,6 +1155,13 @@ App.format_description = () => {
     let text = App.safe_html(App.description)
     text = App.urlize(text)
     description.innerHTML = text
+
+    if (App.is_ascii_art(App.description)) {
+      description.classList.add(`mono`)
+    }
+    else {
+      description.classList.remove(`mono`)
+    }
   }
 
   DOM.show(`#description_container`)

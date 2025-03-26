@@ -279,3 +279,7 @@ a.button:hover {
 .button:hover {
     text-decoration: underline;
 }
+
+.mono {
+    font-family: monospace !important;
+}

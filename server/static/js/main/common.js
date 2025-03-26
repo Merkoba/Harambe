@@ -1362,3 +1362,66 @@ App.untab_string = (s) => {
 
   return new_lines.join(`\n`)
 }
+
+App.is_ascii_art = (text) => {
+  // If text is very short, it's unlikely to be ASCII art
+  if (!text || (text.length < 20)) {
+    return false
+  }
+
+  let lines = text.split(`\n`)
+
+  // ASCII art usually has multiple lines
+  if (lines.length < 3) {
+    return false
+  }
+
+  // Check line length consistency
+  let line_lengths = lines.map(line => line.length)
+  let avg_line_length = line_lengths.reduce((a, b) => a + b, 0) / line_lengths.length
+  let line_dev = line_lengths.map(len => Math.abs(len - avg_line_length))
+  let avg_dev = line_dev.reduce((a, b) => a + b, 0) / line_dev.length
+
+  // Character distribution analysis
+  let total_chars = text.length
+  let alpha_chars = (text.match(/[a-zA-Z]/g) || []).length
+
+  // eslint-disable-next-line no-useless-escape
+  let special_chars = (text.match(/[/\\|(){}\[\]<>*#-_+=^~`]/g) || []).length
+
+  // Calculate key ratios
+  let alpha_ratio = alpha_chars / total_chars
+  let special_ratio = special_chars / total_chars
+  let line_consistency = 1 - (avg_dev / avg_line_length)
+
+  // Scoring system
+  let score = 0
+
+  // High special character ratio indicates ASCII art
+  if (special_ratio > 0.15) {
+    score += 2
+  }
+
+  // Low alphabetic character ratio indicates ASCII art
+  if (alpha_ratio < 0.4) {
+    score += 2
+  }
+
+  // Consistent line lengths indicate ASCII art
+  if (line_consistency > 0.8) {
+    score += 2
+  }
+
+  // ASCII art usually has longer lines
+  if (avg_line_length > 30) {
+    score += 1
+  }
+
+  // Multiple lines are common in ASCII art
+  if (lines.length > 5) {
+    score += 1
+  }
+
+  // Threshold can be adjusted based on testing
+  return score >= 5
+}
