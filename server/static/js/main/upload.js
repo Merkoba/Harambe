@@ -16,6 +16,7 @@ App.init = () => {
   App.setup_pickers()
   App.setup_keys()
   App.setup_pastebin()
+  App.setup_description()
   App.focus_title()
 }
 
@@ -868,9 +869,15 @@ App.add_pastebin = () => {
     App.clear_pastebin(c)
   })
 
+  let text = DOM.el(`.pastebin`, c)
+
+  DOM.ev(text, `blur`, () => {
+    text.value = App.untab_string(text.value)
+  })
+
   DOM.show(main)
   App.to_bottom()
-  DOM.el(`.pastebin`, c).focus()
+  text.focus()
 }
 
 App.remove_pastebin = (c) => {
@@ -911,4 +918,14 @@ App.focus_pastebin = (c) => {
 
 App.focus_title = () => {
   DOM.el(`#title`).focus()
+}
+
+App.setup_description = () => {
+  let description = DOM.el(`#description`)
+
+  if (description) {
+    DOM.ev(description, `blur`, (e) => {
+      description.value = App.untab_string(description.value)
+    })
+  }
 }

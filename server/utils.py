@@ -572,7 +572,13 @@ def get_url_info(url: str) -> tuple[str, str] | None:
 
 
 def clean_description(s: str) -> str:
-    return remove_multiple_lines(s)[: config.max_description_length].strip()
+    return untab_string(
+        remove_multiple_lines(s)[: config.max_description_length].strip()
+    )
+
+
+def clean_pastebin(s: str) -> str:
+    return untab_string(s[: config.max_pastebin_length].strip())
 
 
 def do_query(obj: Post | Reaction | User, query: str, props: list[str]) -> bool:
@@ -584,3 +590,35 @@ def do_query(obj: Post | Reaction | User, query: str, props: list[str]) -> bool:
             return True
 
     return False
+
+
+def untab_string(s: str) -> str:
+    s = s.replace("\t", "  ")
+    lines = s.split("\n")
+
+    if len(lines) <= 1:
+        return s
+
+    ns = []
+    pos = -1
+
+    for line in lines:
+        if not line.strip():
+            continue
+
+        m = re.match(r"^\s+", line)
+
+        if m:
+            n = len(m.group(0))
+
+            if pos == -1 or n < pos:
+                pos = n
+
+            ns.append(n)
+        else:
+            return s
+
+    new_lines = []
+    spaces = " " * pos
+    new_lines = [re.sub(f"^{spaces}", "", line) for line in lines]
+    return "\n".join(new_lines)

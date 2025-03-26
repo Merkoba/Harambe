@@ -1315,3 +1315,50 @@ App.urlize = (text) => {
   let re = /(\bhttps?:\/\/\S+)/gi
   return text.replace(re, `<a href="$1">$1</a>`)
 }
+
+App.untab_string = (s) => {
+  s = s.replace(/\t/gm, `  `)
+  let lines = s.split(`\n`)
+
+  if (lines.length <= 1) {
+    return s
+  }
+
+  let ns = []
+  let pos = -1
+
+  for (let line of lines) {
+    if (!line.trim()) {
+      continue
+    }
+
+    let m = line.match(/^\s+/)
+
+    if (m) {
+      let n = m[0].length
+
+      if ((pos === -1) || (n < pos)) {
+        pos = n
+      }
+
+      ns.push(n)
+    }
+    else {
+      return s
+    }
+  }
+
+  let new_lines = []
+  let spaces = ``
+
+  for (let i = 0; i < pos; i++) {
+    spaces += ` `
+  }
+
+  for (let line of lines) {
+    let re = new RegExp(`(^${spaces})`)
+    new_lines.push(line.replace(re, ``))
+  }
+
+  return new_lines.join(`\n`)
+}

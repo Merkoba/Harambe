@@ -159,7 +159,9 @@ def make_text_files(
 ) -> None:
     pastebins = request.form.getlist("pastebin")
 
-    for index, text in enumerate(pastebins):
+    for index, otext in enumerate(pastebins):
+        text = utils.clean_pastebin(otext)
+
         if not text:
             continue
 
