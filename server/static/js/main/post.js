@@ -1156,7 +1156,7 @@ App.format_description = () => {
     text = App.urlize(text)
     description.innerHTML = text
 
-    if (App.is_ascii_art(App.description)) {
+    if (App.num_lines(App.description) >= 8) {
       description.classList.add(`mono`)
     }
     else {
