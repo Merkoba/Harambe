@@ -89,13 +89,9 @@ App.edit_title = () => {
     value: App.title || App.original,
     max: App.max_title_length,
     callback: async (title) => {
-      if (!title) {
-        return
-      }
-
       title = title.trim()
 
-      if (title === App.title) {
+      if (!title || (title === App.title)) {
         return
       }
 
@@ -130,10 +126,6 @@ App.edit_description = () => {
     max: App.max_description_length,
     multi: true,
     callback: async (description) => {
-      if (!description) {
-        return
-      }
-
       description = description.trim()
 
       if (description === App.description) {

@@ -546,6 +546,9 @@ def edit_post_title(ids: list[int], title: str, user: User) -> tuple[str, int]:
     if not ids:
         return utils.bad("Missing ids")
 
+    if not title:
+        return utils.bad("Missing title")
+
     if len(title) > config.max_title_length:
         return utils.bad("Title is too long")
 
