@@ -51,23 +51,20 @@ App.delete_user = async () => {
     return
   }
 
-  try {
-    let response = await fetch(`/delete_user`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({username}),
-    })
+  let response = await fetch(`/delete_user`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({username}),
+  })
 
-    if (response.ok) {
-      App.popmsg(`Deleted`)
-    }
-    else {
-      App.print_error(response.status)
-    }
+  let json = await response.json()
+
+  if (response.ok) {
+    App.popmsg(`Deleted`)
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }

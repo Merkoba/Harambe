@@ -209,24 +209,21 @@ App.delete_posts = () => {
 }
 
 App.delete_selected_posts = async (ids) => {
-  try {
-    let response = await fetch(`/delete_posts`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({ids}),
-    })
+  let response = await fetch(`/delete_posts`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({ids}),
+  })
 
-    if (response.ok) {
-      App.remove_posts(ids)
-    }
-    else {
-      App.print_error(response.status)
-    }
+  let json = await response.json()
+
+  if (response.ok) {
+    App.remove_posts(ids)
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }
 
@@ -241,24 +238,21 @@ App.remove_posts = (posts) => {
 }
 
 App.delete_all_posts = async () => {
-  try {
-    let response = await fetch(`/delete_all_posts`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify(),
-    })
+  let response = await fetch(`/delete_all_posts`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify(),
+  })
 
-    if (response.ok) {
-      App.location(`/admin/posts`)
-    }
-    else {
-      App.print_error(response.status)
-    }
+  let json = await response.json()
+
+  if (response.ok) {
+    App.location(`/admin/posts`)
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }
 
@@ -350,11 +344,13 @@ App.edit_post_title = (el) => {
         body: JSON.stringify({ids, title}),
       })
 
+      let json = await response.json()
+
       if (response.ok) {
         App.refresh()
       }
       else {
-        App.print_error(response.status)
+        App.feedback(json)
       }
     },
   }
@@ -385,11 +381,13 @@ App.edit_post_privacy = (privacy) => {
         body: JSON.stringify({ids, privacy}),
       })
 
+      let json = await response.json()
+
       if (response.ok) {
         App.refresh()
       }
       else {
-        App.print_error(response.status)
+        App.feedback(json)
       }
     },
   }
@@ -476,24 +474,21 @@ App.delete_users = () => {
 }
 
 App.delete_selected_users = async (ids) => {
-  try {
-    let response = await fetch(`/delete_users`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({ids}),
-    })
+  let response = await fetch(`/delete_users`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({ids}),
+  })
 
-    if (response.ok) {
-      App.remove_users(ids)
-    }
-    else {
-      App.print_error(response.status)
-    }
+  let json = await response.json()
+
+  if (response.ok) {
+    App.remove_users(ids)
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }
 
@@ -508,24 +503,21 @@ App.remove_users = (ids) => {
 }
 
 App.delete_normal_users = async () => {
-  try {
-    let response = await fetch(`/delete_normal_users`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify(),
-    })
+  let response = await fetch(`/delete_normal_users`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify(),
+  })
 
-    if (response.ok) {
-      App.location(`/admin/users`)
-    }
-    else {
-      App.print_error(response.status)
-    }
+  let json = await response.json()
+
+  if (response.ok) {
+    App.location(`/admin/users`)
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }
 
@@ -570,24 +562,21 @@ App.mod_user = (what, value, vtype) => {
 App.do_mod_user = async (items, what, value, vtype) => {
   let ids = items.map(x => x.dataset.user_id)
 
-  try {
-    let response = await fetch(`/mod_user`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({ids, what, value, vtype}),
-    })
+  let response = await fetch(`/mod_user`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({ids, what, value, vtype}),
+  })
 
-    if (response.ok) {
-      App.refresh()
-    }
-    else {
-      App.print_error(response.status)
-    }
+  let json = await response.json()
+
+  if (response.ok) {
+    App.refresh()
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }
 
@@ -714,24 +703,21 @@ App.delete_reactions = () => {
 }
 
 App.delete_selected_reactions = async (ids) => {
-  try {
-    let response = await fetch(`/delete_reactions`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({ids}),
-    })
+  let response = await fetch(`/delete_reactions`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({ids}),
+  })
 
-    if (response.ok) {
-      App.remove_reactions(ids)
-    }
-    else {
-      App.print_error(response.status)
-    }
+  let json = await response.json()
+
+  if (response.ok) {
+    App.remove_reactions(ids)
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }
 
@@ -746,24 +732,21 @@ App.remove_reactions = (reactions) => {
 }
 
 App.delete_all_reactions = async () => {
-  try {
-    let response = await fetch(`/delete_all_reactions`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify(),
-    })
+  let response = await fetch(`/delete_all_reactions`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify(),
+  })
 
-    if (response.ok) {
-      App.location(`/admin/reactions`)
-    }
-    else {
-      App.print_error(response.status)
-    }
+  let json = await response.json()
+
+  if (response.ok) {
+    App.location(`/admin/reactions`)
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }
 
@@ -1013,21 +996,16 @@ App.show_sample_video = (path, title) => {
 App.show_sample_text = async (path, title = ``) => {
   App.hide_sample_media()
   App.set_sample_title(title)
+  let response = await fetch(path)
+  let json = await response.json()
 
-  try {
-    let response = await fetch(path)
-
-    if (response.ok) {
-      App.hide_sample_media(`text`)
-      let text = await response.text()
-      DOM.el(`#sample_text`).textContent = text
-    }
-    else {
-      App.print_error(response.status)
-    }
+  if (response.ok) {
+    App.hide_sample_media(`text`)
+    let text = await response.text()
+    DOM.el(`#sample_text`).textContent = text
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.feedback(json)
   }
 }
 
@@ -1049,35 +1027,30 @@ App.show_sample = async (item, from = `normal`) => {
   DOM.show(`#sample_container`)
   App.check_sample_buttons()
 
-  try {
-    let response = await fetch(`/get_sample`, {
-      method: `POST`,
-      headers: {
-        "Content-Type": `application/json`,
-      },
-      body: JSON.stringify({name}),
-    })
+  let response = await fetch(`/get_sample`, {
+    method: `POST`,
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    body: JSON.stringify({name}),
+  })
 
-    if (response.ok) {
-      let json = await response.json()
+  let json = await response.json()
 
-      if (json.ext === `jpg`) {
-        App.show_sample_image(json.path, title)
-      }
-      else if (json.ext === `mp3`) {
-        App.show_sample_video(json.path, title)
-      }
-      else if (json.ext === `txt`) {
-        App.show_sample_text(json.path, title)
-      }
+  if (response.ok) {
+    if (json.ext === `jpg`) {
+      App.show_sample_image(json.path, title)
     }
-    else {
-      App.hide_sample_media()
-      App.set_sample_title(`No Sample | ${title}`)
+    else if (json.ext === `mp3`) {
+      App.show_sample_video(json.path, title)
+    }
+    else if (json.ext === `txt`) {
+      App.show_sample_text(json.path, title)
     }
   }
-  catch (error) {
-    App.print_error(error)
+  else {
+    App.hide_sample_media()
+    App.set_sample_title(`No Sample | ${title}`)
   }
 }
 
