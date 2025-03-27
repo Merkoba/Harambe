@@ -59,6 +59,7 @@
 
             {% if user %}
             App.user = {}
+            App.user.id = {{user.id | default(0)}}
             App.user.username = {{user.username | default(0) | tojson | safe}}
             App.user.name = {{user.name | default(0) | tojson | safe}}
             {% endif %}

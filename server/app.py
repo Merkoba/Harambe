@@ -967,25 +967,6 @@ def delete_normal_users() -> Any:
     return user_procs.delete_normal_users()
 
 
-@app.route("/delete_user", methods=["POST"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-@admin_required
-def delete_user() -> Any:
-    data = request.get_json()
-    user_id = data.get("user_id", None)
-
-    if not user_id:
-        return error_json
-
-    user = get_user()
-
-    if not user:
-        return error_json
-
-    return user_procs.delete_user(user_id, user.id)
-
-
 @app.route("/mod_user", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()

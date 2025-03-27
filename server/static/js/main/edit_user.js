@@ -45,21 +45,17 @@ App.init = () => {
 }
 
 App.delete_user = async () => {
-  let username = App.user.username
+  let ids = [App.user.id]
 
-  if (!username) {
-    return
-  }
-
-  let response = await fetch(`/delete_user`, {
+  let response = await fetch(`/delete_users`, {
     method: `POST`,
     headers: {
       "Content-Type": `application/json`,
     },
-    body: JSON.stringify({username}),
+    body: JSON.stringify({ids}),
   })
 
-  let json = await response.json()
+  let json = await response.json().catch(() => ({}))
 
   if (response.ok) {
     App.popmsg(`Deleted`)
