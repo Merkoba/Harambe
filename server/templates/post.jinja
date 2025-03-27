@@ -74,8 +74,7 @@
     <!-- File -->
     <div id="details">
         {% if dynamic_file_info and
-        ((post.original_full == "empty.txt") and (post.size == 0)) or
-        ((post.original_full == "url.txt") and post.value) %}
+        (post.mtype == "mode/talk") or (post.mtype == "mode/url") %}
 
         {# Don't show the file because it's not relevant #}
 

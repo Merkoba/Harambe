@@ -138,6 +138,13 @@ App.edit_description = () => {
         return
       }
 
+      if (App.mtype === `mode/talk`) {
+        if (!description) {
+          App.popmsg(`Description can't be empty`)
+          return
+        }
+      }
+
       let ids = [App.post_id]
 
       let response = await fetch(`/edit_description`, {
@@ -148,13 +155,14 @@ App.edit_description = () => {
         body: JSON.stringify({ids, description}),
       })
 
+      let json = await response.json()
+
       if (response.ok) {
-        let json = await response.json()
         App.description = json.description
         App.format_description()
       }
       else {
-        App.print_error(response.status)
+        App.feedback(json)
       }
     },
   }

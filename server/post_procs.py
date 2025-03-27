@@ -579,6 +579,15 @@ def edit_post_description(
         return utils.bad("You can't edit this")
 
     for post_id in ids:
+        posts = database.get_posts(post_id)
+        post = posts[0] if posts else None
+
+        if not post:
+            return utils.bad("Post not found")
+
+        if (not description) and (post.mtype == "mode/talk"):
+            return utils.bad("Description can't be empty")
+
         database.edit_post_description(post_id, description)
 
     return utils.ok("Description updated", {"description": description})
