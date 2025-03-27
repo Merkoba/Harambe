@@ -466,14 +466,14 @@ def is_youtube_url(url: str) -> bool:
     return is_url(url) and bool(get_youtube_id(url))
 
 
-def is_url(s: str) -> bool:
-    if " " in s:
+def is_url(s: str, allow_space: bool = False) -> bool:
+    if (not allow_space) and (" " in s):
         return False
 
     if len(s) > config.max_url_length:
         return False
 
-    if s.startswith(("http://", "https://")):
+    if any(prefix in s for prefix in ["https://", "http://"]):
         if len(s) <= (s.find("://") + 3):
             return False
 

@@ -95,6 +95,11 @@ App.edit_title = () => {
         return
       }
 
+      if (App.contains_url(title)) {
+        App.popmsg(`Title can't be a URL`)
+        return
+      }
+
       let ids = [App.post_id]
 
       let response = await fetch(`/edit_title`, {
@@ -105,13 +110,14 @@ App.edit_title = () => {
         body: JSON.stringify({ids, title}),
       })
 
+      let json = await response.json()
+
       if (response.ok) {
-        let json = await response.json()
         App.title = json.title
         DOM.el(`#title`).textContent = App.title || App.original
       }
       else {
-        App.print_error(response.status)
+        App.feedback(json)
       }
     },
   }

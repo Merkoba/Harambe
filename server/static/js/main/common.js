@@ -1452,3 +1452,7 @@ App.size_string = (bytes) => {
   let tb = gb / 1024
   return `${tb.toFixed(1)} tb`
 }
+
+App.feedback = (json) => {
+  App.popmsg(json.message)
+}
