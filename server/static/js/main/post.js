@@ -181,12 +181,14 @@ App.delete_post = async () => {
     body: JSON.stringify({post_id}),
   })
 
+  let json = await response.json()
+
   if (response.ok) {
     let icon = App.icon(`deleted`)
     DOM.el(`#title`).textContent = `DELETED ${icon}`
   }
   else {
-    App.print_error(response.status)
+    App.feedback(json)
   }
 }
 
@@ -510,11 +512,13 @@ App.send_reaction = async (text) => {
     body: JSON.stringify({post_id, text}),
   })
 
+  let json = await response.json()
+
   if (response.ok) {
     App.refresh(true)
   }
   else {
-    App.print_error(response.status)
+    App.feedback(json)
   }
 }
 
@@ -531,12 +535,13 @@ App.edit_reaction = async (id, text) => {
     body: JSON.stringify({id, text}),
   })
 
+  let json = await response.json()
+
   if (response.ok) {
-    let json = await response.json()
     App.modify_reaction(json.reaction)
   }
   else {
-    App.print_error(response.status)
+    App.feedback(json)
   }
 }
 
@@ -563,8 +568,9 @@ App.refresh = async (to_bottom = false) => {
     body: JSON.stringify({post_id}),
   })
 
+  let json = await response.json()
+
   if (response.ok) {
-    let json = await response.json()
     App.apply_update(json.update)
 
     if (to_bottom && !App.reversed()) {
@@ -572,7 +578,7 @@ App.refresh = async (to_bottom = false) => {
     }
   }
   else {
-    App.print_error(response.status)
+    App.feedback(json)
   }
 }
 
@@ -769,11 +775,13 @@ App.do_delete_reaction = async (id) => {
     body: JSON.stringify({id}),
   })
 
+  let json = await response.json()
+
   if (response.ok) {
     App.remove_reaction(id)
   }
   else {
-    App.print_error(response.status)
+    App.feedback(json)
   }
 }
 
