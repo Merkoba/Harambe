@@ -6,8 +6,6 @@ App.init = () => {
   App.max_on = false
   App.max_id = ``
   App.image_expanded = false
-  App.reversed = App.storage_value(`reversed_reactions`, false)
-  App.ace_wrap = App.storage_value(`wrapped_editor`, true)
   let edit = DOM.el(`#edit`)
 
   if (edit) {
@@ -507,9 +505,7 @@ App.send_reaction = async (text) => {
   })
 
   if (response.ok) {
-    let json = await response.json()
-    App.add_reaction(json.reaction)
-    App.to_bottom()
+    App.refresh(true)
   }
   else {
     App.print_error(response.status)
@@ -549,7 +545,7 @@ App.modify_reaction = (reaction) => {
   item.replaceWith(new_item)
 }
 
-App.refresh = async () => {
+App.refresh = async (to_bottom = false) => {
   App.print_info(`Refreshing post...`)
   let post_id = App.post_id
 
@@ -564,6 +560,10 @@ App.refresh = async () => {
   if (response.ok) {
     let json = await response.json()
     App.apply_update(json.update)
+
+    if (to_bottom && !App.reversed()) {
+      App.to_bottom()
+    }
   }
   else {
     App.print_error(response.status)
@@ -729,7 +729,7 @@ App.reset_modal_image = () => {
 App.fill_reactions = () => {
   let reactions = App.reactions.slice(0)
 
-  if (App.reversed) {
+  if (App.reversed()) {
     reactions.reverse()
   }
 
@@ -798,20 +798,18 @@ App.on_image_load = () => {
 }
 
 App.toggle_reverse = () => {
-  App.reversed = !App.reversed
-  App.storage.reversed_reactions = App.reversed
+  App.storage.reversed_reactions = !App.reversed()
   App.save_storage()
   App.fill_reactions()
 }
 
 App.toggle_wrap = () => {
-  App.ace_wrap = !App.ace_wrap
+  App.storage.wrapped_editor = !App.wrapped()
 
   App.editor.setOptions({
-    wrap: App.ace_wrap,
+    wrap: App.wrapped(),
   })
 
-  App.storage.wrapped_editor = App.ace_wrap
   App.save_storage()
 }
 
@@ -867,7 +865,7 @@ App.start_editor = async () => {
   App.editor.renderer.setShowGutter(num_lines >= 1)
 
   App.editor.setOptions({
-    wrap: App.ace_wrap,
+    wrap: App.wrapped(),
     highlightGutterLine: false,
     maxLines: 25,
   })
@@ -1167,4 +1165,12 @@ App.format_description = () => {
   }
 
   DOM.show(`#description_container`)
+}
+
+App.reversed = () => {
+  return App.storage_value(`reversed_reactions`, false)
+}
+
+App.wrapped = () => {
+  return App.storage_value(`wrapped_editor`, true)
 }
