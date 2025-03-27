@@ -445,6 +445,12 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         value=value,
     )
 
+    if config.remove_metadata:
+        try:
+            utils.remove_metadata(path)
+        except Exception as e:
+            utils.error(e)
+
     if config.samples_enabled:
         if presample:
             sample_procs.save_presample(path, presample, presample_ext)

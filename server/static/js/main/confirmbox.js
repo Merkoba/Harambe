@@ -2,6 +2,10 @@ class Confirmbox {
   static instance = null
 
   constructor(args = {}) {
+    if (Confirmbox.instance) {
+      Confirmbox.instance.msg.close()
+    }
+
     let def_args = {
       message: `Are you sure ?`,
       yes: `Yes`,

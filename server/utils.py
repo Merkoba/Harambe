@@ -622,3 +622,18 @@ def untab_string(s: str) -> str:
     spaces = " " * pos
     new_lines = [re.sub(f"^{spaces}", "", line) for line in lines]
     return "\n".join(new_lines)
+
+
+def remove_metadata(path: Path) -> None:
+    cmd = [
+        "exiftool",
+        "-all=",  # Remove all metadata
+        "-tagsfromfile",
+        "@",  # Copy tags from the original file
+        "-orientation",  # Preserve orientation
+        "-rotation",  # Preserve rotation
+        "-overwrite_original",  # Don't create backup files
+        str(path),
+    ]
+
+    run_cmd(cmd)

@@ -482,6 +482,9 @@ class Config:
         # Allow same talk: title/description
         self.allow_same_talk = False
 
+        # Remove metadata from files
+        self.remove_metadata = True
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:
