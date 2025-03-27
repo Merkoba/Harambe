@@ -42,7 +42,6 @@
             App.post = {}
             App.post.id = {{post.id | default(0)}}
             App.post.name = {{post.name | default(0) | tojson | safe}}
-            App.post.full = {{post.full | default(0) | tojson | safe}}
             App.post.date = {{post.date | default(0)}}
             App.post.title = {{post.title | default(0) | tojson | safe}}
             App.post.original = {{post.original | default(0) | tojson | safe}}
@@ -51,7 +50,6 @@
             App.post.image_embed = {{post.image_embed | default(0) | tojson}}
             App.post.reactions = {{post.reactions | default(0) | tojson}}
             App.post.text = {{post.text | default(0) | tojson | safe}}
-            App.post.uploader = {{post.uploader | default(0) | tojson | safe}}
             App.post.zip_embed = {{post.zip_embed | default(0) | tojson}}
             App.post.privacy = {{post.privacy | default(0) | tojson}}
             App.post.youtube_id = {{post.youtube_id | default(0) | tojson | safe}}

@@ -128,13 +128,13 @@ App.edit_title = () => {
 App.edit_description = () => {
   let prompt_args = {
     placeholder: `Edit Description`,
-    value: App.description,
+    value: App.post.description,
     max: App.max_description_length,
     multi: true,
     callback: async (description) => {
       description = description.trim()
 
-      if (description === App.description) {
+      if (description === App.post.description) {
         return
       }
 
@@ -158,7 +158,7 @@ App.edit_description = () => {
       let json = await response.json()
 
       if (response.ok) {
-        App.description = json.description
+        App.post.description = json.description
         App.format_description()
       }
       else {
@@ -911,11 +911,11 @@ App.start_embed = () => {
     App.start_markdown()
   }
   else if (App.post.text) {
-    if (App.zip_embed) {
+    if (App.post.zip_embed) {
       //
     }
-    else if (App.is_url) {
-      if (App.youtube_id) {
+    else if (App.post.is_url) {
+      if (App.post.youtube_id) {
         App.start_youtube()
       }
       else {
@@ -1126,7 +1126,7 @@ App.edit_privacy = async (privacy) => {
   let json = await response.json()
 
   if (response.ok) {
-    App.privacy = privacy
+    App.post.privacy = privacy
     App.update_privacy()
   }
   else {
@@ -1136,11 +1136,11 @@ App.edit_privacy = async (privacy) => {
 
 App.update_privacy = () => {
   let privacy = DOM.el(`#privacy`)
-  privacy.textContent = App.capitalize(App.privacy)
+  privacy.textContent = App.capitalize(App.post.privacy)
 }
 
 App.start_youtube = () => {
-  let video_id = App.youtube_id
+  let video_id = App.post.youtube_id
   let iframe = DOM.create(`iframe`, ``, `youtube`)
   iframe.src = `https://www.youtube.com/embed/${video_id}`
   iframe.title = `YouTube video player`
@@ -1158,7 +1158,7 @@ App.show_url = () => {
 }
 
 App.format_description = () => {
-  if (!App.description) {
+  if (!App.post.description) {
     DOM.hide(`#description_container`)
     return
   }
@@ -1166,11 +1166,11 @@ App.format_description = () => {
   let description = DOM.el(`#description`)
 
   if (description) {
-    let text = App.safe_html(App.description)
+    let text = App.safe_html(App.post.description)
     text = App.urlize(text)
     description.innerHTML = text
 
-    if (App.is_ascii_art(App.description)) {
+    if (App.is_ascii_art(App.post.description)) {
       description.classList.add(`mono`)
     }
     else {

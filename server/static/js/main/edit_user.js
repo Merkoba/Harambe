@@ -10,7 +10,7 @@ App.init = () => {
   if (del) {
     DOM.ev(del, `click`, () => {
       let confirm_args = {
-        message: `Delete ${App.username}`,
+        message: `Delete ${App.user.username}`,
         callback_yes: () => {
           App.delete_user()
         },
@@ -45,7 +45,7 @@ App.init = () => {
 }
 
 App.delete_user = async () => {
-  let username = App.username
+  let username = App.user.username
 
   if (!username) {
     return
