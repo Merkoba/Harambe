@@ -583,6 +583,12 @@ def edit_post_privacy(ids: list[int], privacy: str, user: User) -> tuple[str, in
         return utils.bad("You can't edit this")
 
     for post_id in ids:
+        post = get_post(post_id)
+
+        if not post:
+            return utils.bad("Post not found")
+
+        database.get_posts(file_hash=post.file_hash)
         database.edit_post_privacy(post_id, privacy)
 
     return utils.ok("Privacy updated")
