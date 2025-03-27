@@ -952,6 +952,7 @@ App.check_multi_files = (input) => {
       new_data_transfer.items.add(file)
       picker.files = new_data_transfer.files
       App.reflect_file(picker)
+      App.file_title(picker)
     }
   }
 }
