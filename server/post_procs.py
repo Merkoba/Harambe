@@ -612,6 +612,8 @@ def edit_post_privacy(ids: list[int], privacy: str, user: User) -> tuple[str, in
                 if exists:
                     return utils.bad("Same talk already exists")
 
+        database.edit_post_privacy(post.id, privacy)
+
     return utils.ok("Privacy updated")
 
 
