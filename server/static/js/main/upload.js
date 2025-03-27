@@ -175,6 +175,7 @@ App.add_picker = (show = false) => {
     }
 
     App.check_files_used()
+    App.file_title(file)
   })
 
   DOM.ev(el, `click`, (e) => {
@@ -953,4 +954,9 @@ App.check_multi_files = (input) => {
       App.reflect_file(picker)
     }
   }
+}
+
+App.file_title = (input) => {
+  let file = input.files[0]
+  input.title = `${file.name} | ${App.size_string(file.size)}`
 }
