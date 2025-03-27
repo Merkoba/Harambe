@@ -217,7 +217,7 @@ App.delete_selected_posts = async (ids) => {
     body: JSON.stringify({ids}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.remove_posts(ids)
@@ -246,7 +246,7 @@ App.delete_all_posts = async () => {
     body: JSON.stringify(),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.location(`/admin/posts`)
@@ -344,7 +344,7 @@ App.edit_post_title = (el) => {
         body: JSON.stringify({ids, title}),
       })
 
-      let json = await response.json()
+      let json = await App.json(response)
 
       if (response.ok) {
         App.refresh()
@@ -381,7 +381,7 @@ App.edit_post_privacy = (privacy) => {
         body: JSON.stringify({ids, privacy}),
       })
 
-      let json = await response.json()
+      let json = await App.json(response)
 
       if (response.ok) {
         App.refresh()
@@ -482,7 +482,7 @@ App.delete_selected_users = async (ids) => {
     body: JSON.stringify({ids}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.remove_users(ids)
@@ -511,7 +511,7 @@ App.delete_normal_users = async () => {
     body: JSON.stringify(),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.location(`/admin/users`)
@@ -570,7 +570,7 @@ App.do_mod_user = async (items, what, value, vtype) => {
     body: JSON.stringify({ids, what, value, vtype}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.refresh()
@@ -711,7 +711,7 @@ App.delete_selected_reactions = async (ids) => {
     body: JSON.stringify({ids}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.remove_reactions(ids)
@@ -740,7 +740,7 @@ App.delete_all_reactions = async () => {
     body: JSON.stringify(),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.location(`/admin/reactions`)
@@ -997,7 +997,7 @@ App.show_sample_text = async (path, title = ``) => {
   App.hide_sample_media()
   App.set_sample_title(title)
   let response = await fetch(path)
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.hide_sample_media(`text`)
@@ -1035,7 +1035,7 @@ App.show_sample = async (item, from = `normal`) => {
     body: JSON.stringify({name}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     if (json.ext === `jpg`) {

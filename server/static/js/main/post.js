@@ -110,7 +110,7 @@ App.edit_title = () => {
         body: JSON.stringify({ids, title}),
       })
 
-      let json = await response.json()
+      let json = await App.json(response)
 
       if (response.ok) {
         App.post.title = json.title
@@ -155,7 +155,7 @@ App.edit_description = () => {
         body: JSON.stringify({ids, description}),
       })
 
-      let json = await response.json()
+      let json = await App.json(response)
 
       if (response.ok) {
         App.post.description = json.description
@@ -181,7 +181,7 @@ App.delete_post = async () => {
     body: JSON.stringify({post_id}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     let icon = App.icon(`deleted`)
@@ -512,7 +512,7 @@ App.send_reaction = async (text) => {
     body: JSON.stringify({post_id, text}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.refresh(true)
@@ -535,7 +535,7 @@ App.edit_reaction = async (id, text) => {
     body: JSON.stringify({id, text}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.modify_reaction(json.reaction)
@@ -568,7 +568,7 @@ App.refresh = async (to_bottom = false) => {
     body: JSON.stringify({post_id}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.apply_update(json.update)
@@ -701,7 +701,7 @@ App.fill_icons = async () => {
     return
   }
 
-  let json = await response.json()
+  let json = await App.json(response)
   let icons = App.shuffle_array(json.icons)
 
   for (let icon of icons) {
@@ -775,7 +775,7 @@ App.do_delete_reaction = async (id) => {
     body: JSON.stringify({id}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.remove_reaction(id)
@@ -1123,7 +1123,7 @@ App.edit_privacy = async (privacy) => {
     body: JSON.stringify({ids, privacy}),
   })
 
-  let json = await response.json()
+  let json = await App.json(response)
 
   if (response.ok) {
     App.post.privacy = privacy

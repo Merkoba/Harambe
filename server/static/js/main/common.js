@@ -1458,3 +1458,7 @@ App.feedback = (json) => {
     App.popmsg(json.message)
   }
 }
+
+App.json = async (response) => {
+  return await response.json().catch(() => ({}))
+}
