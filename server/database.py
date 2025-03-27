@@ -266,6 +266,7 @@ def get_posts(
     extra: bool = True,
     full_reactions: bool = False,
     increase: bool = False,
+    ignore_ids: list[int] | None = None,
     only_public: bool = False,
     oconn: Connection | None = None,
 ) -> list[Post]:
@@ -300,6 +301,10 @@ def get_posts(
 
     posts = []
     rows = [row for row in rows if row]
+
+    if ignore_ids:
+        rows = [row for row in rows if row["id"] not in ignore_ids]
+
     now = utils.now()
 
     for row in rows:

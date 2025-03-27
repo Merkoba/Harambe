@@ -77,7 +77,7 @@ def check_hash(content: bytes) -> tuple[str, str]:
         existing = database.get_posts(file_hash=file_hash)
 
         if existing:
-            return "", existing[0].name
+            return file_hash, existing[0].name
 
     return file_hash, ""
 
@@ -203,7 +203,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Invalid privacy setting")
 
     if utils.is_url(title):
-        if not config.allow_same_url:
+        if not config.allow_same_value:
             eposts = database.get_posts(value=title)
             epost = eposts[0] if eposts else None
 

@@ -474,7 +474,7 @@ class Config:
         self.max_description_length = 10_000
 
         # Allow same URL posts
-        self.allow_same_url = False
+        self.allow_same_value = False
 
         # Hide the file info in posts in some cases
         self.dynamic_file_info = True
