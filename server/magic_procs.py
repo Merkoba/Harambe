@@ -417,7 +417,17 @@ def do_gif_magic(files: list[FileStorage]) -> bytes | None:
                 f.write(content)
 
             # Convert to PNG
-            utils.run_cmd(["ffmpeg", "-i", str(input_path), "-y", str(output_path)])
+            utils.run_cmd(
+                [
+                    "ffmpeg",
+                    "-i",
+                    str(input_path),
+                    "-frames:v",
+                    "1",
+                    "-y",
+                    str(output_path),
+                ]
+            )
 
             # Clean up temporary input file
             input_path.unlink()
