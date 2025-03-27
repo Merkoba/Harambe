@@ -479,6 +479,9 @@ class Config:
         # Hide the file info in posts in some cases
         self.dynamic_file_info = True
 
+        # Allow same talk: title/description
+        self.allow_same_talk = False
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

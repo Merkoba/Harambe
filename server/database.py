@@ -262,6 +262,7 @@ def get_posts(
     user_id: int | None = None,
     file_hash: str | None = None,
     title: str | None = None,
+    description: str | None = None,
     value: str | None = None,
     extra: bool = True,
     full_reactions: bool = False,
@@ -285,6 +286,12 @@ def get_posts(
         rows = c.fetchall()
     elif file_hash:
         c.execute(f"select * from posts where file_hash = ?{pub}", (file_hash,))
+        rows = c.fetchall()
+    elif title and description:
+        c.execute(
+            f"select * from posts where title = ? and description = ?{pub}",
+            (title, description),
+        )
         rows = c.fetchall()
     elif title:
         c.execute(f"select * from posts where title = ?{pub}", (title,))

@@ -1111,12 +1111,14 @@ App.edit_privacy = async (privacy) => {
     body: JSON.stringify({ids, privacy}),
   })
 
+  let json = await response.json()
+
   if (response.ok) {
     App.privacy = privacy
     App.update_privacy()
   }
   else {
-    App.print_error(response.status)
+    App.popmsg(json.message)
   }
 }
 

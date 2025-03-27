@@ -258,6 +258,12 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         if not description:
             return error("No file or description")
 
+        if not config.allow_same_talk:
+            exists = database.get_posts(title=title, description=description)
+
+            if exists and (privacy == "public"):
+                return error("Same talk already exists")
+
         make_empty_file(files, seen_files)
         psample = ""
 
@@ -269,6 +275,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
         presample = psample.encode("utf-8")
         presample_ext = "txt"
+        mtype = "mode/talk"
 
     if (len(files) < 1) or (len(files) > config.max_upload_files):
         return error("Wrong file length")

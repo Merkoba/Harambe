@@ -583,25 +583,34 @@ def edit_post_privacy(ids: list[int], privacy: str, user: User) -> tuple[str, in
         return utils.bad("You can't edit this")
 
     for post_id in ids:
-        post = database.get_post(post_id)
-        utils.q(post)
+        posts = database.get_posts(post_id)
+        post = posts[0] if posts else None
 
         if not post:
             return utils.bad("Post not found")
 
-        if not config.allow_same_hash:
-            exists = database.get_posts(file_hash=post.file_hash, ignore_ids=[post.id])
+        if post.value:
+            if not config.allow_same_value:
+                exists = database.get_posts(value=post.value, ignore_ids=[post.id])
 
-            if exists:
-                return utils.bad("Post with same file hash already exists")
+                if exists:
+                    return utils.bad("Post with same value already exists")
+        elif post.size and post.file_hash:
+            if not config.allow_same_hash:
+                exists = database.get_posts(
+                    file_hash=post.file_hash, ignore_ids=[post.id]
+                )
 
-        if not config.allow_same_value:
-            exists = database.get_posts(value=post.value, ignore_ids=[post.id])
+                if exists:
+                    return utils.bad("Post with same file hash already exists")
+        elif post.title and post.description:
+            if not config.allow_same_talk:
+                exists = database.get_posts(
+                    title=post.title, description=post.description, ignore_ids=[post.id]
+                )
 
-            if exists:
-                return utils.bad("Post with same value already exists")
-
-        database.edit_post_privacy(post.id, privacy)
+                if exists:
+                    return utils.bad("Same talk already exists")
 
     return utils.ok("Privacy updated")
 
