@@ -324,6 +324,12 @@ def get_posts(
             elif media_type == "zip":
                 if not post.is_zip():
                     continue
+            elif media_type == "url":
+                if post.mtype != "mode/url":
+                    continue
+            elif media_type == "talk":
+                if post.mtype != "mode/talk":
+                    continue
 
         total_size += post.size
         posts.append(post)

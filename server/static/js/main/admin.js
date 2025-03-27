@@ -1103,7 +1103,7 @@ App.close_sample = () => {
   App.sample_name = ``
 }
 
-App.on_media_select_change = (page_select) => {
+App.on_media_select_change = () => {
   App.do_search()
 }
 
