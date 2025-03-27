@@ -947,8 +947,8 @@ App.setup_edit_privacy_opts = (show = false, parent = ``) => {
 App.next_post = (blank = false) => {
   let url
 
-  if (App.name) {
-    url = `/next/${App.name}`
+  if (App.post.name) {
+    url = `/next/${App.post.name}`
   }
   else {
     url = `/random`
@@ -1454,5 +1454,7 @@ App.size_string = (bytes) => {
 }
 
 App.feedback = (json) => {
-  App.popmsg(json.message)
+  if (json && json.message) {
+    App.popmsg(json.message)
+  }
 }

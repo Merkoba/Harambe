@@ -1,5 +1,5 @@
 App.init = () => {
-  App.date_ms = App.date * 1000
+  App.date_ms = App.post.date * 1000
   App.icons_loaded = false
   App.selected_icon = ``
   App.refresh_count = 0
@@ -86,12 +86,12 @@ App.init = () => {
 App.edit_title = () => {
   let prompt_args = {
     placeholder: `Edit Title`,
-    value: App.title || App.original,
+    value: App.post.title || App.post.original,
     max: App.max_title_length,
     callback: async (title) => {
       title = title.trim()
 
-      if (!title || (title === App.title)) {
+      if (!title || (title === App.post.title)) {
         return
       }
 
@@ -100,7 +100,7 @@ App.edit_title = () => {
         return
       }
 
-      let ids = [App.post_id]
+      let ids = [App.post.id]
 
       let response = await fetch(`/edit_title`, {
         method: `POST`,
@@ -113,8 +113,8 @@ App.edit_title = () => {
       let json = await response.json()
 
       if (response.ok) {
-        App.title = json.title
-        DOM.el(`#title`).textContent = App.title || App.original
+        App.post.title = json.title
+        DOM.el(`#title`).textContent = App.post.title || App.post.original
       }
       else {
         App.feedback(json)
@@ -138,14 +138,14 @@ App.edit_description = () => {
         return
       }
 
-      if (App.mtype === `mode/talk`) {
+      if (App.post.mtype === `mode/talk`) {
         if (!description) {
           App.popmsg(`Description can't be empty`)
           return
         }
       }
 
-      let ids = [App.post_id]
+      let ids = [App.post.id]
 
       let response = await fetch(`/edit_description`, {
         method: `POST`,
@@ -171,7 +171,7 @@ App.edit_description = () => {
 }
 
 App.delete_post = async () => {
-  let post_id = App.post_id
+  let post_id = App.post.id
 
   let response = await fetch(`/delete_post`, {
     method: `POST`,
@@ -214,7 +214,7 @@ App.start_flash = async () => {
   player.style.height = `600px`
   let container = DOM.el(`#flash_container`)
   container.appendChild(player)
-  player.ruffle().load(`/${App.file_path}/${App.name}`)
+  player.ruffle().load(`/${App.file_path}/${App.post.name}`)
 }
 
 App.react_icon = async (id) => {
@@ -502,7 +502,7 @@ App.send_reaction = async (text) => {
     return
   }
 
-  let post_id = App.post_id
+  let post_id = App.post.id
 
   let response = await fetch(`/react`, {
     method: `POST`,
@@ -558,7 +558,7 @@ App.modify_reaction = (reaction) => {
 
 App.refresh = async (to_bottom = false) => {
   App.print_info(`Refreshing post...`)
-  let post_id = App.post_id
+  let post_id = App.post.id
 
   let response = await fetch(`/refresh`, {
     method: `POST`,
@@ -584,13 +584,13 @@ App.refresh = async (to_bottom = false) => {
 
 App.apply_update = (update) => {
   if (update.reactions && update.reactions.length) {
-    App.reactions = update.reactions
+    App.post.reactions = update.reactions
     App.fill_reactions()
   }
 
-  App.title = update.title
+  App.post.title = update.title
   document.title = update.post_title
-  DOM.el(`#title`).textContent = update.title || App.original
+  DOM.el(`#title`).textContent = update.title || App.post.original
   DOM.el(`#views`).textContent = update.views
 }
 
@@ -607,7 +607,7 @@ App.toggle_modal_image = () => {
 }
 
 App.copy_all_text = () => {
-  App.copy_to_clipboard(App.text || ``)
+  App.copy_to_clipboard(App.post.text || ``)
 }
 
 App.select_all_text = () => {
@@ -739,7 +739,7 @@ App.reset_modal_image = () => {
 }
 
 App.fill_reactions = () => {
-  let reactions = App.reactions.slice(0)
+  let reactions = App.post.reactions.slice(0)
 
   if (App.reversed()) {
     reactions.reverse()
@@ -832,7 +832,7 @@ App.guess_mode = () => {
   let modes = modelist.modes
 
   for (let mode of modes) {
-    if (App.mtype.includes(mode.name)) {
+    if (App.post.mtype.includes(mode.name)) {
       return mode.mode
     }
   }
@@ -853,7 +853,7 @@ App.load_script = (src) => {
 }
 
 App.start_editor = async () => {
-  if (!App.text) {
+  if (!App.post.text) {
     return
   }
 
@@ -870,9 +870,9 @@ App.start_editor = async () => {
   ace.config.set(`basePath`, `/static/ace`)
   App.editor = ace.edit(`editor`)
   App.editor.setTheme(`ace/theme/tomorrow_night_eighties`)
-  let mode = App.guess_mode(App.text)
+  let mode = App.guess_mode(App.post.text)
   App.editor.session.setMode(mode)
-  App.editor.session.setValue(App.text, -1)
+  App.editor.session.setValue(App.post.text, -1)
   App.editor.setReadOnly(true)
   App.editor.setShowPrintMargin(false)
   let num_lines = App.editor.session.getLength()
@@ -907,10 +907,10 @@ App.keyboard_events = () => {
 }
 
 App.start_embed = () => {
-  if (App.mtype === `text/markdown`) {
+  if (App.post.mtype === `text/markdown`) {
     App.start_markdown()
   }
-  else if (App.text) {
+  else if (App.post.text) {
     if (App.zip_embed) {
       //
     }
@@ -926,8 +926,8 @@ App.start_embed = () => {
       App.start_editor()
     }
   }
-  else if (App.mtype.startsWith(`application`)) {
-    if (App.mtype.includes(`flash`)) {
+  else if (App.post.mtype.startsWith(`application`)) {
+    if (App.post.mtype.includes(`flash`)) {
       App.start_flash()
     }
   }
@@ -974,7 +974,7 @@ App.start_embed = () => {
     })
   }
 
-  if (App.image_embed) {
+  if (App.post.image_embed) {
     App.msg_image = Msg.factory({
       id: `modal_image`,
       class: `modal_image`,
@@ -1113,7 +1113,7 @@ App.setup_scrollers = () => {
 }
 
 App.edit_privacy = async (privacy) => {
-  let ids = [App.post_id]
+  let ids = [App.post.id]
 
   let response = await fetch(`/edit_privacy`, {
     method: `POST`,
@@ -1153,7 +1153,7 @@ App.start_youtube = () => {
 
 App.show_url = () => {
   let c = DOM.el(`#url_container`)
-  let text = App.safe_html(App.text)
+  let text = App.safe_html(App.post.text)
   c.innerHTML = `<a href="${text}">${text}</a>`
 }
 

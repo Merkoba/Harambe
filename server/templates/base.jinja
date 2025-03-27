@@ -39,23 +39,30 @@
             App.max_description_length = {{max_description_length | default(0)}}
 
             {% if post %}
-            App.post_id = {{post.id | default(0)}}
-            App.name = {{post.name | default(0) | tojson | safe}}
-            App.full = {{post.full | default(0) | tojson | safe}}
-            App.date = {{post.date | default(0)}}
-            App.title = {{post.title | default(0) | tojson | safe}}
-            App.original = {{post.original | default(0) | tojson | safe}}
-            App.original_full = {{post.original_full | default(0) | tojson | safe}}
-            App.mtype = {{post.mtype | default(0) | tojson | safe}}
-            App.image_embed = {{post.image_embed | default(0) | tojson}}
-            App.reactions = {{post.reactions | default(0) | tojson}}
-            App.text = {{post.text | default(0) | tojson | safe}}
-            App.uploader = {{post.uploader | default(0) | tojson | safe}}
-            App.zip_embed = {{post.zip_embed | default(0) | tojson}}
-            App.privacy = {{post.privacy | default(0) | tojson}}
-            App.youtube_id = {{post.youtube_id | default(0) | tojson | safe}}
-            App.is_url = {{post.is_url | default(0) | tojson}}
-            App.description = {{post.description | default(0) | tojson | safe}}
+            App.post = {}
+            App.post.id = {{post.id | default(0)}}
+            App.post.name = {{post.name | default(0) | tojson | safe}}
+            App.post.full = {{post.full | default(0) | tojson | safe}}
+            App.post.date = {{post.date | default(0)}}
+            App.post.title = {{post.title | default(0) | tojson | safe}}
+            App.post.original = {{post.original | default(0) | tojson | safe}}
+            App.post.original_full = {{post.original_full | default(0) | tojson | safe}}
+            App.post.mtype = {{post.mtype | default(0) | tojson | safe}}
+            App.post.image_embed = {{post.image_embed | default(0) | tojson}}
+            App.post.reactions = {{post.reactions | default(0) | tojson}}
+            App.post.text = {{post.text | default(0) | tojson | safe}}
+            App.post.uploader = {{post.uploader | default(0) | tojson | safe}}
+            App.post.zip_embed = {{post.zip_embed | default(0) | tojson}}
+            App.post.privacy = {{post.privacy | default(0) | tojson}}
+            App.post.youtube_id = {{post.youtube_id | default(0) | tojson | safe}}
+            App.post.is_url = {{post.is_url | default(0) | tojson}}
+            App.post.description = {{post.description | default(0) | tojson | safe}}
+            {% endif %}
+
+            {% if user %}
+            App.user = {}
+            App.user.username = {{user.username | default(0) | tojson | safe}}
+            App.user.name = {{user.name | default(0) | tojson | safe}}
             {% endif %}
 
             App.file_path = {{file_path | default(0) | tojson | safe}}
