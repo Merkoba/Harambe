@@ -299,7 +299,7 @@ class Config:
 
         # Image quality for image magic
         # 1-31, where 1 is best
-        self.image_magic_quality = 8
+        self.image_magic_quality = 6
 
         # Minimum file size to apply image magic
         # If 0 it will apply to any file size
