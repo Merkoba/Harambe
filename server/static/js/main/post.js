@@ -693,8 +693,10 @@ App.add_icon_events = () => {
 }
 
 App.fill_icons = async () => {
+  App.flash(`Fetching`)
   let container = DOM.el(`#icons`)
   let response = await fetch(`/get_icons`)
+  App.close_modals()
 
   if (!response.ok) {
     App.print_error(response.status)

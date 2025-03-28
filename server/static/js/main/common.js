@@ -1082,7 +1082,7 @@ App.to_bottom = () => {
 
 App.flash = (text) => {
   let msg = Msg.factory({
-    closeable: false,
+    close_on_overlay_click: false,
     window_x: `none`,
     class: `blue`,
   })
