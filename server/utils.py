@@ -404,24 +404,46 @@ def get_content_type(file: FileStorage) -> str:
     return file.content_type or mimetypes.guess_type(file.filename)[0] or ""
 
 
-def is_image_file(file: FileStorage) -> bool:
-    content_type = get_content_type(file)
-    return content_type.startswith("image/")
+def is_media_file(what: str, file: FileStorage, ignore: list[str]) -> bool:
+    ct = get_content_type(file)
+    return ct.startswith(f"{what}/") and not any(ct == g for g in ignore)
 
 
-def is_audio_file(file: FileStorage) -> bool:
-    content_type = get_content_type(file)
-    return content_type.startswith("audio/")
+def is_image_file(file: FileStorage, lossless: bool = False) -> bool:
+    if lossless:
+        ignore = [
+            "image/jpeg",
+        ]
+    else:
+        ignore = []
+
+    return is_media_file("image", file, ignore)
 
 
-def is_video_file(file: FileStorage) -> bool:
-    content_type = get_content_type(file)
-    return content_type.startswith("video/")
+def is_audio_file(file: FileStorage, lossless: bool = False) -> bool:
+    if lossless:
+        ignore = [
+            "audio/mpeg",
+        ]
+    else:
+        ignore = []
+
+    return is_media_file("audio", file, ignore)
+
+
+def is_video_file(file: FileStorage, lossless: bool = False) -> bool:
+    if lossless:
+        ignore = [
+            "video/mp4",
+        ]
+    else:
+        ignore = []
+
+    return is_media_file("video", file, ignore)
 
 
 def is_gif_file(file: FileStorage) -> bool:
-    content_type = get_content_type(file)
-    return content_type == "image/gif"
+    return is_media_file("gif", file, [])
 
 
 def fix_filename(name: str) -> str:

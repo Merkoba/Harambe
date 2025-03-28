@@ -57,21 +57,21 @@ def is_image_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "image_magic"):
         return False
 
-    return config.image_magic_enabled and utils.is_image_file(file)
+    return config.image_magic_enabled and utils.is_image_file(file, True)
 
 
 def is_audio_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "audio_magic"):
         return False
 
-    return config.audio_magic_enabled and utils.is_audio_file(file)
+    return config.audio_magic_enabled and utils.is_audio_file(file, True)
 
 
 def is_video_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "video_magic"):
         return False
 
-    return config.video_magic_enabled and utils.is_video_file(file)
+    return config.video_magic_enabled and utils.is_video_file(file, True)
 
 
 def is_album_magic(request: Request, files: list[FileStorage]) -> bool:
