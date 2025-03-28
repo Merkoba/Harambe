@@ -100,6 +100,7 @@ App.edit_title = () => {
         return
       }
 
+      App.flash(`Editing`)
       let ids = [App.post.id]
 
       let response = await fetch(`/edit_title`, {
@@ -109,6 +110,8 @@ App.edit_title = () => {
         },
         body: JSON.stringify({ids, title}),
       })
+
+      App.close_flash()
 
       if (response.ok) {
         let json = await App.json(response)
@@ -144,6 +147,7 @@ App.edit_description = () => {
         }
       }
 
+      App.flash(`Editing`)
       let ids = [App.post.id]
 
       let response = await fetch(`/edit_description`, {
@@ -153,6 +157,8 @@ App.edit_description = () => {
         },
         body: JSON.stringify({ids, description}),
       })
+
+      App.close_flash()
 
       if (response.ok) {
         let json = await App.json(response)
