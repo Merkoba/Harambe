@@ -406,13 +406,13 @@ def get_content_type(file: FileStorage) -> str:
 
 def is_media_file(what: str, file: FileStorage, ignore: list[str]) -> bool:
     ct = get_content_type(file)
-    return ct.startswith(f"{what}/") and not any(ct == g for g in ignore)
+    return ct.startswith(f"{what}/") and (not any(ct == f"{what}/{g}" for g in ignore))
 
 
 def is_image_file(file: FileStorage, lossless: bool = False) -> bool:
     if lossless:
         ignore = [
-            "image/jpeg",
+            "jpeg",
         ]
     else:
         ignore = []
@@ -423,7 +423,7 @@ def is_image_file(file: FileStorage, lossless: bool = False) -> bool:
 def is_audio_file(file: FileStorage, lossless: bool = False) -> bool:
     if lossless:
         ignore = [
-            "audio/mpeg",
+            "mpeg",
         ]
     else:
         ignore = []
@@ -434,7 +434,7 @@ def is_audio_file(file: FileStorage, lossless: bool = False) -> bool:
 def is_video_file(file: FileStorage, lossless: bool = False) -> bool:
     if lossless:
         ignore = [
-            "video/mp4",
+            "mp4",
         ]
     else:
         ignore = []
