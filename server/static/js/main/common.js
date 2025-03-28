@@ -1081,14 +1081,20 @@ App.to_bottom = () => {
 }
 
 App.flash = (text) => {
-  let msg = Msg.factory({
+  App.msg_flash = Msg.factory({
     close_on_overlay_click: false,
     window_x: `none`,
     class: `blue`,
   })
 
-  msg.set(text)
-  msg.show()
+  App.msg_flash.set(text)
+  App.msg_flash.show()
+}
+
+App.close_flash = () => {
+  if (App.msg_flash) {
+    App.msg_flash.close()
+  }
 }
 
 App.icon = (what) => {
