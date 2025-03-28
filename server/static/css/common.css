@@ -105,10 +105,6 @@ a.linkbutton:hover {
     font-size: var(--font_size);
 }
 
-.Msg-overlay {
-    cursor: pointer !important;
-}
-
 #prompt_container {
     display: flex;
     flex-direction: column;
