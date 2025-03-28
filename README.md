@@ -315,3 +315,13 @@ User can specify filename with extension which aids on syntax highlighting.
 There's a textarea to paste text quicky.
 
 The uploader script accepts `--pastebin some text` and `--pastebin-filename file.py`.
+
+---
+
+## Metadata
+
+Install `exiftool` in your system to allow metadata removal to work.
+
+The package is usually called `perl-image-exiftool` or `libimage-exiftool-perl`.
+
+This strips all metadata from files except `rotation`.
