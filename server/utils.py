@@ -573,12 +573,12 @@ def get_url_info(url: str) -> tuple[str, str] | None:
 
 def clean_description(s: str) -> str:
     return untab_string(
-        remove_multiple_lines(s)[: config.max_description_length].strip()
+        remove_multiple_lines(s)[: config.max_description_length].rstrip()
     )
 
 
 def clean_pastebin(s: str) -> str:
-    return untab_string(s[: config.max_pastebin_length].strip())
+    return untab_string(s[: config.max_pastebin_length].rstrip())
 
 
 def do_query(obj: Post | Reaction | User, query: str, props: list[str]) -> bool:

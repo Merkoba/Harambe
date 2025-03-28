@@ -132,7 +132,7 @@ App.edit_description = () => {
     max: App.max_description_length,
     multi: true,
     callback: async (description) => {
-      description = description.trim()
+      description = description.trimEnd()
 
       if (description === App.post.description) {
         return
