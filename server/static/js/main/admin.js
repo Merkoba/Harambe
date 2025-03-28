@@ -217,13 +217,11 @@ App.delete_selected_posts = async (ids) => {
     body: JSON.stringify({ids}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.remove_posts(ids)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -246,13 +244,11 @@ App.delete_all_posts = async () => {
     body: JSON.stringify(),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.location(`/admin/posts`)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -344,13 +340,11 @@ App.edit_post_title = (el) => {
         body: JSON.stringify({ids, title}),
       })
 
-      let json = await App.json(response)
-
       if (response.ok) {
         App.refresh()
       }
       else {
-        App.feedback(json)
+        App.feedback(response)
       }
     },
   }
@@ -381,13 +375,11 @@ App.edit_post_privacy = (privacy) => {
         body: JSON.stringify({ids, privacy}),
       })
 
-      let json = await App.json(response)
-
       if (response.ok) {
         App.refresh()
       }
       else {
-        App.feedback(json)
+        App.feedback(response)
       }
     },
   }
@@ -482,13 +474,11 @@ App.delete_selected_users = async (ids) => {
     body: JSON.stringify({ids}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.remove_users(ids)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -511,13 +501,11 @@ App.delete_normal_users = async () => {
     body: JSON.stringify(),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.location(`/admin/users`)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -570,13 +558,11 @@ App.do_mod_user = async (items, what, value, vtype) => {
     body: JSON.stringify({ids, what, value, vtype}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.refresh()
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -711,13 +697,11 @@ App.delete_selected_reactions = async (ids) => {
     body: JSON.stringify({ids}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.remove_reactions(ids)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -740,13 +724,11 @@ App.delete_all_reactions = async () => {
     body: JSON.stringify(),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.location(`/admin/reactions`)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -997,7 +979,6 @@ App.show_sample_text = async (path, title = ``) => {
   App.hide_sample_media()
   App.set_sample_title(title)
   let response = await fetch(path)
-  let json = await App.json(response)
 
   if (response.ok) {
     App.hide_sample_media(`text`)
@@ -1005,7 +986,7 @@ App.show_sample_text = async (path, title = ``) => {
     DOM.el(`#sample_text`).textContent = text
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 

@@ -110,14 +110,13 @@ App.edit_title = () => {
         body: JSON.stringify({ids, title}),
       })
 
-      let json = await App.json(response)
-
       if (response.ok) {
+        let json = await App.json(response)
         App.post.title = json.title
         DOM.el(`#title`).textContent = App.post.title || App.post.original
       }
       else {
-        App.feedback(json)
+        App.feedback(response)
       }
     },
   }
@@ -155,14 +154,13 @@ App.edit_description = () => {
         body: JSON.stringify({ids, description}),
       })
 
-      let json = await App.json(response)
-
       if (response.ok) {
+        let json = await App.json(response)
         App.post.description = json.description
         App.format_description()
       }
       else {
-        App.feedback(json)
+        App.feedback(response)
       }
     },
   }
@@ -181,14 +179,12 @@ App.delete_post = async () => {
     body: JSON.stringify({post_id}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     let icon = App.icon(`deleted`)
     DOM.el(`#title`).textContent = `DELETED ${icon}`
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -233,7 +229,6 @@ App.react_icon = async (id) => {
     App.msg_icons.set(t.innerHTML)
     await App.fill_icons()
     App.add_icon_events()
-    App.icons_loaded = true
   }
   else {
     App.show_all_icons()
@@ -512,13 +507,11 @@ App.send_reaction = async (text) => {
     body: JSON.stringify({post_id, text}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.refresh(true)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -535,13 +528,12 @@ App.edit_reaction = async (id, text) => {
     body: JSON.stringify({id, text}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
+    let json = await App.json(response)
     App.modify_reaction(json.reaction)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -568,9 +560,8 @@ App.refresh = async (to_bottom = false) => {
     body: JSON.stringify({post_id}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
+    let json = await App.json(response)
     App.apply_update(json.update)
 
     if (to_bottom && !App.reversed()) {
@@ -578,7 +569,7 @@ App.refresh = async (to_bottom = false) => {
     }
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 
@@ -699,10 +690,11 @@ App.fill_icons = async () => {
   App.close_flash()
 
   if (!response.ok) {
-    App.print_error(response.status)
+    App.feedback(response)
     return
   }
 
+  App.icons_loaded = true
   let json = await App.json(response)
   let icons = App.shuffle_array(json.icons)
 
@@ -777,13 +769,11 @@ App.do_delete_reaction = async (id) => {
     body: JSON.stringify({id}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.remove_reaction(id)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }
 

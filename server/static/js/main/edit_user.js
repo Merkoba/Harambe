@@ -55,12 +55,10 @@ App.delete_user = async () => {
     body: JSON.stringify({ids}),
   })
 
-  let json = await App.json(response)
-
   if (response.ok) {
     App.popmsg(`Deleted`)
   }
   else {
-    App.feedback(json)
+    App.feedback(response)
   }
 }

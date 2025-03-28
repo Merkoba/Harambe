@@ -1459,9 +1459,14 @@ App.size_string = (bytes) => {
   return `${tb.toFixed(1)} tb`
 }
 
-App.feedback = (json) => {
+App.feedback = async (response) => {
+  let json = await App.json(response)
+
   if (json && json.message) {
     App.popmsg(json.message)
+  }
+  else if (response.statusText) {
+    App.popmsg(response.statusText)
   }
 }
 
