@@ -1069,7 +1069,7 @@ App.timeago = (date) => {
 }
 
 App.login_feedback = () => {
-  App.popmsg(`You might have to login to do this`)
+  App.popmsg(`You might need to login to do this`)
 }
 
 App.to_top = () => {
