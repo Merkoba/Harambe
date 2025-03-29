@@ -241,6 +241,15 @@ a.linkbutton:hover {
     outline: none;
 }
 
+.popmsg_content a:link, .popmsg_content a:visited {
+    color: rgb(91, 94, 255) !important;
+    font-weight: bold;
+}
+
+.popmsg_content a:hover {
+    text-decoration: underline !important;
+}
+
 .unselectable {
     user-select: none;
 }

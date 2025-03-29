@@ -1,7 +1,7 @@
 class Popmsg {
   static instance = null
 
-  constructor(message, callback) {
+  constructor(message, callback, html = false) {
     let msg = Msg.factory({
       persistent: false,
       after_close: callback,
@@ -12,7 +12,13 @@ class Popmsg {
     Popmsg.instance = this
     let content = DOM.create(`div`, `popmsg_content`)
 
-    content.textContent = message
+    if (html) {
+      content.innerHTML = message
+    }
+    else {
+      content.textContent = message
+    }
+
     content.tabIndex = 0
 
     msg.set(content)

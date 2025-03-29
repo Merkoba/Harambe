@@ -215,6 +215,10 @@ App.popmsg = (message, callback) => {
   new Popmsg(message, callback)
 }
 
+App.pophtml = (message, callback) => {
+  new Popmsg(message, callback, true)
+}
+
 App.remove_multiple_empty_lines = (s) => {
   return s.replace(/\n\s*\n/g, `\n\n`)
 }
@@ -1081,7 +1085,7 @@ App.timeago = (date) => {
 }
 
 App.login_feedback = () => {
-  App.popmsg(`You might need to login to do this`)
+  App.pophtml(`You might need to <a href="/login">login</a> or <a href="/register">register</a>`)
 }
 
 App.to_top = () => {
