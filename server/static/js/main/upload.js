@@ -111,6 +111,10 @@ App.submit_form = (check = true, args = {}) => {
 }
 
 App.reflect_file = (file) => {
+  if (!file) {
+    file = App.get_empty_picker()
+  }
+
   let title = DOM.el(`#title`)
 
   if (title) {
@@ -253,6 +257,7 @@ App.file_trigger = () => {
 
 App.get_empty_picker = () => {
   let files = DOM.els(`.picker_file`)
+  files = files.slice(0).reverse()
 
   for (let file of files) {
     if (file.files.length === 0) {
@@ -280,8 +285,8 @@ App.remove_picker = (picker) => {
     picker = pickers.at(-1)
   }
 
-  App.reset_file_media(picker)
   picker.remove()
+  App.reflect_file()
   App.on_picker_change()
 }
 
