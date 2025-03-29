@@ -804,6 +804,8 @@ App.setup_dragdrop = () => {
       App.check_multi_files(input)
       App.add_picker()
     }
+
+    App.on_picker_change()
   })
 }
 
