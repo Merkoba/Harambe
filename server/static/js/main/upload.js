@@ -678,13 +678,15 @@ App.get_file_title = (file) => {
 App.setup_zip = () => {
   let zip = DOM.el(`#zip_container`)
 
-  DOM.ev(zip, `click`, (e) => {
-    if (e.target.id === `zip`) {
-      return
-    }
+  if (zip) {
+    DOM.ev(zip, `click`, (e) => {
+      if (e.target.id === `zip`) {
+        return
+      }
 
-    DOM.el(`#zip`).click()
-  })
+      DOM.el(`#zip`).click()
+    })
+  }
 }
 
 App.setup_submit = () => {
@@ -929,11 +931,18 @@ App.clear_pastebin = (c) => {
 
 App.focus_pastebin = (c) => {
   let pastebin = DOM.el(`.pastebin`, c)
-  pastebin.focus()
+
+  if (pastebin) {
+    pastebin.focus()
+  }
 }
 
 App.focus_title = () => {
-  DOM.el(`#title`).focus()
+  let title = DOM.el(`#title`)
+
+  if (title) {
+    title.focus()
+  }
 }
 
 App.setup_description = () => {
