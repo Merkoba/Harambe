@@ -423,10 +423,16 @@ class Config:
         self.icon_for_random = "🎲"
 
         # Icon for upload
-        self.icon_for_upload = "🦍"
+        self.icon_for_upload = "🔼"
+
+        # Icon for menu
+        self.icon_for_menu = "🧭"
 
         # Icon for edit
         self.icon_for_edit = "📝"
+
+        # Icon for text
+        self.icon_for_text = "📝"
 
         # Icon for delete
         self.icon_for_delete = "💣"

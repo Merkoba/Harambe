@@ -750,9 +750,9 @@ def register() -> Any:
             return def_url()
 
     if config.captcha_enabled:
-        captcha, captcha_key, captcha_div = utils.get_captcha()
+        captcha, captcha_key = utils.get_captcha()
     else:
-        captcha, captcha_key, captcha_div = "", "", ""
+        captcha, captcha_key = "", ""
 
     return render_template(
         "register.jinja",
@@ -760,7 +760,6 @@ def register() -> Any:
         register_code=config.register_code,
         captcha=captcha,
         captcha_key=captcha_key,
-        captcha_div=captcha_div,
         **common_configs(),
     )
 

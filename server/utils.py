@@ -368,7 +368,7 @@ def random_string(n: int) -> str:
     return "".join(random_letter() for _ in range(n))
 
 
-def get_captcha() -> tuple[str, str, str]:
+def get_captcha() -> tuple[str, str]:
     a = random_int(11, 99)
     b = random_int(11, 99)
     c = random_int(11, 99)
@@ -377,9 +377,8 @@ def get_captcha() -> tuple[str, str, str]:
     answer = a * b * c
     question = f"What is {a} * {b} * {c}"
     key = f"captcha_{n}"
-    div = random_string(random_int(6, 16))
     redis_save(key, {"answer": answer, "time": n}, config.max_captcha_time)
-    return question, key, div
+    return question, key
 
 
 def redis_save(key: str, value: dict[str, Any], expire: int | None = None) -> None:

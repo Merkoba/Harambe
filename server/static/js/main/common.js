@@ -223,10 +223,28 @@ App.capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-App.setup_menu_opts = (show = false) => {
+App.ignore_buttons = (name, ignore) => {
+  for (let g of ignore) {
+    let el = DOM.el(`#${name}_opts_${g}`)
+
+    if (el) {
+      el.remove()
+    }
+  }
+}
+
+App.setup_menu_opts = (show = false, ignore = []) => {
   let name = `menu`
 
   App.make_opts(name, () => {
+    App.ignore_buttons(name, ignore)
+
+    App.bind_button(`${name}_opts_upload`, () => {
+      App.location(`/`)
+    }, () => {
+      App.open_tab(`/`)
+    }, App.icon(`upload`))
+
     App.bind_button(`${name}_opts_fresh`, () => {
       App.location(`/fresh`)
     }, () => {
@@ -238,12 +256,6 @@ App.setup_menu_opts = (show = false) => {
     }, () => {
       App.open_tab(`/random`)
     }, App.icon(`random`))
-
-    App.bind_button(`${name}_opts_upload`, () => {
-      App.location(`/`)
-    }, () => {
-      App.open_tab(`/`)
-    }, App.icon(`upload`))
 
     App.bind_button(`${name}_opts_list`, () => {
       App.setup_list_opts(true, name)

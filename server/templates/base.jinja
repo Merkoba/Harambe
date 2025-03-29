@@ -120,13 +120,13 @@
     <body>
         <template id="template_menu_opts">
             <div class="dialog_container">
+                {% if is_user %}
+                <div id="menu_opts_upload" class="aero_button">Upload</div>
+                {% endif %}
+
                 {% if is_reader or (not list_private) %}
                 <div id="menu_opts_fresh" class="aero_button" title="Ctrl + Up">Fresh</div>
                 <div id="menu_opts_random" class="aero_button" title="Ctrl + Shift + Right">Random</div>
-                {% endif %}
-
-                {% if is_user %}
-                <div id="menu_opts_upload" class="aero_button">Upload</div>
                 {% endif %}
 
                 {% if is_reader or (not list_private) %}

@@ -14,7 +14,7 @@
 
     <form id="form" action="/register" method="post">
         {% if captcha %}
-        <div id="{{captcha_div}}" style="background-color: white; padding: 0.35rem;">{{captcha}}</div>
+        <div style="background-color: white; padding: 0.35rem; user-select: none;">{{captcha}}</div>
         <input type="hidden" name="captcha_key" value="{{captcha_key}}">
         <input type="text" id="solution" name="solution" placeholder="Solution" required>
         {% endif %}
