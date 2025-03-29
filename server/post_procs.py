@@ -191,7 +191,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         if (not text_file) or (not text_file.exists()):
             text_file = Path(utils.samples_dir() / f"{name}.txt")
 
-        if text_file and (text_file.exists()):
+        if text_file and text_file.exists():
             max_bytes = config.embed_max_size_text * 1024 * 1024
             text = text_file.open("r").read(max_bytes)
 
