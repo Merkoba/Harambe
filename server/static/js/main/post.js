@@ -1142,7 +1142,6 @@ App.start_youtube = () => {
   let iframe = DOM.create(`iframe`, ``, `youtube`)
   iframe.src = `https://www.youtube.com/embed/${video_id}`
   iframe.title = `YouTube video player`
-  iframe.allow = `accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share`
   iframe.allowFullscreen = true
   let container = DOM.el(`#youtube_container`)
   container.appendChild(iframe)
