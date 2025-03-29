@@ -115,12 +115,6 @@ App.reflect_file = (file) => {
     file = App.get_empty_picker()
   }
 
-  let title = DOM.el(`#title`)
-
-  if (title) {
-    title.focus()
-  }
-
   if (!App.check_total_size()) {
     App.reset_file(file)
     App.popmsg(`That file is too big`)
@@ -185,11 +179,6 @@ App.add_picker = (show = false) => {
     App.clicked = false
     App.remove_duplicate_files()
     App.check_multi_files(input)
-
-    if (App.reflect_file(input)) {
-      App.add_picker()
-    }
-
     App.check_files_used()
     App.file_title(file)
   })
@@ -969,6 +958,7 @@ App.setup_description = () => {
 App.check_multi_files = (input) => {
   if (input.files.length <= 1) {
     App.reflect_file(input)
+    App.add_picker()
     return
   }
 
@@ -990,6 +980,7 @@ App.check_multi_files = (input) => {
   }
 
   App.reflect_file()
+  App.add_picker()
 }
 
 App.file_title = (input) => {
