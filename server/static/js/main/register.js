@@ -1,8 +1,8 @@
 App.init = () => {
-  let captcha = DOM.el(`#captcha`)
+  let solution = DOM.el(`#solution`)
 
-  if (captcha) {
-    captcha.focus()
+  if (solution) {
+    solution.focus()
   }
   else {
     let username = DOM.el(`#username`)
