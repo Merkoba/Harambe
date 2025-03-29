@@ -10,15 +10,29 @@ It supports embedding media (images, video, audio, text/code/markdown, flash, zi
 
 ## Installation
 
-Make a virtual env and install requirements.
+Clone this repo.
 
-Read [this](#config) to see how to configure it.
+This can be done with `git clone --depth=1 https://github.com/Merkoba/Harambe harambe`.
+
+Go inside the new dir, then go inside `server`.
+
+This can be done with `cd harambe/server`.
+
+Make a `virtual env`.
+
+This can be done with `python -m venv venv`.
+
+Install the requirements.
+
+This can be done with `venv/bin/pip install -r requirements.txt`.
 
 Run `venv/bin/python schema.py` to prepare the database.
 
-Run `venv/bin/python add_admin.py` to add yourself as the first admin.
+Run `venv/bin/python add_admin.py username password` to add yourself as the first admin.
 
-Run with gunicorn with this systemd service:
+Read [this](#config) to see how to configure it.
+
+To run in `production` with `gunicorn` use this this `systemd service`:
 
 ```
 [Unit]
@@ -79,7 +93,7 @@ There are admin pages to view and delete files and users.
 
 Admins can create more users, but you need to create the first admin.
 
-You can do it with `venv/bin/python add_admin.py`.
+You can do it with `venv/bin/python add_admin.py username password`.
 
 ---
 
