@@ -61,6 +61,13 @@ App.validate = () => {
       App.file_trigger()
       return false
     }
+
+    if (!texts.length) {
+      if (description && App.is_filename(title.value)) {
+        App.ask_make_file()
+        return false
+      }
+    }
   }
 
   if (!App.check_total_size()) {
@@ -880,6 +887,7 @@ App.add_pastebin = () => {
   DOM.show(main)
   App.to_bottom()
   text.focus()
+  return c
 }
 
 App.remove_pastebin = (c) => {
@@ -959,4 +967,49 @@ App.check_multi_files = (input) => {
 App.file_title = (input) => {
   let file = input.files[0]
   input.title = `${file.name} | ${App.size_string(file.size)}`
+}
+
+App.ask_make_file = () => {
+  let confirm_args = {
+    message: `Turn this into a file`,
+    callback_yes: () => {
+      let c = App.add_pastebin()
+      let filename = DOM.el(`.pastebin_filename`, c)
+      let pastebin = DOM.el(`.pastebin`, c)
+      filename.value = App.get_title()
+      pastebin.value = App.get_description()
+      App.clear_title()
+      App.clear_description()
+    },
+    callback_no: () => {
+      App.submit_form(false)
+    },
+  }
+
+  App.confirmbox(confirm_args)
+  return true
+}
+
+App.get_title = () => {
+  return DOM.el(`#title`).value.trim()
+}
+
+App.get_description = () => {
+  return DOM.el(`#description`).value.trim()
+}
+
+App.clear_title = () => {
+  let title = DOM.el(`#title`)
+
+  if (title) {
+    title.value = ``
+  }
+}
+
+App.clear_description = () => {
+  let description = DOM.el(`#description`)
+
+  if (description) {
+    description.value = ``
+  }
 }

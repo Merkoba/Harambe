@@ -1489,3 +1489,42 @@ App.feedback = async (response) => {
 App.json = async (response) => {
   return await response.json().catch(() => ({}))
 }
+
+App.num_lines = (text) => {
+  return text.split(`\n`).length
+}
+
+App.is_filename = (str) => {
+  str = str.toLowerCase().trim()
+
+  if (!str) {
+    return false
+  }
+
+  // Contains
+  if (!/^[a-z0-9_.-]+$/.test(str)) {
+    return false
+  }
+
+  // Starts with
+  if (!/^[a-z0-9]/.test(str)) {
+    return false
+  }
+
+  // Ends with
+  if (!/[a-z0-9]$/.test(str)) {
+    return false
+  }
+
+  // Check that it contains at least 1 dot
+  if (str.indexOf(`.`) < 1) {
+    return false
+  }
+
+  // Check if it contains dots in succession
+  if (str.includes(`..`)) {
+    return false
+  }
+
+  return true
+}
