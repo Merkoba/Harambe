@@ -983,7 +983,7 @@ App.ask_make_file = () => {
       let filename = DOM.el(`.pastebin_filename`, c)
       let pastebin = DOM.el(`.pastebin`, c)
       filename.value = App.get_title()
-      pastebin.value = App.get_description()
+      pastebin.value = App.untab_string(App.get_description())
       App.clear_title()
       App.clear_description()
     },
@@ -1003,7 +1003,7 @@ App.get_title = () => {
 }
 
 App.get_description = () => {
-  return DOM.el(`#description`).value.trim()
+  return DOM.el(`#description`).value
 }
 
 App.clear_title = () => {
