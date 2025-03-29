@@ -20,7 +20,13 @@ App.init = () => {
   App.focus_title()
 }
 
-App.validate = () => {
+App.validate = (args = {}) => {
+  let def_args = {
+    make_file: true,
+  }
+
+  App.fill_def_args(def_args, args)
+
   if (App.clicked) {
     App.print_info(`Validate: Clicked`)
     return false
@@ -29,9 +35,11 @@ App.validate = () => {
   let title = App.get_title()
   let description = App.get_description()
 
-  if (description && App.is_filename(title)) {
-    App.ask_make_file()
-    return false
+  if (args.make_file) {
+    if (description && App.is_filename(title)) {
+      App.ask_make_file()
+      return false
+    }
   }
 
   let title_is_url = false
@@ -93,8 +101,8 @@ App.validate = () => {
   return true
 }
 
-App.submit_form = (check = true) => {
-  if (check && !App.validate()) {
+App.submit_form = (check = true, args = {}) => {
+  if (check && !App.validate(args)) {
     return
   }
 
@@ -980,7 +988,9 @@ App.ask_make_file = () => {
       App.clear_description()
     },
     callback_no: () => {
-      App.submit_form(false)
+      App.submit_form(true, {
+        make_file: false,
+      })
     },
   }
 
