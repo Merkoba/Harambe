@@ -503,7 +503,7 @@ App.send_reaction = async (text) => {
     return
   }
 
-  App.flash("Sending")
+  App.flash(`Sending`)
   let post_id = App.post.id
 
   let response = await fetch(`/react`, {
