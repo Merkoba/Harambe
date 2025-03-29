@@ -659,3 +659,7 @@ def remove_metadata(path: Path) -> None:
     ]
 
     run_cmd(cmd)
+
+
+def striplimit(s: str, n: int) -> str:
+    return s.strip()[:n].strip()

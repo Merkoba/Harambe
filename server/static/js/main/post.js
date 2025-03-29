@@ -503,6 +503,7 @@ App.send_reaction = async (text) => {
     return
   }
 
+  App.flash("Sending")
   let post_id = App.post.id
 
   let response = await fetch(`/react`, {
@@ -514,9 +515,11 @@ App.send_reaction = async (text) => {
   })
 
   if (response.ok) {
-    App.refresh(true)
+    await App.refresh(true)
+    App.close_flash()
   }
   else {
+    App.close_flash()
     App.feedback(response)
   }
 }

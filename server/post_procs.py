@@ -135,7 +135,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     if all_data:
         description = post.description
     else:
-        description = post.description.strip()[:280].strip()
+        description = utils.striplimit(post.description, 280)
 
     value = post.value
 
