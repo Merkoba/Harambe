@@ -131,7 +131,12 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     privacy_str = "Public" if privacy == "public" else "Private"
     lister_str = "Lister" if lister else "Not Lister"
     privacy_str += f" | {lister_str}"
-    description = post.description
+
+    if all_data:
+        description = post.description
+    else:
+        description = post.description.strip()[:280].strip()
+
     value = post.value
 
     if post.reactions:
