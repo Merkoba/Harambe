@@ -292,6 +292,7 @@ def get_posts(
             f"select * from posts where title = ? and description = ?{pub}",
             (title, description),
         )
+
         rows = c.fetchall()
     elif title:
         c.execute(f"select * from posts where title = ?{pub}", (title,))
