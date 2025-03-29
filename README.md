@@ -32,6 +32,10 @@ Run `venv/bin/python add_admin.py username password` to add yourself as the firs
 
 Read [this](#config) to see how to configure it.
 
+Test that it runs locally in `dev` mode.
+
+This can be done with `venv/bin/python -m flask run --debug --port 4040`.
+
 To run in `production` with `gunicorn` use this this `systemd service`:
 
 ```
