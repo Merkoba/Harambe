@@ -10,7 +10,7 @@ It supports embedding media (images, video, audio, text/code/markdown, flash, zi
 
 ## Installation
 
-Clone this repo.
+Pick a location and clone this repo.
 
 This can be done with `git clone --depth=1 https://github.com/Merkoba/Harambe harambe`.
 
