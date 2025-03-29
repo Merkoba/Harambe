@@ -181,7 +181,7 @@ App.add_picker = (show = false) => {
   input.name = `file`
   let file = DOM.el(`.picker_file`, el)
 
-  DOM.ev(el, `change`, (e) => {
+  DOM.ev(input, `change`, (e) => {
     App.clicked = false
     App.remove_duplicate_files()
     App.check_multi_files(input)
@@ -793,11 +793,15 @@ App.setup_dragdrop = () => {
     let files = e.dataTransfer.files
 
     if (files && (files.length > 0)) {
-      let file = App.get_empty_picker()
+      let input = App.get_empty_picker()
       let dataTransfer = new DataTransfer()
-      dataTransfer.items.add(files[0])
-      file.files = dataTransfer.files
-      App.reflect_file(file)
+
+      for (let file of files) {
+        dataTransfer.items.add(file)
+      }
+
+      input.files = dataTransfer.files
+      App.check_multi_files(input)
       App.add_picker()
     }
   })
@@ -962,6 +966,7 @@ App.setup_description = () => {
 
 App.check_multi_files = (input) => {
   if (input.files.length <= 1) {
+    App.reflect_file(input)
     return
   }
 
@@ -978,10 +983,11 @@ App.check_multi_files = (input) => {
       let new_data_transfer = new DataTransfer()
       new_data_transfer.items.add(file)
       picker.files = new_data_transfer.files
-      App.reflect_file(picker)
       App.file_title(picker)
     }
   }
+
+  App.reflect_file()
 }
 
 App.file_title = (input) => {
