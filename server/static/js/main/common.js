@@ -1391,6 +1391,13 @@ App.is_ascii_art = (text) => {
     return false
   }
 
+  // If it contains URLs returl false
+  let url_regex = /https?:\/\/[^\s]+/gi
+
+  if (url_regex.test(text)) {
+    return false
+  }
+
   let lines = text.split(`\n`)
 
   // ASCII art usually has multiple lines
@@ -1445,7 +1452,7 @@ App.is_ascii_art = (text) => {
   }
 
   // Threshold can be adjusted based on testing
-  return score >= 5
+  return score >= 4
 }
 
 App.size_string = (bytes) => {

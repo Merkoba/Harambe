@@ -26,29 +26,34 @@ App.validate = () => {
     return false
   }
 
-  let title = DOM.el(`#title`)
+  let title = App.get_title()
+  let description = App.get_description()
+
+  if (description && App.is_filename(title)) {
+    App.ask_make_file()
+    return false
+  }
+
   let title_is_url = false
 
   if (title) {
-    if (title.value.length > App.max_title_length) {
+    if (title.length > App.max_title_length) {
       App.popmsg(`Title is too long`)
       return false
     }
 
-    title_is_url = App.is_a_url(title.value)
+    title_is_url = App.is_a_url(title)
 
     if (!title_is_url) {
-      if (App.contains_url(title.value)) {
+      if (App.contains_url(title)) {
         App.popmsg(`Title cannot contain a url`)
         return false
       }
     }
   }
 
-  let description = DOM.el(`#description`)
-
-  if (description) {
-    if (description.value.length > App.max_description_length) {
+  if (title && description) {
+    if (description.length > App.max_description_length) {
       App.popmsg(`Description is too long`)
       return false
     }
@@ -57,16 +62,9 @@ App.validate = () => {
   let texts = App.get_texts()
 
   if (App.num_active_files() === 0) {
-    if (!title_is_url && !description.value.trim() && !texts.length) {
+    if (!title_is_url && !description.trim() && !texts.length) {
       App.file_trigger()
       return false
-    }
-
-    if (!texts.length) {
-      if (description && App.is_filename(title.value)) {
-        App.ask_make_file()
-        return false
-      }
     }
   }
 
