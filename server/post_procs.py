@@ -168,7 +168,9 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         mtype.startswith("application/") and ("flash" in mtype) and embed_size("flash")
     )
 
-    if mtype.startswith("text/"):
+    is_text = mtype.startswith("text/")
+
+    if is_text:
         markdown_embed = ("markdown" in mtype) and embed_size("markdown")
     else:
         markdown_embed = False
@@ -178,14 +180,20 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     text = ""
 
     if all_data:
-        fname = f"{name}.txt"
-        text_file = Path(utils.files_dir() / fname)
+        text_file: Path | None = None
 
-        if not text_file.exists():
-            text_file = Path(utils.samples_dir() / fname)
+        if is_text:
+            text_file = Path(utils.files_dir() / full)
 
-        if text_file.exists():
-            text = text_file.open("r").read()
+        if (not text_file) or (not text_file.exists()):
+            text_file = Path(utils.files_dir() / f"{name}.txt")
+
+        if (not text_file) or (not text_file.exists()):
+            text_file = Path(utils.samples_dir() / f"{name}.txt")
+
+        if text_file and (text_file.exists()):
+            max_bytes = config.embed_max_size_text * 1024 * 1024
+            text = text_file.open("r").read(max_bytes)
 
     youtube_id = ""
     is_url = False
