@@ -59,7 +59,6 @@ App.validate = () => {
   if (App.num_active_files() === 0) {
     if (!title_is_url && !description.value.trim() && !texts.length) {
       App.file_trigger()
-      App.popmsg(`Upload something first`)
       return false
     }
   }
