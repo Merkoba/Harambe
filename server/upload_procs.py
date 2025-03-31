@@ -208,7 +208,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             epost = eposts[0] if eposts else None
 
             if epost and (privacy == "public"):
-                return return_post(mode, epost.name, privacy)
+                return return_post(epost.name, privacy)
 
         ans: MadeURL | None = make_url_file(title, files, seen_files)
 
@@ -454,18 +454,16 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
 
     database.update_user_last_date(user.id)
     post_procs.check_storage()
-    return return_post(mode, post_name, privacy)
+    return return_post(post_name, privacy)
 
 
-def return_post(mode: str, name: str, privacy: str) -> tuple[bool, str]:
+def return_post(name: str, privacy: str) -> tuple[bool, str]:
     if privacy == "private":
         if config.mark_private_posts:
-            name += f"_{config.private_posts_mark}"
+            mark = config.private_posts_mark
+            name = f"{name}?{mark}=true"
 
-    if mode == "normal":
-        return True, name
-
-    return True, f"post/{name}"
+    return True, name
 
 
 def api_upload(request: Request) -> tuple[bool, str]:

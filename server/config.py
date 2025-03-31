@@ -494,7 +494,7 @@ class Config:
         # Mark private posts URLs
         self.mark_private_posts = True
 
-        # Private posts mark
+        # Mark for private posts
         self.private_posts_mark = "priv"
 
     # --- Methods ---
