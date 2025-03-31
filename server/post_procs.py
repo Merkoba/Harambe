@@ -2,6 +2,7 @@ from __future__ import annotations
 
 # Standard
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -375,8 +376,18 @@ def get_post(
     if (not post_id) and (not name):
         return None
 
+    names: list[str] = [name if name else ""]
+    mark = config.private_posts_mark
+
+    if name and name.endswith(f"_{mark}"):
+        altname = re.sub(f"_{mark}$", "", name)
+        names.append(altname)
+
     posts = database.get_posts(
-        post_id=post_id, name=name, full_reactions=full_reactions, increase=increase
+        post_id=post_id,
+        names=names,
+        full_reactions=full_reactions,
+        increase=increase,
     )
 
     post = posts[0] if posts else None

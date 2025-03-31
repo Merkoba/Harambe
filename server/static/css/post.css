@@ -254,7 +254,7 @@ a.link:hover,
     padding-right: var(--react_padding);
     max-height: 20rem;
     overflow: auto;
-    min-width: 5rem;
+    min-width: 6rem;
 }
 
 .reaction_content {

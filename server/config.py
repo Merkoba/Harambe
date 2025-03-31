@@ -491,6 +491,12 @@ class Config:
         # Remove metadata from files
         self.remove_metadata = True
 
+        # Mark private posts URLs
+        self.mark_private_posts = True
+
+        # Private posts mark
+        self.private_posts_mark = "priv"
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

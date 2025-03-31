@@ -267,6 +267,7 @@ def get_posts(
     extra: bool = True,
     full_reactions: bool = False,
     increase: bool = False,
+    names: list[str] | None = None,
     ignore_ids: list[int] | None = None,
     only_public: bool = False,
     oconn: Connection | None = None,
@@ -278,6 +279,10 @@ def get_posts(
     if post_id:
         c.execute(f"select * from posts where id = ?{pub}", (post_id,))
         rows = [c.fetchone()]
+    elif names:
+        placeholders = ", ".join("?" for _ in names)
+        c.execute(f"select * from posts where name in ({placeholders}){pub}", names)
+        rows = c.fetchall()
     elif name:
         c.execute(f"select * from posts where name = ?{pub}", (name,))
         rows = [c.fetchone()]
