@@ -8,10 +8,10 @@ require "json"
 require "open3"
 
 # Default values
-url = "https://someurl.com"
-username = "someusername"
-password = "somepassword"
-endpoint = "apiupload"
+url = "http://locahost:4040"
+username = "yo"
+password = "deepwoodz"
+endpoint = "205bpm"
 
 # Arguments
 prompt = false
@@ -154,14 +154,13 @@ response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https
   http.request(request)
 end
 
-response_body = response.body
+body = response.body
 
-# Check if the response starts with "post/"
-if response_body.start_with?("post/")
-  full_url = "#{url}/#{response_body}"
+if response.is_a?(Net::HTTPSuccess)
+  full_url = "#{url}/post/#{body}"
   IO.popen(["xclip", "-selection", "clipboard"], "w") { |clipboard| clipboard.print full_url }
   puts "URL Copied: #{full_url}"
   system("awesome-client", 'Utils.msg("Harambe: Upload Complete")')
 else
-  puts response_body
+  puts body
 end
