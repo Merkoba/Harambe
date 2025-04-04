@@ -226,7 +226,7 @@ text_mtype = "text/plain"
 
 @app.route("/", methods=["POST", "GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-def show_upload() -> Any:
+def upload() -> Any:
     user = get_user()
 
     if request.method == "POST":
@@ -245,7 +245,8 @@ def show_upload() -> Any:
                 session["data"] = data
                 return redirect(url_for("message"))
 
-            return redirect(url_for("post", name=ans))
+            return redirect(f"/post/{ans}")
+
 
         except Exception as e:
             utils.error(e)
@@ -354,6 +355,8 @@ def post(name: str) -> Any:
         if not user:
             return over()
 
+    name = utils.decode(name)
+    name = name.split("?")[0]
     post = post_procs.get_post(name=name, full=True, increase=True, full_reactions=True)
 
     if not post:
@@ -467,6 +470,7 @@ def get_file(name: str, original: str | None = None) -> Any:
         return over()
 
     rootdir = utils.files_dir()
+
     return send_file(
         rootdir / post.full, download_name=original, max_age=config.max_age
     )
