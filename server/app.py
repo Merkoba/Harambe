@@ -247,7 +247,6 @@ def upload() -> Any:
 
             return redirect(f"/post/{ans}")
 
-
         except Exception as e:
             utils.error(e)
             return over()
