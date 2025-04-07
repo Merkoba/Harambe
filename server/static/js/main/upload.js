@@ -791,7 +791,6 @@ App.setup_dragdrop = () => {
 
       input.files = dataTransfer.files
       App.check_multi_files(input)
-      App.add_picker()
     }
 
     App.on_picker_change()
