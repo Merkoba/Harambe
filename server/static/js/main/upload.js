@@ -424,7 +424,7 @@ App.check_media_magic = (what) => {
   let checkbox = DOM.el(`#${what}_magic`)
 
   if (!checkbox) {
-    return
+    return false
   }
 
   let files = App.get_active_files()
@@ -544,6 +544,10 @@ App.check_magic = () => {
   }
 
   if (DOM.el(`#zip`).checked) {
+    return true
+  }
+
+  if (App.get_texts().length) {
     return true
   }
 

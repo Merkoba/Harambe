@@ -159,7 +159,7 @@ def fill_session(user: User) -> None:
 
 
 def def_url() -> Any:
-    return redirect(url_for("show_upload"))
+    return redirect(url_for("upload"))
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
