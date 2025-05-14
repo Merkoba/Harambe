@@ -638,7 +638,18 @@ App.set_title = (title) => {
 }
 
 App.check_file_media = (file) => {
+  if (!file) {
+    App.reset_file()
+    return
+  }
+
   let the_file = file.files[0]
+
+  if (!the_file) {
+    App.reset_file()
+    return
+  }
+
   let image = DOM.el(`#image`)
   let video = DOM.el(`#video`)
 
