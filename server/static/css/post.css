@@ -328,6 +328,8 @@ a.link:hover,
     overflow: auto;
     overflow-x: hidden;
     background-color: var(--contrast_background);
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
 }
 
 #markdown.max {
