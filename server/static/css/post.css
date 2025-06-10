@@ -326,6 +326,7 @@ a.link:hover,
     max-width: 50rem;
     max-height: 33rem;
     overflow: auto;
+    overflow-x: hidden;
     background-color: var(--contrast_background);
 }
 
