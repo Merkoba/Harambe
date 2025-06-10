@@ -882,6 +882,7 @@ App.start_editor = async () => {
   App.editor.setOptions({
     wrap: App.wrapped(),
     highlightGutterLine: false,
+    showInvisibles: false,
     maxLines: 25,
   })
 }

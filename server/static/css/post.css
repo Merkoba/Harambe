@@ -381,6 +381,10 @@ a.link:hover,
     display: none;
 }
 
+.ace_invisible {
+    opacity: 0 !important;
+}
+
 #youtube_container {
     margin-top: var(--media_margin);
 }

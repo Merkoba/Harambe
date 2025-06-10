@@ -406,8 +406,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         if mode == "normal":
             return True, existing
 
-        return True, f"post/{existing}"
-
     try:
         if ext:
             full_name = post_name + ext
