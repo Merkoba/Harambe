@@ -324,7 +324,6 @@ a.link:hover,
 #markdown {
     width: 50rem;
     max-width: 50rem;
-    height: 33rem;
     max-height: 33rem;
     overflow: auto;
     background-color: var(--contrast_background);
