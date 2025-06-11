@@ -912,6 +912,9 @@ App.start_embed = () => {
   if (App.post.mtype === `text/markdown`) {
     App.start_markdown()
   }
+  else if (App.is_application()) {
+    App.start_flash()
+  }
   else if (App.post.text) {
     if (App.post.zip_embed) {
       //
@@ -926,11 +929,6 @@ App.start_embed = () => {
     }
     else {
       App.start_editor()
-    }
-  }
-  else if (App.post.mtype.startsWith(`application`)) {
-    if (App.post.mtype.includes(`flash`)) {
-      App.start_flash()
     }
   }
 
@@ -1198,4 +1196,14 @@ App.reversed = () => {
 
 App.wrapped = () => {
   return App.storage_value(`wrapped_editor`, true)
+}
+
+App.is_application = () => {
+  if (App.post.mtype.startsWith(`application`)) {
+    if (App.post.mtype.includes(`flash`)) {
+      return true
+    }
+  }
+
+  return false
 }

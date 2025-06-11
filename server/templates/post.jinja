@@ -27,7 +27,12 @@
             <div class="sep">|</div>
             {% endif %}
 
-            {% if post.text %}
+            {% if post.flash_embed %}
+                <div class="rowitem nowrap">
+                    <div id="max" data-max_type="flash" class="button" title="Maximize the flash player">Max</div>
+                    <div class="sep">|</div>
+                </div>
+            {% elif post.text %}
                 {% if post.youtube_id %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="youtube" class="button" title="Maximize the video">Max</div>
@@ -53,11 +58,6 @@
                 {% elif post.video_embed or post.audio_embed %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="video" class="button" title="Maximize the video">Max</div>
-                    <div class="sep">|</div>
-                </div>
-                {% elif post.flash_embed and (not post.text) %}
-                <div class="rowitem nowrap">
-                    <div id="max" data-max_type="flash" class="button" title="Maximize the flash player">Max</div>
                     <div class="sep">|</div>
                 </div>
                 {% endif %}
@@ -134,7 +134,9 @@
         </div>
     </div>
 
-    {% if post.text %}
+    {% if post.flash_embed %}
+        <div id="flash_container" class="embed"></div>
+    {% elif post.text %}
         {% if post.is_url %}
             {% if post.youtube_id %}
             <div id="youtube_container"></div>
@@ -183,8 +185,6 @@
             {% endif %}
             </video>
         </div>
-        {% elif post.flash_embed %}
-        <div id="flash_container" class="embed"></div>
         {% endif %}
     {% endif %}
 

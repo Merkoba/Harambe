@@ -39,6 +39,8 @@ def make_sample(
             get_audio_sample(path)
         elif utils.is_text_file(path):
             get_text_sample(path)
+        else:
+            get_application_sample(path, files)
     except Exception:
         try:
             utils.error("Failed to get sample #1")
@@ -336,6 +338,19 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
 
     sample = "\n".join(lines)
     sample = sample[: config.sample_zip_chars].strip()
+    sample_name = f"{path.stem}.txt"
+    sample_path = utils.samples_dir() / Path(sample_name)
+    sample_path.write_text(sample)
+
+
+def get_application_sample(path: Path, files: list[FileStorage]) -> None:
+    names = []
+
+    for file in files:
+        filename = Path(file.filename).name
+        names.append(filename)
+
+    sample = "\n".join(names)
     sample_name = f"{path.stem}.txt"
     sample_path = utils.samples_dir() / Path(sample_name)
     sample_path.write_text(sample)
