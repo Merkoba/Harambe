@@ -1139,6 +1139,16 @@ App.edit_privacy = async (privacy) => {
 App.update_privacy = () => {
   let privacy = DOM.el(`#privacy`)
   privacy.textContent = App.capitalize(App.post.privacy)
+  let url = new URL(window.location.href)
+
+  if (App.post.privacy !== `private`) {
+    url.searchParams.delete(`priv`)
+  }
+  else {
+    url.searchParams.set(`priv`, `true`)
+  }
+
+  window.history.replaceState({}, document.title, url.toString())
 }
 
 App.start_youtube = () => {
