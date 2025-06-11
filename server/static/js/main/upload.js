@@ -244,7 +244,7 @@ App.file_trigger = () => {
   }
 }
 
-App.get_empty_picker = () => {
+App.get_empty_picker = (fallback = true) => {
   let files = DOM.els(`.picker_file`)
   files = files.slice(0).reverse()
 
@@ -254,7 +254,9 @@ App.get_empty_picker = () => {
     }
   }
 
-  return files[0]
+  if (fallback) {
+    return files[0]
+  }
 }
 
 App.remove_picker = (picker) => {
@@ -970,9 +972,15 @@ App.setup_description = () => {
 }
 
 App.check_multi_files = (input) => {
+  let empty = App.get_empty_picker(false)
+
   if (input.files.length <= 1) {
     App.reflect_file(input)
-    App.add_picker()
+
+    if (!empty) {
+      App.add_picker()
+    }
+
     return
   }
 
@@ -994,7 +1002,10 @@ App.check_multi_files = (input) => {
   }
 
   App.reflect_file()
-  App.add_picker()
+
+  if (!empty) {
+    App.add_picker()
+  }
 }
 
 App.file_title = (input) => {
