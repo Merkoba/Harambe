@@ -188,6 +188,7 @@ App.delete_post = async () => {
   if (response.ok) {
     let icon = App.icon(`deleted`)
     DOM.el(`#title`).textContent = `DELETED ${icon}`
+    clearInterval(App.refresh_interval)
   }
   else {
     App.feedback(response)
