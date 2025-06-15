@@ -88,6 +88,7 @@ a.link:hover,
     width: 46rem;
     max-width: 90%;
     height: auto;
+    max-height: 42rem;
     background-color: black;
     margin-top: var(--media_margin);
 }
