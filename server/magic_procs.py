@@ -57,7 +57,7 @@ def is_image_magic(request: Request, file: FileStorage) -> bool:
     if not utils.get_checkbox(request, "image_magic"):
         return False
 
-    return config.image_magic_enabled and utils.is_image_file(file, True)
+    return config.image_magic_enabled and utils.is_image_file(file, True, ignore_gif=True)
 
 
 def is_audio_magic(request: Request, file: FileStorage) -> bool:
