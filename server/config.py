@@ -173,12 +173,12 @@ class Config:
 
         # Max size in megabytes to consider files for media embeds
         # Make it 0 to allow any size
-        self.embed_max_size_image: int = 100
-        self.embed_max_size_video: int = 100
-        self.embed_max_size_audio: int = 100
-        self.embed_max_size_flash: int = 100
-        self.embed_max_size_text: int = 100
-        self.embed_max_size_markdown: int = 100
+        self.embed_max_size_image: int = 200
+        self.embed_max_size_video: int = 200
+        self.embed_max_size_audio: int = 200
+        self.embed_max_size_flash: int = 200
+        self.embed_max_size_text: int = 200
+        self.embed_max_size_markdown: int = 200
 
         # Users can edit their own posts
         self.allow_edit: bool = True
