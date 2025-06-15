@@ -647,12 +647,13 @@ App.toggle_max = (what) => {
 }
 
 App.resize_max = () => {
-  let el = DOM.el(`#${App.max_id}`)
   let w_width = window.innerWidth
+  let main = DOM.el(`#main`)
+  let left_space = main.getBoundingClientRect().left
+  let top_space = main.getBoundingClientRect().top
   let w_height = window.innerHeight
-  let v_rect = el.getBoundingClientRect()
-  let v_width = w_width - v_rect.left - 20
-  let v_height = w_height - v_rect.top - 20
+  let v_width = w_width - left_space - 20
+  let v_height = w_height - top_space - 70
   App.set_css_var(`max_width`, `${v_width}px`)
   App.set_css_var(`max_height`, `${v_height}px`)
 }
