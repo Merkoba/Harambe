@@ -1072,3 +1072,13 @@ def edit_reaction() -> Any:
 @admin_required
 def delete_all_reactions() -> Any:
     return react_procs.delete_all_reactions()
+
+
+# DATA
+
+
+@app.route("/data/<string:name>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def get_data(name: str) -> Any:
+    return post_procs.get_data(name)

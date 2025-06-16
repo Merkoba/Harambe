@@ -6,6 +6,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+# Libraries
+from flask import jsonify
+
 # Modules
 import utils
 import database
@@ -708,3 +711,30 @@ def can_edit_post(ids: list[int], user: User) -> bool:
             return False
 
     return True
+
+
+# Return a json response on flask
+def get_data(name: str) -> Any:
+    if not name:
+        return jsonify({"error": "Post id is required"})
+
+    post = get_post(name=name)
+
+    if not post:
+        return jsonify({"error": "Post not found"})
+
+    if post:
+        return jsonify(
+            {
+                "id": post.id,
+                "name": post.name,
+                "full": post.full,
+                "ext": post.ext,
+                "mtype": post.mtype,
+                "size": post.size,
+                "views": post.views,
+                "title": post.title,
+                "description": post.description,
+                "privacy": post.privacy,
+            }
+        )
