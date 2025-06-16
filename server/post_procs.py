@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 # Libraries
-from flask import jsonify
+from flask import jsonify  # type: ignore
 
 # Modules
 import utils
@@ -723,18 +723,17 @@ def get_data(name: str) -> Any:
     if not post:
         return jsonify({"error": "Post not found"})
 
-    if post:
-        return jsonify(
-            {
-                "id": post.id,
-                "name": post.name,
-                "full": post.full,
-                "ext": post.ext,
-                "mtype": post.mtype,
-                "size": post.size,
-                "views": post.views,
-                "title": post.title,
-                "description": post.description,
-                "privacy": post.privacy,
-            }
-        )
+    return jsonify(
+        {
+            "id": post.id,
+            "name": post.name,
+            "full": post.full,
+            "ext": post.ext,
+            "mtype": post.mtype,
+            "size": post.size,
+            "views": post.views,
+            "title": post.title,
+            "description": post.description,
+            "privacy": post.privacy,
+        }
+    )

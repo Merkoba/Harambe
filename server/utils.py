@@ -409,7 +409,9 @@ def is_media_file(what: str, file: FileStorage, ignore: list[str]) -> bool:
     return ct.startswith(f"{what}/") and (not any(ct == f"{what}/{g}" for g in ignore))
 
 
-def is_image_file(file: FileStorage, lossless: bool = False, ignore_gif: bool = False) -> bool:
+def is_image_file(
+    file: FileStorage, lossless: bool = False, ignore_gif: bool = False
+) -> bool:
     if lossless:
         ignore = [
             "jpeg",
