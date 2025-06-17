@@ -207,6 +207,19 @@ def common_list_configs(user: User | None = None) -> dict[str, Any]:
     }
 
 
+def random_func(request: Request, action: Callable[[], Post]) -> Any:
+    json = request.args.get("json", "") == "true"
+    post = action()
+
+    if post:
+        if json:
+            return post_procs.post_to_json(post)
+
+        return redirect(url_for("post", name=post.name))
+
+    return over()
+
+
 limiter = Limiter(
     get_remote_address,
     app=app,
@@ -440,6 +453,42 @@ def random_post() -> Any:
         return redirect(url_for("post", name=post.name))
 
     return over()
+
+
+@app.route("/random_video", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@reader_required
+def random_video() -> Any:
+    action = lambda: post_procs.get_random_video_post()
+    return random_func(request, action)
+
+
+@app.route("/random_image", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@reader_required
+def random_image() -> Any:
+    action = lambda: post_procs.get_random_image_post()
+    return random_func(request, action)
+
+
+@app.route("/random_audio", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@reader_required
+def random_audio() -> Any:
+    action = lambda: post_procs.get_random_audio_post()
+    return random_func(request, action)
+
+
+@app.route("/random_media", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@reader_required
+def random_media() -> Any:
+    action = lambda: post_procs.get_random_media_post()
+    return random_func(request, action)
 
 
 # FILES

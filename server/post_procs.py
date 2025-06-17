@@ -419,6 +419,42 @@ def get_random_post(used_ids: list[int]) -> Post | None:
     return None
 
 
+def get_random_video_post() -> Post | None:
+    db_post = database.get_random_video_post()
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
+
+
+def get_random_audio_post() -> Post | None:
+    db_post = database.get_random_audio_post()
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
+
+
+def get_random_image_post() -> Post | None:
+    db_post = database.get_random_image_post()
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
+
+
+def get_random_media_post() -> Post | None:
+    db_post = database.get_random_media_post()
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
+
+
 def delete_posts(ids: list[int]) -> tuple[str, int]:
     if not ids:
         return utils.bad("Post ids were not provided")
@@ -760,6 +796,10 @@ def get_data(name: str) -> Any:
     if not post:
         return jsonify({"error": "Post not found"})
 
+    return post_to_json(post)
+
+
+def post_to_json(post: Post) -> dict[str, Any]:
     return jsonify(
         {
             "id": post.id,

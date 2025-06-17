@@ -3,6 +3,7 @@ from __future__ import annotations
 # Standard
 import sys
 import sqlite3
+import random
 from typing import Any
 from pathlib import Path
 from dataclasses import dataclass, field
@@ -626,6 +627,43 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
         return make_post(dict(row))
 
     return None
+
+
+def get_post_by_ext(exts: list[str]) -> Post | None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    query = "select * from posts where ext in ({}) order by random() limit 1"
+    placeholders = ", ".join("?" for _ in exts)
+    c.execute(query.format(placeholders), exts)
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_post(dict(row))
+
+    return None
+
+
+def get_random_video_post() -> Post | None:
+    exts = ["mp4", "webm"]
+    return get_post_by_ext(exts)
+
+
+def get_random_audio_post() -> Post | None:
+    exts = ["mp3", "ogg", "flac", "wav"]
+    return get_post_by_ext(exts)
+
+
+def get_random_image_post() -> Post | None:
+    exts = ["jpg", "jpeg", "png", "gif", "webp"]
+    return get_post_by_ext(exts)
+
+
+def get_random_media_post() -> Post | None:
+    if random.randint(0, 1) == 0:
+        return get_random_video_post()
+
+    return get_random_image_post()
 
 
 def update_file_size(name: str, size: int) -> None:
