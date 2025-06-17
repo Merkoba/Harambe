@@ -442,7 +442,6 @@ def next_post(current: str) -> Any:
 @app.route("/random", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@reader_required
 def random_post() -> Any:
     used_ids = session["used_ids"] if "used_ids" in session else []
     post = post_procs.get_random_post(used_ids)
@@ -458,7 +457,6 @@ def random_post() -> Any:
 @app.route("/random_video", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@reader_required
 def random_video() -> Any:
     action = lambda: post_procs.get_random_video_post()
     return random_func(request, action)
@@ -467,7 +465,6 @@ def random_video() -> Any:
 @app.route("/random_image", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@reader_required
 def random_image() -> Any:
     action = lambda: post_procs.get_random_image_post()
     return random_func(request, action)
@@ -476,7 +473,6 @@ def random_image() -> Any:
 @app.route("/random_audio", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@reader_required
 def random_audio() -> Any:
     action = lambda: post_procs.get_random_audio_post()
     return random_func(request, action)
@@ -485,7 +481,6 @@ def random_audio() -> Any:
 @app.route("/random_media", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-@reader_required
 def random_media() -> Any:
     action = lambda: post_procs.get_random_media_post()
     return random_func(request, action)
