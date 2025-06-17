@@ -812,6 +812,7 @@ def post_to_json(post: Post) -> dict[str, Any]:
             "title": post.title,
             "description": post.description,
             "privacy": post.privacy,
+            "filename": post.original_full,
         }
     )
 
