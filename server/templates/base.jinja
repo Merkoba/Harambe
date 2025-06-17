@@ -37,6 +37,7 @@
             App.show_menu_icons = {{show_menu_icons | default(0) | tojson}}
             App.max_pastebin_length = {{max_pastebin_length | default(0)}}
             App.max_description_length = {{max_description_length | default(0)}}
+            App.max_filename_length = {{max_filename_length | default(0)}}
 
             {% if post %}
             App.post = {}
@@ -153,6 +154,7 @@
                 <div id="edit_post_opts_delete" class="aero_button">Delete</div>
                 <div id="edit_post_opts_title" class="aero_button">Edit Title</div>
                 <div id="edit_post_opts_description" class="aero_button">Edit Description</div>
+                <div id="edit_post_opts_filename" class="aero_button">Edit Filename</div>
                 <div id="edit_post_opts_privacy" class="aero_button">Edit Privacy</div>
             </div>
         </template>

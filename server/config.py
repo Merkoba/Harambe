@@ -449,6 +449,9 @@ class Config:
         # Icon for desc
         self.icon_for_desc = "📉"
 
+        # Icon for filename
+        self.icon_for_filename = "💾"
+
         # Max captcha time
         self.max_captcha_time = 180
 
@@ -478,6 +481,9 @@ class Config:
 
         # Max length for descriptions
         self.max_description_length = 10_000
+
+        # Max filename length
+        self.max_filename_length = 100
 
         # Allow same URL posts
         self.allow_same_value = False

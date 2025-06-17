@@ -288,6 +288,26 @@ def clean_filename(name: str) -> str:
     return re.sub(r"[^a-zA-Z0-9_-]", "", name)[:50].strip()
 
 
+def ext_split(name: str) -> list[str]:
+    return name.rsplit(".", 1)
+
+
+def clean_full_filename(name: str) -> str:
+    split = ext_split(name)
+
+    if len(split) == 1:
+        return clean_filename(split[0])
+
+    stem, ext = split
+    stem = clean_filename(stem)
+    ext = clean_filename(ext).lower()
+
+    if not ext:
+        return stem
+
+    return f"{stem}.{ext}"
+
+
 def decode(s: str) -> str:
     return str(urllib.parse.unquote(s))
 

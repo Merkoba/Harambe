@@ -617,6 +617,44 @@ def edit_post_description(
     return utils.ok("Description updated", {"description": description})
 
 
+def edit_post_filename(ids: list[int], filename: str, user: User) -> tuple[str, int]:
+    if not ids:
+        return utils.bad("Missing ids")
+
+    filename = utils.clean_full_filename(filename)
+
+    if len(filename) > config.max_filename_length:
+        return utils.bad("Filename is too long")
+
+    if not can_edit_post(ids, user):
+        return utils.bad("You can't edit this")
+
+    original, ext = utils.ext_split(filename)
+
+    for post_id in ids:
+        posts = database.get_posts(post_id)
+        post = posts[0] if posts else None
+
+        if not post:
+            return utils.bad("Post not found")
+
+        if (not filename) and (post.mtype == "mode/talk"):
+            return utils.bad("Filename can't be empty")
+
+        if original:
+            database.edit_post_original(post_id, original)
+
+        if ext:
+            database.edit_post_ext(post_id, ext)
+
+        old_filename = get_original_name(post.original, post)
+        rename_file(old_filename, filename)
+
+    return utils.ok(
+        "Filename updated", {"original": original, "original_full": filename}
+    )
+
+
 def edit_post_privacy(ids: list[int], privacy: str, user: User) -> tuple[str, int]:
     if not ids:
         return utils.bad("Missing ids")
@@ -713,7 +751,6 @@ def can_edit_post(ids: list[int], user: User) -> bool:
     return True
 
 
-# Return a json response on flask
 def get_data(name: str) -> Any:
     if not name:
         return jsonify({"error": "Post id is required"})
@@ -737,3 +774,25 @@ def get_data(name: str) -> Any:
             "privacy": post.privacy,
         }
     )
+
+
+def rename_file(old_name: str, new_name: str) -> None:
+    if not old_name or not new_name:
+        return
+
+    old_path = utils.files_dir() / old_name
+    new_path = utils.files_dir() / new_name
+
+    if not old_path.exists():
+        return
+
+    if old_path == new_path:
+        return
+
+    if new_path.exists():
+        return
+
+    try:
+        old_path.rename(new_path)
+    except OSError as e:
+        utils.log(f"Error renaming file {old_name} to {new_name}: {e}")

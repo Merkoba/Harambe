@@ -174,6 +174,48 @@ App.edit_description = () => {
   App.prompt_text(prompt_args)
 }
 
+App.edit_filename = () => {
+  let prompt_args = {
+    placeholder: `Edit Filename`,
+    value: App.post.original_full,
+    max: App.max_filename_length,
+    callback: async (filename) => {
+      filename = filename.trimEnd()
+
+      if (filename === App.post.filename) {
+        return
+      }
+
+      if (!filename) {
+        App.popmsg(`Filename can't be empty`)
+        return
+      }
+
+      App.flash(`Editing`)
+      let ids = [App.post.id]
+
+      let response = await fetch(`/edit_filename`, {
+        method: `POST`,
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        body: JSON.stringify({ids, filename}),
+      })
+
+      App.close_flash()
+
+      if (response.ok) {
+        App.reload()
+      }
+      else {
+        App.feedback(response)
+      }
+    },
+  }
+
+  App.prompt_text(prompt_args)
+}
+
 App.delete_post = async () => {
   let post_id = App.post.id
 

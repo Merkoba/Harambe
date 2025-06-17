@@ -929,6 +929,10 @@ App.setup_edit_post_opts = (show = false) => {
       App.edit_description()
     }, undefined, App.icon(`edit`))
 
+    App.bind_button(`${name}_opts_filename`, () => {
+      App.edit_filename()
+    }, undefined, App.icon(`filename`))
+
     App.bind_button(`${name}_opts_privacy`, () => {
       App.setup_edit_privacy_opts(true, name)
     }, undefined, `>`)
@@ -1534,4 +1538,8 @@ App.is_filename = (str) => {
   }
 
   return true
+}
+
+App.reload = () => {
+  window.location.reload()
 }

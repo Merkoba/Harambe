@@ -402,6 +402,22 @@ def edit_post_description(post_id: int, description: str) -> None:
     conn.close()
 
 
+def edit_post_original(post_id: int, original: str) -> None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    c.execute("update posts set original = ? where id = ?", (original, post_id))
+    conn.commit()
+    conn.close()
+
+
+def edit_post_ext(post_id: int, ext: str) -> None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    c.execute("update posts set ext = ? where id = ?", (ext, post_id))
+    conn.commit()
+    conn.close()
+
+
 def edit_post_privacy(post_id: int, privacy: str) -> None:
     connection = get_conn()
     conn, c = connection.tuple()

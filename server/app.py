@@ -693,6 +693,26 @@ def edit_description() -> Any:
     return post_procs.edit_post_description(ids, description, user=user)
 
 
+@app.route("/edit_filename", methods=["POST"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@login_required
+def edit_filename() -> Any:
+    data = request.get_json()
+    ids = data.get("ids", None)
+
+    if not ids:
+        return error_json
+
+    filename = data.get("filename", "")
+    user = get_user()
+
+    if not user:
+        return error_json
+
+    return post_procs.edit_post_filename(ids, filename, user=user)
+
+
 @app.route("/edit_privacy", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
