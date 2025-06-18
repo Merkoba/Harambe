@@ -343,3 +343,25 @@ Install `exiftool` in your system to allow metadata removal to work.
 The package is usually called `perl-image-exiftool` or `libimage-exiftool-perl`.
 
 This strips all metadata from files except `rotation`.
+
+---
+
+## Other endpoints
+
+/data/somename
+
+/random_media
+
+/random_video
+
+/random_audio
+
+/random_image
+
+/random_media?json=true
+
+/random_video?json=true
+
+/random_audio?json=true
+
+/random_image?json=true
