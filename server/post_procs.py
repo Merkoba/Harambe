@@ -799,7 +799,7 @@ def get_data(name: str) -> Any:
     return post_to_json(post)
 
 
-def post_to_json(post: Post) -> dict[str, Any]:
+def post_to_json(post: Post) -> Any:
     return jsonify(
         {
             "id": post.id,

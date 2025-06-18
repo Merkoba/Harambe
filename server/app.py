@@ -207,7 +207,10 @@ def common_list_configs(user: User | None = None) -> dict[str, Any]:
     }
 
 
-def random_func(request: Request, action: Callable[[], Post]) -> Any:
+def random_func(request: request, action: Callable[[], Post | None]) -> Any:
+    if action is None:
+        return over()
+
     json = request.args.get("json", "") == "true"
     post = action()
 

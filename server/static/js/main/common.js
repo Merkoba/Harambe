@@ -876,7 +876,7 @@ App.bind_button = (what, func, mfunc, submenu = ``) => {
   el.appendChild(text)
 
   if (submenu && App.show_menu_icons) {
-    let sub = DOM.create(`div`, `aero_arrow`)
+    let sub = DOM.create(`div`, `aero_arrow menu_icon`)
     sub.textContent = submenu
     el.appendChild(sub)
   }
@@ -935,7 +935,7 @@ App.setup_edit_post_opts = (show = false) => {
 
     App.bind_button(`${name}_opts_privacy`, () => {
       App.setup_edit_privacy_opts(true, name)
-    }, undefined, `>`)
+    }, undefined, App.icon(App.post.privacy))
 
     App.bind_button(`${name}_opts_delete`, () => {
       let confirm_args = {
@@ -1542,4 +1542,10 @@ App.is_filename = (str) => {
 
 App.reload = () => {
   window.location.reload()
+}
+
+App.change_menu_icon = (what, value) => {
+  let menu_item = DOM.el(`#${what}`)
+  let icon = DOM.el(`.menu_icon`, menu_item)
+  icon.textContent = value
 }

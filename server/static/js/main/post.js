@@ -1190,6 +1190,7 @@ App.update_privacy = () => {
     url.searchParams.set(`priv`, `true`)
   }
 
+  App.change_menu_icon(`edit_post_opts_privacy`, App.icon(App.post.privacy))
   window.history.replaceState({}, document.title, url.toString())
 }
 
