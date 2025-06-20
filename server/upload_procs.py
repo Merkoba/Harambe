@@ -295,13 +295,6 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Upload is too big")
 
     post_name = get_name(user)
-
-    if make_zip and title and (len(files) > 1):
-        original = title
-    else:
-        original = Path(files[0].filename).stem
-
-    original = utils.clean_filename(original)
     zip_archive = utils.get_checkbox(request, "zip")
 
     image_magic = False
@@ -425,6 +418,13 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     if not mtype:
         mt, _ = mimetypes.guess_type(path)
         mtype = mt or ""
+
+    if zip_archive and title and (len(files) > 1):
+        original = title
+    else:
+        original = Path(files[0].filename).stem
+
+    original = utils.clean_filename(original)
 
     database.add_post(
         user_id=user.id,
