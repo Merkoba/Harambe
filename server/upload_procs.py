@@ -295,7 +295,13 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error("Upload is too big")
 
     post_name = get_name(user)
-    original = utils.clean_filename(Path(files[0].filename).stem)
+
+    if make_zip and title and (len(files) > 1):
+        original = title
+    else:
+        original = Path(files[0].filename).stem
+
+    original = utils.clean_filename(original)
     zip_archive = utils.get_checkbox(request, "zip")
 
     image_magic = False
@@ -407,11 +413,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
             return True, existing
 
     try:
-        if ext:
-            full_name = post_name + ext
-        else:
-            full_name = post_name
-
+        full_name = post_name + ext if ext else post_name
         path = utils.files_dir() / Path(full_name)
         path.write_bytes(content)
     except Exception as e:
