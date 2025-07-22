@@ -26,6 +26,9 @@ App.setup_keyboard = () => {
     if (e.code.startsWith(`Digit`)) {
       n = parseInt(e.code.replace(`Digit`, ``), 10)
     }
+    else if (e.code.startsWith(`Numpad`)) {
+      n = parseInt(e.code.replace(`Numpad`, ``), 10)
+    }
 
     if (e.key === `Enter`) {
       if (Popmsg.instance && Popmsg.instance.msg.is_open()) {
