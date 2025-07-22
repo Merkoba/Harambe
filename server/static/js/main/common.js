@@ -331,14 +331,20 @@ App.setup_sort_opts = (show = false) => {
   let name = `sort`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_asc`, () => {
-      let what = App.sort_what
-      App.sort_action(what)
-    }, undefined, App.icon(`asc`))
+    App.bind_button(`${name}_opts_asc_all`, () => {
+      App.sort_action(App.sort_what, false, false)
+    }, undefined, App.icon(`asc`, false))
 
-    App.bind_button(`${name}_opts_desc`, () => {
-      let what = App.sort_what
-      App.sort_action(what, true)
+    App.bind_button(`${name}_opts_desc_all`, () => {
+      App.sort_action(App.sort_what, true)
+    }, undefined, App.icon(`desc`))
+
+    App.bind_button(`${name}_opts_asc_page`, () => {
+      App.sort_action(App.sort_what, false, true)
+    }, undefined, App.icon(`asc`, false))
+
+    App.bind_button(`${name}_opts_desc_page`, () => {
+      App.sort_action(App.sort_what, true, true)
     }, undefined, App.icon(`desc`))
   }, show)
 }

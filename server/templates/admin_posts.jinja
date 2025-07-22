@@ -108,64 +108,67 @@
         {% endif %}
     </div>
 
-    {% for item in items %}
-    <div class="table_row item" data-post="{{item.name}}"
-    data-ext="{{item.ext}}" data-size="{{item.size}}" data-user_id="{{item.user_id}}"
-    data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-size="{{item.size}}" data-post_id="{{item.id}}"
-    data-size_str="{{item.size_str}}" data-title="{{item.title}}" data-original="{{item.original}}"
-    data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views_str}}"
-    data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}" data-username="{{item.username}}"
-    data-privacy="{{item.privacy_str}}" data-description="{{item.description}}" data-value="{{item.value}}">
-        {% if mode == "admin_posts" %}
-        <!-- Checkbox -->
-        <div class="table_cell checkbox" title="Select this item">
-            <input class="select_checkbox" type="checkbox">
+    <div id="items_container">
+        {% for item in items %}
+        <div class="table_row item" data-post="{{item.name}}"
+        data-ext="{{item.ext}}" data-size="{{item.size}}" data-user_id="{{item.user_id}}"
+        data-date="{{item.date_3}}" data-ago="{{item.ago}}" data-post_id="{{item.id}}"
+        data-size_str="{{item.size_str}}" data-title="{{item.title or item.original}}" data-original="{{item.original}}"
+        data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views}}"
+        data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}" data-username="{{item.username}}"
+        data-privacy="{{item.privacy_str}}" data-description="{{item.description}}" data-value="{{item.value}}"
+        data-num_reactions="{{item.num_reactions}}">
+            {% if mode == "admin_posts" %}
+            <!-- Checkbox -->
+            <div class="table_cell checkbox" title="Select this item">
+                <input class="select_checkbox" type="checkbox">
+            </div>
+            {% endif %}
+
+            <!-- Sample -->
+            <div class="table_cell small sample">
+                <div title="Click to show the sample. Wheel can be used to scroll text">{{sample_icon}}</div>
+            </div>
+
+            <!-- Title -->
+            <div class="table_cell">
+                <a href="/post/{{item.name}}" title="{{item.title or item.original}}" class="button post_name">{{item.title or item.original}}</a>
+            </div>
+
+            <!-- Type -->
+            <div class="table_cell" title="{{item.value or item.description or item.original_full or item.mtype_str}}">
+                <div class="button mtype">{{item.mtype_str}}</div>
+            </div>
+
+            <!-- Size -->
+            <div class="table_cell" title="{{item.size_str}}">{{item.size_str}}</div>
+
+            <!-- User -->
+            {% if mode == "admin_posts" %}
+            <div class="table_cell" title="{{item.username}}">
+                <div class="uploader admin_user button">{{item.uploader_str}}</div>
+            </div>
+            {% else %}
+            <div class="table_cell" title="{{item.uploader_str}}">
+                <div class="uploader admin_user button">{{item.uploader_str}}</div>
+            </div>
+            {% endif %}
+
+            <!-- Date -->
+            <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
+
+            <!-- Views -->
+            <div class="table_cell small" title="{{item.views}}">{{item.views}}</div>
+
+            <!-- Reactions -->
+            <div class="table_cell small" title="{{item.last_reaction}}">{{item.num_reactions}}</div>
+
+            {% if mode == "admin_posts" %}
+            <!-- Listed -->
+            <div class="table_cell small" title="{{item.privacy_str}}">{{item.listed_str}}</div>
+            {% endif %}
         </div>
-        {% endif %}
-
-        <!-- Sample -->
-        <div class="table_cell small sample">
-            <div title="Click to show the sample. Wheel can be used to scroll text">{{sample_icon}}</div>
-        </div>
-
-        <!-- Title -->
-        <div class="table_cell">
-            <a href="/post/{{item.name}}" title="{{item.title or item.original}}" class="button post_name">{{item.title or item.original}}</a>
-        </div>
-
-        <!-- Type -->
-        <div class="table_cell" title="{{item.value or item.description or item.original_full or item.mtype_str}}">
-            <div class="button mtype">{{item.mtype_str}}</div>
-        </div>
-
-        <!-- Size -->
-        <div class="table_cell" title="{{item.size_str}}">{{item.size_str}}</div>
-
-        <!-- User -->
-        {% if mode == "admin_posts" %}
-        <div class="table_cell" title="{{item.username}}">
-            <div class="uploader admin_user button">{{item.uploader_str}}</div>
-        </div>
-        {% else %}
-        <div class="table_cell" title="{{item.uploader_str}}">
-            <div class="uploader admin_user button">{{item.uploader_str}}</div>
-        </div>
-        {% endif %}
-
-        <!-- Date -->
-        <div class="table_cell date" title="{{item.date_3}}">{{item.ago}}</div>
-
-        <!-- Views -->
-        <div class="table_cell small" title="{{item.views}}">{{item.views}}</div>
-
-        <!-- Reactions -->
-        <div class="table_cell small" title="{{item.last_reaction}}">{{item.num_reactions}}</div>
-
-        {% if mode == "admin_posts" %}
-        <!-- Listed -->
-        <div class="table_cell small" title="{{item.privacy_str}}">{{item.listed_str}}</div>
-        {% endif %}
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

@@ -509,16 +509,51 @@ App.delete_normal_users = async () => {
   }
 }
 
-App.sort_action = (what, desc = false) => {
-  if (desc) {
-    what = what + `_desc`
+App.sort_action = (what, desc = false, page = false) => {
+  if (page) {
+    let container = DOM.el(`#items_container`)
+    let items = App.get_items()
+
+    items.sort((a, b) => {
+      let value_a = a.dataset[what]
+      let value_b = b.dataset[what]
+
+      // Handle undefined/null values
+      if (!value_a && !value_b) return 0
+      if (!value_a) return desc ? -1 : 1
+      if (!value_b) return desc ? 1 : -1
+
+      // Try to parse as numbers first
+      let num_a = parseFloat(value_a)
+      let num_b = parseFloat(value_b)
+
+      if (!isNaN(num_a) && !isNaN(num_b)) {
+        return desc ? num_b - num_a : num_a - num_b
+      }
+
+      // Fall back to string comparison
+      let str_a = value_a.toString().toLowerCase()
+      let str_b = value_b.toString().toLowerCase()
+      return desc ? str_b.localeCompare(str_a) : str_a.localeCompare(str_b)
+    })
+
+    container.innerHTML = ``
+
+    for (let item of items) {
+      container.appendChild(item)
+    }
   }
   else {
-    what = what + `_asc`
-  }
+    if (desc) {
+      what = what + `_desc`
+    }
+    else {
+      what = what + `_asc`
+    }
 
-  let ms = App.mode_string()
-  App.location(`/${ms}?sort=${what}`)
+    let ms = App.mode_string()
+    App.location(`/${ms}?sort=${what}`)
+  }
 }
 
 App.do_sort = (what) => {
