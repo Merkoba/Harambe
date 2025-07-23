@@ -102,67 +102,70 @@
         </div>
     </div>
 
-    {% for item in items %}
-    <div class="table_row item"
-    data-user_id="{{item.id}}"
-    data-username="{{item.username}}"
-    data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}"
-    data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}"
-    data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}"
-    data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}"
-    data-lister="{{item.lister_str}}" data-reacter="{{item.reacter_str}}" data-mage="{{item.mage_str}}"
-    data-num_posts="{{item.num_posts}}" data-num_reactions="{{item.num_reactions}}"
-    data-regdate_ago="{{item.regdate_ago}}" data-lastdate_ago="{{item.lastdate_ago}}">
-        <!-- Checkbox -->
-        <div class="table_cell checkbox" title="Select this item">
-            <input class="select_checkbox" type="checkbox">
+    <div id="items_container">
+        {% for item in items %}
+        <div class="table_row item"
+        data-user_id="{{item.id}}"
+        data-username="{{item.username}}"
+        data-name="{{item.name}}" data-rpm="{{item.rpm_fill}}"
+        data-max_size="{{item.max_size_fill}}" data-reader="{{item.reader_str}}"
+        data-mark="{{item.mark}}" data-reg_date="{{item.reg_date_str}}"
+        data-last_date="{{item.last_date_str}}" data-admin="{{item.admin_str}}"
+        data-lister="{{item.lister_str}}" data-reacter="{{item.reacter_str}}" data-mage="{{item.mage_str}}"
+        data-num_posts="{{item.num_posts}}" data-num_reactions="{{item.num_reactions}}"
+        data-regdate_ago="{{item.regdate_ago}}" data-lastdate_ago="{{item.lastdate_ago}}"
+        data-poster="{{item.poster_str}}" data-register_date="{{item.register_date_str}}">
+            <!-- Checkbox -->
+            <div class="table_cell checkbox" title="Select this item">
+                <input class="select_checkbox" type="checkbox">
+            </div>
+
+            <!-- Name -->
+            {% if item.mark %}
+            <div class="table_cell" title="{{item.username}} | {{item.mark}}">
+            {% else %}
+            <div class="table_cell" title="{{item.username}}">
+            {% endif%}
+                <div class="admin_user button">{{item.name or "-"}}</div>
+            </div>
+
+            <!-- RPM -->
+            <div class="table_cell small">{{item.rpm_fill}}</div>
+
+            <!-- Max Size -->
+            <div class="table_cell small">{{item.max_size_fill}}</div>
+
+            <!-- Admin -->
+            <div class="table_cell small">{{item.admin_str}}</div>
+
+            <!-- Poster -->
+            <div class="table_cell small">{{item.poster_str}}</div>
+
+            <!-- Reacter -->
+            <div class="table_cell small">{{item.reacter_str}}</div>
+
+            <!-- Lister -->
+            <div class="table_cell small">{{item.lister_str}}</div>
+
+            <!-- Reader -->
+            <div class="table_cell small">{{item.reader_str}}</div>
+
+            <!-- Mage -->
+            <div class="table_cell small">{{item.mage_str}}</div>
+
+            <!-- Posts -->
+            <div class="table_cell small">{{item.num_posts}}</div>
+
+            <!-- Reactions -->
+            <div class="table_cell small">{{item.num_reactions}}</div>
+
+            <!-- Register Date -->
+            <div class="table_cell" title="{{item.register_date_str}}">{{item.regdate_ago}}</div>
+
+            <!-- Last Date -->
+            <div class="table_cell" title="{{item.last_date_str}}">{{item.lastdate_ago}}</div>
         </div>
-
-        <!-- Name -->
-        {% if item.mark %}
-        <div class="table_cell" title="{{item.username}} | {{item.mark}}">
-        {% else %}
-        <div class="table_cell" title="{{item.username}}">
-        {% endif%}
-            <div class="admin_user button">{{item.name or "-"}}</div>
-        </div>
-
-        <!-- RPM -->
-        <div class="table_cell small">{{item.rpm_fill}}</div>
-
-        <!-- Max Size -->
-        <div class="table_cell small">{{item.max_size_fill}}</div>
-
-        <!-- Admin -->
-        <div class="table_cell small">{{item.admin_str}}</div>
-
-        <!-- Poster -->
-        <div class="table_cell small">{{item.poster_str}}</div>
-
-        <!-- Reacter -->
-        <div class="table_cell small">{{item.reacter_str}}</div>
-
-        <!-- Lister -->
-        <div class="table_cell small">{{item.lister_str}}</div>
-
-        <!-- Reader -->
-        <div class="table_cell small">{{item.reader_str}}</div>
-
-        <!-- Mage -->
-        <div class="table_cell small">{{item.mage_str}}</div>
-
-        <!-- Posts -->
-        <div class="table_cell small">{{item.num_posts}}</div>
-
-        <!-- Reactions -->
-        <div class="table_cell small">{{item.num_reactions}}</div>
-
-        <!-- Register Date -->
-        <div class="table_cell" title="{{item.register_date_str}}">{{item.regdate_ago}}</div>
-
-        <!-- Last Date -->
-        <div class="table_cell" title="{{item.last_date_str}}">{{item.lastdate_ago}}</div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}
