@@ -973,6 +973,19 @@ App.setup_edit_privacy_opts = (show = false, parent = ``) => {
   }, show, parent)
 }
 
+App.prev_post = (blank = false) => {
+  let url
+
+  if (App.post.name) {
+    url = `/prev/${App.post.name}`
+  }
+  else {
+    url = `/random`
+  }
+
+  App.goto_url(url, blank)
+}
+
 App.next_post = (blank = false) => {
   let url
 

@@ -427,6 +427,32 @@ def edit_post_privacy(post_id: int, privacy: str) -> None:
     conn.close()
 
 
+def get_prev_post(current: str) -> Post | None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    c.execute("select * from posts where name = ?", (current,))
+    row = c.fetchone()
+
+    if not row:
+        conn.close()
+        return None
+
+    post = make_post(dict(row))
+
+    c.execute(
+        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date > ? and privacy = 'public' order by p.date asc limit 1",
+        (post.date,),
+    )
+
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_post(dict(row))
+
+    return None
+
+
 def get_next_post(current: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()

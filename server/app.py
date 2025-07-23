@@ -429,6 +429,19 @@ def refresh() -> Any:
     return {"update": update}, 200
 
 
+@app.route("/prev/<string:current>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+@reader_required
+def prev_post(current: str) -> Any:
+    post = post_procs.get_prev_post(current)
+
+    if not post:
+        return over()
+
+    return redirect(url_for("post", name=post.name))
+
+
 @app.route("/next/<string:current>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()

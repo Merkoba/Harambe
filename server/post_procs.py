@@ -398,6 +398,18 @@ def get_post(
     return None
 
 
+def get_prev_post(name: str) -> Post | None:
+    if not name:
+        return None
+
+    db_post = database.get_prev_post(name)
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
+
+
 def get_next_post(name: str) -> Post | None:
     if not name:
         return None
