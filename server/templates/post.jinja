@@ -7,7 +7,7 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{request.url}}">
 <meta property="og:title" content="{{post.post_title or post.name}}">
-<meta property="og:description" content="{{post.description}}">
+<meta property="og:description" content="{{post.description or post.title or post.name}}">
 <meta property="og:site_name" content="{{main_title or 'Harambe'}}">
 <meta property="og:image" content="/sample/{{post.name}}">
 <meta property="article:author" content="{{post.uploader}}">
