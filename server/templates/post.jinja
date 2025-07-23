@@ -1,13 +1,13 @@
 {% extends "base.jinja" %}
 
 {% block head %}
-<meta name="description" content="{{post.description}}">
+<meta name="description" content="{{post.description or description}}">
 <title>{{post.post_title or post.name}}</title>
 
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{request.url}}">
 <meta property="og:title" content="{{post.post_title or post.name}}">
-<meta property="og:description" content="{{post.description or post.title or post.name}}">
+<meta property="og:description" content="{{post.description or description}}">
 <meta property="og:site_name" content="{{main_title or 'Harambe'}}">
 <meta property="og:image" content="/sample/{{post.name}}">
 <meta property="article:author" content="{{post.uploader}}">
