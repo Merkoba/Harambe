@@ -114,6 +114,18 @@ class Config:
         # Alt color for some text elements
         self.alt_color: str = "193, 234, 178"
 
+        # First background color for buttons
+        self.button_background_color_1: str = "69, 156, 198"
+
+        # Second background color for buttons
+        self.button_background_color_2: str = "93, 104, 80"
+
+        # Third background color for buttons
+        self.button_background_color_3: str = "129, 147, 108"
+
+        # Text color for buttons
+        self.button_text_color: str = "255, 255, 255"
+
         # Font family for the web interface
         self.font_family: str = "sans-serif"
 

@@ -163,9 +163,7 @@ def def_url() -> Any:
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
-    colors = {
-        key: getattr(config, key) for key in dir(config) if key.endswith("_color")
-    }
+    colors = {key: getattr(config, key) for key in dir(config) if "_color" in key}
 
     magics = {
         key: getattr(config, key)
