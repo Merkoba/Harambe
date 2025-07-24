@@ -85,7 +85,8 @@
 
     <!-- File -->
     <div id="details">
-        {% if dynamic_file_info and ((post.media_type == "talk") or (post.media_type == "url")) %}
+        {% if dynamic_file_info and
+        ((post.media_type == "talk") or (post.media_type == "url")) %}
         {# Don't show the file because it's not relevant #}
         {% else %}
         <div id="file" class="rowitem">
