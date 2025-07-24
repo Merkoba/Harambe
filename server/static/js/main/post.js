@@ -6,6 +6,9 @@ App.init = () => {
   App.max_on = false
   App.max_id = ``
   App.image_expanded = false
+  App.modal_image_container_id = `#Msg-content-container-modal_image`
+  App.modal_image_scroll_step = 80
+
   let edit = DOM.el(`#edit`)
 
   if (edit) {
@@ -953,12 +956,24 @@ App.keyboard_events = () => {
       if (e.ctrlKey && e.shiftKey) {
         App.edit_post()
       }
+      else if (App.image_expanded) {
+        App.scroll_modal_up()
+      }
+      else if (App.msg_image.is_open()) {
+        App.expand_modal_image()
+      }
     }
     else if (e.key === `ArrowDown`) {
       if (e.ctrlKey && !e.shiftKey) {
         if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
           App.react_prompt()
         }
+      }
+      else if (App.image_expanded) {
+        App.scroll_modal_down()
+      }
+      else if (App.msg_image.is_open()) {
+        App.expand_modal_image()
       }
     }
   })
@@ -1263,4 +1278,20 @@ App.is_application = () => {
   }
 
   return false
+}
+
+App.scroll_modal_up = () => {
+  let container = DOM.el(App.modal_image_container_id)
+
+  if (container) {
+    container.scrollTop -= App.modal_image_scroll_step
+  }
+}
+
+App.scroll_modal_down = () => {
+  let container = DOM.el(App.modal_image_container_id)
+
+  if (container) {
+    container.scrollTop += App.modal_image_scroll_step
+  }
 }
