@@ -433,9 +433,7 @@ def is_image_file(
     file: FileStorage, lossless: bool = False, ignore_gif: bool = False
 ) -> bool:
     if lossless:
-        ignore = [
-            "jpeg",
-        ]
+        ignore = config.magic_image_ignore
     else:
         ignore = []
 
@@ -447,9 +445,7 @@ def is_image_file(
 
 def is_audio_file(file: FileStorage, lossless: bool = False) -> bool:
     if lossless:
-        ignore = [
-            "mpeg",
-        ]
+        ignore = config.magic_audio_ignore
     else:
         ignore = []
 
@@ -458,10 +454,7 @@ def is_audio_file(file: FileStorage, lossless: bool = False) -> bool:
 
 def is_video_file(file: FileStorage, lossless: bool = False) -> bool:
     if lossless:
-        ignore = [
-            "mp4",
-            "webm",
-        ]
+        ignore = config.magic_video_ignore
     else:
         ignore = []
 

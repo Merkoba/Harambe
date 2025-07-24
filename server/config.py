@@ -503,6 +503,22 @@ class Config:
         # Mark for private posts
         self.private_posts_mark = "priv"
 
+        # Don't consider these types of files for image magic
+        self.magic_image_ignore: list[str] = [
+            "jpeg",
+        ]
+
+        # Don't consider these types of files for audio magic
+        self.magic_audio_ignore: list[str] = [
+            "mpeg",
+        ]
+
+        # Don't consider these types of files for video magic
+        self.magic_video_ignore: list[str] = [
+            "mp4",
+            "webm",
+        ]
+
     # --- Methods ---
 
     def get_max_storage(self) -> int:

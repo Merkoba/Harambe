@@ -161,6 +161,7 @@ App.is_lossless_audio = (file) => {
 App.is_lossless_video = (file) => {
   let allowed = [
     `video/mp4`,
+    `video/webm`,
   ]
 
   return App.is_video(file) && !allowed.includes(file.type)
