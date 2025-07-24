@@ -17,7 +17,7 @@ endpoint = "205bpm"
 prompt = false
 zip = "off"
 privacy = "public"
-file_path = nil
+file_paths = []
 image_magic = "off"
 audio_magic = "off"
 video_magic = "off"
@@ -28,7 +28,7 @@ pastebin_filenames = []
 
 # Parse command-line options
 OptionParser.new do |opts|
-  opts.banner = "Usage: upload.rb [options] <file_path>"
+  opts.banner = "Usage: upload.rb [options] <file_path1> [file_path2 ...]"
 
   opts.on("--prompt", "Prompt for the title") do
     prompt = true
@@ -76,14 +76,12 @@ OptionParser.new do |opts|
   end
 end.parse!(into: {})
 
-file_path = ARGV[0]
-
-if file_path
+# Accept multiple file paths as arguments
+ARGV.each do |arg|
   # Remove "file://" prefix if present
-  file_path = file_path.sub(/^file:\/\//, "") if file_path
-
+  arg = arg.sub(/^file:\/\//, "")
   # Convert to absolute path
-  file_path = File.absolute_path(file_path) if file_path
+  file_paths << File.absolute_path(arg)
 end
 
 # Check required parameters
@@ -91,32 +89,59 @@ abort("Error: URL is not set") if url.nil? || url.empty?
 abort("Error: USERNAME is not set") if username.nil? || username.empty?
 abort("Error: PASSWORD is not set") if password.nil? || password.empty?
 
-if file_path.nil? && pastebins.empty?
+if file_paths.empty? && pastebins.empty?
   abort("Error: Content is not set")
 end
 
 # Prompt to get the title
-title = ""
+# If multiple files, prompt for each file's title if --prompt is set
+file_titles = []
+file_descriptions = []
+if prompt && !file_paths.empty?
+  file_paths.each do |file_path|
+    filename = File.basename(file_path, ".*")
+    title = `zenity --entry --title=\"Harambe Upload\" --text=\"Enter a title for #{filename}:\" --entry-text=\"#{filename}\"`.chomp
+    if $?.exitstatus != 0
+      puts "User cancelled the input."
+      exit 1
+    end
+    file_titles << title
 
-if prompt
-  filename = File.basename(file_path, ".*")
-  title = `zenity --entry --title="Harambe Upload" --text="Enter a title:" --entry-text="#{filename}"`.chomp
-
+    description = `zenity --entry --title=\"Harambe Upload\" --text=\"Enter a description for #{filename}:\"`.chomp
+    if $?.exitstatus != 0
+      puts "User cancelled the input."
+      exit 1
+    end
+    file_descriptions << description
+  end
+elsif prompt && file_paths.empty?
+  # No files, just pastebins
+  title = `zenity --entry --title=\"Harambe Upload\" --text=\"Enter a title:\"`.chomp
   if $?.exitstatus != 0
     puts "User cancelled the input."
     exit 1
   end
+  file_titles << title
+
+  description = `zenity --entry --title=\"Harambe Upload\" --text=\"Enter a description:\"`.chomp
+  if $?.exitstatus != 0
+    puts "User cancelled the input."
+    exit 1
+  end
+  file_descriptions << description
 end
 
-puts "Uploading: #{file_path}"
+file_paths.each_with_index do |file_path, idx|
+  puts "Uploading: #{file_path}"
+end
 
 # Make the POST request and capture the response
 uri = URI("#{url}/#{endpoint}")
 request = Net::HTTP::Post.new(uri)
-mime_type = MIME::Types.type_for(file_path).first.to_s
 form_data = []
 
-if file_path && !file_path.empty?
+file_paths.each_with_index do |file_path, idx|
+  mime_type = MIME::Types.type_for(file_path).first.to_s
   form_data << [
     "file",
     File.open(file_path),
@@ -125,18 +150,30 @@ if file_path && !file_path.empty?
       content_type: mime_type,
     }
   ]
+  # If prompting, add a title for each file
+  if prompt && file_titles[idx]
+    form_data << ["title", file_titles[idx]]
+  end
+  # If prompting, add a description for each file
+  if prompt && file_descriptions[idx]
+    form_data << ["description", file_descriptions[idx]]
+  end
 end
 
 pastebins.each_with_index do |pastebin, index|
   form_data << ["pastebin", pastebin]
-
   if pastebin_filenames[index] && !pastebin_filenames[index].empty?
     form_data << ["pastebin_filename", pastebin_filenames[index]]
   end
 end
 
+# If not prompting, add a single title (empty string or default)
+if !prompt
+  form_data << ["title", ""]
+  form_data << ["description", ""]
+end
+
 form_data += [
-  ["title", title],
   ["username", username],
   ["password", password],
   ["zip", zip],
