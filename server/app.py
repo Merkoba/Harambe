@@ -200,7 +200,6 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
 
 def common_list_configs(user: User | None = None) -> dict[str, Any]:
     return {
-        "sample_icon": config.sample_icon,
         "prev_sample_icon": config.prev_sample_icon,
         "next_sample_icon": config.next_sample_icon,
         "max_title_length": config.max_title_length,

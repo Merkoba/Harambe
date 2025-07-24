@@ -54,7 +54,7 @@
             App.post.zip_embed = {{post.zip_embed | default(0) | tojson}}
             App.post.privacy = {{post.privacy | default(0) | tojson}}
             App.post.youtube_id = {{post.youtube_id | default(0) | tojson | safe}}
-            App.post.is_url = {{post.is_url | default(0) | tojson}}
+            App.post.has_url = {{post.has_url | default(0) | tojson}}
             App.post.description = {{post.description | default(0) | tojson | safe}}
             {% endif %}
 

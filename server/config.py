@@ -286,7 +286,34 @@ class Config:
         self.session_days = 365 * 5
 
         # Sample icon for admin pages
-        self.sample_icon = "🔊"
+        self.sample_icon = "🪧"
+
+        # Sample icon for videos
+        self.sample_icon_video = "📺"
+
+        # Sample icon for images
+        self.sample_icon_image = "🖼️"
+
+        # Sample icon for audio
+        self.sample_icon_audio = "🔊"
+
+        # Sample icon for text
+        self.sample_icon_text = "📝"
+
+        # Sample icon for zip
+        self.sample_icon_zip = "📦"
+
+        # Sample icon for markdown
+        self.sample_icon_markdown = "🧑🏼‍🎨"
+
+        # Sample icon for flash
+        self.sample_icon_flash = "💥"
+
+        # Sample icon for talk
+        self.sample_icon_talk = "💬"
+
+        # Sample icon for URL
+        self.sample_icon_url = "🔗"
 
         # Icon for prev sample button
         self.prev_sample_icon = "⏪"

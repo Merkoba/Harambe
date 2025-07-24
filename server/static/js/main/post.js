@@ -975,7 +975,7 @@ App.start_embed = () => {
     if (App.post.zip_embed) {
       //
     }
-    else if (App.post.is_url) {
+    else if (App.post.has_url) {
       if (App.post.youtube_id) {
         App.start_youtube()
       }

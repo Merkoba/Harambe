@@ -149,7 +149,7 @@
     {% if post.flash_embed %}
         <div id="flash_container" class="embed"></div>
     {% elif post.text %}
-        {% if post.is_url %}
+        {% if post.has_url %}
             {% if post.youtube_id %}
             <div id="youtube_container"></div>
             {% else %}

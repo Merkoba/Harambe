@@ -59,10 +59,12 @@ class Post:
     text: str
     privacy: str
     privacy_str: str
-    youtube_id: str
-    is_url: bool
     description: str
     value: str
+    has_url: bool
+    youtube_id: str
+    media_type: str = ""
+    sample_icon: str = ""
 
     def is_image(self) -> bool:
         return self.mtype.startswith("image/")
@@ -86,6 +88,12 @@ class Post:
 
     def is_zip(self) -> bool:
         return self.mtype.startswith("application/") and ("zip" in self.mtype)
+
+    def is_talk(self) -> bool:
+        return self.mtype == "mode/talk"
+
+    def is_url(self) -> bool:
+        return self.mtype == "mode/url"
 
 
 def get_full_name(dbpost: DbPost) -> str:
@@ -198,19 +206,16 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
             max_bytes = config.embed_max_size_text * 1024 * 1024
             text = text_file.open("r").read(max_bytes)
 
+    has_url = utils.is_url(text)
     youtube_id = ""
-    is_url = False
 
-    if text:
-        is_url = utils.is_url(text)
+    if has_url:
+        yt_info = utils.get_youtube_id(text)
 
-        if is_url:
-            yt_info = utils.get_youtube_id(text)
+        if yt_info and (yt_info[0] == "video"):
+            youtube_id = yt_info[1]
 
-            if yt_info and (yt_info[0] == "video"):
-                youtube_id = yt_info[1]
-
-    return Post(
+    obj = Post(
         post.id,
         post.user,
         name,
@@ -249,11 +254,41 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         text,
         privacy,
         privacy_str,
-        youtube_id,
-        is_url,
         description,
         value,
+        has_url,
+        youtube_id,
     )
+
+    if obj.is_text():
+        obj.media_type = "text"
+        obj.sample_icon = config.sample_icon_text
+    elif obj.is_markdown():
+        obj.media_type = "markdown"
+        obj.sample_icon = config.sample_icon_markdown
+    elif obj.is_zip():
+        obj.media_type = "zip"
+        obj.sample_icon = config.sample_icon_zip
+    elif obj.is_image():
+        obj.media_type = "image"
+        obj.sample_icon = config.sample_icon_image
+    elif obj.is_video():
+        obj.media_type = "video"
+        obj.sample_icon = config.sample_icon_video
+    elif obj.is_audio():
+        obj.media_type = "audio"
+        obj.sample_icon = config.sample_icon_audio
+    elif obj.is_flash():
+        obj.media_type = "flash"
+        obj.sample_icon = config.sample_icon_flash
+    elif obj.is_talk():
+        obj.media_type = "talk"
+        obj.sample_icon = config.sample_icon_talk
+    elif obj.is_url():
+        obj.media_type = "url"
+        obj.sample_icon = config.sample_icon_url
+
+    return obj
 
 
 def get_postlist(
@@ -320,31 +355,31 @@ def get_posts(
 
         if media_type is not None:
             if media_type == "image":
-                if not post.is_image():
+                if post.media_type != "image":
                     continue
             elif media_type == "video":
-                if not post.is_video():
+                if post.media_type != "video":
                     continue
             elif media_type == "audio":
-                if not post.is_audio():
+                if post.media_type != "audio":
                     continue
             elif media_type == "flash":
-                if not post.is_flash():
+                if post.media_type != "flash":
                     continue
             elif media_type == "text":
-                if not post.is_text():
+                if post.media_type != "text":
                     continue
             elif media_type == "markdown":
-                if not post.is_markdown():
+                if post.media_type != "markdown":
                     continue
             elif media_type == "zip":
-                if not post.is_zip():
+                if post.media_type != "zip":
                     continue
             elif media_type == "url":
-                if post.mtype != "mode/url":
+                if post.media_type != "url":
                     continue
             elif media_type == "talk":
-                if post.mtype != "mode/talk":
+                if post.media_type != "talk":
                     continue
 
         total_size += post.size
