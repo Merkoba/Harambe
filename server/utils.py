@@ -460,6 +460,7 @@ def is_video_file(file: FileStorage, lossless: bool = False) -> bool:
     if lossless:
         ignore = [
             "mp4",
+            "webm",
         ]
     else:
         ignore = []
