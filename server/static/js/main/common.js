@@ -1676,6 +1676,28 @@ App.show_settings = () => {
       App.set_cookie(`theme`, select.value)
     })
 
+    DOM.ev(select, `wheel`, (e) => {
+      let cycles = App.themes.map(t => t[0])
+      let current = select.value
+      let index = cycles.indexOf(current)
+      let dir = e.deltaY < 0 ? `prev` : `next`
+
+      if (dir === `next`) {
+        index += 1
+      }
+      else if (dir === `prev`) {
+        index -= 1
+      }
+
+      if (index < 0 || (index >= cycles.length)) {
+        return
+      }
+
+      select.value = cycles[index]
+      App.set_cookie(`theme`, select.value)
+      e.preventDefault()
+    })
+
     let font_size = DOM.el(`#settings_font_size`)
     font_size.value = App.get_cookie(`font_size`) || App.font_size
 
