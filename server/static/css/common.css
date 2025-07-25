@@ -329,6 +329,11 @@ a.button:hover {
     font-weight: bold;
     font-size: 0.9rem;
     padding-bottom: 0.2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 input[type="text"].settings_widget {
