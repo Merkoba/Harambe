@@ -89,6 +89,11 @@ App.setup_keyboard = () => {
         }
       }
     }
+    else if (e.key === `ArrowLeft`) {
+      if (e.ctrlKey && !e.shiftKey) {
+        App.prev_post()
+      }
+    }
     else if (e.key === `ArrowRight`) {
       if (e.ctrlKey && !e.shiftKey) {
         App.next_post()
