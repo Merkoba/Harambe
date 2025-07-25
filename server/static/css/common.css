@@ -199,11 +199,13 @@ a.linkbutton:hover {
     var(--button_background_color_1),
     var(--button_background_color_3));
 
-    border-color: #555;
+    border-color: var(--button_background_color_3);
 }
 
 .aero_button:active {
-    background: linear-gradient(to bottom, #76ac95, #46b48f);
+    background: linear-gradient(to bottom,
+    var(--button_background_color_3),
+    var(--button_background_color_2));
 }
 
 .aero_text {
