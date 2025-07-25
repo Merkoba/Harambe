@@ -26,9 +26,14 @@
                 height: auto;
             }
 
+            #shortcuts {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
             .keys {
                 font-weight: bold;
-                padding-top: 1rem;
             }
         </style>
     </head>
@@ -56,39 +61,52 @@
 
         For example 1 will trigger the first button.
 
-        <br>
-
         <hr>
 
-        <div class="keys">Ctrl + M</div>
+        <div id="shortcuts">
+            <div class="shortcut">
+                <div class="keys">Ctrl + M</div>
 
-        Show the main menu.
+                Show the main menu.
+            </div>
 
-        <div class="keys">Ctrl + Up</div>
+            <div class="shortcut">
+                <div class="keys">Ctrl + Up</div>
 
-        Go to the fresh post.
+                Go to the fresh post.
+            </div>
 
-        <div class="keys">Ctrl + Left</div>
+            <div class="shortcut">
+                <div class="keys">Ctrl + Left</div>
 
-        Go to the previous post.
+                Go to the previous post.
+            </div>
 
-        <div class="keys">Ctrl + Right</div>
+            <div class="shortcut">
+                <div class="keys">Ctrl + Right</div>
 
-        Go to the next post.
+                Go to the next post.
+            </div>
 
-        <div class="keys">Ctrl + Shift + Right</div>
+            <div class="shortcut">
+                <div class="keys">Ctrl + Shift + Right</div>
 
-        Go to a random post.
+                Go to a random post.
+            </div>
 
-        <div class="keys">Ctrl + Shift + Up</div>
+            <div class="shortcut">
+                <div class="keys">Ctrl + Shift + Up</div>
 
-        Edit a post.
+                Edit a post.
+            </div>
 
-        <div class="keys">Ctrl + Down</div>
+            <div class="shortcut">
+                <div class="keys">Ctrl + Down</div>
 
-        React to a post.
+                React to a post.
+            </div>
+        </div>
 
-        <br>
         <hr>
 
         Shift + Wheel on media increases or decreases its size.
