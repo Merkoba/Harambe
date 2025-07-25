@@ -524,6 +524,30 @@ def random_text() -> Any:
     return random_func(request, action)
 
 
+@app.route("/random_talk", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def random_talk() -> Any:
+    action = lambda: post_procs.get_random_talk_post()
+    return random_func(request, action)
+
+
+@app.route("/random_flash", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def random_flash() -> Any:
+    action = lambda: post_procs.get_random_flash_post()
+    return random_func(request, action)
+
+
+@app.route("/random_zip", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def random_zip() -> Any:
+    action = lambda: post_procs.get_random_zip_post()
+    return random_func(request, action)
+
+
 # FILES
 
 

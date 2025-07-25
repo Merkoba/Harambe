@@ -322,32 +322,6 @@ This strips all metadata from files except `rotation`.
 
 ---
 
-## Other endpoints
-
-/data/somename
-
-/random_media
-
-/random_video
-
-/random_audio
-
-/random_image
-
-/random_text
-
-/random_media?json=true
-
-/random_video?json=true
-
-/random_audio?json=true
-
-/random_image?json=true
-
-/random_text?json=true
-
----
-
 ## Themes
 
 There are 10 themes to choose from.

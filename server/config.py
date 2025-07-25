@@ -463,6 +463,15 @@ class Config:
         # Icon for audio
         self.icon_for_audio = "🔊"
 
+        # Icon for talk
+        self.icon_for_talk = "💬"
+
+        # Icon for zip
+        self.icon_for_zip = "📦"
+
+        # Icon for flash
+        self.icon_for_flash = "💥"
+
         # Icon for delete
         self.icon_for_delete = "💣"
 

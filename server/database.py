@@ -655,12 +655,33 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
     return None
 
 
-def get_post_by_ext(exts: list[str]) -> Post | None:
+def get_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    query = "select * from posts where ext in ({}) and privacy = 'public' order by random() limit 1"
+
+    if no_mode:
+        no_mode_str = " and mtype not like 'mode/%' "
+    else:
+        no_mode_str = " "
+
+    query = f"select * from posts where ext in ({{}}) and privacy = 'public'{no_mode_str}order by random() limit 1"
     placeholders = ", ".join("?" for _ in exts)
     c.execute(query.format(placeholders), exts)
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_post(dict(row))
+
+    return None
+
+
+def get_post_by_mtype(mtype: str) -> Post | None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+
+    query = "select * from posts where mtype = ? and privacy = 'public' order by random() limit 1"
+    c.execute(query, (mtype,))
     row = c.fetchone()
     conn.close()
 
@@ -694,6 +715,20 @@ def get_random_media_post() -> Post | None:
 
 def get_random_text_post() -> Post | None:
     exts = ["txt", "md"]
+    return get_post_by_ext(exts, no_mode=True)
+
+
+def get_random_talk_post() -> Post | None:
+    return get_post_by_mtype("mode/talk")
+
+
+def get_random_flash_post() -> Post | None:
+    exts = ["swf"]
+    return get_post_by_ext(exts)
+
+
+def get_random_zip_post() -> Post | None:
+    exts = ["zip"]
     return get_post_by_ext(exts)
 
 

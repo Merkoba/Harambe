@@ -813,6 +813,24 @@ App.setup_random_opts = (show = false, parent = ``) => {
     }, () => {
       App.open_tab(`/random_text`)
     }, App.icon(`text`))
+
+    App.bind_button(`${name}_opts_talk`, () => {
+      App.location(`/random_talk`)
+    }, () => {
+      App.open_tab(`/random_talk`)
+    }, App.icon(`talk`))
+
+    App.bind_button(`${name}_opts_flash`, () => {
+      App.location(`/random_flash`)
+    }, () => {
+      App.open_tab(`/random_flash`)
+    }, App.icon(`flash`))
+
+    App.bind_button(`${name}_opts_zip`, () => {
+      App.location(`/random_zip`)
+    }, () => {
+      App.open_tab(`/random_zip`)
+    }, App.icon(`zip`))
   }, show, parent)
 }
 
