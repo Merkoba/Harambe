@@ -1067,6 +1067,21 @@ App.start_embed = () => {
       App.expand_modal_image()
     })
   }
+
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    DOM.ev(video, `wheel`, (e) => {
+      if (e.shiftKey) {
+        if (e.deltaY < 0) {
+          App.increase_video_size(video)
+        }
+        else {
+          App.decrease_video_size(video)
+        }
+      }
+    })
+  }
 }
 
 App.setup_reactions = () => {
@@ -1294,4 +1309,63 @@ App.scroll_modal_down = () => {
   if (container) {
     container.scrollTop += App.modal_image_scroll_step
   }
+}
+
+App.change_video_size = (el, what, size) => {
+  let width = el.clientWidth
+  let height = el.clientHeight
+  let ratio = height / width
+  let new_width = what === `increase` ? width + size : width - size
+
+  // For decreasing, just apply minimum size check
+  if (what === `decrease`) {
+    if (new_width < 200) {
+      return // Don't shrink below 100px
+    }
+
+    let new_height = new_width * ratio
+    el.style.width = `${new_width}px`
+    el.style.height = `${new_height}px`
+    return
+  }
+
+  // For increasing, check if we would hit any constraints
+  if (what === `increase`) {
+    // Temporarily set the new size to see if constraints kick in
+    let original_width = el.style.width
+    let original_height = el.style.height
+
+    el.style.width = `${new_width}px`
+    el.style.height = `${new_width * ratio}px`
+
+    // Check if the actual rendered size matches what we set
+    let actual_width = el.clientWidth
+    let actual_height = el.clientHeight
+    let actual_ratio = actual_height / actual_width
+
+    // If the ratio changed significantly, we hit a constraint
+    if (Math.abs(actual_ratio - ratio) > 0.01) {
+      // Restore original size and don't grow
+      el.style.width = original_width
+      el.style.height = original_height
+      return
+    }
+  }
+}
+
+App.increase_video_size = (el) => {
+  console.log(el)
+  if (App.max_on) {
+    return
+  }
+
+  App.change_video_size(el, `increase`, 50)
+}
+
+App.decrease_video_size = (el) => {
+  if (App.max_on) {
+    return
+  }
+
+  App.change_video_size(el, `decrease`, 50)
 }
