@@ -39,6 +39,7 @@
             App.max_description_length = {{max_description_length | default(0)}}
             App.max_filename_length = {{max_filename_length | default(0)}}
             App.themes = {{themes | default(0) | tojson}}
+            App.active_theme = {{active_theme | default(0) | tojson | safe}}
 
             {% if post %}
             App.post = {}

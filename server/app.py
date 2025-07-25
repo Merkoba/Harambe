@@ -198,6 +198,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "magics": magics,
         "icons": icons,
         "themes": themes,
+        "active_theme": config.active_theme,
     }
 
 

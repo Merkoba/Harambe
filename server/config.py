@@ -59,7 +59,7 @@ class Config:
         themes.fill(self)
 
         # Check themes.py to see all the theme names
-        self.active_theme: str = "default"
+        self.active_theme: str = "blossom"
 
         # Secret key for security
         # Make it a long random string

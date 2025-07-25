@@ -21,8 +21,8 @@ def fill(config: Config) -> None:
 
 
 def fill_theme_1(config: Config) -> None:
-    config.themes["default"] = {
-        "name": "Default",
+    config.themes["blossom"] = {
+        "name": "Steel Blossom",
         "colors": {
             "background_color": "81, 81, 81",
             "accent_color": "127, 104, 164",

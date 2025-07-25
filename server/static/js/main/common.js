@@ -1629,7 +1629,7 @@ App.change_theme = () => {
     select.appendChild(option)
   }
 
-  select.value = App.get_cookie(`theme`) || `default`
+  select.value = App.get_cookie(`theme`) || App.active_theme
 
   DOM.ev(select, `change`, () => {
     App.set_cookie(`theme`, select.value)
