@@ -692,6 +692,9 @@ App.toggle_max = (what) => {
   App.max_on = !App.max_on
   App.max_id = what
 
+  el.style.width = ``
+  el.style.height = ``
+
   if (App.max_on) {
     App.resize_max()
     DOM.hide(details)
