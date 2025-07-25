@@ -219,7 +219,7 @@ class Config:
         self.allow_password_edit = True
 
         # Font size for all pages
-        self.font_size = 19
+        self.font_size = 18
 
         # Max length for user username
         self.max_user_username_length = 240

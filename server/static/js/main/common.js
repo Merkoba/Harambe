@@ -1717,10 +1717,12 @@ App.show_settings = () => {
     App.register_cycle(ff_cycles, `font_family`)
 
     DOM.ev(`#settings_reset`, `click`, () => {
-      App.clear_cookie(`theme`)
-      App.clear_cookie(`font_size`)
-      App.clear_cookie(`font_family`)
-      App.reload()
+      if (confirm(`Are you sure you want to reset the settings?`)) {
+        App.clear_cookie(`theme`)
+        App.clear_cookie(`font_size`)
+        App.clear_cookie(`font_family`)
+        App.reload()
+      }
     })
 
     DOM.ev(`#settings_apply`, `click`, () => {
