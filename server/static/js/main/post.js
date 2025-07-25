@@ -1366,6 +1366,11 @@ App.change_media_size = (what, size) => {
   }
 
   el.style.width = `${new_width}px`
+
+  if (el.tagName !== `IMG`) {
+    return
+  }
+
   el.style.height = `${new_height}px`
 
   if (what === `increase`) {
