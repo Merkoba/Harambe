@@ -831,6 +831,12 @@ App.setup_random_opts = (show = false, parent = ``) => {
     }, () => {
       App.open_tab(`/random_zip`)
     }, App.icon(`zip`))
+
+    App.bind_button(`${name}_opts_url`, () => {
+      App.location(`/random_url`)
+    }, () => {
+      App.open_tab(`/random_url`)
+    }, App.icon(`url`))
   }, show, parent)
 }
 

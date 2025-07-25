@@ -472,6 +472,9 @@ class Config:
         # Icon for flash
         self.icon_for_flash = "💥"
 
+        # Icon for URL
+        self.icon_for_url = "🔗"
+
         # Icon for delete
         self.icon_for_delete = "💣"
 

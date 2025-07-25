@@ -727,6 +727,10 @@ def get_random_flash_post() -> Post | None:
     return get_post_by_ext(exts)
 
 
+def get_random_url_post() -> Post | None:
+    return get_post_by_mtype("mode/url")
+
+
 def get_random_zip_post() -> Post | None:
     exts = ["zip"]
     return get_post_by_ext(exts)

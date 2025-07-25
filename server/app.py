@@ -532,6 +532,14 @@ def random_talk() -> Any:
     return random_func(request, action)
 
 
+@app.route("/random_url", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def random_url() -> Any:
+    action = lambda: post_procs.get_random_url_post()
+    return random_func(request, action)
+
+
 @app.route("/random_flash", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
