@@ -1012,6 +1012,17 @@ App.start_embed = () => {
     DOM.ev(image, `click`, () => {
       App.show_modal_image()
     })
+
+    DOM.ev(image, `wheel`, (e) => {
+      if (e.shiftKey) {
+        if (e.deltaY < 0) {
+          App.increase_media_size()
+        }
+        else {
+          App.decrease_video_size()
+        }
+      }
+    })
   }
 
   let max = DOM.el(`#max`)
@@ -1328,12 +1339,7 @@ App.change_media_size = (what, size) => {
     return
   }
 
-  let el
-  let video = DOM.el(`#video`)
-
-  if (video) {
-    el = video
-  }
+  let el = DOM.el(`#image`) || DOM.el(`#video`)
 
   if (!el) {
     return
