@@ -130,11 +130,11 @@ class Config:
 
         # Maximum posts allowed to be shown in the list page
         # If 0 it will allow showing all posts
-        self.list_max_posts: int = 100
+        self.list_max_posts: int = 200
 
         # Maximum reactions allowed to be shown in the list page
         # If 0 it will allow showing all reactions
-        self.list_max_reactions: int = 100
+        self.list_max_reactions: int = 200
 
         # Allow admins to delete posts using the admin page or endpoints
         self.allow_delete: bool = True
