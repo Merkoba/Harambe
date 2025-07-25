@@ -69,6 +69,12 @@ a.linkbutton:hover {
     flex-wrap: wrap;
 }
 
+.center_item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .colitem {
     display: flex;
     flex-direction: column;
