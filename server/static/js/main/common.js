@@ -269,9 +269,9 @@ App.setup_menu_opts = (show = false, ignore = []) => {
     }, App.icon(`fresh`))
 
     App.bind_button(`${name}_opts_random`, () => {
-      App.location(`/random`)
+      App.setup_random_opts(true, name)
     }, () => {
-      App.open_tab(`/random`)
+      App.random_post()
     }, App.icon(`random`))
 
     App.bind_button(`${name}_opts_list`, () => {
@@ -777,6 +777,36 @@ App.setup_list_opts = (show = false, parent = ``) => {
     }, () => {
       App.open_tab(`/list/reactions`)
     }, App.icon(`reactions`))
+  }, show, parent)
+}
+
+App.setup_random_opts = (show = false, parent = ``) => {
+  let name = `random`
+
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_any`, () => {
+      App.location(`/random`)
+    }, () => {
+      App.open_tab(`/random`)
+    }, App.icon(`random`))
+
+    App.bind_button(`${name}_opts_video`, () => {
+      App.location(`/random_video`)
+    }, () => {
+      App.open_tab(`/random_video`)
+    }, App.icon(`random`))
+
+    App.bind_button(`${name}_opts_audio`, () => {
+      App.location(`/random_audio`)
+    }, () => {
+      App.open_tab(`/random_audio`)
+    }, App.icon(`random`))
+
+    App.bind_button(`${name}_opts_image`, () => {
+      App.location(`/random_image`)
+    }, () => {
+      App.open_tab(`/random_image`)
+    }, App.icon(`random`))
   }, show, parent)
 }
 
