@@ -163,8 +163,12 @@ def def_url() -> Any:
     return redirect(url_for("upload"))
 
 
+def get_cookie(name: str, default: Any) -> str:
+    return str(request.cookies.get(name, default))
+
+
 def common_configs(user: User | None = None) -> dict[str, Any]:
-    theme_ = request.cookies.get("theme", config.theme)
+    theme_ = get_cookie("theme", config.theme)
     theme = config.themes.get(theme_, {})
     colors = theme.get("colors", {})
 
@@ -179,8 +183,8 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
     }
 
     themes = [(key, theme.get("name", key)) for key, theme in config.themes.items()]
-    font_family = request.cookies.get("font_family", config.font_family)
-    font_size = request.cookies.get("font_size", config.font_size)
+    font_family = get_cookie("font_family", config.font_family)
+    font_size = get_cookie("font_size", config.font_size)
 
     if not font_size.isdigit():
         font_size = re.sub(r"[^\d]", "", font_size)
