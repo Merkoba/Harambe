@@ -380,3 +380,7 @@ select.settings_widget {
 .settings_cycle:hover {
     filter: brightness(1.1);
 }
+
+.settings_separator {
+    opacity: 0.66;
+}
