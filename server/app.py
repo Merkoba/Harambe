@@ -163,7 +163,8 @@ def def_url() -> Any:
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
-    colors = {key: getattr(config, key) for key in dir(config) if "_color" in key}
+    theme = config.themes.get(config.active_theme, {})
+    colors = theme.get("colors", {})
 
     magics = {
         key: getattr(config, key)

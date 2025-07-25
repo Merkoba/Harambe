@@ -15,6 +15,7 @@ from watchdog.events import FileSystemEventHandler  # type: ignore
 
 # Modules
 import utils
+import themes
 
 
 class FileChangeHandler(FileSystemEventHandler):  # type: ignore
@@ -51,6 +52,13 @@ class Config:
             Link("About", "/static/demo/about.html", "🛟"),
             Link("Memorial", "/static/demo/memorial.html", "🦍"),
         ]
+
+        # Fill the themes
+        self.themes: dict[str, dict[str, Any]] = {}
+        themes.fill(self)
+
+        # Check themes.py to see all the theme names
+        self.active_theme: str = "default"
 
         # Secret key for security
         # Make it a long random string
@@ -98,33 +106,6 @@ class Config:
 
         # Requests per minute limit for most endpoints
         self.rate_limit: int = 60
-
-        # Background color for the web interface
-        self.background_color: str = "81, 81, 81"
-
-        # Accent color for the web interface
-        self.accent_color: str = "127, 104, 164"
-
-        # Text color for the web interface
-        self.text_color: str = "255, 255, 255"
-
-        # Link color for the web interface
-        self.link_color: str = "222, 211, 239"
-
-        # Alt color for some text elements
-        self.alt_color: str = "193, 234, 178"
-
-        # First background color for buttons
-        self.button_background_color_1: str = "69, 156, 198"
-
-        # Second background color for buttons
-        self.button_background_color_2: str = "93, 104, 80"
-
-        # Third background color for buttons
-        self.button_background_color_3: str = "129, 147, 108"
-
-        # Text color for buttons
-        self.button_text_color: str = "255, 255, 255"
 
         # Font family for the web interface
         self.font_family: str = "sans-serif"
