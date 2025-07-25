@@ -1683,11 +1683,41 @@ App.show_settings = () => {
       App.set_cookie(`font_size`, font_size.value)
     })
 
+    let font_size_cycle = DOM.el(`#settings_font_size_cycle`)
+
+    let fs_cycles = [
+      `16`,
+      `17`,
+      `18`,
+      `19`,
+      `20`,
+      `21`,
+      `22`,
+    ]
+
+    DOM.ev(font_size_cycle, `click`, () => {
+      App.register_cycle(fs_cycles, font_size, `font_size`)
+    })
+
     let font_family = DOM.el(`#settings_font_family`)
     font_family.value = App.get_cookie(`font_family`) || App.font_family
 
     DOM.ev(font_family, `blur`, () => {
       App.set_cookie(`font_family`, font_family.value)
+    })
+
+    let font_family_cycle = DOM.el(`#settings_font_family_cycle`)
+
+    let ff_cycles = [
+      `serif`,
+      `sans-serif`,
+      `monospace`,
+      `cursive`,
+      `fantasy`,
+    ]
+
+    DOM.ev(font_family_cycle, `click`, () => {
+      App.register_cycle(ff_cycles, font_family, `font_family`)
     })
 
     DOM.ev(`#settings_reset`, `click`, () => {
@@ -1715,4 +1745,24 @@ App.set_cookie = (name, value, days = 900) => {
 
 App.clear_cookie = (name) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+}
+
+App.register_cycle = (cycles, el, name) => {
+  let current = el.value
+  let index = cycles.indexOf(current)
+
+  if (index === -1) {
+    index = 0
+  }
+  else {
+    index += 1
+  }
+
+  if (index >= cycles.length) {
+    index = 0
+  }
+
+  el.value = cycles[index]
+  console.log(cycles[index])
+  App.set_cookie(name, el.value)
 }

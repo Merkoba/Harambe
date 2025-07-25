@@ -371,3 +371,12 @@ select.settings_widget {
     align-items: center;
     justify-content: center;
 }
+
+.settings_cycle {
+    cursor: pointer;
+    user-select: none;
+}
+
+.settings_cycle:hover {
+    filter: brightness(1.1);
+}
