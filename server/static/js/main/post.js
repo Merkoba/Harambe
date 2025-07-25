@@ -1022,6 +1022,15 @@ App.start_embed = () => {
     DOM.evs(max, [`click`, `auxclick`], () => {
       App.toggle_max(type)
     })
+
+    DOM.ev(max, `wheel`, (e) => {
+      if (e.deltaY < 0) {
+        App.increase_media_size()
+      }
+      else {
+        App.decrease_video_size()
+      }
+    })
   }
 
   let copy_all = DOM.el(`#copy_all_text`)
@@ -1077,10 +1086,10 @@ App.start_embed = () => {
     DOM.ev(video, `wheel`, (e) => {
       if (e.shiftKey) {
         if (e.deltaY < 0) {
-          App.increase_video_size(video)
+          App.increase_media_size()
         }
         else {
-          App.decrease_video_size(video)
+          App.decrease_video_size()
         }
       }
     })
@@ -1314,7 +1323,22 @@ App.scroll_modal_down = () => {
   }
 }
 
-App.change_video_size = (el, what, size) => {
+App.change_media_size = (what, size) => {
+  if (App.max_on) {
+    return
+  }
+
+  let el
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    el = video
+  }
+
+  if (!el) {
+    return
+  }
+
   let width = el.clientWidth
   let height = el.clientHeight
   let ratio = height / width
@@ -1356,18 +1380,10 @@ App.change_video_size = (el, what, size) => {
   }
 }
 
-App.increase_video_size = (el) => {
-  if (App.max_on) {
-    return
-  }
-
-  App.change_video_size(el, `increase`, 50)
+App.increase_media_size = () => {
+  App.change_media_size(`increase`, 50)
 }
 
-App.decrease_video_size = (el) => {
-  if (App.max_on) {
-    return
-  }
-
-  App.change_video_size(el, `decrease`, 50)
+App.decrease_video_size = () => {
+  App.change_media_size(`decrease`, 50)
 }
