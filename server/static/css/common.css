@@ -377,10 +377,6 @@ select.settings_widget {
     justify-content: center;
 }
 
-.settings_separator {
-    opacity: 0.66;
-}
-
 .icon_btn {
     cursor: pointer;
     user-select: none;

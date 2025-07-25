@@ -1683,9 +1683,9 @@ App.show_settings = () => {
       App.set_cookie(`font_size`, font_size.value)
     })
 
-    let font_size_cycle = DOM.el(`#settings_font_size_cycle`)
-
     let fs_cycles = [
+      `14`,
+      `15`,
       `16`,
       `17`,
       `18`,
@@ -1693,11 +1693,11 @@ App.show_settings = () => {
       `20`,
       `21`,
       `22`,
+      `23`,
+      `24`,
     ]
 
-    DOM.ev(font_size_cycle, `click`, () => {
-      App.register_cycle(fs_cycles, font_size, `font_size`)
-    })
+    App.register_cycle(fs_cycles, `font_size`)
 
     let font_family = DOM.el(`#settings_font_family`)
     font_family.value = App.get_cookie(`font_family`) || App.font_family
@@ -1705,8 +1705,6 @@ App.show_settings = () => {
     DOM.ev(font_family, `blur`, () => {
       App.set_cookie(`font_family`, font_family.value)
     })
-
-    let font_family_cycle = DOM.el(`#settings_font_family_cycle`)
 
     let ff_cycles = [
       `serif`,
@@ -1716,9 +1714,7 @@ App.show_settings = () => {
       `fantasy`,
     ]
 
-    DOM.ev(font_family_cycle, `click`, () => {
-      App.register_cycle(ff_cycles, font_family, `font_family`)
-    })
+    App.register_cycle(ff_cycles, `font_family`)
 
     DOM.ev(`#settings_reset`, `click`, () => {
       App.clear_cookie(`theme`)
@@ -1747,22 +1743,35 @@ App.clear_cookie = (name) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
 }
 
-App.register_cycle = (cycles, el, name) => {
-  let current = el.value
-  let index = cycles.indexOf(current)
+App.register_cycle = (cycles, name) => {
+  let prev = DOM.el(`#settings_${name}_prev`)
+  let next = DOM.el(`#settings_${name}_next`)
+  let el = DOM.el(`#settings_${name}`)
 
-  if (index === -1) {
-    index = 0
-  }
-  else {
-    index += 1
+  function action(dir) {
+    let current = el.value
+    let index = cycles.indexOf(current)
+
+    if (dir === `next`) {
+      index += 1
+    }
+    else if (dir === `prev`) {
+      index -= 1
+    }
+
+    if ((index < 0) || (index >= cycles.length)) {
+      return
+    }
+
+    el.value = cycles[index]
+    App.set_cookie(name, el.value)
   }
 
-  if (index >= cycles.length) {
-    index = 0
-  }
+  DOM.ev(prev, `click`, () => {
+    action(`prev`)
+  })
 
-  el.value = cycles[index]
-  console.log(cycles[index])
-  App.set_cookie(name, el.value)
+  DOM.ev(next, `click`, () => {
+    action(`next`)
+  })
 }
