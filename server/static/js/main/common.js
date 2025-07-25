@@ -1613,8 +1613,20 @@ App.change_theme = () => {
     select.appendChild(option)
   }
 
+  select.value = App.get_cookie(`theme`) || `default`
+
   DOM.ev(select, `change`, () => {
-    document.cookie = `theme=${select.value}; path=/`
+    App.set_cookie(`theme`, select.value)
     App.reload()
   })
+}
+
+App.get_cookie = (name) => {
+  let cookie = document.cookie.split(`;`).find(c => c.trim().startsWith(`${name}=`))
+  return cookie ? cookie.split(`=`)[1] : null
+}
+
+App.set_cookie = (name, value, days = 900) => {
+  let expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString()
+  document.cookie = `${name}=${value}; expires=${expires}; path=/`
 }
