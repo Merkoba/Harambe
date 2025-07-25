@@ -365,3 +365,17 @@ This strips all metadata from files except `rotation`.
 /random_audio?json=true
 
 /random_image?json=true
+
+---
+
+## Themes
+
+There are 10 themes to choose from.
+
+This is set by the admin for all users.
+
+It's not a per-user setting.
+
+To change it, change the `active_theme` config.
+
+To see all the defined themes check [themes.py](server/themes.py)
