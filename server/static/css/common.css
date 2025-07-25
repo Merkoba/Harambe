@@ -333,6 +333,7 @@ a.button:hover {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    color: inherit;
     gap: 0.5rem;
 }
 
