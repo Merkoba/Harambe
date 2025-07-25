@@ -440,7 +440,7 @@ def get_prev_post(current: str) -> Post | None:
     post = make_post(dict(row))
 
     c.execute(
-        "select * from posts p join users u on p.user = u.id where privacy = 'public' and u.lister = 1 and p.date > ? and privacy = 'public' order by p.date asc limit 1",
+        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date > ? and p.privacy = 'public' order by p.date asc limit 1",
         (post.date,),
     )
 
@@ -466,7 +466,7 @@ def get_next_post(current: str) -> Post | None:
     post = make_post(dict(row))
 
     c.execute(
-        "select * from posts p join users u on p.user = u.id where privacy = 'public' and u.lister = 1 and p.date < ? and privacy = 'public' order by p.date desc limit 1",
+        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? and p.privacy = 'public' order by p.date desc limit 1",
         (post.date,),
     )
 
