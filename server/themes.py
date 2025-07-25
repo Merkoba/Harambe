@@ -192,9 +192,9 @@ def fill_theme_10(config: Config) -> None:
             "text_color": "255, 248, 220",
             "link_color": "222, 184, 135",
             "alt_color": "240, 230, 140",
-            "button_background_color_1": "149, 79, 29",
-            "button_background_color_2": "160, 82, 45",
-            "button_background_color_3": "205, 133, 63",
+            "button_background_color_1": "180, 110, 60",
+            "button_background_color_2": "190, 120, 75",
+            "button_background_color_3": "225, 160, 95",
             "button_text_color": "255, 255, 255",
         },
     }
