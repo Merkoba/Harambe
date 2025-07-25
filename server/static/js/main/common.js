@@ -1751,7 +1751,7 @@ App.register_cycle = (cycles, name) => {
   let prev = DOM.el(`#settings_${name}_prev`)
   let next = DOM.el(`#settings_${name}_next`)
   let el = DOM.el(`#settings_${name}`)
-  let label = DOM.el(`#settings_label_${name}`)
+  let item = el.closest(`.settings_item`)
 
   function action(dir) {
     let current = el.value
@@ -1780,7 +1780,7 @@ App.register_cycle = (cycles, name) => {
     action(`next`)
   })
 
-  DOM.ev(label, `wheel`, (e) => {
+  DOM.ev(item, `wheel`, (e) => {
     action(e.deltaY < 0 ? `next` : `prev`)
     e.preventDefault()
   })
