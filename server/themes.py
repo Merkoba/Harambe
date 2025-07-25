@@ -141,7 +141,7 @@ def fill_theme_7(config: Config) -> None:
             "button_background_color_1": "218, 165, 32",
             "button_background_color_2": "205, 133, 63",
             "button_background_color_3": "210, 180, 140",
-            "button_text_color": "139, 69, 19",
+            "button_text_color": "119, 59, 12",
         },
     }
 
@@ -174,9 +174,9 @@ def fill_theme_9(config: Config) -> None:
             "text_color": "0, 255, 0",
             "link_color": "0, 255, 255",
             "alt_color": "255, 0, 255",
-            "button_background_color_1": "255, 20, 147",
-            "button_background_color_2": "0, 255, 255",
-            "button_background_color_3": "50, 205, 50",
+            "button_background_color_1": "0, 240, 240",
+            "button_background_color_2": "88, 230, 212",
+            "button_background_color_3": "90, 225, 50",
             "button_text_color": "0, 0, 0",
         },
     }
@@ -192,7 +192,7 @@ def fill_theme_10(config: Config) -> None:
             "text_color": "255, 248, 220",
             "link_color": "222, 184, 135",
             "alt_color": "240, 230, 140",
-            "button_background_color_1": "139, 69, 19",
+            "button_background_color_1": "149, 79, 29",
             "button_background_color_2": "160, 82, 45",
             "button_background_color_3": "205, 133, 63",
             "button_text_color": "255, 255, 255",

@@ -185,7 +185,6 @@ a.linkbutton:hover {
     display: flex;
     padding: 0.38em 0.8em;
     font-size: 1em;
-    font-weight: bold;
     align-items: center;
     justify-content: flex-start;
     text-decoration: none;
