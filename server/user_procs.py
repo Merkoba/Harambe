@@ -156,6 +156,7 @@ def get_users(
     sort: str = "register_date_desc",
     admin: bool = False,
     user_id: int | None = None,
+    random: bool = False,
 ) -> tuple[list[User], str, bool]:
     psize = 0
 
@@ -194,7 +195,11 @@ def get_users(
         users.append(user)
 
     total_str = f"{len(users)}"
-    utils.do_sort(users, sort, ["register_date", "last_date"])
+
+    if random:
+        utils.shuffle(users)
+    else:
+        utils.do_sort(users, sort, ["register_date", "last_date"])
 
     if psize > 0:
         start_index = (page - 1) * psize

@@ -18,6 +18,18 @@ App.init = () => {
     })
   }
 
+  let random_btn = DOM.el(`#random`)
+
+  if (random_btn) {
+    DOM.ev(random_btn, `click`, () => {
+      App.random_page()
+    })
+
+    DOM.ev(random_btn, `auxclick`, () => {
+      App.random_page(true)
+    })
+  }
+
   let del_sel = DOM.el(`#delete_selected`)
 
   if (del_sel) {
@@ -1337,4 +1349,10 @@ App.focus_table = () => {
 
 App.delete_all_items = (what, func) => {
   App.double_confirm(`Delete ALL ${what} ?`, func)
+}
+
+App.random_page = (new_tab = false) => {
+  let ms = App.mode_string()
+  let url = `/${ms}?random=true`
+  App.goto_url(url, new_tab)
 }

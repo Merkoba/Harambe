@@ -614,6 +614,7 @@ def admin(what: str) -> Any:
     sort = request.args.get("sort", def_date)
     user_id = int(request.args.get("user_id", 0))
     media_type = request.args.get("media_type", None)
+    random = request.args.get("random", "false") == "true"
     page = int(request.args.get("page", 1))
     page_size = str(request.args.get("page_size", config.admin_page_size))
     post_items: list[Post] = []
@@ -628,6 +629,7 @@ def admin(what: str) -> Any:
             sort=sort,
             user_id=user_id,
             media_type=media_type,
+            random=random,
             admin=True,
         )
     elif what == "users":
@@ -637,6 +639,7 @@ def admin(what: str) -> Any:
             query=query,
             sort=sort,
             user_id=user_id,
+            random=random,
             admin=True,
         )
     elif what == "reactions":
@@ -646,6 +649,7 @@ def admin(what: str) -> Any:
             query=query,
             sort=sort,
             admin=True,
+            random=random,
             user_id=user_id,
         )
     else:
@@ -900,6 +904,7 @@ def show_list(what: str) -> Any:
     page_size = str(request.args.get("page_size", config.list_page_size))
     sort = request.args.get("sort", "date_asc")
     query = request.args.get("query", "")
+    random = request.args.get("random", "false") == "true"
     media_type = request.args.get("media_type", None)
     only_listed = not history
     post_items: list[Post] = []
@@ -915,6 +920,7 @@ def show_list(what: str) -> Any:
             user_id=user_id,
             only_listed=only_listed,
             media_type=media_type,
+            random=random,
             admin=False,
         )
     elif what == "reactions":
@@ -926,6 +932,7 @@ def show_list(what: str) -> Any:
             user_id=user_id,
             query=query,
             sort=sort,
+            random=random,
             admin=True,
         )
     else:

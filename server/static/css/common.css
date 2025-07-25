@@ -372,15 +372,15 @@ select.settings_widget {
     justify-content: center;
 }
 
-.settings_cycle {
+.settings_separator {
+    opacity: 0.66;
+}
+
+.icon_btn {
     cursor: pointer;
     user-select: none;
 }
 
-.settings_cycle:hover {
+.icon_btn:hover {
     filter: brightness(1.1);
-}
-
-.settings_separator {
-    opacity: 0.66;
 }

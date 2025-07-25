@@ -148,6 +148,7 @@ def get_reactions(
     user_id: int | None = None,
     max_reactions: int = 0,
     only_listed: bool = False,
+    random: bool = False,
 ) -> tuple[list[Reaction], str, bool]:
     psize = 0
 
@@ -183,7 +184,11 @@ def get_reactions(
         reactions.append(reaction)
 
     total_str = f"{len(reactions)}"
-    utils.do_sort(reactions, sort, ["date"])
+
+    if random:
+        utils.shuffle(reactions)
+    else:
+        utils.do_sort(reactions, sort, ["date"])
 
     if max_reactions > 0:
         reactions = reactions[:max_reactions]

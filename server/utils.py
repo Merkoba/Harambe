@@ -682,3 +682,7 @@ def remove_metadata(path: Path) -> None:
 
 def striplimit(s: str, n: int) -> str:
     return s.strip()[:n].strip()
+
+
+def shuffle(items: Items) -> None:
+    random.shuffle(items)

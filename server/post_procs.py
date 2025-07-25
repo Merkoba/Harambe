@@ -312,6 +312,7 @@ def get_posts(
     user_id: int | None = None,
     only_listed: bool = False,
     media_type: str | None = None,
+    random: bool = False,
     admin: bool = False,
 ) -> tuple[list[Post], str, bool]:
     psize = 0
@@ -387,7 +388,11 @@ def get_posts(
 
     total_size_str = utils.get_size(total_size)
     total_str = f"{total_size_str} ({len(posts)})"
-    utils.do_sort(posts, sort, ["date"])
+
+    if random:
+        utils.shuffle(posts)
+    else:
+        utils.do_sort(posts, sort, ["date"])
 
     if max_posts > 0:
         posts = posts[:max_posts]
