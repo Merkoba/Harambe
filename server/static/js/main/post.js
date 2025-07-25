@@ -1354,7 +1354,6 @@ App.change_video_size = (el, what, size) => {
 }
 
 App.increase_video_size = (el) => {
-  console.log(el)
   if (App.max_on) {
     return
   }
