@@ -26,6 +26,7 @@ def fill_theme_1(config: Config) -> None:
         "colors": {
             "background_color": "81, 81, 81",
             "accent_color": "127, 104, 164",
+            "accent_color_text": "255, 255, 255",
             "text_color": "255, 255, 255",
             "link_color": "222, 211, 239",
             "alt_color": "193, 234, 178",
@@ -43,6 +44,7 @@ def fill_theme_2(config: Config) -> None:
         "colors": {
             "background_color": "25, 39, 52",
             "accent_color": "70, 130, 180",
+            "accent_color_text": "255, 255, 255",
             "text_color": "240, 248, 255",
             "link_color": "135, 206, 250",
             "alt_color": "64, 224, 208",
@@ -60,6 +62,7 @@ def fill_theme_3(config: Config) -> None:
         "colors": {
             "background_color": "34, 49, 34",
             "accent_color": "85, 139, 47",
+            "accent_color_text": "255, 255, 255",
             "text_color": "245, 255, 250",
             "link_color": "144, 238, 144",
             "alt_color": "255, 215, 0",
@@ -77,6 +80,7 @@ def fill_theme_4(config: Config) -> None:
         "colors": {
             "background_color": "54, 34, 24",
             "accent_color": "255, 69, 0",
+            "accent_color_text": "255, 255, 255",
             "text_color": "255, 248, 220",
             "link_color": "255, 140, 0",
             "alt_color": "255, 215, 0",
@@ -94,6 +98,7 @@ def fill_theme_5(config: Config) -> None:
         "colors": {
             "background_color": "45, 25, 55",
             "accent_color": "147, 112, 219",
+            "accent_color_text": "255, 255, 255",
             "text_color": "248, 248, 255",
             "link_color": "186, 85, 211",
             "alt_color": "255, 20, 147",
@@ -111,6 +116,7 @@ def fill_theme_6(config: Config) -> None:
         "colors": {
             "background_color": "248, 252, 255",
             "accent_color": "70, 130, 180",
+            "accent_color_text": "255, 255, 255",
             "text_color": "25, 25, 112",
             "link_color": "0, 100, 200",
             "alt_color": "0, 191, 255",
@@ -128,6 +134,7 @@ def fill_theme_7(config: Config) -> None:
         "colors": {
             "background_color": "255, 253, 240",
             "accent_color": "184, 134, 11",
+            "accent_color_text": "255, 255, 255",
             "text_color": "101, 63, 13",
             "link_color": "146, 64, 14",
             "alt_color": "34, 139, 34",
@@ -145,6 +152,7 @@ def fill_theme_8(config: Config) -> None:
         "colors": {
             "background_color": "18, 18, 18",
             "accent_color": "220, 220, 220",
+            "accent_color_text": "0, 0, 0",
             "text_color": "240, 240, 240",
             "link_color": "173, 216, 230",
             "alt_color": "255, 105, 180",
@@ -162,6 +170,7 @@ def fill_theme_9(config: Config) -> None:
         "colors": {
             "background_color": "12, 12, 12",
             "accent_color": "0, 255, 127",
+            "accent_color_text": "0, 0, 0",
             "text_color": "0, 255, 0",
             "link_color": "0, 255, 255",
             "alt_color": "255, 0, 255",
@@ -179,6 +188,7 @@ def fill_theme_10(config: Config) -> None:
         "colors": {
             "background_color": "112, 82, 60",
             "accent_color": "205, 133, 63",
+            "accent_color_text": "255, 255, 255",
             "text_color": "255, 248, 220",
             "link_color": "222, 184, 135",
             "alt_color": "240, 230, 140",

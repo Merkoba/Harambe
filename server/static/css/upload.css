@@ -22,8 +22,8 @@ body, html {
 
 #buttons button {
     background-color: var(--accent_color);
+    color: var(--accent_color_text);
     font-family: inherit;
-    color: var(--text_color);
     font-size: 1rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -39,6 +39,7 @@ body, html {
 #buttons button:hover {
     cursor: pointer;
     background-color: var(--accent_color);
+    color: var(--accent_color_text);
     filter: brightness(0.95);
     border-color: var(--button_border);
     border-width: 1px;
@@ -139,6 +140,7 @@ a.dialog_button:hover {
 
 .picker {
     background-color: var(--accent_color);
+    color: var(--accent_color_text);
     padding: var(--padding_1);
     box-sizing: border-box;
     width: 100%;
@@ -194,6 +196,7 @@ a.dialog_button:hover {
     width: 100%;
     padding: var(--padding_1);
     background-color: var(--accent_color);
+    color: var(--accent_color_text);
     box-sizing: border-box;
 }
 
@@ -247,7 +250,7 @@ input[type=text] {
 .topbutton {
     height: 100%;
     background-color: var(--accent_color);
-    color: var(--text_color);
+    color: var(--accent_color_text);
     border-style: solid;
     border-width: 1px;
     border-color: transparent;
