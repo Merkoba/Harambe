@@ -516,6 +516,14 @@ def random_media() -> Any:
     return random_func(request, action)
 
 
+@app.route("/random_text", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def random_text() -> Any:
+    action = lambda: post_procs.get_random_text_post()
+    return random_func(request, action)
+
+
 # FILES
 
 

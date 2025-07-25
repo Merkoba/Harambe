@@ -454,6 +454,15 @@ class Config:
         # Icon for text
         self.icon_for_text = "📝"
 
+        # Icon for image
+        self.icon_for_image = "🖼️"
+
+        # Icon for video
+        self.icon_for_video = "📺"
+
+        # Icon for audio
+        self.icon_for_audio = "🔊"
+
         # Icon for delete
         self.icon_for_delete = "💣"
 

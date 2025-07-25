@@ -794,19 +794,25 @@ App.setup_random_opts = (show = false, parent = ``) => {
       App.location(`/random_video`)
     }, () => {
       App.open_tab(`/random_video`)
-    }, App.icon(`random`))
+    }, App.icon(`video`))
 
     App.bind_button(`${name}_opts_audio`, () => {
       App.location(`/random_audio`)
     }, () => {
       App.open_tab(`/random_audio`)
-    }, App.icon(`random`))
+    }, App.icon(`audio`))
 
     App.bind_button(`${name}_opts_image`, () => {
       App.location(`/random_image`)
     }, () => {
       App.open_tab(`/random_image`)
-    }, App.icon(`random`))
+    }, App.icon(`image`))
+
+    App.bind_button(`${name}_opts_text`, () => {
+      App.location(`/random_text`)
+    }, () => {
+      App.open_tab(`/random_text`)
+    }, App.icon(`text`))
   }, show, parent)
 }
 

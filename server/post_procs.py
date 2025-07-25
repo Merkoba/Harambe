@@ -507,6 +507,15 @@ def get_random_media_post() -> Post | None:
     return None
 
 
+def get_random_text_post() -> Post | None:
+    db_post = database.get_random_text_post()
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
+
+
 def delete_posts(ids: list[int]) -> tuple[str, int]:
     if not ids:
         return utils.bad("Post ids were not provided")

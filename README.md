@@ -334,6 +334,8 @@ This strips all metadata from files except `rotation`.
 
 /random_image
 
+/random_text
+
 /random_media?json=true
 
 /random_video?json=true
@@ -341,6 +343,8 @@ This strips all metadata from files except `rotation`.
 /random_audio?json=true
 
 /random_image?json=true
+
+/random_text?json=true
 
 ---
 

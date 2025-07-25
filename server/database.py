@@ -692,6 +692,11 @@ def get_random_media_post() -> Post | None:
     return get_random_image_post()
 
 
+def get_random_text_post() -> Post | None:
+    exts = ["txt", "md"]
+    return get_post_by_ext(exts)
+
+
 def update_file_size(name: str, size: int) -> None:
     connection = get_conn()
     conn, c = connection.tuple()
