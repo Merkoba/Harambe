@@ -313,6 +313,7 @@ App.do_search = (query = ``, use_media_type = true, new_tab = false) => {
     url.searchParams.set(`page_size`, page_size)
   }
 
+  url.searchParams.delete(`page`)
   url.searchParams.set(`query`, App.encode_uri(query))
   App.goto_url(url.href, new_tab)
 }
