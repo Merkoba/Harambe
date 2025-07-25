@@ -378,11 +378,11 @@ select.settings_widget {
     justify-content: center;
 }
 
-.icon_btn {
+.icon_button {
     cursor: pointer;
     user-select: none;
 }
 
-.icon_btn:hover {
+.icon_button:hover {
     filter: brightness(1.1);
 }
