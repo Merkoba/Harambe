@@ -320,6 +320,10 @@ App.setup_you_opts = (user_id, show = false, parent = ``) => {
       App.edit_password()
     }, undefined, App.icon(`edit`))
 
+    App.bind_button(`${name}_opts_edit_theme`, () => {
+      App.change_theme()
+    }, undefined, App.icon(`theme`))
+
     App.bind_button(`${name}_opts_logout`, () => {
       let confirm_args = {
         message: `Visne profecto discedere`,
@@ -853,6 +857,17 @@ App.make_opts = (name, setup, show = false, parent = ``) => {
   if (show) {
     App[msg_name].show()
   }
+}
+
+App.make_msg = (name) => {
+  let msg_name = `msg_${name}`
+
+  if (App[msg_name]) {
+    return App[msg_name]
+  }
+
+  App[msg_name] = Msg.factory()
+  App[msg_name].set(DOM.el(`#template_${name}`).innerHTML)
 }
 
 App.bind_button = (what, func, mfunc, submenu = ``) => {
@@ -1576,4 +1591,30 @@ App.change_menu_icon = (what, value) => {
   let menu_item = DOM.el(`#${what}`)
   let icon = DOM.el(`.menu_icon`, menu_item)
   icon.textContent = value
+}
+
+App.change_theme = () => {
+  if (!App.msg_theme_picker) {
+    App.make_msg(`theme_picker`)
+  }
+
+  App.msg_theme_picker.show()
+
+  let select = DOM.el(`#theme_picker`)
+
+  if (select.options.length > 0) {
+    return
+  }
+
+  for (let theme of App.themes) {
+    let option = DOM.create(`option`)
+    option.value = theme[0]
+    option.textContent = theme[1]
+    select.appendChild(option)
+  }
+
+  DOM.ev(select, `change`, () => {
+    document.cookie = `theme=${select.value}; path=/`
+    App.reload()
+  })
 }

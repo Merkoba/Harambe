@@ -293,3 +293,11 @@ a.button:hover {
 .mono {
     font-family: monospace !important;
 }
+
+.Msg-content select {
+    background-color: var(--button_background_color_1);
+    border: 1px solid var(--button_background_color_2);
+    color: var(--button_text_color);
+    cursor: pointer;
+    font-size: 0.86rem;
+}

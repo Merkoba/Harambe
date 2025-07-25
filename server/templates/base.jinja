@@ -38,6 +38,7 @@
             App.max_pastebin_length = {{max_pastebin_length | default(0)}}
             App.max_description_length = {{max_description_length | default(0)}}
             App.max_filename_length = {{max_filename_length | default(0)}}
+            App.themes = {{themes | default(0) | tojson}}
 
             {% if post %}
             App.post = {}
@@ -229,8 +230,13 @@
                 <div id="you_opts_reactions" class="aero_button">Reactions</div>
                 <div id="you_opts_edit_name" class="aero_button">Name</div>
                 <div id="you_opts_edit_password" class="aero_button">Password</div>
+                <div id="you_opts_edit_theme" class="aero_button">Theme</div>
                 <div id="you_opts_logout" class="aero_button">Logout</div>
             </div>
+        </template>
+
+        <template id="template_theme_picker">
+            <select id="theme_picker"></select>
         </template>
         {% endif %}
 

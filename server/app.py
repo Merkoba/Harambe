@@ -163,7 +163,8 @@ def def_url() -> Any:
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
-    theme = config.themes.get(config.active_theme, {})
+    active_theme = request.cookies.get("theme", config.active_theme)
+    theme = config.themes.get(active_theme, {})
     colors = theme.get("colors", {})
 
     magics = {
@@ -175,6 +176,8 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
     icons = {
         key: getattr(config, key) for key in dir(config) if key.startswith("icon_for_")
     }
+
+    themes = [(key, theme.get("name", key)) for key, theme in config.themes.items()]
 
     return {
         "is_user": bool(user),
@@ -194,6 +197,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "colors": colors,
         "magics": magics,
         "icons": icons,
+        "themes": themes,
     }
 
 

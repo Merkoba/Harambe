@@ -473,6 +473,9 @@ class Config:
         # Icon for filename
         self.icon_for_filename = "💾"
 
+        # Icon for theme
+        self.icon_for_theme = "🎨"
+
         # Max captcha time
         self.max_captcha_time = 180
 
