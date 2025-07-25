@@ -889,6 +889,10 @@ App.key_events = () => {
 
   DOM.ev(document, `keyup`, (e) => {
     if (e.key === `ArrowLeft`) {
+      if (App.modal_open()) {
+        return
+      }
+
       if (App.no_mod(e)) {
         if (App.sample_open()) {
           App.next_sample(`prev`)
@@ -899,6 +903,10 @@ App.key_events = () => {
       }
     }
     else if (e.key === `ArrowRight`) {
+      if (App.modal_open()) {
+        return
+      }
+
       if (App.no_mod(e)) {
         if (App.sample_open()) {
           App.next_sample(`next`)

@@ -351,3 +351,11 @@ select.settings_widget {
 .settings_button:active {
     background-color: var(--button_background_color_2);
 }
+
+#settings_buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}

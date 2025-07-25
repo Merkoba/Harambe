@@ -21,6 +21,10 @@ App.startup = () => {
 
 App.setup_keyboard = () => {
   DOM.ev(document, `keydown`, (e) => {
+    if (App.settings_open()) {
+      return
+    }
+
     let n = 0
 
     if (e.code.startsWith(`Digit`)) {
@@ -1052,6 +1056,14 @@ App.msg_show = (what) => {
   }
 }
 
+App.modal_open = () => {
+  return Msg.msg && Msg.msg.any_open()
+}
+
+App.settings_open = () => {
+  return App.msg_settings && App.msg_settings.is_open()
+}
+
 App.open_tab = (url, target = `_blank`) => {
   window.open(url, target)
 }
@@ -1648,7 +1660,14 @@ App.show_settings = () => {
       App.set_cookie(`font_family`, font_family.value)
     })
 
-    DOM.ev(DOM.el(`#settings_reload`), `click`, () => {
+    DOM.ev(`#settings_reset`, `click`, () => {
+      App.clear_cookie(`theme`)
+      App.clear_cookie(`font_size`)
+      App.clear_cookie(`font_family`)
+      App.reload()
+    })
+
+    DOM.ev(`#settings_apply`, `click`, () => {
       App.reload()
     })
   }
@@ -1662,4 +1681,8 @@ App.get_cookie = (name) => {
 App.set_cookie = (name, value, days = 900) => {
   let expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString()
   document.cookie = `${name}=${value}; expires=${expires}; path=/`
+}
+
+App.clear_cookie = (name) => {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
 }
