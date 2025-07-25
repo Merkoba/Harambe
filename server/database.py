@@ -643,7 +643,7 @@ def update_user_last_date(user_id: int) -> None:
 def get_random_post(ignore_ids: list[int]) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    query = "select * from posts p join users u on p.user = u.id where p.id not in ({}) and u.lister = 1 order by random() limit 1"
+    query = "select * from posts p join users u on p.user = u.id where p.id not in ({}) and u.lister = 1 and p.privacy = 'public' order by random() limit 1"
     placeholders = ", ".join("?" for _ in ignore_ids)
     c.execute(query.format(placeholders), ignore_ids)
     row = c.fetchone()
@@ -658,7 +658,7 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
 def get_post_by_ext(exts: list[str]) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    query = "select * from posts where ext in ({}) order by random() limit 1"
+    query = "select * from posts where ext in ({}) and privacy = 'public' order by random() limit 1"
     placeholders = ", ".join("?" for _ in exts)
     c.execute(query.format(placeholders), exts)
     row = c.fetchone()
