@@ -859,15 +859,28 @@ App.make_opts = (name, setup, show = false, parent = ``) => {
   }
 }
 
-App.make_msg = (name) => {
+App.make_msg = (name, title) => {
   let msg_name = `msg_${name}`
 
   if (App[msg_name]) {
     return App[msg_name]
   }
 
-  App[msg_name] = Msg.factory()
+  let enable_titlebar
+
+  if (title) {
+    enable_titlebar = true
+  }
+  else {
+    enable_titlebar = false
+  }
+
+  App[msg_name] = Msg.factory({enable_titlebar})
   App[msg_name].set(DOM.el(`#template_${name}`).innerHTML)
+
+  if (title) {
+    App[msg_name].set_title(title)
+  }
 }
 
 App.bind_button = (what, func, mfunc, submenu = ``) => {
@@ -1595,7 +1608,7 @@ App.change_menu_icon = (what, value) => {
 
 App.change_theme = () => {
   if (!App.msg_theme_picker) {
-    App.make_msg(`theme_picker`)
+    App.make_msg(`theme_picker`, `Pick Theme`)
   }
 
   App.msg_theme_picker.show()
