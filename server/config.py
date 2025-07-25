@@ -51,7 +51,6 @@ class Config:
         self.links: list[Link] = [
             Link("About", "/static/demo/about.html", "🛟"),
             Link("Memorial", "/static/demo/memorial.html", "🦍"),
-            Link("Shortcuts", "/static/demo/shortcuts.html", "🖥️"),
         ]
 
         # Fill the themes
