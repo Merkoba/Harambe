@@ -1348,37 +1348,26 @@ App.change_media_size = (what, size) => {
   let width = el.clientWidth
   let height = el.clientHeight
   let ratio = height / width
+  let original_width = el.style.width
+  let original_height = el.style.height
   let new_width = what === `increase` ? width + size : width - size
+  let new_height = new_width * ratio
 
-  // For decreasing, just apply minimum size check
   if (what === `decrease`) {
-    if (new_width < 200) {
-      return // Don't shrink below 100px
+    if ((new_width < 200) || (new_height < 200)) {
+      return
     }
-
-    let new_height = new_width * ratio
-    el.style.width = `${new_width}px`
-    el.style.height = `${new_height}px`
-    return
   }
 
-  // For increasing, check if we would hit any constraints
+  el.style.width = `${new_width}px`
+  el.style.height = `${new_height}px`
+
   if (what === `increase`) {
-    // Temporarily set the new size to see if constraints kick in
-    let original_width = el.style.width
-    let original_height = el.style.height
-
-    el.style.width = `${new_width}px`
-    el.style.height = `${new_width * ratio}px`
-
-    // Check if the actual rendered size matches what we set
     let actual_width = el.clientWidth
     let actual_height = el.clientHeight
     let actual_ratio = actual_height / actual_width
 
-    // If the ratio changed significantly, we hit a constraint
-    if (Math.abs(actual_ratio - ratio) > 0.01) {
-      // Restore original size and don't grow
+    if (Math.abs(actual_ratio - ratio) > 0.05) {
       el.style.width = original_width
       el.style.height = original_height
       return
