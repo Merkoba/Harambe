@@ -1021,6 +1021,8 @@ App.start_embed = () => {
         else {
           App.decrease_video_size()
         }
+
+        e.preventDefault()
       }
     })
   }
@@ -1041,6 +1043,8 @@ App.start_embed = () => {
       else {
         App.decrease_video_size()
       }
+
+      e.preventDefault()
     })
   }
 
@@ -1102,6 +1106,8 @@ App.start_embed = () => {
         else {
           App.decrease_video_size()
         }
+
+        e.preventDefault()
       }
     })
   }
