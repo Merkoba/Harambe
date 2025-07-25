@@ -59,7 +59,7 @@ class Config:
         themes.fill(self)
 
         # Check themes.py to see all the theme names
-        self.active_theme: str = "blossom"
+        self.theme: str = "blossom"
 
         # Secret key for security
         # Make it a long random string
@@ -473,8 +473,8 @@ class Config:
         # Icon for filename
         self.icon_for_filename = "💾"
 
-        # Icon for theme
-        self.icon_for_theme = "🎨"
+        # Icon for settings
+        self.icon_for_settings = "🎨"
 
         # Max captcha time
         self.max_captcha_time = 180

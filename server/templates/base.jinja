@@ -39,7 +39,9 @@
             App.max_description_length = {{max_description_length | default(0)}}
             App.max_filename_length = {{max_filename_length | default(0)}}
             App.themes = {{themes | default(0) | tojson}}
-            App.active_theme = {{active_theme | default(0) | tojson | safe}}
+            App.theme = {{theme | default(0) | tojson | safe}}
+            App.font_size = {{font_size | default(0) | tojson | safe}}
+            App.font_family = {{font_family | default(0) | tojson | safe}}
 
             {% if post %}
             App.post = {}
@@ -232,13 +234,30 @@
                 <div id="you_opts_reactions" class="aero_button">Reactions</div>
                 <div id="you_opts_edit_name" class="aero_button">Name</div>
                 <div id="you_opts_edit_password" class="aero_button">Password</div>
-                <div id="you_opts_edit_theme" class="aero_button">Theme</div>
+                <div id="you_opts_edit_settings" class="aero_button">Settings</div>
                 <div id="you_opts_logout" class="aero_button">Logout</div>
             </div>
         </template>
 
-        <template id="template_theme_picker">
-            <select id="theme_picker"></select>
+        <template id="template_settings">
+            <div id="settings_container">
+                <div class="settings_item">
+                    <div class="settings_label">Theme</div>
+                    <select class="settings_widget" id="settings_theme"></select>
+                </div>
+
+                <div class="settings_item">
+                    <div class="settings_label">Font Size</div>
+                    <input class="settings_widget" type="text" placeholder="Enter value" id="settings_font_size">
+                </div>
+
+                <div class="settings_item">
+                    <div class="settings_label">Font Family</div>
+                    <input class="settings_widget" type="text" placeholder="Enter value" id="settings_font_family">
+                </div>
+
+                <div class="settings_button" id="settings_reload">Reload</div>
+            </div>
         </template>
         {% endif %}
 

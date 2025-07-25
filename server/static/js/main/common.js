@@ -320,9 +320,9 @@ App.setup_you_opts = (user_id, show = false, parent = ``) => {
       App.edit_password()
     }, undefined, App.icon(`edit`))
 
-    App.bind_button(`${name}_opts_edit_theme`, () => {
-      App.change_theme()
-    }, undefined, App.icon(`theme`))
+    App.bind_button(`${name}_opts_edit_settings`, () => {
+      App.show_settings()
+    }, undefined, App.icon(`settings`))
 
     App.bind_button(`${name}_opts_logout`, () => {
       let confirm_args = {
@@ -1609,32 +1609,49 @@ App.change_menu_icon = (what, value) => {
   icon.textContent = value
 }
 
-App.change_theme = () => {
-  if (!App.msg_theme_picker) {
-    App.make_msg(`theme_picker`, `Pick Theme`)
+App.show_settings = () => {
+  let created = App.msg_settings !== undefined
+
+  if (!created) {
+    App.make_msg(`settings`, `Settings`)
   }
 
-  App.msg_theme_picker.show()
+  App.msg_settings.show()
 
-  let select = DOM.el(`#theme_picker`)
+  if (!created) {
+    let select = DOM.el(`#settings_theme`)
 
-  if (select.options.length > 0) {
-    return
+    for (let theme of App.themes) {
+      let option = DOM.create(`option`)
+      option.value = theme[0]
+      option.textContent = theme[1]
+      select.appendChild(option)
+    }
+
+    select.value = App.get_cookie(`theme`) || App.theme
+
+    DOM.ev(select, `change`, () => {
+      App.set_cookie(`theme`, select.value)
+    })
+
+    let font_size = DOM.el(`#settings_font_size`)
+    font_size.value = App.get_cookie(`font_size`) || App.font_size
+
+    DOM.ev(font_size, `blur`, () => {
+      App.set_cookie(`font_size`, font_size.value)
+    })
+
+    let font_family = DOM.el(`#settings_font_family`)
+    font_family.value = App.get_cookie(`font_family`) || App.font_family
+
+    DOM.ev(font_family, `blur`, () => {
+      App.set_cookie(`font_family`, font_family.value)
+    })
+
+    DOM.ev(DOM.el(`#settings_reload`), `click`, () => {
+      App.reload()
+    })
   }
-
-  for (let theme of App.themes) {
-    let option = DOM.create(`option`)
-    option.value = theme[0]
-    option.textContent = theme[1]
-    select.appendChild(option)
-  }
-
-  select.value = App.get_cookie(`theme`) || App.active_theme
-
-  DOM.ev(select, `change`, () => {
-    App.set_cookie(`theme`, select.value)
-    App.reload()
-  })
 }
 
 App.get_cookie = (name) => {

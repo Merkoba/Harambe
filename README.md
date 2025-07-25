@@ -348,7 +348,7 @@ This strips all metadata from files except `rotation`.
 
 There are 10 themes to choose from.
 
-To change it, change the `active_theme` config.
+To change it, change the `theme` config.
 
 To see all the defined themes check [themes.py](server/themes.py)
 

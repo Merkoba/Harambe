@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 # Standard
+import re
 from typing import Any, Never
 from functools import wraps
 from typing import Callable
@@ -163,8 +164,8 @@ def def_url() -> Any:
 
 
 def common_configs(user: User | None = None) -> dict[str, Any]:
-    active_theme = request.cookies.get("theme", config.active_theme)
-    theme = config.themes.get(active_theme, {})
+    theme_ = request.cookies.get("theme", config.theme)
+    theme = config.themes.get(theme_, {})
     colors = theme.get("colors", {})
 
     magics = {
@@ -178,6 +179,11 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
     }
 
     themes = [(key, theme.get("name", key)) for key, theme in config.themes.items()]
+    font_family = request.cookies.get("font_family", config.font_family)
+    font_size = request.cookies.get("font_size", config.font_size)
+
+    if not font_size.isdigit():
+        font_size = re.sub(r"[^\d]", "", font_size)
 
     return {
         "is_user": bool(user),
@@ -188,8 +194,8 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "user_id": user.id if user else 0,
         "username": user.username if user else "",
         "user_name": user.name if user else "",
-        "font_family": config.font_family,
-        "font_size": config.font_size,
+        "font_family": font_family,
+        "font_size": font_size,
         "links": config.links,
         "file_path": config.file_path,
         "list_private": config.list_private,
@@ -198,7 +204,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "magics": magics,
         "icons": icons,
         "themes": themes,
-        "active_theme": config.active_theme,
+        "theme": config.theme,
     }
 
 
