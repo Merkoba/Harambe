@@ -100,9 +100,14 @@ a.linkbutton:hover {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     font-size: var(--font_size);
+}
+
+.dialog_container > * {
+    flex: 1;
+    min-width: 0;
 }
 
 #prompt_container {
@@ -182,6 +187,7 @@ a.linkbutton:hover {
     border: 1px solid #777;
     border-radius: 5px;
     cursor: pointer;
+    gap: 1rem;
 
     background: linear-gradient(to bottom,
     var(--button_background_color_1),
