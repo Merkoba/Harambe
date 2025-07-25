@@ -875,7 +875,10 @@ App.make_msg = (name, title) => {
     enable_titlebar = false
   }
 
-  App[msg_name] = Msg.factory({enable_titlebar})
+  App[msg_name] = Msg.factory({
+    enable_titlebar, window_x: `none`, center_titlebar: true
+  })
+
   App[msg_name].set(DOM.el(`#template_${name}`).innerHTML)
 
   if (title) {
