@@ -84,9 +84,9 @@ def fill_theme_4(config: Config) -> None:
             "text_color": "255, 248, 220",
             "link_color": "255, 140, 0",
             "alt_color": "255, 215, 0",
-            "button_background_color_1": "220, 20, 60",
-            "button_background_color_2": "178, 34, 34",
-            "button_background_color_3": "205, 92, 92",
+            "button_background_color_1": "205, 85, 65",
+            "button_background_color_2": "210, 115, 25",
+            "button_background_color_3": "200, 130, 35",
             "button_text_color": "255, 255, 255",
         },
     }
