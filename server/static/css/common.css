@@ -324,6 +324,7 @@ input[type="text"].settings_widget {
     font-size: 1rem;
     width: 12rem;
     padding: 0.1rem;
+    text-align: center;
 }
 
 select.settings_widget {
