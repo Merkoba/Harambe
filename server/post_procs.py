@@ -471,80 +471,8 @@ def get_random_post(used_ids: list[int]) -> Post | None:
     return None
 
 
-def get_random_video_post() -> Post | None:
-    db_post = database.get_random_video_post()
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
-def get_random_audio_post() -> Post | None:
-    db_post = database.get_random_audio_post()
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
-def get_random_image_post() -> Post | None:
-    db_post = database.get_random_image_post()
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
-def get_random_media_post() -> Post | None:
-    db_post = database.get_random_media_post()
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
-def get_random_text_post() -> Post | None:
-    db_post = database.get_random_text_post()
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
-def get_random_talk_post() -> Post | None:
-    db_post = database.get_random_talk_post()
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
-def get_random_zip_post() -> Post | None:
-    db_post = database.get_random_zip_post()
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
-def get_random_flash_post() -> Post | None:
-    db_post = database.get_random_flash_post()
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
-def get_random_url_post() -> Post | None:
-    db_post = database.get_random_url_post()
+def get_random_post_by_type(post_type: str) -> Post | None:
+    db_post = getattr(database, f"get_random_{post_type}_post", lambda: None)()
 
     if db_post:
         return make_post(db_post, utils.now())

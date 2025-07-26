@@ -791,51 +791,51 @@ App.setup_random_opts = (show = false, parent = ``) => {
     }, App.icon(`random`))
 
     App.bind_button(`${name}_opts_video`, () => {
-      App.location(`/random_video`)
+      App.location(`/random/video`)
     }, () => {
-      App.open_tab(`/random_video`)
+      App.open_tab(`/random/video`)
     }, App.icon(`video`))
 
     App.bind_button(`${name}_opts_audio`, () => {
-      App.location(`/random_audio`)
+      App.location(`/random/audio`)
     }, () => {
-      App.open_tab(`/random_audio`)
+      App.open_tab(`/random/audio`)
     }, App.icon(`audio`))
 
     App.bind_button(`${name}_opts_image`, () => {
-      App.location(`/random_image`)
+      App.location(`/random/image`)
     }, () => {
-      App.open_tab(`/random_image`)
+      App.open_tab(`/random/image`)
     }, App.icon(`image`))
 
     App.bind_button(`${name}_opts_text`, () => {
-      App.location(`/random_text`)
+      App.location(`/random/text`)
     }, () => {
-      App.open_tab(`/random_text`)
+      App.open_tab(`/random/text`)
     }, App.icon(`text`))
 
     App.bind_button(`${name}_opts_talk`, () => {
-      App.location(`/random_talk`)
+      App.location(`/random/talk`)
     }, () => {
-      App.open_tab(`/random_talk`)
+      App.open_tab(`/random/talk`)
     }, App.icon(`talk`))
 
     App.bind_button(`${name}_opts_flash`, () => {
-      App.location(`/random_flash`)
+      App.location(`/random/flash`)
     }, () => {
-      App.open_tab(`/random_flash`)
+      App.open_tab(`/random/flash`)
     }, App.icon(`flash`))
 
     App.bind_button(`${name}_opts_zip`, () => {
-      App.location(`/random_zip`)
+      App.location(`/random/zip`)
     }, () => {
-      App.open_tab(`/random_zip`)
+      App.open_tab(`/random/zip`)
     }, App.icon(`zip`))
 
     App.bind_button(`${name}_opts_url`, () => {
-      App.location(`/random_url`)
+      App.location(`/random/url`)
     }, () => {
-      App.open_tab(`/random_url`)
+      App.open_tab(`/random/url`)
     }, App.icon(`url`))
   }, show, parent)
 }

@@ -706,13 +706,6 @@ def get_random_image_post() -> Post | None:
     return get_post_by_ext(exts)
 
 
-def get_random_media_post() -> Post | None:
-    if random.randint(0, 1) == 0:
-        return get_random_video_post()
-
-    return get_random_image_post()
-
-
 def get_random_text_post() -> Post | None:
     exts = ["txt", "md"]
     return get_post_by_ext(exts, no_mode=True)

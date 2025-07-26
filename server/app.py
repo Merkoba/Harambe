@@ -220,22 +220,6 @@ def common_list_configs(user: User | None = None) -> dict[str, Any]:
     }
 
 
-def random_func(request: request, action: Callable[[], Post | None]) -> Any:
-    if action is None:
-        return over()
-
-    json = request.args.get("json", "") == "true"
-    post = action()
-
-    if post:
-        if json:
-            return post_procs.post_to_json(post)
-
-        return redirect(url_for("post", name=post.name))
-
-    return over()
-
-
 limiter = Limiter(
     get_remote_address,
     app=app,
@@ -484,76 +468,33 @@ def random_post() -> Any:
     return over()
 
 
-@app.route("/random_video", methods=["GET"])  # type: ignore
+@app.route("/random/<string:post_type>", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
-def random_video() -> Any:
-    action = lambda: post_procs.get_random_video_post()
-    return random_func(request, action)
+def random_by_type(post_type: str) -> Any:
+    if post_type not in [
+        "video",
+        "image",
+        "audio",
+        "text",
+        "talk",
+        "url",
+        "flash",
+        "zip",
+    ]:
+        return over()
 
+    post = post_procs.get_random_post_by_type(post_type)
 
-@app.route("/random_image", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def random_image() -> Any:
-    action = lambda: post_procs.get_random_image_post()
-    return random_func(request, action)
+    if post:
+        json = request.args.get("json", "") == "true"
 
+        if json:
+            return post_procs.post_to_json(post)
 
-@app.route("/random_audio", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def random_audio() -> Any:
-    action = lambda: post_procs.get_random_audio_post()
-    return random_func(request, action)
+        return redirect(url_for("post", name=post.name))
 
-
-@app.route("/random_media", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def random_media() -> Any:
-    action = lambda: post_procs.get_random_media_post()
-    return random_func(request, action)
-
-
-@app.route("/random_text", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def random_text() -> Any:
-    action = lambda: post_procs.get_random_text_post()
-    return random_func(request, action)
-
-
-@app.route("/random_talk", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def random_talk() -> Any:
-    action = lambda: post_procs.get_random_talk_post()
-    return random_func(request, action)
-
-
-@app.route("/random_url", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def random_url() -> Any:
-    action = lambda: post_procs.get_random_url_post()
-    return random_func(request, action)
-
-
-@app.route("/random_flash", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def random_flash() -> Any:
-    action = lambda: post_procs.get_random_flash_post()
-    return random_func(request, action)
-
-
-@app.route("/random_zip", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-def random_zip() -> Any:
-    action = lambda: post_procs.get_random_zip_post()
-    return random_func(request, action)
+    return over()
 
 
 # FILES
