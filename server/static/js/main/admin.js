@@ -1352,8 +1352,7 @@ App.delete_all_items = (what, func) => {
 }
 
 App.random_page = () => {
-  App.random_mode = `page`
-  App.setup_random_opts(true, `random`)
+  App.show_random(`page`)
 }
 
 App.do_random_page = (media_type, new_tab = false) => {

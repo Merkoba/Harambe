@@ -269,8 +269,7 @@ App.setup_menu_opts = (show = false, ignore = []) => {
     }, App.icon(`fresh`))
 
     App.bind_button(`${name}_opts_random`, () => {
-      App.random_mode = `menu`
-      App.setup_random_opts(true, name)
+      App.show_random()
     }, () => {
       App.random_post()
     }, App.icon(`random`))
@@ -1718,4 +1717,9 @@ App.set_cookie = (name, value, days = 900) => {
 
 App.clear_cookie = (name) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+}
+
+App.show_random = (what = `menu`) => {
+  App.random_mode = what
+  App.setup_random_opts(true, `random`)
 }
