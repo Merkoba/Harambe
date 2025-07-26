@@ -26,7 +26,7 @@ App.init = () => {
     })
 
     DOM.ev(random_btn, `auxclick`, () => {
-      App.random_page(true)
+      App.do_random_page()
     })
   }
 
