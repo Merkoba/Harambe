@@ -132,6 +132,7 @@ App.edit_title = () => {
         let json = await App.json(response)
         App.post.title = json.title
         DOM.el(`#title`).textContent = App.post.title || App.post.original
+        document.title = App.post.title || App.post.name
       }
       else {
         App.feedback(response)
