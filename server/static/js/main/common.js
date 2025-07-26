@@ -269,6 +269,7 @@ App.setup_menu_opts = (show = false, ignore = []) => {
     }, App.icon(`fresh`))
 
     App.bind_button(`${name}_opts_random`, () => {
+      App.random_mode = `menu`
       App.setup_random_opts(true, name)
     }, () => {
       App.random_post()
@@ -785,57 +786,57 @@ App.setup_random_opts = (show = false, parent = ``) => {
 
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_any`, () => {
-      App.location(`/random`)
+      App.random_action(`random`)
     }, () => {
-      App.open_tab(`/random`)
+      App.random_action(`random`, true)
     }, App.icon(`random`))
 
     App.bind_button(`${name}_opts_video`, () => {
-      App.location(`/random/video`)
+      App.random_action(`video`)
     }, () => {
-      App.open_tab(`/random/video`)
+      App.random_action(`video`, true)
     }, App.icon(`video`))
 
     App.bind_button(`${name}_opts_audio`, () => {
-      App.location(`/random/audio`)
+      App.random_action(`audio`)
     }, () => {
-      App.open_tab(`/random/audio`)
+      App.random_action(`audio`, true)
     }, App.icon(`audio`))
 
     App.bind_button(`${name}_opts_image`, () => {
-      App.location(`/random/image`)
+      App.random_action(`image`)
     }, () => {
-      App.open_tab(`/random/image`)
+      App.random_action(`image`, true)
     }, App.icon(`image`))
 
     App.bind_button(`${name}_opts_text`, () => {
-      App.location(`/random/text`)
+      App.random_action(`text`)
     }, () => {
-      App.open_tab(`/random/text`)
+      App.random_action(`text`, true)
     }, App.icon(`text`))
 
     App.bind_button(`${name}_opts_talk`, () => {
-      App.location(`/random/talk`)
+      App.random_action(`talk`)
     }, () => {
-      App.open_tab(`/random/talk`)
+      App.random_action(`talk`, true)
     }, App.icon(`talk`))
 
     App.bind_button(`${name}_opts_flash`, () => {
-      App.location(`/random/flash`)
+      App.random_action(`flash`)
     }, () => {
-      App.open_tab(`/random/flash`)
+      App.random_action(`flash`, true)
     }, App.icon(`flash`))
 
     App.bind_button(`${name}_opts_zip`, () => {
-      App.location(`/random/zip`)
+      App.random_action(`zip`)
     }, () => {
-      App.open_tab(`/random/zip`)
+      App.random_action(`zip`, true)
     }, App.icon(`zip`))
 
     App.bind_button(`${name}_opts_url`, () => {
-      App.location(`/random/url`)
+      App.random_action(`url`)
     }, () => {
-      App.open_tab(`/random/url`)
+      App.random_action(`url`, true)
     }, App.icon(`url`))
   }, show, parent)
 }
@@ -1845,4 +1846,28 @@ App.cycle_select = (name) => {
     App.set_cookie(`theme`, select.value)
     e.preventDefault()
   })
+}
+
+App.random_action = (what, new_tab = false) => {
+  if (App.random_mode === `page`) {
+    what = what === `random` ? `` : what
+    App.do_random_page(what, new_tab)
+    return
+  }
+
+  let path
+
+  if (what === `random`) {
+    path = `/random`
+  }
+  else {
+    path = `/random/${what}`
+  }
+
+  if (new_tab) {
+    App.open_tab(path)
+  }
+  else {
+    App.location(path)
+  }
 }
