@@ -463,6 +463,11 @@ def random_post() -> Any:
     if post:
         used_ids.append(post.id)
         session["used_ids"] = used_ids
+        json = request.args.get("json", "") == "true"
+
+        if json:
+            return post_procs.post_to_json(post)
+
         return redirect(url_for("post", name=post.name))
 
     return over()
