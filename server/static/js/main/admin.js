@@ -1353,6 +1353,12 @@ App.delete_all_items = (what, func) => {
 
 App.random_page = (new_tab = false) => {
   let ms = App.mode_string()
-  let url = `/${ms}?random=true`
-  App.goto_url(url, new_tab)
+  let url = new URL(`/${ms}?random=true`, window.location.origin)
+  let media_type = App.get_media_type()
+
+  if (media_type) {
+    url.searchParams.set(`media_type`, media_type)
+  }
+
+  App.goto_url(url.href, new_tab)
 }
