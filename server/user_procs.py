@@ -497,7 +497,8 @@ def mod_user(
         return utils.bad("Invalid value")
 
     if user.admin and (what == "admin"):
-        ids.remove(user.id)
+        if user.id in ids:
+            ids.remove(user.id)
 
     ok, checked_value = check_value(None, what, new_value)
 
