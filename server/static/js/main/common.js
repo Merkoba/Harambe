@@ -607,10 +607,21 @@ App.random_post = () => {
   App.location(`/random`)
 }
 
-App.msg_show = (what) => {
+App.msg_show = (what, back_button = true) => {
   let msg = App[`msg_${what}`]
 
   if (msg) {
+    let back = DOM.el(`#${what}_opts_back`)
+
+    if (back) {
+      if (back_button) {
+        DOM.show(back)
+      }
+      else {
+        DOM.hide(back)
+      }
+    }
+
     msg.show()
   }
 }
@@ -1126,9 +1137,10 @@ App.clear_cookie = (name) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
 }
 
-App.show_random = (what = `menu`) => {
+App.show_random = (what = `menu`, back_button = true) => {
   App.random_mode = what
-  App.setup_random_opts(true, `random`)
+  App.setup_random_opts(false, `menu`)
+  App.msg_show(`random`, back_button)
 }
 
 App.any_modal_open = () => {

@@ -1357,7 +1357,7 @@ App.delete_all_items = (what, func) => {
 }
 
 App.random_page = () => {
-  App.show_random(`page`)
+  App.show_random(`page`, false)
 }
 
 App.do_random_page = (media_type, new_tab = false) => {
@@ -1372,5 +1372,5 @@ App.do_random_page = (media_type, new_tab = false) => {
 }
 
 App.page_picker = () => {
-  App.setup_page_opts(true, `page`)
+  App.setup_page_opts(true)
 }
