@@ -9,17 +9,22 @@ class Promptext {
       value: ``,
       buttons: [],
       password: false,
+      clear: false,
     }
 
     App.fill_def_args(def_args, args)
 
-    let msg = Msg.factory({
+    let opts = {
       persistent: false,
       disable_content_padding: true,
-      clear_editables: true,
-      clear_editables_full: true,
-    })
+    }
 
+    if (args.clear) {
+      opts.clear_editables = true
+      opts.clear_editables_full = true
+    }
+
+    let msg = Msg.factory(opts)
     let c = DOM.create(`div`)
     c.id = `prompt_container`
     let input
