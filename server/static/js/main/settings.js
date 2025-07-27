@@ -13,7 +13,7 @@ App.show_settings = () => {
     for (let theme of App.themes) {
       let option = DOM.create(`option`)
       option.value = theme[0]
-      option.textContent = theme[1]
+      option.textContent = `${theme[1]} (${theme[2]})`
       select.appendChild(option)
     }
 

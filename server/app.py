@@ -182,7 +182,7 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         key: getattr(config, key) for key in dir(config) if key.startswith("icon_for_")
     }
 
-    themes = [(key, theme.get("name", key)) for key, theme in config.themes.items()]
+    themes = [(key, theme.get("name", key), theme.get("description", "")) for key, theme in config.themes.items()]
     font_family = get_cookie("font_family", config.font_family)
     font_size = get_cookie("font_size", config.font_size)
 

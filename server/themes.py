@@ -29,6 +29,7 @@ def fill(config: Config) -> None:
 def fill_theme_1(config: Config) -> None:
     config.themes["blossom"] = {
         "name": "Steel Blossom",
+        "description": "Gray purple soft tones",
         "colors": {
             "background_color": "81, 81, 81",
             "accent_color": "127, 104, 164",
@@ -47,6 +48,7 @@ def fill_theme_1(config: Config) -> None:
 def fill_theme_2(config: Config) -> None:
     config.themes["ocean"] = {
         "name": "Ocean Deep",
+        "description": "Dark blue nautical vibes",
         "colors": {
             "background_color": "25, 39, 52",
             "accent_color": "70, 130, 180",
@@ -65,6 +67,7 @@ def fill_theme_2(config: Config) -> None:
 def fill_theme_3(config: Config) -> None:
     config.themes["forest"] = {
         "name": "Forest Night",
+        "description": "Dark green nature tones",
         "colors": {
             "background_color": "34, 49, 34",
             "accent_color": "85, 139, 47",
@@ -83,6 +86,7 @@ def fill_theme_3(config: Config) -> None:
 def fill_theme_4(config: Config) -> None:
     config.themes["sunset"] = {
         "name": "Sunset Glow",
+        "description": "Warm orange golden hues",
         "colors": {
             "background_color": "54, 34, 24",
             "accent_color": "255, 69, 0",
@@ -101,6 +105,7 @@ def fill_theme_4(config: Config) -> None:
 def fill_theme_5(config: Config) -> None:
     config.themes["purple"] = {
         "name": "Purple Haze",
+        "description": "Deep violet atmosphere",
         "colors": {
             "background_color": "45, 25, 55",
             "accent_color": "147, 112, 219",
@@ -119,6 +124,7 @@ def fill_theme_5(config: Config) -> None:
 def fill_theme_6(config: Config) -> None:
     config.themes["arctic"] = {
         "name": "Arctic Ice",
+        "description": "Cool light blue whites",
         "colors": {
             "background_color": "248, 252, 255",
             "accent_color": "70, 130, 180",
@@ -137,6 +143,7 @@ def fill_theme_6(config: Config) -> None:
 def fill_theme_7(config: Config) -> None:
     config.themes["golden"] = {
         "name": "Golden Sand",
+        "description": "Bright warm yellows",
         "colors": {
             "background_color": "255, 253, 240",
             "accent_color": "184, 134, 11",
@@ -155,6 +162,7 @@ def fill_theme_7(config: Config) -> None:
 def fill_theme_8(config: Config) -> None:
     config.themes["midnight"] = {
         "name": "Midnight Black",
+        "description": "Pure dark monochrome",
         "colors": {
             "background_color": "18, 18, 18",
             "accent_color": "220, 220, 220",
@@ -173,6 +181,7 @@ def fill_theme_8(config: Config) -> None:
 def fill_theme_9(config: Config) -> None:
     config.themes["neon"] = {
         "name": "Cyber Neon",
+        "description": "Bright electric colors",
         "colors": {
             "background_color": "12, 12, 12",
             "accent_color": "0, 255, 127",
@@ -191,6 +200,7 @@ def fill_theme_9(config: Config) -> None:
 def fill_theme_10(config: Config) -> None:
     config.themes["sepia"] = {
         "name": "Sepia Classic",
+        "description": "Vintage brown nostalgia",
         "colors": {
             "background_color": "112, 82, 60",
             "accent_color": "205, 133, 63",
@@ -209,6 +219,7 @@ def fill_theme_10(config: Config) -> None:
 def fill_theme_11(config: Config) -> None:
     config.themes["crimson"] = {
         "name": "Crimson Night",
+        "description": "Dark red passionate",
         "colors": {
             "background_color": "35, 15, 15",
             "accent_color": "220, 20, 60",
@@ -227,6 +238,7 @@ def fill_theme_11(config: Config) -> None:
 def fill_theme_12(config: Config) -> None:
     config.themes["pastel"] = {
         "name": "Pastel Spring",
+        "description": "Soft light delicate",
         "colors": {
             "background_color": "252, 248, 255",
             "accent_color": "216, 191, 216",
@@ -245,6 +257,7 @@ def fill_theme_12(config: Config) -> None:
 def fill_theme_13(config: Config) -> None:
     config.themes["teal"] = {
         "name": "Teal Wave",
+        "description": "Cool cyan aquatic",
         "colors": {
             "background_color": "15, 45, 45",
             "accent_color": "0, 128, 128",
@@ -263,6 +276,7 @@ def fill_theme_13(config: Config) -> None:
 def fill_theme_14(config: Config) -> None:
     config.themes["cherry"] = {
         "name": "Cherry Blossom",
+        "description": "Pink floral feminine",
         "colors": {
             "background_color": "255, 250, 250",
             "accent_color": "255, 20, 147",
@@ -281,6 +295,7 @@ def fill_theme_14(config: Config) -> None:
 def fill_theme_15(config: Config) -> None:
     config.themes["mocha"] = {
         "name": "Coffee Mocha",
+        "description": "Rich brown earth",
         "colors": {
             "background_color": "59, 47, 47",
             "accent_color": "139, 69, 19",
@@ -299,6 +314,7 @@ def fill_theme_15(config: Config) -> None:
 def fill_theme_16(config: Config) -> None:
     config.themes["contrast"] = {
         "name": "High Contrast",
+        "description": "Maximum accessibility colors",
         "colors": {
             "background_color": "0, 0, 0",
             "accent_color": "255, 255, 0",
