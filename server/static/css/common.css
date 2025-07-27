@@ -192,6 +192,7 @@ a.linkbutton:hover {
     border: 1px solid #777;
     border-radius: 5px;
     cursor: pointer;
+    white-space: nowrap;
     gap: 1rem;
 
     background: linear-gradient(to bottom,

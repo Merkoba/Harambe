@@ -36,6 +36,12 @@ App.init = () => {
     DOM.ev(del_sel, `click`, () => {
       App.delete_selected()
     })
+
+    DOM.ev(del_sel, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.delete_all()
+      }
+    })
   }
 
   App.setup_edit()
@@ -87,14 +93,6 @@ App.init = () => {
   }
 
   App.setup_pages()
-
-  let del_all = DOM.el(`#delete_all`)
-
-  if (del_all) {
-    DOM.ev(del_all, `click`, () => {
-      App.delete_all()
-    })
-  }
 
   let menu_opts = DOM.el(`#template_menu_opts`)
 
