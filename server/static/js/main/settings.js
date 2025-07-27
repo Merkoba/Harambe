@@ -10,11 +10,22 @@ App.show_settings = () => {
   if (!created) {
     let select = DOM.el(`#settings_theme`)
 
-    for (let theme of App.themes) {
+    for (let [i, theme] of App.themes.entries()) {
       let option = DOM.create(`option`)
       option.value = theme[0]
-      option.textContent = `${theme[1]} (${theme[2]})`
+      option.textContent = theme[1]
       select.appendChild(option)
+
+      let desc = DOM.create(`option`, `info_option`)
+      desc.value = ``
+      desc.textContent = theme[2]
+      desc.disabled = true
+      select.appendChild(desc)
+
+      if (i < App.themes.length - 1) {
+        let hr = DOM.create(`hr`)
+        select.append(hr)
+      }
     }
 
     select.value = App.get_cookie(`theme`) || App.theme

@@ -386,3 +386,7 @@ select.settings_widget {
 .icon_button:hover {
     filter: brightness(1.1);
 }
+
+.info_option {
+    font-size: 0.9rem;
+}
