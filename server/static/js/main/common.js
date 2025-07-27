@@ -1134,3 +1134,7 @@ App.show_random = (what = `menu`) => {
 App.any_modal_open = () => {
   return Msg.msg && Msg.msg.any_open()
 }
+
+App.viewport_height = () => {
+  return Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+}

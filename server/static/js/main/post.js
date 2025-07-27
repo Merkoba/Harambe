@@ -646,7 +646,7 @@ App.apply_update = (update) => {
   App.post.title = update.title
   document.title = update.post_title
   DOM.el(`#title`).textContent = update.title || App.post.original
-  DOM.el(`#views`).textContent = update.views
+  DOM.el(`#views`).textContent = `${update.views} ${update.views === 1 ? "view" : "views"}`
 }
 
 App.show_modal_image = () => {
@@ -707,12 +707,12 @@ App.resize_max = () => {
   let w_width = window.innerWidth
   let main = DOM.el(`#main`)
   let left_space = main.getBoundingClientRect().left
-  let top_space = main.getBoundingClientRect().top
-  let w_height = window.innerHeight
   let v_width = w_width - left_space - 20
-  let v_height = w_height - top_space - 70
+  let vheight = App.viewport_height()
+  let embed_top = DOM.el(`.embed`).getBoundingClientRect().top
+  let mheight = vheight - embed_top
   App.set_css_var(`max_width`, `${v_width}px`)
-  App.set_css_var(`max_height`, `${v_height}px`)
+  App.set_css_var(`max_height`, `${mheight}px`)
 }
 
 App.add_icon_events = () => {
