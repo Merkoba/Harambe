@@ -973,8 +973,15 @@ App.setup_pages = () => {
       App.next_page()
     })
 
-    DOM.ev(next_page, `auxclick`, () => {
-      App.next_page(true)
+    DOM.ev(next_page, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.next_page(true)
+      }
+    })
+
+    DOM.ev(next_page, `contextmenu`, (e) => {
+      App.page_picker()
+      e.preventDefault()
     })
   }
 }
@@ -1364,4 +1371,8 @@ App.do_random_page = (media_type, new_tab = false) => {
   }
 
   App.goto_url(url.href, new_tab)
+}
+
+App.page_picker = () => {
+  App.setup_page_opts(true, `page`)
 }
