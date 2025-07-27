@@ -686,6 +686,7 @@ App.toggle_max = (what) => {
 
   let el = DOM.el(`#${what}`)
   let details = DOM.el(`#details`)
+
   App.max_on = !App.max_on
   App.max_id = what
 
@@ -693,9 +694,9 @@ App.toggle_max = (what) => {
   el.style.height = ``
 
   if (App.max_on) {
-    App.resize_max()
     DOM.hide(details)
     el.classList.add(`max`)
+    App.resize_max()
   }
   else {
     DOM.show(details)

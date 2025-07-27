@@ -134,11 +134,13 @@
     {% elif post.text %}
         {% if post.has_url %}
             {% if post.youtube_id %}
-            <div id="youtube_container"></div>
-            {% else %}
-            <hr>
-            <div id="url_container"></div>
-            {% endif %}
+            <div class="embed">
+                <div id="youtube_container"></div>
+                {% else %}
+                <hr>
+                <div id="url_container"></div>
+                {% endif %}
+            </div>
         {% elif not post.zip_embed %}
         <div class="embed">
             <div id="text_buttons" class="rowitem">
@@ -184,7 +186,7 @@
     {% endif %}
 
     <div id="description_container" class="colitem hidden">
-        <hr>
+        <hr id="description_hr">
         <div id="description"></div>
     </div>
 

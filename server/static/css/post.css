@@ -1,7 +1,6 @@
 :root {
     --modal_color: rgb(42 42 42);
     --react_padding: 0.8rem;
-    --media_margin: 0.45rem;
 }
 
 body, html {
@@ -73,7 +72,6 @@ a.link:hover,
     min-width: 28rem;
     max-width: 60%;
     height: auto;
-    margin-top: var(--media_margin);
     max-height: 36rem;
     cursor: pointer;
     object-fit: contain;
@@ -86,7 +84,6 @@ a.link:hover,
     height: auto;
     max-height: 42rem;
     background-color: black;
-    margin-top: var(--media_margin);
 }
 
 #video.max {
@@ -342,10 +339,6 @@ a.link:hover,
     padding: 0.5rem;
 }
 
-#flash_container {
-    margin-top: var(--media_margin);
-}
-
 #flash.max {
     width: var(--max_width) !important;
     height: var(--max_height) !important;
@@ -359,6 +352,7 @@ a.link:hover,
 
 .embed {
     width: 100%;
+    margin-top: 0.45rem;
 }
 
 #title {
@@ -382,10 +376,6 @@ a.link:hover,
 
 .ace_invisible {
     opacity: 0 !important;
-}
-
-#youtube_container {
-    margin-top: var(--media_margin);
 }
 
 #youtube {
