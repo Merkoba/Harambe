@@ -21,6 +21,89 @@ from react_procs import Reaction
 
 @dataclass
 class Post:
+    @staticmethod
+    def is_image(mtype: str) -> bool:
+        return mtype.startswith("image/")
+
+    @staticmethod
+    def is_video(mtype: str) -> bool:
+        return mtype.startswith("video/")
+
+    @staticmethod
+    def is_audio(mtype: str) -> bool:
+        return mtype.startswith("audio/")
+
+    @staticmethod
+    def is_flash(mtype: str) -> bool:
+        return mtype.startswith("application/") and ("flash" in mtype)
+
+    @staticmethod
+    def is_text(mtype: str) -> bool:
+        return (mtype.startswith("text/") and ("markdown" not in mtype)) or (
+            mtype == "application/json"
+        )
+
+    @staticmethod
+    def is_markdown(mtype: str) -> bool:
+        return mtype.startswith("text/") and ("markdown" in mtype)
+
+    @staticmethod
+    def is_zip(mtype: str) -> bool:
+        return mtype.startswith("application/") and ("zip" in mtype)
+
+    @staticmethod
+    def is_talk(mtype: str) -> bool:
+        return mtype == "mode/talk"
+
+    @staticmethod
+    def is_url(mtype: str) -> bool:
+        return mtype == "mode/url"
+
+    @staticmethod
+    def check_media(mtype: str, obj: Post | None = None) -> tuple[str, str]:
+        media_type: str = ""
+        sample_icon: str = ""
+
+        if Post.is_text(mtype):
+            media_type = "text"
+            sample_icon = config.sample_icon_text
+        elif Post.is_markdown(mtype):
+            media_type = "markdown"
+            sample_icon = config.sample_icon_markdown
+        elif Post.is_zip(mtype):
+            media_type = "zip"
+            sample_icon = config.sample_icon_zip
+        elif Post.is_image(mtype):
+            media_type = "image"
+            sample_icon = config.sample_icon_image
+        elif Post.is_video(mtype):
+            media_type = "video"
+            sample_icon = config.sample_icon_video
+        elif Post.is_audio(mtype):
+            media_type = "audio"
+            sample_icon = config.sample_icon_audio
+        elif Post.is_flash(mtype):
+            media_type = "flash"
+            sample_icon = config.sample_icon_flash
+        elif Post.is_talk(mtype):
+            media_type = "talk"
+            sample_icon = config.sample_icon_talk
+        elif Post.is_url(mtype):
+            media_type = "url"
+            sample_icon = config.sample_icon_url
+        else:
+            media_type = "unknown"
+            sample_icon = config.sample_icon
+
+        if obj:
+            if media_type:
+                obj.media_type = media_type
+
+            if sample_icon:
+                obj.sample_icon = sample_icon
+
+        return media_type, sample_icon
+
     id: int
     user_id: int
     name: str
@@ -65,35 +148,6 @@ class Post:
     youtube_id: str
     media_type: str = ""
     sample_icon: str = ""
-
-    def is_image(self) -> bool:
-        return self.mtype.startswith("image/")
-
-    def is_video(self) -> bool:
-        return self.mtype.startswith("video/")
-
-    def is_audio(self) -> bool:
-        return self.mtype.startswith("audio/")
-
-    def is_flash(self) -> bool:
-        return self.mtype.startswith("application/") and ("flash" in self.mtype)
-
-    def is_text(self) -> bool:
-        return (self.mtype.startswith("text/") and ("markdown" not in self.mtype)) or (
-            self.mtype == "application/json"
-        )
-
-    def is_markdown(self) -> bool:
-        return self.mtype.startswith("text/") and ("markdown" in self.mtype)
-
-    def is_zip(self) -> bool:
-        return self.mtype.startswith("application/") and ("zip" in self.mtype)
-
-    def is_talk(self) -> bool:
-        return self.mtype == "mode/talk"
-
-    def is_url(self) -> bool:
-        return self.mtype == "mode/url"
 
 
 def get_full_name(dbpost: DbPost) -> str:
@@ -260,34 +314,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         youtube_id,
     )
 
-    if obj.is_text():
-        obj.media_type = "text"
-        obj.sample_icon = config.sample_icon_text
-    elif obj.is_markdown():
-        obj.media_type = "markdown"
-        obj.sample_icon = config.sample_icon_markdown
-    elif obj.is_zip():
-        obj.media_type = "zip"
-        obj.sample_icon = config.sample_icon_zip
-    elif obj.is_image():
-        obj.media_type = "image"
-        obj.sample_icon = config.sample_icon_image
-    elif obj.is_video():
-        obj.media_type = "video"
-        obj.sample_icon = config.sample_icon_video
-    elif obj.is_audio():
-        obj.media_type = "audio"
-        obj.sample_icon = config.sample_icon_audio
-    elif obj.is_flash():
-        obj.media_type = "flash"
-        obj.sample_icon = config.sample_icon_flash
-    elif obj.is_talk():
-        obj.media_type = "talk"
-        obj.sample_icon = config.sample_icon_talk
-    elif obj.is_url():
-        obj.media_type = "url"
-        obj.sample_icon = config.sample_icon_url
-
+    Post.check_media(obj.mtype, obj)
     return obj
 
 

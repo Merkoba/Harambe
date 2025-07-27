@@ -9,8 +9,6 @@
 <div class="sep">|</div>
 <div class="icon_button" id="refresh" title="Refresh this page">🔃</div>
 <div class="sep">|</div>
-<div class="icon_button" id="random" title="Fetch a random page">🎲</div>
-<div class="sep">|</div>
 
 {% if mode == "admin_reactions" %}
 <div class="button" id="delete_selected" title="Delete selected items">Delete</div>
@@ -84,7 +82,7 @@
 
             <!-- Sample -->
             <div class="table_cell small sample">
-                <div title="Click to show the sample. Wheel can be used to scroll text">🔊</div>
+                <div title="Click to show the sample. Wheel can be used to scroll text">{{item.sample_icon}}</div>
             </div>
 
             <!-- Post -->

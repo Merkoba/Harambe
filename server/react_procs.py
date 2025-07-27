@@ -32,6 +32,7 @@ class Reaction:
     ptitle: str
     pfull: str
     poriginal: str
+    sample_icon: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -66,6 +67,11 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         uname = "Anon"
         listed = False
 
+    sample_icon = config.sample_icon
+
+    if reaction.parent and reaction.parent.mtype:
+        _, sample_icon = post_procs.Post.check_media(reaction.parent.mtype)
+
     return Reaction(
         reaction.id,
         reaction.post,
@@ -84,6 +90,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         ptitle,
         pfull,
         poriginal,
+        sample_icon,
     )
 
 
