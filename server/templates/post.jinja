@@ -83,8 +83,29 @@
 
     <hr id="top_hr">
 
-    <!-- File -->
     <div id="details">
+        <!-- Uploader -->
+        <div class="rowitem">
+            <div id="uploader" class="button" title="{{post.uploader_str}}">{{post.uploader_str[: max_post_name_length] | trim}}</div>
+
+            <div class="sep">|</div>
+
+            <div id="views">{{post.views}} {{"view" if post.views == 1 else "views"}}</div>
+
+            <div class="sep">|</div>
+
+            {% if post.privacy == "public" %}
+            <div id="privacy">Public</div>
+            {% elif post.privacy == "private" %}
+            <div id="privacy">Private</div>
+            {% endif %}
+
+            <div class="sep">|</div>
+
+            <div id="ago" class="nowrap" title="{{post.date_1}} | {{post.date_2}}">{{post.ago}}</div>
+        </div>
+
+        <!-- File -->
         {% if dynamic_file_info and
         ((post.media_type == "talk") or (post.media_type == "url")) %}
         {# Don't show the file because it's not relevant #}
@@ -106,27 +127,6 @@
             </div>
         </div>
         {% endif %}
-
-        <!-- Uploader -->
-        <div class="rowitem">
-            <div id="uploader" class="button" title="{{post.uploader_str}}">{{post.uploader_str[: max_post_name_length] | trim}}</div>
-
-            <div class="sep">|</div>
-
-            <div id="views">{{post.views}} {{"view" if post.views == 1 else "views"}}</div>
-
-            <div class="sep">|</div>
-
-            {% if post.privacy == "public" %}
-            <div id="privacy">Public</div>
-            {% elif post.privacy == "private" %}
-            <div id="privacy">Private</div>
-            {% endif %}
-
-            <div class="sep">|</div>
-
-            <div id="ago" class="nowrap" title="{{post.date_1}} | {{post.date_2}}">{{post.ago}}</div>
-        </div>
     </div>
 
     {% if post.flash_embed %}
