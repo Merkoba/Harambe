@@ -90,9 +90,7 @@
         {# Don't show the file because it's not relevant #}
         {% else %}
         <div id="file" class="rowitem">
-            <div class="rowitem nowrap">
-                <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">{{post.name}} {{post.ext}}</a>
-            </div>
+            <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">File ({{post.ext}})</a>
 
             <div class="sep">|</div>
             <div class="nowrap">{{post.size_str}}</div>
@@ -111,15 +109,11 @@
 
         <!-- Uploader -->
         <div class="rowitem">
-            <div class="rowitem nowrap">
-                <div id="uploader" class="button" title="{{post.uploader_str}}">{{post.uploader_str[: max_post_name_length] | trim}}</div>
-            </div>
+            <div id="uploader" class="button" title="{{post.uploader_str}}">{{post.uploader_str[: max_post_name_length] | trim}}</div>
 
             <div class="sep">|</div>
 
-            <div class="rowitem nowrap">
-                <div id="views">{{post.views}} {{"view" if post.views == 1 else "views"}}</div>
-            </div>
+            <div id="views">{{post.views}} {{"view" if post.views == 1 else "views"}}</div>
 
             <div class="sep">|</div>
 
