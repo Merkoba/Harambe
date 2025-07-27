@@ -259,11 +259,6 @@ App.update_date = () => {
   if (level > 1) {
     DOM.el(`#ago`).textContent = str
   }
-
-  let date_1 = dateFormat(App.date_ms, `d mmmm yyyy`)
-  let date_2 = dateFormat(App.date_ms, `hh:MM TT`)
-  DOM.el(`#date_1`).textContent = date_1
-  DOM.el(`#date_2`).textContent = date_2
 }
 
 App.start_flash = async () => {
