@@ -324,7 +324,7 @@ This strips all metadata from files except `rotation`.
 
 ## Themes
 
-There are 10 themes to choose from.
+There are multiple color themes to choose from.
 
 To change it, change the `theme` config.
 

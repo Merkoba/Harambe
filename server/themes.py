@@ -18,6 +18,12 @@ def fill(config: Config) -> None:
     fill_theme_8(config)
     fill_theme_9(config)
     fill_theme_10(config)
+    fill_theme_11(config)
+    fill_theme_12(config)
+    fill_theme_13(config)
+    fill_theme_14(config)
+    fill_theme_15(config)
+    fill_theme_16(config)
 
 
 def fill_theme_1(config: Config) -> None:
@@ -196,5 +202,113 @@ def fill_theme_10(config: Config) -> None:
             "button_background_color_2": "190, 120, 75",
             "button_background_color_3": "225, 160, 95",
             "button_text_color": "255, 255, 255",
+        },
+    }
+
+
+def fill_theme_11(config: Config) -> None:
+    config.themes["crimson"] = {
+        "name": "Crimson Night",
+        "colors": {
+            "background_color": "35, 15, 15",
+            "accent_color": "220, 20, 60",
+            "accent_color_text": "255, 255, 255",
+            "text_color": "255, 240, 245",
+            "link_color": "255, 99, 71",
+            "alt_color": "255, 215, 0",
+            "button_background_color_1": "178, 34, 34",
+            "button_background_color_2": "139, 0, 0",
+            "button_background_color_3": "205, 92, 92",
+            "button_text_color": "255, 255, 255",
+        },
+    }
+
+
+def fill_theme_12(config: Config) -> None:
+    config.themes["pastel"] = {
+        "name": "Pastel Spring",
+        "colors": {
+            "background_color": "252, 248, 255",
+            "accent_color": "216, 191, 216",
+            "accent_color_text": "75, 0, 130",
+            "text_color": "75, 0, 130",
+            "link_color": "147, 112, 219",
+            "alt_color": "255, 182, 193",
+            "button_background_color_1": "221, 160, 221",
+            "button_background_color_2": "255, 192, 203",
+            "button_background_color_3": "176, 224, 230",
+            "button_text_color": "75, 0, 130",
+        },
+    }
+
+
+def fill_theme_13(config: Config) -> None:
+    config.themes["teal"] = {
+        "name": "Teal Wave",
+        "colors": {
+            "background_color": "15, 45, 45",
+            "accent_color": "0, 128, 128",
+            "accent_color_text": "255, 255, 255",
+            "text_color": "240, 255, 255",
+            "link_color": "72, 209, 204",
+            "alt_color": "255, 215, 0",
+            "button_background_color_1": "32, 178, 170",
+            "button_background_color_2": "0, 139, 139",
+            "button_background_color_3": "95, 158, 160",
+            "button_text_color": "255, 255, 255",
+        },
+    }
+
+
+def fill_theme_14(config: Config) -> None:
+    config.themes["cherry"] = {
+        "name": "Cherry Blossom",
+        "colors": {
+            "background_color": "255, 250, 250",
+            "accent_color": "255, 20, 147",
+            "accent_color_text": "255, 255, 255",
+            "text_color": "105, 105, 105",
+            "link_color": "219, 112, 147",
+            "alt_color": "255, 182, 193",
+            "button_background_color_1": "255, 105, 180",
+            "button_background_color_2": "255, 182, 193",
+            "button_background_color_3": "255, 192, 203",
+            "button_text_color": "255, 255, 255",
+        },
+    }
+
+
+def fill_theme_15(config: Config) -> None:
+    config.themes["mocha"] = {
+        "name": "Coffee Mocha",
+        "colors": {
+            "background_color": "59, 47, 47",
+            "accent_color": "139, 69, 19",
+            "accent_color_text": "255, 255, 255",
+            "text_color": "245, 222, 179",
+            "link_color": "210, 180, 140",
+            "alt_color": "255, 215, 0",
+            "button_background_color_1": "160, 82, 45",
+            "button_background_color_2": "205, 133, 63",
+            "button_background_color_3": "222, 184, 135",
+            "button_text_color": "255, 255, 255",
+        },
+    }
+
+
+def fill_theme_16(config: Config) -> None:
+    config.themes["contrast"] = {
+        "name": "High Contrast",
+        "colors": {
+            "background_color": "0, 0, 0",
+            "accent_color": "255, 255, 0",
+            "accent_color_text": "0, 0, 0",
+            "text_color": "255, 255, 255",
+            "link_color": "0, 255, 255",
+            "alt_color": "255, 0, 0",
+            "button_background_color_1": "255, 255, 255",
+            "button_background_color_2": "255, 255, 0",
+            "button_background_color_3": "0, 255, 0",
+            "button_text_color": "0, 0, 0",
         },
     }
