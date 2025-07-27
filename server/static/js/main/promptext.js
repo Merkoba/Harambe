@@ -76,19 +76,7 @@ class Promptext {
     })
 
     DOM.ev(input, `keydown`, (e) => {
-      if (e.key === `Enter`) {
-        if (args.multi) {
-          if (e.shiftKey || e.ctrlKey) {
-            this.submit()
-            e.preventDefault()
-          }
-        }
-        else {
-          this.submit()
-          e.preventDefault()
-        }
-      }
-      else if (e.key === `Tab`) {
+      if (e.key === `Tab`) {
         e.preventDefault()
       }
     })
@@ -150,5 +138,9 @@ class Promptext {
     else {
       this.button.textContent = `Submit (${this.input.value.length})`
     }
+  }
+
+  is_open() {
+    return this.msg.is_open()
   }
 }
