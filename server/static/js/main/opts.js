@@ -519,54 +519,54 @@ App.setup_page_opts = (show = false) => {
       App.goto_page(1)
     }, () => {
       App.goto_page(1, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
 
     App.bind_button(`${name}_opts_2`, () => {
       App.goto_page(2)
     }, () => {
       App.goto_page(2, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
 
     App.bind_button(`${name}_opts_3`, () => {
       App.goto_page(3)
     }, () => {
       App.goto_page(3, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
 
     App.bind_button(`${name}_opts_4`, () => {
       App.goto_page(4)
     }, () => {
       App.goto_page(4, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
 
     App.bind_button(`${name}_opts_5`, () => {
       App.goto_page(5)
     }, () => {
       App.goto_page(5, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
 
     App.bind_button(`${name}_opts_6`, () => {
       App.goto_page(6)
     }, () => {
       App.goto_page(6, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
 
     App.bind_button(`${name}_opts_7`, () => {
       App.goto_page(7)
     }, () => {
       App.goto_page(7, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
 
     App.bind_button(`${name}_opts_8`, () => {
       App.goto_page(8)
     }, () => {
       App.goto_page(8, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
 
     App.bind_button(`${name}_opts_9`, () => {
       App.goto_page(9)
     }, () => {
       App.goto_page(9, true)
-    }, App.icon(`edit`))
+    }, App.icon(`page`))
   }, show)
 }
