@@ -192,7 +192,7 @@ def get_reactions(
         if not utils.do_query(reaction, query, props):
             continue
 
-        if media_type is not None:
+        if media_type not in [None, "all"]:
             mtype = reaction.media_type
             mtypes = [media_type]
 

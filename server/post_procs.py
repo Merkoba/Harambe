@@ -381,7 +381,7 @@ def get_posts(
         if not utils.do_query(post, query, props):
             continue
 
-        if media_type is not None:
+        if media_type not in [None, "all"]:
             mtype = post.media_type
             mtypes = [media_type]
 
