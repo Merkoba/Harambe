@@ -681,11 +681,6 @@ App.select_all_text = () => {
 }
 
 App.toggle_max = (what) => {
-  if (what === `image`) {
-    App.toggle_modal_image()
-    return
-  }
-
   let el = DOM.el(`#${what}`)
   let details = DOM.el(`#details`)
   let buttons = DOM.el(`#text_buttons`)

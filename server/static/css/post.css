@@ -78,6 +78,13 @@ a.link:hover,
     object-position: left;
 }
 
+#image.max {
+    width: var(--max_width);
+    height: var(--max_height);
+    max-width: var(--max_width);
+    max-height: var(--max_height);
+}
+
 #video {
     width: 46rem;
     max-width: 90%;
