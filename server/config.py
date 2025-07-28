@@ -502,6 +502,9 @@ class Config:
         # Icon for refresh
         self.icon_for_refresh = "🔃"
 
+        # Icon for search
+        self.icon_for_search = "🔍"
+
         # Max captcha time
         self.max_captcha_time = 180
 

@@ -68,6 +68,10 @@ App.setup_menu_opts = (show = false, ignore = []) => {
       App.setup_admin_opts(true, name)
     }, undefined, `>`)
 
+    App.bind_button(`${name}_opts_search`, () => {
+      App.setup_search_opts(true, name)
+    }, undefined, `>`)
+
     App.bind_button(`${name}_opts_links`, () => {
       App.setup_link_opts(true, name)
     }, undefined, `>`)
@@ -569,4 +573,22 @@ App.setup_page_opts = (show = false) => {
       App.goto_page(9, true)
     }, App.icon(`page`))
   }, show)
+}
+
+App.setup_search_opts = (show = false) => {
+  let name = `search`
+
+  App.make_opts(name, () => {
+    App.bind_button(`${name}_opts_posts`, () => {
+      App.prompt_search(`posts`)
+    }, undefined, App.icon(`search`))
+
+    App.bind_button(`${name}_opts_reactions`, () => {
+      App.prompt_search(`reactions`)
+    }, undefined, App.icon(`search`))
+
+    App.bind_button(`${name}_opts_users`, () => {
+      App.prompt_search(`users`)
+    }, undefined, App.icon(`search`))
+  }, show, `menu`)
 }

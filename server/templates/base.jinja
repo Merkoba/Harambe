@@ -152,6 +152,10 @@
                 <div id="menu_opts_admin" class="aero_button">Admin</div>
                 {% endif %}
 
+                {% if is_admin or is_reader or (not list_private) %}
+                <div id="menu_opts_search" class="aero_button">Search</div>
+                {% endif %}
+
                 <div id="menu_opts_links" class="aero_button">Links</div>
 
                 {% if is_user %}
@@ -170,6 +174,14 @@
                 <div id="edit_post_opts_description" class="aero_button">Edit Description</div>
                 <div id="edit_post_opts_filename" class="aero_button">Edit Filename</div>
                 <div id="edit_post_opts_privacy" class="aero_button">Edit Privacy</div>
+            </div>
+        </template>
+
+        <template id="template_search_opts">
+            <div class="dialog_container">
+                <div id="search_opts_posts" class="aero_button">Posts</div>
+                <div id="search_opts_reactions" class="aero_button">Reactions</div>
+                <div id="search_opts_users" class="aero_button">Users</div>
             </div>
         </template>
 

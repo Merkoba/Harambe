@@ -1158,3 +1158,25 @@ App.any_modal_open = () => {
 App.viewport_height = () => {
   return Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
 }
+
+App.prompt_search = (what) => {
+  let where
+
+  if (App.is_admin) {
+    where = `admin`
+  }
+  else {
+    where = `list`
+  }
+
+  let prompt_args = {
+    placeholder: `Enter search term`,
+    max: 250,
+    callback: async (query) => {
+      let path = `/${where}/${what}?query=${encodeURIComponent(query)}`
+      App.goto_url(path)
+    },
+  }
+
+  App.prompt_text(prompt_args)
+}

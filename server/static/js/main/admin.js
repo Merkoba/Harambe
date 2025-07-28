@@ -982,6 +982,13 @@ App.setup_pages = () => {
       e.preventDefault()
     })
   }
+
+  let page_info = DOM.el(`#page_info`)
+
+  DOM.ev(page_info, `contextmenu`, (e) => {
+    App.page_picker()
+    e.preventDefault()
+  })
 }
 
 App.refresh = (new_tab = false) => {
