@@ -134,7 +134,9 @@ App.cycle_select = (name) => {
   let select = DOM.el(`#settings_${name}`)
 
   DOM.ev(select, `wheel`, (e) => {
-    let cycles = Array.from(select.options).map(option => option.value)
+    let cycles = Array.from(select.options)
+    .filter(o => !o.disabled)
+    .map(option => option.value)
 
     if (cycles.length < 2) {
       return
