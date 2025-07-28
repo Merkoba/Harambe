@@ -956,11 +956,15 @@ App.setup_pages = () => {
 
   if (prev_page) {
     DOM.ev(prev_page, `click`, () => {
-      App.prev_page()
+      if (!App.is_disabled(prev_page)) {
+        App.prev_page()
+      }
     })
 
     DOM.ev(prev_page, `auxclick`, () => {
-      App.prev_page(true)
+      if (!App.is_disabled(prev_page)) {
+        App.prev_page(true)
+      }
     })
   }
 
@@ -968,12 +972,16 @@ App.setup_pages = () => {
 
   if (next_page) {
     DOM.ev(next_page, `click`, () => {
-      App.next_page()
+      if (!App.is_disabled(next_page)) {
+        App.next_page()
+      }
     })
 
     DOM.ev(next_page, `auxclick`, (e) => {
       if (e.button === 1) {
-        App.next_page(true)
+        if (!App.is_disabled(next_page)) {
+          App.next_page(true)
+        }
       }
     })
 

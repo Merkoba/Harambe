@@ -1180,3 +1180,7 @@ App.prompt_search = (what) => {
 
   App.prompt_text(prompt_args)
 }
+
+App.is_disabled = (el) => {
+  return el.classList.contains(`strike`) || el.disabled
+}
