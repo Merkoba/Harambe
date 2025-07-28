@@ -8,6 +8,7 @@ App.init = () => {
   App.image_expanded = false
   App.modal_image_container_id = `#Msg-content-container-modal_image`
   App.modal_image_scroll_step = 80
+  App.editor_lines = 25
 
   let edit = DOM.el(`#edit`)
 
@@ -40,6 +41,7 @@ App.init = () => {
   DOM.ev(window, `resize`, () => {
     if (App.max_on) {
       App.resize_max()
+      App.check_max_editor()
     }
   })
 
@@ -713,17 +715,20 @@ App.toggle_max = (what) => {
 
     el.classList.remove(`max`)
   }
+
+  App.check_max_editor()
 }
 
 App.resize_max = () => {
   let w_width = window.innerWidth
   let main = DOM.el(`#main`)
   let left_space = main.getBoundingClientRect().left
-  let v_width = w_width - left_space - 20
+  let vwidth = w_width - left_space - 20
   let vheight = App.viewport_height()
   let embed_top = DOM.el(`.embed`).getBoundingClientRect().top
   let mheight = vheight - embed_top
-  App.set_css_var(`max_width`, `${v_width}px`)
+
+  App.set_css_var(`max_width`, `${vwidth}px`)
   App.set_css_var(`max_height`, `${mheight}px`)
 }
 
@@ -954,7 +959,7 @@ App.start_editor = async () => {
     wrap: App.wrapped(),
     highlightGutterLine: false,
     showInvisibles: false,
-    maxLines: 25,
+    maxLines: App.editor_lines,
   })
 }
 
@@ -1401,4 +1406,30 @@ App.increase_media_size = () => {
 
 App.decrease_video_size = () => {
   App.change_media_size(`decrease`, 50)
+}
+
+App.check_max_editor = () => {
+  let mheight = parseInt(App.get_css_var(`max_height`))
+
+  if (App.max_on) {
+    if (App.max_id === `editor`) {
+      let line_height = App.editor.renderer.line_height || 16
+      let max_lines = Math.floor(mheight / line_height) - 2
+
+      App.editor.setOptions({
+        maxLines: max_lines > 1 ? max_lines : Infinity
+      })
+
+      App.editor.resize()
+    }
+  }
+  else {
+    if (App.max_id === `editor`) {
+      App.editor.setOptions({
+        maxLines: App.editor_lines
+      })
+
+      App.editor.resize()
+    }
+  }
 }

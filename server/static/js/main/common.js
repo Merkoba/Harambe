@@ -216,6 +216,14 @@ App.set_css_var = (name, value) => {
   document.documentElement.style.setProperty(`--${name}`, value)
 }
 
+App.get_css_var = (name) => {
+  let value = getComputedStyle(document.documentElement).getPropertyValue(`--${name}`)
+
+  if (value) {
+    return value.trim()
+  }
+}
+
 App.print_info = (msg) => {
   // eslint-disable-next-line no-console
   console.log(msg)
