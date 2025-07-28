@@ -32,7 +32,8 @@ class Reaction:
     ptitle: str
     pfull: str
     poriginal: str
-    sample_icon: str = ""
+    media_type: str
+    sample_icon: str
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -67,10 +68,11 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         uname = "Anon"
         listed = False
 
+    media_type = "unknown"
     sample_icon = config.sample_icon
 
     if reaction.parent and reaction.parent.mtype:
-        _, sample_icon = post_procs.Post.check_media(reaction.parent.mtype)
+        media_type, sample_icon = post_procs.Post.check_media(reaction.parent.mtype)
 
     return Reaction(
         reaction.id,
@@ -90,6 +92,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         ptitle,
         pfull,
         poriginal,
+        media_type,
         sample_icon,
     )
 
@@ -155,6 +158,7 @@ def get_reactions(
     user_id: int | None = None,
     max_reactions: int = 0,
     only_listed: bool = False,
+    media_type: str | None = None,
     random: bool = False,
 ) -> tuple[list[Reaction], str, bool]:
     psize = 0
@@ -187,6 +191,16 @@ def get_reactions(
 
         if not utils.do_query(reaction, query, props):
             continue
+
+        if media_type is not None:
+            mtype = reaction.media_type
+            mtypes = [media_type]
+
+            if media_type == "text":
+                mtypes.append("markdown")
+
+            if mtype not in mtypes:
+                continue
 
         reactions.append(reaction)
 

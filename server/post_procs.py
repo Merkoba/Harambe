@@ -382,33 +382,14 @@ def get_posts(
             continue
 
         if media_type is not None:
-            if media_type == "image":
-                if post.media_type != "image":
-                    continue
-            elif media_type == "video":
-                if post.media_type != "video":
-                    continue
-            elif media_type == "audio":
-                if post.media_type != "audio":
-                    continue
-            elif media_type == "flash":
-                if post.media_type != "flash":
-                    continue
-            elif media_type == "text":
-                if post.media_type != "text":
-                    continue
-            elif media_type == "markdown":
-                if post.media_type != "markdown":
-                    continue
-            elif media_type == "zip":
-                if post.media_type != "zip":
-                    continue
-            elif media_type == "url":
-                if post.media_type != "url":
-                    continue
-            elif media_type == "talk":
-                if post.media_type != "talk":
-                    continue
+            mtype = post.media_type
+            mtypes = [media_type]
+
+            if media_type == "text":
+                mtypes.append("markdown")
+
+            if mtype not in mtypes:
+                continue
 
         total_size += post.size
         posts.append(post)

@@ -9,6 +9,8 @@
 <div class="sep">|</div>
 <div class="icon_button" id="refresh" title="Refresh this page">🔃</div>
 <div class="sep">|</div>
+<div class="icon_button" id="random" title="Fetch a random page">🎲</div>
+<div class="sep">|</div>
 
 {% if mode == "admin_reactions" %}
 <div class="button" id="delete_selected" title="Delete selected items">Delete</div>
@@ -32,6 +34,21 @@
 {% else %}
 <div id="next_page" class="unselectable strike">Next</div>
 {% endif %}
+
+<div class="sep">|</div>
+
+<select id="media_select" title="Select type of media">
+    <option value="all">All</option>
+    <hr>
+    <option value="image">Image</option>
+    <option value="video">Video</option>
+    <option value="audio">Audio</option>
+    <option value="text">Text</option>
+    <option value="talk">Talk</option>
+    <option value="url">URL</option>
+    <option value="flash">Flash</option>
+    <option value="zip">Zip</option>
+</select>
 
 <div class="sep">|</div>
 <select id="page_select" title="Show this number of items per page"></select>
