@@ -309,10 +309,10 @@ a.link:hover,
 }
 
 #editor.max {
-    width: var(--max_width);
-    height: var(--max_height);
-    max-width: var(--max_width);
-    max-height: var(--max_height);
+    width: var(--max_width) !important;
+    height: var(--max_height) !important;
+    max-width: var(--max_width) !important;
+    max-height: var(--max_height) !important;
 }
 
 #markdown {
