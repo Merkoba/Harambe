@@ -54,7 +54,7 @@ App.init = () => {
 
   if (uploader) {
     DOM.evs(uploader, [`click`, `auxclick`], () => {
-      App.user_opts_user_id = App.user_id
+      App.user_opts_user_id = App.post.user_id
       App.msg_show(`user`)
     })
   }
