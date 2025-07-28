@@ -64,7 +64,7 @@
         <div class="table_cell checkbox"><input id="checkbox" type="checkbox" title="Select or Unselect All"></div>
 
         <div id="sample" class="table_cell small" title="Show the sample of the item">
-            <div>Sample</div>
+            <div class="header_text" data-sort="sample_icon">Sample</div>
         </div>
 
         <div id="post" class="table_cell" title="The post where it was posted">
@@ -99,7 +99,7 @@
         data-post="{{item.pname}}" data-date="{{item.date_str}}" data-ago="{{item.ago}}"
         data-value="{{item.value}}" data-uname="{{item.uname}}"
         data-mtype="{{item.pmtype}}" data-full="{{item.pfull}}" data-pname="{{item.ptitle or item.poriginal}}"
-        data-title="{{item.ptitle}}" data-original="{{item.poriginal}}">
+        data-title="{{item.ptitle}}" data-original="{{item.poriginal}}" data-sample_icon="{{item.sample_icon}}">
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
                 <input class="select_checkbox" type="checkbox">
