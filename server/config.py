@@ -16,6 +16,7 @@ from watchdog.events import FileSystemEventHandler  # type: ignore
 # Modules
 import utils
 import themes
+import icons
 
 
 class FileChangeHandler(FileSystemEventHandler):  # type: ignore
@@ -56,6 +57,9 @@ class Config:
         # Fill the themes
         self.themes: dict[str, dict[str, Any]] = {}
         themes.fill(self)
+
+        # Fill the icons
+        icons.fill(self)
 
         # Check themes.py to see all the theme names
         self.theme: str = "blossom"
@@ -278,42 +282,6 @@ class Config:
         # Lifetime of a user login session in days
         self.session_days = 365 * 5
 
-        # Sample icon for admin pages
-        self.sample_icon = "🪧"
-
-        # Sample icon for videos
-        self.sample_icon_video = "📺"
-
-        # Sample icon for images
-        self.sample_icon_image = "🖼️"
-
-        # Sample icon for audio
-        self.sample_icon_audio = "🔊"
-
-        # Sample icon for text
-        self.sample_icon_text = "📝"
-
-        # Sample icon for zip
-        self.sample_icon_zip = "📦"
-
-        # Sample icon for markdown
-        self.sample_icon_markdown = "🧑🏼‍🎨"
-
-        # Sample icon for flash
-        self.sample_icon_flash = "💥"
-
-        # Sample icon for talk
-        self.sample_icon_talk = "💬"
-
-        # Sample icon for URL
-        self.sample_icon_url = "🔗"
-
-        # Icon for prev sample button
-        self.prev_sample_icon = "⏪"
-
-        # Icon for next sample button
-        self.next_sample_icon = "⏩"
-
         # Max length for post marks
         self.max_mark_length = 20
 
@@ -420,90 +388,6 @@ class Config:
 
         # Show menu icons
         self.show_menu_icons = True
-
-        # Icon for posts
-        self.icon_for_posts = "😎"
-
-        # Icon for reactions
-        self.icon_for_reactions = "🫠"
-
-        # Icon for users
-        self.icon_for_users = "🤪"
-
-        # Icon for public posts
-        self.icon_for_public = "🌎"
-
-        # Icon for private posts
-        self.icon_for_private = "🔒"
-
-        # Icon for fresh posts
-        self.icon_for_fresh = "🐟"
-
-        # Icon for random
-        self.icon_for_random = "🎲"
-
-        # Icon for upload
-        self.icon_for_upload = "💾"
-
-        # Icon for menu
-        self.icon_for_menu = "🧭"
-
-        # Icon for edit
-        self.icon_for_edit = "📝"
-
-        # Icon for text
-        self.icon_for_text = "📝"
-
-        # Icon for image
-        self.icon_for_image = "🖼️"
-
-        # Icon for video
-        self.icon_for_video = "📺"
-
-        # Icon for audio
-        self.icon_for_audio = "🔊"
-
-        # Icon for talk
-        self.icon_for_talk = "💬"
-
-        # Icon for zip
-        self.icon_for_zip = "📦"
-
-        # Icon for flash
-        self.icon_for_flash = "💥"
-
-        # Icon for URL
-        self.icon_for_url = "🔗"
-
-        # Icon for delete
-        self.icon_for_delete = "💣"
-
-        # Icon for deleted
-        self.icon_for_deleted = "👻"
-
-        # Icon for logout
-        self.icon_for_logout = "🪂"
-
-        # Icon for asc
-        self.icon_for_asc = "📈"
-
-        # Icon for desc
-        self.icon_for_desc = "📉"
-
-        # Icon for filename
-        self.icon_for_filename = "💾"
-
-        # Icon for settings
-        self.icon_for_settings = "🎨"
-
-        # Icon for page
-        self.icon_for_page = "📟"
-
-        # Icon for refresh
-        self.icon_for_refresh = "🔃"
-
-        # Icon for search
-        self.icon_for_search = "🔍"
 
         # Max captcha time
         self.max_captcha_time = 180
