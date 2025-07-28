@@ -639,6 +639,7 @@ def admin(what: str) -> Any:
             query=query,
             sort=sort,
             admin=True,
+            media_type=media_type,
             random=random,
             user_id=user_id,
         )
