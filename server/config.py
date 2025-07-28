@@ -499,6 +499,9 @@ class Config:
         # Icon for page
         self.icon_for_page = "📟"
 
+        # Icon for refresh
+        self.icon_for_refresh = "🔃"
+
         # Max captcha time
         self.max_captcha_time = 180
 
