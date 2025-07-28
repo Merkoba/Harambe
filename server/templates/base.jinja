@@ -87,10 +87,6 @@
             {% for key, value in magics.items() %}
             App.{{key}} = {{value | default(0) | tojson}}
             {% endfor %}
-
-            {% for key, value in icons.items() %}
-            App.{{key}} = {{value | default(0) | tojson | safe}}
-            {% endfor %}
         </script>
 
         <script src="/static/js/main/common.js"></script>

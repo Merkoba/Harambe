@@ -178,9 +178,6 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         if key.endswith("magic_enabled")
     }
 
-    icons = getattr(config, "icons", {})
-    media_icons = getattr(config, "media_icons", {})
-
     themes = [
         (key, theme.get("name", key), theme.get("description", ""))
         for key, theme in config.themes.items()
@@ -209,8 +206,8 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "show_menu_icons": config.show_menu_icons,
         "colors": colors,
         "magics": magics,
-        "icons": icons,
-        "media_icons": media_icons,
+        "icons": config.icons,
+        "media_icons": config.media_icons,
         "themes": themes,
         "theme": config.theme,
         "max_title_length": config.max_title_length,
