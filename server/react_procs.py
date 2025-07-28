@@ -69,7 +69,7 @@ def make_reaction(reaction: DbReaction, now: int) -> Reaction:
         listed = False
 
     media_type = "unknown"
-    sample_icon = config.sample_icon
+    sample_icon = config.media_icons["any"]
 
     if reaction.parent and reaction.parent.mtype:
         media_type, sample_icon = post_procs.Post.check_media(reaction.parent.mtype)

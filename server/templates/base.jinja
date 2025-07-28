@@ -42,6 +42,7 @@
             App.theme = {{theme | default(0) | tojson | safe}}
             App.font_size = {{font_size | default(0) | tojson | safe}}
             App.font_family = {{font_family | default(0) | tojson | safe}}
+            App.icons = {{icons | default(0) | tojson | safe}}
 
             {% if post %}
             App.post = {}

@@ -66,35 +66,34 @@ class Post:
 
         if Post.is_text(mtype):
             media_type = "text"
-            sample_icon = config.sample_icon_text
+            sample_icon = config.media_icons["text"]
         elif Post.is_markdown(mtype):
             media_type = "markdown"
-            sample_icon = config.sample_icon_markdown
+            sample_icon = config.media_icons["markdown"]
         elif Post.is_zip(mtype):
             media_type = "zip"
-            sample_icon = config.sample_icon_zip
+            sample_icon = config.media_icons["zip"]
         elif Post.is_image(mtype):
             media_type = "image"
-            sample_icon = config.sample_icon_image
+            sample_icon = config.media_icons["image"]
         elif Post.is_video(mtype):
             media_type = "video"
-            sample_icon = config.sample_icon_video
+            sample_icon = config.media_icons["video"]
         elif Post.is_audio(mtype):
             media_type = "audio"
-            sample_icon = config.sample_icon_audio
+            sample_icon = config.media_icons["audio"]
         elif Post.is_flash(mtype):
             media_type = "flash"
-            sample_icon = config.sample_icon_flash
+            sample_icon = config.media_icons["flash"]
         elif Post.is_talk(mtype):
             media_type = "talk"
-            sample_icon = config.sample_icon_talk
+            sample_icon = config.media_icons["talk"]
         elif Post.is_url(mtype):
             media_type = "url"
-            sample_icon = config.sample_icon_url
+            sample_icon = config.media_icons["url"]
         else:
             media_type = "unknown"
-            sample_icon = config.sample_icon
-
+            sample_icon = config.media_icons["any"]
         if obj:
             if media_type:
                 obj.media_type = media_type

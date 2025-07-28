@@ -178,9 +178,8 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         if key.endswith("magic_enabled")
     }
 
-    icons = {
-        key: getattr(config, key) for key in dir(config) if key.startswith("icon_for_")
-    }
+    icons = getattr(config, "icons", {})
+    media_icons = getattr(config, "media_icons", {})
 
     themes = [
         (key, theme.get("name", key), theme.get("description", ""))
@@ -211,15 +210,9 @@ def common_configs(user: User | None = None) -> dict[str, Any]:
         "colors": colors,
         "magics": magics,
         "icons": icons,
+        "media_icons": media_icons,
         "themes": themes,
         "theme": config.theme,
-    }
-
-
-def common_list_configs(user: User | None = None) -> dict[str, Any]:
-    return {
-        "prev_sample_icon": config.prev_sample_icon,
-        "next_sample_icon": config.next_sample_icon,
         "max_title_length": config.max_title_length,
     }
 
@@ -293,7 +286,6 @@ def upload() -> Any:
         show_image=config.show_image,
         main_title=config.main_title,
         image_tooltip=config.image_tooltip,
-        max_title_length=config.max_title_length,
         allow_titles=config.allow_titles,
         allow_descriptions=config.allow_descriptions,
         show_list=show_list,
@@ -403,7 +395,6 @@ def post(name: str) -> Any:
         post_refresh_times=config.post_refresh_times,
         max_post_name_length=config.max_post_name_length,
         max_reaction_name_length=config.max_reaction_name_length,
-        max_title_length=config.max_title_length,
         max_description_length=config.max_description_length,
         dynamic_file_info=config.dynamic_file_info,
         main_title=config.main_title,
@@ -681,7 +672,6 @@ def admin(what: str) -> Any:
         def_page_size=def_page_size,
         used_user_id=user_id,
         sort=sort,
-        **common_list_configs(),
         **common_configs(user),
     )
 
@@ -962,7 +952,6 @@ def show_list(what: str) -> Any:
         used_user_id=user_id,
         sort=sort,
         back="/",
-        **common_list_configs(),
         **common_configs(user),
     )
 

@@ -90,14 +90,14 @@
         {% endif %}
 
         <div id="buttons">
-            <button type="button" id="menu_btn" title="Ctrl + M">{{icons.icon_for_menu}}&nbsp;&nbsp;Menu</button>
+            <button type="button" id="menu_btn" title="Ctrl + M">{{icons.menu}}&nbsp;&nbsp;Menu</button>
 
             {% if is_user and upload_enabled and pastebin_enabled %}
-            <button type="button" id="menu_text" title="Create a text file">{{icons.icon_for_text}}&nbsp;&nbsp;Text</button>
+            <button type="button" id="menu_text" title="Create a text file">{{icons.text}}&nbsp;&nbsp;Text</button>
             {% endif %}
 
             {% if is_user and upload_enabled %}
-            <button id="submit_btn" type="button" title="Upload the file(s)">{{icons.icon_for_upload}}&nbsp;&nbsp;Upload</button>
+            <button id="submit_btn" type="button" title="Upload the file(s)">{{icons.upload}}&nbsp;&nbsp;Upload</button>
             {% endif %}
 
             {% if not is_user %}

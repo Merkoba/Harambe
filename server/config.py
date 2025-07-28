@@ -59,6 +59,8 @@ class Config:
         themes.fill(self)
 
         # Fill the icons
+        self.icons: dict[str, str] = {}
+        self.media_icons: dict[str, str] = {}
         icons.fill(self)
 
         # Check themes.py to see all the theme names

@@ -7,130 +7,106 @@ if TYPE_CHECKING:
     from config import Config
 
 
-def fill(config: Config):
-    fill_icons_1(config)
-    fill_icons_2(config)
+def fill(config: Config) -> None:
+    fill_icons(config)
+    fill_media_icons(config)
 
 
-def fill_icons_1(config: Config):
-    # Sample icon for admin pages
-    config.sample_icon = "🪧"
-
-    # Sample icon for videos
-    config.sample_icon_video = "📺"
-
-    # Sample icon for images
-    config.sample_icon_image = "🖼️"
-
-    # Sample icon for audio
-    config.sample_icon_audio = "🔊"
-
-    # Sample icon for text
-    config.sample_icon_text = "📝"
-
-    # Sample icon for zip
-    config.sample_icon_zip = "📦"
-
-    # Sample icon for markdown
-    config.sample_icon_markdown = "🧑🏼‍🎨"
-
-    # Sample icon for flash
-    config.sample_icon_flash = "💥"
-
-    # Sample icon for talk
-    config.sample_icon_talk = "💬"
-
-    # Sample icon for URL
-    config.sample_icon_url = "🔗"
-
-    # Icon for prev sample button
-    config.prev_sample_icon = "⏪"
-
-    # Icon for next sample button
-    config.next_sample_icon = "⏩"
-
-
-def fill_icons_2(config: Config):
+def fill_icons(config: Config) -> None:
     # Icon for posts
-    config.icon_for_posts = "😎"
+    config.icons["posts"] = "😎"
 
     # Icon for reactions
-    config.icon_for_reactions = "🫠"
+    config.icons["reactions"] = "🫠"
 
     # Icon for users
-    config.icon_for_users = "🤪"
+    config.icons["users"] = "🤪"
 
     # Icon for public posts
-    config.icon_for_public = "🌎"
+    config.icons["public"] = "🌎"
 
     # Icon for private posts
-    config.icon_for_private = "🔒"
+    config.icons["private"] = "🔒"
 
     # Icon for fresh posts
-    config.icon_for_fresh = "🐟"
+    config.icons["fresh"] = "🐟"
 
     # Icon for random
-    config.icon_for_random = "🎲"
+    config.icons["random"] = "🎲"
 
     # Icon for upload
-    config.icon_for_upload = "💾"
+    config.icons["upload"] = "💾"
 
     # Icon for menu
-    config.icon_for_menu = "🧭"
+    config.icons["menu"] = "🧭"
 
     # Icon for edit
-    config.icon_for_edit = "📝"
-
-    # Icon for text
-    config.icon_for_text = "📝"
-
-    # Icon for image
-    config.icon_for_image = "🖼️"
-
-    # Icon for video
-    config.icon_for_video = "📺"
-
-    # Icon for audio
-    config.icon_for_audio = "🔊"
-
-    # Icon for talk
-    config.icon_for_talk = "💬"
-
-    # Icon for zip
-    config.icon_for_zip = "📦"
-
-    # Icon for flash
-    config.icon_for_flash = "💥"
-
-    # Icon for URL
-    config.icon_for_url = "🔗"
+    config.icons["edit"] = "📝"
 
     # Icon for delete
-    config.icon_for_delete = "💣"
+    config.icons["delete"] = "💣"
 
     # Icon for deleted
-    config.icon_for_deleted = "👻"
+    config.icons["deleted"] = "👻"
 
     # Icon for logout
-    config.icon_for_logout = "🪂"
+    config.icons["logout"] = "🪂"
 
     # Icon for asc
-    config.icon_for_asc = "📈"
+    config.icons["asc"] = "📈"
 
     # Icon for desc
-    config.icon_for_desc = "📉"
+    config.icons["desc"] = "📉"
 
     # Icon for filename
-    config.icon_for_filename = "💾"
+    config.icons["filename"] = "💾"
 
     # Icon for settings
-    config.icon_for_settings = "🎨"
+    config.icons["settings"] = "🎨"
 
     # Icon for page
-    config.icon_for_page = "📟"
+    config.icons["page"] = "📟"
 
     # Icon for refresh
-    config.icon_for_refresh = "🔃"
+    config.icons["refresh"] = "🔃"
 
     # Icon for search
-    config.icon_for_search = "🔍"
+    config.icons["search"] = "🔍"
+
+    # Icon for prev sample button
+    config.icons["prev_sample"] = "⏪"
+
+    # Icon for next sample button
+    config.icons["next_sample"] = "⏩"
+
+
+def fill_media_icons(config: Config) -> None:
+    # Sample icon for admin pages
+    config.media_icons["any"] = "🪧"
+
+    # Sample icon for videos
+    config.media_icons["video"] = "📺"
+
+    # Sample icon for images
+    config.media_icons["image"] = "🖼️"
+
+    # Sample icon for audio
+    config.media_icons["audio"] = "🔊"
+
+    # Sample icon for text
+    config.media_icons["text"] = "📝"
+
+    # Sample icon for zip
+    config.media_icons["zip"] = "📦"
+
+    # Sample icon for markdown
+    config.media_icons["markdown"] = "🧑🏼‍🎨"
+
+    # Sample icon for flash
+    config.media_icons["flash"] = "💥"
+
+    # Sample icon for talk
+    config.media_icons["talk"] = "💬"
+
+    # Sample icon for URL
+    config.media_icons["url"] = "🔗"

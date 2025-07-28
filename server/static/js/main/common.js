@@ -767,7 +767,7 @@ App.close_flash = () => {
 }
 
 App.icon = (what) => {
-  return App[`icon_for_${what}`]
+  return App.icons[what]
 }
 
 App.get_storage = () => {
