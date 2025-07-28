@@ -581,14 +581,14 @@ App.setup_search_opts = (show = false) => {
   App.make_opts(name, () => {
     App.bind_button(`${name}_opts_posts`, () => {
       App.prompt_search(`posts`)
-    }, undefined, App.icon(`search`))
+    }, undefined, App.icon(`posts`))
 
     App.bind_button(`${name}_opts_reactions`, () => {
       App.prompt_search(`reactions`)
-    }, undefined, App.icon(`search`))
+    }, undefined, App.icon(`reactions`))
 
     App.bind_button(`${name}_opts_users`, () => {
       App.prompt_search(`users`)
-    }, undefined, App.icon(`search`))
+    }, undefined, App.icon(`users`))
   }, show, `menu`)
 }
