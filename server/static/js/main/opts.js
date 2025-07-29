@@ -278,56 +278,56 @@ App.setup_random_opts = (show = false, parent = ``) => {
     App.bind_button(`${name}_opts_any`, () => {
       App.random_action(`random`)
     }, () => {
-      App.random_action(`random`, true)
-    }, App.icon(`random`))
+      App.random_action(`any`, true)
+    }, App.media_icon(`any`))
 
     App.bind_button(`${name}_opts_video`, () => {
       App.random_action(`video`)
     }, () => {
       App.random_action(`video`, true)
-    }, App.icon(`video`))
+    }, App.media_icon(`video`))
 
     App.bind_button(`${name}_opts_audio`, () => {
       App.random_action(`audio`)
     }, () => {
       App.random_action(`audio`, true)
-    }, App.icon(`audio`))
+    }, App.media_icon(`audio`))
 
     App.bind_button(`${name}_opts_image`, () => {
       App.random_action(`image`)
     }, () => {
       App.random_action(`image`, true)
-    }, App.icon(`image`))
+    }, App.media_icon(`image`))
 
     App.bind_button(`${name}_opts_text`, () => {
       App.random_action(`text`)
     }, () => {
       App.random_action(`text`, true)
-    }, App.icon(`text`))
+    }, App.media_icon(`text`))
 
     App.bind_button(`${name}_opts_talk`, () => {
       App.random_action(`talk`)
     }, () => {
       App.random_action(`talk`, true)
-    }, App.icon(`talk`))
+    }, App.media_icon(`talk`))
 
     App.bind_button(`${name}_opts_flash`, () => {
       App.random_action(`flash`)
     }, () => {
       App.random_action(`flash`, true)
-    }, App.icon(`flash`))
+    }, App.media_icon(`flash`))
 
     App.bind_button(`${name}_opts_zip`, () => {
       App.random_action(`zip`)
     }, () => {
       App.random_action(`zip`, true)
-    }, App.icon(`zip`))
+    }, App.media_icon(`zip`))
 
     App.bind_button(`${name}_opts_url`, () => {
       App.random_action(`url`)
     }, () => {
       App.random_action(`url`, true)
-    }, App.icon(`url`))
+    }, App.media_icon(`url`))
   }, show, parent)
 }
 

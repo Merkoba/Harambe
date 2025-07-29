@@ -770,6 +770,10 @@ App.icon = (what) => {
   return App.icons[what]
 }
 
+App.media_icon = (what) => {
+  return App.media_icons[what]
+}
+
 App.get_storage = () => {
   let storage = localStorage.getItem(App.ls_storage)
   let obj
