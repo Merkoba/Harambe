@@ -684,6 +684,7 @@ App.toggle_max = (what) => {
   let el = DOM.el(`#${what}`)
   let details = DOM.el(`#details`)
   let buttons = DOM.el(`#text_buttons`)
+  el.classList.remove(`loose`)
 
   App.max_on = !App.max_on
   App.max_id = what
@@ -1375,6 +1376,10 @@ App.change_media_size = (what, size) => {
   }
 
   el.style.width = `${new_width}px`
+
+  if ([`VIDEO`, `AUDIO`, `IMG`].includes(el.tagName)) {
+    el.classList.add(`loose`)
+  }
 
   if (el.tagName !== `IMG`) {
     return
