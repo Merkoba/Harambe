@@ -1387,11 +1387,6 @@ App.change_media_size = (what, size) => {
   }
 
   set_width(`${new_width}px`)
-
-  if (el.tagName !== `IMG`) {
-    return
-  }
-
   set_height(`${new_height}px`)
 
   if (what === `increase`) {
@@ -1402,7 +1397,6 @@ App.change_media_size = (what, size) => {
     if (Math.abs(actual_ratio - ratio) > 0.05) {
       set_width(original_width)
       set_height(original_height)
-      return
     }
   }
 }
