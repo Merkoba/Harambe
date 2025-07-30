@@ -174,6 +174,7 @@ App.add_picker = (show = false) => {
   input.id = `file_${num_pickers}`
   input.name = `file`
   let file = DOM.el(`.picker_file`, el)
+  App.add_drag_events(el)
 
   DOM.ev(input, `change`, (e) => {
     App.clicked = false
@@ -808,9 +809,8 @@ App.setup_dragdrop = () => {
 
       input.files = dataTransfer.files
       App.check_multi_files(input)
+      App.on_picker_change()
     }
-
-    App.on_picker_change()
   })
 }
 
@@ -1058,4 +1058,40 @@ App.clear_description = () => {
   if (description) {
     description.value = ``
   }
+}
+
+App.add_drag_events = (el) => {
+  el.setAttribute(`draggable`, `true`)
+
+  DOM.ev(el, `dragstart`, (e) => {
+    App.dragged_picker = el
+    App.drag_y = e.clientY
+  })
+
+  DOM.ev(el, `dragend`, (e) => {
+    App.dragged_picker = undefined
+  })
+
+  DOM.ev(el, `dragenter`, (e) => {
+    App.drag_y = e.clientY
+  })
+
+  DOM.ev(el, `drop`, (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    let direction = e.clientY > App.drag_y ? `down` : `up`
+    let target = e.target.closest(`.picker`)
+
+    if (!target) {
+      return
+    }
+
+    if (direction === `up`) {
+      target.before(App.dragged_picker)
+    }
+    else if (direction === `down`) {
+      target.after(App.dragged_picker)
+    }
+  })
 }

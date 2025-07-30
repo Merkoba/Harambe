@@ -15,6 +15,7 @@ App.startup = () => {
   DOM.ev(document, `DOMContentLoaded`, () => {
     if (App.init) {
       App.init()
+      App.check_cmd()
     }
   })
 }
@@ -774,34 +775,6 @@ App.media_icon = (what) => {
   return App.media_icons[what]
 }
 
-App.get_storage = () => {
-  let storage = localStorage.getItem(App.ls_storage)
-  let obj
-
-  if (storage) {
-    obj = JSON.parse(storage)
-  }
-  else {
-    obj = {}
-  }
-
-  App.storage = obj
-}
-
-App.save_storage = () => {
-  localStorage.setItem(App.ls_storage, JSON.stringify(App.storage))
-}
-
-App.storage_value = (what, fallback) => {
-  let value = App.storage[what]
-
-  if (value === undefined) {
-    return fallback
-  }
-
-  return value
-}
-
 App.auxclick = (el) => {
   let event = new MouseEvent(`auxclick`, {
     bubbles: true,
@@ -1127,6 +1100,14 @@ App.random_action = (what, new_tab = false) => {
     path = `/random/${what}`
   }
 
+  App.storage.cmd = {
+    kind: `random`,
+    value: path,
+    date: Date.now(),
+  }
+
+  App.save_storage()
+
   if (new_tab) {
     App.open_tab(path)
   }
@@ -1187,4 +1168,36 @@ App.prompt_search = (what) => {
 
 App.is_disabled = (el) => {
   return el.classList.contains(`strike`) || el.disabled
+}
+
+App.corner_msg = (text) => {
+  Msg.factory({
+    preset: `popup_autoclose`,
+    position: `bottomright`,
+    autoclose_delay: 5000,
+    on_click: () => {
+      App.run_cmd()
+    },
+  }).show(text)
+}
+
+App.check_cmd = () => {
+  if (!App.storage.cmd) {
+    return false
+  }
+
+  let now = Date.now()
+
+  if ((now - App.storage.cmd.date) > (App.SECOND * 10)) {
+    return false
+  }
+
+  App.corner_msg(`Click to do this again`)
+}
+
+App.run_cmd = () => {
+  let path = App.storage.cmd.value
+  App.storage.cmd.date = Date.now()
+  App.save_storage()
+  App.location(path)
 }
