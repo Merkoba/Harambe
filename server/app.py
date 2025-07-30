@@ -888,11 +888,16 @@ def show_list(what: str) -> Any:
     post_items: list[Post] = []
     reaction_items: list[Reaction] = []
 
+    if admin:
+        max_posts = 0
+    else:
+        max_posts = config.list_max_posts
+
     if what == "posts":
         post_items, total, next_page = post_procs.get_posts(
             page,
             page_size,
-            max_posts=config.list_max_posts,
+            max_posts=max_posts,
             sort=sort,
             query=query,
             user_id=user_id,
