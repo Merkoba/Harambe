@@ -1388,10 +1388,6 @@ App.change_media_size = (what, size) => {
 
   set_width(`${new_width}px`)
 
-  if ([`VIDEO`, `AUDIO`, `IMG`].includes(el.tagName)) {
-    el.classList.add(`loose`)
-  }
-
   if (el.tagName !== `IMG`) {
     return
   }
