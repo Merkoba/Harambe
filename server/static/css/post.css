@@ -78,11 +78,6 @@ a.link:hover,
     object-position: left;
 }
 
-.loose {
-    max-width: unset !important;
-    max-height: unset !important;
-}
-
 #image.max {
     width: var(--max_width);
     height: var(--max_height);

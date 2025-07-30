@@ -684,13 +684,14 @@ App.toggle_max = (what) => {
   let el = DOM.el(`#${what}`)
   let details = DOM.el(`#details`)
   let buttons = DOM.el(`#text_buttons`)
-  el.classList.remove(`loose`)
 
   App.max_on = !App.max_on
   App.max_id = what
 
   el.style.width = ``
   el.style.height = ``
+  el.style.maxWidth = ``
+  el.style.maxHeight = ``
 
   if (App.max_on) {
     DOM.hide(details)
@@ -1351,6 +1352,16 @@ App.scroll_modal_down = () => {
 }
 
 App.change_media_size = (what, size) => {
+  function set_height(h) {
+    el.style.height = h
+    el.style.maxHeight = h
+  }
+
+  function set_width(w) {
+    el.style.width = w
+    el.style.maxWidth = w
+  }
+
   if (App.max_on) {
     return
   }
@@ -1375,7 +1386,7 @@ App.change_media_size = (what, size) => {
     }
   }
 
-  el.style.width = `${new_width}px`
+  set_width(`${new_width}px`)
 
   if ([`VIDEO`, `AUDIO`, `IMG`].includes(el.tagName)) {
     el.classList.add(`loose`)
@@ -1385,7 +1396,7 @@ App.change_media_size = (what, size) => {
     return
   }
 
-  el.style.height = `${new_height}px`
+  set_height(`${new_height}px`)
 
   if (what === `increase`) {
     let actual_width = el.clientWidth
@@ -1393,8 +1404,8 @@ App.change_media_size = (what, size) => {
     let actual_ratio = actual_height / actual_width
 
     if (Math.abs(actual_ratio - ratio) > 0.05) {
-      el.style.width = original_width
-      el.style.height = original_height
+      set_width(original_width)
+      set_height(original_height)
       return
     }
   }
