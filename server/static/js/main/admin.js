@@ -943,7 +943,6 @@ App.pointer_events = () => {
 
   DOM.ev(document, `contextmenu`, async (e) => {
     App.doc_click(e, `click`)
-    e.preventDefault()
   })
 
   DOM.ev(`#items`, `wheel`, (e) => {
@@ -1319,6 +1318,7 @@ App.next_page = (open_tab = false) => {
 App.doc_click = (e, mode) => {
   let item = e.target.closest(`.item`)
   App.active_item = item
+  let prevent = true
 
   if (e.target.classList.contains(`select_checkbox`)) {
     App.on_checkbox_click(e)
@@ -1346,6 +1346,11 @@ App.doc_click = (e, mode) => {
   }
   else {
     App.close_sample()
+    prevent = false
+  }
+
+  if (prevent) {
+    e.preventDefault()
   }
 }
 
