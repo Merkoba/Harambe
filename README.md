@@ -268,7 +268,7 @@ Convert audio to `mp3`.
 
 Triggers when a single audio is going to be uploaded.
 
-Ignores `mp3`.
+Ignores `mp3`, `ogg`, and `opus`.
 
 ## Video Magic
 
