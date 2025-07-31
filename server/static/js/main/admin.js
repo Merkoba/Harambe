@@ -941,6 +941,11 @@ App.pointer_events = () => {
     }
   })
 
+  DOM.ev(document, `contextmenu`, async (e) => {
+    App.doc_click(e, `click`)
+    e.preventDefault()
+  })
+
   DOM.ev(`#items`, `wheel`, (e) => {
     if (e.target.classList.contains(`sample`)) {
       let direction = e.deltaY > 0 ? `down` : `up`
