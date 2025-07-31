@@ -276,7 +276,7 @@ Convert video to `mp4`.
 
 Triggers when a single video is going to be uploaded.
 
-Ignores `mp4`.
+Ignores `mp4` and `webm`.
 
 ## Album Magic
 
