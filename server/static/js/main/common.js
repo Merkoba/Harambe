@@ -179,6 +179,8 @@ App.is_lossless_image = (file) => {
 App.is_lossless_audio = (file) => {
   let allowed = [
     `audio/mpeg`,
+    `audio/ogg`,
+    `audio/opus`,
   ]
 
   return App.is_audio(file) && !allowed.includes(file.type)

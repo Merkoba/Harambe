@@ -450,6 +450,8 @@ class Config:
         # Don't consider these types of files for audio magic
         self.magic_audio_ignore: list[str] = [
             "mpeg",
+            "ogg",
+            "opus",
         ]
 
         # Don't consider these types of files for video magic

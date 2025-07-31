@@ -1077,6 +1077,10 @@ App.add_drag_events = (el) => {
   })
 
   DOM.ev(el, `drop`, (e) => {
+    if (e.dataTransfer && e.dataTransfer.files && (e.dataTransfer.files.length > 0)) {
+      return
+    }
+
     e.preventDefault()
     e.stopPropagation()
 
