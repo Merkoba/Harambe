@@ -110,11 +110,6 @@ App.setup_keyboard = () => {
         }
       }
     }
-    else if (e.key === `ArrowLeft`) {
-      if (e.ctrlKey && !e.shiftKey) {
-        App.prev_post()
-      }
-    }
     else if (e.key === `ArrowRight`) {
       if (e.ctrlKey && !e.shiftKey) {
         App.next_post()
@@ -582,24 +577,6 @@ App.bind_button = (what, func, mfunc, icon = ``, close = true) => {
 
 App.encode_uri = (uri) => {
   return encodeURIComponent(uri)
-}
-
-App.prev_post = (blank = false) => {
-  if (!App.post) {
-    return
-  }
-
-  let post_id = App.post.id
-
-  if (!post_id) {
-    return
-  }
-
-  let base_path = `/prev`
-  let url = new URL(base_path, window.location.origin)
-  url.searchParams.set("post_id", post_id)
-
-  App.goto_url(url, blank)
 }
 
 App.next_post = (new_tab = false) => {

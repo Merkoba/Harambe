@@ -71,18 +71,6 @@ App.init = () => {
     })
   }
 
-  let prev_btn = DOM.el(`#prev`)
-
-  if (prev_btn) {
-    DOM.ev(prev_btn, `click`, () => {
-      App.prev_post()
-    })
-
-    DOM.ev(prev_btn, `auxclick`, () => {
-      App.prev_post(true)
-    })
-  }
-
   let next_btn = DOM.el(`#next`)
 
   if (next_btn) {

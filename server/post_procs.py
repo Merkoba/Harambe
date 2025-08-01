@@ -445,15 +445,6 @@ def get_post(
     return None
 
 
-def get_prev_post(post_id: int) -> Post | None:
-    db_post = database.get_prev_post(post_id)
-
-    if db_post:
-        return make_post(db_post, utils.now())
-
-    return None
-
-
 def get_next_post(post_id: int) -> Post | None:
     db_post = database.get_next_post(post_id)
 

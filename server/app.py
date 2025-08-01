@@ -154,6 +154,10 @@ def over() -> Any:
     return render_template("over.jinja")
 
 
+def stay() -> tuple[str, int]:
+    return "", 204
+
+
 def fill_session(user: User) -> None:
     session["user_id"] = user.id
     session.permanent = True
@@ -419,24 +423,6 @@ def refresh() -> Any:
     return {"update": update}, 200
 
 
-@app.route("/prev", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-@reader_required
-def prev_post() -> Any:
-    post_id = request.args.get("post_id", None)
-
-    if not post_id:
-        return over()
-
-    post = post_procs.get_prev_post(post_id=post_id)
-
-    if not post:
-        return over()
-
-    return redirect(url_for("post", name=post.name))
-
-
 # NEXT
 
 
@@ -459,7 +445,7 @@ def next_post() -> Any:
 
         return redirect(url_for("post", name=post.name))
 
-    return over()
+    return stay()
 
 
 @app.route("/next/<string:post_type>", methods=["GET"])  # type: ignore
@@ -489,7 +475,7 @@ def next_by_type(post_type: str) -> Any:
 
         return redirect(url_for("post", name=post.name))
 
-    return over()
+    return stay()
 
 
 # RANDOM
@@ -512,7 +498,7 @@ def random_post() -> Any:
 
         return redirect(url_for("post", name=post.name))
 
-    return over()
+    return stay()
 
 
 @app.route("/random/<string:post_type>", methods=["GET"])  # type: ignore
@@ -541,7 +527,7 @@ def random_by_type(post_type: str) -> Any:
 
         return redirect(url_for("post", name=post.name))
 
-    return over()
+    return stay()
 
 
 # FILES

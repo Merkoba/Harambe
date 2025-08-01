@@ -426,32 +426,6 @@ def edit_post_privacy(post_id: int, privacy: str) -> None:
     conn.close()
 
 
-def get_prev_post(post_id: int) -> Post | None:
-    connection = get_conn()
-    conn, c = connection.tuple()
-    c.execute("select * from posts where id = ?", (post_id,))
-    row = c.fetchone()
-
-    if not row:
-        conn.close()
-        return None
-
-    post = make_post(dict(row))
-
-    c.execute(
-        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date > ? and p.privacy = 'public' order by p.date asc limit 1",
-        (post.date,),
-    )
-
-    row = c.fetchone()
-    conn.close()
-
-    if row:
-        return make_post(dict(row))
-
-    return None
-
-
 def get_post_by_id(post_id: int, oconn: Connection) -> Post | None:
     connection = get_conn(oconn)
     _, c = connection.tuple()
@@ -735,7 +709,7 @@ def get_next_post_by_mtype(post_id: int, mtype: str) -> Post | None:
         conn.close()
         return None
 
-    query = "select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.date < ? and p.privacy = 'public' order by p.date desc limit 1"
+    query = "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.mtype = ? and p.date < ? and p.privacy = 'public' order by p.date desc limit 1"
     c.execute(query, (mtype, post.date))
 
     row = c.fetchone()
