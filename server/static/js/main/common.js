@@ -484,7 +484,7 @@ App.make_msg = (name, title) => {
   }
 
   App[msg_name] = Msg.factory({
-    enable_titlebar, window_x: `floating_right`, center_titlebar: true
+    enable_titlebar, window_x: `floating_right`, center_titlebar: true,
   })
 
   App[msg_name].set(DOM.el(`#template_${name}`).innerHTML)
@@ -1102,9 +1102,9 @@ App.next_action = (what, new_tab = false) => {
     return
   }
 
-  let base_path = (what === `next`) ? "/next" : `/next/${what}`
+  let base_path = what === `next` ? `/next` : `/next/${what}`
   let url = new URL(base_path, window.location.origin)
-  url.searchParams.set("post_id", post_id)
+  url.searchParams.set(`post_id`, post_id)
   let path = url.pathname + url.search
 
   App.storage.cmd = {
@@ -1224,7 +1224,7 @@ App.run_cmd = () => {
 
     let base_path = App.storage.cmd.value
     let url = new URL(base_path, window.location.origin)
-    url.searchParams.set("post_id", post_id)
+    url.searchParams.set(`post_id`, post_id)
     path = url.pathname + url.search
   }
   else {
@@ -1239,7 +1239,7 @@ App.run_cmd = () => {
 App.set_volume = (vol) => {
   let video = DOM.el(`video`)
 
-  if(!video) {
+  if (!video) {
     return
   }
 

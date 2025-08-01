@@ -530,9 +530,11 @@ App.sort_action = (what, desc = false, page = false) => {
       let value_b = b.dataset[what]
 
       // Handle undefined/null values
-      if (!value_a && !value_b) return 0
-      if (!value_a) return desc ? -1 : 1
-      if (!value_b) return desc ? 1 : -1
+      if (!value_a && !value_b) {return 0}
+
+      if (!value_a) {return desc ? -1 : 1}
+
+      if (!value_b) {return desc ? 1 : -1}
 
       // Try to parse as numbers first
       let num_a = parseFloat(value_a)

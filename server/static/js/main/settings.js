@@ -135,8 +135,8 @@ App.cycle_select = (name) => {
 
   DOM.ev(select, `wheel`, (e) => {
     let cycles = Array.from(select.options)
-    .filter(o => !o.disabled)
-    .map(option => option.value)
+      .filter(o => !o.disabled)
+      .map(option => option.value)
 
     if (cycles.length < 2) {
       return
@@ -153,7 +153,7 @@ App.cycle_select = (name) => {
       index -= 1
     }
 
-    if (index < 0 || (index >= cycles.length)) {
+    if ((index < 0) || (index >= cycles.length)) {
       return
     }
 

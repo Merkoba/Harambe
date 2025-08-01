@@ -671,7 +671,7 @@ App.apply_update = (update) => {
   App.post.title = update.title
   document.title = update.post_title
   DOM.el(`#title`).textContent = update.title || App.post.original
-  DOM.el(`#views`).textContent = `${update.views} ${update.views === 1 ? "view" : "views"}`
+  DOM.el(`#views`).textContent = `${update.views} ${update.views === 1 ? `view` : `views`}`
 }
 
 App.show_modal_image = () => {
@@ -1441,19 +1441,17 @@ App.check_max_editor = () => {
       let max_lines = Math.floor(mheight / line_height) - 2
 
       App.editor.setOptions({
-        maxLines: max_lines > 1 ? max_lines : Infinity
+        maxLines: max_lines > 1 ? max_lines : Infinity,
       })
 
       App.editor.resize()
     }
   }
-  else {
-    if (App.max_id === `editor`) {
-      App.editor.setOptions({
-        maxLines: App.editor_lines
-      })
+  else if (App.max_id === `editor`) {
+    App.editor.setOptions({
+      maxLines: App.editor_lines,
+    })
 
-      App.editor.resize()
-    }
+    App.editor.resize()
   }
 }

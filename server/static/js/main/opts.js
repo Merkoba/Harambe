@@ -522,6 +522,7 @@ App.setup_page_opts = (show = false) => {
 }
 
 App.setup_volume_opts = (show = false) => {
+  let icon
   let name = `volume`
 
   function make(num) {
