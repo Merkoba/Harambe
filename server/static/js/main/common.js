@@ -1174,6 +1174,7 @@ App.is_disabled = (el) => {
 
 App.corner_msg = (text, delay = 5000) => {
   Msg.factory({
+    id: `corner_msg`,
     preset: `popup_autoclose`,
     position: `bottomright`,
     autoclose_delay: delay,
@@ -1194,7 +1195,7 @@ App.check_cmd = () => {
     return false
   }
 
-  App.corner_msg(`Click to do this again`, 6200)
+  App.corner_msg(`Click to do this again`, 600200)
 }
 
 App.run_cmd = () => {
