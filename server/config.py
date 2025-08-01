@@ -15,7 +15,6 @@ from watchdog.events import FileSystemEventHandler  # type: ignore
 
 # Modules
 import utils
-import themes
 import icons
 
 
@@ -54,9 +53,9 @@ class Config:
             Link("Memorial", "/static/demo/memorial.html", "🦍"),
         ]
 
-        # Fill the themes
+        # Read the theme files
         self.themes: dict[str, dict[str, Any]] = {}
-        themes.fill(self)
+        self.read_themes()
 
         # Fill the icons
         self.icons: dict[str, str] = {}
@@ -488,7 +487,7 @@ class Config:
                 for attr in dir(self)
                 if not attr.startswith("_")
                 and not callable(getattr(self, attr))
-                and attr not in ("links", "reference", "path")
+                and attr not in ("links", "reference", "path", "themes", "icons", "media_icons")
             ]
 
             # Automatically set values for all config attributes
@@ -503,6 +502,20 @@ class Config:
                     Link(link["name"], link["url"], link.get("target", "_self"))
                     for link in links
                 ]
+
+    def read_themes(self) -> None:
+        themes_dir = Path(__file__).parent / "themes"
+        theme_files = sorted(themes_dir.glob("*.toml"))
+
+        for theme_path in theme_files:
+            key = theme_path.stem
+
+            try:
+                with theme_path.open("rb") as f:
+                    theme_data = tomllib.load(f)
+                    self.themes[key] = theme_data
+            except Exception as e:
+                utils.error(f"Warning: Could not load theme file {theme_path.name}: {e}")
 
 
 # Fill it later
