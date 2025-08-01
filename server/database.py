@@ -426,10 +426,10 @@ def edit_post_privacy(post_id: int, privacy: str) -> None:
     conn.close()
 
 
-def get_prev_post(current: str) -> Post | None:
+def get_prev_post(post_id: int) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    c.execute("select * from posts where name = ?", (current,))
+    c.execute("select * from posts where name = ?", (post_id,))
     row = c.fetchone()
 
     if not row:
@@ -452,40 +452,16 @@ def get_prev_post(current: str) -> Post | None:
     return None
 
 
-def get_post_by_name(current: str, oconn: Connection) -> Post | None:
+def get_post_by_id(post_id: int, oconn: Connection) -> Post | None:
     connection = get_conn(oconn)
     conn, c = connection.tuple()
-    c.execute("select * from posts where name = ?", (current,))
+    c.execute("select * from posts where id = ?", (post_id,))
     row = c.fetchone()
 
     if not row:
-        conn.close()
         return None
 
     return make_post(dict(row))
-
-
-def get_next_post(current: str) -> Post | None:
-    connection = get_conn()
-    conn, c = connection.tuple()
-    post = get_post_by_name(current, oconn=connection)
-
-    if not post:
-        conn.close()
-        return None
-
-    c.execute(
-        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? and p.privacy = 'public' order by p.date desc limit 1",
-        (post.date,),
-    )
-
-    row = c.fetchone()
-    conn.close()
-
-    if row:
-        return make_post(dict(row))
-
-    return None
 
 
 def add_user(
@@ -685,7 +661,7 @@ def get_random_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | Non
     return None
 
 
-def get_random_by_mtype(mtype: str, current: str) -> Post | None:
+def get_random_by_mtype(mtype: str, post_id: int) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
 
@@ -700,10 +676,30 @@ def get_random_by_mtype(mtype: str, current: str) -> Post | None:
     return None
 
 
-def get_next_post_by_ext(current: str, exts: list[str], no_mode: bool = False) -> Post | None:
+def get_next_post(post_id: int) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    post = get_post_by_name(current, oconn=connection)
+    post = get_post_by_id(post_id, oconn=connection)
+
+    if not post:
+        conn.close()
+        return None
+
+    query = "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? and p.privacy = 'public' order by p.date desc limit 1",
+    c.execute(query, (post.date,))
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_post(dict(row))
+
+    return None
+
+
+def get_next_post_by_ext(post_id: int, exts: list[str], no_mode: bool = False) -> Post | None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    post = get_post_by_id(post_id, oconn=connection)
 
     if not post:
         conn.close()
@@ -716,7 +712,8 @@ def get_next_post_by_ext(current: str, exts: list[str], no_mode: bool = False) -
 
     query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1"
     placeholders = ", ".join("?" for _ in exts)
-    c.execute(query.format(placeholders), exts, post.date)
+    params = exts + [post.date]
+    c.execute(query.format(placeholders), params)
 
     row = c.fetchone()
     conn.close()
@@ -727,10 +724,10 @@ def get_next_post_by_ext(current: str, exts: list[str], no_mode: bool = False) -
     return None
 
 
-def get_next_post_by_mtype(current: str, mtype: str) -> Post | None:
+def get_next_post_by_mtype(post_id: int, mtype: str, no_mode: bool = False) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    post = get_post_by_name(current, oconn=connection)
+    post = get_post_by_id(post_id, oconn=connection)
 
     if not post:
         conn.close()
@@ -742,7 +739,7 @@ def get_next_post_by_mtype(current: str, mtype: str) -> Post | None:
         no_mode_str = " "
 
     query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1"
-    c.execute(query, mtype, post.date)
+    c.execute(query, (mtype, post.date))
 
     row = c.fetchone()
     conn.close()
@@ -791,42 +788,42 @@ def get_random_zip_post() -> Post | None:
     return get_random_post_by_ext(exts)
 
 
-def get_next_video_post(current: str) -> Post | None:
+def get_next_video_post(post_id: int) -> Post | None:
     exts = ["mp4", "webm"]
-    return get_next_post_by_ext(current, exts)
+    return get_next_post_by_ext(post_id, exts)
 
 
-def get_next_audio_post(current: str) -> Post | None:
+def get_next_audio_post(post_id: int) -> Post | None:
     exts = ["mp3", "ogg", "flac", "wav"]
-    return get_next_post_by_ext(current, exts)
+    return get_next_post_by_ext(post_id, exts)
 
 
-def get_next_image_post(current: str) -> Post | None:
+def get_next_image_post(post_id: int) -> Post | None:
     exts = ["jpg", "jpeg", "png", "gif", "webp"]
-    return get_next_post_by_ext(current, exts)
+    return get_next_post_by_ext(post_id, exts)
 
 
-def get_next_text_post(current: str) -> Post | None:
+def get_next_text_post(post_id: int) -> Post | None:
     exts = ["txt", "md"]
-    return get_next_post_by_ext(current, exts, no_mode=True)
+    return get_next_post_by_ext(post_id, exts, no_mode=True)
 
 
-def get_next_talk_post(current: str) -> Post | None:
-    return get_next_post_by_mtype(current, "mode/talk")
+def get_next_talk_post(post_id: int) -> Post | None:
+    return get_next_post_by_mtype(post_id, "mode/talk")
 
 
-def get_next_flash_post(current: str) -> Post | None:
+def get_next_flash_post(post_id: int) -> Post | None:
     exts = ["swf"]
-    return get_next_post_by_ext(current, exts)
+    return get_next_post_by_ext(post_id, exts)
 
 
-def get_next_url_post(current: str) -> Post | None:
-    return get_next_post_by_mtype(current, "mode/url")
+def get_next_url_post(post_id: int) -> Post | None:
+    return get_next_post_by_mtype(post_id, "mode/url")
 
 
-def get_next_zip_post(current: str) -> Post | None:
+def get_next_zip_post(post_id: int) -> Post | None:
     exts = ["zip"]
-    return get_next_post_by_ext(current, exts)
+    return get_next_post_by_ext(post_id, exts)
 
 
 def update_file_size(name: str, size: int) -> None:

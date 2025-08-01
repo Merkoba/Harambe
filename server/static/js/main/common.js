@@ -1119,14 +1119,20 @@ App.random_action = (what, new_tab = false) => {
 }
 
 App.next_action = (what, new_tab = false) => {
-  let path
+  if (!App.post) {
+    return
+  }
 
-  if (what === `next`) {
-    path = `/next`
+  let post_id = App.post.id
+
+  if (!post_id) {
+    return
   }
-  else {
-    path = `/next/${what}`
-  }
+
+  let base_path = (what === `next`) ? "/next" : `/next/${what}`
+  let url = new URL(base_path, window.location.origin)
+  url.searchParams.set("post_id", post_id)
+  let path = url.pathname + url.search
 
   App.storage.cmd = {
     kind: `next`,
@@ -1230,7 +1236,28 @@ App.check_cmd = () => {
 }
 
 App.run_cmd = () => {
-  let path = App.storage.cmd.value
+  let path
+
+  if (App.storage.cmd.kind === `next`) {
+    if (!App.post) {
+      return
+    }
+
+    let post_id = App.post.id
+
+    if (!post_id) {
+      return
+    }
+
+    let base_path = App.storage.cmd.value
+    let url = new URL(base_path, window.location.origin)
+    url.searchParams.set("post_id", post_id)
+    path = url.pathname + url.search
+  }
+  else {
+    path = App.storage.cmd.value
+  }
+
   App.storage.cmd.date = Date.now()
   App.save_storage()
   App.location(path)
