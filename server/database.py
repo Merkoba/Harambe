@@ -639,7 +639,7 @@ def get_random_by_mtype(mtype: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
 
-    query = "select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.privacy = 'public' order by random() limit 1"
+    query = "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.mtype = ? and p.privacy = 'public' order by random() limit 1"
     c.execute(query, (mtype,))
     row = c.fetchone()
     conn.close()

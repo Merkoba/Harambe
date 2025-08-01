@@ -1259,12 +1259,13 @@ App.show_volume_feedback = () => {
   let feedback = DOM.el(`#volume_feedback`)
 
   if (feedback) {
+    DOM.show(feedback)
     clearTimeout(App.volume_timeout)
     feedback.textContent = `${Math.round(vol * 100)} %`
 
     App.volume_timeout = setTimeout(() => {
-      feedback.textContent = ``
-    }, App.SECOND * 1.5)
+      DOM.hide(feedback)
+    }, App.SECOND * 1.6)
   }
 }
 

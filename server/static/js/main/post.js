@@ -101,6 +101,8 @@ App.init = () => {
       else {
         App.decrease_volume()
       }
+
+      e.preventDefault()
     })
 
     DOM.ev(vol_btn, `auxclick`, (e) => {

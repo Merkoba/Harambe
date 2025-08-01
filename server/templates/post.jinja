@@ -68,6 +68,12 @@
                 {% endif %}
             {% endif %}
 
+            {% if post.video_embed or post.audio_embed %}
+            <div id="volume" class="button">Volume</div>
+            <div id="volume_feedback" class="hidden"></div>
+            <div class="sep">|</div>
+            {% endif %}
+
             {% if owned %}
             <div id="edit" class="button" title="Edit this post">Edit</div>
             <div class="sep">|</div>
@@ -123,12 +129,6 @@
                 <div class="sep">|</div>
                 <div id="resolution"></div>
             </div>
-
-            {% if post.video_embed or post.audio_embed %}
-            <div class="sep">|</div>
-            <div id="volume" class="button">Volume</div>
-            <div id="volume_feedback"></div>
-            {% endif %}
         </div>
         {% endif %}
     </div>
