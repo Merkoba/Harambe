@@ -673,7 +673,7 @@ def get_random_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | Non
     else:
         no_mode_str = " "
 
-    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.date < ? and p.privacy = 'public'{no_mode_str}order by random() limit 1",
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.privacy = 'public'{no_mode_str}order by random() limit 1"
     placeholders = ", ".join("?" for _ in exts)
     c.execute(query.format(placeholders), exts)
     row = c.fetchone()
@@ -689,7 +689,7 @@ def get_random_by_mtype(mtype: str, current: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
 
-    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.date < ? and p.privacy = 'public'{no_mode_str}order by random() limit 1",
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.privacy = 'public'{no_mode_str}order by random() limit 1"
     c.execute(query, (mtype,))
     row = c.fetchone()
     conn.close()
@@ -714,7 +714,7 @@ def get_next_post_by_ext(current: str, exts: list[str], no_mode: bool = False) -
     else:
         no_mode_str = " "
 
-    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1",
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1"
     placeholders = ", ".join("?" for _ in exts)
     c.execute(query.format(placeholders), exts, post.date)
 
@@ -741,8 +741,8 @@ def get_next_by_mtype(current: str, mtype: str) -> Post | None:
     else:
         no_mode_str = " "
 
-    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1",
-    c.execute(mtype, post.date)
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1"
+    c.execute(query, mtype, post.date)
 
     row = c.fetchone()
     conn.close()
