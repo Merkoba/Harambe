@@ -87,11 +87,15 @@ App.init = () => {
 
   if (next_btn) {
     DOM.ev(next_btn, `click`, () => {
-      App.next_post()
+      App.show_next()
     })
 
     DOM.ev(next_btn, `auxclick`, () => {
-      App.next_post(true)
+      App.next_action(`next`)
+    })
+
+    DOM.ev(next_btn, `contextmenu`, () => {
+      App.show_next()
     })
   }
 

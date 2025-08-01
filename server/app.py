@@ -432,6 +432,60 @@ def prev_post(current: str) -> Any:
     return redirect(url_for("post", name=post.name))
 
 
+# NEXT
+
+
+@app.route("/next", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def next_post() -> Any:
+    post_id = request.args.get("post_id", None)
+    used_ids = session["used_ids"] if "used_ids" in session else []
+    post = post_procs.get_next_post(used_ids, post_id=post_id)
+
+    if post:
+        used_ids.append(post.id)
+        session["used_ids"] = used_ids
+        json = request.args.get("json", "") == "true"
+
+        if json:
+            return post_procs.post_to_json(post)
+
+        return redirect(url_for("post", name=post.name))
+
+    return over()
+
+
+@app.route("/next/<string:post_type>", methods=["GET"])  # type: ignore
+@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
+@payload_check()
+def next_by_type(post_type: str) -> Any:
+    if post_type not in [
+        "video",
+        "image",
+        "audio",
+        "text",
+        "talk",
+        "url",
+        "flash",
+        "zip",
+    ]:
+        return over()
+
+    post_id = request.args.get("post_id", None)
+    post = post_procs.get_next_post_by_type(post_type, post_id=post_id)
+
+    if post:
+        json = request.args.get("json", "") == "true"
+
+        if json:
+            return post_procs.post_to_json(post)
+
+        return redirect(url_for("post", name=post.name))
+
+    return over()
+
+
 # RANDOM
 
 
@@ -439,9 +493,8 @@ def prev_post(current: str) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 def random_post() -> Any:
-    post_id = request.args.get("post_id", None)
     used_ids = session["used_ids"] if "used_ids" in session else []
-    post = post_procs.get_random_post(used_ids, post_id=post_id)
+    post = post_procs.get_random_post(used_ids)
 
     if post:
         used_ids.append(post.id)
@@ -472,8 +525,7 @@ def random_by_type(post_type: str) -> Any:
     ]:
         return over()
 
-    post_id = request.args.get("post_id", None)
-    post = post_procs.get_random_post_by_type(post_type, post_id=post_id)
+    post = post_procs.get_random_post_by_type(post_type)
 
     if post:
         json = request.args.get("json", "") == "true"

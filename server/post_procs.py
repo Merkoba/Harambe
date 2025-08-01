@@ -457,11 +457,8 @@ def get_prev_post(name: str) -> Post | None:
     return None
 
 
-def get_random_post(used_ids: list[int], post_id: int | None = None) -> Post | None:
-    if post_id:
-        db_post = database.get_next_post(post_id)
-    else:
-        db_post = database.get_random_post(used_ids)
+def get_next_post(used_ids: list[int], post_id: int | None = None) -> Post | None:
+    db_post = database.get_next_post(used_ids, current=str(post_id))
 
     if db_post:
         return make_post(db_post, utils.now())
@@ -469,11 +466,26 @@ def get_random_post(used_ids: list[int], post_id: int | None = None) -> Post | N
     return None
 
 
-def get_random_post_by_type(post_type: str, post_id: int | None = None) -> Post | None:
-    if post_id:
-        db_post = getattr(database, f"get_next_{post_type}_post", lambda: None)("next")
-    else:
-        db_post = getattr(database, f"get_random_{post_type}_post", lambda: None)()
+def get_next_post_by_type(post_type: str, post_id: int | None = None) -> Post | None:
+    db_post = getattr(database, f"get_next_{post_type}_post", lambda: None)(current=str(post_id))
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
+
+
+def get_random_post(used_ids: list[int]) -> Post | None:
+    db_post = database.get_random_post(used_ids)
+
+    if db_post:
+        return make_post(db_post, utils.now())
+
+    return None
+
+
+def get_random_post_by_type(post_type: str) -> Post | None:
+    db_post = getattr(database, f"get_random_{post_type}_post", lambda: None)()
 
     if db_post:
         return make_post(db_post, utils.now())

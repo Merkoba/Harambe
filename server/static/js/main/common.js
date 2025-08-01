@@ -1164,6 +1164,11 @@ App.show_random = (what = `menu`, back_button = true) => {
   App.msg_show(`random`, back_button)
 }
 
+App.show_next = (what = `menu`, back_button = false) => {
+  App.setup_next_opts(false, `menu`)
+  App.msg_show(`next`, back_button)
+}
+
 App.any_modal_open = () => {
   return Msg.msg && Msg.msg.any_open()
 }

@@ -727,7 +727,7 @@ def get_next_post_by_ext(current: str, exts: list[str], no_mode: bool = False) -
     return None
 
 
-def get_next_by_mtype(current: str, mtype: str) -> Post | None:
+def get_next_post_by_mtype(current: str, mtype: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
     post = get_post_by_name(current, oconn=connection)
@@ -791,42 +791,42 @@ def get_random_zip_post() -> Post | None:
     return get_random_post_by_ext(exts)
 
 
-def get_next_video_post() -> Post | None:
+def get_next_video_post(current: str) -> Post | None:
     exts = ["mp4", "webm"]
-    return get_next_post_by_ext(exts)
+    return get_next_post_by_ext(current, exts)
 
 
-def get_next_audio_post() -> Post | None:
+def get_next_audio_post(current: str) -> Post | None:
     exts = ["mp3", "ogg", "flac", "wav"]
-    return get_next_post_by_ext(exts)
+    return get_next_post_by_ext(current, exts)
 
 
-def get_next_image_post() -> Post | None:
+def get_next_image_post(current: str) -> Post | None:
     exts = ["jpg", "jpeg", "png", "gif", "webp"]
-    return get_next_post_by_ext(exts)
+    return get_next_post_by_ext(current, exts)
 
 
-def get_next_text_post() -> Post | None:
+def get_next_text_post(current: str) -> Post | None:
     exts = ["txt", "md"]
-    return get_next_post_by_ext(exts, no_mode=True)
+    return get_next_post_by_ext(current, exts, no_mode=True)
 
 
-def get_next_talk_post() -> Post | None:
-    return get_next_post_by_mtype("mode/talk")
+def get_next_talk_post(current: str) -> Post | None:
+    return get_next_post_by_mtype(current, "mode/talk")
 
 
-def get_next_flash_post() -> Post | None:
+def get_next_flash_post(current: str) -> Post | None:
     exts = ["swf"]
-    return get_next_post_by_ext(exts)
+    return get_next_post_by_ext(current, exts)
 
 
-def get_next_url_post() -> Post | None:
-    return get_next_post_by_mtype("mode/url")
+def get_next_url_post(current: str) -> Post | None:
+    return get_next_post_by_mtype(current, "mode/url")
 
 
-def get_next_zip_post() -> Post | None:
+def get_next_zip_post(current: str) -> Post | None:
     exts = ["zip"]
-    return get_next_post_by_ext(exts)
+    return get_next_post_by_ext(current, exts)
 
 
 def update_file_size(name: str, size: int) -> None:
