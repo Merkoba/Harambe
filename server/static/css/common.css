@@ -393,8 +393,10 @@ select.settings_widget {
 
 #Msg-window-corner_msg {
     cursor: pointer !important;
+    outline: 2px solid transparent !important;
+    transition: outline-color 0.25s ease-in-out !important;
 }
 
 #Msg-window-corner_msg:hover {
-    outline: 2px solid rgb(128, 211, 128) !important;
+    outline-color: rgb(128, 211, 128) !important;
 }
