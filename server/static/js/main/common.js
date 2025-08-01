@@ -1195,7 +1195,7 @@ App.check_cmd = () => {
     return false
   }
 
-  App.corner_msg(`Click to do this again`, 600200)
+  App.corner_msg(`Click to do this again`, 6200)
 }
 
 App.run_cmd = () => {
