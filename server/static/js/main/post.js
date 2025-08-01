@@ -140,9 +140,29 @@ App.init = () => {
     })
   }
 
+  let play_btn = DOM.el(`#play`)
+
+  if (play_btn) {
+    DOM.ev(play_btn, `click`, () => {
+      App.toggle_play()
+    })
+
+    DOM.ev(play_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.pause_video()
+      }
+    })
+
+    DOM.ev(play_btn, `contextmenu`, (e) => {
+      App.toggle_play()
+      e.preventDefault()
+    })
+  }
+
   App.setup_reactions()
   App.keyboard_events()
   App.format_description()
+  App.setup_video()
 }
 
 App.edit_title = () => {
@@ -1476,4 +1496,110 @@ App.check_max_editor = () => {
 
     App.editor.resize()
   }
+}
+
+App.set_volume = (vol) => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  vol = App.clamp(vol, 1, 0)
+  video.volume = vol
+  App.show_volume_feedback()
+}
+
+App.show_volume_feedback = () => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  let vol = video.volume
+  let feedback = DOM.el(`#volume_feedback`)
+
+  if (feedback) {
+    DOM.show(feedback)
+    clearTimeout(App.volume_timeout)
+    feedback.textContent = `${Math.round(vol * 100)}%`
+
+    App.volume_timeout = setTimeout(() => {
+      DOM.hide(feedback)
+    }, App.SECOND * 1.6)
+  }
+}
+
+App.increase_volume = (step = 0.05) => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  App.set_volume(video.volume + step)
+}
+
+App.decrease_volume = (step = 0.05) => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  App.set_volume(video.volume - step)
+}
+
+App.toggle_volume = () => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  video.muted = !video.muted
+}
+
+App.show_volume = () => {
+  App.setup_volume_opts(true)
+}
+
+App.set_play_text = (text) => {
+  let el = DOM.el(`#play`)
+
+  if (el) {
+    el.textContent = text
+  }
+}
+
+App.toggle_play = () => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  if (video.paused) {
+    video.play()
+  }
+  else {
+    video.pause()
+  }
+}
+
+App.setup_video = () => {
+  let video = DOM.el(`#video`)
+
+  if (!video) {
+    return
+  }
+
+  DOM.ev(video, `playing`, () => {
+    App.set_play_text(`Pause`)
+  })
+
+  DOM.ev(video, `pause`, () => {
+    App.set_play_text(`Play`)
+  })
 }

@@ -76,6 +76,11 @@
             <div class="sep">|</div>
             {% endif %}
 
+            {% if post.video_embed or post.audio_embed %}
+            <div id="play" class="button">Play</div>
+            <div class="sep">|</div>
+            {% endif %}
+
             {% if owned %}
             <div id="edit" class="button" title="Edit this post">Edit</div>
             <div class="sep">|</div>
