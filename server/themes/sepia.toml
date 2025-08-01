@@ -1,0 +1,14 @@
+name = "Sepia Classic"
+description = "Vintage brown nostalgia"
+
+[colors]
+background_color = "112, 82, 60"
+accent_color = "205, 133, 63"
+accent_color_text = "255, 255, 255"
+text_color = "255, 248, 220"
+link_color = "222, 184, 135"
+alt_color = "240, 230, 140"
+button_background_color_1 = "180, 110, 60"
+button_background_color_2 = "190, 120, 75"
+button_background_color_3 = "225, 160, 95"
+button_text_color = "255, 255, 255"

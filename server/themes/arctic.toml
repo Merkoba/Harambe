@@ -1,0 +1,14 @@
+name = "Arctic Ice"
+description = "Cool light blue whites"
+
+[colors]
+background_color = "248, 252, 255"
+accent_color = "70, 130, 180"
+accent_color_text = "255, 255, 255"
+text_color = "25, 25, 112"
+link_color = "0, 100, 200"
+alt_color = "0, 191, 255"
+button_background_color_1 = "65, 105, 225"
+button_background_color_2 = "30, 144, 255"
+button_background_color_3 = "135, 206, 250"
+button_text_color = "255, 255, 255"

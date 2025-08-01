@@ -1,0 +1,14 @@
+name = "Midnight Black"
+description = "Pure dark monochrome"
+
+[colors]
+background_color = "18, 18, 18"
+accent_color = "220, 220, 220"
+accent_color_text = "0, 0, 0"
+text_color = "240, 240, 240"
+link_color = "173, 216, 230"
+alt_color = "255, 105, 180"
+button_background_color_1 = "105, 105, 105"
+button_background_color_2 = "128, 128, 128"
+button_background_color_3 = "169, 169, 169"
+button_text_color = "255, 255, 255"

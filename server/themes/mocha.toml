@@ -1,0 +1,14 @@
+name = "Coffee Mocha"
+description = "Rich brown earth"
+
+[colors]
+background_color = "59, 47, 47"
+accent_color = "139, 69, 19"
+accent_color_text = "255, 255, 255"
+text_color = "245, 222, 179"
+link_color = "210, 180, 140"
+alt_color = "255, 215, 0"
+button_background_color_1 = "160, 82, 45"
+button_background_color_2 = "205, 133, 63"
+button_background_color_3 = "222, 184, 135"
+button_text_color = "255, 255, 255"

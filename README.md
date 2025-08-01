@@ -328,6 +328,6 @@ There are multiple color themes to choose from.
 
 To change it, change the `theme` config.
 
-To see all the defined themes check [themes.py](server/themes.py)
+To see all the defined themes check the [themes directory](themes/).
 
 Users can change their own theme using the menu.

@@ -1,0 +1,14 @@
+name = "Steel Blossom"
+description = "Gray purple soft tones"
+
+[colors]
+background_color = "81, 81, 81"
+accent_color = "127, 104, 164"
+accent_color_text = "255, 255, 255"
+text_color = "255, 255, 255"
+link_color = "222, 211, 239"
+alt_color = "193, 234, 178"
+button_background_color_1 = "69, 156, 198"
+button_background_color_2 = "93, 104, 80"
+button_background_color_3 = "129, 147, 108"
+button_text_color = "255, 255, 255"

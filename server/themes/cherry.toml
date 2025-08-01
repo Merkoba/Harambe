@@ -1,0 +1,14 @@
+name = "Cherry Blossom"
+description = "Pink floral feminine"
+
+[colors]
+background_color = "255, 250, 250"
+accent_color = "255, 20, 147"
+accent_color_text = "255, 255, 255"
+text_color = "105, 105, 105"
+link_color = "219, 112, 147"
+alt_color = "255, 182, 193"
+button_background_color_1 = "255, 105, 180"
+button_background_color_2 = "255, 182, 193"
+button_background_color_3 = "255, 192, 203"
+button_text_color = "255, 255, 255"

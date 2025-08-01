@@ -1,0 +1,14 @@
+name = "Teal Wave"
+description = "Cool cyan aquatic"
+
+[colors]
+background_color = "15, 45, 45"
+accent_color = "0, 128, 128"
+accent_color_text = "255, 255, 255"
+text_color = "240, 255, 255"
+link_color = "72, 209, 204"
+alt_color = "255, 215, 0"
+button_background_color_1 = "32, 178, 170"
+button_background_color_2 = "0, 139, 139"
+button_background_color_3 = "95, 158, 160"
+button_text_color = "255, 255, 255"

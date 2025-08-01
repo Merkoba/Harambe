@@ -1,0 +1,14 @@
+name = "Ocean Deep"
+description = "Dark blue nautical vibes"
+
+[colors]
+background_color = "25, 39, 52"
+accent_color = "70, 130, 180"
+accent_color_text = "255, 255, 255"
+text_color = "240, 248, 255"
+link_color = "135, 206, 250"
+alt_color = "64, 224, 208"
+button_background_color_1 = "30, 144, 255"
+button_background_color_2 = "72, 61, 139"
+button_background_color_3 = "100, 149, 237"
+button_text_color = "255, 255, 255"

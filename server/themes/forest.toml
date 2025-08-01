@@ -1,0 +1,14 @@
+name = "Forest Night"
+description = "Dark green nature tones"
+
+[colors]
+background_color = "34, 49, 34"
+accent_color = "85, 139, 47"
+accent_color_text = "255, 255, 255"
+text_color = "245, 255, 250"
+link_color = "144, 238, 144"
+alt_color = "255, 215, 0"
+button_background_color_1 = "34, 139, 34"
+button_background_color_2 = "107, 142, 35"
+button_background_color_3 = "154, 205, 50"
+button_text_color = "255, 255, 255"

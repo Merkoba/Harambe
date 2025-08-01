@@ -1,0 +1,14 @@
+name = "Pastel Spring"
+description = "Soft light delicate"
+
+[colors]
+background_color = "252, 248, 255"
+accent_color = "216, 191, 216"
+accent_color_text = "75, 0, 130"
+text_color = "75, 0, 130"
+link_color = "147, 112, 219"
+alt_color = "255, 182, 193"
+button_background_color_1 = "221, 160, 221"
+button_background_color_2 = "255, 192, 203"
+button_background_color_3 = "176, 224, 230"
+button_text_color = "75, 0, 130"
