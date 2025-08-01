@@ -16,10 +16,28 @@ body, html {
 #top {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
-    row-gap: 0.1rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#topbuttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+}
+
+#title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+    width: 100%;
 }
 
 #file {
@@ -360,10 +378,6 @@ a.link:hover,
 .embed {
     width: 100%;
     margin-top: 0.45rem;
-}
-
-#title {
-    white-space: wrap;
 }
 
 #details {
