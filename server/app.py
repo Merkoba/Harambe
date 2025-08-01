@@ -419,12 +419,17 @@ def refresh() -> Any:
     return {"update": update}, 200
 
 
-@app.route("/prev/<string:current>", methods=["GET"])  # type: ignore
+@app.route("/prev", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 @reader_required
 def prev_post(current: str) -> Any:
-    post = post_procs.get_prev_post(current)
+    post_id = request.args.get("post_id", None)
+
+    if not post_id:
+        return over()
+
+    post = post_procs.get_prev_post(current, post_id=post_id)
 
     if not post:
         return over()
@@ -440,12 +445,13 @@ def prev_post(current: str) -> Any:
 @payload_check()
 def next_post() -> Any:
     post_id = request.args.get("post_id", None)
-    used_ids = session["used_ids"] if "used_ids" in session else []
-    post = post_procs.get_next_post(used_ids, post_id=post_id)
+
+    if not post_id:
+        return over()
+
+    post = post_procs.get_next_post(post_id=post_id)
 
     if post:
-        used_ids.append(post.id)
-        session["used_ids"] = used_ids
         json = request.args.get("json", "") == "true"
 
         if json:

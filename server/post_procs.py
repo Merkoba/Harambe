@@ -445,11 +445,8 @@ def get_post(
     return None
 
 
-def get_prev_post(name: str) -> Post | None:
-    if not name:
-        return None
-
-    db_post = database.get_prev_post(name)
+def get_prev_post(post_id: int) -> Post | None:
+    db_post = database.get_prev_post(post_id)
 
     if db_post:
         return make_post(db_post, utils.now())
@@ -457,7 +454,7 @@ def get_prev_post(name: str) -> Post | None:
     return None
 
 
-def get_next_post(post_id: int | None = None) -> Post | None:
+def get_next_post(post_id: int) -> Post | None:
     db_post = database.get_next_post(post_id)
 
     if db_post:
@@ -466,7 +463,7 @@ def get_next_post(post_id: int | None = None) -> Post | None:
     return None
 
 
-def get_next_post_by_type(post_type: str, post_id: int | None = None) -> Post | None:
+def get_next_post_by_type(post_type: str, post_id: int) -> Post | None:
     func = getattr(database, f"get_next_{post_type}_post", lambda: None)
     db_post = func(post_id)
 

@@ -585,29 +585,25 @@ App.encode_uri = (uri) => {
 }
 
 App.prev_post = (blank = false) => {
-  let url
+  if (!App.post) {
+    return
+  }
 
-  if (App.post.name) {
-    url = `/prev/${App.post.name}`
+  let post_id = App.post.id
+
+  if (!post_id) {
+    return
   }
-  else {
-    url = `/random`
-  }
+
+  let base_path = `/prev`
+  let url = new URL(base_path, window.location.origin)
+  url.searchParams.set("post_id", post_id)
 
   App.goto_url(url, blank)
 }
 
-App.next_post = (blank = false) => {
-  let url
-
-  if (App.post.name) {
-    url = `/next/${App.post.name}`
-  }
-  else {
-    url = `/random`
-  }
-
-  App.goto_url(url, blank)
+App.next_post = (new_tab = false) => {
+  App.next_action(`next`, new_tab)
 }
 
 App.fresh_post = () => {
