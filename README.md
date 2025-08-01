@@ -328,6 +328,6 @@ There are multiple color themes to choose from.
 
 To change it, change the `theme` config.
 
-To see all the defined themes check the [themes directory](themes/).
+To see all the defined themes check the [themes directory](server/themes/).
 
 Users can change their own theme using the menu.
