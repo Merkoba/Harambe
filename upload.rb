@@ -195,9 +195,14 @@ body = response.body
 
 if response.is_a?(Net::HTTPSuccess)
   full_url = "#{url}/post/#{body}"
-  IO.popen(["xclip", "-selection", "clipboard"], "w") { |clipboard| clipboard.print full_url }
-  puts "URL Copied: #{full_url}"
-  system("awesome-client", 'Utils.msg("Harambe: Upload Complete")')
+
+  # Xorg
+  # IO.popen(["xclip", "-selection", "clipboard"], "w") { |clipboard| clipboard.print full_url }
+  # system("awesome-client", 'Utils.msg("Harambe: Upload Complete")')
+
+  # Wayland
+  IO.popen(["wl-copy"], "w") { |clipboard| clipboard.print full_url }
+  system("notify-send 'Upload Complete'")
 else
   puts body
 end
