@@ -119,7 +119,7 @@ App.init = () => {
     })
 
     DOM.ev(vol_btn, `contextmenu`, (e) => {
-      App.max_volume()
+      App.show_volume()
       e.preventDefault()
     })
   }

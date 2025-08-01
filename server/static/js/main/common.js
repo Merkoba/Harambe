@@ -1256,16 +1256,6 @@ App.toggle_volume = () => {
   video.muted = !video.muted
 }
 
-App.max_volume = () => {
-    let video = DOM.el(`video`)
-
-  if (!video) {
-    return
-  }
-
-  App.set_volume(1)
-}
-
 App.show_volume = () => {
   App.setup_volume_opts(true)
 }
