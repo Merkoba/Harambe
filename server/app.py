@@ -423,13 +423,13 @@ def refresh() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 @reader_required
-def prev_post(current: str) -> Any:
+def prev_post() -> Any:
     post_id = request.args.get("post_id", None)
 
     if not post_id:
         return over()
 
-    post = post_procs.get_prev_post(current, post_id=post_id)
+    post = post_procs.get_prev_post(post_id=post_id)
 
     if not post:
         return over()

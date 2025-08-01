@@ -429,7 +429,7 @@ def edit_post_privacy(post_id: int, privacy: str) -> None:
 def get_prev_post(post_id: int) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
-    c.execute("select * from posts where name = ?", (post_id,))
+    c.execute("select * from posts where id = ?", (post_id,))
     row = c.fetchone()
 
     if not row:

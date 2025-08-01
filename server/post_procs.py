@@ -464,7 +464,7 @@ def get_next_post(post_id: int) -> Post | None:
 
 
 def get_next_post_by_type(post_type: str, post_id: int) -> Post | None:
-    func = getattr(database, f"get_next_{post_type}_post", lambda: None)
+    func = getattr(database, f"get_next_{post_type}_post")
     db_post = func(post_id)
 
     if db_post:
