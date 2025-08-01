@@ -1118,6 +1118,32 @@ App.random_action = (what, new_tab = false) => {
   }
 }
 
+App.next_action = (what, new_tab = false) => {
+  let path
+
+  if (what === `next`) {
+    path = `/next`
+  }
+  else {
+    path = `/next/${what}`
+  }
+
+  App.storage.cmd = {
+    kind: `next`,
+    value: path,
+    date: Date.now(),
+  }
+
+  App.save_storage()
+
+  if (new_tab) {
+    App.open_tab(path)
+  }
+  else {
+    App.location(path)
+  }
+}
+
 App.get_cookie = (name) => {
   let cookie = document.cookie.split(`;`).find(c => c.trim().startsWith(`${name}=`))
   return cookie ? cookie.split(`=`)[1] : null

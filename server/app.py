@@ -432,25 +432,16 @@ def prev_post(current: str) -> Any:
     return redirect(url_for("post", name=post.name))
 
 
-@app.route("/next/<string:current>", methods=["GET"])  # type: ignore
-@limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
-@reader_required
-def next_post(current: str) -> Any:
-    post = post_procs.get_next_post(current)
-
-    if not post:
-        return over()
-
-    return redirect(url_for("post", name=post.name))
+# RANDOM
 
 
 @app.route("/random", methods=["GET"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 def random_post() -> Any:
+    post_id = request.args.get("post_id", None)
     used_ids = session["used_ids"] if "used_ids" in session else []
-    post = post_procs.get_random_post(used_ids)
+    post = post_procs.get_random_post(used_ids, post_id=post_id)
 
     if post:
         used_ids.append(post.id)
@@ -481,7 +472,8 @@ def random_by_type(post_type: str) -> Any:
     ]:
         return over()
 
-    post = post_procs.get_random_post_by_type(post_type)
+    post_id = request.args.get("post_id", None)
+    post = post_procs.get_random_post_by_type(post_type, post_id=post_id)
 
     if post:
         json = request.args.get("json", "") == "true"

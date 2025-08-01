@@ -673,7 +673,7 @@ def get_random_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | Non
     else:
         no_mode_str = " "
 
-    query = f"select * from posts where ext in ({{}}) and privacy = 'public'{no_mode_str}order by random() limit 1"
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.date < ? and p.privacy = 'public'{no_mode_str}order by random() limit 1",
     placeholders = ", ".join("?" for _ in exts)
     c.execute(query.format(placeholders), exts)
     row = c.fetchone()
@@ -685,11 +685,11 @@ def get_random_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | Non
     return None
 
 
-def get_next_by_mtype(mtype: str, current: str) -> Post | None:
+def get_random_by_mtype(mtype: str, current: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
 
-    query = "select * from posts where mtype = ? and privacy = 'public' order by random() limit 1"
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.date < ? and p.privacy = 'public'{no_mode_str}order by random() limit 1",
     c.execute(query, (mtype,))
     row = c.fetchone()
     conn.close()
@@ -700,7 +700,7 @@ def get_next_by_mtype(mtype: str, current: str) -> Post | None:
     return None
 
 
-def get_next_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
+def get_next_post_by_ext(current: str, exts: list[str], no_mode: bool = False) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
     post = get_post_by_name(current, oconn=connection)
@@ -713,11 +713,6 @@ def get_next_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
         no_mode_str = " and mtype not like 'mode/%' "
     else:
         no_mode_str = " "
-
-    c.execute(
-        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? and p.privacy = 'public' order by p.date desc limit 1",
-        (post.date,),
-    )
 
     query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1",
     placeholders = ", ".join("?" for _ in exts)
@@ -732,12 +727,23 @@ def get_next_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
     return None
 
 
-def get_random_by_mtype(mtype: str) -> Post | None:
+def get_next_by_mtype(current: str, mtype: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
+    post = get_post_by_name(current, oconn=connection)
 
-    query = "select * from posts where mtype = ? and privacy = 'public' order by random() limit 1"
-    c.execute(query, (mtype,))
+    if not post:
+        conn.close()
+        return None
+
+    if no_mode:
+        no_mode_str = " and mtype not like 'mode/%' "
+    else:
+        no_mode_str = " "
+
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and where p.mtype = ? and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1",
+    c.execute(mtype, post.date)
+
     row = c.fetchone()
     conn.close()
 

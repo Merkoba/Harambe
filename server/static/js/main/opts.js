@@ -274,60 +274,48 @@ App.setup_list_opts = (show = false, parent = ``) => {
 App.setup_random_opts = (show = false, parent = ``) => {
   let name = `random`
 
+  function make(type) {
+    App.bind_button(`${name}_opts_${type}`, () => {
+      App.random_action(type)
+    }, () => {
+      App.random_action(type, true)
+    }, App.media_icon(type))
+  }
+
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_any`, () => {
-      App.random_action(`random`)
-    }, () => {
-      App.random_action(`any`, true)
-    }, App.media_icon(`any`))
+    make(`any`)
+    make(`video`)
+    make(`audio`)
+    make(`image`)
+    make(`text`)
+    make(`talk`)
+    make(`flash`)
+    make(`zip`)
+    make(`url`)
+  }, show, parent)
+}
 
-    App.bind_button(`${name}_opts_video`, () => {
-      App.random_action(`video`)
-    }, () => {
-      App.random_action(`video`, true)
-    }, App.media_icon(`video`))
+App.setup_next_opts = (show = false, parent = ``) => {
+  let name = `next`
 
-    App.bind_button(`${name}_opts_audio`, () => {
-      App.random_action(`audio`)
+  function make(type) {
+    App.bind_button(`${name}_opts_${type}`, () => {
+      App.next_action(type)
     }, () => {
-      App.random_action(`audio`, true)
-    }, App.media_icon(`audio`))
+      App.next_action(type, true)
+    }, App.media_icon(type))
+  }
 
-    App.bind_button(`${name}_opts_image`, () => {
-      App.random_action(`image`)
-    }, () => {
-      App.random_action(`image`, true)
-    }, App.media_icon(`image`))
-
-    App.bind_button(`${name}_opts_text`, () => {
-      App.random_action(`text`)
-    }, () => {
-      App.random_action(`text`, true)
-    }, App.media_icon(`text`))
-
-    App.bind_button(`${name}_opts_talk`, () => {
-      App.random_action(`talk`)
-    }, () => {
-      App.random_action(`talk`, true)
-    }, App.media_icon(`talk`))
-
-    App.bind_button(`${name}_opts_flash`, () => {
-      App.random_action(`flash`)
-    }, () => {
-      App.random_action(`flash`, true)
-    }, App.media_icon(`flash`))
-
-    App.bind_button(`${name}_opts_zip`, () => {
-      App.random_action(`zip`)
-    }, () => {
-      App.random_action(`zip`, true)
-    }, App.media_icon(`zip`))
-
-    App.bind_button(`${name}_opts_url`, () => {
-      App.random_action(`url`)
-    }, () => {
-      App.random_action(`url`, true)
-    }, App.media_icon(`url`))
+  App.make_opts(name, () => {
+    make(`any`)
+    make(`video`)
+    make(`audio`)
+    make(`image`)
+    make(`text`)
+    make(`talk`)
+    make(`flash`)
+    make(`zip`)
+    make(`url`)
   }, show, parent)
 }
 
