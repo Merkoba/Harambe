@@ -395,6 +395,7 @@ select.settings_widget {
     cursor: pointer !important;
     outline: 2px solid transparent !important;
     transition: outline-color 0.25s ease-in-out !important;
+    user-select: none;
 }
 
 #Msg-window-corner_msg:hover {
