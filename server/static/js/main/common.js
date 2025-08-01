@@ -1214,6 +1214,16 @@ App.set_volume = (vol) => {
 
   vol = App.clamp(vol, 100, 0)
   video.volume = vol
+  let feedback = DOM.el(`#volume_feedback`)
+
+  if (feedback) {
+    clearTimeout(App.volume_timeout)
+    feedback.textContent = `${Math.round(vol * 100)} %`
+
+    App.volume_timeout = setTimeout(() => {
+      feedback.textContent = ``
+    }, App.SECOND * 2)
+  }
 }
 
 App.increase_volume = (step = 0.05) => {
