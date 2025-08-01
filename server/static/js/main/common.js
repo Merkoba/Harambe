@@ -1275,7 +1275,7 @@ App.show_volume_feedback = () => {
   if (feedback) {
     DOM.show(feedback)
     clearTimeout(App.volume_timeout)
-    feedback.textContent = `${Math.round(vol * 100)} %`
+    feedback.textContent = `${Math.round(vol * 100)}%`
 
     App.volume_timeout = setTimeout(() => {
       DOM.hide(feedback)
