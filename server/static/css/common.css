@@ -394,3 +394,7 @@ select.settings_widget {
 #Msg-window-corner_msg {
     cursor: pointer !important;
 }
+
+#Msg-window-corner_msg:hover {
+    outline: 2px solid rgb(128, 211, 128) !important;
+}
