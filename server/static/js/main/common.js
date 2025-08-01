@@ -1172,11 +1172,11 @@ App.is_disabled = (el) => {
   return el.classList.contains(`strike`) || el.disabled
 }
 
-App.corner_msg = (text) => {
+App.corner_msg = (text, delay = 5000) => {
   Msg.factory({
     preset: `popup_autoclose`,
     position: `bottomright`,
-    autoclose_delay: 5000,
+    autoclose_delay: delay,
     on_click: () => {
       App.run_cmd()
     },
@@ -1194,7 +1194,7 @@ App.check_cmd = () => {
     return false
   }
 
-  App.corner_msg(`Click to do this again`)
+  App.corner_msg(`Click to do this again`, 6200)
 }
 
 App.run_cmd = () => {
