@@ -452,8 +452,8 @@ def get_prev_post(current: str) -> Post | None:
     return None
 
 
-def get_next_post(current: str) -> Post | None:
-    connection = get_conn()
+def get_post_by_name(current: str, oconn: Connection) -> Post | None:
+    connection = get_conn(oconn)
     conn, c = connection.tuple()
     c.execute("select * from posts where name = ?", (current,))
     row = c.fetchone()
@@ -462,7 +462,17 @@ def get_next_post(current: str) -> Post | None:
         conn.close()
         return None
 
-    post = make_post(dict(row))
+    return make_post(dict(row))
+
+
+def get_next_post(current: str) -> Post | None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    post = get_post_by_name(current, oconn=connection)
+
+    if not post:
+        conn.close()
+        return None
 
     c.execute(
         "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? and p.privacy = 'public' order by p.date desc limit 1",
@@ -654,7 +664,7 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
     return None
 
 
-def get_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
+def get_random_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
 
@@ -675,7 +685,54 @@ def get_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
     return None
 
 
-def get_post_by_mtype(mtype: str) -> Post | None:
+def get_next_by_mtype(mtype: str, current: str) -> Post | None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+
+    query = "select * from posts where mtype = ? and privacy = 'public' order by random() limit 1"
+    c.execute(query, (mtype,))
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_post(dict(row))
+
+    return None
+
+
+def get_next_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
+    connection = get_conn()
+    conn, c = connection.tuple()
+    post = get_post_by_name(current, oconn=connection)
+
+    if not post:
+        conn.close()
+        return None
+
+    if no_mode:
+        no_mode_str = " and mtype not like 'mode/%' "
+    else:
+        no_mode_str = " "
+
+    c.execute(
+        "select * from posts p join users u on p.user = u.id where u.lister = 1 and p.date < ? and p.privacy = 'public' order by p.date desc limit 1",
+        (post.date,),
+    )
+
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.date < ? and p.privacy = 'public'{no_mode_str}order by p.date desc limit 1",
+    placeholders = ", ".join("?" for _ in exts)
+    c.execute(query.format(placeholders), exts, post.date)
+
+    row = c.fetchone()
+    conn.close()
+
+    if row:
+        return make_post(dict(row))
+
+    return None
+
+
+def get_random_by_mtype(mtype: str) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
 
@@ -692,40 +749,78 @@ def get_post_by_mtype(mtype: str) -> Post | None:
 
 def get_random_video_post() -> Post | None:
     exts = ["mp4", "webm"]
-    return get_post_by_ext(exts)
+    return get_random_post_by_ext(exts)
 
 
 def get_random_audio_post() -> Post | None:
     exts = ["mp3", "ogg", "flac", "wav"]
-    return get_post_by_ext(exts)
+    return get_random_post_by_ext(exts)
 
 
 def get_random_image_post() -> Post | None:
     exts = ["jpg", "jpeg", "png", "gif", "webp"]
-    return get_post_by_ext(exts)
+    return get_random_post_by_ext(exts)
 
 
 def get_random_text_post() -> Post | None:
     exts = ["txt", "md"]
-    return get_post_by_ext(exts, no_mode=True)
+    return get_random_post_by_ext(exts, no_mode=True)
 
 
 def get_random_talk_post() -> Post | None:
-    return get_post_by_mtype("mode/talk")
+    return get_random_by_mtype("mode/talk")
 
 
 def get_random_flash_post() -> Post | None:
     exts = ["swf"]
-    return get_post_by_ext(exts)
+    return get_random_post_by_ext(exts)
 
 
 def get_random_url_post() -> Post | None:
-    return get_post_by_mtype("mode/url")
+    return get_random_by_mtype("mode/url")
 
 
 def get_random_zip_post() -> Post | None:
     exts = ["zip"]
-    return get_post_by_ext(exts)
+    return get_random_post_by_ext(exts)
+
+
+def get_next_video_post() -> Post | None:
+    exts = ["mp4", "webm"]
+    return get_next_post_by_ext(exts)
+
+
+def get_next_audio_post() -> Post | None:
+    exts = ["mp3", "ogg", "flac", "wav"]
+    return get_next_post_by_ext(exts)
+
+
+def get_next_image_post() -> Post | None:
+    exts = ["jpg", "jpeg", "png", "gif", "webp"]
+    return get_next_post_by_ext(exts)
+
+
+def get_next_text_post() -> Post | None:
+    exts = ["txt", "md"]
+    return get_next_post_by_ext(exts, no_mode=True)
+
+
+def get_next_talk_post() -> Post | None:
+    return get_next_post_by_mtype("mode/talk")
+
+
+def get_next_flash_post() -> Post | None:
+    exts = ["swf"]
+    return get_next_post_by_ext(exts)
+
+
+def get_next_url_post() -> Post | None:
+    return get_next_post_by_mtype("mode/url")
+
+
+def get_next_zip_post() -> Post | None:
+    exts = ["zip"]
+    return get_next_post_by_ext(exts)
 
 
 def update_file_size(name: str, size: int) -> None:
