@@ -1257,7 +1257,7 @@ App.set_volume = (vol) => {
     return
   }
 
-  vol = App.clamp(vol, 100, 0)
+  vol = App.clamp(vol, 1, 0)
   App.show_volume_feedback()
   video.volume = vol
 }
