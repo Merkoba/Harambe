@@ -5,6 +5,9 @@ import tomllib
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+# Modules
+import utils
+
 if TYPE_CHECKING:
     from config import Config
 
@@ -17,8 +20,8 @@ def fill(config: Config) -> None:
         key = theme_path.stem
 
         try:
-            with open(theme_path, "rb") as f:
+            with theme_path.open("rb") as f:
                 theme_data = tomllib.load(f)
                 config.themes[key] = theme_data
         except Exception as e:
-            print(f"Warning: Could not load theme file {theme_path.name}: {e}")
+            utils.error(f"Warning: Could not load theme file {theme_path.name}: {e}")
