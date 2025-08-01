@@ -79,6 +79,21 @@ def fill_icons(config: Config) -> None:
     # Icon for next sample button
     config.icons["next_sample"] = "⏩"
 
+    # Icon for volume
+    config.icons["volume"] = "🔊"
+
+    # Icon for volume max
+    config.icons["volume_max"] = "🔊"
+
+    # Icon for volume mid
+    config.icons["volume_mid"] = "🔉"
+
+    # Icon for volume min
+    config.icons["volume_min"] = "🔈"
+
+    # Icon for volume mute
+    config.icons["volume_muted"] = "🔇"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages

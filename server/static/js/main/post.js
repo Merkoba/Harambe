@@ -95,6 +95,35 @@ App.init = () => {
     })
   }
 
+  let vol_btn = DOM.el(`#volume`)
+
+  if (vol_btn) {
+    DOM.ev(vol_btn, `click`, () => {
+      App.show_volume()
+    })
+
+    DOM.ev(vol_btn, `wheel`, (e) => {
+      if (e.deltaY < 0) {
+        App.increase_volume()
+      }
+      else {
+        App.decrease_volume()
+      }
+    })
+
+    DOM.ev(vol_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.toggle_volume()
+        e.preventDefault()
+      }
+    })
+
+    DOM.ev(vol_btn, `contextmenu`, (e) => {
+      App.max_volume()
+      e.preventDefault()
+    })
+  }
+
   App.setup_reactions()
   App.keyboard_events()
   App.format_description()

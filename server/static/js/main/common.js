@@ -1204,3 +1204,69 @@ App.run_cmd = () => {
   App.save_storage()
   App.location(path)
 }
+
+App.set_volume = (vol) => {
+  let video = DOM.el(`video`)
+
+  if(!video) {
+    return
+  }
+
+  vol = App.clamp(vol, 100, 0)
+  video.volume = vol
+}
+
+App.increase_volume = (step = 0.05) => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  App.set_volume(video.volume + step)
+}
+
+App.decrease_volume = (step = 0.05) => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  App.set_volume(video.volume - step)
+}
+
+App.toggle_volume = () => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  video.muted = !video.muted
+}
+
+App.max_volume = () => {
+    let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  App.set_volume(1)
+}
+
+App.show_volume = () => {
+  App.setup_volume_opts(true)
+}
+
+App.clamp = (value, max, min) => {
+  if (value > max) {
+    return max
+  }
+  else if (value < min) {
+    return min
+  }
+
+  return value
+}

@@ -125,6 +125,11 @@
                 <div class="sep">|</div>
                 <div id="resolution"></div>
             </div>
+
+            {% if post.video_embed or post.audio_embed %}
+            <div class="sep">|</div>
+            <div id="volume" class="button">Volume</div>
+            {% endif %}
         </div>
         {% endif %}
     </div>

@@ -518,60 +518,51 @@ App.setup_post_edit_opts = (show = false) => {
 App.setup_page_opts = (show = false) => {
   let name = `page`
 
+  function make(num) {
+    App.bind_button(`${name}_opts_${num}`, () => {
+      App.goto_page(num)
+    }, () => {
+      App.goto_page(num, true)
+    }, App.icon(`page`))
+  }
+
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_1`, () => {
-      App.goto_page(1)
-    }, () => {
-      App.goto_page(1, true)
-    }, App.icon(`page`))
+    for (let n = 1; n <= 9; n++) {
+      make(n)
+    }
+  }, show)
+}
 
-    App.bind_button(`${name}_opts_2`, () => {
-      App.goto_page(2)
-    }, () => {
-      App.goto_page(2, true)
-    }, App.icon(`page`))
+App.setup_volume_opts = (show = false) => {
+  let name = `volume`
 
-    App.bind_button(`${name}_opts_3`, () => {
-      App.goto_page(3)
-    }, () => {
-      App.goto_page(3, true)
-    }, App.icon(`page`))
+  function make(num) {
+    if (num > 75) {
+      icon = `volume_max`
+    }
+    else if ((num <= 75) && (num > 25)) {
+      icon = `volume_mid`
+    }
+    else if (num > 0) {
+      icon = `volume_min`
+    }
+    else {
+      icon = `volume_muted`
+    }
 
-    App.bind_button(`${name}_opts_4`, () => {
-      App.goto_page(4)
-    }, () => {
-      App.goto_page(4, true)
-    }, App.icon(`page`))
+    let vol = num / 100
 
-    App.bind_button(`${name}_opts_5`, () => {
-      App.goto_page(5)
+    App.bind_button(`${name}_opts_${num}`, () => {
+      App.set_volume(vol)
     }, () => {
-      App.goto_page(5, true)
-    }, App.icon(`page`))
+      App.set_volume(vol, true)
+    }, App.icon(icon))
+  }
 
-    App.bind_button(`${name}_opts_6`, () => {
-      App.goto_page(6)
-    }, () => {
-      App.goto_page(6, true)
-    }, App.icon(`page`))
-
-    App.bind_button(`${name}_opts_7`, () => {
-      App.goto_page(7)
-    }, () => {
-      App.goto_page(7, true)
-    }, App.icon(`page`))
-
-    App.bind_button(`${name}_opts_8`, () => {
-      App.goto_page(8)
-    }, () => {
-      App.goto_page(8, true)
-    }, App.icon(`page`))
-
-    App.bind_button(`${name}_opts_9`, () => {
-      App.goto_page(9)
-    }, () => {
-      App.goto_page(9, true)
-    }, App.icon(`page`))
+  App.make_opts(name, () => {
+    for (let n of [100, 75, 50, 25, 0]) {
+      make(n)
+    }
   }, show)
 }
 
