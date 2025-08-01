@@ -1244,7 +1244,18 @@ App.set_volume = (vol) => {
   }
 
   vol = App.clamp(vol, 100, 0)
+  App.show_volume_feedback()
   video.volume = vol
+}
+
+App.show_volume_feedback = () => {
+  let video = DOM.el(`video`)
+
+  if (!video) {
+    return
+  }
+
+  let vol = video.volume
   let feedback = DOM.el(`#volume_feedback`)
 
   if (feedback) {
@@ -1253,7 +1264,7 @@ App.set_volume = (vol) => {
 
     App.volume_timeout = setTimeout(() => {
       feedback.textContent = ``
-    }, App.SECOND * 2)
+    }, App.SECOND * 1.5)
   }
 }
 
