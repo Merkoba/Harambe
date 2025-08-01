@@ -11,32 +11,14 @@ if TYPE_CHECKING:
 
 def fill(config: Config) -> None:
     themes_dir = Path(__file__).parent / "themes"
+    theme_files = sorted(themes_dir.glob("*.toml"))
 
-    themes = [
-        "blossom",
-        "ocean",
-        "forest",
-        "sunset",
-        "purple",
-        "arctic",
-        "golden",
-        "midnight",
-        "neon",
-        "sepia",
-        "crimson",
-        "pastel",
-        "teal",
-        "cherry",
-        "mocha",
-        "contrast",
-    ]
+    for theme_path in theme_files:
+        key = theme_path.stem
 
-    for key in themes:
-        theme_path = themes_dir / f"{key}.toml"
-
-        if theme_path.exists():
+        try:
             with open(theme_path, "rb") as f:
                 theme_data = tomllib.load(f)
                 config.themes[key] = theme_data
-        else:
-            print(f"Warning: Theme file {filename} not found")
+        except Exception as e:
+            print(f"Warning: Could not load theme file {theme_path.name}: {e}")
