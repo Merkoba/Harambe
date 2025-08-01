@@ -71,6 +71,25 @@ App.init = () => {
     })
   }
 
+  let random_btn = DOM.el(`#random`)
+
+  if (random_btn) {
+    DOM.ev(random_btn, `click`, () => {
+      App.show_random(`menu`, false)
+    })
+
+    DOM.ev(random_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.random_action(`random`)
+      }
+    })
+
+    DOM.ev(random_btn, `contextmenu`, (e) => {
+      App.show_random(`menu`, false)
+      e.preventDefault()
+    })
+  }
+
   let next_btn = DOM.el(`#next`)
 
   if (next_btn) {
@@ -78,12 +97,15 @@ App.init = () => {
       App.show_next()
     })
 
-    DOM.ev(next_btn, `auxclick`, () => {
-      App.next_action(`next`)
+    DOM.ev(next_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.next_action(`next`)
+      }
     })
 
-    DOM.ev(next_btn, `contextmenu`, () => {
+    DOM.ev(next_btn, `contextmenu`, (e) => {
       App.show_next()
+      e.preventDefault()
     })
   }
 
