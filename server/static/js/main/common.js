@@ -588,7 +588,16 @@ App.fresh_post = () => {
 }
 
 App.random_post = () => {
-  App.location(`/random`)
+  let path = `/random`
+  App.location(path)
+
+  App.storage.cmd = {
+    kind: `random`,
+    value: path,
+    date: Date.now(),
+  }
+
+  App.save_storage()
 }
 
 App.msg_show = (what, back_button = true) => {
@@ -1060,6 +1069,11 @@ App.change_menu_icon = (what, value) => {
 }
 
 App.random_action = (what, new_tab = false) => {
+  if (what === `any`) {
+    App.random_post()
+    return
+  }
+
   if (App.random_mode === `page`) {
     what = what === `random` ? `` : what
     App.do_random_page(what, new_tab)

@@ -517,9 +517,12 @@ def random_by_type(post_type: str) -> Any:
     ]:
         return over()
 
-    post = post_procs.get_random_post_by_type(post_type)
+    used_ids = session["used_ids"] if "used_ids" in session else []
+    post = post_procs.get_random_post_by_type(post_type, used_ids)
 
     if post:
+        used_ids.append(post.id)
+        session["used_ids"] = used_ids
         json = request.args.get("json", "") == "true"
 
         if json:

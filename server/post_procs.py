@@ -473,8 +473,9 @@ def get_random_post(used_ids: list[int]) -> Post | None:
     return None
 
 
-def get_random_post_by_type(post_type: str) -> Post | None:
-    db_post = getattr(database, f"get_random_{post_type}_post", lambda: None)()
+def get_random_post_by_type(post_type: str, ignore_ids: list[int]) -> Post | None:
+    func = getattr(database, f"get_random_{post_type}_post")
+    db_post = func(ignore_ids)
 
     if db_post:
         return make_post(db_post, utils.now())

@@ -614,7 +614,9 @@ def get_random_post(ignore_ids: list[int]) -> Post | None:
     return None
 
 
-def get_random_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | None:
+def get_random_post_by_ext(
+    exts: list[str], ignore_ids: list[int], no_mode: bool = False
+) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
 
@@ -623,9 +625,11 @@ def get_random_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | Non
     else:
         no_mode_str = " "
 
-    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.ext in ({{}}) and p.privacy = 'public'{no_mode_str}order by random() limit 1"
-    placeholders = ", ".join("?" for _ in exts)
-    c.execute(query.format(placeholders), exts)
+    ph_exts = ", ".join("?" for _ in exts)
+    ph_ignore = ", ".join("?" for _ in ignore_ids)
+    query = f"select * from posts p join users u on p.user = u.id where u.lister = 1 and p.id not in ({ph_ignore}) and p.ext in ({ph_exts}) and p.privacy = 'public'{no_mode_str}order by random() limit 1"
+    params = ignore_ids + exts
+    c.execute(query, params)
     row = c.fetchone()
     conn.close()
 
@@ -635,7 +639,7 @@ def get_random_post_by_ext(exts: list[str], no_mode: bool = False) -> Post | Non
     return None
 
 
-def get_random_by_mtype(mtype: str) -> Post | None:
+def get_random_by_mtype(mtype: str, ignore_ids: list[int]) -> Post | None:
     connection = get_conn()
     conn, c = connection.tuple()
 
@@ -721,42 +725,46 @@ def get_next_post_by_mtype(post_id: int, mtype: str) -> Post | None:
     return None
 
 
-def get_random_video_post() -> Post | None:
+def get_random_video_post(ignore_ids: list[int]) -> Post | None:
     exts = ["mp4", "webm"]
-    return get_random_post_by_ext(exts)
+    return get_random_post_by_ext(exts, ignore_ids)
 
 
-def get_random_audio_post() -> Post | None:
+def get_random_audio_post(ignore_ids: list[int]) -> Post | None:
     exts = ["mp3", "ogg", "flac", "wav"]
-    return get_random_post_by_ext(exts)
+    return get_random_post_by_ext(exts, ignore_ids)
 
 
-def get_random_image_post() -> Post | None:
+def get_random_image_post(ignore_ids: list[int]) -> Post | None:
     exts = ["jpg", "jpeg", "png", "gif", "webp"]
-    return get_random_post_by_ext(exts)
+    return get_random_post_by_ext(exts, ignore_ids)
 
 
-def get_random_text_post() -> Post | None:
+def get_random_text_post(ignore_ids: list[int]) -> Post | None:
     exts = ["txt", "md"]
-    return get_random_post_by_ext(exts, no_mode=True)
+    return get_random_post_by_ext(
+        exts,
+        ignore_ids,
+        no_mode=True,
+    )
 
 
-def get_random_talk_post() -> Post | None:
-    return get_random_by_mtype("mode/talk")
+def get_random_talk_post(ignore_ids: list[int]) -> Post | None:
+    return get_random_by_mtype("mode/talk", ignore_ids)
 
 
-def get_random_flash_post() -> Post | None:
+def get_random_flash_post(ignore_ids: list[int]) -> Post | None:
     exts = ["swf"]
-    return get_random_post_by_ext(exts)
+    return get_random_post_by_ext(exts, ignore_ids)
 
 
-def get_random_url_post() -> Post | None:
-    return get_random_by_mtype("mode/url")
+def get_random_url_post(ignore_ids: list[int]) -> Post | None:
+    return get_random_by_mtype("mode/url", ignore_ids)
 
 
-def get_random_zip_post() -> Post | None:
+def get_random_zip_post(ignore_ids: list[int]) -> Post | None:
     exts = ["zip"]
-    return get_random_post_by_ext(exts)
+    return get_random_post_by_ext(exts, ignore_ids)
 
 
 def get_next_video_post(post_id: int) -> Post | None:
