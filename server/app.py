@@ -32,6 +32,7 @@ from react_procs import Reaction
 database.check_db()
 
 
+MAX_USED_IDS = 10
 ICONS = utils.load_icons()
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -490,6 +491,7 @@ def random_post() -> Any:
 
     if post:
         used_ids.append(post.id)
+        used_ids = used_ids[-MAX_USED_IDS:]
         session["used_ids"] = used_ids
         json = request.args.get("json", "") == "true"
 
@@ -518,15 +520,13 @@ def random_by_type(post_type: str) -> Any:
         return over()
 
     used_ids = session["used_ids"] if "used_ids" in session else []
-    print(used_ids)
     post = post_procs.get_random_post_by_type(post_type, used_ids)
-    print(2222)
 
     if post:
         used_ids.append(post.id)
+        used_ids = used_ids[-MAX_USED_IDS:]
         session["used_ids"] = used_ids
         json = request.args.get("json", "") == "true"
-        print(post)
 
         if json:
             return post_procs.post_to_json(post)
