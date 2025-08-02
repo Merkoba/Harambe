@@ -487,7 +487,8 @@ class Config:
                 for attr in dir(self)
                 if not attr.startswith("_")
                 and not callable(getattr(self, attr))
-                and attr not in ("links", "reference", "path", "themes", "icons", "media_icons")
+                and attr
+                not in ("links", "reference", "path", "themes", "icons", "media_icons")
             ]
 
             # Automatically set values for all config attributes
@@ -515,7 +516,9 @@ class Config:
                     theme_data = tomllib.load(f)
                     self.themes[key] = theme_data
             except Exception as e:
-                utils.error(f"Warning: Could not load theme file {theme_path.name}: {e}")
+                utils.error(
+                    f"Warning: Could not load theme file {theme_path.name}: {e}"
+                )
 
 
 # Fill it later
