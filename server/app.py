@@ -44,6 +44,22 @@ app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=config.session_days)
 CORS(app)
 
 
+def limit_used_ids(used_ids: list[int]) -> list[int]:
+    return used_ids[-MAX_USED_IDS:]
+
+
+def get_used_ids() -> list[int]:
+    used_ids = session["used_ids"] if "used_ids" in session else []
+    return limit_used_ids(used_ids)
+
+
+def add_used_ids(post_id: int) -> None:
+    used_ids = get_used_ids()
+    used_ids.append(post_id)
+    used_ids = limit_used_ids(used_ids)
+    session["used_ids"] = used_ids
+
+
 def get_user_id() -> int | None:
     uid = session.get("user_id")
 
@@ -486,12 +502,11 @@ def next_by_type(post_type: str) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 def random_post() -> Any:
-    used_ids = session["used_ids"] if "used_ids" in session else []
+    used_ids = get_used_ids()
     post = post_procs.get_random_post(used_ids)
 
     if post:
-        used_ids.append(post.id)
-        used_ids = used_ids[-MAX_USED_IDS:]
+        add_used_ids(post.id)
         session["used_ids"] = used_ids
         json = request.args.get("json", "") == "true"
 
@@ -519,13 +534,11 @@ def random_by_type(post_type: str) -> Any:
     ]:
         return over()
 
-    used_ids = session["used_ids"] if "used_ids" in session else []
+    used_ids = get_used_ids()
     post = post_procs.get_random_post_by_type(post_type, used_ids)
 
     if post:
-        used_ids.append(post.id)
-        used_ids = used_ids[-MAX_USED_IDS:]
-        session["used_ids"] = used_ids
+        add_used_ids(post.id)
         json = request.args.get("json", "") == "true"
 
         if json:
