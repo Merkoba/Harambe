@@ -53,7 +53,7 @@ def get_used_ids() -> list[int]:
     return limit_used_ids(used_ids)
 
 
-def add_used_ids(post_id: int) -> None:
+def add_used_id(post_id: int) -> None:
     used_ids = get_used_ids()
     used_ids.append(post_id)
     used_ids = limit_used_ids(used_ids)
@@ -506,7 +506,7 @@ def random_post() -> Any:
     post = post_procs.get_random_post(used_ids)
 
     if post:
-        add_used_ids(post.id)
+        add_used_id(post.id)
         session["used_ids"] = used_ids
         json = request.args.get("json", "") == "true"
 
@@ -538,7 +538,7 @@ def random_by_type(post_type: str) -> Any:
     post = post_procs.get_random_post_by_type(post_type, used_ids)
 
     if post:
-        add_used_ids(post.id)
+        add_used_id(post.id)
         json = request.args.get("json", "") == "true"
 
         if json:
