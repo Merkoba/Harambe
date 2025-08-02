@@ -518,7 +518,7 @@ def random_by_type(post_type: str) -> Any:
         return over()
 
     used_ids = session["used_ids"] if "used_ids" in session else []
-    prit(used_ids)
+    print(used_ids)
     post = post_procs.get_random_post_by_type(post_type, used_ids)
     print(2222)
 
