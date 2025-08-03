@@ -494,13 +494,26 @@ App.make_msg = (name, title) => {
   }
 }
 
-App.bind_button = (what, func, mfunc, icon = ``, close = true) => {
-  let name = what.match(/^(.*?)_opts/)[1]
+App.bind_button = (args = {}) => {
+  let def_args = {
+    icon: ``,
+    close: true,
+    class: ``,
+  }
+
+  App.fill_def_args(def_args, args)
+  let name = args.what.match(/^(.*?)_opts/)[1]
   let msg_name = `msg_${name}`
-  let el = DOM.el(`#${what}`)
+  let el = DOM.el(`#${args.what}`)
 
   if (!el) {
     return
+  }
+
+  let btn_cls = ``
+
+  if (args.class) {
+    btn_cls = App.cleanlist(args.class)
   }
 
   let c = DOM.el(`.dialog_container`, App[msg_name].content)
@@ -529,48 +542,54 @@ App.bind_button = (what, func, mfunc, icon = ``, close = true) => {
 
   el.appendChild(text)
 
-  if (icon && App.show_menu_icons) {
+  if (btn_cls) {
+    for (let cls of btn_cls) {
+      el.classList.add(cls)
+    }
+  }
+
+  if (args.icon && App.show_menu_icons) {
     let sub = DOM.create(`div`, `aero_arrow menu_icon`)
-    sub.textContent = icon
+    sub.textContent = args.icon
     el.appendChild(sub)
   }
 
-  if (func) {
+  if (args.func) {
     DOM.ev(el, `click`, (e) => {
-      if (close) {
+      if (args.close) {
         App[msg_name].close()
       }
 
-      func()
+      args.func()
     })
   }
 
-  if (mfunc || func) {
+  if (args.mfunc || args.func) {
     DOM.ev(el, `auxclick`, (e) => {
       if (e.button === 1) {
-        if (close) {
+        if (args.close) {
           App[msg_name].close()
         }
 
-        if (mfunc) {
-          mfunc()
+        if (args.mfunc) {
+          args.mfunc()
         }
-        else if (func) {
-          func()
+        else if (args.func) {
+          args.func()
         }
       }
     })
   }
 
   DOM.ev(el, `contextmenu`, (e) => {
-    if (close) {
+    if (args.close) {
       App[msg_name].close()
     }
 
     e.preventDefault()
 
-    if (func) {
-      func()
+    if (args.func) {
+      args.func()
     }
   })
 }
@@ -1259,4 +1278,8 @@ App.clamp = (value, max, min) => {
   }
 
   return value
+}
+
+App.cleanlist = (cls) => {
+  return cls.match(/\S+/g) || []
 }

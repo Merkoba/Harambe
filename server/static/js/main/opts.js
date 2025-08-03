@@ -26,9 +26,13 @@ App.make_opts = (name, setup, show = false, parent = ``) => {
     btn.textContent = `Back`
     c.appendChild(btn)
 
-    App.bind_button(`${name}_opts_back`, () => {
-      App[`setup_${parent}_opts`](true)
-    }, undefined, `<`)
+    App.bind_button({
+      what: `${name}_opts_back`,
+      func: () => {
+        App[`setup_${parent}_opts`](true)
+      },
+      icon: `<`
+    })
   }
 
   if (show) {
@@ -42,54 +46,97 @@ App.setup_menu_opts = (show = false, ignore = []) => {
   App.make_opts(name, () => {
     App.ignore_buttons(name, ignore)
 
-    App.bind_button(`${name}_opts_upload`, () => {
-      App.location(`/`)
-    }, () => {
-      App.open_tab(`/`)
-    }, App.icon(`upload`))
-
-    App.bind_button(`${name}_opts_fresh`, () => {
-      App.location(`/fresh`)
-    }, () => {
-      App.open_tab(`/fresh`)
-    }, App.icon(`fresh`))
-
-    App.bind_button(`${name}_opts_random`, () => {
-      App.show_random()
-    }, () => {
-      App.random_post()
-    }, App.icon(`random`))
-
-    App.bind_button(`${name}_opts_list`, () => {
-      App.setup_list_opts(true, name)
-    }, undefined, `>`)
-
-    App.bind_button(`${name}_opts_admin`, () => {
-      App.setup_admin_opts(true, name)
-    }, undefined, `>`)
-
-    App.bind_button(`${name}_opts_search`, () => {
-      App.setup_search_opts(true, name)
-    }, undefined, `>`)
-
-    App.bind_button(`${name}_opts_links`, () => {
-      App.setup_link_opts(true, name)
-    }, undefined, `>`)
-
-    App.bind_button(`${name}_opts_you`, () => {
-      App.setup_you_opts(App.user_id, true, name)
-    }, undefined, `>`)
-
-    App.bind_button(`${name}_opts_login`, () => {
-      App.location(`/login`)
-    }, () => {
-      App.open_tab(`/login`)
+    App.bind_button({
+      what: `${name}_opts_upload`,
+      func: () => {
+        App.location(`/`)
+      },
+      mfunc: () => {
+        App.open_tab(`/`)
+      },
+      icon: App.icon(`upload`)
     })
 
-    App.bind_button(`${name}_opts_register`, () => {
-      App.location(`/register`)
-    }, () => {
-      App.open_tab(`/register`)
+    App.bind_button({
+      what: `${name}_opts_fresh`,
+      func: () => {
+        App.location(`/fresh`)
+      },
+      mfunc: () => {
+        App.open_tab(`/fresh`)
+      },
+      icon: App.icon(`fresh`)
+    })
+
+    App.bind_button({
+      what: `${name}_opts_random`,
+      func: () => {
+        App.show_random()
+      },
+      mfunc: () => {
+        App.random_post()
+      },
+      icon: App.icon(`random`)
+    })
+
+    App.bind_button({
+      what: `${name}_opts_list`,
+      func: () => {
+        App.setup_list_opts(true, name)
+      },
+      icon: `>`
+    })
+
+    App.bind_button({
+      what: `${name}_opts_admin`,
+      func: () => {
+        App.setup_admin_opts(true, name)
+      },
+      icon: `>`
+    })
+
+    App.bind_button({
+      what: `${name}_opts_search`,
+      func: () => {
+        App.setup_search_opts(true, name)
+      },
+      icon: `>`
+    })
+
+    App.bind_button({
+      what: `${name}_opts_links`,
+      func: () => {
+        App.setup_link_opts(true, name)
+      },
+      icon: `>`
+    })
+
+    App.bind_button({
+      what: `${name}_opts_you`,
+      func: () => {
+        App.setup_you_opts(App.user_id, true, name)
+      },
+      icon: `>`
+    })
+
+    App.bind_button({
+      what: `${name}_opts_login`,
+      func: () => {
+        App.location(`/login`)
+      },
+      mfunc: () => {
+        App.open_tab(`/login`)
+      }
+    })
+
+    App.bind_button({
+      what: `${name}_opts_register`,
+      func: () => {
+        App.location(`/register`)
+      },
+      mfunc: () => {
+        App.open_tab(`/register`)
+      }
     })
   }, show)
 }
@@ -98,36 +145,62 @@ App.setup_you_opts = (user_id, show = false, parent = ``) => {
   let name = `you`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_posts`, () => {
-      App.location(`/list/posts?user_id=${user_id}`)
-    }, undefined, App.icon(`posts`))
+    App.bind_button({
+      what: `${name}_opts_posts`,
+      func: () => {
+        App.location(`/list/posts?user_id=${user_id}`)
+      },
+      icon: App.icon(`posts`)
+    })
 
-    App.bind_button(`${name}_opts_reactions`, () => {
-      App.location(`/list/reactions?user_id=${user_id}`)
-    }, undefined, App.icon(`reactions`))
+    App.bind_button({
+      what: `${name}_opts_reactions`,
+      func: () => {
+        App.location(`/list/reactions?user_id=${user_id}`)
+      },
+      icon: App.icon(`reactions`)
+    })
 
-    App.bind_button(`${name}_opts_edit_name`, () => {
-      App.edit_name()
-    }, undefined, App.icon(`edit`), false)
+    App.bind_button({
+      what: `${name}_opts_edit_name`,
+      func: () => {
+        App.edit_name()
+      },
+      icon: App.icon(`edit`),
+      close: false
+    })
 
-    App.bind_button(`${name}_opts_edit_password`, () => {
-      App.edit_password()
-    }, undefined, App.icon(`edit`), false)
+    App.bind_button({
+      what: `${name}_opts_edit_password`,
+      func: () => {
+        App.edit_password()
+      },
+      icon: App.icon(`edit`),
+      close: false
+    })
 
-    App.bind_button(`${name}_opts_edit_settings`, () => {
-      App.show_settings()
-    }, undefined, App.icon(`settings`))
+    App.bind_button({
+      what: `${name}_opts_edit_settings`,
+      func: () => {
+        App.show_settings()
+      },
+      icon: App.icon(`settings`)
+    })
 
-    App.bind_button(`${name}_opts_logout`, () => {
-      let confirm_args = {
-        message: `Visne profecto discedere`,
-        callback_yes: () => {
-          App.location(`/logout`)
-        },
-      }
+    App.bind_button({
+      what: `${name}_opts_logout`,
+      func: () => {
+        let confirm_args = {
+          message: `Visne profecto discedere`,
+          callback_yes: () => {
+            App.location(`/logout`)
+          },
+        }
 
-      App.confirmbox(confirm_args)
-    }, undefined, App.icon(`logout`))
+        App.confirmbox(confirm_args)
+      },
+      icon: App.icon(`logout`)
+    })
   }, show, parent)
 }
 
@@ -135,21 +208,37 @@ App.setup_sort_opts = (show = false) => {
   let name = `sort`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_asc_all`, () => {
-      App.sort_action(App.sort_what, false, false)
-    }, undefined, App.icon(`asc`, false))
+    App.bind_button({
+      what: `${name}_opts_asc_all`,
+      func: () => {
+        App.sort_action(App.sort_what, false, false)
+      },
+      icon: App.icon(`asc`, false)
+    })
 
-    App.bind_button(`${name}_opts_desc_all`, () => {
-      App.sort_action(App.sort_what, true)
-    }, undefined, App.icon(`desc`))
+    App.bind_button({
+      what: `${name}_opts_desc_all`,
+      func: () => {
+        App.sort_action(App.sort_what, true)
+      },
+      icon: App.icon(`desc`)
+    })
 
-    App.bind_button(`${name}_opts_asc_page`, () => {
-      App.sort_action(App.sort_what, false, true)
-    }, undefined, App.icon(`asc`, false))
+    App.bind_button({
+      what: `${name}_opts_asc_page`,
+      func: () => {
+        App.sort_action(App.sort_what, false, true)
+      },
+      icon: App.icon(`asc`, false)
+    })
 
-    App.bind_button(`${name}_opts_desc_page`, () => {
-      App.sort_action(App.sort_what, true, true)
-    }, undefined, App.icon(`desc`))
+    App.bind_button({
+      what: `${name}_opts_desc_page`,
+      func: () => {
+        App.sort_action(App.sort_what, true, true)
+      },
+      icon: App.icon(`desc`)
+    })
   }, show)
 }
 
@@ -157,83 +246,98 @@ App.setup_user_opts = (show = false, parent = ``) => {
   let name = `user`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_posts`, () => {
-      if (!App.is_reader) {
-        App.login_feedback()
-        return
-      }
+    App.bind_button({
+      what: `${name}_opts_posts`,
+      func: () => {
+        if (!App.is_reader) {
+          App.login_feedback()
+          return
+        }
 
-      let user_id = App.user_opts_user_id
+        let user_id = App.user_opts_user_id
 
-      if (App.mode.includes(`admin`)) {
-        App.location(`/admin/posts?user_id=${user_id}`)
-      }
-      else {
-        App.location(`/list/posts?user_id=${user_id}`)
-      }
-    }, () => {
-      if (!App.is_reader) {
-        App.login_feedback()
-        return
-      }
+        if (App.mode.includes(`admin`)) {
+          App.location(`/admin/posts?user_id=${user_id}`)
+        }
+        else {
+          App.location(`/list/posts?user_id=${user_id}`)
+        }
+      },
+      mfunc: () => {
+        if (!App.is_reader) {
+          App.login_feedback()
+          return
+        }
 
-      let user_id = App.user_opts_user_id
+        let user_id = App.user_opts_user_id
 
-      if (App.mode.includes(`admin`)) {
-        App.open_tab(`/admin/posts?user_id=${user_id}`)
-      }
-      else {
-        App.open_tab(`/list/posts?user_id=${user_id}`)
-      }
-    }, App.icon(`posts`))
+        if (App.mode.includes(`admin`)) {
+          App.open_tab(`/admin/posts?user_id=${user_id}`)
+        }
+        else {
+          App.open_tab(`/list/posts?user_id=${user_id}`)
+        }
+      },
+      icon: App.icon(`posts`)
+    })
 
-    App.bind_button(`${name}_opts_reactions`, () => {
-      if (!App.is_reader) {
-        App.login_feedback()
-        return
-      }
+    App.bind_button({
+      what: `${name}_opts_reactions`,
+      func: () => {
+        if (!App.is_reader) {
+          App.login_feedback()
+          return
+        }
 
-      let user_id = App.user_opts_user_id
+        let user_id = App.user_opts_user_id
 
-      if (App.mode.includes(`admin`)) {
-        App.location(`/admin/reactions?user_id=${user_id}`)
-      }
-      else {
-        App.location(`/list/reactions?user_id=${user_id}`)
-      }
-    }, () => {
-      if (!App.is_reader) {
-        App.login_feedback()
-        return
-      }
+        if (App.mode.includes(`admin`)) {
+          App.location(`/admin/reactions?user_id=${user_id}`)
+        }
+        else {
+          App.location(`/list/reactions?user_id=${user_id}`)
+        }
+      },
+      mfunc: () => {
+        if (!App.is_reader) {
+          App.login_feedback()
+          return
+        }
 
-      let user_id = App.user_opts_user_id
+        let user_id = App.user_opts_user_id
 
-      if (App.mode.includes(`admin`)) {
-        App.open_tab(`/admin/reactions?user_id=${user_id}`)
-      }
-      else {
-        App.open_tab(`/list/reactions?user_id=${user_id}`)
-      }
-    }, App.icon(`reactions`))
+        if (App.mode.includes(`admin`)) {
+          App.open_tab(`/admin/reactions?user_id=${user_id}`)
+        }
+        else {
+          App.open_tab(`/list/reactions?user_id=${user_id}`)
+        }
+      },
+      icon: App.icon(`reactions`)
+    })
 
-    App.bind_button(`${name}_opts_user`, () => {
-      if (!App.is_reader) {
-        App.login_feedback()
-        return
-      }
+    App.bind_button({
+      what: `${name}_opts_user`,
+      func: () => {
+        if (!App.is_reader) {
+          App.login_feedback()
+          return
+        }
 
-      let user_id = App.user_opts_user_id
-      App.location(`/edit_user/${user_id}`)
-    }, () => {
-      if (!App.is_reader) {
-        App.login_feedback()
-        return
-      }
+        let user_id = App.user_opts_user_id
+        App.location(`/edit_user/${user_id}`)
+      },
+      mfunc: () => {
+        if (!App.is_reader) {
+          App.login_feedback()
+          return
+        }
 
-      let user_id = App.user_opts_user_id
-      App.open_tab(`/edit_user/${user_id}`)
-    }, App.icon(`edit`))
+        let user_id = App.user_opts_user_id
+        App.open_tab(`/edit_user/${user_id}`)
+      },
+      icon: App.icon(`edit`)
+    })
   }, show, parent)
 }
 
@@ -241,15 +345,23 @@ App.setup_reaction_opts = (show = false) => {
   let name = `reaction`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_edit`, () => {
-      let id = App.active_item.dataset.id
-      App.react_prompt(id)
-    }, undefined, App.icon(`edit`))
+    App.bind_button({
+      what: `${name}_opts_edit`,
+      func: () => {
+        let id = App.active_item.dataset.id
+        App.react_prompt(id)
+      },
+      icon: App.icon(`edit`)
+    })
 
-    App.bind_button(`${name}_opts_delete`, () => {
-      let id = App.active_item.dataset.id
-      App.delete_reaction(id)
-    }, undefined, App.icon(`delete`))
+    App.bind_button({
+      what: `${name}_opts_delete`,
+      func: () => {
+        let id = App.active_item.dataset.id
+        App.delete_reaction(id)
+      },
+      icon: App.icon(`delete`)
+    })
   }, show)
 }
 
@@ -257,17 +369,27 @@ App.setup_list_opts = (show = false, parent = ``) => {
   let name = `list`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_posts`, () => {
-      App.location(`/list/posts`)
-    }, () => {
-      App.open_tab(`/list/posts`)
-    }, App.icon(`posts`))
+    App.bind_button({
+      what: `${name}_opts_posts`,
+      func: () => {
+        App.location(`/list/posts`)
+      },
+      mfunc: () => {
+        App.open_tab(`/list/posts`)
+      },
+      icon: App.icon(`posts`)
+    })
 
-    App.bind_button(`${name}_opts_reactions`, () => {
-      App.location(`/list/reactions`)
-    }, () => {
-      App.open_tab(`/list/reactions`)
-    }, App.icon(`reactions`))
+    App.bind_button({
+      what: `${name}_opts_reactions`,
+      func: () => {
+        App.location(`/list/reactions`)
+      },
+      mfunc: () => {
+        App.open_tab(`/list/reactions`)
+      },
+      icon: App.icon(`reactions`)
+    })
   }, show, parent)
 }
 
@@ -275,11 +397,16 @@ App.setup_random_opts = (show = false, parent = ``) => {
   let name = `random`
 
   function make(type) {
-    App.bind_button(`${name}_opts_${type}`, () => {
-      App.random_action(type)
-    }, () => {
-      App.random_action(type, true)
-    }, App.media_icon(type))
+    App.bind_button({
+      what: `${name}_opts_${type}`,
+      func: () => {
+        App.random_action(type)
+      },
+      mfunc: () => {
+        App.random_action(type, true)
+      },
+      icon: App.media_icon(type)
+    })
   }
 
   App.make_opts(name, () => {
@@ -299,11 +426,23 @@ App.setup_next_opts = (show = false, parent = ``) => {
   let name = `next`
 
   function make(type) {
-    App.bind_button(`${name}_opts_${type}`, () => {
-      App.next_action(type)
-    }, () => {
-      App.next_action(type, true)
-    }, App.media_icon(type))
+    let cls = ``
+
+    if (type === App.post.media_type) {
+      cls = `button_highlight`
+    }
+
+    App.bind_button({
+      what: `${name}_opts_${type}`,
+      func: () => {
+        App.next_action(type)
+      },
+      mfunc:() => {
+        App.next_action(type, true)
+      },
+      icon: App.media_icon(type),
+      class: cls,
+    })
   }
 
   App.make_opts(name, () => {
@@ -323,23 +462,38 @@ App.setup_admin_opts = (show = false, parent = ``) => {
   let name = `admin`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_posts`, () => {
-      App.location(`/admin/posts`)
-    }, () => {
-      App.open_tab(`/admin/posts`)
-    }, App.icon(`posts`))
+    App.bind_button({
+      what: `${name}_opts_posts`,
+      func: () => {
+        App.location(`/admin/posts`)
+      },
+      mfunc: () => {
+        App.open_tab(`/admin/posts`)
+      },
+      icon: App.icon(`posts`)
+    })
 
-    App.bind_button(`${name}_opts_reactions`, () => {
-      App.location(`/admin/reactions`)
-    }, () => {
-      App.open_tab(`/admin/reactions`)
-    }, App.icon(`reactions`))
+    App.bind_button({
+      what: `${name}_opts_reactions`,
+      func: () => {
+        App.location(`/admin/reactions`)
+      },
+      mfunc: () => {
+        App.open_tab(`/admin/reactions`)
+      },
+      icon: App.icon(`reactions`)
+    })
 
-    App.bind_button(`${name}_opts_users`, () => {
-      App.location(`/admin/users`)
-    }, () => {
-      App.open_tab(`/admin/users`)
-    }, App.icon(`users`))
+    App.bind_button({
+      what: `${name}_opts_users`,
+      func: () => {
+        App.location(`/admin/users`)
+      },
+      mfunc: () => {
+        App.open_tab(`/admin/users`)
+      },
+      icon: App.icon(`users`)
+    })
   }, show, parent)
 }
 
@@ -355,11 +509,16 @@ App.setup_link_opts = (show = false, parent = ``) => {
       item.title = link.url
       c.appendChild(item)
 
-      App.bind_button(`${name}_opts_${i}`, () => {
-        App.open_tab(link.url, link.target)
-      }, () => {
-        App.open_tab(link.url)
-      }, link.icon)
+      App.bind_button({
+        what: `${name}_opts_${i}`,
+        func: () => {
+          App.open_tab(link.url, link.target)
+        },
+        mfunc: () => {
+          App.open_tab(link.url)
+        },
+        icon: link.icon
+      })
     }
   }, show, parent)
 }
@@ -368,32 +527,52 @@ App.setup_edit_post_opts = (show = false) => {
   let name = `edit_post`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_title`, () => {
-      App.edit_title()
-    }, undefined, App.icon(`edit`))
+    App.bind_button({
+      what: `${name}_opts_title`,
+      func: () => {
+        App.edit_title()
+      },
+      icon: App.icon(`edit`)
+    })
 
-    App.bind_button(`${name}_opts_description`, () => {
-      App.edit_description()
-    }, undefined, App.icon(`edit`))
+    App.bind_button({
+      what: `${name}_opts_description`,
+      func: () => {
+        App.edit_description()
+      },
+      icon: App.icon(`edit`)
+    })
 
-    App.bind_button(`${name}_opts_filename`, () => {
-      App.edit_filename()
-    }, undefined, App.icon(`filename`))
+    App.bind_button({
+      what: `${name}_opts_filename`,
+      func: () => {
+        App.edit_filename()
+      },
+      icon: App.icon(`filename`)
+    })
 
-    App.bind_button(`${name}_opts_privacy`, () => {
-      App.setup_edit_privacy_opts(true, name)
-    }, undefined, App.icon(App.post.privacy))
+    App.bind_button({
+      what: `${name}_opts_privacy`,
+      func: () => {
+        App.setup_edit_privacy_opts(true, name)
+      },
+      icon: App.icon(App.post.privacy)
+    })
 
-    App.bind_button(`${name}_opts_delete`, () => {
-      let confirm_args = {
-        message: `Delete this post`,
-        callback_yes: () => {
-          App.delete_post()
-        },
-      }
+    App.bind_button({
+      what: `${name}_opts_delete`,
+      func: () => {
+        let confirm_args = {
+          message: `Delete this post`,
+          callback_yes: () => {
+            App.delete_post()
+          },
+        }
 
-      App.confirmbox(confirm_args)
-    }, undefined, App.icon(`delete`))
+        App.confirmbox(confirm_args)
+      },
+      icon: App.icon(`delete`)
+    })
   }, show)
 }
 
@@ -401,13 +580,21 @@ App.setup_edit_privacy_opts = (show = false, parent = ``) => {
   let name = `edit_privacy`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_public`, () => {
-      App.edit_privacy(`public`)
-    }, undefined, App.icon(`public`))
+    App.bind_button({
+      what: `${name}_opts_public`,
+      func: () => {
+        App.edit_privacy(`public`)
+      },
+      icon: App.icon(`public`)
+    })
 
-    App.bind_button(`${name}_opts_private`, () => {
-      App.edit_privacy(`private`)
-    }, undefined, App.icon(`private`))
+    App.bind_button({
+      what: `${name}_opts_private`,
+      func: () => {
+        App.edit_privacy(`private`)
+      },
+      icon: App.icon(`private`)
+    })
   }, show, parent)
 }
 
@@ -415,72 +602,123 @@ App.setup_user_edit_opts = (show = false) => {
   let name = `user_edit`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_poster_no`, () => {
-      App.mod_user(`poster`, 0, `bool`)
+    App.bind_button({
+      what: `${name}_opts_poster_no`,
+      func: () => {
+        App.mod_user(`poster`, 0, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_reader_no`, () => {
-      App.mod_user(`reader`, 0, `bool`)
+    App.bind_button({
+      what: `${name}_opts_reader_no`,
+      func: () => {
+        App.mod_user(`reader`, 0, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_reader_yes`, () => {
-      App.mod_user(`reader`, 1, `bool`)
+    App.bind_button({
+      what: `${name}_opts_reader_yes`,
+      func: () => {
+        App.mod_user(`reader`, 1, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_lister_no`, () => {
-      App.mod_user(`lister`, 0, `bool`)
+    App.bind_button({
+      what: `${name}_opts_lister_no`,
+      func: () => {
+        App.mod_user(`lister`, 0, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_lister_yes`, () => {
-      App.mod_user(`lister`, 1, `bool`)
+    App.bind_button({
+      what: `${name}_opts_lister_yes`,
+      func: () => {
+        App.mod_user(`lister`, 1, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_reacter_no`, () => {
-      App.mod_user(`reacter`, 0, `bool`)
+    App.bind_button({
+      what: `${name}_opts_reacter_no`,
+      func: () => {
+        App.mod_user(`reacter`, 0, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_reacter_yes`, () => {
-      App.mod_user(`reacter`, 1, `bool`)
+    App.bind_button({
+      what: `${name}_opts_reacter_yes`,
+      func: () => {
+        App.mod_user(`reacter`, 1, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_mage_no`, () => {
-      App.mod_user(`mage`, 0, `bool`)
+    App.bind_button({
+      what: `${name}_opts_mage_no`,
+      func: () => {
+        App.mod_user(`mage`, 0, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_mage_yes`, () => {
-      App.mod_user(`mage`, 1, `bool`)
+    App.bind_button({
+      what: `${name}_opts_mage_yes`,
+      func: () => {
+        App.mod_user(`mage`, 1, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_admin_no`, () => {
-      App.mod_user(`admin`, 0, `bool`)
+    App.bind_button({
+      what: `${name}_opts_admin_no`,
+      func: () => {
+        App.mod_user(`admin`, 0, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_admin_yes`, () => {
-      App.mod_user(`admin`, 1, `bool`)
+    App.bind_button({
+      what: `${name}_opts_admin_yes`,
+      func: () => {
+        App.mod_user(`admin`, 1, `bool`)
+      }
     })
 
-    App.bind_button(`${name}_opts_rpm`, () => {
-      App.user_mod_input(`rpm`, ``, `number`)
+    App.bind_button({
+      what: `${name}_opts_rpm`,
+      func: () => {
+        App.user_mod_input(`rpm`, ``, `number`)
+      }
     })
 
-    App.bind_button(`${name}_opts_max_size`, () => {
-      App.user_mod_input(`max_size`, ``, `number`)
+    App.bind_button({
+      what: `${name}_opts_max_size`,
+      func: () => {
+        App.user_mod_input(`max_size`, ``, `number`)
+      }
     })
 
-    App.bind_button(`${name}_opts_mark`, () => {
-      App.user_mod_input(`mark`, ``, `string`)
+    App.bind_button({
+      what: `${name}_opts_mark`,
+      func: () => {
+        App.user_mod_input(`mark`, ``, `string`)
+      }
     })
 
-    App.bind_button(`${name}_opts_name`, () => {
-      App.user_mod_input(`name`, ``, `string`)
+    App.bind_button({
+      what: `${name}_opts_name`,
+      func: () => {
+        App.user_mod_input(`name`, ``, `string`)
+      }
     })
 
-    App.bind_button(`${name}_opts_username`, () => {
-      App.user_mod_input(`username`, ``, `string`)
+    App.bind_button({
+      what: `${name}_opts_username`,
+      func: () => {
+        App.user_mod_input(`username`, ``, `string`)
+      }
     })
 
-    App.bind_button(`${name}_opts_password`, () => {
-      App.user_mod_input(`password`, ``, `password`)
+    App.bind_button({
+      what: `${name}_opts_password`,
+      func: () => {
+        App.user_mod_input(`password`, ``, `password`)
+      }
     })
   }, show)
 }
@@ -489,17 +727,29 @@ App.setup_post_edit_opts = (show = false) => {
   let name = `post_edit`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_title`, () => {
-      App.edit_post_title()
-    }, undefined, App.icon(`edit`))
+    App.bind_button({
+      what: `${name}_opts_title`,
+      func: () => {
+        App.edit_post_title()
+      },
+      icon: App.icon(`edit`)
+    })
 
-    App.bind_button(`${name}_opts_public`, () => {
-      App.edit_post_privacy(`public`)
-    }, undefined, App.icon(`public`))
+    App.bind_button({
+      what: `${name}_opts_public`,
+      func: () => {
+        App.edit_post_privacy(`public`)
+      },
+      icon: App.icon(`public`)
+    })
 
-    App.bind_button(`${name}_opts_private`, () => {
-      App.edit_post_privacy(`private`)
-    }, undefined, App.icon(`private`))
+    App.bind_button({
+      what: `${name}_opts_private`,
+      func: () => {
+        App.edit_post_privacy(`private`)
+      },
+      icon: App.icon(`private`)
+    })
   }, show)
 }
 
@@ -507,11 +757,16 @@ App.setup_page_opts = (show = false) => {
   let name = `page`
 
   function make(num) {
-    App.bind_button(`${name}_opts_${num}`, () => {
-      App.goto_page(num)
-    }, () => {
-      App.goto_page(num, true)
-    }, App.icon(`page`))
+    App.bind_button({
+      what: `${name}_opts_${num}`,
+      func: () => {
+        App.goto_page(num)
+      },
+      mfunc: () => {
+        App.goto_page(num, true)
+      },
+      icon: App.icon(`page`)
+    })
   }
 
   App.make_opts(name, () => {
@@ -541,11 +796,16 @@ App.setup_volume_opts = (show = false) => {
 
     let vol = num / 100
 
-    App.bind_button(`${name}_opts_${num}`, () => {
-      App.set_volume(vol)
-    }, () => {
-      App.set_volume(vol, true)
-    }, App.icon(icon))
+    App.bind_button({
+      what: `${name}_opts_${num}`,
+      func: () => {
+        App.set_volume(vol)
+      },
+      mfunc: () => {
+        App.set_volume(vol, true)
+      },
+      icon: App.icon(icon)
+    })
   }
 
   App.make_opts(name, () => {
@@ -559,16 +819,28 @@ App.setup_search_opts = (show = false) => {
   let name = `search`
 
   App.make_opts(name, () => {
-    App.bind_button(`${name}_opts_posts`, () => {
-      App.prompt_search(`posts`)
-    }, undefined, App.icon(`posts`))
+    App.bind_button({
+      what: `${name}_opts_posts`,
+      func: () => {
+        App.prompt_search(`posts`)
+      },
+      icon: App.icon(`posts`)
+    })
 
-    App.bind_button(`${name}_opts_reactions`, () => {
-      App.prompt_search(`reactions`)
-    }, undefined, App.icon(`reactions`))
+    App.bind_button({
+      what: `${name}_opts_reactions`,
+      func: () => {
+        App.prompt_search(`reactions`)
+      },
+      icon: App.icon(`reactions`)
+    })
 
-    App.bind_button(`${name}_opts_users`, () => {
-      App.prompt_search(`users`)
-    }, undefined, App.icon(`users`))
+    App.bind_button({
+      what: `${name}_opts_users`,
+      func: () => {
+        App.prompt_search(`users`)
+      },
+      icon: App.icon(`users`)
+    })
   }, show, `menu`)
 }

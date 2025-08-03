@@ -401,3 +401,7 @@ select.settings_widget {
 #Msg-window-corner_msg:hover {
     outline-color: rgb(128, 211, 128) !important;
 }
+
+.button_highlight {
+    outline: 2px solid var(--text_color);
+}
