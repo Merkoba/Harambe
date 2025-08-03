@@ -47,14 +47,20 @@ class Confirmbox {
     msg.set(c)
     App.msg_confirmbox = msg
 
-    App.bind_button(`confirmbox_opts_no`, () => {
-      if (args.callback_no) {
-        args.callback_no()
-      }
+    App.bind_button({
+      what: `confirmbox_opts_no`,
+      func: () => {
+        if (args.callback_no) {
+          args.callback_no()
+        }
+      },
     })
 
-    App.bind_button(`confirmbox_opts_yes`, () => {
-      this.action()
+    App.bind_button({
+      what: `confirmbox_opts_yes`,
+      func: () => {
+        this.action()
+      },
     })
 
     this.args = args
