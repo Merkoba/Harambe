@@ -484,7 +484,9 @@ App.make_msg = (name, title) => {
   }
 
   App[msg_name] = Msg.factory({
-    enable_titlebar, window_x: `floating_right`, center_titlebar: true,
+    enable_titlebar,
+    window_x: `floating_right`,
+    center_titlebar: true,
   })
 
   App[msg_name].set(DOM.el(`#template_${name}`).innerHTML)
