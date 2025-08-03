@@ -60,6 +60,10 @@ def add_used_id(post_id: int) -> None:
     session["used_ids"] = used_ids
 
 
+def reset_used_ids() -> None:
+    session["used_ids"] = []
+
+
 def get_user_id() -> int | None:
     uid = session.get("user_id")
 
@@ -1023,6 +1027,7 @@ def latest_post() -> Any:
     if not post:
         return over()
 
+    reset_used_ids()
     return redirect(url_for("post", name=post.name))
 
 
