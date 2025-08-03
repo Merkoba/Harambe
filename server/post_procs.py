@@ -39,13 +39,7 @@ class Post:
 
     @staticmethod
     def is_text(mtype: str) -> bool:
-        return (mtype.startswith("text/") and ("markdown" not in mtype)) or (
-            mtype == "application/json"
-        )
-
-    @staticmethod
-    def is_markdown(mtype: str) -> bool:
-        return mtype.startswith("text/") and ("markdown" in mtype)
+        return mtype.startswith("text/") or (mtype == "application/json")
 
     @staticmethod
     def is_zip(mtype: str) -> bool:
@@ -67,9 +61,6 @@ class Post:
         if Post.is_text(mtype):
             media_type = "text"
             sample_icon = config.media_icons["text"]
-        elif Post.is_markdown(mtype):
-            media_type = "markdown"
-            sample_icon = config.media_icons["markdown"]
         elif Post.is_zip(mtype):
             media_type = "zip"
             sample_icon = config.media_icons["zip"]

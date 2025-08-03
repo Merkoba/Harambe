@@ -532,14 +532,16 @@ App.bind_button = (args = {}) => {
   el.textContent = ``
 
   let text = DOM.create(`div`, `aero_text`)
+  let text_label = DOM.create(`div`, `button_text_label`)
+  text_label.textContent = otext
 
   if (numbers) {
-    text.textContent = `${index + 1}. ${otext}`
-  }
-  else {
-    text.textContent = otext
+    let text_num = DOM.create(`div`, `button_text_number`)
+    text_num.textContent = `${index + 1}.`
+    text.append(text_num)
   }
 
+  text.append(text_label)
   el.appendChild(text)
 
   if (btn_cls) {

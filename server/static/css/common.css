@@ -402,6 +402,11 @@ select.settings_widget {
     outline-color: rgb(128, 211, 128) !important;
 }
 
-.button_highlight {
-    outline: 2px solid var(--text_color);
+.button_text_number {
+    padding-right: 0.5rem;
+    opacity: 0.8;
+}
+
+.button_highlight .button_text_label {
+    text-decoration: underline;
 }

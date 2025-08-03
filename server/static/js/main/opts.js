@@ -397,6 +397,12 @@ App.setup_random_opts = (show = false, parent = ``) => {
   let name = `random`
 
   function make(type) {
+    let cls = ``
+
+    if (type === App.post.media_type) {
+      cls = `button_highlight`
+    }
+
     App.bind_button({
       what: `${name}_opts_${type}`,
       func: () => {
@@ -406,6 +412,7 @@ App.setup_random_opts = (show = false, parent = ``) => {
         App.random_action(type, true)
       },
       icon: App.media_icon(type),
+      class: cls,
     })
   }
 
