@@ -117,9 +117,8 @@
         </div>
 
         <!-- File -->
-        {% if dynamic_file_info and
-        ((post.media_type == "talk") or (post.media_type == "url")) %}
-        {# Don't show the file because it's not relevant #}
+        {% if dynamic_file_info and ((post.media_type == "talk") or (post.media_type == "url")) %}
+        <div id="file" class="rowitem hidden"></div>
         {% else %}
         <div id="file" class="rowitem">
             <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">File ({{post.ext}})</a>
@@ -147,11 +146,11 @@
             {% if post.youtube_id %}
             <div class="embed">
                 <div id="youtube_container"></div>
-                {% else %}
-                <hr>
-                <div id="url_container"></div>
-                {% endif %}
             </div>
+            {% else %}
+            <hr>
+            <div id="url_container"></div>
+            {% endif %}
         {% elif not post.zip_embed %}
         <div class="embed">
             <div id="text_buttons" class="rowitem">
