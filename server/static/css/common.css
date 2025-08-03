@@ -226,6 +226,7 @@ a.linkbutton:hover {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-direction: row;
 }
 
 .aero_arrow {
@@ -247,7 +248,7 @@ a.linkbutton:hover {
     gap: 0.5rem;
 }
 
-#confirmbox_buttons div {
+#confirmbox_buttons .aero_button {
     min-width: 4rem;
 }
 
@@ -405,6 +406,16 @@ select.settings_widget {
 .button_text_number {
     padding-right: 0.5rem;
     opacity: 0.8;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.button_text_label {
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    display: flex;
+    align-items: flex-start;
 }
 
 .button_highlight .button_text_label {

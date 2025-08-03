@@ -54,6 +54,7 @@ class Confirmbox {
           args.callback_no()
         }
       },
+      icon: App.icon(`confirm_no`),
     })
 
     App.bind_button({
@@ -61,6 +62,7 @@ class Confirmbox {
       func: () => {
         this.action()
       },
+      icon: App.icon(`confirm_yes`),
     })
 
     this.args = args

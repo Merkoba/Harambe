@@ -94,6 +94,12 @@ def fill_icons(config: Config) -> None:
     # Icon for volume mute
     config.icons["volume_muted"] = "🔇"
 
+    # Icon for confirm: ok
+    config.icons["confirm_yes"] = "✅"
+
+    # Icon for confirm: cancel
+    config.icons["confirm_no"] = "❌"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages
