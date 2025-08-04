@@ -1,6 +1,7 @@
 :root {
     --modal_color: rgb(42 42 42);
     --react_padding: 0.8rem;
+    --max_media_height: 600px;
 }
 
 body, html {
@@ -90,7 +91,7 @@ a.link:hover,
     min-width: 28rem;
     max-width: 60%;
     height: auto;
-    max-height: 36rem;
+    max-height: var(--max_media_height);
     cursor: pointer;
     object-fit: contain;
     object-position: left;
@@ -107,7 +108,7 @@ a.link:hover,
     width: 46rem;
     max-width: 90%;
     height: auto;
-    max-height: 42rem;
+    max-height: var(--max_media_height);
     background-color: black;
 }
 
@@ -343,7 +344,7 @@ a.link:hover,
 #markdown {
     width: 50rem;
     max-width: 50rem;
-    max-height: 33rem;
+    max-height: var(--max_media_height);
     overflow: auto;
     overflow-x: hidden;
     background-color: var(--contrast_background);
