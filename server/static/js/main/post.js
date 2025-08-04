@@ -80,7 +80,7 @@ App.init = () => {
 
     DOM.ev(random_btn, `auxclick`, (e) => {
       if (e.button === 1) {
-        App.random_action(`random`)
+        App.random_action(`any`)
       }
     })
 
@@ -99,7 +99,7 @@ App.init = () => {
 
     DOM.ev(next_btn, `auxclick`, (e) => {
       if (e.button === 1) {
-        App.next_action(`next`)
+        App.next_action(`any`)
       }
     })
 

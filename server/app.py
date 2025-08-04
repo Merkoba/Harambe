@@ -33,6 +33,7 @@ database.check_db()
 
 
 MAX_USED_IDS = 10
+USED_IDS = "used_ids"
 ICONS = utils.load_icons()
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -49,7 +50,7 @@ def limit_used_ids(used_ids: list[int]) -> list[int]:
 
 
 def get_used_ids() -> list[int]:
-    used_ids = session["used_ids"] if "used_ids" in session else []
+    used_ids = session[USED_IDS] if USED_IDS in session else []
     return limit_used_ids(used_ids)
 
 
@@ -57,11 +58,17 @@ def add_used_id(post_id: int) -> None:
     used_ids = get_used_ids()
     used_ids.append(post_id)
     used_ids = limit_used_ids(used_ids)
-    session["used_ids"] = used_ids
+    session[USED_IDS] = used_ids
 
 
-def reset_used_ids() -> None:
-    session["used_ids"] = []
+def reset_used_ids(remainder: int = 0) -> None:
+    if remainder:
+        used_ids = get_used_ids()
+        used_ids = used_ids[-remainder:]
+    else:
+        used_ids = []
+
+    session[USED_IDS] = used_ids
 
 
 def get_user_id() -> int | None:
@@ -451,12 +458,19 @@ def refresh() -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 def next_post() -> Any:
-    post_id = request.args.get("post_id", None)
+    def action() -> Any:
+        post_id = request.args.get("post_id", None)
 
-    if not post_id:
-        return over()
+        if not post_id:
+            return over()
 
-    post = post_procs.get_next_post(post_id=post_id)
+        return post_procs.get_next_post(post_id=post_id)
+
+    post = action()
+
+    if not post:
+        reset_used_ids(1)
+        post = action()
 
     if post:
         json = request.args.get("json", "") == "true"
@@ -485,8 +499,15 @@ def next_by_type(post_type: str) -> Any:
     ]:
         return over()
 
-    post_id = request.args.get("post_id", None)
-    post = post_procs.get_next_post_by_type(post_type, post_id=post_id)
+    def action() -> Any:
+        post_id = request.args.get("post_id", None)
+        return post_procs.get_next_post_by_type(post_type, post_id=post_id)
+
+    post = action()
+
+    if not post:
+        reset_used_ids(1)
+        post = action()
 
     if post:
         json = request.args.get("json", "") == "true"
@@ -506,12 +527,18 @@ def next_by_type(post_type: str) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 def random_post() -> Any:
-    used_ids = get_used_ids()
-    post = post_procs.get_random_post(used_ids)
+    def action() -> Any:
+        used_ids = get_used_ids()
+        return post_procs.get_random_post(used_ids)
+
+    post = action()
+
+    if not post:
+        reset_used_ids(1)
+        post = action()
 
     if post:
         add_used_id(post.id)
-        session["used_ids"] = used_ids
         json = request.args.get("json", "") == "true"
 
         if json:
@@ -538,8 +565,15 @@ def random_by_type(post_type: str) -> Any:
     ]:
         return over()
 
-    used_ids = get_used_ids()
-    post = post_procs.get_random_post_by_type(post_type, used_ids)
+    def action() -> Any:
+        used_ids = get_used_ids()
+        return post_procs.get_random_post_by_type(post_type, used_ids)
+
+    post = action()
+
+    if not post:
+        reset_used_ids(1)
+        post = action()
 
     if post:
         add_used_id(post.id)
@@ -1021,7 +1055,7 @@ def show_list(what: str) -> Any:
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
 @payload_check()
 @reader_required
-def latest_post() -> Any:
+def fresh_post() -> Any:
     post = post_procs.get_latest_post()
 
     if not post:

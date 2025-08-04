@@ -603,7 +603,7 @@ App.encode_uri = (uri) => {
 }
 
 App.next_post = (new_tab = false) => {
-  App.next_action(`next`, new_tab)
+  App.next_action(`any`, new_tab)
 }
 
 App.fresh_post = () => {
@@ -1092,11 +1092,6 @@ App.change_menu_icon = (what, value) => {
 }
 
 App.random_action = (what, new_tab = false) => {
-  if (what === `any`) {
-    App.random_post()
-    return
-  }
-
   if (App.random_mode === `page`) {
     what = what === `random` ? `` : what
     App.do_random_page(what, new_tab)
@@ -1105,7 +1100,7 @@ App.random_action = (what, new_tab = false) => {
 
   let path
 
-  if (what === `random`) {
+  if (what === `any`) {
     path = `/random`
   }
   else {
@@ -1139,7 +1134,7 @@ App.next_action = (what, new_tab = false) => {
     return
   }
 
-  let base_path = what === `next` ? `/next` : `/next/${what}`
+  let base_path = what === `any` ? `/next` : `/next/${what}`
   let url = new URL(base_path, window.location.origin)
   url.searchParams.set(`post_id`, post_id)
   let path = url.pathname + url.search
