@@ -1,7 +1,7 @@
 :root {
     --modal_color: rgb(42 42 42);
     --react_padding: 0.8rem;
-    --max_media_height: 600px;
+    --max_media_height: 640px;
 }
 
 body, html {
