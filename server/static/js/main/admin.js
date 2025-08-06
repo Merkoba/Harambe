@@ -945,7 +945,10 @@ App.pointer_events = () => {
 
   DOM.ev(document, `contextmenu`, async (e) => {
     App.doc_click(e, `click`)
-    e.preventDefault()
+
+    if (!e.target.tagName.includes(`A`)) {
+      e.preventDefault()
+    }
   })
 
   DOM.ev(`#items`, `wheel`, (e) => {
