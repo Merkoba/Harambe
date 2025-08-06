@@ -399,7 +399,7 @@ App.setup_random_opts = (show = false, parent = ``) => {
   function make(type) {
     let cls = ``
 
-    if (type === App.post.media_type) {
+    if (App.post && (type === App.post.media_type)) {
       cls = `button_highlight`
     }
 
@@ -435,7 +435,7 @@ App.setup_next_opts = (show = false, parent = ``) => {
   function make(type) {
     let cls = ``
 
-    if (type === App.post.media_type) {
+    if (App.post && (type === App.post.media_type)) {
       cls = `button_highlight`
     }
 
