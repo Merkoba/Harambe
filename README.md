@@ -331,3 +331,9 @@ To change it, change the `theme` config.
 To see all the defined themes check the [themes directory](server/themes/).
 
 Users can change their own theme using the menu.
+
+---
+
+## Also
+
+The cool reaction icons was an idea by `fourdrey`.
