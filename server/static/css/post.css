@@ -278,11 +278,7 @@ a.link:hover,
 }
 
 .reaction_content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     white-space: normal;
-    gap: 0.5rem;
 }
 
 .reaction_text {
