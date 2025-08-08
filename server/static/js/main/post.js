@@ -1141,6 +1141,11 @@ App.start_embed = () => {
     })
 
     DOM.ev(max, `wheel`, (e) => {
+      if (App.max_on) {
+        App.reset_max()
+        return
+      }
+
       if (e.deltaY < 0) {
         App.increase_media_size()
       }
@@ -1152,10 +1157,7 @@ App.start_embed = () => {
     })
 
     DOM.ev(max, `contextmenu`, (e) => {
-      if (App.max_id) {
-        App.toggle_max(App.max_id, false)
-      }
-
+      App.reset_max()
       e.preventDefault()
     })
   }
@@ -1652,4 +1654,10 @@ App.setup_video = () => {
   DOM.ev(video, `pause`, () => {
     App.set_play_text(`Play`)
   })
+}
+
+App.reset_max = () => {
+  if (App.max_on && App.max_id) {
+    App.toggle_max(App.max_id, false)
+  }
 }
