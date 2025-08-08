@@ -15,8 +15,19 @@ App.init = () => {
   if (edit) {
     App.setup_edit_post_opts()
 
-    DOM.evs(edit, [`click`, `auxclick`], () => {
+    DOM.ev(edit, `click`, () => {
       App.edit_post()
+    })
+
+    DOM.ev(edit, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.edit_post()
+      }
+    })
+
+    DOM.ev(edit, `contextmenu`, (e) => {
+      App.edit_title()
+      e.preventDefault()
     })
   }
 
@@ -66,8 +77,19 @@ App.init = () => {
   if (menu) {
     App.setup_menu_opts()
 
-    DOM.evs(menu, [`click`, `auxclick`], () => {
+    DOM.ev(menu, `click`, () => {
       App.msg_show(`menu`)
+    })
+
+    DOM.ev(menu, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.msg_show(`menu`)
+      }
+    })
+
+    DOM.ev(menu, `contextmenu`, (e) => {
+      App.msg_show(`menu`)
+      e.preventDefault()
     })
   }
 
@@ -745,12 +767,18 @@ App.select_all_text = () => {
   }
 }
 
-App.toggle_max = (what) => {
+App.toggle_max = (what, max_on) => {
   let el = DOM.el(`#${what}`)
   let details = DOM.el(`#details`)
   let buttons = DOM.el(`#text_buttons`)
 
-  App.max_on = !App.max_on
+  if (max_on !== undefined) {
+    App.max_on = max_on
+  }
+  else {
+    App.max_on = !App.max_on
+  }
+
   App.max_id = what
 
   el.style.width = ``
@@ -1118,6 +1146,14 @@ App.start_embed = () => {
       }
       else {
         App.decrease_video_size()
+      }
+
+      e.preventDefault()
+    })
+
+    DOM.ev(max, `contextmenu`, (e) => {
+      if (App.max_id) {
+        App.toggle_max(App.max_id, false)
       }
 
       e.preventDefault()
