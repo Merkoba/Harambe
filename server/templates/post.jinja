@@ -64,19 +64,19 @@
                 </div>
                 {% elif post.video_embed or post.audio_embed %}
                 <div class="rowitem nowrap">
-                    <div id="max" data-max_type="video" class="button" title="Maximize the video">Max</div>
+                    <div id="max" data-max_type="video" class="button" title="Maximize the video | Wheel supported">Max</div>
                     <div class="sep">|</div>
                 </div>
                 {% endif %}
             {% endif %}
 
             {% if post.video_embed or post.audio_embed %}
-            <div id="play" class="button">Play</div>
+            <div id="play" class="button" title="Play or pause the media">Play</div>
             <div class="sep">|</div>
             {% endif %}
 
             {% if post.video_embed or post.audio_embed %}
-            <div id="volume" class="button">Volume</div>
+            <div id="volume" class="button" title="Adjust the volume | Wheel supported">Volume</div>
             <div id="volume_feedback" class="hidden"></div>
             <div class="sep">|</div>
             {% endif %}
