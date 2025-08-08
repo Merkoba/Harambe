@@ -290,6 +290,7 @@ a.link:hover,
     flex-shrink: 0;
     align-self: stretch;
     padding-left: var(--react_padding);
+    padding-right: 0.3rem;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
