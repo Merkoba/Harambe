@@ -1505,6 +1505,7 @@ App.set_volume = (vol) => {
     return
   }
 
+  video.muted = false
   vol = App.clamp(vol, 1, 0)
   video.volume = vol
   App.show_volume_feedback()
@@ -1521,14 +1522,20 @@ App.show_volume_feedback = () => {
   let feedback = DOM.el(`#volume_feedback`)
 
   if (feedback) {
-    DOM.show(feedback)
-    clearTimeout(App.volume_timeout)
-    feedback.textContent = `${Math.round(vol * 100)}%`
-
-    App.volume_timeout = setTimeout(() => {
-      DOM.hide(feedback)
-    }, App.SECOND * 1.6)
+    let text = `${Math.round(vol * 100)}%`
+    App.set_volume_feedback(text)
   }
+}
+
+App.set_volume_feedback = (text) => {
+  clearTimeout(App.volume_timeout)
+  let feedback = DOM.el(`#volume_feedback`)
+  feedback.textContent = text
+  DOM.show(feedback)
+
+  App.volume_timeout = setTimeout(() => {
+    DOM.hide(feedback)
+  }, App.SECOND * 1.6)
 }
 
 App.increase_volume = (step = 0.05) => {
@@ -1559,6 +1566,13 @@ App.toggle_volume = () => {
   }
 
   video.muted = !video.muted
+
+  if (video.muted) {
+    App.set_volume_feedback(`(M)`)
+  }
+  else {
+    App.show_volume_feedback()
+  }
 }
 
 App.show_volume = () => {
