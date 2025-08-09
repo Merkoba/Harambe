@@ -29,9 +29,9 @@
         <div id="topbuttons" class="rowitem">
             <div id="menu" class="button" title="Ctrl+M">Menu</div>
             <div class="sep">|</div>
-            <div id="random" class="button" title="Next post by date | Ctrl + Shift + Right">Random</div>
+            <div id="random" class="button" title="Next post by date | Ctrl+Shift+Right">Random</div>
             <div class="sep">|</div>
-            <div id="next" class="button" title="Next post by date | Ctrl + Right">Next</div>
+            <div id="next" class="button" title="Next post by date | Ctrl+Right">Next</div>
             <div class="sep">|</div>
 
             {% if post.flash_embed %}
@@ -82,7 +82,7 @@
             {% endif %}
 
             {% if owned %}
-            <div id="edit" class="button" title="Edit this post | Ctrl + Shift + Up">Edit</div>
+            <div id="edit" class="button" title="Edit this post | Ctrl+Shift+Up">Edit</div>
             <div class="sep">|</div>
             {% endif %}
         </div>
@@ -206,7 +206,7 @@
     <div id="react_buttons" class="nowrap">
         <div id="react_btn" class="icon_btn">
             <div>{{icons.reactions}}</div>
-            <div class="icon_btn_text" title="Ctrl + Down">React To This Post</div>
+            <div class="icon_btn_text" title="Ctrl+Down">React To This Post</div>
         </div>
 
         {% if post.reactions | length > 1 %}
