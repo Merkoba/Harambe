@@ -1211,7 +1211,7 @@ App.prompt_search = (what) => {
     },
     alt_callback: (query) => {
       let path = get_path(query)
-      App.goto_url(path, true)
+      App.open_tab(path)
     }
   }
 
