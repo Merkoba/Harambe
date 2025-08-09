@@ -54,12 +54,12 @@ App.setup_keyboard = () => {
         if (pmt && pmt.is_open()) {
           if (pmt.args.multi) {
             if (e.shiftKey || e.ctrlKey) {
-              pmt.submit()
+              pmt.submit(e.shiftKey || e.ctrlKey)
               e.preventDefault()
             }
           }
           else {
-            pmt.submit()
+            pmt.submit(e.shiftKey || e.ctrlKey)
             e.preventDefault()
           }
         }
@@ -1198,13 +1198,21 @@ App.prompt_search = (what) => {
     where = `list`
   }
 
+  function get_path(query) {
+    return `/${where}/${what}?query=${encodeURIComponent(query)}`
+  }
+
   let prompt_args = {
     placeholder: `Enter search term`,
     max: 250,
-    callback: async (query) => {
-      let path = `/${where}/${what}?query=${encodeURIComponent(query)}`
+    callback: (query) => {
+      let path = get_path(query)
       App.goto_url(path)
     },
+    alt_callback: (query) => {
+      let path = get_path(query)
+      App.goto_url(path, true)
+    }
   }
 
   App.prompt_text(prompt_args)

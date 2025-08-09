@@ -60,6 +60,12 @@ class Promptext {
         this.button_action(btn)
       })
 
+      DOM.ev(el, `auxclick`, (e) => {
+        if (e.button === 1) {
+          this.middle_button_action(btn)
+        }
+      })
+
       buttons.appendChild(el)
     }
 
@@ -100,6 +106,12 @@ class Promptext {
       this.submit()
     })
 
+    DOM.ev(button, `auxclick`, (e) => {
+      if (e.button === 1) {
+        this.submit(true)
+      }
+    })
+
     this.button = button
     this.input = input
     this.args = args
@@ -110,8 +122,15 @@ class Promptext {
     input.focus()
   }
 
-  async submit() {
-    let ans = await this.args.callback(this.input.value)
+  async submit(alt = false) {
+    let ans
+
+    if (alt && this.args.alt_callback) {
+      ans = await this.args.alt_callback(this.input.value)
+    }
+    else {
+      ans = await this.args.callback(this.input.value)
+    }
 
     if (!ans) {
       this.msg.close()
@@ -129,6 +148,14 @@ class Promptext {
   button_action(btn) {
     if (btn.callback(this.input.value)) {
       this.msg.close()
+    }
+  }
+
+  middle_button_action(btn) {
+    if (btn.alt_callback) {
+      if (btn.alt_callback(this.input.value)) {
+        this.msg.close()
+      }
     }
   }
 
