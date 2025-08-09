@@ -1141,19 +1141,23 @@ App.start_embed = () => {
     })
 
     DOM.ev(max, `wheel`, (e) => {
-      if (App.max_on) {
-        App.reset_max()
-        return
-      }
+      e.preventDefault()
 
       if (e.deltaY < 0) {
+        if (App.max_on) {
+          return
+        }
+
         App.increase_media_size()
       }
       else {
+        if (App.max_on) {
+          App.reset_max()
+          return
+        }
+
         App.decrease_video_size()
       }
-
-      e.preventDefault()
     })
 
     DOM.ev(max, `contextmenu`, (e) => {
