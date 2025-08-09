@@ -569,14 +569,7 @@ App.setup_edit_post_opts = (show = false) => {
     App.bind_button({
       what: `${name}_opts_delete`,
       func: () => {
-        let confirm_args = {
-          message: `Delete this post`,
-          callback_yes: () => {
-            App.delete_post()
-          },
-        }
-
-        App.confirmbox(confirm_args)
+        App.delete_post()
       },
       icon: App.icon(`delete`),
     })

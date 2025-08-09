@@ -21,12 +21,12 @@ App.init = () => {
 
     DOM.ev(edit, `auxclick`, (e) => {
       if (e.button === 1) {
-        App.edit_post()
+        App.delete_post()
       }
     })
 
     DOM.ev(edit, `contextmenu`, (e) => {
-      App.edit_title()
+      App.edit_post()
       e.preventDefault()
     })
   }
@@ -321,7 +321,18 @@ App.edit_filename = () => {
   App.prompt_text(prompt_args)
 }
 
-App.delete_post = async () => {
+App.delete_post = () => {
+  let confirm_args = {
+    message: `Delete this post`,
+    callback_yes: () => {
+      App.do_delete_post()
+    },
+  }
+
+  App.confirmbox(confirm_args)
+}
+
+App.do_delete_post = async () => {
   let post_id = App.post.id
 
   let response = await fetch(`/delete_post`, {
