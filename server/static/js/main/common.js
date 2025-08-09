@@ -1212,7 +1212,7 @@ App.prompt_search = (what) => {
     alt_callback: (query) => {
       let path = get_path(query)
       App.open_tab(path)
-    }
+    },
   }
 
   App.prompt_text(prompt_args)

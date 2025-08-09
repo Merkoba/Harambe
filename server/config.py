@@ -235,6 +235,9 @@ class Config:
         # Max length for user name
         self.max_user_name_length = 30
 
+        # Login page will be enabled
+        self.login_enabled = True
+
         # Register page will be enabled
         self.register_enabled = True
 

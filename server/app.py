@@ -889,6 +889,15 @@ def edit_privacy() -> Any:
 @limiter.limit(rate_limit(6))  # type: ignore
 @payload_check()
 def login() -> Any:
+    user = get_user()
+
+    if not config.login_enabled:
+        # Allow admins to login
+        if user and user.admin:
+            pass
+        else:
+            return over()
+
     message = ""
 
     if request.method == "POST":
@@ -909,8 +918,14 @@ def login() -> Any:
 @limiter.limit(rate_limit(6))  # type: ignore
 @payload_check()
 def register() -> Any:
+    user = get_user()
+
     if not config.register_enabled:
-        return over()
+        # Allow admins to register accounts
+        if user and user.admin:
+            pass
+        else:
+            return over()
 
     message = ""
 
