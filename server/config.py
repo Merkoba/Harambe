@@ -386,6 +386,9 @@ class Config:
         # If empty string, no code is needed
         self.register_code = ""
 
+        # Max files to list when reading uploaded archives
+        self.max_archive_files = 20
+
         # Used to fill 'original' from title when empty
         # Used in post_procs.py
         self.original_title_length = 30

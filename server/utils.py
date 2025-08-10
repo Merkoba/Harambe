@@ -6,6 +6,8 @@ import time
 import json
 import string
 import random
+import zipfile
+import tarfile
 import urllib.parse
 import unicodedata
 import subprocess
@@ -14,6 +16,7 @@ import requests  # type: ignore
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from io import BytesIO
 
 # Libraries
 import redis  # type: ignore
@@ -23,6 +26,7 @@ from werkzeug.datastructures import FileStorage  # type: ignore
 
 # Modules
 from config import config
+
 from post_procs import Post
 from react_procs import Reaction
 from user_procs import User
@@ -686,3 +690,59 @@ def striplimit(s: str, n: int) -> str:
 
 def shuffle(items: Items) -> None:
     random.shuffle(items)
+
+
+def read_archive(source: str | Path | bytes, extension: str = "") -> list[tuple[str, bytes, int]] | None:
+    """
+    Read archive contents and return file information.
+    Returns list of tuples: (filename, content, size)
+    """
+    max_files = config.max_archive_files
+
+    try:
+        if extension.lower() == ".zip":
+            with zipfile.ZipFile(BytesIO(source), "r") as archive:
+                file_info = []
+                all_names = archive.namelist()
+                regular_files = [name for name in all_names if not name.endswith('/')][:max_files]
+
+                for filename in regular_files:
+                    try:
+                        content = archive.read(filename)
+                        size = len(content)
+                        # Extract just the basename to avoid directory structure
+                        clean_filename = Path(filename).name
+                        if clean_filename:  # Skip if filename is empty after path extraction
+                            file_info.append((clean_filename, content, size))
+                    except Exception as e:
+                        error(f"Failed to read {filename} from zip: {e}")
+                        continue
+
+                return file_info
+
+        elif extension.lower() in [".gz"]:
+            with tarfile.open(fileobj=BytesIO(source), mode="r:gz") as archive:
+                file_info = []
+                all_members = archive.getmembers()
+                regular_files = [member for member in all_members if member.isfile()][:max_files]
+
+                for member in regular_files:
+                    try:
+                        file_obj = archive.extractfile(member)
+                        if file_obj:
+                            content = file_obj.read()
+                            size = len(content)
+                            # Extract just the basename to avoid directory structure
+                            clean_filename = Path(member.name).name
+                            if clean_filename:  # Skip if filename is empty after path extraction
+                                file_info.append((clean_filename, content, size))
+                    except Exception as e:
+                        error(f"Failed to read {member.name} from tar.gz: {e}")
+                        continue
+
+                return file_info
+        else:
+            return None
+    except Exception as e:
+        error(e)
+        return None

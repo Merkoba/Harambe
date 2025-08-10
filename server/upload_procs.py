@@ -154,6 +154,28 @@ def make_empty_file(files: list[FileStorage], seen_files: set[str]) -> None:
     seen_files.add("empty.txt")
 
 
+def make_archive_files(
+    archive_info: list[tuple[str, bytes, int]], files: list[FileStorage], seen_files: set[str]
+) -> None:
+    for filename, content, size in archive_info:
+        if filename in seen_files:
+            continue
+
+        mtype, _ = mimetypes.guess_type(filename)
+        mtype = mtype or "application/octet-stream"
+        content_stream = BytesIO(content)
+
+        archive_file = FileStorage(
+            stream=content_stream,
+            filename=filename,
+            name="file",
+            content_type=mtype,
+        )
+
+        files.append(archive_file)
+        seen_files.add(filename)
+
+
 def make_text_files(
     request: Request, files: list[FileStorage], seen_files: set[str]
 ) -> None:
@@ -398,6 +420,23 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         file = files[0]
         content = file.read()
         ext = Path(file.filename).suffix
+
+        if ext in [".zip", ".gz"]:
+            zip_archive = True
+            original_content = content
+            original_ext = ext
+
+            archfiles = utils.read_archive(content, ext)
+            utils.q(archfiles)
+
+            if archfiles:
+                files.clear()
+                seen_files.clear()
+                make_archive_files(archfiles, files, seen_files)
+                content = original_content
+                ext = original_ext
+            else:
+                zip_archive = True
 
     file_hash, existing = check_hash(content)
 
