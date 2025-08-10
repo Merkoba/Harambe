@@ -419,15 +419,19 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     else:
         file = files[0]
         content = file.read()
-        ext = Path(file.filename).suffix
+        filename = file.filename or ""
+        first_dot = filename.find(".")
 
-        if ext in [".zip", ".gz"]:
+        if first_dot != -1:
+            ext = filename[first_dot:]
+        else:
+            ext = ""
+
+        if ext in [".zip", ".tar.gz", ".gz"]:
             zip_archive = True
             original_content = content
             original_ext = ext
-
             archfiles = utils.read_archive(content, ext)
-            utils.q(archfiles)
 
             if archfiles:
                 files.clear()
@@ -468,7 +472,7 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
     database.add_post(
         user_id=user.id,
         name=post_name,
-        ext=path.suffix[1:],
+        ext=ext[1:],
         title=title,
         original=original,
         mtype=mtype,

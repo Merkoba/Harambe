@@ -1698,7 +1698,7 @@ App.download_file = (new_tab = false) => {
   let file_btn = DOM.el(`#file_button`)
 
   let confirm_args = {
-    message: `Download file?`,
+    message: `Download file`,
     callback_yes: () => {
       let url = file_btn.dataset.href
       App.goto_url(url, new_tab)
