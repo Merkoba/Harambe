@@ -192,6 +192,7 @@ App.init = () => {
       App.download_file(true)
     }
   })
+
   DOM.ev(file_btn, `contextmenu`, (e) => {
     App.msgbox(file_btn.dataset.href)
     e.preventDefault()
