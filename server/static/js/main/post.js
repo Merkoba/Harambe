@@ -187,6 +187,16 @@ App.init = () => {
     App.download_file()
   })
 
+  DOM.ev(file_btn, `auxclick`, (e) => {
+    if (e.button === 1) {
+      App.download_file(true)
+    }
+  })
+  DOM.ev(file_btn, `contextmenu`, (e) => {
+    App.msgbox(file_btn.dataset.href)
+    e.preventDefault()
+  })
+
   App.setup_reactions()
   App.keyboard_events()
   App.format_description()
@@ -1683,14 +1693,14 @@ App.reset_max = () => {
   }
 }
 
-App.download_file = () => {
+App.download_file = (new_tab = false) => {
   let file_btn = DOM.el(`#file_button`)
 
   let confirm_args = {
     message: `Download file?`,
     callback_yes: () => {
       let url = file_btn.dataset.href
-      App.location(url)
+      App.goto_url(url, new_tab)
     },
   }
 

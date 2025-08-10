@@ -757,6 +757,14 @@ App.to_bottom = () => {
   window.scrollTo(0, document.body.scrollHeight)
 }
 
+App.msgbox = (text) => {
+  if (!App.msg_info) {
+    App.msg_info = Msg.factory()
+  }
+
+  App.msg_info.show(text)
+}
+
 App.flash = (text) => {
   App.msg_flash = Msg.factory({
     close_on_overlay_click: false,
@@ -764,8 +772,7 @@ App.flash = (text) => {
     class: `blue`,
   })
 
-  App.msg_flash.set(text)
-  App.msg_flash.show()
+  App.msg_flash.show(text)
 }
 
 App.close_flash = () => {
