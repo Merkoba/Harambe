@@ -1339,6 +1339,9 @@ App.doc_click = (e, mode) => {
   else if (e.target.closest(`.sample`)) {
     App.show_sample(item)
   }
+  else if (e.target.closest(`.reactions`)) {
+    App.show_reaction(item)
+  }
   else if (e.target.closest(`.header_text`)) {
     let sort = e.target.dataset.sort
 
@@ -1398,4 +1401,22 @@ App.do_random_page = (media_type, new_tab = false) => {
 
 App.page_picker = () => {
   App.setup_page_opts(true)
+}
+
+App.show_reaction = (item) => {
+  let value = item.dataset.last_reaction
+
+  if (!value) {
+    return
+  }
+
+  let t = DOM.el(`#template_show_reaction`)
+
+  if (!App.show_reaction_msg) {
+    App.show_reaction_msg = Msg.factory()
+  }
+
+  App.show_reaction_msg.set(t.innerHTML)
+  DOM.el(`#show_reaction`).textContent = value
+  App.show_reaction_msg.show()
 }

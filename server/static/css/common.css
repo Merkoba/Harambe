@@ -421,3 +421,7 @@ select.settings_widget {
 .button_highlight .button_text_label {
     text-decoration: underline;
 }
+
+.pointer {
+    cursor: pointer;
+}

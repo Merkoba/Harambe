@@ -124,7 +124,8 @@
         data-full="{{item.full}}" data-uploader="{{item.uploader_str}}" data-views="{{item.views}}"
         data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}" data-username="{{item.username}}"
         data-privacy="{{item.privacy_str}}" data-description="{{item.description}}" data-value="{{item.value}}"
-        data-num_reactions="{{item.num_reactions}}" data-sample_icon="{{item.sample_icon}}">
+        data-num_reactions="{{item.num_reactions}}" data-sample_icon="{{item.sample_icon}}"
+        data-last_reaction="{{item.last_reaction}}">
             {% if mode == "admin_posts" %}
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
@@ -168,7 +169,15 @@
             <div class="table_cell small" title="{{item.views}}">{{item.views}}</div>
 
             <!-- Reactions -->
-            <div class="table_cell small" title="{{item.last_reaction}}">{{item.num_reactions}}</div>
+            <div
+            {% if item.num_reactions > 0 %}
+            class="table_cell small reactions pointer"
+            {% else %}
+            class="table_cell small reactions"
+            {% endif %}
+            title="{{item.last_reaction}}">
+                {{item.num_reactions}}
+            </div>
 
             {% if mode == "admin_posts" %}
             <!-- Listed -->
