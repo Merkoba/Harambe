@@ -121,7 +121,7 @@
         <div id="file" class="rowitem hidden"></div>
         {% else %}
         <div id="file" class="rowitem">
-            <a class="link" href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">File ({{post.ext}})</a>
+            <div id="file_button" class="button" data-href="/{{file_path}}/{{post.name}}/{{post.original_full}}" title="{{post.original_full}}">File ({{post.ext}})</div>
 
             <div class="sep">|</div>
             <div class="nowrap">{{post.size_str}}</div>

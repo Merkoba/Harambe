@@ -181,6 +181,12 @@ App.init = () => {
     })
   }
 
+  let file_btn = DOM.el(`#file_button`)
+
+  DOM.ev(file_btn, `click`, () => {
+    App.download_file()
+  })
+
   App.setup_reactions()
   App.keyboard_events()
   App.format_description()
@@ -1675,4 +1681,18 @@ App.reset_max = () => {
   if (App.max_on && App.max_id) {
     App.toggle_max(App.max_id, false)
   }
+}
+
+App.download_file = () => {
+  let file_btn = DOM.el(`#file_button`)
+
+  let confirm_args = {
+    message: `Download file?`,
+    callback_yes: () => {
+      let url = file_btn.dataset.href
+      App.location(url)
+    },
+  }
+
+  App.confirmbox(confirm_args)
 }
