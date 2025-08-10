@@ -693,10 +693,6 @@ def shuffle(items: Items) -> None:
 
 
 def read_archive(source: str | Path | bytes, extension: str = "") -> list[tuple[str, bytes, int]] | None:
-    """
-    Read archive contents and return file information.
-    Returns list of tuples: (filename, content, size)
-    """
     max_files = config.max_archive_files
 
     try:
