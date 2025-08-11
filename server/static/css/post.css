@@ -38,7 +38,7 @@ body, html {
     min-width: 0;
     flex-shrink: 1;
     overflow: hidden;
-    width: 100%;
+    width: fit-content;
     cursor: pointer;
 }
 
