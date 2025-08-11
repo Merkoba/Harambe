@@ -204,14 +204,11 @@ App.init = () => {
     App.expand_title()
   })
 
-  DOM.ev(title, `mouseleave`, () => {
-    App.collapse_title()
-  })
-
   App.setup_reactions()
   App.keyboard_events()
   App.format_description()
   App.setup_video()
+  App.create_title_debouncer()
 }
 
 App.edit_title = () => {
@@ -1726,4 +1723,18 @@ App.expand_title = () => {
 App.collapse_title = () => {
   let title = DOM.el(`#title`)
   title.classList.remove(`expanded`)
+}
+
+App.create_title_debouncer = () => {
+  App.title_debouncer = App.create_debouncer(() => {
+    App.collapse_title()
+  }, App.SECOND)
+
+  DOM.ev(title, `mouseleave`, () => {
+    App.title_debouncer.call()
+  })
+
+  DOM.ev(title, `mouseenter`, () => {
+    App.title_debouncer.cancel()
+  })
 }
