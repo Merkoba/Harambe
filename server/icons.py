@@ -100,6 +100,15 @@ def fill_icons(config: Config) -> None:
     # Icon for confirm: cancel
     config.icons["confirm_no"] = "❌"
 
+    # Icon for list
+    config.icons["list"] = "📚"
+
+    # Icon for links
+    config.icons["links"] = "🔗"
+
+    # Icon for you
+    config.icons["you"] = "🥸"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages

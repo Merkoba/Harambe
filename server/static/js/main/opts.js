@@ -84,7 +84,7 @@ App.setup_menu_opts = (show = false, ignore = []) => {
       func: () => {
         App.setup_list_opts(true, name)
       },
-      icon: `>`,
+      icon: App.icon(`list`),
     })
 
     App.bind_button({
@@ -92,7 +92,7 @@ App.setup_menu_opts = (show = false, ignore = []) => {
       func: () => {
         App.setup_admin_opts(true, name)
       },
-      icon: `>`,
+      icon: App.icon(`list`),
     })
 
     App.bind_button({
@@ -100,7 +100,7 @@ App.setup_menu_opts = (show = false, ignore = []) => {
       func: () => {
         App.setup_search_opts(true, name)
       },
-      icon: `>`,
+      icon: App.icon(`search`),
     })
 
     App.bind_button({
@@ -108,7 +108,7 @@ App.setup_menu_opts = (show = false, ignore = []) => {
       func: () => {
         App.setup_link_opts(true, name)
       },
-      icon: `>`,
+      icon: App.icon(`links`),
     })
 
     App.bind_button({
@@ -116,7 +116,7 @@ App.setup_menu_opts = (show = false, ignore = []) => {
       func: () => {
         App.setup_you_opts(App.user_id, true, name)
       },
-      icon: `>`,
+      icon: App.icon(`you`),
     })
 
     App.bind_button({
