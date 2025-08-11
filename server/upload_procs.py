@@ -420,27 +420,16 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         file = files[0]
         content = file.read()
         filename = file.filename or ""
-        first_dot = filename.find(".")
+        ext = Path(filename).suffix.lower()
+        archfiles = utils.read_archive(content, filename)
 
-        if first_dot != -1:
-            ext = filename[first_dot:]
-        else:
-            ext = ""
-
-        if ext in [".zip", ".tar.gz", ".gz"]:
-            zip_archive = True
+        if archfiles:
             original_content = content
-            original_ext = ext
-            archfiles = utils.read_archive(content, ext)
-
-            if archfiles:
-                files.clear()
-                seen_files.clear()
-                make_archive_files(archfiles, files, seen_files)
-                content = original_content
-                ext = original_ext
-            else:
-                zip_archive = True
+            zip_archive = True
+            files.clear()
+            seen_files.clear()
+            make_archive_files(archfiles, files, seen_files)
+            content = original_content
 
     file_hash, existing = check_hash(content)
 

@@ -331,8 +331,8 @@ def get_zip_sample(path: Path, files: list[FileStorage]) -> None:
                     size_str = f"{size / (1024 * 1024 * 1024 * 1024):.1f} tb"
 
                 line = f"{filename} | {size_str}"
-        except:
-            pass
+        except Exception as e:
+            utils.error(e)
 
         lines.append(line)
 

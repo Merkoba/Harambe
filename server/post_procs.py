@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 # Libraries
+import libarchive
 from flask import jsonify  # type: ignore
 
 # Modules
@@ -42,8 +43,24 @@ class Post:
         return mtype.startswith("text/") or (mtype == "application/json")
 
     @staticmethod
-    def is_zip(mtype: str) -> bool:
-        return mtype.startswith("application/") and ("zip" in mtype)
+    def is_archive(mtype: str, file_path: str | None = None) -> bool:
+        # Fast check: common archive MIME types
+        if mtype.startswith("application/") and any(archive_type in mtype for archive_type in ["zip", "gzip", "x-tar", "tar", "rar", "7z", "bzip", "xz", "compress"]):
+            return True
+
+        # If file path is provided and MIME type is uncertain, use libarchive to probe
+        if file_path and Path(file_path).exists():
+            try:
+                # Try to read the archive - libarchive will raise an exception if it's not an archive
+                with libarchive.file_reader(file_path) as archive:
+                    # Just try to get the first entry - if it succeeds, it's an archive
+                    next(archive, None)
+                    return True
+            except (libarchive.ArchiveError, OSError, Exception):
+                # Not an archive or file access error
+                pass
+
+        return False
 
     @staticmethod
     def is_talk(mtype: str) -> bool:
@@ -54,16 +71,13 @@ class Post:
         return mtype == "mode/url"
 
     @staticmethod
-    def check_media(mtype: str, obj: Post | None = None) -> tuple[str, str]:
+    def check_media(mtype: str, obj: Post | None = None, file_path: str | None = None) -> tuple[str, str]:
         media_type: str = ""
         sample_icon: str = ""
 
         if Post.is_text(mtype):
             media_type = "text"
             sample_icon = config.media_icons["text"]
-        elif Post.is_zip(mtype):
-            media_type = "zip"
-            sample_icon = config.media_icons["zip"]
         elif Post.is_image(mtype):
             media_type = "image"
             sample_icon = config.media_icons["image"]
@@ -82,6 +96,9 @@ class Post:
         elif Post.is_url(mtype):
             media_type = "url"
             sample_icon = config.media_icons["url"]
+        elif Post.is_archive(mtype, file_path):
+            media_type = "zip"
+            sample_icon = config.media_icons["zip"]
         else:
             media_type = "unknown"
             sample_icon = config.media_icons["any"]
@@ -230,7 +247,9 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     else:
         markdown_embed = False
 
-    zip_embed = mtype.startswith("application/") and ("zip" in mtype)
+    # Use libarchive to check if it's actually an archive
+    file_path = str(utils.files_dir() / full) if full else None
+    zip_embed = Post.is_archive(mtype, file_path)
     file_hash = post.file_hash
     text = ""
 
@@ -304,7 +323,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         youtube_id,
     )
 
-    Post.check_media(obj.mtype, obj)
+    Post.check_media(obj.mtype, obj, file_path)
     return obj
 
 

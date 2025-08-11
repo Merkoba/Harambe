@@ -6,8 +6,6 @@ import time
 import json
 import string
 import random
-import zipfile
-import tarfile
 import urllib.parse
 import unicodedata
 import subprocess
@@ -23,6 +21,7 @@ import redis  # type: ignore
 import q as qlib  # type: ignore
 from flask import jsonify, Request  # type: ignore
 from werkzeug.datastructures import FileStorage  # type: ignore
+import libarchive  # type: ignore
 
 # Modules
 from config import config
@@ -692,53 +691,108 @@ def shuffle(items: Items) -> None:
     random.shuffle(items)
 
 
-def read_archive(source: str | Path | bytes, extension: str = "") -> list[tuple[str, bytes, int]] | None:
-    max_files = config.max_archive_files
+def read_archive(source: str | Path | bytes, filename: str = "") -> list[tuple[str, bytes, int]] | None:
+    """
+    Read archive files using libarchive-c and return a list of file entries.
 
-    try:
-        if extension.lower() == ".zip":
-            with zipfile.ZipFile(BytesIO(source), "r") as archive:
-                file_info = []
-                all_names = archive.namelist()
-                regular_files = [name for name in all_names if not name.endswith('/')][:max_files]
+    Args:
+        source: Path to archive file, or bytes content
+        extension: Optional file extension hint (e.g. ".zip", ".tar.gz")
 
-                for filename in regular_files:
-                    try:
-                        content = archive.read(filename)
-                        size = len(content)
-                        # Extract just the basename to avoid directory structure
-                        clean_filename = Path(filename).name
-                        if clean_filename:  # Skip if filename is empty after path extraction
-                            file_info.append((clean_filename, content, size))
-                    except Exception as e:
-                        error(f"Failed to read {filename} from zip: {e}")
-                        continue
+    Returns:
+        List of tuples containing (filename, file_content_bytes, file_size) or None if not an archive
+    """
+    # Common archive extensions
+    archive_extensions = {
+        ".zip", ".tar", ".tar.gz", ".tar.bz2", ".tar.xz", ".tar.lz", ".tar.Z",
+        ".tgz", ".tbz2", ".txz", ".tlz", ".tZ", ".gz", ".bz2", ".xz", ".lz",
+        ".7z", ".rar", ".cab", ".iso", ".lha", ".lzh", ".ar", ".deb", ".rpm",
+        ".dmg", ".hfs", ".cpio", ".shar", ".pax", ".ustar"
+    }
 
-                return file_info
+    # Check if it's likely an archive by extension
+    is_archive_by_ext = False
 
-        elif extension.lower() in [".gz"]:
-            with tarfile.open(fileobj=BytesIO(source), mode="r:gz") as archive:
-                file_info = []
-                all_members = archive.getmembers()
-                regular_files = [member for member in all_members if member.isfile()][:max_files]
+    if isinstance(source, (str, Path)):
+        file_path = Path(source)
 
-                for member in regular_files:
-                    try:
-                        file_obj = archive.extractfile(member)
-                        if file_obj:
-                            content = file_obj.read()
-                            size = len(content)
-                            # Extract just the basename to avoid directory structure
-                            clean_filename = Path(member.name).name
-                            if clean_filename:  # Skip if filename is empty after path extraction
-                                file_info.append((clean_filename, content, size))
-                    except Exception as e:
-                        error(f"Failed to read {member.name} from tar.gz: {e}")
-                        continue
-
-                return file_info
+        if extension:
+            is_archive_by_ext = extension.lower() in archive_extensions
         else:
-            return None
+            # Check file extension
+            for ext in archive_extensions:
+                if str(file_path).lower().endswith(ext):
+                    is_archive_by_ext = True
+                    break
+    elif filename:
+        for ext in archive_extensions:
+            if filename.endswith(ext):
+                is_archive_by_ext = True
+                break
+    try:
+        files_list = []
+
+        # Try to open with libarchive
+        if isinstance(source, bytes):
+            # Handle bytes input
+            with libarchive.memory_reader(source) as archive:
+                for entry in archive:
+                    if len(files_list) >= config.max_archive_files:
+                        break
+
+                    # Skip directories
+                    if entry.isdir:
+                        continue
+
+                    filename = entry.name
+                    file_size = entry.size
+
+                    # Read file content
+                    try:
+                        file_content = b''
+                        for block in entry.get_blocks():
+                            file_content += block
+                        files_list.append((filename, file_content, file_size))
+                    except Exception:
+                        # If we can't read the content, skip this file
+                        continue
+        else:
+            # Handle file path input
+            file_path = Path(source)
+
+            # Check if file exists
+            if not file_path.exists():
+                return None
+
+            with libarchive.file_reader(str(file_path)) as archive:
+                for entry in archive:
+                    if len(files_list) >= config.max_archive_files:
+                        break
+
+                    # Skip directories
+                    if entry.isdir:
+                        continue
+
+                    filename = entry.name
+                    file_size = entry.size
+
+                    # Read file content
+                    try:
+                        file_content = b''
+                        for block in entry.get_blocks():
+                            file_content += block
+
+                        files_list.append((filename, file_content, file_size))
+                    except Exception:
+                        # If we can't read the content, skip this file
+                        continue
+
+        return files_list if files_list else None
+
     except Exception as e:
-        error(e)
+        # If libarchive fails to read it, it's probably not a valid archive
+        # or an unsupported format
+        if is_archive_by_ext:
+            # If extension suggests it should be an archive, log the error
+            error(f"Failed to read archive {source}: {e}")
         return None
