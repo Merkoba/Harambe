@@ -183,26 +183,30 @@ App.init = () => {
 
   let file_btn = DOM.el(`#file_button`)
 
-  DOM.ev(file_btn, `click`, () => {
-    App.download_file()
-  })
+  if (file_btn) {
+    DOM.ev(file_btn, `click`, () => {
+      App.download_file()
+    })
 
-  DOM.ev(file_btn, `auxclick`, (e) => {
-    if (e.button === 1) {
-      App.download_file(true)
-    }
-  })
+    DOM.ev(file_btn, `auxclick`, (e) => {
+      if (e.button === 1) {
+        App.download_file(true)
+      }
+    })
 
-  DOM.ev(file_btn, `contextmenu`, (e) => {
-    App.msgbox(file_btn.dataset.href)
-    e.preventDefault()
-  })
+    DOM.ev(file_btn, `contextmenu`, (e) => {
+      App.msgbox(file_btn.dataset.href)
+      e.preventDefault()
+    })
+  }
 
   let title = DOM.el(`#title`)
 
-  DOM.ev(title, `click`, () => {
-    App.expand_title()
-  })
+  if (title) {
+    DOM.ev(title, `click`, () => {
+      App.expand_title()
+    })
+  }
 
   App.setup_reactions()
   App.keyboard_events()
