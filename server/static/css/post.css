@@ -47,6 +47,7 @@ body, html {
     overflow: auto;
     max-height: 300px;
     cursor: default;
+    text-align: center;
 }
 
 #file {
