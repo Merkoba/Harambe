@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 # Libraries
-import libarchive
+import libarchive  # type: ignore
 from flask import jsonify  # type: ignore
 
 # Modules
@@ -45,7 +45,20 @@ class Post:
     @staticmethod
     def is_archive(mtype: str, file_path: str | None = None) -> bool:
         # Fast check: common archive MIME types
-        if mtype.startswith("application/") and any(archive_type in mtype for archive_type in ["zip", "gzip", "x-tar", "tar", "rar", "7z", "bzip", "xz", "compress"]):
+        if mtype.startswith("application/") and any(
+            archive_type in mtype
+            for archive_type in [
+                "zip",
+                "gzip",
+                "x-tar",
+                "tar",
+                "rar",
+                "7z",
+                "bzip",
+                "xz",
+                "compress",
+            ]
+        ):
             return True
 
         # If file path is provided and MIME type is uncertain, use libarchive to probe
@@ -71,7 +84,9 @@ class Post:
         return mtype == "mode/url"
 
     @staticmethod
-    def check_media(mtype: str, obj: Post | None = None, file_path: str | None = None) -> tuple[str, str]:
+    def check_media(
+        mtype: str, obj: Post | None = None, file_path: str | None = None
+    ) -> tuple[str, str]:
         media_type: str = ""
         sample_icon: str = ""
 

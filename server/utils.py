@@ -14,7 +14,6 @@ import requests  # type: ignore
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from io import BytesIO
 
 # Libraries
 import redis  # type: ignore
@@ -691,46 +690,56 @@ def shuffle(items: Items) -> None:
     random.shuffle(items)
 
 
-def read_archive(source: str | Path | bytes, filename: str = "") -> list[tuple[str, bytes, int]] | None:
-    """
-    Read archive files using libarchive-c and return a list of file entries.
-
-    Args:
-        source: Path to archive file, or bytes content
-        extension: Optional file extension hint (e.g. ".zip", ".tar.gz")
-
-    Returns:
-        List of tuples containing (filename, file_content_bytes, file_size) or None if not an archive
-    """
+def read_archive(
+    source: str | Path | bytes, filename: str
+) -> list[tuple[str, bytes, int]] | None:
     # Common archive extensions
     archive_extensions = {
-        ".zip", ".tar", ".tar.gz", ".tar.bz2", ".tar.xz", ".tar.lz", ".tar.Z",
-        ".tgz", ".tbz2", ".txz", ".tlz", ".tZ", ".gz", ".bz2", ".xz", ".lz",
-        ".7z", ".rar", ".cab", ".iso", ".lha", ".lzh", ".ar", ".deb", ".rpm",
-        ".dmg", ".hfs", ".cpio", ".shar", ".pax", ".ustar"
+        ".zip",
+        ".tar",
+        ".tar.gz",
+        ".tar.bz2",
+        ".tar.xz",
+        ".tar.lz",
+        ".tar.Z",
+        ".tgz",
+        ".tbz2",
+        ".txz",
+        ".tlz",
+        ".tZ",
+        ".gz",
+        ".bz2",
+        ".xz",
+        ".lz",
+        ".7z",
+        ".rar",
+        ".cab",
+        ".iso",
+        ".lha",
+        ".lzh",
+        ".ar",
+        ".deb",
+        ".rpm",
+        ".dmg",
+        ".hfs",
+        ".cpio",
+        ".shar",
+        ".pax",
+        ".ustar",
     }
 
-    # Check if it's likely an archive by extension
-    is_archive_by_ext = False
+    match = False
 
-    if isinstance(source, (str, Path)):
-        file_path = Path(source)
+    for ext in archive_extensions:
+        if filename.endswith(ext):
+            match = True
+            break
 
-        if extension:
-            is_archive_by_ext = extension.lower() in archive_extensions
-        else:
-            # Check file extension
-            for ext in archive_extensions:
-                if str(file_path).lower().endswith(ext):
-                    is_archive_by_ext = True
-                    break
-    elif filename:
-        for ext in archive_extensions:
-            if filename.endswith(ext):
-                is_archive_by_ext = True
-                break
+    if not match:
+        return None
+
     try:
-        files_list = []
+        files_list: list[tuple[str, bytes, int]] = []
 
         # Try to open with libarchive
         if isinstance(source, bytes):
@@ -749,9 +758,11 @@ def read_archive(source: str | Path | bytes, filename: str = "") -> list[tuple[s
 
                     # Read file content
                     try:
-                        file_content = b''
+                        file_content = b""
+
                         for block in entry.get_blocks():
                             file_content += block
+
                         files_list.append((filename, file_content, file_size))
                     except Exception:
                         # If we can't read the content, skip this file
@@ -778,7 +789,7 @@ def read_archive(source: str | Path | bytes, filename: str = "") -> list[tuple[s
 
                     # Read file content
                     try:
-                        file_content = b''
+                        file_content = b""
                         for block in entry.get_blocks():
                             file_content += block
 
@@ -790,9 +801,5 @@ def read_archive(source: str | Path | bytes, filename: str = "") -> list[tuple[s
         return files_list if files_list else None
 
     except Exception as e:
-        # If libarchive fails to read it, it's probably not a valid archive
-        # or an unsupported format
-        if is_archive_by_ext:
-            # If extension suggests it should be an archive, log the error
-            error(f"Failed to read archive {source}: {e}")
+        error(e)
         return None

@@ -155,9 +155,11 @@ def make_empty_file(files: list[FileStorage], seen_files: set[str]) -> None:
 
 
 def make_archive_files(
-    archive_info: list[tuple[str, bytes, int]], files: list[FileStorage], seen_files: set[str]
+    archive_info: list[tuple[str, bytes, int]],
+    files: list[FileStorage],
+    seen_files: set[str],
 ) -> None:
-    for filename, content, size in archive_info:
+    for filename, content, _ in archive_info:
         if filename in seen_files:
             continue
 
