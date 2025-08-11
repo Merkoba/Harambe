@@ -728,7 +728,7 @@ def read_archive(
     source: str | Path | bytes, filename: str
 ) -> list[tuple[str, bytes, int]] | None:
     if not any(filename.endswith(ext) for ext in archive_extensions):
-        return
+        return None
 
     try:
         files_list: list[tuple[str, bytes, int]] = []
