@@ -198,6 +198,16 @@ App.init = () => {
     e.preventDefault()
   })
 
+  let title = DOM.el(`#title`)
+
+  DOM.ev(title, `click`, () => {
+    App.expand_title()
+  })
+
+  DOM.ev(title, `mouseleave`, () => {
+    App.collapse_title()
+  })
+
   App.setup_reactions()
   App.keyboard_events()
   App.format_description()
@@ -1706,4 +1716,14 @@ App.download_file = (new_tab = false) => {
   }
 
   App.confirmbox(confirm_args)
+}
+
+App.expand_title = () => {
+  let title = DOM.el(`#title`)
+  title.classList.add(`expanded`)
+}
+
+App.collapse_title = () => {
+  let title = DOM.el(`#title`)
+  title.classList.remove(`expanded`)
 }

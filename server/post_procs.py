@@ -46,7 +46,10 @@ class Post:
         if not file_path:
             return False
 
-        return any(file_path.endswith(ext) for ext in utils.archive_extensions)
+        if any(file_path.endswith(ext) for ext in utils.archive_extensions):
+            return True
+
+        return mtype.startswith("application/")
 
     @staticmethod
     def is_talk(mtype: str) -> bool:

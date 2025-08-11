@@ -727,15 +727,8 @@ def shuffle(items: Items) -> None:
 def read_archive(
     source: str | Path | bytes, filename: str
 ) -> list[tuple[str, bytes, int]] | None:
-    match = False
-
-    for ext in archive_extensions:
-        if filename.endswith(ext):
-            match = True
-            break
-
-    if not match:
-        return None
+    if not any(filename.endswith(ext) for ext in archive_extensions):
+        return
 
     try:
         files_list: list[tuple[str, bytes, int]] = []

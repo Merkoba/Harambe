@@ -39,6 +39,14 @@ body, html {
     flex-shrink: 1;
     overflow: hidden;
     width: 100%;
+    cursor: pointer;
+}
+
+#title.expanded {
+    white-space: normal;
+    overflow: auto;
+    max-height: 300px;
+    cursor: default;
 }
 
 #file {
