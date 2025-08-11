@@ -92,7 +92,7 @@ App.setup_menu_opts = (show = false, ignore = []) => {
       func: () => {
         App.setup_admin_opts(true, name)
       },
-      icon: App.icon(`list`),
+      icon: App.icon(`admin`),
     })
 
     App.bind_button({

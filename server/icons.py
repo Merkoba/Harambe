@@ -103,6 +103,9 @@ def fill_icons(config: Config) -> None:
     # Icon for list
     config.icons["list"] = "📚"
 
+    # Icon for admin
+    config.icons["admin"] = "📚"
+
     # Icon for links
     config.icons["links"] = "🔗"
 
