@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Any
 
 # Libraries
-import libarchive  # type: ignore
 from flask import jsonify  # type: ignore
 
 # Modules
@@ -44,36 +43,10 @@ class Post:
 
     @staticmethod
     def is_archive(mtype: str, file_path: str | None = None) -> bool:
-        # Fast check: common archive MIME types
-        if mtype.startswith("application/") and any(
-            archive_type in mtype
-            for archive_type in [
-                "zip",
-                "gzip",
-                "x-tar",
-                "tar",
-                "rar",
-                "7z",
-                "bzip",
-                "xz",
-                "compress",
-            ]
-        ):
-            return True
+        if not file_path:
+            return False
 
-        # If file path is provided and MIME type is uncertain, use libarchive to probe
-        if file_path and Path(file_path).exists():
-            try:
-                # Try to read the archive - libarchive will raise an exception if it's not an archive
-                with libarchive.file_reader(file_path) as archive:
-                    # Just try to get the first entry - if it succeeds, it's an archive
-                    next(archive, None)
-                    return True
-            except (libarchive.ArchiveError, OSError, Exception):
-                # Not an archive or file access error
-                pass
-
-        return False
+        return any(file_path.endswith(ext) for ext in utils.archive_extensions)
 
     @staticmethod
     def is_talk(mtype: str) -> bool:

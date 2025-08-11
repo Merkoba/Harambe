@@ -47,6 +47,40 @@ TLDS = [
     "co",
 ]
 
+archive_extensions = [
+    ".zip",
+    ".tar",
+    ".tar.gz",
+    ".tar.bz2",
+    ".tar.xz",
+    ".tar.lz",
+    ".tar.Z",
+    ".tgz",
+    ".tbz2",
+    ".txz",
+    ".tlz",
+    ".tZ",
+    ".gz",
+    ".bz2",
+    ".xz",
+    ".lz",
+    ".7z",
+    ".rar",
+    ".cab",
+    ".iso",
+    ".lha",
+    ".lzh",
+    ".ar",
+    ".deb",
+    ".rpm",
+    ".dmg",
+    ".hfs",
+    ".cpio",
+    ".shar",
+    ".pax",
+    ".ustar",
+]
+
 
 def now() -> int:
     return int(time.time())
@@ -693,41 +727,6 @@ def shuffle(items: Items) -> None:
 def read_archive(
     source: str | Path | bytes, filename: str
 ) -> list[tuple[str, bytes, int]] | None:
-    # Common archive extensions
-    archive_extensions = {
-        ".zip",
-        ".tar",
-        ".tar.gz",
-        ".tar.bz2",
-        ".tar.xz",
-        ".tar.lz",
-        ".tar.Z",
-        ".tgz",
-        ".tbz2",
-        ".txz",
-        ".tlz",
-        ".tZ",
-        ".gz",
-        ".bz2",
-        ".xz",
-        ".lz",
-        ".7z",
-        ".rar",
-        ".cab",
-        ".iso",
-        ".lha",
-        ".lzh",
-        ".ar",
-        ".deb",
-        ".rpm",
-        ".dmg",
-        ".hfs",
-        ".cpio",
-        ".shar",
-        ".pax",
-        ".ustar",
-    }
-
     match = False
 
     for ext in archive_extensions:
