@@ -1718,11 +1718,13 @@ App.download_file = (new_tab = false) => {
 App.expand_title = () => {
   let title = DOM.el(`#title`)
   title.classList.add(`expanded`)
+  title.title = ``
 }
 
 App.collapse_title = () => {
   let title = DOM.el(`#title`)
   title.classList.remove(`expanded`)
+  title.title = App.get_title()
 }
 
 App.create_title_debouncer = () => {
@@ -1737,4 +1739,8 @@ App.create_title_debouncer = () => {
   DOM.ev(title, `mouseenter`, () => {
     App.title_debouncer.cancel()
   })
+}
+
+App.get_title = () => {
+  return App.post.title || App.post.original
 }
