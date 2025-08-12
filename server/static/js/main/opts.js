@@ -869,6 +869,7 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
         App.video_slow()
       },
       icon: App.icon(`slow`),
+      close: false,
     })
 
     App.bind_button({
@@ -877,6 +878,7 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
         App.video_fast()
       },
       icon: App.icon(`fast`),
+      close: false,
     })
 
     App.bind_button({
