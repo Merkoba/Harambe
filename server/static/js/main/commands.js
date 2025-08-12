@@ -8,6 +8,7 @@ App.bass_boost_enabled = false
 App.current_pitch_step = 0
 App.pitch_step_size = 1
 App.current_audio_source = null
+App.playback_step = 0.1
 
 App.show_video_commands = () => {
   if ((App.mode === `post`) && App.get_video()) {
@@ -56,7 +57,7 @@ App.increase_playback = () => {
   let video = App.get_video()
 
   if (video) {
-    video.playbackRate = Math.min(10, video.playbackRate + 0.1)
+    video.playbackRate = Math.min(10, video.playbackRate + App.playback_step)
   }
 }
 
@@ -64,7 +65,7 @@ App.decrease_playback = () => {
   let video = App.get_video()
 
   if (video) {
-    video.playbackRate = Math.max(0.1, video.playbackRate - 0.1)
+    video.playbackRate = Math.max(0.1, video.playbackRate - App.playback_step)
   }
 }
 
