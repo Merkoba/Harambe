@@ -40,12 +40,10 @@ App.make_opts = (name, setup, show = false, parent = ``) => {
   }
 }
 
-App.setup_menu_opts = (show = false, ignore = []) => {
+App.setup_menu_opts = (show = false) => {
   let name = `menu`
 
   App.make_opts(name, () => {
-    App.ignore_buttons(name, ignore)
-
     App.bind_button({
       what: `${name}_opts_upload`,
       func: () => {

@@ -262,16 +262,6 @@ App.capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-App.ignore_buttons = (name, ignore) => {
-  for (let g of ignore) {
-    let el = DOM.el(`#${name}_opts_${g}`)
-
-    if (el) {
-      el.remove()
-    }
-  }
-}
-
 App.fill_def_args = (def, args) => {
   for (let key in def) {
     if ((args[key] === undefined) && (def[key] !== undefined)) {

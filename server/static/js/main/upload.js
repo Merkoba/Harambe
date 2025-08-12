@@ -739,7 +739,7 @@ App.setup_menu = () => {
   let menu_btn = DOM.el(`#menu_btn`)
 
   if (menu_btn) {
-    App.setup_menu_opts(false, [`upload`])
+    App.setup_menu_opts(false)
 
     DOM.ev(menu_btn, `click`, (e) => {
       App.msg_show(`menu`)
