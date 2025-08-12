@@ -247,7 +247,7 @@ App.create_reverb_node = () => {
     let output_gain = ac.createGain()
 
     let pre_delay = ac.createDelay(1.0)
-    pre_delay.delayTime.value = 0.03 // 30ms
+    pre_delay.delayTime.value = 0.03
 
     let lowpass = ac.createBiquadFilter()
     lowpass.type = `lowpass`
@@ -397,7 +397,7 @@ App.set_bass_boost = (gain_db) => {
 
   let ac = App.audio_context
   let now = ac.currentTime
-  let clamped_gain = Math.max(0, Math.min(12, gain_db)) // Limit boost to 0-12dB
+  let clamped_gain = Math.max(0, Math.min(12, gain_db))
 
   App.bass_boost_node.bass_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
 }
