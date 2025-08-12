@@ -1714,6 +1714,14 @@ App.setup_video = () => {
   DOM.ev(video, `pause`, () => {
     App.set_play_text(`Play`)
   })
+
+  // Initialize audio context for pitch control when video loads
+  DOM.ev(video, `loadeddata`, () => {
+    // Reset pitch when new video loads
+    if (typeof App.current_pitch_step !== 'undefined') {
+      App.current_pitch_step = 0
+    }
+  })
 }
 
 App.reset_max = () => {
@@ -1765,7 +1773,7 @@ App.create_title_debouncer = () => {
 
   App.title_debouncer = App.create_debouncer(() => {
     App.collapse_title()
-  }, App.SECOND)
+  }, App.SECOND * 2)
 
   DOM.ev(title, `mouseleave`, () => {
     App.title_debouncer.call()

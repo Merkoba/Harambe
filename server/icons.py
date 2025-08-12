@@ -136,6 +136,18 @@ def fill_icons(config: Config) -> None:
     # Icon for download
     config.icons["download"] = "📥"
 
+    # Icon for speed
+    config.icons["speed"] = "🚅"
+
+    # Icon for pitch
+    config.icons["pitch"] = "🎹"
+
+    # Icon for up
+    config.icons["up"] = "⬆️"
+
+    # Icon for down
+    config.icons["down"] = "⬇️"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages

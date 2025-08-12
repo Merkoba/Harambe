@@ -1,4 +1,15 @@
 App.fade_delay = 100
+App.audio_context = null
+App.pitch_node = null
+App.current_pitch_step = 0
+App.pitch_step_size = 1
+App.current_audio_source = null
+
+App.show_video_commands = () => {
+  if ((App.mode === `post`) && DOM.el(`#video`)) {
+    App.setup_video_commands_opts(true)
+  }
+}
 
 App.video_jump = () => {
   let video = DOM.el(`#video`)
@@ -37,7 +48,7 @@ App.video_rewind = () => {
   }
 }
 
-App.video_slow = () => {
+App.video_slower = () => {
   let video = DOM.el(`#video`)
 
   if (video) {
@@ -46,7 +57,7 @@ App.video_slow = () => {
   }
 }
 
-App.video_fast = () => {
+App.video_faster = () => {
   let video = DOM.el(`#video`)
 
   if (video) {
@@ -91,8 +102,108 @@ App.video_fade_out = () => {
   }
 }
 
-App.show_video_commands = () => {
-  if ((App.mode === `post`) && DOM.el(`#video`)) {
-    App.setup_video_commands_opts(true)
+App.setup_audio_context = (video) => {
+  if (!App.audio_context) {
+    try {
+      App.audio_context = new (window.AudioContext || window.webkitAudioContext)()
+    }
+    catch (e) {
+      console.error('Web Audio API not supported:', e)
+      return false
+    }
+  }
+
+  if (App.audio_context.state === 'suspended') {
+    App.audio_context.resume()
+  }
+
+  if (!App.pitch_node || video.audioSource !== App.current_audio_source) {
+    try {
+      if (App.current_audio_source) {
+        App.current_audio_source.disconnect()
+      }
+
+      let source = App.audio_context.createMediaElementSource(video)
+      App.current_audio_source = source
+      App.pitch_node = App.audio_context.createGain()
+      source.connect(App.pitch_node)
+      App.pitch_node.connect(App.audio_context.destination)
+      video.audioSource = source
+    }
+    catch (e) {
+      if (e.name === 'InvalidStateError') {
+        console.warn('Audio source already connected, using existing setup')
+        return true
+      }
+
+      console.error('Audio context setup error:', e)
+      return false
+    }
+  }
+
+  return true
+}
+
+App.apply_pitch = (video) => {
+  if (!video) {
+    return
+  }
+
+  try {
+    if (`preservesPitch` in video) {
+      video.preservesPitch = false
+    }
+
+    if (`mozPreservesPitch` in video) {
+      video.mozPreservesPitch = false
+    }
+
+    if (`webkitPreservesPitch` in video) {
+      video.webkitPreservesPitch = false
+    }
+  }
+  catch (e) {
+    console.warn('Could not set preservesPitch flag:', e)
+  }
+
+  let pitch_multi = Math.pow(2, App.current_pitch_step / 12)
+  let new_rate = Math.max(0.25, Math.min(4.0, pitch_multi))
+  video.playbackRate = new_rate
+}
+
+App.video_pitch_down = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    App.setup_audio_context(video)
+    App.current_pitch_step = Math.max(-12, App.current_pitch_step - App.pitch_step_size)
+    App.apply_pitch(video)
+
+    if (video.paused) {
+      video.play()
+    }
+  }
+}
+
+App.video_pitch_up = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    App.setup_audio_context(video)
+    App.current_pitch_step = Math.min(12, App.current_pitch_step + App.pitch_step_size)
+    App.apply_pitch(video)
+
+    if (video.paused) {
+      video.play()
+    }
+  }
+}
+
+App.video_pitch_reset = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    App.current_pitch_step = 0
+    App.apply_pitch(video)
   }
 }

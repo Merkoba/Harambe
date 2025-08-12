@@ -864,21 +864,19 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
     })
 
     App.bind_button({
-      what: `${name}_opts_slower`,
+      what: `${name}_opts_speed`,
       func: () => {
-        App.video_slow()
+        App.show_video_speed_menu()
       },
-      icon: App.icon(`slow`),
-      close: false,
+      icon: App.icon(`speed`),
     })
 
     App.bind_button({
-      what: `${name}_opts_faster`,
+      what: `${name}_opts_pitch`,
       func: () => {
-        App.video_fast()
+        App.show_video_pitch_menu()
       },
-      icon: App.icon(`fast`),
-      close: false,
+      icon: App.icon(`pitch`),
     })
 
     App.bind_button({
@@ -896,6 +894,56 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
       },
       icon: App.icon(`fade_out`),
     })
+  }, show, parent)
+}
+
+App.setup_video_speed_opts = (show = false, parent = ``) => {
+  let name = `video_speed`
+
+  App.make_opts(name, () => {
+    App.bind_button({
+      what: `${name}_opts_slower`,
+      func: () => {
+        App.video_slower()
+      },
+      close: false,
+      icon: App.icon(`slow`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_faster`,
+      func: () => {
+        App.video_faster()
+      },
+      close: false,
+      icon: App.icon(`fast`),
+    })
+
+  }, show, parent)
+}
+
+App.setup_video_pitch_opts = (show = false, parent = ``) => {
+  let name = `video_pitch`
+
+  App.make_opts(name, () => {
+    App.bind_button({
+      what: `${name}_opts_up`,
+      func: () => {
+        App.video_pitch_up()
+      },
+      close: false,
+      icon: App.icon(`up`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_down`,
+      func: () => {
+        App.video_pitch_down()
+      },
+      close: false,
+      icon: App.icon(`down`),
+    })
+
   }, show, parent)
 }
 
@@ -919,4 +967,12 @@ App.setup_zip_file_opts = (show = false, parent = ``) => {
       icon: App.icon(`download`),
     })
   }, show, parent)
+}
+
+App.show_video_speed_menu = () => {
+  App.setup_video_speed_opts(true, `video_commands`)
+}
+
+App.show_video_pitch_menu = () => {
+  App.setup_video_pitch_opts(true, `video_commands`)
 }
