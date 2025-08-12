@@ -3,6 +3,8 @@ App.audio_context = null
 App.pitch_node = null
 App.reverb_node = null
 App.reverb_enabled = false
+App.bass_boost_node = null
+App.bass_boost_enabled = false
 App.current_pitch_step = 0
 App.pitch_step_size = 1
 App.current_audio_source = null
@@ -70,6 +72,7 @@ App.video_speed_reset = () => {
   let video = DOM.el(`#video`)
 
   if (video) {
+    App.set_video_preserve_pitch(true)
     video.playbackRate = 1.0
   }
 }
@@ -134,14 +137,17 @@ App.setup_audio_context = (video) => {
       App.current_audio_source = source
       App.pitch_node = App.audio_context.createGain()
 
-      // Create reverb node if not exists
       if (!App.reverb_node) {
         App.create_reverb_node()
       }
 
-      // Connect audio chain: source -> pitch -> reverb -> destination
+      if (!App.bass_boost_node) {
+        App.create_bass_boost_node()
+      }
+
       source.connect(App.pitch_node)
-      App.pitch_node.connect(App.reverb_node.input)
+      App.pitch_node.connect(App.bass_boost_node.input)
+      App.bass_boost_node.output.connect(App.reverb_node.input)
       App.reverb_node.output.connect(App.audio_context.destination)
       video.audioSource = source
     }
@@ -227,30 +233,57 @@ App.create_reverb_node = () => {
   }
 
   try {
-    let convolver = App.audio_context.createConvolver()
-    let dry_gain = App.audio_context.createGain()
-    let wet_gain = App.audio_context.createGain()
-    let output_gain = App.audio_context.createGain()
+    let ac = App.audio_context
+    let convolver = ac.createConvolver()
+    let dry_gain = ac.createGain()
+    let wet_gain = ac.createGain()
+    let mix_gain = ac.createGain()
+    let output_gain = ac.createGain()
+
+    let pre_delay = ac.createDelay(1.0)
+    pre_delay.delayTime.value = 0.03 // 30ms
+
+    let lowpass = ac.createBiquadFilter()
+    lowpass.type = 'lowpass'
+    lowpass.frequency.value = 6500
+    lowpass.Q.value = 0.7
+
+    let comp = ac.createDynamicsCompressor()
+    comp.threshold.value = -18
+    comp.knee.value = 20
+    comp.ratio.value = 2
+    comp.attack.value = 0.003
+    comp.release.value = 0.25
 
     App.create_impulse_response(convolver)
 
-    dry_gain.gain.value = 0.8
+    convolver.normalize = true
+    dry_gain.gain.value = 1.0
     wet_gain.gain.value = 0.0
+    mix_gain.gain.value = 1.0
     output_gain.gain.value = 1.0
 
     App.reverb_node = {
-      input: App.audio_context.createGain(),
+      input: ac.createGain(),
       convolver: convolver,
+      pre_delay: pre_delay,
+      lowpass: lowpass,
       dry: dry_gain,
       wet: wet_gain,
+      mix: mix_gain,
+      comp: comp,
       output: output_gain,
     }
 
     App.reverb_node.input.connect(App.reverb_node.dry)
-    App.reverb_node.input.connect(App.reverb_node.convolver)
-    App.reverb_node.convolver.connect(App.reverb_node.wet)
-    App.reverb_node.dry.connect(App.reverb_node.output)
-    App.reverb_node.wet.connect(App.reverb_node.output)
+    App.reverb_node.input.connect(App.reverb_node.pre_delay)
+    App.reverb_node.pre_delay.connect(App.reverb_node.convolver)
+    App.reverb_node.convolver.connect(App.reverb_node.lowpass)
+    App.reverb_node.lowpass.connect(App.reverb_node.wet)
+    App.reverb_node.dry.connect(App.reverb_node.mix)
+    App.reverb_node.wet.connect(App.reverb_node.mix)
+    App.reverb_node.mix.connect(App.reverb_node.comp)
+    App.reverb_node.comp.connect(App.reverb_node.output)
   }
   catch (e) {
     App.print_error(`Could not create reverb node:`, e)
@@ -259,17 +292,47 @@ App.create_reverb_node = () => {
 
 App.create_impulse_response = (convolver) => {
   try {
-    let sample_rate = App.audio_context.sampleRate
-    let length = sample_rate * 2
-    let impulse = App.audio_context.createBuffer(2, length, sample_rate)
+    let ac = App.audio_context
+    let sample_rate = ac.sampleRate
+
+    let seconds = 3.0
+    let length = Math.floor(sample_rate * seconds)
+    let impulse = ac.createBuffer(2, length, sample_rate)
+
+    let earlyTimes = [0.007, 0.013, 0.021, 0.033]
+    let earlyGains = [0.6, 0.45, 0.32, 0.22]
 
     for (let channel = 0; channel < 2; channel++) {
-      let channel_data = impulse.getChannelData(channel)
+      let data = impulse.getChannelData(channel)
+
+      for (let j = 0; j < earlyTimes.length; j++) {
+        let t = earlyTimes[j] + (channel === 0 ? 0.000 : 0.0015)
+        let idx = Math.floor(t * sample_rate)
+        if (idx < length) {
+          let gain = earlyGains[j]
+
+          for (let k = -8; k <= 8; k++) {
+            let p = idx + k
+            if (p >= 0 && p < length) {
+              let window = 1 - Math.abs(k) / 8
+              data[p] += gain * window * 0.04
+            }
+          }
+        }
+      }
+
+      let decay = 3.5
 
       for (let i = 0; i < length; i++) {
-        let decay = Math.pow(1 - i / length, 2)
-        let noise = (Math.random() * 2 - 1) * decay * 0.5
-        channel_data[i] = noise
+        let t = i / length
+        let env = Math.pow(1 - t, decay)
+        let noise = ((Math.random() * 2) - 1) * env * 0.6
+        data[i] += noise
+      }
+
+      for (let i = Math.floor(length * 0.85); i < length; i++) {
+        let fade = (length - i) / (length * 0.15)
+        data[i] *= fade
       }
     }
 
@@ -278,6 +341,73 @@ App.create_impulse_response = (convolver) => {
   catch (e) {
     App.print_error(`Could not create impulse response:`, e)
   }
+}
+
+App.create_bass_boost_node = () => {
+  if (!App.audio_context) {
+    return
+  }
+
+  try {
+    let ac = App.audio_context
+    let input_gain = ac.createGain()
+    let output_gain = ac.createGain()
+
+    let bass_filter = ac.createBiquadFilter()
+    bass_filter.type = 'lowshelf'
+    bass_filter.frequency.value = 320
+    bass_filter.gain.value = 0
+    bass_filter.Q.value = 1.0
+
+    let highpass = ac.createBiquadFilter()
+    highpass.type = 'highpass'
+    highpass.frequency.value = 40
+    highpass.Q.value = 0.7
+
+    input_gain.gain.value = 1.0
+    output_gain.gain.value = 1.0
+
+    App.bass_boost_node = {
+      input: input_gain,
+      bass_filter: bass_filter,
+      highpass: highpass,
+      output: output_gain,
+    }
+
+    App.bass_boost_node.input.connect(App.bass_boost_node.highpass)
+    App.bass_boost_node.highpass.connect(App.bass_boost_node.bass_filter)
+    App.bass_boost_node.bass_filter.connect(App.bass_boost_node.output)
+  }
+  catch (e) {
+    App.print_error(`Could not create bass boost node:`, e)
+  }
+}
+
+App.set_bass_boost = (gain_db) => {
+  if (!App.bass_boost_node || !App.audio_context) {
+    return
+  }
+
+  let ac = App.audio_context
+  let now = ac.currentTime
+  let clamped_gain = Math.max(0, Math.min(12, gain_db)) // Limit boost to 0-12dB
+
+  App.bass_boost_node.bass_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
+}
+
+App.set_reverb_mix = (mix) => {
+  if (!App.reverb_node || !App.audio_context) {
+    return
+  }
+
+  let ac = App.audio_context
+  let t = Math.max(0, Math.min(1, mix)) * Math.PI / 2
+  let dryLevel = Math.cos(t)
+  let wetLevel = Math.sin(t)
+  let now = ac.currentTime
+
+  App.reverb_node.dry.gain.setTargetAtTime(dryLevel, now, 0.01)
+  App.reverb_node.wet.gain.setTargetAtTime(wetLevel, now, 0.01)
 }
 
 App.video_reverb_on = () => {
@@ -290,8 +420,7 @@ App.video_reverb_on = () => {
 
     if (App.reverb_node) {
       App.reverb_enabled = true
-      App.reverb_node.wet.gain.setValueAtTime(0.4, App.audio_context.currentTime)
-      App.reverb_node.dry.gain.setValueAtTime(0.6, App.audio_context.currentTime)
+      App.set_reverb_mix(0.55)
     }
   }
 }
@@ -302,8 +431,7 @@ App.video_reverb_off = () => {
   if (video) {
     if (App.reverb_node) {
       App.reverb_enabled = false
-      App.reverb_node.wet.gain.setValueAtTime(0.0, App.audio_context.currentTime)
-      App.reverb_node.dry.gain.setValueAtTime(0.8, App.audio_context.currentTime)
+      App.set_reverb_mix(0.0)
     }
   }
 }
@@ -320,10 +448,54 @@ App.video_reverb_toggle = () => {
   }
   else {
     App.video_reverb_on()
-    let icon = App.icon(`enabled`)
 
     if (item) {
       item.classList.add(`button_highlight`)
+    }
+  }
+}
+
+App.video_bass_boost_toggle = () => {
+  let item = DOM.el(`#video_commands_opts_bass_boost`)
+
+  if (App.bass_boost_enabled) {
+    App.video_bass_boost_off()
+
+    if (item) {
+      item.classList.remove(`button_highlight`)
+    }
+  }
+  else {
+    App.video_bass_boost_on()
+
+    if (item) {
+      item.classList.add(`button_highlight`)
+    }
+  }
+}
+
+App.video_bass_boost_on = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    if (!App.setup_audio_context(video)) {
+      return
+    }
+
+    if (App.bass_boost_node) {
+      App.bass_boost_enabled = true
+      App.set_bass_boost(6)
+    }
+  }
+}
+
+App.video_bass_boost_off = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    if (App.bass_boost_node) {
+      App.bass_boost_enabled = false
+      App.set_bass_boost(0)
     }
   }
 }

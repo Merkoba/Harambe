@@ -154,8 +154,8 @@ def fill_icons(config: Config) -> None:
     # Icon for reverb
     config.icons["reverb"] = "🌊"
 
-    # Icon for enabled
-    config.icons["enabled"] = "✅"
+    # Icon for bass
+    config.icons["bass"] = "🎸"
 
 
 def fill_media_icons(config: Config) -> None:
