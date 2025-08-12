@@ -1692,6 +1692,10 @@ App.setup_video = () => {
 
   DOM.ev(video, `playing`, () => {
     App.set_play_text(`Pause`)
+
+    if (App.video_jump_enabled) {
+      App.video_jump_action()
+    }
   })
 
   DOM.ev(video, `pause`, () => {

@@ -842,3 +842,57 @@ App.setup_search_opts = (show = false) => {
     })
   }, show, `menu`)
 }
+
+App.setup_video_commands_opts = (show = false, parent = ``) => {
+  let name = `video_commands`
+
+  App.make_opts(name, () => {
+    App.bind_button({
+      what: `${name}_opts_jump`,
+      func: () => {
+        App.video_jump()
+      },
+      icon: App.icon(`jump`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_rewind`,
+      func: () => {
+        App.video_rewind()
+      },
+      icon: App.icon(`rewind`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_slow`,
+      func: () => {
+        App.video_slow()
+      },
+      icon: App.icon(`slow`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_fast`,
+      func: () => {
+        App.video_fast()
+      },
+      icon: App.icon(`fast`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_fade_in`,
+      func: () => {
+        App.video_fade_in()
+      },
+      icon: App.icon(`fade_in`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_fade_out`,
+      func: () => {
+        App.video_fade_out()
+      },
+      icon: App.icon(`fade_out`),
+    })
+  }, show, parent)
+}
