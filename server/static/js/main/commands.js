@@ -10,13 +10,13 @@ App.pitch_step_size = 1
 App.current_audio_source = null
 
 App.show_video_commands = () => {
-  if ((App.mode === `post`) && DOM.el(`#video`)) {
+  if ((App.mode === `post`) && App.get_video()) {
     App.setup_video_commands_opts(true)
   }
 }
 
 App.video_jump = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     if (video.paused) {
@@ -31,7 +31,7 @@ App.video_jump = () => {
 
 App.video_jump_action = () => {
   App.video_jump_enabled = false
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     let duration = video.duration
@@ -44,7 +44,7 @@ App.video_jump_action = () => {
 }
 
 App.video_rewind = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     video.currentTime = 0
@@ -52,24 +52,42 @@ App.video_rewind = () => {
   }
 }
 
-App.video_slower = () => {
-  let video = DOM.el(`#video`)
-
-  if (video) {
-    video.playbackRate = Math.max(0.1, video.playbackRate - 0.1)
-  }
-}
-
-App.video_faster = () => {
-  let video = DOM.el(`#video`)
+App.increase_playback = () => {
+  let video = App.get_video()
 
   if (video) {
     video.playbackRate = Math.min(10, video.playbackRate + 0.1)
   }
 }
 
+App.decrease_playback = () => {
+  let video = App.get_video()
+
+  if (video) {
+    video.playbackRate = Math.max(0.1, video.playbackRate - 0.1)
+  }
+}
+
+App.video_slower = () => {
+  let video = App.get_video()
+
+  if (video) {
+    App.set_video_preserve_pitch(true)
+    App.decrease_playback()
+  }
+}
+
+App.video_faster = () => {
+  let video = App.get_video()
+
+  if (video) {
+    App.set_video_preserve_pitch(true)
+    App.increase_playback()
+  }
+}
+
 App.video_speed_reset = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     App.set_video_preserve_pitch(true)
@@ -78,7 +96,7 @@ App.video_speed_reset = () => {
 }
 
 App.video_fade_in = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     video.volume = 0
@@ -96,7 +114,7 @@ App.video_fade_in = () => {
 }
 
 App.video_fade_out = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     video.volume = 1
@@ -163,39 +181,26 @@ App.setup_audio_context = (video) => {
   return true
 }
 
-App.apply_pitch = (video) => {
-  if (!video) {
-    return
-  }
+App.video_pitch_up = () => {
+  let video = App.get_video()
 
-  App.set_video_preserve_pitch(false)
-  let pitch_multi = Math.pow(2, App.current_pitch_step / 12)
-  let new_rate = Math.max(0.25, Math.min(4.0, pitch_multi))
-  video.playbackRate = new_rate
+  if (video) {
+    App.set_video_preserve_pitch(false)
+    App.increase_playback()
+  }
 }
 
 App.video_pitch_down = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
-    App.setup_audio_context(video)
-    App.current_pitch_step = Math.max(-12, App.current_pitch_step - App.pitch_step_size)
-    App.apply_pitch(video)
-  }
-}
-
-App.video_pitch_up = () => {
-  let video = DOM.el(`#video`)
-
-  if (video) {
-    App.setup_audio_context(video)
-    App.current_pitch_step = Math.min(12, App.current_pitch_step + App.pitch_step_size)
-    App.apply_pitch(video)
+    App.set_video_preserve_pitch(false)
+    App.decrease_playback()
   }
 }
 
 App.video_pitch_reset = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     App.set_video_preserve_pitch(true)
@@ -205,7 +210,7 @@ App.video_pitch_reset = () => {
 }
 
 App.set_video_preserve_pitch = (value) => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     try {
@@ -412,7 +417,7 @@ App.set_reverb_mix = (mix) => {
 }
 
 App.video_reverb_on = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     if (!App.setup_audio_context(video)) {
@@ -427,7 +432,7 @@ App.video_reverb_on = () => {
 }
 
 App.video_reverb_off = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     if (App.reverb_node) {
@@ -476,7 +481,7 @@ App.video_bass_boost_toggle = () => {
 }
 
 App.video_bass_boost_on = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     if (!App.setup_audio_context(video)) {
@@ -491,7 +496,7 @@ App.video_bass_boost_on = () => {
 }
 
 App.video_bass_boost_off = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     if (App.bass_boost_node) {

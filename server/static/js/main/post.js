@@ -1265,7 +1265,7 @@ App.start_embed = () => {
     })
   }
 
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (video) {
     DOM.ev(video, `wheel`, (e) => {
@@ -1525,7 +1525,7 @@ App.change_media_size = (what, size) => {
     return
   }
 
-  let el = DOM.el(`#image`) || DOM.el(`#video`)
+  let el = DOM.el(`#image`) || App.get_video()
 
   if (!el) {
     return
@@ -1697,7 +1697,7 @@ App.toggle_play = () => {
 }
 
 App.setup_video = () => {
-  let video = DOM.el(`#video`)
+  let video = App.get_video()
 
   if (!video) {
     return
@@ -1863,4 +1863,8 @@ App.list_zip = async () => {
 
 App.show_zip_file_menu = () => {
   App.setup_zip_file_opts(true)
+}
+
+App.get_video = () => {
+  return DOM.el(`#video`)
 }
