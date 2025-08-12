@@ -90,3 +90,7 @@ App.video_fade_out = () => {
     }, App.fade_delay)
   }
 }
+
+App.show_video_commands = () => {
+  App.setup_video_commands_opts(true)
+}

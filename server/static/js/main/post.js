@@ -212,7 +212,7 @@ App.init = () => {
 
   if (cmd) {
     DOM.ev(cmd, `click`, () => {
-      App.setup_video_commands_opts(true)
+      App.show_video_commands()
     })
   }
 

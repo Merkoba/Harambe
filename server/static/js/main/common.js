@@ -123,6 +123,11 @@ App.setup_keyboard = () => {
         App.fresh_post()
       }
     }
+    else if (e.key === `.`) {
+      if (e.ctrlKey && !e.shiftKey) {
+        App.show_video_commands()
+      }
+    }
   })
 }
 
