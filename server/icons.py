@@ -130,6 +130,12 @@ def fill_icons(config: Config) -> None:
     # Icon for fade out
     config.icons["fade_out"] = "🌇"
 
+    # Icon for read
+    config.icons["read"] = "📖"
+
+    # Icon for download
+    config.icons["download"] = "📥"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages

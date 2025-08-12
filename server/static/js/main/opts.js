@@ -896,3 +896,25 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
     })
   }, show, parent)
 }
+
+App.setup_zip_file_opts = (show = false, parent = ``) => {
+  let name = `zip_file`
+
+  App.make_opts(name, () => {
+    App.bind_button({
+      what: `${name}_opts_list`,
+      func: () => {
+        App.list_zip()
+      },
+      icon: App.icon(`read`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_download`,
+      func: () => {
+        App.download_file(false, true)
+      },
+      icon: App.icon(`download`),
+    })
+  }, show, parent)
+}

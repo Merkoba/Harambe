@@ -425,3 +425,13 @@ select.settings_widget {
 .pointer {
     cursor: pointer;
 }
+
+#msgbox {
+    white-space: pre-wrap;
+    max-height: 80vh;
+    max-width: 60vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    word-break: break-word;
+}

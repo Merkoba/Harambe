@@ -116,6 +116,7 @@ export default [
         Confirmbox: "readonly",
         Tooltip: "readonly",
         ace: "readonly",
+        zip: "readonly",
       }
     }
   }

@@ -185,7 +185,12 @@ App.init = () => {
 
   if (file_btn) {
     DOM.ev(file_btn, `click`, () => {
-      App.download_file()
+      if (App.post.zip_embed) {
+        App.show_zip_file_menu()
+      }
+      else {
+        App.download_file()
+      }
     })
 
     DOM.ev(file_btn, `auxclick`, (e) => {
@@ -1717,14 +1722,26 @@ App.reset_max = () => {
   }
 }
 
-App.download_file = (new_tab = false) => {
+App.get_file_path = () => {
   let file_btn = DOM.el(`#file_button`)
+  return file_btn.dataset.href
+}
+
+App.download_file = (new_tab = false, force = false) => {
+  function action() {
+    let url = App.get_file_path()
+    App.goto_url(url, new_tab)
+  }
+
+  if (force) {
+    action()
+    return
+  }
 
   let confirm_args = {
     message: `Download file`,
     callback_yes: () => {
-      let url = file_btn.dataset.href
-      App.goto_url(url, new_tab)
+      action()
     },
   }
 
@@ -1761,4 +1778,28 @@ App.create_title_debouncer = () => {
 
 App.get_title = () => {
   return App.post.title || App.post.original
+}
+
+App.list_zip = async () => {
+  let url = App.get_file_path()
+  let response = await fetch(url)
+  let blob = await response.blob()
+
+  zip.configure({
+    useWebWorkers: false,
+  })
+
+  let reader = new zip.BlobReader(blob)
+  let zip_file = new zip.ZipReader(reader)
+  let entries = await zip_file.getEntries()
+  let file_names = entries.map(entry => entry.filename)
+  await zip_file.close()
+
+  if (file_names.length) {
+    App.msgbox(file_names.join(`\n`))
+  }
+}
+
+App.show_zip_file_menu = () => {
+  App.setup_zip_file_opts(true)
 }

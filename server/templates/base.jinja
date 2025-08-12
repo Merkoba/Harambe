@@ -7,6 +7,7 @@
         <script src="/static/js/libs/dom.js"></script>
         <script src="/static/js/libs/msg.js"></script>
         <script src="/static/js/libs/dateformat.js"></script>
+        <script src="/static/js/libs/zip.min.js"></script>
 
         <script>
             const App = {}
@@ -437,6 +438,19 @@
                     <div id="video_commands_opts_fade_out" class="aero_button" title="Fade out the video">Fade Out</div>
                 </div>
             </div>
+        </template>
+
+        <template id="template_zip_file_opts">
+            <div class="dialog_container">
+                <div class="dialog_col">
+                    <div id="zip_file_opts_list" class="aero_button" title="List the contents of the archive">List</div>
+                    <div id="zip_file_opts_download" class="aero_button" title="Download the file">Download</div>
+                </div>
+            </div>
+        </template>
+
+        <template id="template_msgbox">
+            <div id="msgbox"></div>
         </template>
 
         {% block body %}{% endblock %}

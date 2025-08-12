@@ -755,9 +755,12 @@ App.to_bottom = () => {
 App.msgbox = (text) => {
   if (!App.msg_info) {
     App.msg_info = Msg.factory()
+    let t = DOM.el(`#template_msgbox`)
+    App.msg_info.set(t.innerHTML)
   }
 
-  App.msg_info.show(text)
+  DOM.el(`#msgbox`).textContent = text
+  App.msg_info.show()
 }
 
 App.flash = (text) => {
