@@ -1844,7 +1844,7 @@ App.list_zip = async () => {
   }
   finally {
     if (zip_file) {
-      try { await zip_file.close() } catch {}
+      await zip_file.close()
     }
   }
 }
