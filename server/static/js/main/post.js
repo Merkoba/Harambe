@@ -1782,48 +1782,70 @@ App.get_title = () => {
 
 App.list_zip = async () => {
   let url = App.get_file_path()
-  let response = await fetch(url)
-  let blob = await response.blob()
 
   zip.configure({
     useWebWorkers: false,
   })
 
-  let reader = new zip.BlobReader(blob)
-  let zip_file = new zip.ZipReader(reader)
-  let entries = await zip_file.getEntries()
+  let zip_file
 
-  let file_list = entries.map(entry => {
-    let size_str = ``
+  try {
+    let reader
 
-    if (entry.directory) {
-      size_str = `(Dir)`
+    if (zip.HttpReader) {
+      reader = new zip.HttpReader(url, {
+        useRangeHeader: true,
+      })
     }
     else {
-      let size = entry.uncompressedSize
-
-      if (size >= 1073741824) { // 1GB
-        size_str = `(${(size / 1073741824).toFixed(1)}gb)`
-      }
-      else if (size >= 1048576) { // 1MB
-        size_str = `(${(size / 1048576).toFixed(1)}mb)`
-      }
-      else if (size >= 1024) { // 1KB
-        size_str = `(${(size / 1024).toFixed(1)}kb)`
-      }
-      else {
-        size_str = `(${size}b)`
-      }
+      let response = await fetch(url)
+      let blob = await response.blob()
+      reader = new zip.BlobReader(blob)
     }
 
-    return `${entry.filename} ${size_str}`
-  })
+    zip_file = new zip.ZipReader(reader)
+    let entries = await zip_file.getEntries()
 
-  file_list.sort()
-  await zip_file.close()
+    let file_list = entries.map(entry => {
+      let size_str = ``
 
-  if (file_list.length) {
-    App.msgbox(file_list.join(`\n`))
+      if (entry.directory) {
+        size_str = `(Dir)`
+      }
+      else {
+        let size = entry.uncompressedSize
+
+        if (size >= 1073741824) { // 1GB
+          size_str = `(${(size / 1073741824).toFixed(1)}gb)`
+        }
+        else if (size >= 1048576) { // 1MB
+          size_str = `(${(size / 1048576).toFixed(1)}mb)`
+        }
+        else if (size >= 1024) { // 1KB
+          size_str = `(${(size / 1024).toFixed(1)}kb)`
+        }
+        else {
+          size_str = `(${size}b)`
+        }
+      }
+
+      return `${entry.filename} ${size_str}`
+    })
+
+    file_list.sort()
+
+    if (file_list.length) {
+      App.msgbox(file_list.join(`\n`))
+    }
+  }
+  catch (err) {
+    App.print_error(err)
+    App.popmsg(`Couldn't list ZIP contents`)
+  }
+  finally {
+    if (zip_file) {
+      try { await zip_file.close() } catch {}
+    }
   }
 }
 
