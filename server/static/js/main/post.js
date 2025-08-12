@@ -1792,11 +1792,32 @@ App.list_zip = async () => {
   let reader = new zip.BlobReader(blob)
   let zip_file = new zip.ZipReader(reader)
   let entries = await zip_file.getEntries()
-  let file_names = entries.map(entry => entry.filename)
+
+  let file_list = entries.map(entry => {
+    let size = entry.uncompressedSize
+    let size_str = ``
+
+    if (size >= 1073741824) { // 1GB
+      size_str = `(${(size / 1073741824).toFixed(1)}gb)`
+    }
+    else if (size >= 1048576) { // 1MB
+      size_str = `(${(size / 1048576).toFixed(1)}mb)`
+    }
+    else if (size >= 1024) { // 1KB
+      size_str = `(${(size / 1024).toFixed(1)}kb)`
+    }
+    else {
+      size_str = `(${size}b)`
+    }
+
+    return `${entry.filename} ${size_str}`
+  })
+
+  file_list.sort()
   await zip_file.close()
 
-  if (file_names.length) {
-    App.msgbox(file_names.join(`\n`))
+  if (file_list.length) {
+    App.msgbox(file_list.join(`\n`))
   }
 }
 
