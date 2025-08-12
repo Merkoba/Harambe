@@ -6,6 +6,9 @@ App.HOUR = App.MINUTE * 60
 App.DAY = App.HOUR * 24
 App.MONTH = App.DAY * 30
 App.YEAR = App.DAY * 365
+App.DECADE = App.YEAR * 10
+App.CENTURY = App.YEAR * 100
+App.MILLENNIUM = App.YEAR * 1000
 
 App.startup = () => {
   App.get_storage()
@@ -727,14 +730,52 @@ App.timeago = (date) => {
   else if (diff >= App.YEAR) {
     let n = parseFloat(diff / App.YEAR).toFixed(places)
 
-    if (n === 1) {
-      result = `${n} year ago`
+    if (n < 10) {
+      if (n === 1) {
+        result = `${n} year ago`
+      }
+      else {
+        result = `${n} years ago`
+      }
+
+      level = 6
+    }
+    else if (diff < App.CENTURY) {
+      n = parseFloat(diff / App.DECADE).toFixed(places)
+
+      if (n === 1) {
+        result = `${n} decade ago`
+      }
+      else {
+        result = `${n} decades ago`
+      }
+
+      level = 7
+    }
+    else if (diff < App.MILLENNIUM) {
+      n = parseFloat(diff / App.CENTURY).toFixed(places)
+
+      if (n === 1) {
+        result = `${n} century ago`
+      }
+      else {
+        result = `${n} centuries ago`
+      }
+
+      level = 8
     }
     else {
-      result = `${n} years ago`
-    }
+      n = parseFloat(diff / App.MILLENNIUM).toFixed(places)
 
-    level = 6
+      if (n === 1) {
+        result = `${n} millennium ago`
+      }
+      else {
+        result = `${n} millennia ago`
+      }
+
+      level = 9
+    }
   }
 
   return [result, level]
