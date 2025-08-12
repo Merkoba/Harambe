@@ -942,6 +942,7 @@ App.setup_video_speed_opts = (show = false, parent = ``) => {
       func: () => {
         App.video_speed_reset()
       },
+      close: false,
       icon: App.icon(`reset`),
     })
   }, show, parent)
@@ -974,6 +975,7 @@ App.setup_video_pitch_opts = (show = false, parent = ``) => {
       func: () => {
         App.video_pitch_reset()
       },
+      close: false,
       icon: App.icon(`reset`),
     })
   }, show, parent)
