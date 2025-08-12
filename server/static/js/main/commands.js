@@ -1,3 +1,5 @@
+App.fade_delay = 100
+
 App.video_jump = () => {
   let video = DOM.el(`#video`)
 
@@ -58,12 +60,12 @@ App.video_fade_in = () => {
 
     let fadeIn = setInterval(() => {
       if (video.volume < 1) {
-        video.volume = Math.min(1, video.volume + 0.1)
+        video.volume = Math.min(1, video.volume + 0.02)
       }
       else {
         clearInterval(fadeIn)
       }
-    }, 300)
+    }, App.fade_delay)
   }
 }
 
@@ -75,12 +77,12 @@ App.video_fade_out = () => {
 
     let fadeOut = setInterval(() => {
       if (video.volume > 0) {
-        video.volume = Math.max(0, video.volume - 0.1)
+        video.volume = Math.max(0, video.volume - 0.02)
       }
       else {
         clearInterval(fadeOut)
         video.pause()
       }
-    }, 300)
+    }, App.fade_delay)
   }
 }
