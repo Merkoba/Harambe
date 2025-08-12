@@ -902,21 +902,21 @@ App.setup_video_speed_opts = (show = false, parent = ``) => {
 
   App.make_opts(name, () => {
     App.bind_button({
-      what: `${name}_opts_slower`,
-      func: () => {
-        App.video_slower()
-      },
-      close: false,
-      icon: App.icon(`slow`),
-    })
-
-    App.bind_button({
       what: `${name}_opts_faster`,
       func: () => {
         App.video_faster()
       },
       close: false,
       icon: App.icon(`fast`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_slower`,
+      func: () => {
+        App.video_slower()
+      },
+      close: false,
+      icon: App.icon(`slow`),
     })
 
     App.bind_button({

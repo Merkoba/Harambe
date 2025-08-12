@@ -1715,10 +1715,8 @@ App.setup_video = () => {
     App.set_play_text(`Play`)
   })
 
-  // Initialize audio context for pitch control when video loads
   DOM.ev(video, `loadeddata`, () => {
-    // Reset pitch when new video loads
-    if (typeof App.current_pitch_step !== 'undefined') {
+    if (typeof App.current_pitch_step !== `undefined`) {
       App.current_pitch_step = 0
     }
   })

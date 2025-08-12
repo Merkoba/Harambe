@@ -117,16 +117,15 @@ App.setup_audio_context = (video) => {
       App.audio_context = new (window.AudioContext || window.webkitAudioContext)()
     }
     catch (e) {
-      console.error('Web Audio API not supported:', e)
       return false
     }
   }
 
-  if (App.audio_context.state === 'suspended') {
+  if (App.audio_context.state === `suspended`) {
     App.audio_context.resume()
   }
 
-  if (!App.pitch_node || video.audioSource !== App.current_audio_source) {
+  if (!App.pitch_node || (video.audioSource !== App.current_audio_source)) {
     try {
       if (App.current_audio_source) {
         App.current_audio_source.disconnect()
@@ -140,12 +139,10 @@ App.setup_audio_context = (video) => {
       video.audioSource = source
     }
     catch (e) {
-      if (e.name === 'InvalidStateError') {
-        console.warn('Audio source already connected, using existing setup')
+      if (e.name === `InvalidStateError`) {
         return true
       }
 
-      console.error('Audio context setup error:', e)
       return false
     }
   }
@@ -172,7 +169,7 @@ App.apply_pitch = (video) => {
     }
   }
   catch (e) {
-    console.warn('Could not set preservesPitch flag:', e)
+    App.print_error(`Could not set preservesPitch flag:`, e)
   }
 
   let pitch_multi = Math.pow(2, App.current_pitch_step / 12)
