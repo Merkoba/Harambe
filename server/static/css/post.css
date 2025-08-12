@@ -426,3 +426,9 @@ a.link:hover,
 #description_container {
     width: 100%;
 }
+
+.zip_item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

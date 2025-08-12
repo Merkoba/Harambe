@@ -752,14 +752,23 @@ App.to_bottom = () => {
   window.scrollTo(0, document.body.scrollHeight)
 }
 
-App.msgbox = (text) => {
+App.msgbox = (value, mode = `text`) => {
   if (!App.msg_info) {
     App.msg_info = Msg.factory()
     let t = DOM.el(`#template_msgbox`)
     App.msg_info.set(t.innerHTML)
   }
 
-  DOM.el(`#msgbox`).textContent = text
+  let c = DOM.el(`#msgbox`)
+
+  if (mode === `text`) {
+    c.textContent = value
+  }
+  else if (mode === `html`) {
+    c.innerHTML = ``
+    c.append(value)
+  }
+
   App.msg_info.show()
 }
 

@@ -1829,14 +1829,20 @@ App.list_zip = async () => {
         }
       }
 
-      return `${entry.filename} ${size_str}`
+      let div = DOM.create(`div`)
+      div.classList.add(`zip_item`)
+      div.textContent = `${entry.filename} ${size_str}`
+      return div
     })
 
-    file_list.sort()
+    file_list.sort((a, b) => a.textContent.localeCompare(b.textContent))
+    let container = DOM.create(`div`)
 
-    if (file_list.length) {
-      App.msgbox(file_list.join(`\n`))
+    for (let item of file_list) {
+      container.append(item)
     }
+
+    App.msgbox(container, `html`)
   }
   catch (err) {
     App.print_error(err)
