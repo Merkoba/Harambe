@@ -151,6 +151,12 @@ def fill_icons(config: Config) -> None:
     # Icon for reset
     config.icons["reset"] = "🔄"
 
+    # Icon for reverb
+    config.icons["reverb"] = "🌊"
+
+    # Icon for enabled
+    config.icons["enabled"] = "✅"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages

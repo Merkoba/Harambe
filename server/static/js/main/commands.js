@@ -1,6 +1,8 @@
 App.fade_delay = 100
 App.audio_context = null
 App.pitch_node = null
+App.reverb_node = null
+App.reverb_enabled = false
 App.current_pitch_step = 0
 App.pitch_step_size = 1
 App.current_audio_source = null
@@ -53,7 +55,6 @@ App.video_slower = () => {
 
   if (video) {
     video.playbackRate = Math.max(0.1, video.playbackRate - 0.1)
-    video.play()
   }
 }
 
@@ -62,7 +63,6 @@ App.video_faster = () => {
 
   if (video) {
     video.playbackRate = Math.min(10, video.playbackRate + 0.1)
-    video.play()
   }
 }
 
@@ -71,7 +71,6 @@ App.video_speed_reset = () => {
 
   if (video) {
     video.playbackRate = 1.0
-    video.play()
   }
 }
 
@@ -134,8 +133,16 @@ App.setup_audio_context = (video) => {
       let source = App.audio_context.createMediaElementSource(video)
       App.current_audio_source = source
       App.pitch_node = App.audio_context.createGain()
+
+      // Create reverb node if not exists
+      if (!App.reverb_node) {
+        App.create_reverb_node()
+      }
+
+      // Connect audio chain: source -> pitch -> reverb -> destination
       source.connect(App.pitch_node)
-      App.pitch_node.connect(App.audio_context.destination)
+      App.pitch_node.connect(App.reverb_node.input)
+      App.reverb_node.output.connect(App.audio_context.destination)
       video.audioSource = source
     }
     catch (e) {
@@ -168,10 +175,6 @@ App.video_pitch_down = () => {
     App.setup_audio_context(video)
     App.current_pitch_step = Math.max(-12, App.current_pitch_step - App.pitch_step_size)
     App.apply_pitch(video)
-
-    if (video.paused) {
-      video.play()
-    }
   }
 }
 
@@ -182,10 +185,6 @@ App.video_pitch_up = () => {
     App.setup_audio_context(video)
     App.current_pitch_step = Math.min(12, App.current_pitch_step + App.pitch_step_size)
     App.apply_pitch(video)
-
-    if (video.paused) {
-      video.play()
-    }
   }
 }
 
@@ -196,7 +195,6 @@ App.video_pitch_reset = () => {
     App.set_video_preserve_pitch(true)
     App.current_pitch_step = 0
     video.playbackRate = 1.0
-    video.play()
   }
 }
 
@@ -219,6 +217,113 @@ App.set_video_preserve_pitch = (value) => {
     }
     catch (e) {
       App.print_error(`Could not set pitch flag:`, e)
+    }
+  }
+}
+
+App.create_reverb_node = () => {
+  if (!App.audio_context) {
+    return
+  }
+
+  try {
+    let convolver = App.audio_context.createConvolver()
+    let dry_gain = App.audio_context.createGain()
+    let wet_gain = App.audio_context.createGain()
+    let output_gain = App.audio_context.createGain()
+
+    App.create_impulse_response(convolver)
+
+    dry_gain.gain.value = 0.8
+    wet_gain.gain.value = 0.0
+    output_gain.gain.value = 1.0
+
+    App.reverb_node = {
+      input: App.audio_context.createGain(),
+      convolver: convolver,
+      dry: dry_gain,
+      wet: wet_gain,
+      output: output_gain,
+    }
+
+    App.reverb_node.input.connect(App.reverb_node.dry)
+    App.reverb_node.input.connect(App.reverb_node.convolver)
+    App.reverb_node.convolver.connect(App.reverb_node.wet)
+    App.reverb_node.dry.connect(App.reverb_node.output)
+    App.reverb_node.wet.connect(App.reverb_node.output)
+  }
+  catch (e) {
+    App.print_error(`Could not create reverb node:`, e)
+  }
+}
+
+App.create_impulse_response = (convolver) => {
+  try {
+    let sample_rate = App.audio_context.sampleRate
+    let length = sample_rate * 2
+    let impulse = App.audio_context.createBuffer(2, length, sample_rate)
+
+    for (let channel = 0; channel < 2; channel++) {
+      let channel_data = impulse.getChannelData(channel)
+
+      for (let i = 0; i < length; i++) {
+        let decay = Math.pow(1 - i / length, 2)
+        let noise = (Math.random() * 2 - 1) * decay * 0.5
+        channel_data[i] = noise
+      }
+    }
+
+    convolver.buffer = impulse
+  }
+  catch (e) {
+    App.print_error(`Could not create impulse response:`, e)
+  }
+}
+
+App.video_reverb_on = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    if (!App.setup_audio_context(video)) {
+      return
+    }
+
+    if (App.reverb_node) {
+      App.reverb_enabled = true
+      App.reverb_node.wet.gain.setValueAtTime(0.4, App.audio_context.currentTime)
+      App.reverb_node.dry.gain.setValueAtTime(0.6, App.audio_context.currentTime)
+    }
+  }
+}
+
+App.video_reverb_off = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    if (App.reverb_node) {
+      App.reverb_enabled = false
+      App.reverb_node.wet.gain.setValueAtTime(0.0, App.audio_context.currentTime)
+      App.reverb_node.dry.gain.setValueAtTime(0.8, App.audio_context.currentTime)
+    }
+  }
+}
+
+App.video_reverb_toggle = () => {
+  let item = DOM.el(`#video_commands_opts_reverb`)
+
+  if (App.reverb_enabled) {
+    App.video_reverb_off()
+
+    if (item) {
+      item.classList.remove(`button_highlight`)
+    }
+  }
+  else {
+    App.video_reverb_on()
+    let icon = App.icon(`enabled`)
+
+    if (item) {
+      item.classList.add(`button_highlight`)
     }
   }
 }

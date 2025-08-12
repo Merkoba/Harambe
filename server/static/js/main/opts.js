@@ -880,6 +880,15 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
     })
 
     App.bind_button({
+      what: `${name}_opts_reverb`,
+      func: () => {
+        App.video_reverb_toggle()
+      },
+      close: false,
+      icon: App.icon(`reverb`),
+    })
+
+    App.bind_button({
       what: `${name}_opts_fade_in`,
       func: () => {
         App.video_fade_in()
