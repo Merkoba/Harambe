@@ -208,6 +208,14 @@ App.init = () => {
     })
   }
 
+  let cmd = DOM.el(`#cmd`)
+
+  if (cmd) {
+    DOM.ev(cmd, `click`, () => {
+      App.setup_video_commands_opts(true)
+    })
+  }
+
   App.setup_reactions()
   App.keyboard_events()
   App.format_description()
