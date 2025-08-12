@@ -1794,20 +1794,26 @@ App.list_zip = async () => {
   let entries = await zip_file.getEntries()
 
   let file_list = entries.map(entry => {
-    let size = entry.uncompressedSize
     let size_str = ``
 
-    if (size >= 1073741824) { // 1GB
-      size_str = `(${(size / 1073741824).toFixed(1)}gb)`
-    }
-    else if (size >= 1048576) { // 1MB
-      size_str = `(${(size / 1048576).toFixed(1)}mb)`
-    }
-    else if (size >= 1024) { // 1KB
-      size_str = `(${(size / 1024).toFixed(1)}kb)`
+    if (entry.directory) {
+      size_str = `(Dir)`
     }
     else {
-      size_str = `(${size}b)`
+      let size = entry.uncompressedSize
+
+      if (size >= 1073741824) { // 1GB
+        size_str = `(${(size / 1073741824).toFixed(1)}gb)`
+      }
+      else if (size >= 1048576) { // 1MB
+        size_str = `(${(size / 1048576).toFixed(1)}mb)`
+      }
+      else if (size >= 1024) { // 1KB
+        size_str = `(${(size / 1024).toFixed(1)}kb)`
+      }
+      else {
+        size_str = `(${size}b)`
+      }
     }
 
     return `${entry.filename} ${size_str}`
