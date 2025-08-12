@@ -444,40 +444,24 @@ App.video_reverb_off = () => {
 }
 
 App.video_reverb_toggle = () => {
-  let item = DOM.el(`#video_commands_opts_reverb`)
-
   if (App.reverb_enabled) {
     App.video_reverb_off()
-
-    if (item) {
-      item.classList.remove(`button_highlight`)
-    }
+    App.button_highlight(`video_commands_opts_reverb`, false)
   }
   else {
     App.video_reverb_on()
-
-    if (item) {
-      item.classList.add(`button_highlight`)
-    }
+    App.button_highlight(`video_commands_opts_reverb`)
   }
 }
 
 App.video_bass_boost_toggle = () => {
-  let item = DOM.el(`#video_commands_opts_bass_boost`)
-
   if (App.bass_boost_enabled) {
     App.video_bass_boost_off()
-
-    if (item) {
-      item.classList.remove(`button_highlight`)
-    }
+    App.button_highlight(`video_commands_opts_bass_boost`, false)
   }
   else {
     App.video_bass_boost_on()
-
-    if (item) {
-      item.classList.add(`button_highlight`)
-    }
+    App.button_highlight(`video_commands_opts_bass_boost`)
   }
 }
 

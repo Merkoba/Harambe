@@ -1345,3 +1345,16 @@ App.clamp = (value, max, min) => {
 App.cleanlist = (cls) => {
   return cls.match(/\S+/g) || []
 }
+
+App.button_highlight = (what, add = true) => {
+  let item = DOM.el(`#${what}`)
+
+  if (item) {
+    if (add) {
+      item.classList.add(`button_highlight`)
+    }
+    else {
+      item.classList.remove(`button_highlight`)
+    }
+  }
+}
