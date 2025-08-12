@@ -148,6 +148,9 @@ def fill_icons(config: Config) -> None:
     # Icon for down
     config.icons["down"] = "⬇️"
 
+    # Icon for reset
+    config.icons["reset"] = "🔄"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages

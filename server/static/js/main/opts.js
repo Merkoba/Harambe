@@ -919,6 +919,13 @@ App.setup_video_speed_opts = (show = false, parent = ``) => {
       icon: App.icon(`fast`),
     })
 
+    App.bind_button({
+      what: `${name}_opts_reset`,
+      func: () => {
+        App.video_speed_reset()
+      },
+      icon: App.icon(`reset`),
+    })
   }, show, parent)
 }
 
@@ -944,6 +951,13 @@ App.setup_video_pitch_opts = (show = false, parent = ``) => {
       icon: App.icon(`down`),
     })
 
+    App.bind_button({
+      what: `${name}_opts_reset`,
+      func: () => {
+        App.video_pitch_reset()
+      },
+      icon: App.icon(`reset`),
+    })
   }, show, parent)
 }
 

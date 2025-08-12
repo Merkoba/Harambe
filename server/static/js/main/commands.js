@@ -66,6 +66,15 @@ App.video_faster = () => {
   }
 }
 
+App.video_speed_reset = () => {
+  let video = DOM.el(`#video`)
+
+  if (video) {
+    video.playbackRate = 1.0
+    video.play()
+  }
+}
+
 App.video_fade_in = () => {
   let video = DOM.el(`#video`)
 
