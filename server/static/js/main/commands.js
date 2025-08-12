@@ -244,7 +244,7 @@ App.create_reverb_node = () => {
     pre_delay.delayTime.value = 0.03 // 30ms
 
     let lowpass = ac.createBiquadFilter()
-    lowpass.type = 'lowpass'
+    lowpass.type = `lowpass`
     lowpass.frequency.value = 6500
     lowpass.Q.value = 0.7
 
@@ -265,13 +265,13 @@ App.create_reverb_node = () => {
 
     App.reverb_node = {
       input: ac.createGain(),
-      convolver: convolver,
-      pre_delay: pre_delay,
-      lowpass: lowpass,
+      convolver,
+      pre_delay,
+      lowpass,
       dry: dry_gain,
       wet: wet_gain,
       mix: mix_gain,
-      comp: comp,
+      comp,
       output: output_gain,
     }
 
@@ -313,7 +313,8 @@ App.create_impulse_response = (convolver) => {
 
           for (let k = -8; k <= 8; k++) {
             let p = idx + k
-            if (p >= 0 && p < length) {
+
+            if ((p >= 0) && (p < length)) {
               let window = 1 - Math.abs(k) / 8
               data[p] += gain * window * 0.04
             }
@@ -354,13 +355,13 @@ App.create_bass_boost_node = () => {
     let output_gain = ac.createGain()
 
     let bass_filter = ac.createBiquadFilter()
-    bass_filter.type = 'lowshelf'
+    bass_filter.type = `lowshelf`
     bass_filter.frequency.value = 320
     bass_filter.gain.value = 0
     bass_filter.Q.value = 1.0
 
     let highpass = ac.createBiquadFilter()
-    highpass.type = 'highpass'
+    highpass.type = `highpass`
     highpass.frequency.value = 40
     highpass.Q.value = 0.7
 
@@ -369,8 +370,8 @@ App.create_bass_boost_node = () => {
 
     App.bass_boost_node = {
       input: input_gain,
-      bass_filter: bass_filter,
-      highpass: highpass,
+      bass_filter,
+      highpass,
       output: output_gain,
     }
 
