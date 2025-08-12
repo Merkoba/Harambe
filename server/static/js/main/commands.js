@@ -155,23 +155,7 @@ App.apply_pitch = (video) => {
     return
   }
 
-  try {
-    if (`preservesPitch` in video) {
-      video.preservesPitch = false
-    }
-
-    if (`mozPreservesPitch` in video) {
-      video.mozPreservesPitch = false
-    }
-
-    if (`webkitPreservesPitch` in video) {
-      video.webkitPreservesPitch = false
-    }
-  }
-  catch (e) {
-    App.print_error(`Could not set preservesPitch flag:`, e)
-  }
-
+  App.set_video_preserve_pitch(false)
   let pitch_multi = Math.pow(2, App.current_pitch_step / 12)
   let new_rate = Math.max(0.25, Math.min(4.0, pitch_multi))
   video.playbackRate = new_rate
@@ -209,7 +193,28 @@ App.video_pitch_reset = () => {
   let video = DOM.el(`#video`)
 
   if (video) {
+    App.set_video_preserve_pitch(true)
     App.current_pitch_step = 0
-    App.apply_pitch(video)
+    video.playbackRate = 1.0
+    video.play()
+  }
+}
+
+App.set_video_preserve_pitch = (value) => {
+  try {
+    if (`preservesPitch` in video) {
+      video.preservesPitch = value
+    }
+
+    if (`mozPreservesPitch` in video) {
+      video.mozPreservesPitch = value
+    }
+
+    if (`webkitPreservesPitch` in video) {
+      video.webkitPreservesPitch = value
+    }
+  }
+  catch (e) {
+    App.print_error(`Could not set preservesPitch flag:`, e)
   }
 }
