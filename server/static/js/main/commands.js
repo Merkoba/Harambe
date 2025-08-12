@@ -92,5 +92,7 @@ App.video_fade_out = () => {
 }
 
 App.show_video_commands = () => {
-  App.setup_video_commands_opts(true)
+  if ((App.mode === `post`) && DOM.el(`#video`)) {
+    App.setup_video_commands_opts(true)
+  }
 }
