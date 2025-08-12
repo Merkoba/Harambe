@@ -201,20 +201,24 @@ App.video_pitch_reset = () => {
 }
 
 App.set_video_preserve_pitch = (value) => {
-  try {
-    if (`preservesPitch` in video) {
-      video.preservesPitch = value
-    }
+  let video = DOM.el(`#video`)
 
-    if (`mozPreservesPitch` in video) {
-      video.mozPreservesPitch = value
-    }
+  if (video) {
+    try {
+      if (`preservesPitch` in video) {
+        video.preservesPitch = value
+      }
 
-    if (`webkitPreservesPitch` in video) {
-      video.webkitPreservesPitch = value
+      if (`mozPreservesPitch` in video) {
+        video.mozPreservesPitch = value
+      }
+
+      if (`webkitPreservesPitch` in video) {
+        video.webkitPreservesPitch = value
+      }
     }
-  }
-  catch (e) {
-    App.print_error(`Could not set preservesPitch flag:`, e)
+    catch (e) {
+      App.print_error(`Could not set pitch flag:`, e)
+    }
   }
 }
