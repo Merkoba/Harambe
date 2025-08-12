@@ -1736,6 +1736,8 @@ App.collapse_title = () => {
 }
 
 App.create_title_debouncer = () => {
+  let title = DOM.el(`#title`)
+
   App.title_debouncer = App.create_debouncer(() => {
     App.collapse_title()
   }, App.SECOND)

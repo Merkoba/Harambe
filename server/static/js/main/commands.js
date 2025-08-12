@@ -16,11 +16,15 @@ App.video_jump = () => {
 
 App.video_jump_action = () => {
   App.video_jump_enabled = false
-  let duration = video.duration
+  let video = DOM.el(`#video`)
 
-  if (duration > 0) {
-    let random_time = Math.random() * duration
-    video.currentTime = random_time
+  if (video) {
+    let duration = video.duration
+
+    if (duration > 0) {
+      let random_time = Math.random() * duration
+      video.currentTime = random_time
+    }
   }
 }
 
@@ -28,7 +32,7 @@ App.video_rewind = () => {
   let video = DOM.el(`#video`)
 
   if (video) {
-    video.currentTime = Math.max(0, video.currentTime - 10)
+    video.currentTime = 0
     video.play()
   }
 }
