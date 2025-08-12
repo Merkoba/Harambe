@@ -864,7 +864,7 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
     })
 
     App.bind_button({
-      what: `${name}_opts_slow`,
+      what: `${name}_opts_slower`,
       func: () => {
         App.video_slow()
       },
@@ -872,7 +872,7 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
     })
 
     App.bind_button({
-      what: `${name}_opts_fast`,
+      what: `${name}_opts_faster`,
       func: () => {
         App.video_fast()
       },
