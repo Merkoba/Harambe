@@ -31,7 +31,7 @@ App.show_settings = () => {
     select.value = App.get_cookie(`theme`) || App.theme
 
     DOM.ev(select, `change`, () => {
-      App.set_cookie(`theme`, select.value)
+      App.set_theme(select.value)
     })
 
     App.cycle_select(`theme`)
@@ -158,7 +158,11 @@ App.cycle_select = (name) => {
     }
 
     select.value = cycles[index]
-    App.set_cookie(`theme`, select.value)
+    App.set_theme(select.value)
     e.preventDefault()
   })
+}
+
+App.set_theme = (value) => {
+  App.set_cookie(`theme`, value)
 }
