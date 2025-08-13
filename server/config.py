@@ -447,6 +447,9 @@ class Config:
         # Mark for private posts
         self.private_posts_mark = "priv"
 
+        # Default title for posts
+        self.default_title = "Untitled"
+
         # Don't consider these types of files for image magic
         self.magic_image_ignore: list[str] = [
             "jpeg",

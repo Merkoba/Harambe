@@ -214,6 +214,10 @@ def upload(request: Any, user: User, mode: str = "normal") -> tuple[bool, str]:
         return error(u_msg)
 
     title = request.form.get("title", "")
+
+    if not title:
+        title = config.default_title
+
     files: list[FileStorage] = []
     seen_files: set[str] = set()
     presample: bytes | None = None
