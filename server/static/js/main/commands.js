@@ -427,6 +427,7 @@ App.video_reverb_on = () => {
     }
 
     if (App.reverb_node) {
+      App.button_highlight(`video_commands_opts_reverb`)
       App.reverb_enabled = true
       App.set_reverb_mix(0.55)
     }
@@ -438,6 +439,7 @@ App.video_reverb_off = () => {
 
   if (video) {
     if (App.reverb_node) {
+      App.button_highlight(`video_commands_opts_reverb`, false)
       App.reverb_enabled = false
       App.set_reverb_mix(0.0)
     }
@@ -447,22 +449,20 @@ App.video_reverb_off = () => {
 App.video_reverb_toggle = () => {
   if (App.reverb_enabled) {
     App.video_reverb_off()
-    App.button_highlight(`video_commands_opts_reverb`, false)
   }
   else {
     App.video_reverb_on()
-    App.button_highlight(`video_commands_opts_reverb`)
   }
 }
 
 App.video_bass_boost_toggle = () => {
+  App.video_bass_cut_off()
+
   if (App.bass_boost_enabled) {
     App.video_bass_boost_off()
-    App.button_highlight(`video_commands_opts_bass_boost`, false)
   }
   else {
     App.video_bass_boost_on()
-    App.button_highlight(`video_commands_opts_bass_boost`)
   }
 }
 
@@ -475,6 +475,7 @@ App.video_bass_boost_on = () => {
     }
 
     if (App.bass_boost_node) {
+      App.button_highlight(`video_commands_opts_bass_boost`)
       App.bass_boost_enabled = true
       App.set_bass_gain(6)
     }
@@ -486,6 +487,7 @@ App.video_bass_boost_off = () => {
 
   if (video) {
     if (App.bass_boost_node) {
+      App.button_highlight(`video_commands_opts_bass_boost`, false)
       App.bass_boost_enabled = false
       App.set_bass_gain(0)
     }
@@ -493,13 +495,13 @@ App.video_bass_boost_off = () => {
 }
 
 App.video_bass_cut_toggle = () => {
+  App.video_bass_boost_off()
+
   if (App.bass_cut_enabled) {
     App.video_bass_cut_off()
-    App.button_highlight(`video_commands_opts_bass_cut`, false)
   }
   else {
     App.video_bass_cut_on()
-    App.button_highlight(`video_commands_opts_bass_cut`)
   }
 }
 
@@ -512,6 +514,7 @@ App.video_bass_cut_on = () => {
     }
 
     if (App.bass_boost_node) {
+      App.button_highlight(`video_commands_opts_bass_cut`)
       App.bass_cut_enabled = true
       App.set_bass_gain(-8)
     }
@@ -523,6 +526,7 @@ App.video_bass_cut_off = () => {
 
   if (video) {
     if (App.bass_boost_node) {
+      App.button_highlight(`video_commands_opts_bass_cut`, false)
       App.bass_cut_enabled = false
       App.set_bass_gain(0)
     }
