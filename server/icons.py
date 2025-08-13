@@ -110,7 +110,7 @@ def fill_icons(config: Config) -> None:
     config.icons["links"] = "🔗"
 
     # Icon for you
-    config.icons["you"] = "👾"
+    config.icons["you"] = "😸"
 
     # Icon for jump
     config.icons["jump"] = "⏫"
