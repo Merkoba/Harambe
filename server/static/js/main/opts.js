@@ -898,6 +898,15 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
     })
 
     App.bind_button({
+      what: `${name}_opts_bass_cut`,
+      func: () => {
+        App.video_bass_cut_toggle()
+      },
+      close: false,
+      icon: App.icon(`cut`),
+    })
+
+    App.bind_button({
       what: `${name}_opts_fade_in`,
       func: () => {
         App.video_fade_in()

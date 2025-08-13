@@ -157,6 +157,9 @@ def fill_icons(config: Config) -> None:
     # Icon for bass
     config.icons["bass"] = "🎸"
 
+    # Icon for cut
+    config.icons["cut"] = "✂️"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages

@@ -5,6 +5,7 @@ App.reverb_node = null
 App.reverb_enabled = false
 App.bass_boost_node = null
 App.bass_boost_enabled = false
+App.bass_cut_enabled = false
 App.current_pitch_step = 0
 App.pitch_step_size = 1
 App.current_audio_source = null
@@ -390,14 +391,14 @@ App.create_bass_boost_node = () => {
   }
 }
 
-App.set_bass_boost = (gain_db) => {
+App.set_bass_gain = (gain_db) => {
   if (!App.bass_boost_node || !App.audio_context) {
     return
   }
 
   let ac = App.audio_context
   let now = ac.currentTime
-  let clamped_gain = Math.max(0, Math.min(12, gain_db))
+  let clamped_gain = Math.max(-12, Math.min(12, gain_db))
 
   App.bass_boost_node.bass_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
 }
@@ -475,7 +476,7 @@ App.video_bass_boost_on = () => {
 
     if (App.bass_boost_node) {
       App.bass_boost_enabled = true
-      App.set_bass_boost(6)
+      App.set_bass_gain(6)
     }
   }
 }
@@ -486,7 +487,44 @@ App.video_bass_boost_off = () => {
   if (video) {
     if (App.bass_boost_node) {
       App.bass_boost_enabled = false
-      App.set_bass_boost(0)
+      App.set_bass_gain(0)
+    }
+  }
+}
+
+App.video_bass_cut_toggle = () => {
+  if (App.bass_cut_enabled) {
+    App.video_bass_cut_off()
+    App.button_highlight(`video_commands_opts_bass_cut`, false)
+  }
+  else {
+    App.video_bass_cut_on()
+    App.button_highlight(`video_commands_opts_bass_cut`)
+  }
+}
+
+App.video_bass_cut_on = () => {
+  let video = App.get_video()
+
+  if (video) {
+    if (!App.setup_audio_context(video)) {
+      return
+    }
+
+    if (App.bass_boost_node) {
+      App.bass_cut_enabled = true
+      App.set_bass_gain(-8)
+    }
+  }
+}
+
+App.video_bass_cut_off = () => {
+  let video = App.get_video()
+
+  if (video) {
+    if (App.bass_boost_node) {
+      App.bass_cut_enabled = false
+      App.set_bass_gain(0)
     }
   }
 }
