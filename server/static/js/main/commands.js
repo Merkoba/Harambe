@@ -58,7 +58,7 @@ App.update_playback_title = () => {
   let video = App.get_video()
 
   if (video) {
-    let playback = video.playbackRate.toFixed(2)
+    let playback = video.playbackRate.toFixed(2).replace(/\.?0+$/, ``)
 
     if (App.current_msg === `msg_video_speed`) {
       DOM.el(`#speed_menu_title`).innerText = `Speed: ${playback}x`
