@@ -54,7 +54,7 @@ App.video_rewind = () => {
   }
 }
 
-App.update_playback_title = () => {
+App.update_playback_title = (mode) => {
   let video = App.get_video()
 
   if (video) {
@@ -63,7 +63,7 @@ App.update_playback_title = () => {
     let pitch = DOM.el(`#pitch_menu_title`)
 
     if (speed) {
-      if (App.current_msg === `msg_video_speed`) {
+      if (mode === `speed`) {
         speed.innerText = `Speed: ${playback}x`
       }
       else {
@@ -72,7 +72,7 @@ App.update_playback_title = () => {
     }
 
     if (pitch) {
-      if (App.current_msg === `msg_video_pitch`) {
+      if (mode === `pitch`) {
         pitch.innerText = `Pitch: ${playback}x`
       }
       else {
@@ -85,21 +85,21 @@ App.update_playback_title = () => {
 App.update_pitch_menu_title = () => {
 }
 
-App.increase_playback = () => {
+App.increase_playback = (mode) => {
   let video = App.get_video()
 
   if (video) {
     video.playbackRate = Math.min(10, video.playbackRate + App.playback_step)
-    App.update_playback_title()
+    App.update_playback_title(mode)
   }
 }
 
-App.decrease_playback = () => {
+App.decrease_playback = (mode) => {
   let video = App.get_video()
 
   if (video) {
     video.playbackRate = Math.max(0.1, video.playbackRate - App.playback_step)
-    App.update_playback_title()
+    App.update_playback_title(mode)
   }
 }
 
@@ -108,7 +108,7 @@ App.video_slower = () => {
 
   if (video) {
     App.set_video_preserve_pitch(true)
-    App.decrease_playback()
+    App.decrease_playback(`speed`)
   }
 }
 
@@ -117,7 +117,7 @@ App.video_faster = () => {
 
   if (video) {
     App.set_video_preserve_pitch(true)
-    App.increase_playback()
+    App.increase_playback(`speed`)
   }
 }
 
@@ -127,7 +127,7 @@ App.video_speed_reset = () => {
   if (video) {
     App.set_video_preserve_pitch(true)
     video.playbackRate = 1.0
-    App.update_playback_title()
+    App.update_playback_title(`speed`)
   }
 }
 
@@ -222,7 +222,7 @@ App.video_pitch_up = () => {
 
   if (video) {
     App.set_video_preserve_pitch(false)
-    App.increase_playback()
+    App.increase_playback(`pitch`)
   }
 }
 
@@ -231,7 +231,7 @@ App.video_pitch_down = () => {
 
   if (video) {
     App.set_video_preserve_pitch(false)
-    App.decrease_playback()
+    App.decrease_playback(`pitch`)
   }
 }
 
@@ -242,7 +242,7 @@ App.video_pitch_reset = () => {
     App.set_video_preserve_pitch(true)
     App.current_pitch_step = 0
     video.playbackRate = 1.0
-    App.update_playback_title()
+    App.update_playback_title(`pitch`)
   }
 }
 
