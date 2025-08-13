@@ -485,6 +485,9 @@ App.make_msg = (name, title) => {
     enable_titlebar,
     window_x: `floating_right`,
     center_titlebar: true,
+    after_show: () => {
+      App.current_msg = msg_name
+    },
   })
 
   App[msg_name].set(DOM.el(`#template_${name}`).innerHTML)
@@ -795,7 +798,12 @@ App.to_bottom = () => {
 
 App.msgbox = (value, mode = `text`) => {
   if (!App.msg_info) {
-    App.msg_info = Msg.factory()
+    App.msg_info = Msg.factory({
+      after_show: () => {
+        App.current_msg = `msgbox`
+      },
+    })
+
     let t = DOM.el(`#template_msgbox`)
     App.msg_info.set(t.innerHTML)
   }
@@ -818,6 +826,9 @@ App.flash = (text) => {
     close_on_overlay_click: false,
     window_x: `none`,
     class: `blue`,
+    after_show: () => {
+      App.current_msg = `flash`
+    },
   })
 
   App.msg_flash.show(text)
@@ -1285,6 +1296,9 @@ App.corner_msg = (text, delay = 5000) => {
     autoclose_delay: delay,
     on_click: () => {
       App.run_cmd()
+    },
+    after_show: () => {
+      App.current_msg = `corner`
     },
   }).show(text)
 }

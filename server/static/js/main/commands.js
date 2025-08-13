@@ -54,11 +54,30 @@ App.video_rewind = () => {
   }
 }
 
+App.update_playback_title = () => {
+  let video = App.get_video()
+
+  if (video) {
+    let playback = video.playbackRate.toFixed(2)
+
+    if (App.current_msg === `msg_video_speed`) {
+      DOM.el(`#speed_menu_title`).innerText = `Speed: ${playback}x`
+    }
+    else if (App.current_msg === `msg_video_pitch`) {
+      DOM.el(`#pitch_menu_title`).innerText = `Pitch: ${playback}x`
+    }
+  }
+}
+
+App.update_pitch_menu_title = () => {
+}
+
 App.increase_playback = () => {
   let video = App.get_video()
 
   if (video) {
     video.playbackRate = Math.min(10, video.playbackRate + App.playback_step)
+    App.update_playback_title()
   }
 }
 
@@ -67,6 +86,7 @@ App.decrease_playback = () => {
 
   if (video) {
     video.playbackRate = Math.max(0.1, video.playbackRate - App.playback_step)
+    App.update_playback_title()
   }
 }
 
@@ -94,6 +114,7 @@ App.video_speed_reset = () => {
   if (video) {
     App.set_video_preserve_pitch(true)
     video.playbackRate = 1.0
+    App.update_playback_title()
   }
 }
 
@@ -208,6 +229,7 @@ App.video_pitch_reset = () => {
     App.set_video_preserve_pitch(true)
     App.current_pitch_step = 0
     video.playbackRate = 1.0
+    App.update_playback_title()
   }
 }
 

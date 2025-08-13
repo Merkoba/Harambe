@@ -13,6 +13,7 @@ App.make_opts = (name, setup, show = false, parent = ``) => {
     after_show: () => {
       let selection = window.getSelection()
       selection.removeAllRanges()
+      App.current_msg = msg_name
     },
   })
 
