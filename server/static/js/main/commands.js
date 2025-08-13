@@ -59,12 +59,25 @@ App.update_playback_title = () => {
 
   if (video) {
     let playback = video.playbackRate.toFixed(2).replace(/\.?0+$/, ``)
+    let speed = DOM.el(`#speed_menu_title`)
+    let pitch = DOM.el(`#pitch_menu_title`)
 
-    if (App.current_msg === `msg_video_speed`) {
-      DOM.el(`#speed_menu_title`).innerText = `Speed: ${playback}x`
+    if (speed) {
+      if (App.current_msg === `msg_video_speed`) {
+        speed.innerText = `Speed: ${playback}x`
+      }
+      else {
+        speed.innerText = `Speed`
+      }
     }
-    else if (App.current_msg === `msg_video_pitch`) {
-      DOM.el(`#pitch_menu_title`).innerText = `Pitch: ${playback}x`
+
+    if (pitch) {
+      if (App.current_msg === `msg_video_pitch`) {
+        pitch.innerText = `Pitch: ${playback}x`
+      }
+      else {
+        pitch.innerText = `Pitch`
+      }
     }
   }
 }
