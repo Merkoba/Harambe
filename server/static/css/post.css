@@ -1,7 +1,7 @@
 :root {
     --modal_color: rgb(42 42 42);
     --react_padding: 0.8rem;
-    --max_media_height: 640px;
+    --max_media_height: 680px;
 }
 
 body, html {
@@ -97,8 +97,8 @@ a.link:hover,
 }
 
 #image {
-    min-width: 28rem;
-    max-width: 60%;
+    min-width: 1000px;
+    max-width: 90%;
     height: auto;
     max-height: var(--max_media_height);
     cursor: pointer;
@@ -114,7 +114,7 @@ a.link:hover,
 }
 
 #video {
-    width: 46rem;
+    width: 1000px;
     max-width: 90%;
     height: auto;
     max-height: var(--max_media_height);
