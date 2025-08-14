@@ -246,21 +246,17 @@ a.link:hover,
 }
 
 .reaction_item {
-    padding: 0.5rem;
-    display: flex;
-    justify-content: flex-start;
+    display: inline-grid;
+    grid-auto-flow: column;
+    align-items: center;
     border: 1px solid var(--frame_color);
-    max-width: 66rem;
-    align-items: flex-start;
+    padding: 0.5rem;
 }
 
 .reaction_uname {
-    display: flex;
+    display: block;
     font-weight: bold;
-    flex-grow: 0;
-    flex-shrink: 0;
     border-right: 1px solid var(--frame_color);
-    align-self: stretch;
     padding-right: var(--react_padding);
     cursor: pointer;
     user-select: none;
@@ -271,13 +267,10 @@ a.link:hover,
 }
 
 .reaction_value {
-    display: flex;
-    flex-grow: 0;
-    flex-shrink: 1;
-    align-items: flex-start;
-    justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     white-space: pre-wrap;
-    align-self: stretch;
     border-right: 1px solid var(--frame_color);
     padding-left: var(--react_padding);
     padding-right: var(--react_padding);
@@ -285,6 +278,11 @@ a.link:hover,
     overflow: auto;
     min-width: 6rem;
 }
+
+.reaction_item img {
+    vertical-align: middle;
+}
+
 
 .reaction_content {
     white-space: normal;
@@ -295,17 +293,14 @@ a.link:hover,
 }
 
 .reaction_right {
-    flex-grow: 0;
-    flex-shrink: 0;
-    align-self: stretch;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
     padding-left: var(--react_padding);
     padding-right: 0.3rem;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-end;
-    margin-left: auto;
     gap: 0.5rem;
+    margin-left: auto;
 }
 
 .reaction_item img {
