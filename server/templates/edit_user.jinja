@@ -94,7 +94,7 @@
         <div class="checkbox">
             <div>Can Do Magic</div>
 
-            {% if default_mage or (user and user.mage) %}
+            {% if ((not user) and default_mage) or (user and user.mage) %}
             <input id="mage" name="mage" type="checkbox" checked>
             {% else %}
             <input id="mage" name="mage" type="checkbox">
