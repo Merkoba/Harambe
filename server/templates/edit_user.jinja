@@ -91,6 +91,16 @@
             {% endif %}
         </div>
 
+        <div class="checkbox">
+            <div>Can Do Magic</div>
+
+            {% if default_mage or (user and user.mage) %}
+            <input id="mage" name="mage" type="checkbox" checked>
+            {% else %}
+            <input id="mage" name="mage" type="checkbox">
+            {% endif %}
+        </div>
+
         <input type="submit" value="Submit">
     </form>
 

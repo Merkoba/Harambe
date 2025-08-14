@@ -350,6 +350,11 @@ def edit_user(
     else:
         args["reacter"] = True
 
+    if request.form.get("mage") is None:
+        args["mage"] = False
+    else:
+        args["mage"] = True
+
     if request.form.get("rpm") is None:
         args["rpm"] = 0
 
@@ -394,6 +399,7 @@ def edit_user(
         n_args["lister"],
         n_args["poster"],
         n_args["reacter"],
+        n_args["mage"],
         user_id=user_id,
     )
 

@@ -1115,6 +1115,7 @@ def edit_user(user_id: int = 0) -> Any:
             user=user or {},
             title=title,
             mode=mode,
+            default_mage=config.default_mage,
             **common_configs(admin),
         )
 
