@@ -269,6 +269,7 @@ a.link:hover,
 .reaction_value {
     display: inline-flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.4rem;
     white-space: pre-wrap;
     border-right: 1px solid var(--frame_color);
@@ -276,7 +277,6 @@ a.link:hover,
     padding-right: var(--react_padding);
     max-height: 20rem;
     overflow: auto;
-    min-width: 6rem;
 }
 
 .reaction_item img {
