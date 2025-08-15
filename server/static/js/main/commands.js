@@ -10,6 +10,7 @@ App.current_pitch_step = 0
 App.pitch_step_size = 1
 App.current_audio_source = null
 App.playback_step = 0.1
+App.jump_popup_delay = 5000
 
 App.show_video_commands = () => {
   if ((App.mode === `post`) && App.get_video()) {
@@ -41,6 +42,14 @@ App.video_jump_action = () => {
     if (duration > 0) {
       let random_time = Math.random() * duration
       video.currentTime = random_time
+
+      App.corner_msg({
+        text: `Jumped to ${parseInt(random_time)}s`,
+        delay: App.jump_popup_delay,
+        on_click: () => {
+          App.video_jump_action()
+        },
+      })
     }
   }
 }

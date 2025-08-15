@@ -1,4 +1,5 @@
 App.ls_storage = `storage_v1`
+App.corner_msg_delay = 6200
 
 App.SECOND = 1000
 App.MINUTE = App.SECOND * 60
@@ -1288,19 +1289,30 @@ App.is_disabled = (el) => {
   return el.classList.contains(`strike`) || el.disabled
 }
 
-App.corner_msg = (text, delay = 5000) => {
-  Msg.factory({
-    id: `corner_msg`,
-    preset: `popup_autoclose`,
-    position: `bottomright`,
-    autoclose_delay: delay,
-    on_click: () => {
-      App.run_cmd()
-    },
-    after_show: () => {
-      App.current_msg = `corner`
-    },
-  }).show(text)
+App.corner_msg = (args = {}) => {
+  let def_args = {
+    delay: 5000,
+  }
+
+  App.fill_def_args(def_args, args)
+
+  if (!App.msg_corner) {
+    App.msg_corner = Msg.factory({
+      id: `corner_msg`,
+      preset: `popup_autoclose`,
+      position: `bottomright`,
+      autoclose_delay: args.delay,
+      on_click: () => {
+        args.on_click()
+      },
+      after_show: () => {
+        App.current_msg = `corner`
+      },
+    })
+  }
+
+  App.msg_corner.options.on_click = args.on_click
+  App.msg_corner.show(args.text)
 }
 
 App.check_cmd = () => {
@@ -1314,7 +1326,13 @@ App.check_cmd = () => {
     return false
   }
 
-  App.corner_msg(`Click to do this again`, 6200)
+  App.corner_msg({
+    text: `Click to do this again`,
+    delay: App.corner_msg_delay,
+    on_click: () => {
+      App.run_cmd()
+    },
+  })
 }
 
 App.run_cmd = () => {
