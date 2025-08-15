@@ -91,25 +91,39 @@ App.update_playback_title = (mode) => {
   }
 }
 
-App.update_pitch_menu_title = () => {
+App.playback_change = (mode, action) => {
+  let video = App.get_video()
+
+  if (!video) {
+    return
+  }
+
+  let rate
+
+  if (App.playback_rate_mode !== mode) {
+    rate = 1.0
+  }
+  else {
+    rate = video.playbackRate
+  }
+
+  if (action === `increase`) {
+    video.playbackRate = Math.min(10, rate + App.playback_step)
+  }
+  else if (action === `decrease`) {
+    video.playbackRate = Math.max(0.1, rate - App.playback_step)
+  }
+
+  App.update_playback_title(mode)
+  App.playback_rate_mode = mode
 }
 
 App.increase_playback = (mode) => {
-  let video = App.get_video()
-
-  if (video) {
-    video.playbackRate = Math.min(10, video.playbackRate + App.playback_step)
-    App.update_playback_title(mode)
-  }
+  App.playback_change(mode, `increase`)
 }
 
 App.decrease_playback = (mode) => {
-  let video = App.get_video()
-
-  if (video) {
-    video.playbackRate = Math.max(0.1, video.playbackRate - App.playback_step)
-    App.update_playback_title(mode)
-  }
+  App.playback_change(mode, `decrease`)
 }
 
 App.video_slower = () => {
