@@ -824,7 +824,7 @@ def edit_title() -> Any:
 
 @app.route("/edit_description", methods=["POST"])  # type: ignore
 @limiter.limit(rate_limit(config.rate_limit))  # type: ignore
-@payload_check()
+@payload_check(max_post=20048)
 @login_required
 def edit_description() -> Any:
     data = request.get_json()
