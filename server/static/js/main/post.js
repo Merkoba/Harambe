@@ -217,7 +217,12 @@ App.init = () => {
 
   if (cmd) {
     DOM.ev(cmd, `click`, () => {
-      App.show_video_commands()
+      if (App.post.video_embed || App.post.audio_embed) {
+        App.show_video_commands()
+      }
+      else if (App.post.image_embed) {
+        App.show_image_commands()
+      }
     })
   }
 

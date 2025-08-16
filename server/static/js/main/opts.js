@@ -925,6 +925,28 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
   }, show, parent)
 }
 
+App.setup_image_commands_opts = (show = false, parent = ``) => {
+  let name = `image_commands`
+
+  App.make_opts(name, () => {
+    App.bind_button({
+      what: `${name}_opts_rotate_left`,
+      func: () => {
+        App.image_rotate(`left`)
+      },
+      icon: App.icon(`rotate_left`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_rotate_right`,
+      func: () => {
+        App.image_rotate(`right`)
+      },
+      icon: App.icon(`rotate_right`),
+    })
+  }, show, parent)
+}
+
 App.setup_video_speed_opts = (show = false, parent = ``) => {
   let name = `video_speed`
 

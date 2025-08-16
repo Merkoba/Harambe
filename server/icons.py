@@ -160,6 +160,12 @@ def fill_icons(config: Config) -> None:
     # Icon for cut
     config.icons["cut"] = "✂️"
 
+    # Icon for rotate left
+    config.icons["rotate_left"] = "↩️"
+
+    # Icon for rotate right
+    config.icons["rotate_right"] = "↪️"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages

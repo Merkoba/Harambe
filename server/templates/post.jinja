@@ -37,35 +37,29 @@
             {% if post.flash_embed %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="flash" class="button" title="Maximize the flash player">Max</div>
-                    <div class="sep">|</div>
                 </div>
             {% elif post.text %}
                 {% if post.youtube_id %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="youtube" class="button" title="Maximize the video">Max</div>
-                    <div class="sep">|</div>
                 </div>
                 {% elif (not post.markdown_embed) and (not post.zip_embed) %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="editor" class="button" title="Maximize the editor">Max</div>
-                    <div class="sep">|</div>
                 </div>
                 {% elif post.markdown_embed %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="markdown" class="button" title="Maximize the markdown">Max</div>
-                    <div class="sep">|</div>
                 </div>
                 {% endif %}
             {% else %}
                 {% if post.image_embed %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="image" class="button" title="Maximize the image">Max</div>
-                    <div class="sep">|</div>
                 </div>
                 {% elif post.video_embed or post.audio_embed %}
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="video" class="button" title="Maximize the video | Wheel supported">Max</div>
-                    <div class="sep">|</div>
                 </div>
                 {% endif %}
             {% endif %}
@@ -73,23 +67,28 @@
             {% if post.video_embed or post.audio_embed %}
             <div id="play" class="button" title="Play or pause the media">Play</div>
             <div class="sep">|</div>
-            {% endif %}
-
-            {% if post.video_embed or post.audio_embed %}
             <div id="volume" class="button" title="Adjust the volume | Wheel supported">Vol</div>
             <div id="volume_feedback" class="hidden"></div>
+            {% endif %}
+
+            {% if post.video_embed or post.audio_embed or post.image_embed %}
             <div class="sep">|</div>
             <div id="cmd" class="button" title="Open the command menu">Cmd</div>
+            {% endif %}
+
+            {% if post.flash_embed %}
             <div class="sep">|</div>
+            <div id="fullscreen" class="button" title="Toggle fullscreen | Ctrl+Shift+F">Fullscreen</div>
             {% endif %}
 
             {% if owned %}
-            <div id="edit" class="button" title="Edit this post | Ctrl+Shift+Up">Edit</div>
             <div class="sep">|</div>
+            <div id="edit" class="button" title="Edit this post | Ctrl+Shift+Up">Edit</div>
             {% endif %}
         </div>
 
         {% if post.title or post.original %}
+        <div class="sep">|</div>
         <div id="title" title="{{post.title or post.original}}">{{post.title or post.original}}</div>
         {% endif %}
     </div>

@@ -56,6 +56,8 @@
             App.post.original_full = {{post.original_full | default(0) | tojson | safe}}
             App.post.mtype = {{post.mtype | default(0) | tojson | safe}}
             App.post.image_embed = {{post.image_embed | default(0) | tojson}}
+            App.post.video_embed = {{post.video_embed | default(0) | tojson}}
+            App.post.audio_embed = {{post.audio_embed | default(0) | tojson}}
             App.post.reactions = {{post.reactions | default(0) | tojson}}
             App.post.text = {{post.text | default(0) | tojson | safe}}
             App.post.zip_embed = {{post.zip_embed | default(0) | tojson}}
@@ -439,6 +441,15 @@
                     <div id="video_commands_opts_bass_cut" class="aero_button" title="Reduce lower frequencies">Bass Cut</div>
                     <div id="video_commands_opts_fade_in" class="aero_button" title="Fade in the video">Fade In</div>
                     <div id="video_commands_opts_fade_out" class="aero_button" title="Fade out the video">Fade Out</div>
+                </div>
+            </div>
+        </template>
+
+        <template id="template_image_commands_opts">
+            <div class="dialog_container">
+                <div class="dialog_col">
+                    <div id="image_commands_opts_rotate_left" class="aero_button" title="Rotate the image left">Rotate Left</div>
+                    <div id="image_commands_opts_rotate_right" class="aero_button" title="Rotate the image right">Rotate Right</div>
                 </div>
             </div>
         </template>

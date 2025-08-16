@@ -13,9 +13,11 @@ App.playback_step = 0.1
 App.jump_popup_delay = 5000
 
 App.show_video_commands = () => {
-  if ((App.mode === `post`) && App.get_video()) {
-    App.setup_video_commands_opts(true)
-  }
+  App.setup_video_commands_opts(true)
+}
+
+App.show_image_commands = () => {
+  App.setup_image_commands_opts(true)
 }
 
 App.video_jump = () => {
@@ -589,4 +591,31 @@ App.video_bass_cut_off = () => {
       App.set_bass_gain(0)
     }
   }
+}
+
+App.image_rotate = (direction) => {
+  App.show_modal_image()
+  let image = DOM.el(`#modal_image`)
+
+  if (!image) {
+    return
+  }
+
+  if (!image.dataset.rotation) {
+    image.dataset.rotation = 0
+  }
+
+  let currentRotation = parseInt(image.dataset.rotation)
+
+  if (direction === `left`) {
+    currentRotation -= 90
+  }
+  else if (direction === `right`) {
+    currentRotation += 90
+  }
+
+  image.dataset.rotation = currentRotation
+  image.style.transform = `rotate(${currentRotation}deg)`
+  image.style.transformOrigin = `center center`
+  image.style.transition = `transform 0.3s ease`
 }
