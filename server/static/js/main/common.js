@@ -11,6 +11,8 @@ App.DECADE = App.YEAR * 10
 App.CENTURY = App.YEAR * 100
 App.MILLENNIUM = App.YEAR * 1000
 
+App.LETTERS = [`a`, `b`, `c`, `d`, `e`, `f`, `g`, `h`, `i`, `j`, `k`, `l`, `m`, `n`, `o`, `p`, `q`, `r`, `s`, `t`, `u`, `v`, `w`, `x`, `y`, `z`]
+
 App.startup = () => {
   App.get_storage()
   App.setup_keyboard()
@@ -30,13 +32,20 @@ App.setup_keyboard = () => {
       return
     }
 
-    let n = 0
+    let n = -1
 
     if (e.code.startsWith(`Digit`)) {
       n = parseInt(e.code.replace(`Digit`, ``), 10)
     }
     else if (e.code.startsWith(`Numpad`)) {
       n = parseInt(e.code.replace(`Numpad`, ``), 10)
+    }
+    else if (e.code.startsWith(`Key`)) {
+      let letter = e.code.replace(`Key`, ``).toLowerCase()
+
+      if ((letter >= `a`) && (letter <= `z`)) {
+        n = 10 + App.LETTERS.indexOf(letter)
+      }
     }
 
     if (e.key === `Enter`) {
@@ -82,7 +91,7 @@ App.setup_keyboard = () => {
         }
       }
     }
-    else if (!isNaN(n) && (n >= 1) && (n <= 9)) {
+    else if (!isNaN(n) && (n > -1)) {
       if (App.any_modal_open()) {
         let content = Msg.msg.highest_instance().content
         let dialog = DOM.el(`.dialog_container`, content)
@@ -123,8 +132,34 @@ App.setup_keyboard = () => {
       }
     }
     else if (e.key === `ArrowUp`) {
-      if (e.ctrlKey && !e.shiftKey) {
+      if (App.mode === `post`) {
+        if (e.ctrlKey && e.shiftKey) {
+          App.edit_post()
+        }
+        else if (App.image_expanded) {
+          App.scroll_modal_up()
+        }
+        else if (App.msg_image && App.msg_image.is_open()) {
+          App.expand_modal_image()
+        }
+      }
+      else if (e.ctrlKey && !e.shiftKey) {
         App.fresh_post()
+      }
+    }
+    else if (e.key === `ArrowDown`) {
+      if (App.mode === `post`) {
+        if (e.ctrlKey && !e.shiftKey) {
+          if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
+            App.react_prompt()
+          }
+        }
+        else if (App.image_expanded) {
+          App.scroll_modal_down()
+        }
+        else if (App.msg_image && App.msg_image.is_open()) {
+          App.expand_modal_image()
+        }
       }
     }
     else if (e.key === `.`) {
@@ -524,7 +559,7 @@ App.bind_button = (args = {}) => {
   let btns = DOM.els(`.aero_button`, c)
   let numbers
 
-  if (btns.length > 9) {
+  if (btns.length > 30) {
     numbers = false
   }
   else {
@@ -538,10 +573,19 @@ App.bind_button = (args = {}) => {
   let text = DOM.create(`div`, `aero_text`)
   let text_label = DOM.create(`div`, `button_text_label`)
   text_label.textContent = otext
+  let current_letter = 0
 
   if (numbers) {
     let text_num = DOM.create(`div`, `button_text_number`)
-    text_num.textContent = `${index + 1}.`
+
+    if (index <= 8) {
+      text_num.textContent = `${index + 1}.`
+    }
+    else {
+      text_num.textContent = `${App.LETTERS[current_letter]}.`
+      current_letter += 1
+    }
+
     text.append(text_num)
   }
 

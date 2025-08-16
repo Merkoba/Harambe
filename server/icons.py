@@ -157,8 +157,11 @@ def fill_icons(config: Config) -> None:
     # Icon for bass
     config.icons["bass"] = "🎸"
 
-    # Icon for cut
-    config.icons["cut"] = "✂️"
+    # Icon for bass cut
+    config.icons["bass_cut"] = "✂️"
+
+    # Icon for treble cut
+    config.icons["treble_cut"] = "📉"
 
     # Icon for clockwise
     config.icons["clockwise"] = "🔃"

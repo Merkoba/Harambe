@@ -227,7 +227,6 @@ App.init = () => {
   }
 
   App.setup_reactions()
-  App.keyboard_events()
   App.format_description()
   App.setup_video()
   App.create_title_debouncer()
@@ -1112,35 +1111,6 @@ App.start_editor = async () => {
 
 App.edit_post = () => {
   App.msg_show(`edit_post`)
-}
-
-App.keyboard_events = () => {
-  DOM.ev(document, `keydown`, (e) => {
-    if (e.key === `ArrowUp`) {
-      if (e.ctrlKey && e.shiftKey) {
-        App.edit_post()
-      }
-      else if (App.image_expanded) {
-        App.scroll_modal_up()
-      }
-      else if (App.msg_image.is_open()) {
-        App.expand_modal_image()
-      }
-    }
-    else if (e.key === `ArrowDown`) {
-      if (e.ctrlKey && !e.shiftKey) {
-        if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
-          App.react_prompt()
-        }
-      }
-      else if (App.image_expanded) {
-        App.scroll_modal_down()
-      }
-      else if (App.msg_image.is_open()) {
-        App.expand_modal_image()
-      }
-    }
-  })
 }
 
 App.start_embed = () => {

@@ -906,7 +906,17 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
         App.video_bass_cut_toggle()
       },
       close: false,
-      icon: App.icon(`cut`),
+      icon: App.icon(`bass_cut`),
+    })
+
+
+    App.bind_button({
+      what: `${name}_opts_treble_cut`,
+      func: () => {
+        App.video_treble_cut_toggle()
+      },
+      close: false,
+      icon: App.icon(`treble_cut`),
     })
 
     App.bind_button({
