@@ -909,7 +909,6 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
       icon: App.icon(`bass_cut`),
     })
 
-
     App.bind_button({
       what: `${name}_opts_treble_cut`,
       func: () => {

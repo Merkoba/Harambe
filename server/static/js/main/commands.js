@@ -7,6 +7,7 @@ App.bass_boost_node = null
 App.treble_boost_node = null
 App.bass_boost_enabled = false
 App.bass_cut_enabled = false
+App.treble_boost_enabled = false
 App.treble_cut_enabled = false
 App.current_pitch_step = 0
 App.pitch_step_size = 1
@@ -225,9 +226,15 @@ App.setup_audio_context = (video) => {
         App.create_bass_boost_node()
       }
 
+      if (!App.treble_boost_node) {
+        App.create_treble_boost_node()
+      }
+
       source.connect(App.pitch_node)
       App.pitch_node.connect(App.bass_boost_node.input)
       App.bass_boost_node.output.connect(App.reverb_node.input)
+      App.pitch_node.connect(App.treble_boost_node.input)
+      App.treble_boost_node.output.connect(App.reverb_node.input)
       App.reverb_node.output.connect(App.audio_context.destination)
       video.audioSource = source
     }
@@ -642,6 +649,45 @@ App.video_bass_cut_off = () => {
       App.button_highlight(`video_commands_opts_bass_cut`, false)
       App.bass_cut_enabled = false
       App.set_bass_gain(0)
+    }
+  }
+}
+
+App.video_treble_boost_toggle = () => {
+  App.video_treble_cut_off()
+
+  if (App.treble_boost_enabled) {
+    App.video_treble_boost_off()
+  }
+  else {
+    App.video_treble_boost_on()
+  }
+}
+
+App.video_treble_boost_on = () => {
+  let video = App.get_video()
+
+  if (video) {
+    if (!App.setup_audio_context(video)) {
+      return
+    }
+
+    if (App.treble_boost_node) {
+      App.button_highlight(`video_commands_opts_treble_boost`)
+      App.treble_boost_enabled = true
+      App.set_treble_gain(6)
+    }
+  }
+}
+
+App.video_treble_boost_off = () => {
+  let video = App.get_video()
+
+  if (video) {
+    if (App.treble_boost_node) {
+      App.button_highlight(`video_commands_opts_treble_boost`, false)
+      App.treble_boost_enabled = false
+      App.set_treble_gain(0)
     }
   }
 }
