@@ -126,6 +126,7 @@ App.setup_menu_opts = (show = false) => {
       mfunc: () => {
         App.open_tab(`/login`)
       },
+      icon: App.icon(`login`),
     })
 
     App.bind_button({
@@ -136,6 +137,7 @@ App.setup_menu_opts = (show = false) => {
       mfunc: () => {
         App.open_tab(`/register`)
       },
+      icon: App.icon(`register`),
     })
   }, show)
 }

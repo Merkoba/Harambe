@@ -166,6 +166,12 @@ def fill_icons(config: Config) -> None:
     # Icon for counterclockwise
     config.icons["counterclockwise"] = "🔄"
 
+    # Icon for login
+    config.icons["login"] = "🔐"
+
+    # Icon for register
+    config.icons["register"] = "📝"
+
 
 def fill_media_icons(config: Config) -> None:
     # Sample icon for admin pages
