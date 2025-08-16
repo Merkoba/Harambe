@@ -437,11 +437,10 @@
                     <div id="video_commands_opts_speed" class="aero_button" title="Video speed controls">Speed</div>
                     <div id="video_commands_opts_pitch" class="aero_button" title="Video pitch controls">Pitch</div>
                     <div id="video_commands_opts_reverb" class="aero_button" title="Add a reverb effect to the audio">Reverb</div>
-                    <div id="video_commands_opts_bass_boost" class="aero_button" title="Add a bass boost to the audio">Bass Boost</div>
-                    <div id="video_commands_opts_bass_cut" class="aero_button" title="Reduce lower frequencies">Bass Cut</div>
+                    <div id="video_commands_opts_bass" class="aero_button" title="Show the bass menu">Bass</div>
+                    <div id="video_commands_opts_treble" class="aero_button" title="Show the treble menu">Treble</div>
                     <div id="video_commands_opts_treble_cut" class="aero_button" title="Reduce higher frequencies">Treble Cut</div>
-                    <div id="video_commands_opts_fade_in" class="aero_button" title="Fade in the video">Fade In</div>
-                    <div id="video_commands_opts_fade_out" class="aero_button" title="Fade out the video">Fade Out</div>
+                    <div id="video_commands_opts_fade" class="aero_button" title="Show the fade menu">Fade</div>
                 </div>
             </div>
         </template>
@@ -479,6 +478,45 @@
                     <div id="video_pitch_opts_up" class="aero_button" title="Increase the pitch">Up</div>
                     <div id="video_pitch_opts_down" class="aero_button" title="Lower the pitch">Down</div>
                     <div id="video_pitch_opts_reset" class="aero_button" title="Rest the pitch">Reset</div>
+                </div>
+            </div>
+        </template>
+
+        <template id="template_video_fade_opts">
+            <div class="dialog_container">
+                <div class="rowitem center_item">
+                    <div id="fade_menu_title">Fade</div>
+                </div>
+
+                <div class="dialog_col">
+                    <div id="video_fade_opts_in" class="aero_button" title="Fade in the video">Fade In</div>
+                    <div id="video_fade_opts_out" class="aero_button" title="Fade out the video">Fade Out</div>
+                </div>
+            </div>
+        </template>
+
+        <template id="template_video_bass_opts">
+            <div class="dialog_container">
+                <div class="rowitem center_item">
+                    <div id="bass_menu_title">Bass</div>
+                </div>
+
+                <div class="dialog_col">
+                    <div id="video_bass_opts_boost" class="aero_button" title="Add a bass boost to the audio">Boost</div>
+                    <div id="video_bass_opts_cut" class="aero_button" title="Reduce lower frequencies">Cut</div>
+                </div>
+            </div>
+        </template>
+
+        <template id="template_video_treble_opts">
+            <div class="dialog_container">
+                <div class="rowitem center_item">
+                    <div id="treble_menu_title">Treble</div>
+                </div>
+
+                <div class="dialog_col">
+                    <div id="video_treble_opts_boost" class="aero_button" title="Add a treble boost to the audio">Boost</div>
+                    <div id="video_treble_opts_cut" class="aero_button" title="Reduce lower frequencies">Cut</div>
                 </div>
             </div>
         </template>

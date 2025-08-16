@@ -595,7 +595,7 @@ App.video_bass_boost_on = () => {
     }
 
     if (App.bass_boost_node) {
-      App.button_highlight(`video_commands_opts_bass_boost`)
+      App.button_highlight(`video_bass_opts_boost`)
       App.bass_boost_enabled = true
       App.set_bass_gain(6)
     }
@@ -607,7 +607,7 @@ App.video_bass_boost_off = () => {
 
   if (video) {
     if (App.bass_boost_node) {
-      App.button_highlight(`video_commands_opts_bass_boost`, false)
+      App.button_highlight(`video_bass_opts_boost`, false)
       App.bass_boost_enabled = false
       App.set_bass_gain(0)
     }
@@ -634,7 +634,7 @@ App.video_bass_cut_on = () => {
     }
 
     if (App.bass_boost_node) {
-      App.button_highlight(`video_commands_opts_bass_cut`)
+      App.button_highlight(`video_bass_opts_cut`)
       App.bass_cut_enabled = true
       App.set_bass_gain(-8)
     }
@@ -646,7 +646,7 @@ App.video_bass_cut_off = () => {
 
   if (video) {
     if (App.bass_boost_node) {
-      App.button_highlight(`video_commands_opts_bass_cut`, false)
+      App.button_highlight(`video_bass_opts_cut`, false)
       App.bass_cut_enabled = false
       App.set_bass_gain(0)
     }

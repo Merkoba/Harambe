@@ -892,44 +892,25 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
     })
 
     App.bind_button({
-      what: `${name}_opts_bass_boost`,
+      what: `${name}_opts_bass`,
       func: () => {
-        App.video_bass_boost_toggle()
+        App.show_video_bass_menu()
       },
-      close: false,
       icon: App.icon(`bass`),
     })
 
     App.bind_button({
-      what: `${name}_opts_bass_cut`,
+      what: `${name}_opts_treble`,
       func: () => {
-        App.video_bass_cut_toggle()
+        App.show_video_treble_menu()
       },
-      close: false,
-      icon: App.icon(`bass_cut`),
+      icon: App.icon(`treble`),
     })
 
     App.bind_button({
-      what: `${name}_opts_treble_cut`,
+      what: `${name}_opts_fade`,
       func: () => {
-        App.video_treble_cut_toggle()
-      },
-      close: false,
-      icon: App.icon(`treble_cut`),
-    })
-
-    App.bind_button({
-      what: `${name}_opts_fade_in`,
-      func: () => {
-        App.video_fade_in()
-      },
-      icon: App.icon(`fade_in`),
-    })
-
-    App.bind_button({
-      what: `${name}_opts_fade_out`,
-      func: () => {
-        App.video_fade_out()
+        App.show_video_fade_menu()
       },
       icon: App.icon(`fade_out`),
     })
@@ -1024,6 +1005,78 @@ App.setup_video_pitch_opts = (show = false, parent = ``) => {
   }, show, parent)
 }
 
+App.setup_video_fade_opts = (show = false, parent = ``) => {
+  let name = `video_fade`
+
+  App.make_opts(name, () => {
+    App.bind_button({
+      what: `${name}_opts_in`,
+      func: () => {
+        App.video_fade_in()
+      },
+      close: false,
+      icon: App.icon(`fade_in`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_out`,
+      func: () => {
+        App.video_fade_out()
+      },
+      close: false,
+      icon: App.icon(`fade_out`),
+    })
+  }, show, parent)
+}
+
+App.setup_video_bass_opts = (show = false, parent = ``) => {
+  let name = `video_bass`
+
+  App.make_opts(name, () => {
+    App.bind_button({
+      what: `${name}_opts_boost`,
+      func: () => {
+        App.video_bass_boost_toggle()
+      },
+      close: false,
+      icon: App.icon(`boost`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_cut`,
+      func: () => {
+        App.video_bass_cut_toggle()
+      },
+      close: false,
+      icon: App.icon(`cut`),
+    })
+  }, show, parent)
+}
+
+App.setup_video_treble_opts = (show = false, parent = ``) => {
+  let name = `video_treble`
+
+  App.make_opts(name, () => {
+    App.bind_button({
+      what: `${name}_opts_boost`,
+      func: () => {
+        App.video_treble_boost_toggle()
+      },
+      close: false,
+      icon: App.icon(`boost`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_cut`,
+      func: () => {
+        App.video_treble_cut_toggle()
+      },
+      close: false,
+      icon: App.icon(`cut`),
+    })
+  }, show, parent)
+}
+
 App.setup_zip_file_opts = (show = false, parent = ``) => {
   let name = `zip_file`
 
@@ -1052,4 +1105,16 @@ App.show_video_speed_menu = () => {
 
 App.show_video_pitch_menu = () => {
   App.setup_video_pitch_opts(true, `video_commands`)
+}
+
+App.show_video_fade_menu = () => {
+  App.setup_video_fade_opts(true, `video_commands`)
+}
+
+App.show_video_bass_menu = () => {
+  App.setup_video_bass_opts(true, `video_commands`)
+}
+
+App.show_video_treble_menu = () => {
+  App.setup_video_treble_opts(true, `video_commands`)
 }
