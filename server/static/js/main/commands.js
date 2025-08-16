@@ -11,6 +11,7 @@ App.pitch_step_size = 1
 App.current_audio_source = null
 App.playback_step = 0.1
 App.jump_popup_delay = 5000
+App.rotate_popup_delay = 5000
 
 App.show_video_commands = () => {
   App.setup_video_commands_opts(true)
@@ -618,4 +619,12 @@ App.image_rotate = (direction) => {
   image.style.transform = `rotate(${currentRotation}deg)`
   image.style.transformOrigin = `center center`
   image.style.transition = `transform 0.3s ease`
+
+  App.corner_msg({
+    text: `Click to rotate more`,
+    delay: App.rotate_popup_delay,
+    on_click: () => {
+      App.image_rotate(direction)
+    },
+  })
 }

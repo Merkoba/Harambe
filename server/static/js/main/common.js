@@ -1308,6 +1308,7 @@ App.corner_msg = (args = {}) => {
       after_show: () => {
         App.current_msg = `corner`
       },
+      zStack_level: 52000000,
     })
   }
 
