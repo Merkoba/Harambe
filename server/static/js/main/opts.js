@@ -912,7 +912,7 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
       func: () => {
         App.show_video_fade_menu()
       },
-      icon: App.icon(`fade_out`),
+      icon: App.icon(`fade_in`),
     })
   }, show, parent)
 }
