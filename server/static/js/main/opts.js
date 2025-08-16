@@ -930,19 +930,19 @@ App.setup_image_commands_opts = (show = false, parent = ``) => {
 
   App.make_opts(name, () => {
     App.bind_button({
-      what: `${name}_opts_rotate_left`,
+      what: `${name}_opts_rotate_clockwise`,
       func: () => {
-        App.image_rotate(`left`)
+        App.image_rotate(`clockwise`)
       },
-      icon: App.icon(`rotate_left`),
+      icon: App.icon(`clockwise`),
     })
 
     App.bind_button({
-      what: `${name}_opts_rotate_right`,
+      what: `${name}_opts_rotate_counterclockwise`,
       func: () => {
-        App.image_rotate(`right`)
+        App.image_rotate(`counterclockwise`)
       },
-      icon: App.icon(`rotate_right`),
+      icon: App.icon(`counterclockwise`),
     })
   }, show, parent)
 }

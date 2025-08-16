@@ -160,11 +160,11 @@ def fill_icons(config: Config) -> None:
     # Icon for cut
     config.icons["cut"] = "✂️"
 
-    # Icon for rotate left
-    config.icons["rotate_left"] = "↩️"
+    # Icon for clockwise
+    config.icons["clockwise"] = "🔃"
 
-    # Icon for rotate right
-    config.icons["rotate_right"] = "↪️"
+    # Icon for counterclockwise
+    config.icons["counterclockwise"] = "🔄"
 
 
 def fill_media_icons(config: Config) -> None:

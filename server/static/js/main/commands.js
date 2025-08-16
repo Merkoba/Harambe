@@ -608,11 +608,11 @@ App.image_rotate = (direction) => {
 
   let currentRotation = parseInt(image.dataset.rotation)
 
-  if (direction === `left`) {
-    currentRotation -= 90
-  }
-  else if (direction === `right`) {
+  if (direction === `clockwise`) {
     currentRotation += 90
+  }
+  else if (direction === `counterclockwise`) {
+    currentRotation -= 90
   }
 
   image.dataset.rotation = currentRotation
