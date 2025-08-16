@@ -1014,7 +1014,6 @@ App.setup_video_fade_opts = (show = false, parent = ``) => {
       func: () => {
         App.video_fade_in()
       },
-      close: false,
       icon: App.icon(`fade_in`),
     })
 
@@ -1023,7 +1022,6 @@ App.setup_video_fade_opts = (show = false, parent = ``) => {
       func: () => {
         App.video_fade_out()
       },
-      close: false,
       icon: App.icon(`fade_out`),
     })
   }, show, parent)
