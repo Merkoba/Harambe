@@ -673,7 +673,7 @@ App.video_treble_boost_on = () => {
     }
 
     if (App.treble_boost_node) {
-      App.button_highlight(`video_commands_opts_treble_boost`)
+      App.button_highlight(`video_treble_opts_boost`)
       App.treble_boost_enabled = true
       App.set_treble_gain(6)
     }
@@ -685,7 +685,7 @@ App.video_treble_boost_off = () => {
 
   if (video) {
     if (App.treble_boost_node) {
-      App.button_highlight(`video_commands_opts_treble_boost`, false)
+      App.button_highlight(`video_treble_opts_boost`, false)
       App.treble_boost_enabled = false
       App.set_treble_gain(0)
     }
@@ -712,7 +712,7 @@ App.video_treble_cut_on = () => {
     }
 
     if (App.treble_boost_node) {
-      App.button_highlight(`video_commands_opts_treble_cut`)
+      App.button_highlight(`video_treble_opts_cut`)
       App.treble_cut_enabled = true
       App.set_treble_gain(-8)
     }
@@ -724,7 +724,7 @@ App.video_treble_cut_off = () => {
 
   if (video) {
     if (App.treble_boost_node) {
-      App.button_highlight(`video_commands_opts_treble_cut`, false)
+      App.button_highlight(`video_treble_opts_cut`, false)
       App.treble_cut_enabled = false
       App.set_treble_gain(0)
     }
