@@ -547,6 +547,11 @@ App.expand_modal_image = () => {
 }
 
 App.reset_modal_image = () => {
+  App.reset_image_rotation()
+  App.unexpand_modal_image()
+}
+
+App.unexpand_modal_image = () => {
   if (!App.image_expanded) {
     return
   }
@@ -751,6 +756,11 @@ App.start_embed = () => {
       disable_content_padding: true,
       before_show: () => {
         App.reset_modal_image()
+      },
+      after_close: () => {
+        if (App.corner_mode === `modal_image`) {
+          App.hide_corner_msg()
+        }
       },
     })
 

@@ -173,6 +173,8 @@ a.link:hover,
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
 }
 
 #modal_image_container.expanded #modal_image {

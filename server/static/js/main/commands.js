@@ -754,14 +754,24 @@ App.image_rotate = (direction) => {
 
   image.dataset.rotation = currentRotation
   image.style.transform = `rotate(${currentRotation}deg)`
-  image.style.transformOrigin = `center center`
-  image.style.transition = `transform 0.3s ease`
 
   App.corner_msg({
+    mode: `modal_image`,
     text: `Click to rotate more`,
     delay: App.rotate_popup_delay,
     on_click: () => {
       App.image_rotate(direction)
     },
   })
+}
+
+App.reset_image_rotation = () => {
+  let image = DOM.el(`#modal_image`)
+
+  if (!image) {
+    return
+  }
+
+  image.dataset.rotation = 0
+  image.style.transform = `rotate(0deg)`
 }

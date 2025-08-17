@@ -1335,6 +1335,7 @@ App.is_disabled = (el) => {
 
 App.corner_msg = (args = {}) => {
   let def_args = {
+    mode: `normal`,
     delay: 5000,
   }
 
@@ -1356,8 +1357,15 @@ App.corner_msg = (args = {}) => {
     })
   }
 
+  App.corner_mode = args.mode
   App.msg_corner.options.on_click = args.on_click
   App.msg_corner.show(args.text)
+}
+
+App.hide_corner_msg = () => {
+  if (App.msg_corner) {
+    App.msg_corner.close()
+  }
 }
 
 App.check_cmd = () => {
