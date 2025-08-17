@@ -754,10 +754,9 @@ App.start_embed = () => {
       id: `modal_image`,
       class: `modal_image`,
       disable_content_padding: true,
-      before_show: () => {
-        App.reset_modal_image()
-      },
       after_close: () => {
+        App.reset_modal_image()
+
         if (App.corner_mode === `modal_image`) {
           App.hide_corner_msg()
         }

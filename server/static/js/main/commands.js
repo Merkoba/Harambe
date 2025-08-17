@@ -743,17 +743,17 @@ App.image_rotate = (direction) => {
     image.dataset.rotation = 0
   }
 
-  let currentRotation = parseInt(image.dataset.rotation)
+  let current_rotation = parseInt(image.dataset.rotation)
 
   if (direction === `clockwise`) {
-    currentRotation += 90
+    current_rotation += 90
   }
   else if (direction === `counterclockwise`) {
-    currentRotation -= 90
+    current_rotation -= 90
   }
 
-  image.dataset.rotation = currentRotation
-  image.style.transform = `rotate(${currentRotation}deg)`
+  image.dataset.rotation = current_rotation
+  image.style.transform = `rotate(${current_rotation}deg)`
 
   App.corner_msg({
     mode: `modal_image`,
