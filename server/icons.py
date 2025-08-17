@@ -118,12 +118,6 @@ def fill_icons(config: Config) -> None:
     # Icon for rewind
     config.icons["rewind"] = "⏪"
 
-    # Icon for slow
-    config.icons["slow"] = "🐢"
-
-    # Icon for fast
-    config.icons["fast"] = "🐇"
-
     # Icon for fade in
     config.icons["fade_in"] = "🌅"
 

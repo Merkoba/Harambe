@@ -949,7 +949,7 @@ App.setup_video_speed_opts = (show = false, parent = ``) => {
         App.video_faster()
       },
       close: false,
-      icon: App.icon(`fast`),
+      icon: App.icon(`up`),
     })
 
     App.bind_button({
@@ -958,7 +958,7 @@ App.setup_video_speed_opts = (show = false, parent = ``) => {
         App.video_slower()
       },
       close: false,
-      icon: App.icon(`slow`),
+      icon: App.icon(`down`),
     })
 
     App.bind_button({
