@@ -334,6 +334,16 @@ Users can change their own theme using the menu.
 
 ---
 
+## Commands
+
+There are some commands for media under the `Cmd` button at the top.
+
+For videos these include speed and pitch changes, reverb, bass/treble boost/cut, and fade in/out.
+
+For images there are commands to rotate clockwise and counterclockwise.
+
+---
+
 ## Also
 
 The cool reaction icons was an idea by `fourdrey`.
