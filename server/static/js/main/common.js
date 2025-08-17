@@ -1337,6 +1337,7 @@ App.corner_msg = (args = {}) => {
   let def_args = {
     mode: `normal`,
     delay: 5000,
+    on_middle_click: () => {},
   }
 
   App.fill_def_args(def_args, args)
@@ -1349,6 +1350,9 @@ App.corner_msg = (args = {}) => {
       autoclose_delay: args.delay,
       on_click: () => {
         args.on_click()
+      },
+      on_middle_click: () => {
+        args.on_middle_click()
       },
       after_show: () => {
         App.current_msg = `corner`

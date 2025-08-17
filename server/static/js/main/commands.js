@@ -757,11 +757,14 @@ App.image_rotate = (direction) => {
 
   App.corner_msg({
     mode: `modal_image`,
-    text: `Click to rotate more`,
+    text: `Clockwise | Counter`,
     delay: App.rotate_popup_delay,
     on_click: () => {
-      App.image_rotate(direction)
+      App.image_rotate(`clockwise`)
     },
+    on_middle_click: () => {
+      App.image_rotate(`counterclockwise`)
+    }
   })
 }
 
