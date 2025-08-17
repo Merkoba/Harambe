@@ -1352,24 +1352,27 @@ App.corner_msg = (args = {}) => {
 
   App.fill_def_args(def_args, args)
 
-  if (!App.msg_corner) {
-    App.msg_corner = Msg.factory({
-      id: `corner_msg`,
-      preset: `popup_autoclose`,
-      position: `bottomright`,
-      autoclose_delay: args.delay,
-      on_click: () => {
-        args.on_click()
-      },
-      on_middle_click: () => {
-        args.on_middle_click()
-      },
-      after_show: () => {
-        App.current_msg = `corner`
-      },
-      zStack_level: 52000000,
-    })
+  if (App.msg_corner) {
+    App.msg_corner.close()
+    App.msg_corner = null
   }
+
+  App.msg_corner = Msg.factory({
+    id: `corner_msg`,
+    preset: `popup_autoclose`,
+    position: `bottomright`,
+    autoclose_delay: args.delay,
+    on_click: () => {
+      args.on_click()
+    },
+    on_middle_click: () => {
+      args.on_middle_click()
+    },
+    after_show: () => {
+      App.current_msg = `corner`
+    },
+    zStack_level: 52000000,
+  })
 
   App.corner_mode = args.mode
   App.msg_corner.options.on_click = args.on_click
