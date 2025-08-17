@@ -304,7 +304,6 @@ App.react_prompt = (id) => {
     placeholder: `Write a text reaction`,
     max: App.max_reaction_length,
     value,
-    clear: true,
     callback: (text) => {
       if (!text) {
         return

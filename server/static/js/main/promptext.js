@@ -9,7 +9,6 @@ class Promptext {
       value: ``,
       buttons: [],
       password: false,
-      clear: false,
     }
 
     App.fill_def_args(def_args, args)
@@ -17,11 +16,6 @@ class Promptext {
     let opts = {
       persistent: false,
       disable_content_padding: true,
-    }
-
-    if (args.clear) {
-      opts.clear_editables = true
-      opts.clear_editables_full = true
     }
 
     let msg = Msg.factory(opts)

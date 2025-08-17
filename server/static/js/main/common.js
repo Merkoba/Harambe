@@ -104,6 +104,11 @@ App.setup_keyboard = () => {
         App.show_modal_image()
       }
     }
+    else if (e.key === `Escape`) {
+      if (App.any_modal_open()) {
+        App.close_modals()
+      }
+    }
     else if (!isNaN(n) && (n > -1)) {
       if (App.any_modal_open()) {
         let content = Msg.msg.highest_instance().content
