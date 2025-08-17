@@ -764,7 +764,7 @@ App.image_rotate = (direction) => {
     },
     on_middle_click: () => {
       App.image_rotate(`counterclockwise`)
-    }
+    },
   })
 }
 
