@@ -448,6 +448,7 @@ App.apply_update = (update) => {
 }
 
 App.show_modal_image = () => {
+  App.close_corner_msg()
   App.msg_image.show()
 }
 
@@ -753,7 +754,7 @@ App.start_embed = () => {
         App.reset_modal_image()
 
         if (App.corner_mode === `modal_image`) {
-          App.hide_corner_msg()
+          App.close_corner_msg()
         }
       },
     })

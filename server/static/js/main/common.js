@@ -61,7 +61,7 @@ App.setup_keyboard = () => {
         e.preventDefault()
         Confirmbox.instance.action()
       }
-      else if (App.any_modal_open()) {
+      else if (App.any_modal_open(`higher`)) {
         let pmt = Promptext.instance
 
         if (pmt && pmt.is_open()) {
@@ -99,6 +99,9 @@ App.setup_keyboard = () => {
             }
           }
         }
+      }
+      else if (App.post.image_embed) {
+        App.show_modal_image()
       }
     }
     else if (!isNaN(n) && (n > -1)) {
@@ -1301,8 +1304,20 @@ App.show_next = (what = `menu`, back_button = false) => {
   App.msg_show(`next`, back_button)
 }
 
-App.any_modal_open = () => {
-  return Msg.msg && Msg.msg.any_open()
+App.any_modal_open = (what = `all`) => {
+  if (!Msg.msg) {
+    return false
+  }
+
+  if (what === `all`) {
+    return Msg.msg.any_open()
+  }
+  else if (what === `higher`) {
+    return Msg.msg.any_higher_open()
+  }
+  else if (what === `lower`) {
+    return Msg.msg.any_lower_open()
+  }
 }
 
 App.viewport_height = () => {
@@ -1379,7 +1394,7 @@ App.corner_msg = (args = {}) => {
   App.msg_corner.show(args.text)
 }
 
-App.hide_corner_msg = () => {
+App.close_corner_msg = () => {
   if (App.msg_corner) {
     App.msg_corner.close()
   }
