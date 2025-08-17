@@ -4,6 +4,15 @@
     --max_media_height: 680px;
 }
 
+@keyframes blink-animation {
+    from, to {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
 body, html {
     color: var(--text_color);
     background-color: var(--background_color);
@@ -425,4 +434,8 @@ a.link:hover,
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.blink {
+    animation: blink-animation 0.5s steps(5, start) infinite;
 }

@@ -1435,3 +1435,11 @@ App.button_highlight = (what, add = true) => {
     }
   }
 }
+
+App.blink = (el) => {
+  el.classList.add(`blink`)
+
+  setTimeout(() => {
+    el.classList.remove(`blink`)
+  }, 1000)
+}
