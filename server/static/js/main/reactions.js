@@ -313,6 +313,7 @@ App.react_prompt = (id) => {
         return
       }
 
+      App.hide_icons()
       let n = App.max_reaction_length
       text = App.remove_multiple_empty_lines(text)
       text = App.replace_urls(text)
