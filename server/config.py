@@ -365,7 +365,7 @@ class Config:
         self.gif_magic_height = 480
 
         # Frames per second for gif magic
-        self.gif_magic_fps = 1.5
+        self.gif_magic_fps = 1.25
 
         # Background color for gif magic
         self.gif_magic_color = "black"
