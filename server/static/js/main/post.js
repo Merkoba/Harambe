@@ -214,12 +214,7 @@ App.init = () => {
 
   if (cmd) {
     DOM.ev(cmd, `click`, () => {
-      if (App.post.video_embed || App.post.audio_embed) {
-        App.show_video_commands()
-      }
-      else if (App.post.image_embed) {
-        App.show_image_commands()
-      }
+      App.show_commands()
     })
   }
 

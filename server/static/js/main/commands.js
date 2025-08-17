@@ -16,6 +16,15 @@ App.playback_step = 0.1
 App.jump_popup_delay = 5000
 App.rotate_popup_delay = 5000
 
+App.show_commands = () => {
+  if (App.post.video_embed || App.post.audio_embed) {
+    App.show_video_commands()
+  }
+  else if (App.post.image_embed) {
+    App.show_image_commands()
+  }
+}
+
 App.show_video_commands = () => {
   App.setup_video_commands_opts(true)
 }

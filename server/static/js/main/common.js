@@ -76,6 +76,16 @@ App.setup_keyboard = () => {
             e.preventDefault()
           }
         }
+        else if (App.msg_image && App.msg_image.is_open()) {
+          if (e.shiftKey) {
+            App.image_rotate(`counterclockwise`)
+          }
+          else {
+            App.image_rotate(`clockwise`)
+          }
+
+          e.preventDefault()
+        }
         else {
           let content = Msg.msg.highest_instance().content
           let dialog = DOM.el(`.dialog_container`, content)
@@ -162,9 +172,9 @@ App.setup_keyboard = () => {
         }
       }
     }
-    else if (e.key === `.`) {
+    else if (e.key === `\\`) {
       if (e.ctrlKey && !e.shiftKey) {
-        App.show_video_commands()
+        App.show_commands()
       }
     }
   })
