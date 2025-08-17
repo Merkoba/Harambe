@@ -163,7 +163,9 @@ App.enter_icons = (item, hide = true) => {
 }
 
 App.hide_icons = () => {
-  App.msg_icons.close()
+  if (App.msg_icons) {
+    App.msg_icons.close()
+  }
 }
 
 App.up_icons = () => {
