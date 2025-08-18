@@ -100,8 +100,15 @@ App.setup_keyboard = () => {
           }
         }
       }
-      else if (App.post.image_embed) {
-        App.show_modal_image()
+      else if (App.is_post()) {
+        if (e.ctrlKey && !e.shiftKey) {
+          if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
+            App.react_prompt()
+          }
+        }
+        else if (App.is_image()) {
+          App.show_modal_image()
+        }
       }
     }
     else if (e.key === `Escape`) {
@@ -129,6 +136,9 @@ App.setup_keyboard = () => {
           }
         }
       }
+      else if (App.is_multimedia()){
+        App.video_percentage(n)
+      }
     }
     else if (e.key === `m`) {
       if (e.ctrlKey && !e.shiftKey) {
@@ -150,9 +160,13 @@ App.setup_keyboard = () => {
       }
     }
     else if (e.key === `ArrowUp`) {
-      if (App.mode === `post`) {
+      if (App.is_post()) {
         if (e.ctrlKey && e.shiftKey) {
           App.edit_post()
+        }
+        else if (e.ctrlKey && !e.shiftKey) {
+          App.volume_up()
+          e.preventDefault()
         }
         else if (App.image_expanded) {
           App.scroll_modal_up()
@@ -161,16 +175,12 @@ App.setup_keyboard = () => {
           App.expand_modal_image()
         }
       }
-      else if (e.ctrlKey && !e.shiftKey) {
-        App.fresh_post()
-      }
     }
     else if (e.key === `ArrowDown`) {
-      if (App.mode === `post`) {
+      if (App.is_post()) {
         if (e.ctrlKey && !e.shiftKey) {
-          if (!Popmsg.instance || !Popmsg.instance.msg.is_open()) {
-            App.react_prompt()
-          }
+          App.volume_down()
+          e.preventDefault()
         }
         else if (App.image_expanded) {
           App.scroll_modal_down()
@@ -183,6 +193,14 @@ App.setup_keyboard = () => {
     else if (e.key === `\\`) {
       if (e.ctrlKey && !e.shiftKey) {
         App.show_commands()
+      }
+    }
+    else if (e.key === ` `) {
+      if (App.is_multimedia()) {
+        if (!App.any_modal_open(`higher`)) {
+          App.toggle_play()
+          e.preventDefault()
+        }
       }
     }
   })
@@ -1487,4 +1505,16 @@ App.blink = (el) => {
   setTimeout(() => {
     el.classList.remove(`blink`)
   }, 1000)
+}
+
+App.is_post = () => {
+  return App.mode === `post`
+}
+
+App.is_image = () => {
+  return App.is_post() && App.post.image_embed
+}
+
+App.is_multimedia = () => {
+  return App.is_post() && (App.post.video_embed || App.post.audio_embed)
 }

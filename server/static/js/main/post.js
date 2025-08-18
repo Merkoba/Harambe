@@ -137,10 +137,10 @@ App.init = () => {
 
     DOM.ev(vol_btn, `wheel`, (e) => {
       if (e.deltaY < 0) {
-        App.increase_volume()
+        App.volume_up()
       }
       else {
-        App.decrease_volume()
+        App.volume_down()
       }
 
       e.preventDefault()
@@ -1078,7 +1078,7 @@ App.set_volume_feedback = (text) => {
   }, App.SECOND * 1.6)
 }
 
-App.increase_volume = (step = 0.05) => {
+App.volume_up = (step = 0.05) => {
   let video = DOM.el(`video`)
 
   if (!video) {
@@ -1088,7 +1088,7 @@ App.increase_volume = (step = 0.05) => {
   App.set_volume(video.volume + step)
 }
 
-App.decrease_volume = (step = 0.05) => {
+App.volume_down = (step = 0.05) => {
   let video = DOM.el(`video`)
 
   if (!video) {
@@ -1313,4 +1313,24 @@ App.show_zip_file_menu = () => {
 
 App.get_video = () => {
   return DOM.el(`#video`)
+}
+
+App.video_percentage = (n) => {
+  if ((n < 1) || (n > 9)) {
+    return
+  }
+
+  let video = App.get_video()
+
+  if (!video) {
+    return
+  }
+
+  if (!video.duration || isNaN(video.duration)) {
+    return
+  }
+
+  let p = n * 0.1
+  let time = video.duration * p
+  video.currentTime = time
 }
