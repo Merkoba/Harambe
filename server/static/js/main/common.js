@@ -10,6 +10,7 @@ App.YEAR = App.DAY * 365
 App.DECADE = App.YEAR * 10
 App.CENTURY = App.YEAR * 100
 App.MILLENNIUM = App.YEAR * 1000
+App.double_tap_delay = 300
 
 App.LETTERS = [`a`, `b`, `c`, `d`, `e`, `f`, `g`, `h`, `i`, `j`, `k`, `l`, `m`, `n`, `o`, `p`, `q`, `r`, `s`, `t`, `u`, `v`, `w`, `x`, `y`, `z`]
 
@@ -17,6 +18,7 @@ App.startup = () => {
   App.get_storage()
   App.setup_keyboard()
   App.setup_mouse()
+  App.start_double_tap()
 
   DOM.ev(document, `DOMContentLoaded`, () => {
     if (App.init) {
@@ -147,7 +149,7 @@ App.setup_keyboard = () => {
         }
         else {
           e.preventDefault()
-          App.setup_menu_opts(true)
+          App.show_main_menu()
         }
       }
     }
@@ -1517,4 +1519,58 @@ App.image_embed = () => {
 
 App.multimedia_embed = () => {
   return App.is_post() && (App.post.video_embed || App.post.audio_embed)
+}
+
+App.start_double_tap = () => {
+  let ctrl_tap_count = 0
+  let shift_tap_count = 0
+
+  let ctrl_reset_debouncer = App.create_debouncer(() => {
+    ctrl_tap_count = 0
+  }, App.double_tap_delay)
+
+  let shift_reset_debouncer = App.create_debouncer(() => {
+    shift_tap_count = 0
+  }, App.double_tap_delay)
+
+  DOM.ev(document, `keydown`, (e) => {
+    if (e.key === `Control`) {
+      ctrl_tap_count += 1
+      ctrl_reset_debouncer.call()
+
+      if (ctrl_tap_count === 2) {
+        ctrl_tap_count = 0
+        ctrl_reset_debouncer.cancel()
+        App.handle_double_ctrl()
+      }
+    }
+    else if (e.key === `Shift`) {
+      shift_tap_count += 1
+      shift_reset_debouncer.call()
+
+      if (shift_tap_count === 2) {
+        shift_tap_count = 0
+        shift_reset_debouncer.cancel()
+        App.handle_double_shift()
+      }
+    }
+  })
+}
+
+App.handle_double_ctrl = () => {
+  if (App.is_post()) {
+    App.toggle_max()
+  }
+}
+
+App.handle_double_shift = () => {
+  App.toggle_main_menu()
+}
+
+App.show_main_menu = () => {
+  App.setup_menu_opts(true)
+}
+
+App.toggle_main_menu = () => {
+  App.msg_menu.toggle()
 }

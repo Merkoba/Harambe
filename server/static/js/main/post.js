@@ -2,7 +2,6 @@ App.init = () => {
   App.date_ms = App.post.date * 1000
   App.refresh_count = 0
   App.max_on = false
-  App.max_id = ``
   App.image_expanded = false
   App.modal_image_container_id = `#Msg-content-container-modal_image`
   App.modal_image_scroll_step = 80
@@ -477,7 +476,13 @@ App.select_all_text = () => {
   }
 }
 
-App.toggle_max = (what, max_on) => {
+App.get_max_type = () => {
+  let max = DOM.el(`#max`)
+  return max.dataset.max_type
+}
+
+App.toggle_max = (max_on) => {
+  let what = App.get_max_type()
   let el = DOM.el(`#${what}`)
   let details = DOM.el(`#details`)
   let buttons = DOM.el(`#text_buttons`)
@@ -488,8 +493,6 @@ App.toggle_max = (what, max_on) => {
   else {
     App.max_on = !App.max_on
   }
-
-  App.max_id = what
 
   el.style.width = ``
   el.style.height = ``
@@ -689,10 +692,8 @@ App.start_embed = () => {
   let max = DOM.el(`#max`)
 
   if (max) {
-    let type = max.dataset.max_type
-
     DOM.evs(max, [`click`, `auxclick`], () => {
-      App.toggle_max(type)
+      App.toggle_max()
     })
 
     DOM.ev(max, `wheel`, (e) => {
@@ -1018,7 +1019,7 @@ App.check_max_editor = () => {
   let mheight = parseInt(App.get_css_var(`max_height`))
 
   if (App.max_on) {
-    if (App.max_id === `editor`) {
+    if (App.get_max_type() === `editor`) {
       let line_height = App.editor.renderer.line_height || 16
       let max_lines = Math.floor(mheight / line_height) - 2
 
@@ -1029,7 +1030,7 @@ App.check_max_editor = () => {
       App.editor.resize()
     }
   }
-  else if (App.max_id === `editor`) {
+  else if (App.get_max_type() === `editor`) {
     App.editor.setOptions({
       maxLines: App.editor_lines,
     })
@@ -1169,8 +1170,8 @@ App.setup_video = () => {
 }
 
 App.reset_max = () => {
-  if (App.max_on && App.max_id) {
-    App.toggle_max(App.max_id, false)
+  if (App.max_on && App.get_max_type()) {
+    App.toggle_max(false)
   }
 }
 
