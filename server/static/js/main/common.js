@@ -248,7 +248,7 @@ App.is_lossless_image = (file) => {
     `image/jpeg`,
   ]
 
-  return App.is_an_image(file) && !allowed.includes(file.type)
+  return App.is_image(file) && !allowed.includes(file.type)
 }
 
 App.is_lossless_audio = (file) => {
@@ -258,7 +258,7 @@ App.is_lossless_audio = (file) => {
     `audio/opus`,
   ]
 
-  return App.is_an_audio(file) && !allowed.includes(file.type)
+  return App.is_audio(file) && !allowed.includes(file.type)
 }
 
 App.is_lossless_video = (file) => {
@@ -267,10 +267,10 @@ App.is_lossless_video = (file) => {
     `video/webm`,
   ]
 
-  return App.is_a_video(file) && !allowed.includes(file.type)
+  return App.is_video(file) && !allowed.includes(file.type)
 }
 
-App.is_an_image = (file, include_gif = true) => {
+App.is_image = (file, include_gif = true) => {
   let ok = file.type.match(`image/*`)
 
   if (ok) {
@@ -282,11 +282,11 @@ App.is_an_image = (file, include_gif = true) => {
   return ok
 }
 
-App.is_an_audio = (file) => {
+App.is_audio = (file) => {
   return file.type.match(`audio/*`)
 }
 
-App.is_a_video = (file) => {
+App.is_video = (file) => {
   return file.type.match(`video/*`)
 }
 
