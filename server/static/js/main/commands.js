@@ -824,21 +824,21 @@ App.reset_image_rotation = () => {
 App.start_auto_video = () => {
   App.auto_video_on = true
   App.auto_video_action()
+  App.button_highlight(`video_commands_opts_auto`)
 }
 
 App.stop_auto_video = () => {
   App.auto_video_on = false
   clearTimeout(App.auto_video_timeout)
+  App.button_highlight(`video_commands_opts_auto`, false)
 }
 
 App.toggle_auto_video = () => {
   if (App.auto_video_on) {
     App.stop_auto_video()
-    App.button_highlight(`video_commands_opts_auto`, false)
   }
   else {
     App.start_auto_video()
-    App.button_highlight(`video_commands_opts_auto`)
   }
 }
 
