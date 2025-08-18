@@ -192,7 +192,7 @@ App.setup_keyboard = () => {
     }
     else if (e.key === `\\`) {
       if (e.ctrlKey && !e.shiftKey) {
-        App.show_commands()
+        App.toggle_commands()
       }
     }
     else if (e.key === ` `) {
@@ -248,7 +248,7 @@ App.is_lossless_image = (file) => {
     `image/jpeg`,
   ]
 
-  return App.is_image(file) && !allowed.includes(file.type)
+  return App.is_an_image(file) && !allowed.includes(file.type)
 }
 
 App.is_lossless_audio = (file) => {
@@ -270,7 +270,7 @@ App.is_lossless_video = (file) => {
   return App.is_video(file) && !allowed.includes(file.type)
 }
 
-App.is_image = (file, include_gif = true) => {
+App.is_an_image = (file, include_gif = true) => {
   let ok = file.type.match(`image/*`)
 
   if (ok) {

@@ -16,11 +16,30 @@ App.playback_step = 0.1
 App.jump_popup_delay = 5000
 App.rotate_popup_delay = 5000
 
+App.toggle_commands = () => {
+  if (App.is_multimedia()) {
+    if (App.msg_video_commands && App.msg_video_commands.is_open()) {
+      App.msg_video_commands.close()
+    }
+    else {
+      App.show_video_commands()
+    }
+  }
+  else if (App.is_image()) {
+    if (App.msg_image_commands && App.msg_image_commands.is_open()) {
+      App.msg_image_commands.close()
+    }
+    else {
+      App.show_image_commands()
+    }
+  }
+}
+
 App.show_commands = () => {
-  if (App.post.video_embed || App.post.audio_embed) {
+  if (App.is_multimedia()) {
     App.show_video_commands()
   }
-  else if (App.post.image_embed) {
+  else if (App.is_image()) {
     App.show_image_commands()
   }
 }
