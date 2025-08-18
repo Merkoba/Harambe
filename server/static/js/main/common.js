@@ -575,6 +575,7 @@ App.bind_button = (args = {}) => {
   let def_args = {
     icon: ``,
     close: true,
+    mclose: true,
     class: ``,
   }
 
@@ -655,7 +656,7 @@ App.bind_button = (args = {}) => {
   if (args.mfunc || args.func) {
     DOM.ev(el, `auxclick`, (e) => {
       if (e.button === 1) {
-        if (args.close) {
+        if (args.mclose) {
           App[msg_name].close()
         }
 

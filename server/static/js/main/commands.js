@@ -814,3 +814,7 @@ App.reset_image_rotation = () => {
   image.dataset.rotation = 0
   image.style.transform = `rotate(0deg)`
 }
+
+App.start_auto_video = () => {
+  console.log(444)
+}

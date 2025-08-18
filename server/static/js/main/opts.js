@@ -866,6 +866,7 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
       mfunc: () => {
         App.video_rewind(5)
       },
+      mclose: false,
       icon: App.icon(`rewind`),
     })
 
@@ -916,6 +917,14 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
         App.show_video_fade_menu()
       },
       icon: App.icon(`fade_in`),
+    })
+
+    App.bind_button({
+      what: `${name}_opts_auto`,
+      func: () => {
+        App.start_auto_video()
+      },
+      icon: App.icon(`random`),
     })
   }, show, parent)
 }
