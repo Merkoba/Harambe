@@ -1575,3 +1575,42 @@ App.show_main_menu = () => {
 App.toggle_main_menu = () => {
   App.msg_menu.toggle()
 }
+
+App.random_int = (args = {}) => {
+  let def_args = {
+    exclude: [],
+  }
+
+  App.fill_def_args(def_args, args)
+
+  if (args.exclude.length > 0) {
+    let available = []
+
+    for (let i = args.min; i <= args.max; i++) {
+      if (!args.exclude.includes(i)) {
+        available.push(i)
+      }
+    }
+
+    if (available.length === 0) {
+      return
+    }
+
+    let random_index
+
+    if (args.rand) {
+      random_index = Math.floor(args.rand() * available.length)
+    }
+    else {
+      random_index = Math.floor(Math.random() * available.length)
+    }
+
+    return available[random_index]
+  }
+
+  if (args.rand) {
+    return Math.floor(args.rand() * (args.max - args.min + 1) + args.min)
+  }
+
+  return Math.floor(Math.random() * (args.max - args.min + 1) + args.min)
+}

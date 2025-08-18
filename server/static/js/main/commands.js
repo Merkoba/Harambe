@@ -15,6 +15,7 @@ App.current_audio_source = null
 App.playback_step = 0.1
 App.jump_popup_delay = 5000
 App.rotate_popup_delay = 5000
+App.auto_video_on = false
 
 App.toggle_commands = () => {
   if (App.multimedia_embed()) {
@@ -74,7 +75,9 @@ App.video_jump_action = () => {
     let duration = video.duration
 
     if (duration > 0) {
-      let random_time = Math.random() * duration
+      let min = parseInt(0.1 * duration)
+      let max = parseInt(0.9 * duration)
+      let random_time = App.random_int({min, max})
       video.currentTime = random_time
 
       App.corner_msg({
@@ -816,5 +819,37 @@ App.reset_image_rotation = () => {
 }
 
 App.start_auto_video = () => {
-  console.log(444)
+  App.auto_video_on = true
+  App.auto_video_action()
+}
+
+App.stop_auto_video = () => {
+  App.auto_video_on = false
+  clearTimeout(App.auto_video_timeout)
+}
+
+App.start_auto_video_timeout = () => {
+  let delay_type = App.random_int({min: 1, max: 3})
+  let delay
+
+  if (delay_type === 1) {
+    delay = App.random_int({min: 5000, max: 10000})
+  }
+  else if (delay_type === 2) {
+    delay = App.random_int({min: 15000, max: 30000})
+  }
+  else {
+    delay = App.random_int({min: 45000, max: 60000})
+  }
+
+  App.auto_video_timeout = setTimeout(() => {
+    App.auto_video_action()
+  }, delay)
+}
+
+App.auto_video_action = () => {
+  if (App.auto_video_on) {
+    App.video_jump()
+    App.start_auto_video_timeout()
+  }
 }

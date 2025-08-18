@@ -1167,6 +1167,10 @@ App.setup_video = () => {
       App.current_pitch_step = 0
     }
   })
+
+  DOM.ev(video, `ended`, () => {
+    App.stop_auto_video()
+  })
 }
 
 App.reset_max = () => {
