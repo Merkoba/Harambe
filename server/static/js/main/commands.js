@@ -88,10 +88,18 @@ App.video_jump_action = () => {
   }
 }
 
-App.video_rewind = () => {
+App.video_rewind = (seconds = 0) => {
   let video = App.get_video()
 
-  if (video) {
+  if (!video) {
+    return
+  }
+
+  if (seconds > 0) {
+    video.currentTime -= seconds
+    video.play()
+  }
+  else {
     video.currentTime = 0
     video.play()
   }

@@ -863,6 +863,9 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
       func: () => {
         App.video_rewind()
       },
+      mfunc: () => {
+        App.video_rewind(5)
+      },
       icon: App.icon(`rewind`),
     })
 
