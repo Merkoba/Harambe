@@ -1169,7 +1169,9 @@ App.setup_video = () => {
   })
 
   DOM.ev(video, `ended`, () => {
-    App.stop_auto_video()
+    if (!video.loop) {
+      App.stop_auto_video()
+    }
   })
 }
 
