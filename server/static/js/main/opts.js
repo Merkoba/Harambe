@@ -922,8 +922,9 @@ App.setup_video_commands_opts = (show = false, parent = ``) => {
     App.bind_button({
       what: `${name}_opts_auto`,
       func: () => {
-        App.start_auto_video()
+        App.toggle_auto_video()
       },
+      close: false,
       icon: App.icon(`random`),
     })
   }, show, parent)

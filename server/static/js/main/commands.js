@@ -15,6 +15,7 @@ App.current_audio_source = null
 App.playback_step = 0.1
 App.jump_popup_delay = 5000
 App.rotate_popup_delay = 5000
+App.automatic_popup_delay = 5000
 App.auto_video_on = false
 
 App.toggle_commands = () => {
@@ -53,7 +54,7 @@ App.show_image_commands = () => {
   App.setup_image_commands_opts(true)
 }
 
-App.video_jump = () => {
+App.video_jump = (feedback = false) => {
   let video = App.get_video()
 
   if (video) {
@@ -62,12 +63,12 @@ App.video_jump = () => {
       video.play()
     }
     else {
-      App.video_jump_action()
+      App.video_jump_action(feedback)
     }
   }
 }
 
-App.video_jump_action = () => {
+App.video_jump_action = (feedback = false) => {
   App.video_jump_enabled = false
   let video = App.get_video()
 
@@ -80,13 +81,15 @@ App.video_jump_action = () => {
       let random_time = App.random_int({min, max})
       video.currentTime = random_time
 
-      App.corner_msg({
-        text: `Jumped to ${parseInt(random_time)}s`,
-        delay: App.jump_popup_delay,
-        on_click: () => {
-          App.video_jump_action()
-        },
-      })
+      if (feedback) {
+        App.corner_msg({
+          text: `Jumped to ${parseInt(random_time)}s`,
+          delay: App.jump_popup_delay,
+          on_click: () => {
+            App.video_jump_action()
+          },
+        })
+      }
     }
   }
 }
@@ -828,6 +831,17 @@ App.stop_auto_video = () => {
   clearTimeout(App.auto_video_timeout)
 }
 
+App.toggle_auto_video = () => {
+  if (App.auto_video_on) {
+    App.stop_auto_video()
+    App.button_highlight(`video_commands_opts_auto`, false)
+  }
+  else {
+    App.start_auto_video()
+    App.button_highlight(`video_commands_opts_auto`)
+  }
+}
+
 App.start_auto_video_timeout = () => {
   let delay_type = App.random_int({min: 1, max: 3})
   let delay
@@ -849,7 +863,7 @@ App.start_auto_video_timeout = () => {
 
 App.auto_video_action = () => {
   if (App.auto_video_on) {
-    App.video_jump()
+    App.video_jump(false)
     App.start_auto_video_timeout()
   }
 }
