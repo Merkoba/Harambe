@@ -822,8 +822,21 @@ App.reset_image_rotation = () => {
 }
 
 App.start_auto_video = () => {
+  let video = App.get_video()
+
+  if (!video) {
+    return
+  }
+
   App.auto_video_on = true
-  App.auto_video_action()
+
+  if (video.paused) {
+    App.auto_video_action()
+  }
+  else {
+    App.start_auto_video_timeout()
+  }
+
   App.button_highlight(`video_commands_opts_auto`)
 }
 
