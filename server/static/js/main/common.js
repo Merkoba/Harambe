@@ -106,7 +106,7 @@ App.setup_keyboard = () => {
             App.react_prompt()
           }
         }
-        else if (App.is_image()) {
+        else if (App.image_embed()) {
           App.show_modal_image()
         }
       }
@@ -136,7 +136,7 @@ App.setup_keyboard = () => {
           }
         }
       }
-      else if (App.is_multimedia()){
+      else if (App.multimedia_embed()){
         App.video_percentage(n)
       }
     }
@@ -196,7 +196,7 @@ App.setup_keyboard = () => {
       }
     }
     else if (e.key === ` `) {
-      if (App.is_multimedia()) {
+      if (App.multimedia_embed()) {
         if (!App.any_modal_open(`higher`)) {
           App.toggle_play()
           e.preventDefault()
@@ -258,7 +258,7 @@ App.is_lossless_audio = (file) => {
     `audio/opus`,
   ]
 
-  return App.is_audio(file) && !allowed.includes(file.type)
+  return App.is_an_audio(file) && !allowed.includes(file.type)
 }
 
 App.is_lossless_video = (file) => {
@@ -267,7 +267,7 @@ App.is_lossless_video = (file) => {
     `video/webm`,
   ]
 
-  return App.is_video(file) && !allowed.includes(file.type)
+  return App.is_a_video(file) && !allowed.includes(file.type)
 }
 
 App.is_an_image = (file, include_gif = true) => {
@@ -282,11 +282,11 @@ App.is_an_image = (file, include_gif = true) => {
   return ok
 }
 
-App.is_audio = (file) => {
+App.is_an_audio = (file) => {
   return file.type.match(`audio/*`)
 }
 
-App.is_video = (file) => {
+App.is_a_video = (file) => {
   return file.type.match(`video/*`)
 }
 
@@ -1511,10 +1511,10 @@ App.is_post = () => {
   return App.mode === `post`
 }
 
-App.is_image = () => {
+App.image_embed = () => {
   return App.is_post() && App.post.image_embed
 }
 
-App.is_multimedia = () => {
+App.multimedia_embed = () => {
   return App.is_post() && (App.post.video_embed || App.post.audio_embed)
 }

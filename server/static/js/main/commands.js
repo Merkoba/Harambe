@@ -17,7 +17,7 @@ App.jump_popup_delay = 5000
 App.rotate_popup_delay = 5000
 
 App.toggle_commands = () => {
-  if (App.is_multimedia()) {
+  if (App.multimedia_embed()) {
     if (App.msg_video_commands && App.msg_video_commands.is_open()) {
       App.msg_video_commands.close()
     }
@@ -25,7 +25,7 @@ App.toggle_commands = () => {
       App.show_video_commands()
     }
   }
-  else if (App.is_image()) {
+  else if (App.image_embed()) {
     if (App.msg_image_commands && App.msg_image_commands.is_open()) {
       App.msg_image_commands.close()
     }
@@ -36,10 +36,10 @@ App.toggle_commands = () => {
 }
 
 App.show_commands = () => {
-  if (App.is_multimedia()) {
+  if (App.multimedia_embed()) {
     App.show_video_commands()
   }
-  else if (App.is_image()) {
+  else if (App.image_embed()) {
     App.show_image_commands()
   }
 }

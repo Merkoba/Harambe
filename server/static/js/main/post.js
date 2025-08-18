@@ -745,7 +745,7 @@ App.start_embed = () => {
     })
   }
 
-  if (App.is_image()) {
+  if (App.image_embed()) {
     App.msg_image = Msg.factory({
       id: `modal_image`,
       class: `modal_image`,

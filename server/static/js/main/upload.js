@@ -496,7 +496,7 @@ App.check_visual_magic = () => {
   for (let file of App.get_active_files()) {
     let current = file.files[0]
 
-    if (App.is_an_image(current)) {
+    if (App.is_image(current)) {
       image_count++
     }
     else if (App.is_audio(current)) {
@@ -530,7 +530,7 @@ App.check_gif_magic = () => {
   for (let file of App.get_active_files()) {
     let current = file.files[0]
 
-    if (App.is_an_image(current, false)) {
+    if (App.is_image(current, false)) {
       image_count++
     }
     else {
@@ -656,7 +656,7 @@ App.check_file_media = (file) => {
   let image = DOM.el(`#image`)
   let video = DOM.el(`#video`)
 
-  if (App.is_an_image(the_file)) {
+  if (App.is_image(the_file)) {
     let reader = new FileReader()
 
     reader.onload = (e) => {
