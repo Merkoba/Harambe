@@ -104,8 +104,13 @@ App.video_rewind = (seconds = 0) => {
     video.play()
   }
   else {
+    video.pause()
     video.currentTime = 0
-    video.play()
+
+    // This is to avoid clicking
+    setTimeout(() => {
+      video.play()
+    }, 250)
   }
 }
 
