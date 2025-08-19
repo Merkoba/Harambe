@@ -858,13 +858,13 @@ App.start_auto_video_timeout = () => {
   let delay
 
   if (delay_type === 1) {
-    delay = App.random_int({min: 5000, max: 10000})
+    delay = App.random_int({min: App.SECOND * 5, max: App.SECOND * 10})
   }
   else if (delay_type === 2) {
-    delay = App.random_int({min: 15000, max: 30000})
+    delay = App.random_int({min: App.SECOND * 15, max: App.SECOND * 30})
   }
   else {
-    delay = App.random_int({min: 45000, max: 60000})
+    delay = App.random_int({min: App.SECOND * 45, max: App.SECOND * 60})
   }
 
   App.auto_video_timeout = setTimeout(() => {
