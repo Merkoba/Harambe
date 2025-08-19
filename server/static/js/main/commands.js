@@ -272,8 +272,7 @@ App.setup_audio_context = (video) => {
 
       source.connect(App.pitch_node)
       App.pitch_node.connect(App.bass_boost_node.input)
-      App.bass_boost_node.output.connect(App.reverb_node.input)
-      App.pitch_node.connect(App.treble_boost_node.input)
+      App.bass_boost_node.output.connect(App.treble_boost_node.input)
       App.treble_boost_node.output.connect(App.reverb_node.input)
       App.reverb_node.output.connect(App.audio_context.destination)
       video.audioSource = source
