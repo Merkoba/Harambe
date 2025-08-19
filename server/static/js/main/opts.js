@@ -19,6 +19,7 @@ App.make_opts = (name, setup, show = false, parent = ``) => {
 
   let t = DOM.el(`#template_${name}_opts`)
   App[msg_name].set(t.innerHTML)
+  App[msg_name].hb_parent = parent
   setup()
 
   if (parent) {
@@ -30,7 +31,7 @@ App.make_opts = (name, setup, show = false, parent = ``) => {
     App.bind_button({
       what: `${name}_opts_back`,
       func: () => {
-        App[`setup_${parent}_opts`](true)
+        App.menu_go_back(msg_name)
       },
       icon: `<`,
     })
@@ -39,6 +40,22 @@ App.make_opts = (name, setup, show = false, parent = ``) => {
   if (show) {
     App[msg_name].show()
   }
+}
+
+App.menu_go_back = (msg_name) => {
+  let msg = App[msg_name]
+
+  if (!msg) {
+    return
+  }
+
+  let parent = msg.hb_parent
+
+  if (!parent) {
+    return
+  }
+
+  App[`setup_${parent}_opts`](true)
 }
 
 App.setup_menu_opts = (show = false) => {

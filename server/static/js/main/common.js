@@ -118,6 +118,16 @@ App.setup_keyboard = () => {
         App.close_modals()
       }
     }
+    else if (e.key === `Backspace`) {
+      if (App.current_msg) {
+        let msg = App[App.current_msg]
+
+        if (msg && msg.is_open()) {
+          App.menu_go_back(App.current_msg)
+          msg.close()
+        }
+      }
+    }
     else if (!isNaN(n) && (n > -1)) {
       if (App.any_modal_open()) {
         let content = Msg.msg.highest_instance().content
