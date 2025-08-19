@@ -778,6 +778,8 @@ App.image_rotate = (direction) => {
     return
   }
 
+  App.unexpand_modal_image()
+
   if (!image.dataset.rotation) {
     image.dataset.rotation = 0
   }
