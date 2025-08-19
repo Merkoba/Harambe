@@ -9,10 +9,8 @@ App.bass_boost_enabled = false
 App.bass_cut_enabled = false
 App.treble_boost_enabled = false
 App.treble_cut_enabled = false
-App.current_pitch_step = 0
-App.pitch_step_size = 1
 App.current_audio_source = null
-App.playback_step = 0.1
+App.playback_step = 0.05
 App.jump_popup_delay = 5000
 App.rotate_popup_delay = 5000
 App.automatic_popup_delay = 5000
@@ -315,7 +313,6 @@ App.video_pitch_reset = () => {
 
   if (video) {
     App.set_video_preserve_pitch(true)
-    App.current_pitch_step = 0
     video.playbackRate = 1.0
     App.update_playback_title(`pitch`)
   }
