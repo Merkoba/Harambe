@@ -1,4 +1,6 @@
 App.fade_delay = 100
+App.fade_delay_fast = 25
+App.fade_step = 0.02
 App.audio_context = null
 App.pitch_node = null
 App.reverb_node = null
@@ -104,13 +106,17 @@ App.video_rewind = (seconds = 0) => {
     video.play()
   }
   else {
-    video.pause()
-    video.currentTime = 0
+    let volume = video.volume
 
-    // This is to avoid clicking
-    setTimeout(() => {
-      video.play()
-    }, 250)
+    // Fade out quickly then rewind
+    App.video_fade_out_fast(() => {
+      video.currentTime = 0
+
+      setTimeout(() => {
+        video.volume = volume
+        video.play()
+      }, 200)
+    })
   }
 }
 
@@ -214,7 +220,7 @@ App.video_fade_in = () => {
 
     let fadeIn = setInterval(() => {
       if (video.volume < 1) {
-        video.volume = Math.min(1, video.volume + 0.02)
+        video.volume = Math.min(1, video.volume + App.fade_step)
       }
       else {
         clearInterval(fadeIn)
@@ -223,19 +229,43 @@ App.video_fade_in = () => {
   }
 }
 
-App.video_fade_out = () => {
+App.video_fade_out = (callback) => {
   let video = App.get_video()
 
   if (video) {
     let fadeOut = setInterval(() => {
       if (video.volume > 0) {
-        video.volume = Math.max(0, video.volume - 0.02)
+        video.volume = Math.max(0, video.volume - App.fade_step)
       }
       else {
         clearInterval(fadeOut)
         video.pause()
+
+        if (callback) {
+          callback()
+        }
       }
     }, App.fade_delay)
+  }
+}
+
+App.video_fade_out_fast = (callback) => {
+  let video = App.get_video()
+
+  if (video) {
+    let fadeOut = setInterval(() => {
+      if (video.volume > 0) {
+        video.volume = Math.max(0, video.volume - App.fade_step)
+      }
+      else {
+        clearInterval(fadeOut)
+        video.pause()
+
+        if (callback) {
+          callback()
+        }
+      }
+    }, App.fade_delay_fast)
   }
 }
 
