@@ -489,17 +489,17 @@ App.create_impulse_response = (convolver) => {
     let length = Math.floor(sample_rate * seconds)
     let impulse = ac.createBuffer(2, length, sample_rate)
 
-    let earlyTimes = [0.007, 0.013, 0.021, 0.033]
-    let earlyGains = [0.6, 0.45, 0.32, 0.22]
+    let early_times = [0.007, 0.013, 0.021, 0.033]
+    let early_gains = [0.6, 0.45, 0.32, 0.22]
 
     for (let channel = 0; channel < 2; channel++) {
       let data = impulse.getChannelData(channel)
 
-      for (let j = 0; j < earlyTimes.length; j++) {
-        let t = earlyTimes[j] + (channel === 0 ? 0.000 : 0.0015)
+      for (let j = 0; j < early_times.length; j++) {
+        let t = early_times[j] + (channel === 0 ? 0.000 : 0.0015)
         let idx = Math.floor(t * sample_rate)
         if (idx < length) {
-          let gain = earlyGains[j]
+          let gain = early_gains[j]
 
           for (let k = -8; k <= 8; k++) {
             let p = idx + k
@@ -528,18 +528,20 @@ App.create_impulse_response = (convolver) => {
     }
 
     // Compute RMS of impulse for makeup gain compensation
-    let sumSq = 0
-    let totalSamples = 0
+    let sum_sq = 0
+    let total_samples = 0
+
     for (let c = 0; c < impulse.numberOfChannels; c++) {
       let data = impulse.getChannelData(c)
-      totalSamples += data.length
+      total_samples += data.length
+
       for (let i = 0; i < data.length; i++) {
         let v = data[i]
-        sumSq += v * v
+        sum_sq += v * v
       }
     }
 
-    let rms = Math.sqrt(sumSq / Math.max(1, totalSamples)) || 1.0
+    let rms = Math.sqrt(sum_sq / Math.max(1, total_samples)) || 1.0
     convolver.buffer = impulse
     return rms
   }
