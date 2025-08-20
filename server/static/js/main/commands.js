@@ -101,21 +101,27 @@ App.video_rewind = (seconds = 0) => {
     return
   }
 
+  let volume = video.volume
+
+  function action() {
+    video.currentTime = 0
+
+    setTimeout(() => {
+      video.volume = volume
+      video.play()
+    }, 200)
+  }
+
   if (seconds > 0) {
     video.currentTime -= seconds
     video.play()
   }
+  else if (video.paused) {
+    action()
+  }
   else {
-    let volume = video.volume
-
-    // Fade out quickly then rewind
     App.video_fade_out_fast(() => {
-      video.currentTime = 0
-
-      setTimeout(() => {
-        video.volume = volume
-        video.play()
-      }, 200)
+      action()
     })
   }
 }
