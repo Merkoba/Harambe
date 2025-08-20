@@ -171,12 +171,13 @@ App.playback_change = (mode, action) => {
   }
 
   if (action === `increase`) {
-    video.playbackRate = Math.min(10, rate + App.playback_step)
+    rate = Math.min(10, rate + App.playback_step)
   }
   else if (action === `decrease`) {
-    video.playbackRate = Math.max(0.1, rate - App.playback_step)
+    rate = Math.max(0.1, rate - App.playback_step)
   }
 
+  App.set_video_playback(rate, mode)
   App.update_playback_title(mode)
   App.playback_rate_mode = mode
 }
@@ -212,8 +213,29 @@ App.video_speed_reset = () => {
 
   if (video) {
     App.set_video_preserve_pitch(true)
-    video.playbackRate = 1.0
+    App.set_video_playback(1.0, `speed`)
     App.update_playback_title(`speed`)
+  }
+}
+
+App.set_video_playback = (value, mode) => {
+  let video = App.get_video()
+
+  if (video) {
+    video.playbackRate = value
+
+    if (value === 1.0) {
+      App.button_highlight(`video_commands_opts_speed`, false)
+      App.button_highlight(`video_commands_opts_pitch`, false)
+    }
+    else if (mode === `speed`) {
+      App.button_highlight(`video_commands_opts_pitch`, false)
+      App.button_highlight(`video_commands_opts_speed`, true)
+    }
+    else if (mode === `pitch`) {
+      App.button_highlight(`video_commands_opts_speed`, false)
+      App.button_highlight(`video_commands_opts_pitch`, true)
+    }
   }
 }
 
@@ -359,7 +381,7 @@ App.video_pitch_reset = () => {
 
   if (video) {
     App.set_video_preserve_pitch(true)
-    video.playbackRate = 1.0
+    App.set_video_playback(1.0, `pitch`)
     App.update_playback_title(`pitch`)
   }
 }
