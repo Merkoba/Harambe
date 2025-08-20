@@ -616,6 +616,13 @@ App.set_bass_gain = (gain_db) => {
   let clamped_gain = Math.max(-12, Math.min(12, gain_db))
 
   App.bass_boost_node.bass_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
+
+  if (gain_db === 0) {
+    App.button_highlight(`video_commands_opts_bass`, false)
+  }
+  else {
+    App.button_highlight(`video_commands_opts_bass`)
+  }
 }
 
 App.set_treble_gain = (gain_db) => {
@@ -628,6 +635,13 @@ App.set_treble_gain = (gain_db) => {
   let clamped_gain = Math.max(-12, Math.min(12, gain_db))
 
   App.treble_boost_node.treble_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
+
+  if (gain_db === 0) {
+    App.button_highlight(`video_commands_opts_treble`, false)
+  }
+  else {
+    App.button_highlight(`video_commands_opts_treble`)
+  }
 }
 
 App.set_reverb_mix = (mix) => {
