@@ -17,6 +17,7 @@ App.jump_popup_delay = 5000
 App.rotate_popup_delay = 5000
 App.automatic_popup_delay = 5000
 App.auto_video_on = false
+App.REVERB_DEFAULT_MIX = 0.55 // default wet mix when enabling reverb
 
 App.toggle_commands = () => {
   if (App.multimedia_embed()) {
@@ -419,7 +420,8 @@ App.create_reverb_node = () => {
     let convolver = ac.createConvolver()
     let dry_gain = ac.createGain()
     let wet_gain = ac.createGain()
-    let mix_gain = ac.createGain()
+    // Node used to sum dry + processed wet after compression
+    let sum_gain = ac.createGain()
     let output_gain = ac.createGain()
 
     let pre_delay = ac.createDelay(1.0)
@@ -437,12 +439,12 @@ App.create_reverb_node = () => {
     comp.attack.value = 0.003
     comp.release.value = 0.25
 
-    App.create_impulse_response(convolver)
+    let ir_rms = App.create_impulse_response(convolver) || 1.0
 
     convolver.normalize = true
     dry_gain.gain.value = 1.0
     wet_gain.gain.value = 0.0
-    mix_gain.gain.value = 1.0
+    sum_gain.gain.value = 1.0
     output_gain.gain.value = 1.0
 
     App.reverb_node = {
@@ -452,20 +454,26 @@ App.create_reverb_node = () => {
       lowpass,
       dry: dry_gain,
       wet: wet_gain,
-      mix: mix_gain,
+      sum: sum_gain,
       comp,
       output: output_gain,
+      impulse_rms: ir_rms,
+      last_mix: 0,
     }
 
+    // Wiring: dry bypasses compressor; wet goes through comp
     App.reverb_node.input.connect(App.reverb_node.dry)
     App.reverb_node.input.connect(App.reverb_node.pre_delay)
     App.reverb_node.pre_delay.connect(App.reverb_node.convolver)
     App.reverb_node.convolver.connect(App.reverb_node.lowpass)
     App.reverb_node.lowpass.connect(App.reverb_node.wet)
-    App.reverb_node.dry.connect(App.reverb_node.mix)
-    App.reverb_node.wet.connect(App.reverb_node.mix)
-    App.reverb_node.mix.connect(App.reverb_node.comp)
-    App.reverb_node.comp.connect(App.reverb_node.output)
+    // Wet -> comp -> sum
+    App.reverb_node.wet.connect(App.reverb_node.comp)
+    App.reverb_node.comp.connect(App.reverb_node.sum)
+    // Dry -> sum
+    App.reverb_node.dry.connect(App.reverb_node.sum)
+    // Sum -> output
+    App.reverb_node.sum.connect(App.reverb_node.output)
   }
   catch (e) {
     App.print_error(`Could not create reverb node:`, e)
@@ -519,10 +527,25 @@ App.create_impulse_response = (convolver) => {
       }
     }
 
+    // Compute RMS of impulse for makeup gain compensation
+    let sumSq = 0
+    let totalSamples = 0
+    for (let c = 0; c < impulse.numberOfChannels; c++) {
+      let data = impulse.getChannelData(c)
+      totalSamples += data.length
+      for (let i = 0; i < data.length; i++) {
+        let v = data[i]
+        sumSq += v * v
+      }
+    }
+    let rms = Math.sqrt(sumSq / Math.max(1, totalSamples)) || 1.0
+
     convolver.buffer = impulse
+    return rms
   }
   catch (e) {
     App.print_error(`Could not create impulse response:`, e)
+    return 1.0
   }
 }
 
@@ -650,13 +673,63 @@ App.set_reverb_mix = (mix) => {
   }
 
   let ac = App.audio_context
-  let t = Math.max(0, Math.min(1, mix)) * Math.PI / 2
-  let dryLevel = Math.cos(t)
-  let wetLevel = Math.sin(t)
+  let node = App.reverb_node
+  let clamped = Math.max(0, Math.min(1, mix))
+
+  // Avoid redundant scheduling
+  if (Math.abs(clamped - node.last_mix) < 0.002) {
+    return
+  }
+
   let now = ac.currentTime
 
-  App.reverb_node.dry.gain.setTargetAtTime(dryLevel, now, 0.01)
-  App.reverb_node.wet.gain.setTargetAtTime(wetLevel, now, 0.01)
+  if (clamped === 0) {
+    // Immediate kill of wet tail when disabling
+    node.dry.gain.cancelScheduledValues(now)
+    node.wet.gain.cancelScheduledValues(now)
+    node.sum.gain.cancelScheduledValues(now)
+    node.output.gain.cancelScheduledValues(now)
+    node.dry.gain.setValueAtTime(1.0, now)
+    node.wet.gain.setValueAtTime(0.0, now)
+    node.output.gain.setValueAtTime(1.0, now)
+    node.last_mix = 0
+    return
+  }
+
+  // Perceptual remap so mid control feels more wet
+  let percept = Math.pow(clamped, 0.6)
+  let t = percept * Math.PI / 2
+  let dry_level = Math.cos(t)
+  let wet_level = Math.sin(t)
+
+  // Energy compensation factoring IR RMS (wet energy scaled by impulse RMS)
+  let ir_rms = node.impulse_rms || 1.0
+  let total_level = Math.sqrt((dry_level * dry_level) + (wet_level * wet_level * ir_rms * ir_rms))
+  let makeup_gain = 1.0 / Math.max(0.0001, total_level)
+  // Keep within sane bounds
+  makeup_gain = Math.max(0.5, Math.min(1.3, makeup_gain))
+
+  // Short linear ramps for snappy yet click-free response
+  let rampTime = 0.03
+  let end = now + rampTime
+
+  function ramp(param, value) {
+    try {
+      param.cancelScheduledValues(now)
+      param.setValueAtTime(param.value, now)
+      param.linearRampToValueAtTime(value, end)
+    }
+    catch (e) {
+      // Fallback
+      param.setValueAtTime(value, end)
+    }
+  }
+
+  ramp(node.dry.gain, dry_level)
+  ramp(node.wet.gain, wet_level)
+  ramp(node.output.gain, makeup_gain)
+
+  node.last_mix = clamped
 }
 
 App.video_reverb_on = () => {
@@ -670,7 +743,7 @@ App.video_reverb_on = () => {
     if (App.reverb_node) {
       App.button_highlight(`video_commands_opts_reverb`)
       App.reverb_enabled = true
-      App.set_reverb_mix(0.55)
+      App.set_reverb_mix(App.REVERB_DEFAULT_MIX)
     }
   }
 }
