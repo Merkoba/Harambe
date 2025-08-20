@@ -28,6 +28,11 @@ App.init = () => {
     })
   }
 
+  DOM.ev(document, `click`, () => App.init_audio_context(), {once: true})
+  DOM.ev(document, `keydown`, () => App.init_audio_context(), {once: true})
+  DOM.ev(document, `touchstart`, () => App.init_audio_context(), {once: true})
+  DOM.ev(document, `play`, () => App.init_audio_context(), {once: true})
+
   App.start_embed()
 
   DOM.ev(document, `dragover`, (e) => {
@@ -1149,6 +1154,9 @@ App.setup_video = () => {
   if (!video) {
     return
   }
+
+  DOM.ev(video, `click`, () => App.init_audio_context(), {once: true})
+  DOM.ev(video, `play`, () => App.init_audio_context(), {once: true})
 
   DOM.ev(video, `playing`, () => {
     App.set_play_text(`Pause`)

@@ -269,14 +269,32 @@ App.video_fade_out_fast = (callback) => {
   }
 }
 
+App.init_audio_context = () => {
+  if (App.audio_context) {
+    return true
+  }
+
+  try {
+    App.audio_context = new (window.AudioContext || window.webkitAudioContext)()
+    App.create_reverb_node()
+    App.create_bass_boost_node()
+    App.create_treble_boost_node()
+    let video = App.get_video()
+
+    if (video) {
+      App.setup_audio_context(video)
+    }
+
+    return true
+  }
+  catch (e) {
+    return false
+  }
+}
+
 App.setup_audio_context = (video) => {
-  if (!App.audio_context) {
-    try {
-      App.audio_context = new (window.AudioContext || window.webkitAudioContext)()
-    }
-    catch (e) {
-      return false
-    }
+  if (!App.init_audio_context()) {
+    return false
   }
 
   if (App.audio_context.state === `suspended`) {
@@ -292,18 +310,6 @@ App.setup_audio_context = (video) => {
       let source = App.audio_context.createMediaElementSource(video)
       App.current_audio_source = source
       App.pitch_node = App.audio_context.createGain()
-
-      if (!App.reverb_node) {
-        App.create_reverb_node()
-      }
-
-      if (!App.bass_boost_node) {
-        App.create_bass_boost_node()
-      }
-
-      if (!App.treble_boost_node) {
-        App.create_treble_boost_node()
-      }
 
       source.connect(App.pitch_node)
       App.pitch_node.connect(App.bass_boost_node.input)
