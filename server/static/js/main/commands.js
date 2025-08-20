@@ -538,8 +538,8 @@ App.create_impulse_response = (convolver) => {
         sumSq += v * v
       }
     }
-    let rms = Math.sqrt(sumSq / Math.max(1, totalSamples)) || 1.0
 
+    let rms = Math.sqrt(sumSq / Math.max(1, totalSamples)) || 1.0
     convolver.buffer = impulse
     return rms
   }
