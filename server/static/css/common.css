@@ -430,7 +430,6 @@ select.settings_widget {
     white-space: pre-wrap;
     max-height: 80vh;
     max-width: 80vw;
-    overflow: hidden;
     padding: 1rem;
     word-break: break-word;
 }
