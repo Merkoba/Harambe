@@ -136,6 +136,7 @@ class Post:
     markdown_embed: bool
     zip_embed: bool
     last_reaction: str
+    last_reaction_uploader: str
     file_hash: str
     text: str
     privacy: str
@@ -203,9 +204,16 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
     value = post.value
 
     if post.reactions:
-        last_reaction = post.reactions[-1].value
+        lrp = post.reactions[-1]
+        last_reaction = lrp.value
+
+        if lrp.author:
+            last_reaction_uploader = lrp.author.name
+        else:
+            last_reaction_uploader = ""
     else:
         last_reaction = ""
+        last_reaction_uploader = ""
 
     if all_data:
         reactions = [react_procs.make_reaction(r, now) for r in post.reactions]
@@ -304,6 +312,7 @@ def make_post(post: DbPost, now: int, all_data: bool = False) -> Post:
         markdown_embed,
         zip_embed,
         last_reaction,
+        last_reaction_uploader,
         file_hash,
         text,
         privacy,

@@ -125,7 +125,7 @@
         data-listed="{{item.listed_str}}" data-mtype="{{item.mtype_str}}" data-username="{{item.username}}"
         data-privacy="{{item.privacy_str}}" data-description="{{item.description}}" data-value="{{item.value}}"
         data-num_reactions="{{item.num_reactions}}" data-sample_icon="{{item.sample_icon}}"
-        data-last_reaction="{{item.last_reaction}}">
+        data-last_reaction="{{item.last_reaction}}" data-last_reaction_uploader="{{item.last_reaction_uploader}}">
             {% if mode == "admin_posts" %}
             <!-- Checkbox -->
             <div class="table_cell checkbox" title="Select this item">
@@ -175,7 +175,7 @@
             {% else %}
             class="table_cell small reactions"
             {% endif %}
-            title="{{item.last_reaction}}">
+            title="{{item.last_reaction}} ({{item.last_reaction_uploader}})">
                 {{item.num_reactions}}
             </div>
 

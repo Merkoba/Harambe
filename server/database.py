@@ -884,8 +884,6 @@ def get_reactions(
             else:
                 rpost = None
 
-            ruser = None
-
             if not rpost:
                 rposts = get_posts(post_id=reaction.post, extra=False, oconn=connection)
                 rpost = rposts[0] if rposts else None
@@ -895,15 +893,7 @@ def get_reactions(
             else:
                 reaction.parent = None
 
-            if not ruser:
-                rusers = get_users(user_id=reaction.user, oconn=connection)
-                ruser = rusers[0] if rusers else None
-
-            if ruser:
-                reaction.author = ruser
-            else:
-                reaction.author = None
-
+            fill_reaction_author(reaction, oconn=connection)
         reactions.append(reaction)
 
     if not oconn:
@@ -956,14 +946,27 @@ def get_last_reaction(post_id: int, oconn: Connection | None = None) -> Reaction
     )
 
     row = c.fetchone()
+    reaction = None
+
+    if row:
+        reaction = make_reaction(dict(row))
+        fill_reaction_author(reaction, oconn=connection)
 
     if not oconn:
         conn.close()
 
-    if row:
-        return make_reaction(dict(row))
+    return reaction
 
-    return None
+
+def fill_reaction_author(reaction: Reaction, oconn: Connection) -> None:
+    connection = get_conn(oconn)
+    rusers = get_users(user_id=reaction.user, oconn=connection)
+    ruser = rusers[0] if rusers else None
+
+    if ruser:
+        reaction.author = ruser
+    else:
+        reaction.author = None
 
 
 def get_post_count(user_id: int | None = None, oconn: Connection | None = None) -> int:
