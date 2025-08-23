@@ -5,8 +5,8 @@ App.audio_context = null
 App.pitch_node = null
 App.reverb_node = null
 App.reverb_enabled = false
-App.bass_boost_node = null
-App.treble_boost_node = null
+App.bass_node = null
+App.treble_node = null
 App.bass_boost_enabled = false
 App.bass_cut_enabled = false
 App.treble_boost_enabled = false
@@ -306,8 +306,8 @@ App.init_audio_context = () => {
   try {
     App.audio_context = new (window.AudioContext || window.webkitAudioContext)()
     App.create_reverb_node()
-    App.create_bass_boost_node()
-    App.create_treble_boost_node()
+    App.create_bass_node()
+    App.create_treble_node()
     let video = App.get_video()
 
     if (video) {
@@ -341,9 +341,9 @@ App.setup_audio_context = (video) => {
       App.pitch_node = App.audio_context.createGain()
 
       source.connect(App.pitch_node)
-      App.pitch_node.connect(App.bass_boost_node.input)
-      App.bass_boost_node.output.connect(App.treble_boost_node.input)
-      App.treble_boost_node.output.connect(App.reverb_node.input)
+      App.pitch_node.connect(App.bass_node.input)
+      App.bass_node.output.connect(App.treble_node.input)
+      App.treble_node.output.connect(App.reverb_node.input)
       App.reverb_node.output.connect(App.audio_context.destination)
       video.audioSource = source
     }
@@ -420,8 +420,11 @@ App.create_reverb_node = () => {
     let convolver = ac.createConvolver()
     let dry_gain = ac.createGain()
     let wet_gain = ac.createGain()
-    // Node used to sum dry + processed wet after compression
-    let sum_gain = ac.createGain()
+    // Node to sum the final output of the effect chain
+    let effect_sum_gain = ac.createGain()
+    // A new gain node for the bypass signal
+    let bypass_gain = ac.createGain()
+    // The final output node that collects signal from either the effect or bypass
     let output_gain = ac.createGain()
 
     let pre_delay = ac.createDelay(1.0)
@@ -444,8 +447,13 @@ App.create_reverb_node = () => {
     convolver.normalize = true
     dry_gain.gain.value = 1.0
     wet_gain.gain.value = 0.0
-    sum_gain.gain.value = 1.0
+    effect_sum_gain.gain.value = 1.0
     output_gain.gain.value = 1.0
+
+    // *** Key Change: Set the bypass to be active by default ***
+    bypass_gain.gain.value = 1.0; // Pass signal through
+    effect_sum_gain.gain.value = 0.0; // Mute the effect chain output
+
 
     App.reverb_node = {
       input: ac.createGain(),
@@ -454,26 +462,53 @@ App.create_reverb_node = () => {
       lowpass,
       dry: dry_gain,
       wet: wet_gain,
-      sum: sum_gain,
+      sum: effect_sum_gain,
+      bypass: bypass_gain,
       comp,
       output: output_gain,
       impulse_rms: ir_rms,
       last_mix: 0,
+      is_active: false,
     }
 
-    // Wiring: dry bypasses compressor; wet goes through comp
-    App.reverb_node.input.connect(App.reverb_node.dry)
-    App.reverb_node.input.connect(App.reverb_node.pre_delay)
-    App.reverb_node.pre_delay.connect(App.reverb_node.convolver)
-    App.reverb_node.convolver.connect(App.reverb_node.lowpass)
-    App.reverb_node.lowpass.connect(App.reverb_node.wet)
-    // Wet -> comp -> sum
-    App.reverb_node.wet.connect(App.reverb_node.comp)
-    App.reverb_node.comp.connect(App.reverb_node.sum)
-    // Dry -> sum
-    App.reverb_node.dry.connect(App.reverb_node.sum)
-    // Sum -> output
-    App.reverb_node.sum.connect(App.reverb_node.output)
+    let reverb = App.reverb_node;
+
+    // --- Wiring ---
+
+    // 1. Input splits to the effect chain AND the bypass chain
+    reverb.input.connect(reverb.dry)
+    reverb.input.connect(reverb.pre_delay)
+    reverb.input.connect(reverb.bypass)
+
+    // 2. The original effect chain wiring
+    reverb.pre_delay.connect(reverb.convolver)
+    reverb.convolver.connect(reverb.lowpass)
+    reverb.lowpass.connect(reverb.wet)
+    reverb.wet.connect(reverb.comp)
+    reverb.comp.connect(reverb.sum)
+    reverb.dry.connect(reverb.sum)
+
+    // 3. Both the effect chain's output and the bypass chain's output connect to the final output
+    reverb.sum.connect(reverb.output)
+    reverb.bypass.connect(reverb.output)
+
+    // --- Control Methods ---
+
+    reverb.enable = () => {
+      // Use setTargetAtTime for smooth, click-free transitions
+      let now = App.audio_context.currentTime
+      reverb.bypass.gain.setTargetAtTime(0.0, now, 0.01)
+      reverb.sum.gain.setTargetAtTime(1.0, now, 0.01)
+      reverb.is_active = true
+    }
+
+    reverb.disable = () => {
+      let now = App.audio_context.currentTime
+      reverb.bypass.gain.setTargetAtTime(1.0, now, 0.01)
+      reverb.sum.gain.setTargetAtTime(0.0, now, 0.01)
+      reverb.is_active = false
+    }
+
   }
   catch (e) {
     App.print_error(`Could not create reverb node:`, e)
@@ -551,7 +586,7 @@ App.create_impulse_response = (convolver) => {
   }
 }
 
-App.create_bass_boost_node = () => {
+App.create_bass_node = () => {
   if (!App.audio_context) {
     return
   }
@@ -559,12 +594,14 @@ App.create_bass_boost_node = () => {
   try {
     let ac = App.audio_context
     let input_gain = ac.createGain()
-    let output_gain = ac.createGain()
+    let effect_output_gain = ac.createGain() // Was 'output_gain'
+    let bypass_gain = ac.createGain()         // New bypass node
+    let final_output_gain = ac.createGain()   // New final output
 
     let bass_filter = ac.createBiquadFilter()
     bass_filter.type = `lowshelf`
     bass_filter.frequency.value = 320
-    bass_filter.gain.value = 0
+    bass_filter.gain.value = 0 // Starts at 0dB boost
     bass_filter.Q.value = 1.0
 
     let highpass = ac.createBiquadFilter()
@@ -572,26 +609,58 @@ App.create_bass_boost_node = () => {
     highpass.frequency.value = 40
     highpass.Q.value = 0.7
 
-    input_gain.gain.value = 1.0
-    output_gain.gain.value = 1.0
+    // Default state: bypass is on, effect is off
+    bypass_gain.gain.value = 1.0
+    effect_output_gain.gain.value = 0.0
 
-    App.bass_boost_node = {
+    App.bass_node = {
       input: input_gain,
       bass_filter,
       highpass,
-      output: output_gain,
+      effect_output: effect_output_gain,
+      bypass: bypass_gain,
+      output: final_output_gain, // The node to connect to the next stage
+      is_active: false,
     }
 
-    App.bass_boost_node.input.connect(App.bass_boost_node.highpass)
-    App.bass_boost_node.highpass.connect(App.bass_boost_node.bass_filter)
-    App.bass_boost_node.bass_filter.connect(App.bass_boost_node.output)
+    let bass = App.bass_node
+
+    // --- Wiring ---
+
+    // 1. Input splits to the effect chain AND the bypass chain
+    bass.input.connect(bass.highpass)
+    bass.input.connect(bass.bypass)
+
+    // 2. Effect chain
+    bass.highpass.connect(bass.bass_filter)
+    bass.bass_filter.connect(bass.effect_output)
+
+    // 3. Both paths connect to the final output
+    bass.effect_output.connect(bass.output)
+    bass.bypass.connect(bass.output)
+
+    // --- Control Methods ---
+
+    bass.enable = () => {
+      let now = App.audio_context.currentTime
+      bass.bypass.gain.setTargetAtTime(0.0, now, 0.01)
+      bass.effect_output.gain.setTargetAtTime(1.0, now, 0.01)
+      bass.is_active = true
+    }
+
+    bass.disable = () => {
+      let now = App.audio_context.currentTime
+      bass.bypass.gain.setTargetAtTime(1.0, now, 0.01)
+      bass.effect_output.gain.setTargetAtTime(0.0, now, 0.01)
+      bass.is_active = false
+    }
   }
   catch (e) {
     App.print_error(`Could not create bass boost node:`, e)
   }
 }
 
-App.create_treble_boost_node = () => {
+App.create_treble_node = () => {
   if (!App.audio_context) {
     return
   }
@@ -599,32 +668,67 @@ App.create_treble_boost_node = () => {
   try {
     let ac = App.audio_context
     let input_gain = ac.createGain()
-    let output_gain = ac.createGain()
+    let effect_output_gain = ac.createGain()
+    let bypass_gain = ac.createGain()
+    let final_output_gain = ac.createGain()
 
     let treble_filter = ac.createBiquadFilter()
     treble_filter.type = `highshelf`
     treble_filter.frequency.value = 3200
-    treble_filter.gain.value = 0
+    treble_filter.gain.value = 0 // Starts at 0dB boost
     treble_filter.Q.value = 1.0
 
+    // Note: This highpass might be redundant if you always chain after the bass boost
     let highpass = ac.createBiquadFilter()
     highpass.type = `highpass`
     highpass.frequency.value = 40
     highpass.Q.value = 0.7
 
-    input_gain.gain.value = 1.0
-    output_gain.gain.value = 1.0
+    // Default state: bypass is on, effect is off
+    bypass_gain.gain.value = 1.0
+    effect_output_gain.gain.value = 0.0
 
-    App.treble_boost_node = {
+    App.treble_node = {
       input: input_gain,
       treble_filter,
       highpass,
-      output: output_gain,
+      effect_output: effect_output_gain,
+      bypass: bypass_gain,
+      output: final_output_gain,
+      is_active: false,
     }
 
-    App.treble_boost_node.input.connect(App.treble_boost_node.highpass)
-    App.treble_boost_node.highpass.connect(App.treble_boost_node.treble_filter)
-    App.treble_boost_node.treble_filter.connect(App.treble_boost_node.output)
+    let treble = App.treble_node
+
+    // --- Wiring ---
+
+    // 1. Input splits to the effect chain AND the bypass chain
+    treble.input.connect(treble.highpass)
+    treble.input.connect(treble.bypass)
+
+    // 2. Effect chain
+    treble.highpass.connect(treble.treble_filter)
+    treble.treble_filter.connect(treble.effect_output)
+
+    // 3. Both paths connect to the final output
+    treble.effect_output.connect(treble.output)
+    treble.bypass.connect(treble.output)
+
+    // --- Control Methods ---
+
+    treble.enable = () => {
+      let now = App.audio_context.currentTime
+      treble.bypass.gain.setTargetAtTime(0.0, now, 0.01)
+      treble.effect_output.gain.setTargetAtTime(1.0, now, 0.01)
+      treble.is_active = true
+    }
+
+    treble.disable = () => {
+      let now = App.audio_context.currentTime
+      treble.bypass.gain.setTargetAtTime(1.0, now, 0.01)
+      treble.effect_output.gain.setTargetAtTime(0.0, now, 0.01)
+      treble.is_active = false
+    }
   }
   catch (e) {
     App.print_error(`Could not create treble boost node:`, e)
@@ -632,15 +736,21 @@ App.create_treble_boost_node = () => {
 }
 
 App.set_bass_gain = (gain_db) => {
-  if (!App.bass_boost_node || !App.audio_context) {
+  if (!App.bass_node || !App.audio_context) {
     return
+  }
+
+  if (gain_db === 0) {
+    App.bass_node.disable()
+  }
+  else {
+    App.bass_node.enable()
   }
 
   let ac = App.audio_context
   let now = ac.currentTime
   let clamped_gain = Math.max(-12, Math.min(12, gain_db))
-
-  App.bass_boost_node.bass_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
+  App.bass_node.bass_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
 
   if (gain_db === 0) {
     App.button_highlight(`video_commands_opts_bass`, false)
@@ -651,15 +761,21 @@ App.set_bass_gain = (gain_db) => {
 }
 
 App.set_treble_gain = (gain_db) => {
-  if (!App.treble_boost_node || !App.audio_context) {
+  if (!App.treble_node || !App.audio_context) {
     return
+  }
+
+  if (gain_db === 0) {
+    App.treble_node.disable()
+  }
+  else {
+    App.treble_node.enable()
   }
 
   let ac = App.audio_context
   let now = ac.currentTime
   let clamped_gain = Math.max(-12, Math.min(12, gain_db))
-
-  App.treble_boost_node.treble_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
+  App.treble_node.treble_filter.gain.setTargetAtTime(clamped_gain, now, 0.01)
 
   if (gain_db === 0) {
     App.button_highlight(`video_commands_opts_treble`, false)
@@ -745,6 +861,7 @@ App.video_reverb_on = () => {
     if (App.reverb_node) {
       App.button_highlight(`video_commands_opts_reverb`)
       App.reverb_enabled = true
+      App.reverb_node.enable()
       App.set_reverb_mix(App.REVERB_DEFAULT_MIX)
     }
   }
@@ -757,6 +874,7 @@ App.video_reverb_off = () => {
     if (App.reverb_node) {
       App.button_highlight(`video_commands_opts_reverb`, false)
       App.reverb_enabled = false
+      App.reverb_node.disable()
       App.set_reverb_mix(0.0)
     }
   }
@@ -790,7 +908,7 @@ App.video_bass_boost_on = () => {
       return
     }
 
-    if (App.bass_boost_node) {
+    if (App.bass_node) {
       App.button_highlight(`video_bass_opts_boost`)
       App.bass_boost_enabled = true
       App.set_bass_gain(6)
@@ -802,7 +920,7 @@ App.video_bass_boost_off = () => {
   let video = App.get_video()
 
   if (video) {
-    if (App.bass_boost_node) {
+    if (App.bass_node) {
       App.button_highlight(`video_bass_opts_boost`, false)
       App.bass_boost_enabled = false
       App.set_bass_gain(0)
@@ -829,7 +947,7 @@ App.video_bass_cut_on = () => {
       return
     }
 
-    if (App.bass_boost_node) {
+    if (App.bass_node) {
       App.button_highlight(`video_bass_opts_cut`)
       App.bass_cut_enabled = true
       App.set_bass_gain(-8)
@@ -841,7 +959,7 @@ App.video_bass_cut_off = () => {
   let video = App.get_video()
 
   if (video) {
-    if (App.bass_boost_node) {
+    if (App.bass_node) {
       App.button_highlight(`video_bass_opts_cut`, false)
       App.bass_cut_enabled = false
       App.set_bass_gain(0)
@@ -868,7 +986,7 @@ App.video_treble_boost_on = () => {
       return
     }
 
-    if (App.treble_boost_node) {
+    if (App.treble_node) {
       App.button_highlight(`video_treble_opts_boost`)
       App.treble_boost_enabled = true
       App.set_treble_gain(6)
@@ -880,7 +998,7 @@ App.video_treble_boost_off = () => {
   let video = App.get_video()
 
   if (video) {
-    if (App.treble_boost_node) {
+    if (App.treble_node) {
       App.button_highlight(`video_treble_opts_boost`, false)
       App.treble_boost_enabled = false
       App.set_treble_gain(0)
@@ -907,7 +1025,7 @@ App.video_treble_cut_on = () => {
       return
     }
 
-    if (App.treble_boost_node) {
+    if (App.treble_node) {
       App.button_highlight(`video_treble_opts_cut`)
       App.treble_cut_enabled = true
       App.set_treble_gain(-8)
@@ -919,7 +1037,7 @@ App.video_treble_cut_off = () => {
   let video = App.get_video()
 
   if (video) {
-    if (App.treble_boost_node) {
+    if (App.treble_node) {
       App.button_highlight(`video_treble_opts_cut`, false)
       App.treble_cut_enabled = false
       App.set_treble_gain(0)
