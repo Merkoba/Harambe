@@ -742,9 +742,8 @@ App.set_bass_gain = (gain_db) => {
     App.bass_node.disable()
     return
   }
-  else {
-    App.bass_node.enable()
-  }
+  
+  App.bass_node.enable()
 
   let ac = App.audio_context
   let now = ac.currentTime
@@ -768,9 +767,8 @@ App.set_treble_gain = (gain_db) => {
     App.treble_node.disable()
     return
   }
-  else {
-    App.treble_node.enable()
-  }
+  
+  App.treble_node.enable()
 
   let ac = App.audio_context
   let now = ac.currentTime
@@ -794,9 +792,8 @@ App.set_reverb_mix = (mix) => {
     App.reverb_node.disable()
     return
   }
-  else {
-    App.reverb_node.enable()
-  }
+  
+  App.reverb_node.enable()
 
   let ac = App.audio_context
   let node = App.reverb_node
