@@ -57,7 +57,7 @@ a.linkbutton:hover {
 }
 
 .sep {
-    opacity: 0.66;
+    opacity: 0.5;
     user-select: none;
     color: inherit;
 }

@@ -34,7 +34,6 @@
             <div id="random" class="button" title="Next post by date | Ctrl+Shift+Right">Rand</div>
             <div class="sep">|</div>
             <div id="next" class="button" title="Next post by date | Ctrl+Right">Next</div>
-            <div class="sep">|</div>
 
             {% if post.flash_embed %}
                 <div class="rowitem nowrap">
@@ -42,24 +41,34 @@
                 </div>
             {% elif post.text %}
                 {% if post.youtube_id %}
+                <div class="sep">|</div>
+
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="youtube" class="button" title="Maximize the video">Max</div>
                 </div>
                 {% elif (not post.markdown_embed) and (not post.zip_embed) %}
+                <div class="sep">|</div>
+
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="editor" class="button" title="Maximize the editor">Max</div>
                 </div>
                 {% elif post.markdown_embed %}
+                <div class="sep">|</div>
+
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="markdown" class="button" title="Maximize the markdown">Max</div>
                 </div>
                 {% endif %}
             {% else %}
                 {% if post.image_embed %}
+                <div class="sep">|</div>
+
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="image" class="button" title="Maximize the image">Max</div>
                 </div>
                 {% elif post.video_embed or post.audio_embed %}
+                <div class="sep">|</div>
+
                 <div class="rowitem nowrap">
                     <div id="max" data-max_type="video" class="button" title="Maximize the video | Wheel supported">Max</div>
                 </div>

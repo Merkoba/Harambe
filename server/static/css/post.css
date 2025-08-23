@@ -41,6 +41,10 @@ body, html {
     flex-shrink: 0;
 }
 
+#topbuttons .button::first-letter {
+    font-weight: bold;
+}
+
 #title {
     white-space: nowrap;
     text-overflow: ellipsis;
