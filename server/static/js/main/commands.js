@@ -451,9 +451,8 @@ App.create_reverb_node = () => {
     output_gain.gain.value = 1.0
 
     // *** Key Change: Set the bypass to be active by default ***
-    bypass_gain.gain.value = 1.0; // Pass signal through
-    effect_sum_gain.gain.value = 0.0; // Mute the effect chain output
-
+    bypass_gain.gain.value = 1.0 // Pass signal through
+    effect_sum_gain.gain.value = 0.0 // Mute the effect chain output
 
     App.reverb_node = {
       input: ac.createGain(),
@@ -471,7 +470,7 @@ App.create_reverb_node = () => {
       is_active: false,
     }
 
-    let reverb = App.reverb_node;
+    let reverb = App.reverb_node
 
     // --- Wiring ---
 
@@ -508,7 +507,6 @@ App.create_reverb_node = () => {
       reverb.sum.gain.setTargetAtTime(0.0, now, 0.01)
       reverb.is_active = false
     }
-
   }
   catch (e) {
     App.print_error(`Could not create reverb node:`, e)
@@ -594,14 +592,14 @@ App.create_bass_node = () => {
   try {
     let ac = App.audio_context
     let input_gain = ac.createGain()
-    let effect_output_gain = ac.createGain() // Was 'output_gain'
-    let bypass_gain = ac.createGain()         // New bypass node
-    let final_output_gain = ac.createGain()   // New final output
+    let effect_output_gain = ac.createGain()
+    let bypass_gain = ac.createGain()
+    let final_output_gain = ac.createGain()
 
     let bass_filter = ac.createBiquadFilter()
     bass_filter.type = `lowshelf`
     bass_filter.frequency.value = 320
-    bass_filter.gain.value = 0 // Starts at 0dB boost
+    bass_filter.gain.value = 0
     bass_filter.Q.value = 1.0
 
     let highpass = ac.createBiquadFilter()
@@ -619,7 +617,7 @@ App.create_bass_node = () => {
       highpass,
       effect_output: effect_output_gain,
       bypass: bypass_gain,
-      output: final_output_gain, // The node to connect to the next stage
+      output: final_output_gain,
       is_active: false,
     }
 
