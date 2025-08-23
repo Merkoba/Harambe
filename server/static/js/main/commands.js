@@ -432,7 +432,7 @@ App.create_reverb_node = () => {
 
     let lowpass = ac.createBiquadFilter()
     lowpass.type = `lowpass`
-    lowpass.frequency.value = 6500
+    lowpass.frequency.value = 10 * 1000
     lowpass.Q.value = 0.7
 
     let comp = ac.createDynamicsCompressor()
@@ -740,6 +740,7 @@ App.set_bass_gain = (gain_db) => {
 
   if (gain_db === 0) {
     App.bass_node.disable()
+    return
   }
   else {
     App.bass_node.enable()
@@ -765,6 +766,7 @@ App.set_treble_gain = (gain_db) => {
 
   if (gain_db === 0) {
     App.treble_node.disable()
+    return
   }
   else {
     App.treble_node.enable()
@@ -786,6 +788,14 @@ App.set_treble_gain = (gain_db) => {
 App.set_reverb_mix = (mix) => {
   if (!App.reverb_node || !App.audio_context) {
     return
+  }
+
+  if (mix === 0) {
+    App.reverb_node.disable()
+    return
+  }
+  else {
+    App.reverb_node.enable()
   }
 
   let ac = App.audio_context
@@ -823,11 +833,11 @@ App.set_reverb_mix = (mix) => {
   let total_level = Math.sqrt((dry_level * dry_level) + (wet_level * wet_level * ir_rms * ir_rms))
   let makeup_gain = 1.0 / Math.max(0.0001, total_level)
   // Keep within sane bounds
-  makeup_gain = Math.max(0.5, Math.min(1.3, makeup_gain))
+  makeup_gain = Math.max(0.5, Math.min(1.5, makeup_gain))
 
   // Short linear ramps for snappy yet click-free response
-  let rampTime = 0.03
-  let end = now + rampTime
+  let ramp_time = 0.03
+  let end = now + ramp_time
 
   function ramp(param, value) {
     try {
@@ -859,7 +869,6 @@ App.video_reverb_on = () => {
     if (App.reverb_node) {
       App.button_highlight(`video_commands_opts_reverb`)
       App.reverb_enabled = true
-      App.reverb_node.enable()
       App.set_reverb_mix(App.REVERB_DEFAULT_MIX)
     }
   }
@@ -872,7 +881,6 @@ App.video_reverb_off = () => {
     if (App.reverb_node) {
       App.button_highlight(`video_commands_opts_reverb`, false)
       App.reverb_enabled = false
-      App.reverb_node.disable()
       App.set_reverb_mix(0.0)
     }
   }
