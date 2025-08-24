@@ -788,13 +788,6 @@ App.set_reverb_mix = (mix) => {
     return
   }
 
-  if (mix === 0) {
-    App.reverb_node.disable()
-    return
-  }
-
-  App.reverb_node.enable()
-
   let ac = App.audio_context
   let node = App.reverb_node
   let clamped = Math.max(0, Math.min(1, mix))
@@ -807,50 +800,53 @@ App.set_reverb_mix = (mix) => {
   let now = ac.currentTime
 
   if (clamped === 0) {
-    // Immediate kill of wet tail when disabling
+    // When mix is zero, just disable the effect path.
+    // The disable() method handles the crossfade to the bypass node correctly.
+    node.disable()
+
+    // We can still reset the internal gains for a clean state when the
+    // reverb is re-enabled, but we must NOT interfere with the
+    // sum.gain ramp that disable() has already started.
     node.dry.gain.cancelScheduledValues(now)
     node.wet.gain.cancelScheduledValues(now)
-    node.sum.gain.cancelScheduledValues(now)
-    node.output.gain.cancelScheduledValues(now)
+
     node.dry.gain.setValueAtTime(1.0, now)
     node.wet.gain.setValueAtTime(0.0, now)
-    node.output.gain.setValueAtTime(1.0, now)
-    node.last_mix = 0
-    return
   }
+  else {
+    // If mix is greater than zero, ensure the effect path is active.
+    node.enable()
 
-  // Perceptual remap so mid control feels more wet
-  let percept = Math.pow(clamped, 0.6)
-  let t = percept * Math.PI / 2
-  let dry_level = Math.cos(t)
-  let wet_level = Math.sin(t)
+    // Perceptual remap for mix control
+    let percept = Math.pow(clamped, 0.6)
+    let t = percept * Math.PI / 2
+    let dry_level = Math.cos(t)
+    let wet_level = Math.sin(t)
 
-  // Energy compensation factoring IR RMS (wet energy scaled by impulse RMS)
-  let ir_rms = node.impulse_rms || 1.0
-  let total_level = Math.sqrt((dry_level * dry_level) + (wet_level * wet_level * ir_rms * ir_rms))
-  let makeup_gain = 1.0 / Math.max(0.0001, total_level)
-  // Keep within sane bounds
-  makeup_gain = Math.max(0.5, Math.min(1.5, makeup_gain))
+    // Energy compensation factoring IR RMS
+    let ir_rms = node.impulse_rms || 1.0
+    let total_level = Math.sqrt((dry_level * dry_level) + (wet_level * wet_level * ir_rms * ir_rms))
+    let makeup_gain = 1.0 / Math.max(0.0001, total_level)
+    makeup_gain = Math.max(0.5, Math.min(1.5, makeup_gain))
 
-  // Short linear ramps for snappy yet click-free response
-  let ramp_time = 0.03
-  let end = now + ramp_time
+    let ramp_time = 0.03
+    let end = now + ramp_time
 
-  function ramp(param, value) {
-    try {
-      param.cancelScheduledValues(now)
-      param.setValueAtTime(param.value, now)
-      param.linearRampToValueAtTime(value, end)
+    function ramp(param, value) {
+      try {
+        param.cancelScheduledValues(now)
+        param.setValueAtTime(param.value, now)
+        param.linearRampToValueAtTime(value, end)
+      }
+      catch (e) {
+        param.setValueAtTime(value, end) // Fallback
+      }
     }
-    catch (e) {
-      // Fallback
-      param.setValueAtTime(value, end)
-    }
+
+    ramp(node.dry.gain, dry_level)
+    ramp(node.wet.gain, wet_level)
+    ramp(node.sum.gain, makeup_gain)
   }
-
-  ramp(node.dry.gain, dry_level)
-  ramp(node.wet.gain, wet_level)
-  ramp(node.output.gain, makeup_gain)
 
   node.last_mix = clamped
 }
