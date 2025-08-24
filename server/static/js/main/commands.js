@@ -432,14 +432,14 @@ App.create_reverb_node = () => {
 
     let lowpass = ac.createBiquadFilter()
     lowpass.type = `lowpass`
-    lowpass.frequency.value = 10 * 1000
+    lowpass.frequency.value = 7 * 1000
     lowpass.Q.value = 0.7
 
     let comp = ac.createDynamicsCompressor()
     comp.threshold.value = -18
     comp.knee.value = 20
     comp.ratio.value = 2
-    comp.attack.value = 0.003
+    comp.attack.value = 0.01
     comp.release.value = 0.25
 
     let ir_rms = App.create_impulse_response(convolver) || 1.0
