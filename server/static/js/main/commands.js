@@ -439,7 +439,7 @@ App.create_reverb_node = () => {
     comp.threshold.value = -18
     comp.knee.value = 20
     comp.ratio.value = 2
-    comp.attack.value = 0.01
+    comp.attack.value = 0.008
     comp.release.value = 0.25
 
     let ir_rms = App.create_impulse_response(convolver) || 1.0
