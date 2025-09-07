@@ -133,7 +133,14 @@ class Promptext {
 
   insert(text) {
     let value = this.input.value.trim()
-    this.input.value = `${value} ${text.trim()} `
+
+    if (value) {
+      this.input.value = `${value} ${text.trim()}`
+    }
+    else {
+      this.input.value = text.trim()
+    }
+
     this.update_button()
     this.input.selectionStart = this.input.value.length
     this.input.focus()
